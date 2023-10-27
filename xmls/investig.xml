@@ -1,0 +1,109 @@
+<list_investigation>
+  <entry cod="1021." name="Examen ecografic complex (organele cavităţii abdominale + organele sistemului uro-genital)"/>
+  <entry cod="1022." name="Examen ecografic complex (organele cavităţii abdominale + organele sistemului urinar)"/>
+  <entry cod="1023." name="Ecografia organelor abdominale (ficatul, splina, vezica biliară, pancreasul)"/>
+  <entry cod="1024." name="Ecografia organelor sistemului urinar (rinichii, glandele suprarenale)"/>
+  <entry cod="1025." name="Ecografia organelor bazinului mic transabdominal (vezica urinară, prostata, uterul, ovarele)"/>
+  <entry cod="1026." name="Examen ecografic transvaginal"/>
+  <entry cod="1027." name="Examen ecografic transabdominal în I trimestru de sarcină (până la 11 săptămîni)"/>
+  <entry cod="1027.1." name="Examen ecografic transabdominal în I trimestru de sarcină (până la 11 săptămîni), sarcină multiplă"/>
+  <entry cod="1027.4.1." name="Examen ecografic la 11-14 săptămîni gestaţie, morfologie fetală şi screening pentru aberaţii cromozomiale, cu evaluarea uterului şi anexelor gestantei (abdominal)"/>
+  <entry cod="1027.5.1." name="Examen ecografic la 11-14 săptămîni, morfologie fetală şi screening pentru aberaţii cromozomiale, cu evaluarea uterului şi anexelor gestantei (transvaginal)"/>
+  <entry cod="1028." name="Examen ecografic transvaginal în I trimestru de sarcină (până la 11 săptămîni)"/>
+  <entry cod="1028.1." name="Examen ecografic transvaginal în I trimestru de sarcină (până la 11 săptămîni), sarcină multiplă"/>
+  <entry cod="1028.4.1." name="Examen ecografic la 11-14 săptămîni gestaţie, morfologie fetală şi screening pentru aberaţii cromozomiale, cu evaluarea uterului şi anexelor gestantei, sarcină multiplă (abdominal)"/>
+  <entry cod="1028.5.1." name="Examen ecografic la 11-14 săptămîni gestaţie, morfologie fetală şi screening pentru aberaţii cromozomiale, cu evaluarea uterului şi anexelor gestantei, sarcină multiplă (transvaginal)"/>
+  <entry cod="1029.1.1." name="Examenul ecografic al morfologiei fetale şi anexelor fetale în trimestrul II de sarcină"/>
+  <entry cod="1029.1.2." name="Examenul ecografic al morfologiei fetale şi anexelor fetale în trimestrul II de sarcină, sarcină multiplă"/>
+  <entry cod="1029.2." name="Examen ecografic în trimestrul III de sarcina"/>
+  <entry cod="1029.3." name="Examen ecografic în trimestrul III de sarcina, sarcină multiplă"/>
+  <entry cod="1029.4." name="Evaluarea viabilităţii şi evoluţiei sarcinei"/>
+  <entry cod="1030." name="Ecocardiografie fetală"/>
+  <entry cod="1030.1." name="Reconstrucţie de volum (3D-4D) al cordului fetal (STIC)"/>
+  <entry cod="1033." name="Foliculometria transvaginală"/>
+  <entry cod="1034." name="Foliculometria transabdominală"/>
+  <entry cod="1034.1." name="Foliculometrie 3D (VOCAL mode)"/>
+  <entry cod="1035." name="Ecohidrotubaţii (fără preţul substanţei de contrast)"/>
+  <entry cod="1036." name="Examen ecografic al glandei tiroide"/>
+  <entry cod="1037." name="Examen ecografic al glandei mamare"/>
+  <entry cod="1038." name="Examen ecografic al prostatei (transrectal), sondă simplă"/>
+  <entry cod="1039." name="Examen ecografic al prostatei (transrectal) sondă biplană"/>
+  <entry cod="1040." name="Aprecierea ultrasonografică a rezidiului vezical"/>
+  <entry cod="1041." name="Aprecierea colecţiilor libere în una din cavităţi (pleurală, abdominală) sau în spaţiul retroperitonial"/>
+  <entry cod="1042." name="Examen ecografic al scrotului"/>
+  <entry cod="1043." name="Examen ecografic al penisului"/>
+  <entry cod="1044." name="Examen ecografic al encefalului prin fontanela sau orificiu trepanat"/>
+  <entry cod="1045." name="Examen ecografic al encefalului prin fontanela sau orificiu trepanat + Doppler"/>
+  <entry cod="1046." name="Examen ecografic al globilor oculari"/>
+  <entry cod="1047." name="Examen ecografic musculoscheletal al unei zone – articulaţii anatomice"/>
+  <entry cod="1048." name="Examen ecografic al ţesuturilor moi şi ganglionilor limfatici ai unei zone anatomice"/>
+  <entry cod="1049." name="Examen ecografic al unui organ (în dinamică)"/>
+  <entry cod="1049.1." name="Control în dinamică al unui organ sau sistem de organe fetale, lungimii colului uterin sau a anexelor fetale"/>
+  <entry cod="1049.2." name="Ultrasonografia în perioada postpartum şi postoperatorie"/>
+  <entry cod="1050." name="Examen ecografic în determinarea chineticii unui sistem excretor (căile biliare, urinare etc.)"/>
+  <entry cod="1050.2." name="Puncţie ecoghidată randomizată a prostatei"/>
+  <entry cod="1050.3." name="Biopsia percutană randomizată ecoghidată renală"/>
+  <entry cod="1050.4." name="Nefrostomie ecoghidată „a minima”"/>
+  <entry cod="1050.5." name="Puncţie – drenarea chistului renal"/>
+  <entry cod="1050.6." name="Farmacodoplerografia peniană"/>
+  <entry cod="1050.7." name="Examinarea ecografică 3D a unui organ"/>
+  <entry cod="1050.8." name="Instalarea sondei ureterale JJ"/>
+  <entry cod="1050.9." name="Urofluometrie"/>
+  <entry cod="1050.10." name="Ecografia hepatobiliară (2D)"/>
+  <entry cod="1050.11." name="Ecografia hepatobiliară (2D) + Doppler"/>
+  <entry cod="1050.12." name="Elastografia ficatului pentru aprecierea gradului de fibroză (Shear Waves Elastograrhy)"/>
+  <entry cod="1050.14." name="Ecografia pancreasului cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.15." name="Ecografia pancreasului cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.17." name="Ecografia splinei cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.18." name="Ecografia splinei cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.19." name="Ecografia sistemului urinar (2D)"/>
+  <entry cod="1050.20." name="Ecografia sistemului urinar (2D) + Doppler"/>
+  <entry cod="1050.21." name="Ecografia rinichilor cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.22." name="Examen ecografic ginecologic transabdominal (2D)"/>
+  <entry cod="1050.23." name="Examen ecografic ginecologic transabdominal (2D) +Doppler"/>
+  <entry cod="1050.24." name="Ecografia uterului cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.25." name="Examen ecografic ginecologic transvaginal (2D)"/>
+  <entry cod="1050.26." name="Examen ecografic ginecologic transvaginal (2D) + Doppler"/>
+  <entry cod="1050.27." name="Ecografia ovarelor cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.29." name="Ecografia vezicii urinare cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.30." name="Ecografia vezicii urinare cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.31." name="Examen ecografic al glandei tiroide cu 2 D în scară gri"/>
+  <entry cod="1050.32." name="Examen ecografic al glandei tiroide cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.33." name="Examen ecografic al glandei tiroide cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.34." name="Examen ecografic al glandei mamare cu 2 D în scară gri"/>
+  <entry cod="1050.35." name="Examen ecografic al glandei mamare cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.36." name="Examen ecografic al glandei mamare cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.37." name="Examen ecografic al prostatei (transrectal) sonda biplan cu 2 D în scară gri"/>
+  <entry cod="1050.38." name="Examen ecografic al prostatei (transrectal) sonda biplan cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.39." name="examen ecografic al prostatei (transrectal) sonda biplan cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.40." name="Aprecierea colecţiilor libere în una din cavităţi (spaţiul pleural) cu 2 D în scară gri"/>
+  <entry cod="1050.41." name="Aprecierea colecţiilor libere în una din cavităţi (spaţiul pleural) cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.42." name="Aprecierea colecţiilor libere în una din cavităţi (spaţiul pleural) cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.43." name="Examen ecografic al scrotului cu 2 D în scară gri"/>
+  <entry cod="1050.44." name="Examen ecografic al scrotului cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.45." name="Examen ecografic al scrotului cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.46." name="Examen ecografic al penisului cu 2 D în scară gri"/>
+  <entry cod="1050.47." name="Examen ecografic al penisului cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.48." name="Examen ecografic al penisului cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.49." name="Examen ecografic musculosheletal al unei zone – articulaţie anatomice cu 2 D în scară gri"/>
+  <entry cod="1050.50." name="Examen ecografic musculosheletal al unei zone – articulaţie anatomice cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.51." name="Examen ecografic musculosheletal al unei zone – articulaţie anatomice cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.52." name="Examen ecografic al ţesuturilor moi şi ganglionilor limfatici ai unei zone anatomice cu 2 D în scară gri"/>
+  <entry cod="1050.53." name="Examen ecografic al ţesuturilor moi şi ganglionilor limfatici ai unei zone anatomice cu 2 D în scară gri + Doppler"/>
+  <entry cod="1050.54." name="Examen ecografic al ţesuturilor moi şi ganglionilor limfatici ai unei zone anatomice cu 2 D în scară gri + Doppler + Elastografie"/>
+  <entry cod="1050.55." name="Examen ecografic transabdominal al prostatei"/>
+  <entry cod="1050.56." name="Determinarea urinei reziduale"/>
+  <entry cod="1050.57." name="Reconstrucţie de volum (3D-4D) al unui organ sau sistem de organe fetale"/>
+  <entry cod="1050.58." name="Ecografie 3D mode în ginecologie"/>
+  <entry cod="1050.59." name="Evaluarea neinvazivă a gradului de afectare a ficatului (gradul de fibroză şi gradul de steatoză) – test FibroScan cu aparatul FibroScan-502 TOUCH CAP (sonda M şi XL)"/>
+  <entry cod="1050.60." name="Ecografia organelor abdominale (ficatul, pancreasul, splina) (2D)"/>
+  <entry cod="1050.61." name="Ecografia organelor abdominale + sistemul urinar (2D)"/>
+  <entry cod="1050.62." name="Ecografia organelor abdominale + sistemul urinar + ginecologie transabdominală (2D)"/>
+  <entry cod="1050.63." name="Ecografia organelor abdominale + sistemul urinar + ginecologie transvaginală (2D)"/>
+  <entry cod="1050.66." name="Ecografia sarcinei în trimestrul I (pînă la 11 săptămîni), transabdominal"/>
+  <entry cod="1050.67." name="Ecografia sarcinei în trimestrul I (pînă la 11 săptămîni), transvaginală"/>
+  <entry cod="1050.68." name="Foliculometria transabdominală (o investigaţie)"/>
+  <entry cod="1050.69." name="Foliculometria transvaginală (o investigaţie)"/>
+  <entry cod="1050.70." name="Osteodensitometria computerizată"/>
+  <entry cod="1050.71." name="Osteodensitometrie cu ultrasunet"/>
+</list_investigation>

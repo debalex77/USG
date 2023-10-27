@@ -1,0 +1,14 @@
+/* --------------------- QToolButton --------------------- */
+
+QToolButton {
+  padding: 0;
+  border: none;
+  outline: none;
+  background-color: transparent;
+}
+
+QLineEdit {
+  border: none;
+  outline: none;
+  background-color: transparent;
+}

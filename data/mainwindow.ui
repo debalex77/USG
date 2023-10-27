@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>800</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="resource.qrc">
+    <normaloff>:/img/eco_512x512.ico</normaloff>:/img/eco_512x512.ico</iconset>
+  </property>
+  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>800</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <widget class="QMenu" name="menuFile">
+    <property name="title">
+     <string>File</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuCataloage">
+    <property name="title">
+     <string>Cataloage</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuDocumente">
+    <property name="title">
+     <string>Documente</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuService">
+    <property name="title">
+     <string>Setări</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuAssistance">
+    <property name="title">
+     <string>Asistență</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menuRapoarte">
+    <property name="title">
+     <string>Rapoarte</string>
+    </property>
+   </widget>
+   <addaction name="menuFile"/>
+   <addaction name="menuCataloage"/>
+   <addaction name="menuDocumente"/>
+   <addaction name="menuRapoarte"/>
+   <addaction name="menuService"/>
+   <addaction name="menuAssistance"/>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources>
+  <include location="resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

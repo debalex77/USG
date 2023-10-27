@@ -1,0 +1,16 @@
+.title {
+  padding-left: 5px;
+  font: bold 15px DejaVu Sans;
+  color: rgb(49, 151, 116);
+  width: 700px;
+}
+.title_description {
+  padding-left: 5px;
+  font: 14px DejaVu Sans;
+  color: rgb(49, 151, 116);
+  width: 700px;
+}
+.description {
+  padding-left: 20px;
+  font: 13px DejaVu Sans;
+}

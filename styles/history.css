@@ -1,0 +1,22 @@
+.title_doc {
+  font: bold 20px Cantarell;
+}
+.checkbox_title {
+  padding-left: 5px;
+  font: bold 18px Cantarell;
+  background-color: yellow;
+  width: 700px;
+}
+.description_version {
+  padding-left: 20px;
+  font: 16px Cantarell;
+  display: none;
+}
+.description_version_first {
+  padding-left: 20px;
+  font: 16px Cantarell;
+  display: block;
+}
+.list_item {
+  padding-left: 20px;
+}

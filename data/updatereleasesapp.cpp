@@ -1,0 +1,344 @@
+#include "updatereleasesapp.h"
+
+UpdateReleasesApp::UpdateReleasesApp(QObject *parent) : QObject(parent)
+{
+    db = new DataBase(this);
+}
+
+UpdateReleasesApp::~UpdateReleasesApp()
+{
+    delete db;
+}
+
+bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
+{
+    if (current_release == release_1_1_3){
+
+        QSqlQuery qry;
+        qry.prepare("CREATE TABLE sqlitestudio_temp_table AS SELECT * FROM settingsUsers;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este efectuata actualizarea - ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE settingsUsers;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este efectuata actualizarea - ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("CREATE TABLE settingsUsers ("
+                    "    id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "    id_users              INT NOT NULL,"
+                    "    owner                 TEXT,"
+                    "    nameOption            TEXT,"
+                    "    versionApp            TEXT,"
+                    "    showQuestionCloseApp  INT,"
+                    "    showUserManual        INT,"
+                    "    showHistoryVersion    INT,"
+                    "    order_splitFullName   INT,"
+                    "    updateListDoc         TEXT,"
+                    "    showDesignerMenuPrint INT"
+                    ");");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este efectuata actualizarea - ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("INSERT INTO settingsUsers ("
+                    "    id,"
+                    "    id_users,"
+                    "    owner,"
+                    "    nameOption,"
+                    "    versionApp,"
+                    "    showQuestionCloseApp,"
+                    "    showUserManual,"
+                    "    showHistoryVersion,"
+                    "    order_splitFullName,"
+                    "    updateListDoc)"
+                    "       SELECT id,"
+                    "          id_users,"
+                    "          owner,"
+                    "          nameOption,"
+                    "          versionApp,"
+                    "          showQuestionCloseApp,"
+                    "          showUserManual,"
+                    "          showHistoryVersion,"
+                    "          order_splitFullName,"
+                    "         updateListDoc"
+                    "       FROM sqlitestudio_temp_table;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este efectuata actualizarea - ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE sqlitestudio_temp_table;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este efectuata actualizarea - ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("INSERT INTO settingsUsers (id, id_users, owner, nameOption, versionApp, showQuestionCloseApp, showUserManual, showHistoryVersion, order_splitFullName, updateListDoc, showDesignerMenuPrint) "
+                                    "VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+        qry.addBindValue(QString::number(7));
+        qry.addBindValue(QString::number(globals::idUserApp));
+        qry.addBindValue("Setări a documentelor");
+        qry.addBindValue("prezentarea designerului(LimeReport) în meniu de printare");
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QVariant());
+        qry.addBindValue(QString::number(0));
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de inserare in tabela 'settingsUsers' in timpul actualizarii la versiunea '%1' - %2").arg(current_release, qry.lastError().text());
+            return false;
+        }
+    }
+
+    if (current_release == release_1_1_4) {
+
+        QSqlQuery qry;
+        qry.prepare("CREATE TABLE sqlitestudio_temp_table0 AS SELECT * FROM orderEcho;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (crearea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE orderEcho;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (eliminarea tabelei 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("CREATE TABLE orderEcho ("
+                    "id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    "deletionMark     INTEGER NOT NULL,"
+                    "numberDoc        TEXT,"
+                    "dateDoc          TEXT,"
+                    "id_organizations INTEGER,"
+                    "id_contracts     INTEGER,"
+                    "id_typesPrices   INTEGER,"
+                    "id_doctors       INTEGER,"
+                    "id_pacients      INTEGER,"
+                    "id_users         INTEGER,"
+                    "sum              REAL,"
+                    "comment          TEXT,"
+                    "cardPayment      INTEGER,"
+                    "attachedImages   INTEGER"
+                ");");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (crearea tabelei noi 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("INSERT INTO orderEcho ("
+                    "id,"
+                    "deletionMark,"
+                    "numberDoc,"
+                    "dateDoc,"
+                    "id_organizations,"
+                    "id_contracts,"
+                    "id_typesPrices,"
+                    "id_doctors,"
+                    "id_pacients,"
+                    "id_users,"
+                    "sum,"
+                    "comment"
+                ")"
+                "SELECT id,"
+                       "deletionMark,"
+                       "numberDoc,"
+                       "dateDoc,"
+                       "id_organizations,"
+                       "id_contracts,"
+                       "id_typesPrices,"
+                       "id_doctors,"
+                       "id_pacients,"
+                       "id_users,"
+                       "sum,"
+                       "comment "
+                  "FROM sqlitestudio_temp_table0;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (inserarea datelor din tabela 'sqlitestudio_temp_table0' in tabela 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE sqlitestudio_temp_table0;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (eliminarea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+            return false;
+        }
+
+        QSqlQuery qry_image(db->getDatabaseImage());
+        qry_image.prepare("SELECT id_orderEcho FROM imagesReports;");
+        if (qry_image.exec()){
+            while (qry_image.next()) {
+                qry.prepare(QString("UPDATE orderEcho SET attachedImages = 1 WHERE id = '%1';").arg(qry_image.value(0).toString()));
+                if (! qry.exec())
+                    qCritical(logCritical()) << tr("Eroare de actualizare a documentului 'Comanda ecografica' (inserarea atasarii imaginelor): ") + qry.lastError().text();
+            }
+
+        }
+
+        qry.prepare("UPDATE orderEcho SET attachedImages = 0 WHERE attachedImages ISNULL;");
+        if (! qry.exec())
+            qCritical(logCritical()) << tr("Nu a fost resetata valoarea 'o' la documente cu imaginile neatasate");
+
+
+        qry.prepare("UPDATE orderEcho SET cardPayment = 1 WHERE comment IN ('card', 'achitat cu card');");
+        if (! qry.exec())
+            qCritical(logCritical()) << tr("Eroare de actualizare a documentului 'Comanda ecografica' (actualizarea datelor achitarii cu card): ") + qry.lastError().text();
+
+        qry.prepare("UPDATE orderEcho SET cardPayment = 0 WHERE comment NOT IN ('card', 'achitat cu card');");
+        if (! qry.exec())
+            qCritical(logCritical()) << tr("Eroare de actualizare a documentului 'Comanda ecografica' (actualizarea datelor achitarii cu card): ") + qry.lastError().text();
+
+        qry.prepare("SELECT id, id_typesPrices FROM orderEcho WHERE cardPayment = 0;");
+        if (qry.exec()) {
+            while (qry.next()) {
+                const int id_order = qry.value(0).toInt();
+                const int id_typesPrices = qry.value(1).toInt();
+                int value_payment = 0;
+
+                QSqlQuery qry_type_price;
+                qry_type_price.prepare(QString("SELECT noncomercial FROM typesPrices WHERE id = '%1' AND deletionMark = '0';").arg(QString::number(id_typesPrices)));
+                if (qry_type_price.exec()){
+                    qry_type_price.next();
+                    if (qry_type_price.value(0).toInt() > 0)
+                        value_payment = 2;
+                }
+
+                QSqlQuery qry_order;
+                qry_order.prepare(QString("UPDATE orderEcho SET cardPayment = '%1' WHERE id = '%2';").arg(QString::number(value_payment), QString::number(id_order)));
+                if (! qry_order.exec())
+                    qCritical(logCritical()) << tr("Nu a fost modificat statut de achitare a documentului cu id='%1'").arg(QString::number(id_order));
+            }
+        }
+
+        //*********************************************************************
+
+        qry.prepare("CREATE TABLE sqlitestudio_temp_table0 AS SELECT * FROM reportEcho;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (crearea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE reportEcho;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (eliminarea tabelei 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("CREATE TABLE reportEcho ("
+                    "id                INTEGER PRIMARY KEY AUTOINCREMENT,"
+                    "deletionMark      INTEGER,"
+                    "numberDoc         TEXT,"
+                    "dateDoc           TEXT,"
+                    "id_pacients       INTEGER,"
+                    "id_orderEcho      INTEGER,"
+                    "t_organs_internal INTEGER,"
+                    "t_urinary_system  INTEGER,"
+                    "t_prostate        INTEGER,"
+                    "t_gynecology      INTEGER,"
+                    "t_breast          INTEGER,"
+                    "t_thyroid         INTEGER,"
+                    "t_gestation0      INTEGER,"
+                    "t_gestation1      INTEGER,"
+                    "t_gestation2      INTEGER,"
+                    "t_gestation3      INTEGER,"
+                    "id_users          INTEGER,"
+                    "concluzion        TEXT,"
+                    "comment           TEXT,"
+                    "attachedImages    INTEGER"
+                ");");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (crearea tabelei noi 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("INSERT INTO reportEcho ("
+                    "id,"
+                    "deletionMark,"
+                    "numberDoc,"
+                    "dateDoc,"
+                    "id_pacients,"
+                    "id_orderEcho,"
+                    "t_organs_internal,"
+                    "t_urinary_system,"
+                    "t_prostate,"
+                    "t_gynecology,"
+                    "t_breast,"
+                    "t_thyroid,"
+                    "t_gestation0,"
+                    "t_gestation1,"
+                    "t_gestation2,"
+                    "t_gestation3,"
+                    "id_users,"
+                    "concluzion,"
+                    "comment"
+                ")"
+                "SELECT id,"
+                       "deletionMark,"
+                       "numberDoc,"
+                       "dateDoc,"
+                       "id_pacients,"
+                       "id_orderEcho,"
+                       "t_organs_internal,"
+                       "t_urinary_system,"
+                       "t_prostate,"
+                       "t_gynecology,"
+                       "t_breast,"
+                       "t_thyroid,"
+                       "t_gestation0,"
+                       "t_gestation1,"
+                       "t_gestation2,"
+                       "t_gestation3,"
+                       "id_users,"
+                       "concluzion,"
+                       "comment "
+                  "FROM sqlitestudio_temp_table0;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (inserarea datelor din tabela 'sqlitestudio_temp_table0' in tabela 'orderEcho'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry.prepare("DROP TABLE sqlitestudio_temp_table0;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_1_1_4 "' (eliminarea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+            return false;
+        }
+
+        qry_image.prepare("SELECT id_reportEcho FROM imagesReports;");
+        if (qry_image.exec()){
+            while (qry_image.next()) {
+                qry.prepare(QString("UPDATE reportEcho SET attachedImages = 1 WHERE id = '%1';").arg(qry_image.value(0).toString()));
+                if (! qry.exec())
+                    qCritical(logCritical()) << tr("Eroare de actualizare a documentului 'Comanda ecografica' (inserarea atasarii imaginelor): ") + qry.lastError().text();
+            }
+
+        }
+
+        qry.prepare("UPDATE reportEcho SET attachedImages = 0 WHERE attachedImages ISNULL;");
+        if (! qry.exec())
+            qCritical(logCritical()) << tr("Eroare de actualizare a documentului 'Comanda ecografica' (inserarea atasarii imaginelor): ") + qry.lastError().text();
+    }
+
+    if (current_release == release_1_1_5) {
+        QSqlQuery qry;
+        qry.prepare("CREATE TABLE conclusionTemplates ("
+                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "deletionMark INT (1) NOT NULL,"
+                    "cod          TEXT (10) NOT NULL, "
+                    "name         TEXT (512) NOT NULL,"
+                    "system       TEXT (150)"
+                    ");");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu a fost creata tabela 'conclusionTemplates' - ") + qry.lastError().text();
+            return false;
+        }
+    }
+
+    return true;
+}
