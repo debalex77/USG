@@ -253,7 +253,7 @@
              <string>...</string>
             </property>
             <property name="icon">
-             <iconset resource="resource.qrc">
+             <iconset resource="../resource.qrc">
               <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
             </property>
            </widget>
@@ -318,7 +318,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="resource.qrc">
+        <iconset resource="../resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
       </widget>
@@ -329,7 +329,7 @@
         <string>Salvează</string>
        </property>
        <property name="icon">
-        <iconset resource="resource.qrc">
+        <iconset resource="../resource.qrc">
          <normaloff>:/img/write_doc.png</normaloff>:/img/write_doc.png</iconset>
        </property>
       </widget>
@@ -340,7 +340,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="resource.qrc">
+        <iconset resource="../resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
       </widget>
@@ -360,7 +360,7 @@
   <tabstop>btnCancel</tabstop>
  </tabstops>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections/>
 </ui>

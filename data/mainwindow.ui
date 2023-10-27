@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset resource="../resource.qrc">
     <normaloff>:/img/eco_512x512.ico</normaloff>:/img/eco_512x512.ico</iconset>
   </property>
   <widget class="QWidget" name="centralwidget"/>
@@ -67,7 +67,7 @@
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections/>
 </ui>

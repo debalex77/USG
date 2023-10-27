@@ -20,7 +20,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="resource.qrc">
+   <iconset resource="../resource.qrc">
     <normaloff>:/img/settings_x32.png</normaloff>:/img/settings_x32.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_4">
@@ -52,7 +52,7 @@
          <string>OK</string>
         </property>
         <property name="icon">
-         <iconset resource="resource.qrc">
+         <iconset resource="../resource.qrc">
           <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
         </property>
        </widget>
@@ -63,7 +63,7 @@
          <string>Salvează</string>
         </property>
         <property name="icon">
-         <iconset resource="resource.qrc">
+         <iconset resource="../resource.qrc">
           <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
         </property>
        </widget>
@@ -74,7 +74,7 @@
          <string>Închide</string>
         </property>
         <property name="icon">
-         <iconset resource="resource.qrc">
+         <iconset resource="../resource.qrc">
           <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
         </property>
        </widget>
@@ -807,7 +807,7 @@
   <tabstop>tabConnections</tabstop>
  </tabstops>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections/>
 </ui>
