@@ -324,7 +324,7 @@ void MainWindow::openSourceCode()
 
 void MainWindow::openUserManual()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/User-Manual-(ro)"));
+    QDesktopServices::openUrl(QUrl("https://debalex77.github.io/usg_user_manual"));
 }
 
 void MainWindow::openHistoryVersion()
