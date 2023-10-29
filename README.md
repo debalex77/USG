@@ -1,4 +1,4 @@
-## USG - Record of ultrasound examinations V2.0.1
+## USG - Record of ultrasound examinations
 The application for the records of patients who have passed ultrasound investigations, with the memory of contact   
 details and identity documents. 
 
