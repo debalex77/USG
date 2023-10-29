@@ -12,5 +12,5 @@ details and identity documents.
 * Generating unique print pattern of investigations.
 * Generating statistical reports in the field of ultrasound and financial (in case of a commercial contract)
 
-The app is closely linked to the LimeReport library not included in source code (see [releases](https://github.com/debalex77/USG/releases)).  
+The app is closely linked to the LimeReport library not included in source code (see [releases tag library](https://github.com/debalex77/USG/releases/tag/library)).  
 
