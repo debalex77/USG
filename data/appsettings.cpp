@@ -474,7 +474,7 @@ void AppSettings::setDefaultPath()
     //******************************************************************************
     // setam localizarea sabloanelor de tipar si a rapoartelor
 #if defined(Q_OS_LINUX)
-    lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets"));
+    lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(QCoreApplication::applicationDirPath() + "/templets"));
     globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
     lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets/reports"));
