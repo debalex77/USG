@@ -298,10 +298,6 @@ void MainWindow::initActions()
     ui->menuAssistance->addAction(action_user_manual);
     connect(action_user_manual, &QAction::triggered, this, &MainWindow::openUserManual);
 
-    QAction* action_open_history = new QAction(QIcon(":/img/history.png"), tr("Istoria versiunilor"), this);
-    ui->menuAssistance->addAction(action_open_history);
-    connect(action_open_history, &QAction::triggered, this, &MainWindow::openHistoryVersion);
-
     QAction* actionCheckUpdate = new QAction(QIcon(":/img/update_app.png"), tr("Verifică versiunea nouă"), this);
     ui->menuAssistance->addAction(actionCheckUpdate);
     connect(actionCheckUpdate, &QAction::triggered, this, &MainWindow::checkUpdateApp);
@@ -325,13 +321,6 @@ void MainWindow::openSourceCode()
 void MainWindow::openUserManual()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/User-manual"));
-}
-
-void MainWindow::openHistoryVersion()
-{
-    history_version = new HistoryVersion(this);
-    history_version->setAttribute(Qt::WA_DeleteOnClose);
-    history_version->show();
 }
 
 void MainWindow::updateTextBtn()
@@ -428,11 +417,9 @@ void MainWindow::updateTimer()
             dock_widget->show();
             if (update_app->execUpdateCurrentRelease(APPLICATION_VERSION)){
                 setVersionAppInTableSettingsUsers();
-                openHistoryVersion();
             }
         }
         if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)
-            openHistoryVersion();
         if (globals::showUserManual){
             QDir dir;
             QString str = dir.toNativeSeparators(dir.currentPath() + "/UserManual.pdf");

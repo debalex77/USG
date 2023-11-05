@@ -38,7 +38,6 @@ SOURCES += \
     data/database.cpp \
     data/databaseselection.cpp \
     data/globals.cpp \
-    data/historyversion.cpp \
     data/initlaunch.cpp \
     data/loggingcategories.cpp \
     data/mainwindow.cpp \
@@ -79,7 +78,6 @@ HEADERS += \
     data/database.h \
     data/databaseselection.h \
     data/globals.h \
-    data/historyversion.h \
     data/initlaunch.h \
     data/loggingcategories.h \
     data/mainwindow.h \
@@ -118,7 +116,6 @@ FORMS += \
     data/appsettings.ui \
     data/authorizationuser.ui \
     data/databaseselection.ui \
-    data/historyversion.ui \
     data/initlaunch.ui \
     data/mainwindow.ui \
     data/reports.ui \

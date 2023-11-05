@@ -23,7 +23,6 @@
 #include "data/appsettings.h"
 #include "data/usersettings.h"
 #include "docs/docorderecho.h"
-#include "data/historyversion.h"
 #include "docs/docappointmentspatients.h"
 #include "data/mdiareacontainer.h"
 #include "data/database.h"
@@ -68,7 +67,6 @@ private slots:
     void checkUpdateApp();
     void openSourceCode();
     void openUserManual();
-    void openHistoryVersion();
     void openAbout();
     void openListForm(const int indexEnum);
     void openCatInvestigations();
@@ -123,7 +121,6 @@ private:
     ListDoc*         listDoc;
     Reports*         reports;
     DocOrderEcho*    docOrderEcho;
-    HistoryVersion*  history_version;
     ListDocReportOrder* list_order;
     ListDocReportOrder* list_report;
     CatForSqlTableModel* cat_investigations;
