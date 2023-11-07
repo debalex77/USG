@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>955</width>
-    <height>727</height>
+    <height>762</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -115,7 +115,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -127,7 +126,6 @@
            <widget class="QComboBox" name="comboBoxTypeSQL">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -137,7 +135,6 @@
            <widget class="QLabel" name="label_2">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -150,7 +147,6 @@
            <widget class="QLabel" name="label_3">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -179,7 +175,6 @@
            <widget class="QComboBox" name="comboBoxLangApp">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -189,7 +184,6 @@
            <widget class="QComboBox" name="comboBoxUnitMeasure">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -199,7 +193,6 @@
            <widget class="QLabel" name="label">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -221,7 +214,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -229,37 +221,10 @@
           <string>Localizarea fișierelor aplicației</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="font">
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea formularelor de tipar</string>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="font">
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea bazei de date a imaginelor (.sqlite3)</string>
-            </property>
-           </widget>
-          </item>
           <item row="0" column="2">
            <widget class="QLineEdit" name="txtPathAppSettings">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -268,24 +233,10 @@
             </property>
            </widget>
           </item>
-          <item row="4" column="2">
-           <widget class="QLineEdit" name="txtPathImage">
-            <property name="font">
-             <font>
-              <weight>50</weight>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
           <item row="1" column="2">
            <widget class="QLineEdit" name="txtPathLog">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -294,26 +245,27 @@
             </property>
            </widget>
           </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_5">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
             <property name="text">
-             <string>Localizarea fișierului cu setări</string>
+             <string>Localizarea bazei de date a imaginelor (.sqlite3)</string>
             </property>
            </widget>
           </item>
-          <item row="2" column="2">
-           <widget class="QLineEdit" name="txtPathTemplatesPrint">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_15">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
+            </property>
+            <property name="text">
+             <string>Localizarea șabloanelor de rapoarte</string>
             </property>
            </widget>
           </item>
@@ -321,7 +273,6 @@
            <widget class="QLabel" name="label_6">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -330,11 +281,65 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="2">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea formularelor de tipar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea fișierului cu setări</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QToolButton" name="btnOpenSettings">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QToolButton" name="btnOpenLog">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="2">
+           <widget class="QLineEdit" name="txtPathTemplatesPrint">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="2">
            <widget class="QLineEdit" name="txtPathReports">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -343,16 +348,15 @@
             </property>
            </widget>
           </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_15">
+          <item row="4" column="2" colspan="2">
+           <widget class="QLineEdit" name="txtPathImage">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
-            <property name="text">
-             <string>Localizarea șabloanelor de rapoarte</string>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
             </property>
            </widget>
           </item>
@@ -363,7 +367,6 @@
         <widget class="QTabWidget" name="tabConnections">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -371,7 +374,7 @@
           <enum>QTabWidget::Rounded</enum>
          </property>
          <property name="currentIndex">
-          <number>1</number>
+          <number>0</number>
          </property>
          <property name="elideMode">
           <enum>Qt::ElideNone</enum>
@@ -385,7 +388,6 @@
             <widget class="QLineEdit" name="nameBaseSqlite">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -398,7 +400,6 @@
             <widget class="QLineEdit" name="txtPathBaseSQLITE">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -424,7 +425,6 @@
             <widget class="QLabel" name="label_10">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -450,7 +450,6 @@
             <widget class="QLabel" name="label_16">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -490,7 +489,6 @@
             <widget class="QLabel" name="label_9">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -506,7 +504,6 @@
              </property>
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -519,7 +516,6 @@
             <widget class="QLabel" name="label_11">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -532,7 +528,6 @@
             <widget class="QLineEdit" name="mySQLnameBase">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -545,7 +540,6 @@
             <widget class="QLabel" name="label_12">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -558,7 +552,6 @@
             <widget class="QLineEdit" name="mySQLport">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -571,7 +564,6 @@
             <widget class="QLabel" name="label_13">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -584,7 +576,6 @@
             <widget class="QLineEdit" name="mySQLoptionConnect">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -597,7 +588,6 @@
             <widget class="QLabel" name="label_7">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -610,7 +600,6 @@
             <widget class="QLineEdit" name="mySQLuser">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -623,7 +612,6 @@
             <widget class="QLabel" name="label_8">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -636,7 +624,6 @@
             <widget class="QLineEdit" name="mySQLpasswdUser">
              <property name="font">
               <font>
-               <weight>50</weight>
                <bold>false</bold>
               </font>
              </property>
@@ -686,7 +673,6 @@
         <widget class="QLabel" name="label_18">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -702,7 +688,6 @@
         <widget class="QLabel" name="label_17">
          <property name="font">
           <font>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>

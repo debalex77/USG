@@ -71,8 +71,8 @@ signals:
 private:
     enum IndexBaseSQL {idx_Unknow = 0, idx_MySQL = 1, idx_Sqlite = 2};
     void initBtnForm();
-    void initBtnSettingsApp(const QString appStyleBtn);
-    void initBtnLogApp(const QString appStyleBtn);
+    void initBtnSettingsApp();
+    void initBtnLogApp();
     void initBtnMainBase(const QString appStyleBtn);
     void initBtnImageBase(const QString appStyleBtn);
     void initBtnDirTemplets(const QString appStyleBtn);
@@ -80,7 +80,7 @@ private:
 
     void initConnections();
 
-    void processingLoggingFiles();
+    void processingLoggingFiles(const QString nameMatches);
     void removeFilesLogOnStartApp();
     void setDefaultPath();
     void setDefaultPathSqlite();
@@ -113,10 +113,8 @@ private slots:
     void onClearPathDBImage();
 
     void openFileSettingsApp();     // btn setarile aplicatiei
-    void removeFileSettingsApp();
 
     void openFileCurrentLogApp();   // btn fisierelor de logare
-    void removeFileCurrentLogApp();
 
     void openDirTemplets();         // btn templets and reports
     void openDirReports();
@@ -158,10 +156,8 @@ private:
     QString fileLogPath    = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/logs/usg.log";
 #endif
 
-    QLineEdit* lineEditPathLog;
     QLineEdit* lineEditPathTemplatesPrint;
     QLineEdit* lineEditPathReports;
-    QLineEdit* lineEditPathSettings;
     QLineEdit* lineEditPathDBSqlite;
     QLineEdit* lineEditPathDBImage;
 
@@ -169,17 +165,11 @@ private:
     QToolButton* btnEdit;
     QToolButton* btnClear;
 
-    QToolButton* btnOpenLog;
-    QToolButton* btnRemoveLog;
-
     QToolButton* btnOpenDirTemplates;
     QToolButton* btnRemoveDirTemplates;
 
     QToolButton* btnOpenDirReports;
     QToolButton* btnRemoveDirReports;
-
-    QToolButton* btnOpenSettings;
-    QToolButton* btnRemoveSettings;
 
     QToolButton* btnAddImage;
     QToolButton* btnEditImage;

@@ -22,15 +22,20 @@ AppSettings::AppSettings(QWidget *parent) :
 
 #if defined(Q_OS_LINUX)
 
+    QFileInfo info_file_config(globals::pathAppSettings);
+    const QString baseName_file_config = info_file_config.baseName();
+    const QString nameMatches = baseName_file_config + ".log";
+    fileLogPath = QDir::rootPath() + NAME_DIR_LOG_PATH "/" + nameMatches;
+
     if (! QFile(dirLogPath).exists()){
         QMessageBox::information(this, tr("Crearea directoriului de logare"),
                                  tr("Pentru crearea directoriului de logare a aplicației este necesar accesul administrativ."),
                                  QMessageBox::Ok);
-        QString str_cmd = "pkexec mkdir /" NAME_DIR_LOG_PATH " && pkexec chmod 777 /" NAME_DIR_LOG_PATH " && touch /" NAME_FILE_LOG_PATH;
+        QString str_cmd = "pkexec mkdir /" NAME_DIR_LOG_PATH " && pkexec chmod 777 /" NAME_DIR_LOG_PATH " && touch " + fileLogPath;
         system(str_cmd.toStdString().c_str()); // pkexec mkdir /var/log/usg && pkexec chmod 777 /var/log/usg && touch /var/log/usg/usg.log
         globals::pathLogAppSettings = fileLogPath;
     } else {
-        processingLoggingFiles();
+        processingLoggingFiles(nameMatches);
         globals::pathLogAppSettings = fileLogPath;
     }
 
@@ -53,6 +58,10 @@ AppSettings::AppSettings(QWidget *parent) :
 
 #elif defined(Q_OS_WIN)
 
+    QFileInfo info_file_config(globals::pathAppSettings);
+    const QString nameMatches = baseName_file_config + ".log";
+    fileLogPath = dirLogPath + "/" + nameMatches;
+
     QDir dir;
     //********************************************
     // usg.log
@@ -65,7 +74,7 @@ AppSettings::AppSettings(QWidget *parent) :
             return;
         }
     } else {
-        processingLoggingFiles();
+        processingLoggingFiles(nameMatches);
     }
 
     //********************************************
@@ -108,17 +117,11 @@ AppSettings::~AppSettings()
     delete popUp;
     delete lineEditPathDBImage;
     delete lineEditPathDBSqlite;
-    delete lineEditPathLog;
-    delete lineEditPathSettings;
     delete lineEditPathReports;
     delete lineEditPathTemplatesPrint;
     delete btnAdd;
     delete btnEdit;
     delete btnClear;
-    delete btnOpenSettings;
-    delete btnRemoveSettings;
-    delete btnOpenLog;
-    delete btnRemoveLog;
     delete btnAddImage;
     delete btnEditImage;
     delete btnClearImage;
@@ -135,72 +138,38 @@ void AppSettings::initBtnForm()
     fileStyleBtn.open(QFile::ReadOnly);
     QString appStyleBtn(fileStyleBtn.readAll());
 
-    initBtnSettingsApp(appStyleBtn);
-    initBtnLogApp(appStyleBtn);
+    initBtnSettingsApp();
+    initBtnLogApp();
     initBtnMainBase(appStyleBtn);
     initBtnImageBase(appStyleBtn);
     initBtnDirTemplets(appStyleBtn);
     initBtnDirReports(appStyleBtn);
 }
 
-void AppSettings::initBtnSettingsApp(const QString appStyleBtn)
+void AppSettings::initBtnSettingsApp()
 {
-    btnOpenSettings = new QToolButton(this);
-    btnOpenSettings->setIcon(QIcon(":/img/open-search.png"));
-    btnOpenSettings->setStyleSheet(appStyleBtn);
-    btnOpenSettings->setCursor(Qt::PointingHandCursor);
-    btnOpenSettings->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
 
-    btnRemoveSettings = new QToolButton(this);
-    btnRemoveSettings->setIcon(QIcon(":/img/trash.png"));
-    btnRemoveSettings->setStyleSheet(appStyleBtn);
-    btnRemoveSettings->setCursor(Qt::PointingHandCursor);
-    btnRemoveSettings->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
+    ui->btnOpenSettings->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
+                                       "border-radius: 4px;}"
+                                       "QToolButton:hover {background-color: rgb(234,243,250);}"
+                                       "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
 
-    lineEditPathSettings = new QLineEdit(this);
-    lineEditPathSettings->setStyleSheet(appStyleBtn);
-    lineEditPathSettings->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    ui->txtPathAppSettings->setEnabled(false);
 
-    QHBoxLayout* layoutPathSettings = new QHBoxLayout;
-    layoutPathSettings->setContentsMargins(0, 0, 0, 0);
-    layoutPathSettings->setSpacing(0);
-    layoutPathSettings->addWidget(lineEditPathSettings);
-    layoutPathSettings->addWidget(btnOpenSettings);
-    layoutPathSettings->addWidget(btnRemoveSettings);
-    ui->txtPathAppSettings->setLayout(layoutPathSettings);
-
-    connect(btnOpenSettings, &QToolButton::clicked, this, &AppSettings::openFileSettingsApp);
-    connect(btnRemoveSettings, &QToolButton::clicked, this, &AppSettings::removeFileSettingsApp);
+    connect(ui->btnOpenSettings, &QToolButton::clicked, this, &AppSettings::openFileSettingsApp);
 }
 
-void AppSettings::initBtnLogApp(const QString appStyleBtn)
+void AppSettings::initBtnLogApp()
 {
-    btnOpenLog = new QToolButton(this);
-    btnOpenLog->setIcon(QIcon(":/img/open-search.png"));
-    btnOpenLog->setStyleSheet(appStyleBtn);
-    btnOpenLog->setCursor(Qt::PointingHandCursor);
-    btnOpenLog->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
 
-    btnRemoveLog = new QToolButton(this);
-    btnRemoveLog->setIcon(QIcon(":/img/trash.png"));
-    btnRemoveLog->setStyleSheet(appStyleBtn);
-    btnRemoveLog->setCursor(Qt::PointingHandCursor);
-    btnRemoveLog->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
+    ui->btnOpenLog->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
+                                  "border-radius: 4px;}"
+                                  "QToolButton:hover {background-color: rgb(234,243,250);}"
+                                  "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
 
-    lineEditPathLog = new QLineEdit(this);
-    lineEditPathLog->setStyleSheet(appStyleBtn);
-    lineEditPathLog->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+    ui->txtPathLog->setEnabled(false);
 
-    QHBoxLayout* layoutPathLog = new QHBoxLayout;
-    layoutPathLog->setContentsMargins(0, 0, 0, 0);
-    layoutPathLog->setSpacing(0);
-    layoutPathLog->addWidget(lineEditPathLog);
-    layoutPathLog->addWidget(btnOpenLog);
-    layoutPathLog->addWidget(btnRemoveLog);
-    ui->txtPathLog->setLayout(layoutPathLog);
-
-    connect(btnOpenLog, &QToolButton::clicked, this, &AppSettings::openFileCurrentLogApp);
-    connect(btnRemoveLog, &QToolButton::clicked, this, &AppSettings::removeFileCurrentLogApp);
+    connect(ui->btnOpenLog, &QToolButton::clicked, this, &AppSettings::openFileCurrentLogApp);
 }
 
 void AppSettings::initBtnMainBase(const QString appStyleBtn)
@@ -349,8 +318,8 @@ void AppSettings::initConnections()
 {
     connect(lineEditPathDBSqlite, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathDBImage, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    connect(lineEditPathSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    connect(lineEditPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(ui->txtPathAppSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
@@ -467,9 +436,9 @@ void AppSettings::setDefaultPath()
 
     QDir dir;
 
-    if (! lineEditPathSettings->text().isEmpty())
-        lineEditPathSettings->setText(globals::pathAppSettings);
-    lineEditPathLog->setText(globals::pathLogAppSettings);
+    if (! ui->txtPathAppSettings->text().isEmpty())
+        ui->txtPathAppSettings->setText(globals::pathAppSettings);
+    ui->txtPathLog->setText(globals::pathLogAppSettings);
 
     //******************************************************************************
     // setam localizarea sabloanelor de tipar si a rapoartelor
@@ -669,8 +638,8 @@ void AppSettings::readSettings()
 
     disconnect(lineEditPathDBSqlite, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     disconnect(lineEditPathDBImage, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    disconnect(lineEditPathSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    disconnect(lineEditPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    disconnect(ui->txtPathAppSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    disconnect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     disconnect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     disconnect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
@@ -715,7 +684,7 @@ void AppSettings::readSettings()
 
     }
 
-    lineEditPathLog->setText(globals::pathLogAppSettings);   
+    ui->txtPathLog->setText(globals::pathLogAppSettings);
     lineEditPathTemplatesPrint->setText(globals::pathTemplatesDocs);
     lineEditPathReports->setText(globals::pathReports);
 
@@ -731,8 +700,8 @@ void AppSettings::readSettings()
 
     connect(lineEditPathDBSqlite, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathDBImage, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    connect(lineEditPathSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
-    connect(lineEditPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(ui->txtPathAppSettings, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
@@ -771,7 +740,7 @@ void AppSettings::saveSettings()
         settApp->setValue("sqliteNameBase", ui->nameBaseSqlite->text());
         settApp->setValue("sqlitePathBase", lineEditPathDBSqlite->text());
         settApp->setValue("pathDBImage",    lineEditPathDBImage->text());
-        settApp->setValue("pathLogApp",     lineEditPathLog->text());
+        settApp->setValue("pathLogApp",     ui->txtPathLog->text());
     }
     settApp->endGroup();
 
@@ -908,7 +877,7 @@ QVariant AppSettings::getValuesSettings(const QString nameGroup, const QString &
 // *******************************************************************
 // **************** PROCESAREA LOG-FISIERELOR ************************
 
-void AppSettings::processingLoggingFiles()
+void AppSettings::processingLoggingFiles(const QString nameMatches)
 {
     QDir dir(dirLogPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
@@ -924,7 +893,7 @@ void AppSettings::processingLoggingFiles()
 
         // verificam data curenta si ultima modificare a fisierului
         // copierea fisierului si redenumirea cu atribuirea datei
-        if (fileInfo.fileName() == "usg.log"){
+        if (fileInfo.fileName() == nameMatches){
             QString log_file = fileInfo.filePath();
             QString str_cmd;
             QString renamed_file;
@@ -955,7 +924,7 @@ void AppSettings::processingLoggingFiles()
         // verificam data curenta si ultima modificare a fisierului
         // copierea fisierului si redenumirea cu atasarea datei ultimei
         // modificari
-        if (fileInfo.fileName() == "usg.log" && mCurrentDate > fileInfo.lastModified().date()){
+        if (fileInfo.fileName() == nameMatches && mCurrentDate > fileInfo.lastModified().date()){
             QDir file_init;
             QString nFile = file_init.toNativeSeparators(fileInfo.filePath());
             QString nNameFile = file_init.toNativeSeparators(dirLogPath + "\\" + fileInfo.baseName() + QString("_%1.log").arg(fileInfo.lastModified().toString("dd.MM.yyyy")));
@@ -985,13 +954,16 @@ void AppSettings::removeFilesLogOnStartApp()
 
     QDir dir(dirLogPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
+    dir.setSorting(QDir::Time);
     QFileInfoList listFiles = dir.entryInfoList();
+
+    QRegExp regx(globals::sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
 
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
 
         // verificam fisiere si eliminam din sistem
-        if (fileInfo.fileName() != "usg.log"){             // fisierul curent = usg.log
+        if (fileInfo.fileName().contains(regx) > 0){             // fisierul curent = usg.log
             count_file += 1;
             if (count_file > globals::numSavedFilesLog){  // valoarea in SpinBox - numberLogFile
 #if defined(Q_OS_LINUX)
@@ -1246,31 +1218,6 @@ void AppSettings::openFileSettingsApp()
 
 }
 
-void AppSettings::removeFileSettingsApp()
-{
-    QMessageBox::StandardButton YesNo;
-    YesNo = QMessageBox::question(this,
-                                  tr("Eliminarea fișierului"),
-                                  tr("Sunteți siguri că doriți să eliminați fișierul cu setările aplicației din sistem ?"),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::Yes);
-    QString str_cmd;
-#if defined(Q_OS_LINUX)
-    str_cmd = "rm -r " + lineEditPathSettings->text();
-#elif defined(Q_OS_MACOS)
-  str_cmd = "rm -r " + lineEditPathSettings->text();
-#elif defined(Q_OS_WIN)
-    str_cmd = "del /f " + lineEditPathSettings->text();
-#endif
-    if (YesNo == QMessageBox::Yes){
-        system(str_cmd.toStdString().c_str());
-        if (! QFile(lineEditPathSettings->text()).exists()){
-            popUp->setPopupText(tr("Fișierul cu setările aplicației<br> a fost eliminat cu succes."));
-            popUp->show();
-        }
-    }
-}
-
 void AppSettings::openFileCurrentLogApp()
 {
     if (! QFile(fileLogPath).exists()){
@@ -1283,43 +1230,18 @@ void AppSettings::openFileCurrentLogApp()
     }
 
 #if defined(Q_OS_LINUX)
-    QDesktopServices::openUrl(QUrl(lineEditPathLog->text()));
+    QDesktopServices::openUrl(QUrl(ui->txtPathLog->text()));
 #elif defined(Q_OS_MACOS)
-    QString str_cmd = "open -a \"TextEdit\" " + lineEditPathLog->text();
+    QString str_cmd = "open -a \"TextEdit\" " + ui->txtPathLog->text();
     system(str_cmd.toStdString().c_str());
 #elif defined(Q_OS_WIN)
     QProcess* proc = new QProcess(this);
     QStringList arguments;
-    arguments << lineEditPathLog->text();
+    arguments << ui->txtPathLog->text();
     proc->start("notepad.exe", arguments);
 #elif defined(Q_OS_MACOS)
 #endif
 
-}
-
-void AppSettings::removeFileCurrentLogApp()
-{
-    QMessageBox::StandardButton YesNo;
-    YesNo = QMessageBox::question(this,
-                                  tr("Eliminarea fișierului"),
-                                  tr("Doriți să eliminați fișierul de logare a aplicației din sistem ?"),
-                                  QMessageBox::Yes | QMessageBox::No,
-                                  QMessageBox::Yes);
-    QString str_cmd;
-#if defined(Q_OS_LINUX)
-    str_cmd = "rm -r " + lineEditPathLog->text();
-#elif defined(Q_OS_MACOS)
-    str_cmd = "rm -r " + lineEditPathLog->text();
-#elif defined(Q_OS_WIN)
-    str_cmd = "del /f " + lineEditPathLog->text(); // nu se elimina pu ca e deschis !!!
-#endif
-    if (YesNo == QMessageBox::Yes){
-        system(str_cmd.toStdString().c_str());
-        if (! QFile(fileLogPath).exists()){
-            popUp->setPopupText(tr("Fișierul de logare a aplicației<br> a fost eliminat cu succes."));
-            popUp->show();
-        }
-    }
 }
 
 void AppSettings::openDirTemplets()
@@ -1545,8 +1467,10 @@ void AppSettings::setPathAppSettings()
     QDir file_path;
     if (globals::thisMySQL){
         ui->txtPathAppSettings->setText(file_path.toNativeSeparators(dirConfigPath + "/" + ui->mySQLnameBase->text() + ".conf"));
+        ui->txtPathLog->setText(file_path.toNativeSeparators(dirLogPath + "/" + ui->nameBaseSqlite->text() + ".log"));
     } else {
         ui->txtPathAppSettings->setText(file_path.toNativeSeparators(dirConfigPath + "/" + ui->nameBaseSqlite->text() + ".conf"));
+        ui->txtPathLog->setText(file_path.toNativeSeparators(dirLogPath + "/" + ui->nameBaseSqlite->text() + ".log"));
     }
 }
 
