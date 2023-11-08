@@ -417,6 +417,7 @@ void MainWindow::updateTimer()
             dock_widget->show();
             if (update_app->execUpdateCurrentRelease(APPLICATION_VERSION)){
                 setVersionAppInTableSettingsUsers();
+                QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/Istoria-versiunilor#usg-v202"));
             }
         }
         if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)

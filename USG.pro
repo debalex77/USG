@@ -7,7 +7,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_QML_DEBUG_NO_WARNING
 CONFIG- = qml_debug
 
-VERSION                  = 2.0.1
+VERSION                  = 2.0.2
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
