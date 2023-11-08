@@ -995,17 +995,23 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
 
     model_logs->clear();
 
+    QRegExp regx((ui->comboBoxTypeSQL->currentIndex() == idx_Sqlite) ?
+                     globals::sqliteNameBase : globals::mySQLnameBase );
+
     QDir dir(dirLogPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     QFileInfoList listFiles = dir.entryInfoList();
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
-        QString m_file_log = dir.toNativeSeparators(fileInfo.filePath());
 
-        QStandardItem *item = new QStandardItem;
-        item->setData(n, Qt::UserRole);
-        item->setData(m_file_log, Qt::DisplayRole);
-        model_logs->appendRow(item);
+        if (fileInfo.fileName().contains(regx) > 0){
+            QString m_file_log = dir.toNativeSeparators(fileInfo.filePath());
+
+            QStandardItem *item = new QStandardItem;
+            item->setData(n, Qt::UserRole);
+            item->setData(m_file_log, Qt::DisplayRole);
+            model_logs->appendRow(item);
+        }
     }
 
     ui->tableViewLogs->setModel(model_logs);
@@ -1347,7 +1353,7 @@ void AppSettings::changeIndexTypeSQL(const int _index)
         globals::thisMySQL      = true;
         globals::connectionMade = "MySQL";
 
-        ui->tabLogs->setEnabled(false);
+        ui->tabLogs->setEnabled(true);
         ui->tabSqlite->setEnabled(false);
         ui->tabMySQL->setEnabled(true);
         ui->txtPathImage->setEnabled(false);
@@ -1362,8 +1368,8 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 
         setDefaultPath(); // setam localizarea fisierelor implicite a bazei de date
 
-        ui->tableViewLogs->setVisible(false);
-        ui->textLog->setVisible(false);
+        ui->tableViewLogs->setVisible(true);
+        ui->textLog->setVisible(true);
 
     } else if (_index == idx_Sqlite){ //sqlite
 
