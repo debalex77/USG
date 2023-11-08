@@ -108,6 +108,7 @@ private slots:
     void onClickBtnFilterByIdOrganization();
     void onClickBtnFilterRemove();
     void onClickBtnUpdateTable();
+    void onClickBtnHideShowColumn();
     void onClickBtnPrint();
     void onClickBtnReport();
     void openHistoryPatients();
@@ -248,6 +249,8 @@ private:
     QToolButton* btnViewTab;
     QToolButton* btnPeriodDate;
     QToolButton* btnSearch;
+    QToolButton* btnHideShowColumn;
+
     QLabel*      lablePeriodDate;
     QLineEdit*   editSearch;
 

@@ -48,6 +48,7 @@ SOURCES += \
     data/usersettings.cpp \
     delegates/checkboxdelegate.cpp \
     delegates/combodelegate.cpp \
+    docs/choicecolumns.cpp \
     docs/docappointmentspatients.cpp \
     docs/docorderecho.cpp \
     docs/docpricing.cpp \
@@ -89,6 +90,7 @@ HEADERS += \
     data/version.h \
     delegates/checkboxdelegate.h \
     delegates/combodelegate.h \
+    docs/choicecolumns.h \
     docs/docappointmentspatients.h \
     docs/docorderecho.h \
     docs/docpricing.h \

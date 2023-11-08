@@ -449,6 +449,13 @@ void ListDocReportOrder::onClickBtnUpdateTable()
     updateTableView();
 }
 
+void ListDocReportOrder::onClickBtnHideShowColumn()
+{
+    QMessageBox::warning(this,
+                         tr("Info"),
+                         tr("În procesul dezvoltării !!!"), QMessageBox::Ok);
+}
+
 void ListDocReportOrder::onClickBtnPrint()
 {
     if (ui->tableView->currentIndex().row() == idx_unknow){
@@ -867,18 +874,19 @@ void ListDocReportOrder::initBtnToolBar()
     // alocarea memoriei
 
     toolBar         = new QToolBar(this);
-    btnAdd          = new QToolButton(this);
-    btnEdit         = new QToolButton(this);
-    btnDeletion     = new QToolButton(this);
-    btnFilter       = new QToolButton(this);
-    btnAddFilter    = new QToolButton(this);
-    btnFilterRemove = new QToolButton(this);
-    btnUpdateTable  = new QToolButton(this);
-    btnPrint        = new QToolButton(this);
-    btnReport       = new QToolButton(this);
-    btnViewTab      = new QToolButton(this);
-    btnPeriodDate   = new QToolButton(this);
-    btnSearch       = new QToolButton(this);
+    btnAdd          = new QToolButton(toolBar);
+    btnEdit         = new QToolButton(toolBar);
+    btnDeletion     = new QToolButton(toolBar);
+    btnFilter       = new QToolButton(toolBar);
+    btnAddFilter    = new QToolButton(toolBar);
+    btnFilterRemove = new QToolButton(toolBar);
+    btnUpdateTable  = new QToolButton(toolBar);
+    btnPrint        = new QToolButton(toolBar);
+    btnReport       = new QToolButton(toolBar);
+    btnViewTab      = new QToolButton(toolBar);
+    btnPeriodDate   = new QToolButton(toolBar);
+    btnSearch       = new QToolButton(toolBar);
+    btnHideShowColumn = new QToolButton(toolBar);
 
     // ----------------------------------------------------------------------------
     // setarea stilului btn
@@ -921,6 +929,11 @@ void ListDocReportOrder::initBtnToolBar()
     btnUpdateTable->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
     btnUpdateTable->setShortcut(QKeySequence(Qt::Key_F5));
     btnUpdateTable->setObjectName("toolBtn_update"); // pu adresare din css
+
+    btnHideShowColumn->setIcon(QIcon(":/img/table-cell.png"));
+    btnHideShowColumn->setToolButtonStyle(Qt::ToolButtonIconOnly);
+    btnHideShowColumn->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
+    btnHideShowColumn->setObjectName("toolBtn_update"); // pu adresare din css
 
     btnPrint->setIcon(QIcon(":/img/print.png"));//.pixmap(14, 14));
     btnPrint->setToolButtonStyle(Qt::ToolButtonIconOnly);
@@ -979,6 +992,8 @@ void ListDocReportOrder::initBtnToolBar()
     btnPeriodDate->installEventFilter(this);
     btnSearch->setMouseTracking(true);
     btnSearch->installEventFilter(this);
+    btnHideShowColumn->setMouseTracking(true);
+    btnHideShowColumn->installEventFilter(this);
 
     // ----------------------------------------------------------------------------
     // crearea toolBar-ului
@@ -993,6 +1008,8 @@ void ListDocReportOrder::initBtnToolBar()
     toolBar->addWidget(btnFilterRemove);
     toolBar->addSeparator();
     toolBar->addWidget(btnUpdateTable);
+    toolBar->addSeparator();
+    toolBar->addWidget(btnHideShowColumn);
     toolBar->addSeparator();
     toolBar->addWidget(btnPrint);
     toolBar->addSeparator();
@@ -1021,6 +1038,7 @@ void ListDocReportOrder::initBtnToolBar()
     connect(btnFilter, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnFilterByIdOrganization);
     connect(btnFilterRemove, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnFilterRemove);
     connect(btnUpdateTable, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnUpdateTable);
+    connect(btnHideShowColumn, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnHideShowColumn);
     connect(btnPrint, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnPrint);
     connect(btnReport, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
 
@@ -1923,6 +1941,22 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
             popUp->setPopupText(tr("Actualizează tabela."));  // setam textul
 #elif defined(Q_OS_WIN)
             popUp->setPopupText(tr("Actualizeaz\304\203 tabela."));  // setam textul
+#endif
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == btnHideShowColumn){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(btnUpdateTable->pos().x() - 35, btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
+#if defined(Q_OS_LINUX)
+            popUp->setPopupText(tr("Ascunde/afișează<br>colonițe."));  // setam textul
+#elif defined(Q_OS_MACOS)
+            popUp->setPopupText(tr("Ascunde/afișează<br>colonițe."));  // setam textul
+#elif defined(Q_OS_WIN)
+            popUp->setPopupText(tr("Ascunde/afi\310\231eaz\304\203 <br>coloni\310\233e."));  // setam textul
 #endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
