@@ -61,6 +61,7 @@ AppSettings::AppSettings(QWidget *parent) :
     QDir dir;
 
     QFileInfo info_file_config(globals::pathAppSettings);
+    const QString baseName_file_config = info_file_config.baseName();
     const QString nameMatches = baseName_file_config + ".log";
     fileLogPath = dir.toNativeSeparators(dirLogPath + "/" + nameMatches);
 
@@ -964,7 +965,7 @@ void AppSettings::removeFilesLogOnStartApp()
         QFileInfo fileInfo = listFiles.at(n);
 
         // verificam fisiere si eliminam din sistem
-        if (fileInfo.fileName().contains(regx) > 0){             // fisierul curent = usg.log
+        if (fileInfo.fileName().contains(regx)){             // fisierul curent = usg.log
             count_file += 1;
             if (count_file > globals::numSavedFilesLog){  // valoarea in SpinBox - numberLogFile
 #if defined(Q_OS_LINUX)
@@ -1004,7 +1005,7 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
 
-        if (fileInfo.fileName().contains(regx) > 0){
+        if (fileInfo.fileName().contains(regx)){
             QString m_file_log = dir.toNativeSeparators(fileInfo.filePath());
 
             QStandardItem *item = new QStandardItem;
