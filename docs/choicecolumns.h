@@ -2,6 +2,7 @@
 #define CHOICECOLUMNS_H
 
 #include <QDialog>
+#include <QDebug>
 #include <QDialogButtonBox>
 #include <QListWidget>
 #include <QListWidgetItem>
@@ -69,6 +70,9 @@ public:
 
     void set_comment(bool _comment){show_comment = _comment;}
     bool get_comment(){return show_comment;}
+
+signals:
+    void saveData();
 
 public slots:
     void highlightChecked(QListWidgetItem* item);

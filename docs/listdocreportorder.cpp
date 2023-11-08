@@ -451,9 +451,28 @@ void ListDocReportOrder::onClickBtnUpdateTable()
 
 void ListDocReportOrder::onClickBtnHideShowColumn()
 {
-    QMessageBox::warning(this,
-                         tr("Info"),
-                         tr("În procesul dezvoltării !!!"), QMessageBox::Ok);
+//    QMessageBox::warning(this,
+//                         tr("Info"),
+//                         tr("În procesul dezvoltării !!!"), QMessageBox::Ok);
+    columns = new ChoiceColumns(this);
+    columns->set_attachedImages(! ui->tableView->isColumnHidden(section_attachedImages));
+    columns->set_cardPayment(! ui->tableView->isColumnHidden(section_cardPayment));
+    columns->set_numberDoc(! ui->tableView->isColumnHidden(section_numberDoc));
+    columns->set_dateDoc(! ui->tableView->isColumnHidden(section_dateDoc));
+    columns->set_idOrganization(! ui->tableView->isColumnHidden(section_idOrganization));
+    columns->set_Organization(! ui->tableView->isColumnHidden(section_Organization));
+    columns->set_idContract(! ui->tableView->isColumnHidden(section_idContract));
+    columns->set_Contract(! ui->tableView->isColumnHidden(section_Contract));
+    columns->set_idPacient(! ui->tableView->isColumnHidden(section_idPacient));
+    columns->set_IDNP(! ui->tableView->isColumnHidden(section_IDNP));
+    columns->set_pacient(! ui->tableView->isColumnHidden(section_pacient));
+    columns->set_idUser(! ui->tableView->isColumnHidden(section_idUser));
+    columns->set_user(! ui->tableView->isColumnHidden(section_user));
+    columns->set_sum(! ui->tableView->isColumnHidden(section_sum));
+    columns->set_comment(! ui->tableView->isColumnHidden(section_comment));
+    columns->setListWidget();
+    connect(columns, &ChoiceColumns::saveData, this, &ListDocReportOrder::showHideColums);
+    columns->show();
 }
 
 void ListDocReportOrder::onClickBtnPrint()
@@ -854,6 +873,40 @@ void ListDocReportOrder::onActionEditPacient()
     catPacient->setProperty("typeCatalog", CatGeneral::TypeCatalog::Pacients);
     catPacient->setProperty("Id", _id);
     catPacient->show();
+}
+
+void ListDocReportOrder::showHideColums()
+{
+    if (! columns->get_attachedImages())
+        ui->tableView->hideColumn(section_attachedImages);
+    if (! columns->get_cardPayment())
+        ui->tableView->hideColumn(section_cardPayment);
+    if (! columns->get_numberDoc())
+        ui->tableView->hideColumn(section_numberDoc);
+    if (! columns->get_dateDoc())
+        ui->tableView->hideColumn(section_dateDoc);
+    if (! columns->get_idOrganization())
+        ui->tableView->showColumn(section_idOrganization);
+    if (! columns->get_Organization())
+        ui->tableView->hideColumn(section_Organization);
+    if (! columns->get_idContract())
+        ui->tableView->hideColumn(section_idContract);
+    if (! columns->get_Contract())
+        ui->tableView->hideColumn(section_Contract);
+    if (! columns->get_idPacient())
+        ui->tableView->hideColumn(section_idPacient);
+    if (! columns->get_IDNP())
+        ui->tableView->hideColumn(section_IDNP);
+    if (! columns->get_pacient())
+        ui->tableView->hideColumn(section_pacient);
+    if (! columns->get_idUser())
+        ui->tableView->hideColumn(section_idUser);
+    if (! columns->get_user())
+        ui->tableView->hideColumn(section_user);
+    if (! columns->get_sum())
+        ui->tableView->hideColumn(section_sum);
+    if (! columns->get_comment())
+        ui->tableView->hideColumn(section_comment);
 }
 
 QString ListDocReportOrder::enumToString(TypeDoc typeDoc)

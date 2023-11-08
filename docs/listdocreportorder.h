@@ -18,6 +18,7 @@
 #include <catalogs/catcontracts.h>
 #include <catalogs/catgeneral.h>
 #include "catalogs/customperiod.h"
+#include "docs/choicecolumns.h"
 #include "docs/docorderecho.h"
 #include <docs/docreportecho.h>
 #include "models/basesqlquerymodel.h"
@@ -120,6 +121,8 @@ private slots:
     void onActionEditOrganization();
     void onActionEditContract();
     void onActionEditPacient();
+
+    void showHideColums();
 
 private:
     enum idx
@@ -261,6 +264,8 @@ private:
     PatientHistory* patient_history;
 
     QTimer* timer;
+
+    ChoiceColumns* columns;
 
 protected:
     void closeEvent(QCloseEvent *event);
