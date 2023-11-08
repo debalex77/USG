@@ -58,11 +58,12 @@ AppSettings::AppSettings(QWidget *parent) :
 
 #elif defined(Q_OS_WIN)
 
+    QDir dir;
+
     QFileInfo info_file_config(globals::pathAppSettings);
     const QString nameMatches = baseName_file_config + ".log";
-    fileLogPath = dirLogPath + "/" + nameMatches;
+    fileLogPath = dir.toNativeSeparators(dirLogPath + "/" + nameMatches);
 
-    QDir dir;
     //********************************************
     // usg.log
     if (! QDir(dir.toNativeSeparators(dirLogPath)).exists()){
