@@ -451,9 +451,6 @@ void ListDocReportOrder::onClickBtnUpdateTable()
 
 void ListDocReportOrder::onClickBtnHideShowColumn()
 {
-//    QMessageBox::warning(this,
-//                         tr("Info"),
-//                         tr("În procesul dezvoltării !!!"), QMessageBox::Ok);
     columns = new ChoiceColumns(this);
     columns->set_attachedImages(! ui->tableView->isColumnHidden(section_attachedImages));
     columns->set_cardPayment(! ui->tableView->isColumnHidden(section_cardPayment));
@@ -472,7 +469,7 @@ void ListDocReportOrder::onClickBtnHideShowColumn()
     columns->set_comment(! ui->tableView->isColumnHidden(section_comment));
     columns->setListWidget();
     connect(columns, &ChoiceColumns::saveData, this, &ListDocReportOrder::showHideColums);
-    columns->show();
+    columns->exec();
 }
 
 void ListDocReportOrder::onClickBtnPrint()
@@ -877,36 +874,116 @@ void ListDocReportOrder::onActionEditPacient()
 
 void ListDocReportOrder::showHideColums()
 {
-    if (! columns->get_attachedImages())
+    timer->stop();
+
+    if (columns->get_attachedImages()){
+        ui->tableView->showColumn(section_attachedImages);
+        ui->tableView->setColumnWidth(section_attachedImages, 15);
+    } else {
         ui->tableView->hideColumn(section_attachedImages);
-    if (! columns->get_cardPayment())
+    }
+
+    if (columns->get_cardPayment()){
+        ui->tableView->showColumn(section_cardPayment);
+        ui->tableView->setColumnWidth(section_cardPayment, 15);
+    } else {
         ui->tableView->hideColumn(section_cardPayment);
-    if (! columns->get_numberDoc())
+    }
+
+    if (columns->get_numberDoc()){
+        ui->tableView->showColumn(section_numberDoc);
+        ui->tableView->setColumnWidth(section_numberDoc, 70);
+    } else {
         ui->tableView->hideColumn(section_numberDoc);
-    if (! columns->get_dateDoc())
+    }
+
+    if (columns->get_dateDoc()){
+        ui->tableView->showColumn(section_dateDoc);
+        ui->tableView->setColumnWidth(section_dateDoc, 153);
+    } else {
         ui->tableView->hideColumn(section_dateDoc);
-    if (! columns->get_idOrganization())
+    }
+
+    if (columns->get_idOrganization()){
         ui->tableView->showColumn(section_idOrganization);
-    if (! columns->get_Organization())
+        ui->tableView->setColumnWidth(section_idOrganization, 15);
+    } else {
+        ui->tableView->hideColumn(section_idOrganization);
+    }
+
+    if (columns->get_Organization()){
+        ui->tableView->showColumn(section_Organization);
+        ui->tableView->setColumnWidth(section_Organization, 136);
+    } else {
         ui->tableView->hideColumn(section_Organization);
-    if (! columns->get_idContract())
+    }
+
+    if (columns->get_idContract()){
+        ui->tableView->showColumn(section_idContract);
+        ui->tableView->setColumnWidth(section_idContract, 15);
+    } else {
         ui->tableView->hideColumn(section_idContract);
-    if (! columns->get_Contract())
+    }
+
+    if (columns->get_Contract()){
+        ui->tableView->showColumn(section_Contract);
+        ui->tableView->setColumnWidth(section_Contract, 132);
+    } else {
         ui->tableView->hideColumn(section_Contract);
-    if (! columns->get_idPacient())
+    }
+
+    if (columns->get_idPacient()){
+        ui->tableView->showColumn(section_idPacient);
+        ui->tableView->setColumnWidth(section_idPacient, 15);
+    } else {
         ui->tableView->hideColumn(section_idPacient);
-    if (! columns->get_IDNP())
+    }
+
+    if (columns->get_IDNP()){
+        ui->tableView->showColumn(section_IDNP);
+        ui->tableView->setColumnWidth(section_IDNP, 155);
+    } else {
         ui->tableView->hideColumn(section_IDNP);
-    if (! columns->get_pacient())
+    }
+
+    if (columns->get_pacient()){
+        ui->tableView->showColumn(section_pacient);
+        ui->tableView->setColumnWidth(section_pacient, 160);
+    } else {
         ui->tableView->hideColumn(section_pacient);
-    if (! columns->get_idUser())
+    }
+
+    if (columns->get_idUser()){
+        ui->tableView->showColumn(section_idUser);
+        ui->tableView->setColumnWidth(section_idUser, 15);
+    } else {
         ui->tableView->hideColumn(section_idUser);
-    if (! columns->get_user())
+    }
+
+    if (columns->get_user()){
+        ui->tableView->showColumn(section_user);
+        ui->tableView->setColumnWidth(section_user, 64);
+    } else {
         ui->tableView->hideColumn(section_user);
-    if (! columns->get_sum())
+    }
+
+    if (columns->get_sum()){
+        ui->tableView->showColumn(section_sum);
+        ui->tableView->setColumnWidth(section_sum, 65);
+    } else {
         ui->tableView->hideColumn(section_sum);
-    if (! columns->get_comment())
+    }
+
+    if (columns->get_comment()){
+        ui->tableView->showColumn(section_comment);
+        ui->tableView->setColumnWidth(section_comment, 300);
+    } else {
         ui->tableView->hideColumn(section_comment);
+    }
+
+//    timer->start(globals::updateIntervalListDoc * 1000);
+
+    columns->close();
 }
 
 QString ListDocReportOrder::enumToString(TypeDoc typeDoc)

@@ -44,8 +44,61 @@ void ChoiceColumns::highlightChecked(QListWidgetItem *item)
 
 void ChoiceColumns::save()
 {
+    QListWidgetItem* item = 0;
+    for(int i = 0; i < widget->count(); ++i){
+        item = widget->item(i);
+        bool isChecked = (item->checkState() == Qt::Checked) ? true : false;
+        switch (i) {
+        case 0:
+            show_attachedImages = isChecked;
+            break;
+        case 1:
+            show_cardPayment = isChecked;
+            break;
+        case 2:
+            show_numberDoc = isChecked;
+            break;
+        case 3:
+            show_dateDoc = isChecked;
+            break;
+        case 4:
+            show_idOrganization = isChecked;
+            break;
+        case 5:
+            show_Organization = isChecked;
+            break;
+        case 6:
+            show_idContract = isChecked;
+            break;
+        case 7:
+            show_Contract = isChecked;
+            break;
+        case 8:
+            show_idPacient = isChecked;
+            break;
+        case 9:
+            show_pacient = isChecked;
+            break;
+        case 10:
+            show_IDNP = isChecked;
+            break;
+        case 11:
+            show_idUser = isChecked;
+            break;
+        case 12:
+            show_user = isChecked;
+            break;
+        case 13:
+            show_sum = isChecked;
+            break;
+        case 14:
+            show_comment = isChecked;
+            break;
+        default:
+            qDebug() << tr("Nu a fost determinat indexul din clasa '%1' !!!").arg(metaObject()->className());
+        }
+    }
     emit saveData();
-    this->close();
 }
 
 void ChoiceColumns::setListWidget()
