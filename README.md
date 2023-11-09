@@ -1,4 +1,4 @@
-## USG - Record of ultrasound examinations
+## USG - Evidence of ultrasound examinations
 The application for the evidence of patients who have passed ultrasound investigations, with the memory of contact   
 details and identity documents. 
 
