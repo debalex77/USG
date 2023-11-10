@@ -21,6 +21,13 @@ About::About(QWidget *parent) :
                      "Codreanu Alexandru").arg(APPLICATION_NAME, APPLICATION_VERSION);
     ui->textBrowser_about->setText(str);
 
+    QString str_licenses = tr("<br>"
+                              "<p align=center><h4>Acest program este software gratuit; <br>"
+                              "îl poți redistribui și/sau modifica în concordanță cu termenii <br>"
+                              "GNU Licență Publică Generală cum sunt publicați de <br>"
+                              "Free Software Foundation; fie versiunea 3 a licenței, <br>sau(după alegerea ta) orice versiune mai actuală.</h4>");
+    ui->textBrowser_licenses->setText(str_licenses);
+
 #if defined(Q_OS_WIN)
     ui->textBrowser_about->setStyleSheet("font-size: 15px;");
 #endif
