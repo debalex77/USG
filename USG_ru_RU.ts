@@ -6664,7 +6664,7 @@ data lansării perioadei !!!</source>
     </message>
     <message>
         <location filename="data/mainwindow.ui" line="47"/>
-        <location filename="data/mainwindow.cpp" line="340"/>
+        <location filename="data/mainwindow.cpp" line="350"/>
         <source>Setări</source>
         <translation>Настройки</translation>
     </message>
@@ -6680,25 +6680,25 @@ data lansării perioadei !!!</source>
     </message>
     <message>
         <location filename="data/mainwindow.cpp" line="222"/>
-        <location filename="data/mainwindow.cpp" line="328"/>
+        <location filename="data/mainwindow.cpp" line="338"/>
         <source>Doctori</source>
         <translation>Доктора</translation>
     </message>
     <message>
         <location filename="data/mainwindow.cpp" line="223"/>
-        <location filename="data/mainwindow.cpp" line="329"/>
+        <location filename="data/mainwindow.cpp" line="339"/>
         <source>As.medicale</source>
         <translation>Мед.сёстры</translation>
     </message>
     <message>
         <location filename="data/mainwindow.cpp" line="224"/>
-        <location filename="data/mainwindow.cpp" line="330"/>
+        <location filename="data/mainwindow.cpp" line="340"/>
         <source>Pacienți</source>
         <translation>Пациенты</translation>
     </message>
     <message>
         <location filename="data/mainwindow.cpp" line="226"/>
-        <location filename="data/mainwindow.cpp" line="332"/>
+        <location filename="data/mainwindow.cpp" line="342"/>
         <source>Utilizatori</source>
         <translation>Пользователи</translation>
     </message>
@@ -6708,35 +6708,35 @@ data lansării perioadei !!!</source>
         <translation>Классификатор</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="333"/>
+        <location filename="data/mainwindow.cpp" line="343"/>
         <source>Programarea</source>
         <translation>Планирование</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="334"/>
+        <location filename="data/mainwindow.cpp" line="344"/>
         <source>Comanda ecograf.</source>
         <translation>Заказ исслед.</translation>
     </message>
     <message>
         <location filename="data/mainwindow.cpp" line="275"/>
-        <location filename="data/mainwindow.cpp" line="337"/>
+        <location filename="data/mainwindow.cpp" line="347"/>
         <source>Investigații</source>
         <translation>Исследования</translation>
     </message>
     <message>
         <location filename="data/mainwindow.ui" line="57"/>
-        <location filename="data/mainwindow.cpp" line="338"/>
+        <location filename="data/mainwindow.cpp" line="348"/>
         <source>Rapoarte</source>
         <translation>Отчёты</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="339"/>
+        <location filename="data/mainwindow.cpp" line="349"/>
         <source>Prețuri</source>
         <translation>Цены</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="305"/>
-        <location filename="data/mainwindow.cpp" line="341"/>
+        <location filename="data/mainwindow.cpp" line="310"/>
+        <location filename="data/mainwindow.cpp" line="351"/>
         <source>Despre aplicația</source>
         <translation>О приложении</translation>
     </message>
@@ -6776,34 +6776,34 @@ data lansării perioadei !!!</source>
         <translation>Исходный код</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="297"/>
+        <location filename="data/mainwindow.cpp" line="302"/>
         <source>Manual Online</source>
         <translation>Руководство онлайн</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="301"/>
+        <location filename="data/mainwindow.cpp" line="306"/>
         <source>Verifică versiunea nouă</source>
         <translation>Проверить новую версию</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="399"/>
-        <location filename="data/mainwindow.cpp" line="803"/>
-        <location filename="data/mainwindow.cpp" line="812"/>
+        <location filename="data/mainwindow.cpp" line="409"/>
+        <location filename="data/mainwindow.cpp" line="813"/>
+        <location filename="data/mainwindow.cpp" line="822"/>
         <source>: utilizator (</source>
         <translation>: пользователь (</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="700"/>
+        <location filename="data/mainwindow.cpp" line="710"/>
         <source>Lista utilizatorilor</source>
         <translation>Список пользователей</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="490"/>
+        <location filename="data/mainwindow.cpp" line="500"/>
         <source>Nu a fost determinat indexul &apos;enum=TypeListForm&apos; !!!</source>
         <translation>Не определён индекс &apos;enum=TypeListForm&apos; !!!</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="750"/>
+        <location filename="data/mainwindow.cpp" line="760"/>
         <source>Examinarea ecografica</source>
         <translation>Протокол ультразвук.&lt;br&gt;исследования</translation>
     </message>
@@ -6823,174 +6823,179 @@ data lansării perioadei !!!</source>
         <translation>Протокол исследование</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="331"/>
+        <location filename="data/mainwindow.cpp" line="297"/>
+        <source>Raportează eroare</source>
+        <translation>Сообщить об ошибке</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="341"/>
         <source>Istoria</source>
         <translation>История</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="335"/>
+        <location filename="data/mainwindow.cpp" line="345"/>
         <source>Raport ecograf.</source>
         <translation>Протокол эх.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="336"/>
+        <location filename="data/mainwindow.cpp" line="346"/>
         <source>Centre medicale</source>
         <translation>Мед.центры</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="356"/>
+        <location filename="data/mainwindow.cpp" line="366"/>
         <source>%1 - getVersionAppInTableSettingsUsers()</source>
         <translation>%1 - getVersionAppInTableSettingsUsers()</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="357"/>
+        <location filename="data/mainwindow.cpp" line="367"/>
         <source>Eroare solicitarii - determinarea versiunei aplicatiei - %1</source>
         <translation>Ошибка запроса - определение версии программы - %1</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="372"/>
+        <location filename="data/mainwindow.cpp" line="382"/>
         <source>%1 - setVersionAppInTableSettingsUsers()</source>
         <translation>%1 - setVersionAppInTableSettingsUsers()</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="373"/>
+        <location filename="data/mainwindow.cpp" line="383"/>
         <source>Eroare de actualizare a veriunei aplicatiei din tabela &apos;settingsUsers&apos;.</source>
         <translation>Ошибка изменения версии приложения в таблице &apos;settingsUsers&apos;.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="394"/>
-        <location filename="data/mainwindow.cpp" line="798"/>
-        <location filename="data/mainwindow.cpp" line="807"/>
+        <location filename="data/mainwindow.cpp" line="404"/>
+        <location filename="data/mainwindow.cpp" line="808"/>
+        <location filename="data/mainwindow.cpp" line="817"/>
         <source> (MySQL: %1@%2): utilizator (</source>
         <translation> (MySQL: %1@%2): пользователь (</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="397"/>
+        <location filename="data/mainwindow.cpp" line="407"/>
         <source> (.sqlite3): utilizator (</source>
         <translation> (.sqlite3): пользователь (</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="402"/>
+        <location filename="data/mainwindow.cpp" line="412"/>
         <source>%1   %2: Se completează catalogul &lt;b&gt;&lt;u&gt;&apos;Investigații&apos;&lt;/u&gt;&lt;/b&gt;.</source>
         <translation>%1   %2: Заполняется справочник &lt;b&gt;&lt;u&gt;&apos;Исследования&apos;&lt;/u&gt;&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="415"/>
+        <location filename="data/mainwindow.cpp" line="425"/>
         <source>%1   Aplicația a fost actualizată până la versiunea: USG v</source>
         <translation>%1   Приложение обновлено до версии: УЗИ v</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="445"/>
+        <location filename="data/mainwindow.cpp" line="455"/>
         <source>%1&lt;br&gt;%2 %3 Finisarea completării catalogului &lt;b&gt;&lt;u&gt;&apos;Investigații&apos;&lt;/u&gt;&lt;/b&gt; sursa - &lt;b&gt;Catalogul tarifelor unice (anexa nr.3)&lt;/b&gt;.&lt;br&gt;     &lt;b&gt;Vezi:&lt;/b&gt; &lt;em&gt;Meniu principal al aplicației -&gt; Cataloage -&gt; Clasificatori -&gt; Investigații&lt;em&gt;</source>
         <translation>%1&lt;br&gt;%2 %3 Окончание заполнения справочника &lt;b&gt;&lt;u&gt;&apos;Исследования&apos;&lt;/u&gt;&lt;/b&gt; источник - &lt;b&gt;Catalogul tarifelor unice (anexa nr.3)&lt;/b&gt;.&lt;br&gt;     &lt;b&gt;Vezi:&lt;/b&gt; &lt;em&gt;Главное меню приложения -&gt; Справочники -&gt; Классификатор -&gt; Исследования&lt;em&gt;</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="619"/>
-        <location filename="data/mainwindow.cpp" line="635"/>
+        <location filename="data/mainwindow.cpp" line="629"/>
+        <location filename="data/mainwindow.cpp" line="645"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicația.</source>
         <translation>Пользователь &apos;%1&apos; закончил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="624"/>
+        <location filename="data/mainwindow.cpp" line="634"/>
         <source>Finisarea lucrului</source>
         <translation>Завершение работы</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="624"/>
+        <location filename="data/mainwindow.cpp" line="634"/>
         <source>Doriți să inchideți aplicația ?</source>
         <translation>Вы хотите закрыть приложение?</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="627"/>
+        <location filename="data/mainwindow.cpp" line="637"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="628"/>
+        <location filename="data/mainwindow.cpp" line="638"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="647"/>
+        <location filename="data/mainwindow.cpp" line="657"/>
         <source>Lista cu doctori.</source>
         <translation>Список с докторами.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="657"/>
+        <location filename="data/mainwindow.cpp" line="667"/>
         <source>Lista as.medicale.</source>
         <translation>Список мед.сестёр.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="667"/>
+        <location filename="data/mainwindow.cpp" line="677"/>
         <source>Lista pacienților 
 înregistrați în baza de date.</source>
         <translation>Список пациентов 
 зарегистрированных в базе данных.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="678"/>
+        <location filename="data/mainwindow.cpp" line="688"/>
         <source>Vizualizarea istorie 
 pacienților.</source>
         <translation>Визуализация
 истории пациентов.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="689"/>
+        <location filename="data/mainwindow.cpp" line="699"/>
         <source>Lista persoanelor 
 juridice.</source>
         <translation>Список 
 мед.центров (юр.лиц).</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="710"/>
+        <location filename="data/mainwindow.cpp" line="720"/>
         <source>Clasificatorul investigațiilor</source>
         <translation>Классификатор исследований</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="720"/>
+        <location filename="data/mainwindow.cpp" line="730"/>
         <source>Documente cu
  formarea  preturilor</source>
         <translation>Документ
 формирование цен</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="730"/>
+        <location filename="data/mainwindow.cpp" line="740"/>
         <source>Programarea pacienților 
  la investigații ecografice</source>
         <translation>Запись пациентов
  на ультразвук.исследование</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="740"/>
+        <location filename="data/mainwindow.cpp" line="750"/>
         <source>Comanda pentru
  investigatiile ecografice</source>
         <translation>Заказ на ультразвук.
 исследование</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="760"/>
+        <location filename="data/mainwindow.cpp" line="770"/>
         <source>Rapoarte investigațiilor 
  ecografice</source>
         <translation>Отчёты ультрзвук.
 исследований</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="770"/>
+        <location filename="data/mainwindow.cpp" line="780"/>
         <source>Setările principale
 ale aplicației.</source>
         <translation>Основные настройки
 приложения.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="781"/>
+        <location filename="data/mainwindow.cpp" line="791"/>
         <source>Informația generală
 despre aplicația.</source>
         <translation>Общая информация
 о приложении.</translation>
     </message>
     <message>
-        <location filename="data/mainwindow.cpp" line="801"/>
-        <location filename="data/mainwindow.cpp" line="810"/>
+        <location filename="data/mainwindow.cpp" line="811"/>
+        <location filename="data/mainwindow.cpp" line="820"/>
         <source> (.sqlite3): base - &apos;%1&apos;, utilizator (</source>
         <translation> (.sqlite3): base - &apos;%1&apos;, пользователь (</translation>
     </message>
