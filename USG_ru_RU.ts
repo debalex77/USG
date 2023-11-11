@@ -4,516 +4,486 @@
 <context>
     <name>About</name>
     <message>
-        <location filename="about.ui" line="14"/>
+        <location filename="data/about.ui" line="14"/>
         <source>Informația despre aplicația</source>
         <translation>Информация о приложении</translation>
     </message>
     <message>
-        <location filename="about.ui" line="52"/>
+        <location filename="data/about.ui" line="52"/>
         <source>Despre aplicația</source>
         <translation>О приложении</translation>
     </message>
     <message>
-        <location filename="about.ui" line="62"/>
+        <location filename="data/about.ui" line="62"/>
+        <source>Licență</source>
+        <translation>Лицензия</translation>
+    </message>
+    <message>
+        <location filename="data/about.ui" line="72"/>
         <source>Informația de sistem</source>
         <translation>Системная информация</translation>
     </message>
     <message>
-        <location filename="about.ui" line="127"/>
+        <location filename="data/about.ui" line="138"/>
         <source>Catalogul aplicației:</source>
         <translation>Каталог приложения:</translation>
     </message>
     <message>
-        <location filename="about.ui" line="149"/>
+        <location filename="data/about.ui" line="161"/>
         <source>version Qt: 5.15.2</source>
         <translation>version Qt: 5.15.2</translation>
     </message>
     <message>
-        <location filename="about.ui" line="159"/>
+        <location filename="data/about.ui" line="171"/>
         <source>Catalogul formelor de tipar:</source>
         <translation>Каталог с печатными формами:</translation>
     </message>
     <message>
-        <location filename="about.ui" line="81"/>
+        <location filename="data/about.ui" line="91"/>
         <source>Catalogul imaginelor:</source>
         <translation>Каталог с изображениями:</translation>
     </message>
     <message>
-        <location filename="about.ui" line="173"/>
+        <location filename="data/about.ui" line="185"/>
         <source>Catalogul rapoartelor:</source>
         <translation>Каталог с формами отчётов:</translation>
     </message>
     <message>
-        <location filename="about.ui" line="95"/>
+        <location filename="data/about.ui" line="105"/>
         <source>Catalogul setărilor:</source>
         <translation>Каталог с настройками:</translation>
     </message>
     <message>
-        <location filename="about.ui" line="110"/>
+        <location filename="data/about.ui" line="121"/>
         <source>version SQLite3: 3.35.4</source>
         <translation>version SQLite3: 3.35.4</translation>
     </message>
     <message>
-        <location filename="about.ui" line="194"/>
+        <location filename="data/about.ui" line="206"/>
         <source>Catalogul logării</source>
         <translation>Каталог журналирования</translation>
     </message>
     <message>
-        <location filename="about.ui" line="234"/>
+        <location filename="data/about.ui" line="246"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="about.cpp" line="13"/>
-        <source>&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; %1 v%2&lt;/b&gt; &lt;br&gt;Aplicația pentru evidența pacienților care au trecut investigații ecografice, cu memorarea datelor de contact și a documentelor de identitate. &lt;br&gt;&lt;p align=center&gt;&lt;b&gt;Informații suplimentare:&lt;/b&gt; &lt;br&gt;Free, open-source, cross-platform,&lt;br&gt;database SQLite3&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; Autorul aplicației:&lt;/b&gt; &lt;br&gt;Codreanu Alexandru</source>
-        <translation>&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; %1 v%2&lt;/b&gt; &lt;br&gt;Приложение для учета пациентов, прошедших ультразвуковое исследования, с хранением контактных данных и документов, удостоверяющих личность. &lt;br&gt;&lt;p align=center&gt;&lt;b&gt;Дополнительная информация:&lt;/b&gt; &lt;br&gt;Free, open-source, cross-platform,&lt;br&gt;database SQLite3&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; Автор приложения:&lt;/b&gt; &lt;br&gt;Codreanu Alexandru</translation>
+        <location filename="data/about.cpp" line="13"/>
+        <source>&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; %1 v%2&lt;/b&gt; &lt;br&gt;Aplicația pentru evidența pacienților care au trecut investigații ecografice, cu memorarea datelor de contact și a documentelor de identitate. &lt;br&gt;&lt;p align=center&gt;&lt;b&gt;Informații suplimentare:&lt;/b&gt; &lt;br&gt;Free, open-source, cross-platform,&lt;br&gt;database SQLite3/MySQL/MariaDB&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; Autorul aplicației:&lt;/b&gt; &lt;br&gt;Codreanu Alexandru</source>
+        <translation>&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; %1 v%2&lt;/b&gt; &lt;br&gt;Программа для учета пациентов, прошедших УЗИ, с сохранением контактных данных и документов, удостоверяющих личность.. &lt;br&gt;&lt;p align=center&gt;&lt;b&gt;Дополнительная информация:&lt;/b&gt; &lt;br&gt;Free, open-source, cross-platform,&lt;br&gt;database SQLite3/MySQL/MariaDB&lt;br&gt;&lt;p align=center&gt;&lt;b&gt; Автор программы:&lt;/b&gt; &lt;br&gt;Codreanu Alexandru</translation>
+    </message>
+    <message>
+        <location filename="data/about.cpp" line="24"/>
+        <source>&lt;br&gt;&lt;p align=center&gt;&lt;h4&gt;Acest program este software gratuit; &lt;br&gt;îl poți redistribui și/sau modifica în concordanță cu termenii &lt;br&gt;GNU Licență Publică Generală cum sunt publicați de &lt;br&gt;Free Software Foundation; fie versiunea 3 a licenței, &lt;br&gt;sau(după alegerea ta) orice versiune mai actuală.&lt;/h4&gt;</source>
+        <translation>&lt;br&gt;&lt;p align=center&gt;&lt;h4&gt;Эта программа является бесплатным программным обеспечением; &lt;br&gt;которое вы можете распространять и/или изменять в соответствии с условиями &lt;br&gt;GNU Licență Publică Generală опубликованными &lt;br&gt;Free Software Foundation; либо версия 3 лицензии, &lt;br&gt;или любая другая версия.&lt;/h4&gt;</translation>
     </message>
 </context>
 <context>
     <name>AppSettings</name>
     <message>
-        <location filename="appsettings.ui" line="20"/>
+        <location filename="data/appsettings.ui" line="20"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="92"/>
+        <location filename="data/appsettings.ui" line="92"/>
         <source>Setările generale</source>
         <translation>Общие настройки</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="110"/>
+        <location filename="data/appsettings.ui" line="122"/>
         <source>Setările inițiale</source>
         <translation>Начальные настройки</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="194"/>
+        <location filename="data/appsettings.ui" line="200"/>
         <source>Limba aplicației</source>
         <translation>Язык интерфейса</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="596"/>
+        <location filename="data/appsettings.cpp" line="596"/>
         <source>Utilizatorul</source>
         <translation>Пользователь</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="635"/>
-        <location filename="appsettings.cpp" line="1369"/>
-        <location filename="appsettings.cpp" line="1371"/>
+        <location filename="data/appsettings.cpp" line="1462"/>
+        <location filename="data/appsettings.cpp" line="1467"/>
         <source>Testarea conectării</source>
         <translation>Тест соединения</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="467"/>
+        <location filename="data/appsettings.ui" line="485"/>
         <source>Setarile conectarii (MySQL/MariaDB)</source>
         <translation>Настройки соединения (MySQL/MariaDB)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="74"/>
+        <location filename="data/appsettings.ui" line="74"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="228"/>
+        <location filename="data/appsettings.ui" line="292"/>
         <source>Localizarea formularelor de tipar</source>
         <translation>Путь к печатным формам документов</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="342"/>
+        <location filename="data/appsettings.ui" line="268"/>
         <source>Localizarea șabloanelor de rapoarte</source>
         <translation>Путь к печатным формам отчётов</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="439"/>
-        <location filename="appsettings.cpp" line="608"/>
+        <location filename="data/appsettings.ui" line="457"/>
+        <location filename="data/appsettings.cpp" line="608"/>
         <source>Denumirea bazei de date (.sqlite3)</source>
         <translation>Наименование базы данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="446"/>
-        <location filename="appsettings.cpp" line="1359"/>
+        <location filename="data/appsettings.cpp" line="1445"/>
         <source>Crearea bazei de date (.sqlite)</source>
         <oldsource>Crearea bazei de date</oldsource>
         <translation>Создать базу данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="479"/>
+        <location filename="data/appsettings.ui" line="496"/>
         <source>Nume hostului</source>
         <translation>Имя хоста</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="508"/>
-        <location filename="appsettings.cpp" line="588"/>
+        <location filename="data/appsettings.ui" line="523"/>
+        <location filename="data/appsettings.cpp" line="588"/>
         <source>Denumirea bazei de date</source>
         <translation>Наименование базы данных</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="534"/>
+        <location filename="data/appsettings.ui" line="547"/>
         <source>Port pentru conectare la baza de date</source>
         <translation>Порт соединения с базой данных</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="560"/>
+        <location filename="data/appsettings.ui" line="571"/>
         <source>Opțiunile suplimentare de conectare</source>
         <translation>Дополнительные настройки соединения</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="673"/>
+        <location filename="data/appsettings.ui" line="641"/>
+        <source>Testarea conectării (MySQL/MariaDB)</source>
+        <translation>Тестирование соединения (MySQL/MariaDB)</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.ui" line="666"/>
         <source>Fișiere de logare</source>
         <translation>Файлы журналирования</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="691"/>
+        <location filename="data/appsettings.ui" line="683"/>
         <source>fișiere de logare</source>
         <translation>файлов журналирования</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="707"/>
+        <location filename="data/appsettings.ui" line="698"/>
         <source>... de păstrat ultimele</source>
         <translation>...сохранять последние</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="132"/>
-        <location filename="appsettings.cpp" line="569"/>
+        <location filename="data/appsettings.ui" line="142"/>
+        <location filename="data/appsettings.cpp" line="569"/>
         <source>Tipul bazei de date</source>
         <translation>Тип базы данных</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="145"/>
+        <location filename="data/appsettings.ui" line="154"/>
         <source>Unitatea de măsură</source>
         <translation>Единица измерения</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="216"/>
+        <location filename="data/appsettings.ui" line="221"/>
         <source>Localizarea fișierelor aplicației</source>
         <translation>Путь к файлам программы</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="241"/>
+        <location filename="data/appsettings.ui" line="256"/>
         <source>Localizarea bazei de date a imaginelor (.sqlite3)</source>
         <translation>Путь к базе данных с изображениями (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="293"/>
+        <location filename="data/appsettings.ui" line="304"/>
         <source>Localizarea fișierului cu setări</source>
         <translation>Путь к настройкам программы</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="316"/>
+        <location filename="data/appsettings.ui" line="280"/>
         <source>Localizarea fișierului de logare</source>
         <translation>Путь к журналу логов программы</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="362"/>
+        <location filename="data/appsettings.ui" line="311"/>
+        <location filename="data/appsettings.ui" line="322"/>
+        <source>...</source>
+        <translation>...</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.ui" line="384"/>
         <source>Setarile conectarii (.sqlite3)</source>
         <translation>Настройки соединения (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="413"/>
-        <location filename="appsettings.cpp" line="617"/>
+        <location filename="data/appsettings.ui" line="432"/>
+        <location filename="data/appsettings.cpp" line="617"/>
         <source>Localizarea bazei de date (.sqlite3)</source>
         <translation>Путь к базе данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="612"/>
+        <location filename="data/appsettings.ui" line="464"/>
+        <source>Testarea conectării (.sqlite3)</source>
+        <translation>Тестирование соединения (.sqlite3)</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.ui" line="619"/>
         <source>Parola</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="586"/>
+        <location filename="data/appsettings.ui" line="595"/>
         <source>Utilizatorul (root)</source>
         <translation>Пользователь (root)</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="52"/>
+        <location filename="data/appsettings.ui" line="52"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="appsettings.ui" line="63"/>
+        <location filename="data/appsettings.ui" line="63"/>
         <source>Salvează</source>
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="27"/>
-        <location filename="appsettings.cpp" line="72"/>
-        <location filename="appsettings.cpp" line="94"/>
-        <location filename="appsettings.cpp" line="553"/>
+        <location filename="data/appsettings.cpp" line="513"/>
         <source>Crearea directoriei</source>
         <translation>Создание директории</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="28"/>
-        <source>Directoria &apos;USG&apos; pentru păstrarea setărilor aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Директория &apos;USG&apos; для хранения настроек приложения не создана !!!&lt;br&gt;Обратитесь в администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="35"/>
-        <location filename="appsettings.cpp" line="106"/>
+        <location filename="data/appsettings.cpp" line="31"/>
+        <location filename="data/appsettings.cpp" line="72"/>
         <source>Crearea directoriului de logare</source>
         <translation>Создание директории логов</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="36"/>
+        <location filename="data/appsettings.cpp" line="32"/>
         <source>Pentru crearea directoriului de logare a aplicației este necesar accesul administrativ.</source>
         <translation>Для создания директории хранения логов необходимо административные права доступа.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="14"/>
-        <location filename="appsettings.cpp" line="1401"/>
+        <location filename="data/appsettings.cpp" line="14"/>
+        <location filename="data/appsettings.cpp" line="1516"/>
         <source>Setările aplicației %1</source>
         <oldsource>Setările aplicației [*]</oldsource>
         <translation>Настройки приложения %1</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="61"/>
-        <source>Инициализация приложения</source>
-        <translation>Инициализация приложения</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="62"/>
-        <source>Обнаружен &lt;b&gt;&lt;u&gt;ПЕРВЫЙ ЗАПУСК&lt;/u&gt;&lt;/b&gt; приложения&lt;br&gt; или настройки приложения были удалены.</source>
-        <translation>Обнаружен &lt;b&gt;&lt;u&gt;ПЕРВЫЙ ЗАПУСК&lt;/u&gt;&lt;/b&gt; приложения&lt;br&gt; или настройки приложения были удалены.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="66"/>
-        <source>Inițierea aplicației</source>
-        <translation>Инициализация приложения</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="67"/>
-        <source>S-a depistat &lt;b&gt;&lt;u&gt;&lt;sup&gt;PRIMA LANSARE&lt;/sup&gt;&lt;/u&gt;&lt;/b&gt; a aplicației&lt;br&gt; sau setările aplicației au fost șterse.</source>
-        <translation>Обнаружен  &lt;b&gt;&lt;u&gt;ПЕРВЫЙ ЗАПУСК&lt;/u&gt;&lt;/b&gt; приложения&lt;br&gt;или настройки приложения были удалены.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="73"/>
-        <source>Directoria &apos;USG&apos; pentru păstrarea setărilor, jurnalului de logare a aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Каталог &apos;USG&apos; для хранения настроек, журнала логирования не был создан !!!&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="82"/>
-        <source>Создан каталог для хранения настроек приложения&lt;br&gt;&lt;b&gt;&apos;%1&apos;&lt;/b&gt;</source>
-        <translation>Создан каталог для хранения настроек приложения&lt;br&gt;&lt;b&gt;&apos;%1&apos;&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="85"/>
-        <source>A fost creat catalogul pentru păstrarea setarilor aplicatiei&lt;br&gt;&lt;b&gt;&apos;%1&apos;&lt;/b&gt;</source>
-        <translation>Создан каталог для хранения настроек приложения&lt;br&gt;&lt;b&gt;&apos;%1&apos;&lt;/b&gt;</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="95"/>
-        <source>Directoria &apos;config&apos; pentru păstrarea setărilor aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Каталог &apos;config&apos; для хранения настроек приложения не был создан !!!&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="107"/>
+        <location filename="data/appsettings.cpp" line="73"/>
         <source>Directoria &apos;config&apos; pentru păstrarea fișierelor de logare a aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Каталог &apos;config&apos; для хранения журнала логирования не был создан !!!&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="137"/>
-        <source>&lt;- alege -&gt;</source>
-        <translation>&lt;- выбери -&gt;</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="138"/>
-        <location filename="appsettings.cpp" line="1405"/>
+        <location filename="data/appsettings.cpp" line="100"/>
+        <location filename="data/appsettings.cpp" line="1520"/>
         <source>milimetru</source>
         <translation>милиметры</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="138"/>
-        <location filename="appsettings.cpp" line="1405"/>
+        <location filename="data/appsettings.cpp" line="100"/>
+        <location filename="data/appsettings.cpp" line="1520"/>
         <source>centimetru</source>
         <translation>сантиметры</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="554"/>
+        <location filename="data/appsettings.cpp" line="514"/>
         <source>Directoria &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;pentru baza de date SQlite nu a fost creată !!! Lansarea aplicației nu este posibilă.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Каталог &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;для базы данных SQLite не был создан !!! Запуск программы невозможен.&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="558"/>
+        <location filename="data/appsettings.cpp" line="518"/>
         <source>Directoria &apos;%1&apos; pentru baza de date SQlite nu a fost creată.</source>
         <translation>Каталог &apos;%1&apos; для базы данных SQLite не был создан.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="725"/>
-        <source>Setările aplicației sunt salvate/modificate.</source>
-        <translation>Настройки прогаммы сохранены/изменены.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="956"/>
-        <source>Localizarea fișierelor de logare</source>
-        <translation>Путь к файлам журналирования</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="957"/>
-        <source>Deschisă forma &apos;Vizualizarea fișierului de logare&apos;.</source>
-        <translation>Открыта форма &apos;Просмотр файлов журналирования&apos;.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="975"/>
+        <location filename="data/appsettings.cpp" line="1040"/>
         <source>Vizualizarea fisierului de logare &apos;%1&apos;.</source>
         <translation>Просмотр файла журналирования &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1140"/>
+        <location filename="data/appsettings.cpp" line="1208"/>
         <source>Verificarea fișierului</source>
         <translation>Проверка файла</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1141"/>
+        <location filename="data/appsettings.cpp" line="1209"/>
         <source>Fișierul cu setările aplicației nu a fost găsit !!!.</source>
         <translation>Файл настроек приложения не был найден !!!.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1162"/>
-        <location filename="appsettings.cpp" line="1208"/>
-        <source>Eliminarea fișierului</source>
-        <translation>Удаление файла</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1163"/>
-        <source>Sunteți siguri că doriți să eliminați fișierul cu setările aplicației din sistem ?</source>
-        <translation>Удалить непосредственно файл настроек приложения из системы ?</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1175"/>
-        <source>Fișierul cu setările aplicației&lt;br&gt; a fost eliminat cu succes.</source>
-        <translation>Файл настроек приложения&lt;br&gt; успешно удалён.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1185"/>
+        <location filename="data/appsettings.cpp" line="1233"/>
         <source>Verificarea fișierului de logare</source>
         <translation>Проверка файла журналирования</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1186"/>
+        <location filename="data/appsettings.cpp" line="1234"/>
         <source>Fișierul de logare nu a fost găsit !!!&lt;br&gt;Creați fișierul nou sau restartați aplicația.</source>
         <translation>Файл журналирования не был найден !!!&lt;br&gt;Создайте новый файл или перезапустите приложение.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1209"/>
-        <source>Doriți să eliminați fișierul de logare a aplicației din sistem ?</source>
-        <translation>Удалить файл журналирования ?</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1221"/>
-        <source>Fișierul de logare a aplicației&lt;br&gt; a fost eliminat cu succes.</source>
-        <translation>Файл журналирования приложения&lt;br&gt; успешно удалён.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1236"/>
-        <location filename="appsettings.cpp" line="1254"/>
+        <location filename="data/appsettings.cpp" line="1264"/>
+        <location filename="data/appsettings.cpp" line="1282"/>
         <source>Alegeti directoriu</source>
         <translation>Выбери директорию</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="568"/>
-        <location filename="appsettings.cpp" line="578"/>
-        <location filename="appsettings.cpp" line="586"/>
-        <location filename="appsettings.cpp" line="594"/>
-        <location filename="appsettings.cpp" line="606"/>
-        <location filename="appsettings.cpp" line="615"/>
+        <location filename="data/appsettings.cpp" line="568"/>
+        <location filename="data/appsettings.cpp" line="578"/>
+        <location filename="data/appsettings.cpp" line="586"/>
+        <location filename="data/appsettings.cpp" line="594"/>
+        <location filename="data/appsettings.cpp" line="606"/>
+        <location filename="data/appsettings.cpp" line="615"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="569"/>
-        <location filename="appsettings.cpp" line="607"/>
+        <location filename="data/appsettings.cpp" line="99"/>
+        <source>&lt;- Alege -&gt;</source>
+        <translation>&lt;- Выбери -&gt;</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="523"/>
+        <source>Determinarea existenței bazei de date</source>
+        <translation>Определение существования базы данных</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="524"/>
+        <source>Baza de date &apos;&lt;u&gt;%1&lt;/u&gt;&apos; există în sistem !!!&lt;br&gt;&lt;br&gt;Pentru crearea bazei de date noi cu nume &apos;&lt;b&gt;&lt;u&gt;%2&lt;/u&gt;&lt;/b&gt;&apos; este necesar de eliminat fișierul vechi. Doriți să eliminați fișierul din sistem ?</source>
+        <translation>База данных &apos;&lt;u&gt;%1&lt;/u&gt;&apos; существует в системе !!!&lt;br&gt;&lt;br&gt;Для создания новой базы данных с именем &apos;&lt;b&gt;&lt;u&gt;%2&lt;/u&gt;&lt;/b&gt;&apos; удалить старый файл с базой данных. Хотите удалить старую базу данных ?</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="529"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="530"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="569"/>
+        <location filename="data/appsettings.cpp" line="607"/>
         <source>Nu este indicat &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="579"/>
-        <location filename="appsettings.cpp" line="595"/>
+        <location filename="data/appsettings.cpp" line="579"/>
+        <location filename="data/appsettings.cpp" line="595"/>
         <source>Nu este indicat &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!.</source>
         <translation>Не указан &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="580"/>
+        <location filename="data/appsettings.cpp" line="580"/>
         <source>Numele hostului</source>
         <translation>Имя хоста</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="587"/>
+        <location filename="data/appsettings.cpp" line="587"/>
         <source>Nu este indicată &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!.</source>
         <translation>Не указан &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="616"/>
+        <location filename="data/appsettings.cpp" line="616"/>
         <source>Nu este indicată &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан &quot;&lt;b&gt;%1&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="799"/>
+        <location filename="data/appsettings.cpp" line="753"/>
+        <source>Setările aplicației sunt salvate/modificate în fișierul - %1.</source>
+        <translation>Настройки прогаммы сохранены/изменены в файл - %1.</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="822"/>
+        <source>Conectarea la baza de date</source>
+        <translation>Соединение с базой данных</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="823"/>
+        <source>Conectarea la baza de date &lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt; lipsește !!! &lt;br&gt;&lt;br&gt;Adresați-vă administratorului aplicației.</source>
+        <translation>Соединение с базой данных &lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt; отсутствует !!! &lt;br&gt;&lt;br&gt;Обратитесь к администратору программы.</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="826"/>
         <source>%1: loadSettings()&lt;br&gt; Nu a fost efectuata conectarea la BD &apos;%2&apos;</source>
         <translation>%1: loadSettings()&lt;br&gt; Соединение с БД не установлено &apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="885"/>
+        <location filename="data/appsettings.cpp" line="939"/>
         <source>Fișierul de logare este redenumit în &apos;%1&apos;.</source>
         <translation>Файл журнала логирования был переименован в &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1044"/>
-        <location filename="appsettings.cpp" line="1099"/>
+        <location filename="data/appsettings.cpp" line="1021"/>
+        <source>Localizarea fisierelor de logare</source>
+        <translation>Путь к файлам журналирования</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="1022"/>
+        <source>Deschisa forma &apos;Vizualizarea fisierului de logare&apos;.</source>
+        <translation>Открыта форма &apos;Просмотр файлов журналирования&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/appsettings.cpp" line="1112"/>
+        <location filename="data/appsettings.cpp" line="1167"/>
         <source>Crearea fișierului</source>
         <translation>Создать файл</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1046"/>
-        <location filename="appsettings.cpp" line="1070"/>
-        <location filename="appsettings.cpp" line="1101"/>
-        <location filename="appsettings.cpp" line="1117"/>
+        <location filename="data/appsettings.cpp" line="1114"/>
+        <location filename="data/appsettings.cpp" line="1138"/>
+        <location filename="data/appsettings.cpp" line="1169"/>
+        <location filename="data/appsettings.cpp" line="1185"/>
         <source>SQLite3 file (*.sqlite3)</source>
         <translation>SQLite3 file (*.sqlite3)</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1068"/>
-        <location filename="appsettings.cpp" line="1115"/>
+        <location filename="data/appsettings.cpp" line="1136"/>
+        <location filename="data/appsettings.cpp" line="1183"/>
         <source>Deschide fișierul</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1309"/>
+        <location filename="data/appsettings.cpp" line="1337"/>
         <source>Traducerea aplicației.</source>
         <translation>Перевод приложения.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1310"/>
+        <location filename="data/appsettings.cpp" line="1338"/>
         <source>Pentru traducerea completă este necesar de relansat aplicația.&lt;br&gt;&lt;br&gt;Doriți relansarea ?</source>
         <oldsource>Pentru traducerea completă este necesar de relansat aplicația.&lt;br&gt;Doriți relansarea ?</oldsource>
         <translation>Для полного перевода необходимо перезапустить приложение.&lt;br&gt;&lt;br&gt;Перезапустить ?</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1324"/>
-        <source>Selectarea tipului bazei de date</source>
-        <translation>Выберите тип базы данных</translation>
+        <location filename="data/appsettings.cpp" line="1463"/>
+        <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; este realizată cu succes.</source>
+        <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; выполнено успешно.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1325"/>
-        <source>Baza de date cu tipul &lt;b&gt;&apos;MySQL&apos;&lt;/b&gt; se află în procesul dezvoltării.&lt;br&gt;Pentru informație suplimentară contactați administratorul aplicației.</source>
-        <translation>Тип базы данных &lt;b&gt;&apos;MySQL&apos;&lt;/b&gt; находится в разработке.&lt;br&gt;Для дополнительной информации обратитесь к администратору приложения.</translation>
+        <location filename="data/appsettings.cpp" line="1468"/>
+        <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; lipsește.</source>
+        <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; отсутствует.</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1369"/>
-        <source>Conectarea cu baza de date MySQL este realizată cu succes.</source>
-        <translation>Соединение с базой данныз MySQL успешно установлено.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1371"/>
-        <source>Conectarea cu baza de date MySQL lipsește.</source>
-        <translation>Соединение с базой данных MySQL отсутствует.</translation>
-    </message>
-    <message>
-        <location filename="appsettings.cpp" line="1381"/>
+        <location filename="data/appsettings.cpp" line="1496"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="appsettings.cpp" line="1382"/>
+        <location filename="data/appsettings.cpp" line="1497"/>
         <source>Setările au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Настройки приложения были измененны.
@@ -523,126 +493,136 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>AuthorizationUser</name>
     <message>
-        <location filename="authorizationuser.ui" line="14"/>
+        <location filename="data/authorizationuser.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="authorizationuser.ui" line="24"/>
+        <location filename="data/authorizationuser.ui" line="24"/>
         <source>Login</source>
         <translation>Логин</translation>
     </message>
     <message>
-        <location filename="authorizationuser.ui" line="38"/>
+        <location filename="data/authorizationuser.ui" line="38"/>
         <source>Parola</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="authorizationuser.ui" line="68"/>
+        <location filename="data/authorizationuser.ui" line="68"/>
         <source>Memorează</source>
         <translation>Запомнить</translation>
     </message>
     <message>
-        <location filename="authorizationuser.ui" line="101"/>
+        <location filename="data/authorizationuser.ui" line="101"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="authorizationuser.ui" line="112"/>
+        <location filename="data/authorizationuser.ui" line="112"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="10"/>
-        <location filename="authorizationuser.cpp" line="178"/>
+        <location filename="data/authorizationuser.cpp" line="10"/>
+        <location filename="data/authorizationuser.cpp" line="191"/>
         <source>Autorizarea utilizatorului</source>
         <translation>Авторизация пользователя</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="74"/>
+        <location filename="data/authorizationuser.cpp" line="33"/>
+        <source>...maximum 50 caractere</source>
+        <translation>...максимум 50 символов</translation>
+    </message>
+    <message>
+        <location filename="data/authorizationuser.cpp" line="82"/>
         <source>%1 - slot_IdChanged():</source>
         <translation>%1 - slot_IdChanged():</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="75"/>
+        <location filename="data/authorizationuser.cpp" line="83"/>
         <source>ID utilizatorului nu poate sa fie egal cu &apos;0&apos; !!!</source>
         <translation>ID пользователя не может быть равным &apos;0&apos; !!!</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="84"/>
+        <location filename="data/authorizationuser.cpp" line="98"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="84"/>
+        <location filename="data/authorizationuser.cpp" line="98"/>
         <source>Nu este indicat &lt;b&gt;Login&lt;/b&gt; !!!&lt;br&gt;Accesul este interzis.</source>
         <translation>Не указан &lt;b&gt;Логин&lt;/b&gt; !!!&lt;br&gt;Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="85"/>
+        <location filename="data/authorizationuser.cpp" line="99"/>
         <source>Incercarea accesului în aplicația fără indicarea numelui utilizatorului !!!</source>
         <translation>Попытка авторизации без указания имени пользователя !!!</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="95"/>
-        <location filename="authorizationuser.cpp" line="106"/>
-        <location filename="authorizationuser.cpp" line="121"/>
-        <location filename="authorizationuser.cpp" line="133"/>
+        <location filename="data/authorizationuser.cpp" line="109"/>
+        <location filename="data/authorizationuser.cpp" line="120"/>
+        <location filename="data/authorizationuser.cpp" line="135"/>
+        <location filename="data/authorizationuser.cpp" line="147"/>
         <source>Controlul accesului</source>
         <translation>Проверка доступа</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="95"/>
+        <location filename="data/authorizationuser.cpp" line="109"/>
         <source>Utilizatorul cu nume &lt;b&gt;%1&lt;/b&gt; nu a fost depistat in baza de date !!!&lt;br&gt;Accesul este interzis.</source>
         <translation>Имя пользователя &lt;b&gt;%1&lt;/b&gt; не найдено в базе данных !!!&lt;br&gt;Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="97"/>
-        <location filename="authorizationuser.cpp" line="111"/>
-        <location filename="authorizationuser.cpp" line="124"/>
-        <location filename="authorizationuser.cpp" line="135"/>
+        <location filename="data/authorizationuser.cpp" line="111"/>
+        <location filename="data/authorizationuser.cpp" line="125"/>
+        <location filename="data/authorizationuser.cpp" line="138"/>
+        <location filename="data/authorizationuser.cpp" line="149"/>
         <source>%1 - onAccepted()</source>
         <translation>%1 - onAccepted()</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="98"/>
+        <location filename="data/authorizationuser.cpp" line="112"/>
         <source>Accesul la aplicație. Utilizatorul cu nume &apos;%1&apos; nu a fost depistat in baza de date.</source>
         <translation>Авторизация. Пользователь имя &apos;%1&apos; не был найден в базе данных.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="107"/>
+        <location filename="data/authorizationuser.cpp" line="121"/>
         <source>Utilizatorul &lt;b&gt;%1&lt;/b&gt; a fost depistat in baza de date, &lt;b&gt;&apos;id&apos;&lt;/b&gt; utilizatorului nu a fost determinat (sau determinat incorect) !!!&lt;br&gt;Adresați-vă administratorului aplicației.&gt;&lt;br&gt;Accesul este interzis.</source>
         <translation>Пользователь &lt;b&gt;%1&lt;/b&gt; найден в базе данных, &lt;b&gt;&apos;id&apos;&lt;/b&gt; пользователя не определено (или определено некорректно) !!!&lt;br&gt;Обратитесь к администратору приложения.&gt;&lt;br&gt;Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="112"/>
+        <location filename="data/authorizationuser.cpp" line="126"/>
         <source>Accesul la aplicație. Utilizatorul cu nume &apos;%1&apos; a fost depistat in baza de date, dar &apos;id&apos; utilizatorului nu a fost determinat.</source>
         <translation>Авторизация. Пользователь с именем &apos;%1&apos; найден в базе данных, &apos;id&apos; пользователя не определено.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="121"/>
+        <location filename="data/authorizationuser.cpp" line="135"/>
         <source>Utilizatorul &lt;b&gt;%1&lt;/b&gt; cu &lt;b&gt;id=&apos;%2&apos;&lt;/b&gt; nu este depistat în baza de date !!!</source>
         <translation>Пользователь &lt;b&gt;%1&lt;/b&gt; с &lt;b&gt;id=&apos;%2&apos;&lt;/b&gt; не был найден в базе данных !!!</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="125"/>
+        <location filename="data/authorizationuser.cpp" line="139"/>
         <source>Accesul la aplicație. Utilizatorul &apos;%1&apos; cu id=&apos;%2&apos; nu a fost depistat in baza de date.</source>
         <translation>Авторизация. Пользователь &apos;%1&apos; с id=&apos;%2&apos; не был найден в базе данных.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="133"/>
+        <location filename="data/authorizationuser.cpp" line="147"/>
         <source>Parola utilizatorului &lt;b&gt;&apos;%1&apos;&lt;/b&gt; este incorectă !!!&lt;br&gt; Accesul este interzis.</source>
         <translation>Пароль пользователя &lt;b&gt;&apos;%1&apos;&lt;/b&gt; не корректный !!!&lt;br&gt; Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="136"/>
+        <location filename="data/authorizationuser.cpp" line="150"/>
         <source>Accesul la aplicație. Utilizatorul &apos;%1&apos; cu id=&apos;%2&apos; - întroducerea parolei incorecte.</source>
         <translation>Авторизация. Пользователь &apos;%1&apos; с id=&apos;%2&apos; - ввёл некорректный пароль.</translation>
     </message>
     <message>
-        <location filename="authorizationuser.cpp" line="156"/>
-        <source>Accesul la aplicația. Autorizarea reușită a utilizatorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Авторизация. Успешная авторизация пользователя &apos;%1&apos; с id=&apos;%2&apos;.</translation>
+        <location filename="data/authorizationuser.cpp" line="166"/>
+        <source>Nu este inregistrata timpul si data conectarii utilizatorului - %1</source>
+        <translation>Время и дата подключения пользователя не фиксируются - %1</translation>
+    </message>
+    <message>
+        <location filename="data/authorizationuser.cpp" line="169"/>
+        <source>Accesul la aplicatia. Autorizarea reusita a utilizatorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
+        <translation>Вход в программу. Успешная авторизация пользователя &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
 </context>
 <context>
@@ -653,7 +633,7 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Запрос не выполнен. Ошибка: </translation>
     </message>
     <message>
-        <location filename="models/basesqlquerymodel.cpp" line="108"/>
+        <location filename="models/basesqlquerymodel.cpp" line="112"/>
         <source>&lt;&lt;- Selectează -&gt;&gt;</source>
         <translation>&lt;- выбери -&gt;</translation>
     </message>
@@ -711,117 +691,121 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="309"/>
+        <location filename="catalogs/catcontracts.cpp" line="344"/>
         <source>Contract %1</source>
         <translation>Контракт %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="68"/>
-        <location filename="catalogs/catcontracts.cpp" line="74"/>
+        <location filename="catalogs/catcontracts.cpp" line="70"/>
+        <location filename="catalogs/catcontracts.cpp" line="76"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="69"/>
+        <location filename="catalogs/catcontracts.cpp" line="71"/>
         <source>Nu este indicata &quot;&lt;b&gt;Organizatia&lt;/b&gt;&quot; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="75"/>
+        <location filename="catalogs/catcontracts.cpp" line="77"/>
         <source>Nu este indicata &quot;&lt;b&gt;Denumirea&lt;/b&gt;&quot; contractului !!!</source>
         <translation>Не указано &quot;&lt;b&gt;Наименование&lt;/b&gt;&quot; контракта !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="181"/>
+        <location filename="catalogs/catcontracts.cpp" line="123"/>
+        <source>Eroarea la inserarea datelor contractului &apos;%1&apos; in tabela &apos;contracts&apos; - %2</source>
+        <translation>Ошибка записи данных контракта &apos;%1&apos; в таблицу &apos;contracts&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catcontracts.cpp" line="126"/>
+        <source>Crearea contractului cu nume &apos;%1&apos;, id=&apos;%2&apos;, organizatia - &apos;%3&apos;.</source>
+        <translation>Создание контрата с наименованием &apos;%1&apos;, id=&apos;%2&apos;, организация - &apos;%3&apos;.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catcontracts.cpp" line="155"/>
+        <source>Eroarea la modificarea datelor contractului &apos;%1&apos; din tabela &apos;contracts&apos; - %2</source>
+        <translation>Ошибка изменения данных контратка &apos;%1&apos; в таблице &apos;contracts&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catcontracts.cpp" line="158"/>
+        <source>Modificarea datelor contractului cu nume &apos;%1&apos;, id=&apos;%2&apos;, organizatia - &apos;%3&apos;.</source>
+        <translation>Изменение данных контракта &apos;%1&apos;, id=&apos;%2&apos;, организации - &apos;%3&apos;.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catcontracts.cpp" line="206"/>
         <source>Contract (crearea) %1</source>
         <translation>Контракт (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="183"/>
+        <location filename="catalogs/catcontracts.cpp" line="208"/>
         <source>Contract (salvat) %1</source>
         <translation>Контракт (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="201"/>
+        <location filename="catalogs/catcontracts.cpp" line="226"/>
         <source>Contract comercial</source>
         <translation>Контракт коммерческий</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="208"/>
+        <location filename="catalogs/catcontracts.cpp" line="233"/>
         <source>Selectat randul: %1</source>
         <translation>Выбрана строка: %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="209"/>
+        <location filename="catalogs/catcontracts.cpp" line="234"/>
         <source>A fost selectat utilizatorul cu ID:%1</source>
         <translation>Выбран пользователь с ID:%1</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="234"/>
-        <source>Crearea contractului cu nume &apos;%1&apos; id=&apos;%2&apos; organizatiei &apos;%3&apos;.</source>
-        <translation>Создан контракт с именем &apos;%1&apos; id=&apos;%2&apos; организация &apos;%3&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catcontracts.cpp" line="237"/>
+        <location filename="catalogs/catcontracts.cpp" line="259"/>
         <source>Crearea obiectului.</source>
         <translation>Создание объекта.</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="238"/>
+        <location filename="catalogs/catcontracts.cpp" line="260"/>
         <source>Salvarea datelor contractului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresati-va administratorului aplicatiei.</source>
         <oldsource>Salvarea datelor contractului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</oldsource>
         <translation>Запись данных контракта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="241"/>
-        <source>Eroare la crearea contractului &apos;%1&apos; id=&apos;%2&apos; organizatiei &apos;%3&apos;.</source>
-        <translation>Ошибка создания контракта &apos;%1&apos; id=&apos;%2&apos; организации &apos;%3&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catcontracts.cpp" line="252"/>
-        <source>Actualizarea datelor contractului cu nume &apos;%1&apos;, id=&apos;%2&apos; organizatiei &apos;%3&apos;.</source>
-        <translation>Данные контракта &apos;%1&apos; с id=&apos;%2&apos; организации &apos;%3&apos; обновлены успешно.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catcontracts.cpp" line="255"/>
+        <location filename="catalogs/catcontracts.cpp" line="272"/>
         <source>Modificarea datelor.</source>
         <translation>Изменения данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="256"/>
+        <location filename="catalogs/catcontracts.cpp" line="273"/>
         <source>Modificarea datelor contractului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresati-va administratorului aplicatiei.</source>
         <oldsource>Modificarea datelor contractului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</oldsource>
         <translation>Изменение данных контракта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="259"/>
-        <source>Eroare la actualizarea datelor contractului cu nume &apos;%1&apos;, id=&apos;%2&apos; organizatiei &apos;%3&apos;.</source>
-        <translation>Ошибка обновления данных контракта &apos;%1&apos; с id=&apos;%2&apos; организации &apos;%3&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catcontracts.cpp" line="285"/>
+        <location filename="catalogs/catcontracts.cpp" line="301"/>
+        <location filename="catalogs/catcontracts.cpp" line="307"/>
+        <location filename="catalogs/catcontracts.cpp" line="313"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="286"/>
+        <location filename="catalogs/catcontracts.cpp" line="302"/>
+        <location filename="catalogs/catcontracts.cpp" line="308"/>
+        <location filename="catalogs/catcontracts.cpp" line="314"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="289"/>
+        <location filename="catalogs/catcontracts.cpp" line="319"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="290"/>
+        <location filename="catalogs/catcontracts.cpp" line="320"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="catalogs/catcontracts.cpp" line="291"/>
+        <location filename="catalogs/catcontracts.cpp" line="321"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
@@ -849,95 +833,117 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="156"/>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="169"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="178"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="191"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="204"/>
         <source>id</source>
         <translation>id</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="158"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="180"/>
         <source>Cod MS</source>
         <translation>Код МЗ</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="172"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="194"/>
         <source>Reducere (%)</source>
         <translation>Скидка (%)</translation>
     </message>
     <message>
         <location filename="catalogs/catforsqltablemodel.cpp" line="104"/>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="359"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="409"/>
         <source>Clasificatorul investigatiilor</source>
         <translation>Классификатор обследований</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="109"/>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="363"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="111"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="413"/>
         <source>Tipul preturilor</source>
         <translation>Тип цен</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="159"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="118"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="417"/>
+        <source>Șabloane concluziilor</source>
+        <translation>Шаблоны заключений</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="181"/>
         <source>Denumirea investigatiei</source>
         <translation>Наименование обследования</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="160"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="182"/>
         <source>Use</source>
         <translation>Использование</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="171"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="193"/>
         <source>Denumirea pretului</source>
         <translation>Наименование цены</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="173"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="195"/>
         <source>Noncomercial</source>
         <translation>Не коммерческий</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="255"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="206"/>
+        <source>Cod</source>
+        <translation>Код</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="207"/>
+        <source>Concluzia</source>
+        <translation>Заключение</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="208"/>
+        <source>Sistema</source>
+        <translation>Система</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="302"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="255"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="302"/>
         <source>Atentie</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="265"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="312"/>
         <source>Marcarea/demarcarea obiectului</source>
         <translation>Пометка/отмена пометки объекта</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="266"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="313"/>
         <source>Marcarea/demarcarea obiectului cu codul &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu este reusita.</source>
         <translation>Пометка/отмена пометки объекта с кодом &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнена.</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="292"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="339"/>
         <source>Demarcheaza obiectul cu codul &apos;%1&apos;</source>
         <translation>Отмена пометки объекта с кодом &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="294"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="341"/>
         <source>Marcheaza pentru eliminare obiectul co codul &apos;%1&apos;</source>
         <translation>Пометка на удаление объекта с кодом &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="300"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="347"/>
         <source>Adauga obiect nou</source>
         <translation>Добавить новый объект</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="296"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="343"/>
         <source>%1 - slotContextMenuRequested():</source>
         <translation>%1 - slotContextMenuRequested():</translation>
     </message>
     <message>
-        <location filename="catalogs/catforsqltablemodel.cpp" line="297"/>
+        <location filename="catalogs/catforsqltablemodel.cpp" line="344"/>
         <source>Status &apos;deletionMark&apos; a obiectului cu ID=%1 nu este determinat !!!</source>
         <translation>Статус &apos;deletionMark&apos; объекта с ID=%1 не определен !!!</translation>
     </message>
@@ -1057,300 +1063,259 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="84"/>
-        <source>1% - getDataObject()</source>
-        <translation>1% - getDataObject()</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="85"/>
-        <location filename="catalogs/catgeneral.cpp" line="519"/>
-        <location filename="catalogs/catgeneral.cpp" line="843"/>
+        <location filename="catalogs/catgeneral.cpp" line="479"/>
+        <location filename="catalogs/catgeneral.cpp" line="808"/>
         <source>Nu a fost determinanta proprietatea &apos;typeCatalog&apos; !!!</source>
         <translation>Не определено свойство &apos;typeCatalog&apos; !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="94"/>
-        <location filename="catalogs/catgeneral.cpp" line="98"/>
-        <location filename="catalogs/catgeneral.cpp" line="102"/>
+        <location filename="catalogs/catgeneral.cpp" line="69"/>
+        <location filename="catalogs/catgeneral.cpp" line="76"/>
+        <location filename="catalogs/catgeneral.cpp" line="83"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="94"/>
+        <location filename="catalogs/catgeneral.cpp" line="70"/>
         <source>Nu este indicat &quot;&lt;b&gt;Nume, prenume, patronimic&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указано &quot;&lt;b&gt;Фамилия, имя, отчество&lt;/b&gt;&quot; объекта !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="98"/>
+        <location filename="catalogs/catgeneral.cpp" line="77"/>
         <source>Nu este indicat &quot;&lt;b&gt;Nume&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Фамилия&lt;/b&gt;&quot; объекта !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="102"/>
+        <location filename="catalogs/catgeneral.cpp" line="84"/>
         <source>Nu este indicat &quot;&lt;b&gt;Prenume&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указано &quot;&lt;b&gt;Имя&lt;/b&gt;&quot; объекта !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="733"/>
-        <location filename="catalogs/catgeneral.cpp" line="803"/>
+        <location filename="catalogs/catgeneral.cpp" line="140"/>
+        <source>Datele obiectului &apos;%1&apos; cu id=&apos;%2&apos; au fost salvate cu succes in tabela &apos;%3&apos;.</source>
+        <translation>Данные объекта &apos;%1&apos; с id=&apos;%2&apos; успешно записаны в таблицу &apos;%3&apos;.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="144"/>
+        <source>Eroare la inserarea datelor obiectului &apos;%1&apos; cu id=&apos;%2&apos; in tabela &apos;%3&apos;- %4</source>
+        <translation>Ошибка записи данных объекта &apos;%1&apos; с id=&apos;%2&apos; в таблице &apos;%3&apos;- %4</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="200"/>
+        <source>Datele obiectului &apos;%1&apos; cu id=&apos;%2&apos; au fost modificate cu succes in tabela &apos;%3&apos;.</source>
+        <translation>Данные объекта&apos;%1&apos; с id=&apos;%2&apos; успешно изменены в таблице &apos;%3&apos;.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="204"/>
+        <source>Eroare la modificarea datelor obiectului &apos;%1&apos; cu id=&apos;%2&apos; in tabela &apos;%3&apos; - %4</source>
+        <translation>Ошибка изменения данных объекта &apos;%1&apos; с id=&apos;%2&apos; в таблице &apos;%3&apos; - %4</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="269"/>
+        <source>Eroare la eliminarea semnaturei din baza de date: </source>
+        <translation>Ошибка удаления подписи из базы данных: </translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="286"/>
+        <source>Eroare la eliminarea imaginei din baza de date: </source>
+        <translation>Ошибка удаления изображения из базы данных: </translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="320"/>
+        <source>Eroare de inserare imaginei in baza de date: </source>
+        <translation>Ошибка сохранения изображения в базу данных: </translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="652"/>
+        <source>Obiectul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; a fost modificat cu succes.</source>
+        <translation>Объект &lt;b&gt;%1&lt;/b&gt; &lt;br&gt;успешно изменён.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="703"/>
+        <location filename="catalogs/catgeneral.cpp" line="771"/>
         <source>(crearea)</source>
         <translation>(создание)</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="733"/>
-        <location filename="catalogs/catgeneral.cpp" line="803"/>
+        <location filename="catalogs/catgeneral.cpp" line="703"/>
+        <location filename="catalogs/catgeneral.cpp" line="771"/>
         <source>(salvat)</source>
         <translation>(записан)</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="733"/>
+        <location filename="catalogs/catgeneral.cpp" line="703"/>
         <source>As.medicală %1 %2</source>
         <translation>Мед.сестра %1 %2</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="801"/>
-        <source>A fost creat/inserata pacientul &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Создан пациент &apos;%1&apos; с id=&apos;%2&apos; в базе данных.</translation>
+        <location filename="catalogs/catgeneral.cpp" line="720"/>
+        <source>Datele obiectului &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; au fost modificate cu succes.</source>
+        <translation>Данные объекта &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;успешно обновлены.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="803"/>
+        <location filename="catalogs/catgeneral.cpp" line="838"/>
+        <source>Anulare</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catgeneral.cpp" line="771"/>
         <source>Pacientul %1 %2</source>
         <translation>Пациент %1 %2</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="644"/>
+        <location filename="catalogs/catgeneral.cpp" line="609"/>
         <source>Doctor exista in baza de date:&lt;br&gt; - nume: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - patronimic: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Doriți să continuați validarea ?</source>
         <translation>Доктор существует в базе данных:&lt;br&gt; - фамилия: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - имя: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - отчество: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Продолжить сохранение ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="711"/>
+        <location filename="catalogs/catgeneral.cpp" line="676"/>
         <source>As.medicala exista in baza de date:&lt;br&gt; - nume: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - patronimic: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Doriți să continuați validarea ?</source>
         <translation>Мед.сестра существует в базе данных:&lt;br&gt; - фамилия: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - имя: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - отчество: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Продолжить сохранение ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="665"/>
-        <location filename="catalogs/catgeneral.cpp" line="735"/>
-        <location filename="catalogs/catgeneral.cpp" line="805"/>
+        <location filename="catalogs/catgeneral.cpp" line="633"/>
+        <location filename="catalogs/catgeneral.cpp" line="700"/>
+        <location filename="catalogs/catgeneral.cpp" line="773"/>
         <source>Obiectul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; a fost creat cu succes.</source>
         <translation>Объект &lt;b&gt;%1&lt;/b&gt; &lt;br&gt;успешно создан.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="309"/>
+        <location filename="catalogs/catgeneral.cpp" line="266"/>
         <source>Semnatura este eliminat din baza de date.</source>
         <translation>Подпись удалена из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="312"/>
-        <source>Eroare la eliminarea semnaturei din baza de date:
-</source>
-        <translation>Ошибка удаления подписи из базы данных:
-</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="324"/>
+        <location filename="catalogs/catgeneral.cpp" line="283"/>
         <source>Imaginea este eliminat din baza de date.</source>
         <translation>Изображение удалено из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="327"/>
-        <source>Eroare la eliminarea imaginei din baza de date:
-</source>
-        <translation>Ошибка удаления изображения из базы данных:
-</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="338"/>
+        <location filename="catalogs/catgeneral.cpp" line="297"/>
         <source>Nu este setată imaginea %1: %2</source>
         <translation>Изображение не установлено %1: %2</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="357"/>
+        <location filename="catalogs/catgeneral.cpp" line="317"/>
         <source>Imaginea este salvat cu succes în baza de date.</source>
         <translation>Изображение успешно сохранено в базе данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="360"/>
-        <source>Eroare de inserare imaginei in baza de date:
-</source>
-        <translation>Ошибка сохранения изображения в базу данных:
-</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="397"/>
+        <location filename="catalogs/catgeneral.cpp" line="354"/>
         <source>Verificarea validării</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="398"/>
+        <location filename="catalogs/catgeneral.cpp" line="355"/>
         <source>Pentru a încărca logotipul este necesar de salvat datele.&lt;br&gt;Doriți să salvați datele ?</source>
         <translation>Для выбора логотипа необходимо сохранить данные.&lt;br&gt;Сохранить ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="406"/>
+        <location filename="catalogs/catgeneral.cpp" line="363"/>
         <source>Open File</source>
         <translation>Загрузить файл</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="457"/>
+        <location filename="catalogs/catgeneral.cpp" line="417"/>
         <source>Nu a fost determinata proprietatea &apos;typeCatalog&apos; !!!</source>
         <translation>Не определено свойство &apos;typeCatalog&apos; !!!</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="542"/>
+        <location filename="catalogs/catgeneral.cpp" line="502"/>
         <source>Doctor (crearea) %1</source>
         <translation>Доктор (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="545"/>
+        <location filename="catalogs/catgeneral.cpp" line="505"/>
         <source>As.medicală (crearea) %1</source>
         <translation>Мед.сестра (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="548"/>
+        <location filename="catalogs/catgeneral.cpp" line="508"/>
         <source>Pacient (crearea) %1</source>
         <translation>Пациент (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="556"/>
+        <location filename="catalogs/catgeneral.cpp" line="516"/>
         <source>Doctor (salvat) %1</source>
         <translation>Доктор (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="559"/>
+        <location filename="catalogs/catgeneral.cpp" line="519"/>
         <source>As.medicală (salvată) %1</source>
         <translation>Мед.сестра (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="562"/>
+        <location filename="catalogs/catgeneral.cpp" line="522"/>
         <source>Pacient (salvat) %1</source>
         <translation>Пациент (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="643"/>
-        <location filename="catalogs/catgeneral.cpp" line="710"/>
-        <location filename="catalogs/catgeneral.cpp" line="778"/>
-        <location filename="catalogs/catgeneral.cpp" line="868"/>
+        <location filename="catalogs/catgeneral.cpp" line="608"/>
+        <location filename="catalogs/catgeneral.cpp" line="675"/>
+        <location filename="catalogs/catgeneral.cpp" line="743"/>
+        <location filename="catalogs/catgeneral.cpp" line="831"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="650"/>
-        <location filename="catalogs/catgeneral.cpp" line="717"/>
-        <location filename="catalogs/catgeneral.cpp" line="787"/>
-        <location filename="catalogs/catgeneral.cpp" line="872"/>
+        <location filename="catalogs/catgeneral.cpp" line="616"/>
+        <location filename="catalogs/catgeneral.cpp" line="683"/>
+        <location filename="catalogs/catgeneral.cpp" line="753"/>
+        <location filename="catalogs/catgeneral.cpp" line="836"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="651"/>
-        <location filename="catalogs/catgeneral.cpp" line="718"/>
-        <location filename="catalogs/catgeneral.cpp" line="788"/>
-        <location filename="catalogs/catgeneral.cpp" line="873"/>
+        <location filename="catalogs/catgeneral.cpp" line="617"/>
+        <location filename="catalogs/catgeneral.cpp" line="684"/>
+        <location filename="catalogs/catgeneral.cpp" line="754"/>
+        <location filename="catalogs/catgeneral.cpp" line="837"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="664"/>
-        <source>A fost creat/inserat doctor &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Создан доктор &apos;%1&apos; с id=&apos;%2&apos; в базе данных.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="670"/>
-        <location filename="catalogs/catgeneral.cpp" line="738"/>
-        <location filename="catalogs/catgeneral.cpp" line="809"/>
+        <location filename="catalogs/catgeneral.cpp" line="638"/>
+        <location filename="catalogs/catgeneral.cpp" line="706"/>
+        <location filename="catalogs/catgeneral.cpp" line="777"/>
         <source>Crearea obiectului.</source>
         <translation>Создание объекта.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="671"/>
-        <location filename="catalogs/catgeneral.cpp" line="739"/>
-        <location filename="catalogs/catgeneral.cpp" line="810"/>
+        <location filename="catalogs/catgeneral.cpp" line="639"/>
+        <location filename="catalogs/catgeneral.cpp" line="707"/>
+        <location filename="catalogs/catgeneral.cpp" line="778"/>
         <source>Salvarea datelor obiectului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Запись данных объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="674"/>
-        <source>Eroare la crearea/inserarea doctorului &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Ошибка записи доктора &apos;%1&apos; с id=&apos;%2&apos; в базу данных.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="685"/>
-        <source>Au fost modificate datele doctorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Данные доктора &apos;%1&apos; с id=&apos;%2&apos; успешно обновлены.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="688"/>
-        <location filename="catalogs/catgeneral.cpp" line="756"/>
-        <location filename="catalogs/catgeneral.cpp" line="828"/>
+        <location filename="catalogs/catgeneral.cpp" line="656"/>
+        <location filename="catalogs/catgeneral.cpp" line="724"/>
+        <location filename="catalogs/catgeneral.cpp" line="794"/>
         <source>Modificarea datelor.</source>
         <translation>Изменения данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="689"/>
-        <location filename="catalogs/catgeneral.cpp" line="757"/>
-        <location filename="catalogs/catgeneral.cpp" line="829"/>
+        <location filename="catalogs/catgeneral.cpp" line="657"/>
+        <location filename="catalogs/catgeneral.cpp" line="725"/>
+        <location filename="catalogs/catgeneral.cpp" line="795"/>
         <source>Modificarea datelor obiectului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Изменение данных объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="692"/>
-        <source>Eroare la modificarea datelor doctorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Ошибка обновления данных доктора &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="731"/>
-        <source>A fost creat/inserata as.medicala &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Создана мед.сестра &apos;%1&apos; с id=&apos;%2&apos; в базе данных.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="742"/>
-        <source>Eroare la crearea/inserarea as.medicale &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Ошибка записи мед.сестры &apos;%1&apos; с id=&apos;%2&apos; в базу данных.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="753"/>
-        <source>Au fost modificate datele as.medicale &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Данные мед.сестры &apos;%1&apos; с id=&apos;%2&apos; успешно обновлены.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="760"/>
-        <source>Eroare la modificarea datelor as.medicale &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Ошибка обновления данных мед.сестры &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="779"/>
+        <location filename="catalogs/catgeneral.cpp" line="744"/>
         <source>Pacientul exista in baza de date:&lt;br&gt; - nume: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - patronimic: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - anul nasterii: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Doriți să continuați validarea ?</source>
         <translation>Паиент существует в базе данных:&lt;br&gt; - фамилия: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - имя: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - отчество: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - год рождения: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;. &lt;br&gt;Продолжить сохранение ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="813"/>
-        <source>Eroare la crearea/inserarea pacientului &apos;%1&apos; cu id=&apos;%2&apos; in baza de date.</source>
-        <translation>Ошибка записи пациента &apos;%1&apos; с id=&apos;%2&apos; в базу данных.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="824"/>
-        <source>Au fost modificate datele pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Данные пациента &apos;%1&apos; с id=&apos;%2&apos; успешно обновлены.</translation>
-    </message>
-    <message>
         <location filename="catalogs/catgeneral.cpp" line="832"/>
-        <source>Eroare la modificarea datelor pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Ошибка обновления данных пациента &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="869"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
+        <oldsource>Eroare la modificarea datelor pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</oldsource>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catgeneral.cpp" line="874"/>
-        <source>Cancel</source>
-        <translation>Отмена</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catgeneral.cpp" line="892"/>
+        <location filename="catalogs/catgeneral.cpp" line="861"/>
         <source>Creiază utilizator nou %1</source>
         <translation>Создать нового пользователя %1</translation>
     </message>
@@ -1438,255 +1403,255 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="76"/>
-        <location filename="catalogs/catorganizations.cpp" line="639"/>
+        <location filename="catalogs/catorganizations.cpp" line="96"/>
+        <location filename="catalogs/catorganizations.cpp" line="699"/>
         <source>Organizația (crearea) %1</source>
         <translation>Организация (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="78"/>
-        <location filename="catalogs/catorganizations.cpp" line="641"/>
+        <location filename="catalogs/catorganizations.cpp" line="98"/>
+        <location filename="catalogs/catorganizations.cpp" line="701"/>
         <source>Organizația (salvată) %1</source>
         <translation>Организация (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="229"/>
-        <location filename="catalogs/catorganizations.cpp" line="259"/>
+        <location filename="catalogs/catorganizations.cpp" line="258"/>
+        <location filename="catalogs/catorganizations.cpp" line="293"/>
         <source>Datele obiectului &lt;b&gt;%1&lt;/b&gt; nu sunt salvate.&lt;br&gt;Doriți să salvați datele ?</source>
         <translation>Данные объекта  &lt;b&gt;%1&lt;/b&gt; не сохранены.&lt;br&gt;Сохранить данные ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="13"/>
+        <location filename="catalogs/catorganizations.cpp" line="15"/>
         <source>Organizația %1</source>
         <translation>Организация %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="137"/>
+        <location filename="catalogs/catorganizations.cpp" line="162"/>
         <source>Imaginea este eliminată din baza de date.</source>
         <translation>Изображение удалено из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="140"/>
+        <location filename="catalogs/catorganizations.cpp" line="165"/>
         <source>Eroare la eliminarea imaginei din baza de date:
 </source>
         <translation>Ошибка удаления изображения из базы данных:
 </translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="151"/>
+        <location filename="catalogs/catorganizations.cpp" line="176"/>
         <source>Nu este setată imaginea %1: %2</source>
         <translation>Изображение не установлено %1: %2</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="166"/>
+        <location filename="catalogs/catorganizations.cpp" line="192"/>
         <source>Imaginea este salvat cu succes în baza de date.</source>
         <translation>Изображение успешно сохранено в базе данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="169"/>
+        <location filename="catalogs/catorganizations.cpp" line="195"/>
         <source>Eroare de inserare a imaginei in baza de date:
 </source>
         <translation>Ошибка сохранения изображения в базу данных:
 </translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="206"/>
+        <location filename="catalogs/catorganizations.cpp" line="232"/>
         <source>Verificarea validării</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="207"/>
+        <location filename="catalogs/catorganizations.cpp" line="233"/>
         <source>Pentru a încărca imagine este necesar de salvat datele.&lt;br&gt;Doriți să salvați datele ?</source>
         <translation>Для загрузки изображения необходимо сохранить данные.&lt;br&gt;Сохранить ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="215"/>
+        <location filename="catalogs/catorganizations.cpp" line="241"/>
         <source>Open File</source>
         <translation>Загрузить файл</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="228"/>
-        <location filename="catalogs/catorganizations.cpp" line="258"/>
-        <location filename="catalogs/catorganizations.cpp" line="378"/>
-        <location filename="catalogs/catorganizations.cpp" line="614"/>
+        <location filename="catalogs/catorganizations.cpp" line="257"/>
+        <location filename="catalogs/catorganizations.cpp" line="292"/>
+        <location filename="catalogs/catorganizations.cpp" line="417"/>
+        <location filename="catalogs/catorganizations.cpp" line="667"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="232"/>
         <location filename="catalogs/catorganizations.cpp" line="262"/>
-        <location filename="catalogs/catorganizations.cpp" line="382"/>
-        <location filename="catalogs/catorganizations.cpp" line="618"/>
+        <location filename="catalogs/catorganizations.cpp" line="297"/>
+        <location filename="catalogs/catorganizations.cpp" line="422"/>
+        <location filename="catalogs/catorganizations.cpp" line="672"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="233"/>
         <location filename="catalogs/catorganizations.cpp" line="263"/>
-        <location filename="catalogs/catorganizations.cpp" line="383"/>
-        <location filename="catalogs/catorganizations.cpp" line="619"/>
+        <location filename="catalogs/catorganizations.cpp" line="298"/>
+        <location filename="catalogs/catorganizations.cpp" line="423"/>
+        <location filename="catalogs/catorganizations.cpp" line="673"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="243"/>
+        <location filename="catalogs/catorganizations.cpp" line="277"/>
         <source>Crearea contractului pentru organizatia &apos;%1&apos; - nu este determinat &apos;id&apos; organizatiei.</source>
         <translation>Создание контракта для организации &apos;%1&apos; - не определён &apos;id&apos; организации.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="273"/>
-        <location filename="catalogs/catorganizations.cpp" line="295"/>
-        <location filename="catalogs/catorganizations.cpp" line="326"/>
+        <location filename="catalogs/catorganizations.cpp" line="312"/>
+        <location filename="catalogs/catorganizations.cpp" line="334"/>
+        <location filename="catalogs/catorganizations.cpp" line="365"/>
         <source>Atenție</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="273"/>
-        <location filename="catalogs/catorganizations.cpp" line="295"/>
-        <location filename="catalogs/catorganizations.cpp" line="326"/>
+        <location filename="catalogs/catorganizations.cpp" line="312"/>
+        <location filename="catalogs/catorganizations.cpp" line="334"/>
+        <location filename="catalogs/catorganizations.cpp" line="365"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="284"/>
+        <location filename="catalogs/catorganizations.cpp" line="323"/>
         <source>Datele contractului obiectului &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;au fost modificate cu succes.</source>
         <translation>Данные контракта объект &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;успешно обновлены.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="304"/>
+        <location filename="catalogs/catorganizations.cpp" line="343"/>
         <source>Obiectul &quot;%1&quot; a fost marcat 
 pentru eliminarea din baza de date.</source>
         <translation>Объект &quot;%1&quot; помечен 
 на удаление из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="307"/>
+        <location filename="catalogs/catorganizations.cpp" line="346"/>
         <source>Obiectul &quot;%1&quot; a fost demarcat 
 pentru eliminarea din baza de date.</source>
         <translation>Объект &quot;%1&quot; отмена пометки 
 на удаление из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="311"/>
+        <location filename="catalogs/catorganizations.cpp" line="350"/>
         <source>Obiectul &apos;%1&apos; cu id=&apos;%2&apos; este marcat pentru eliminarea din baza de date.</source>
         <translation>Объект &quot;%1&quot; с id=&apos;%2&apos; помечен на удаление из базы данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="315"/>
+        <location filename="catalogs/catorganizations.cpp" line="354"/>
         <source>Marcarea/demarcarea obiectului</source>
         <translation>Пометка/отмена пометки объекта</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="316"/>
+        <location filename="catalogs/catorganizations.cpp" line="355"/>
         <source>Marcarea/demarcarea obiectului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu este reusita.</source>
         <translation>Пометка/отмена пометки на удаление объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнена.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="317"/>
+        <location filename="catalogs/catorganizations.cpp" line="356"/>
         <source>Eroare la marcare eliminarii din baza de date a obiectului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Ошибка пометки на удаления объекта &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="338"/>
+        <location filename="catalogs/catorganizations.cpp" line="377"/>
         <source>Organizatiei &apos;%1&apos; cu id=&apos;%2&apos; a fost atasat contract de baza.</source>
         <translation>Организация &apos;%1&apos; с id=&apos;%2&apos; установлен котракт по умолчанию.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="340"/>
-        <location filename="catalogs/catorganizations.cpp" line="421"/>
-        <location filename="catalogs/catorganizations.cpp" line="432"/>
+        <location filename="catalogs/catorganizations.cpp" line="379"/>
+        <location filename="catalogs/catorganizations.cpp" line="461"/>
+        <location filename="catalogs/catorganizations.cpp" line="470"/>
         <source>Modificarea datelor.</source>
         <translation>Изменения данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="341"/>
-        <location filename="catalogs/catorganizations.cpp" line="422"/>
-        <location filename="catalogs/catorganizations.cpp" line="433"/>
+        <location filename="catalogs/catorganizations.cpp" line="380"/>
+        <location filename="catalogs/catorganizations.cpp" line="462"/>
+        <location filename="catalogs/catorganizations.cpp" line="471"/>
         <source>Modificarea datelor obiectului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Изменение данных объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="344"/>
+        <location filename="catalogs/catorganizations.cpp" line="383"/>
         <source>Eroare la atasarea contractului de baza a organizatiei &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Ошибка установки контракта по умолчанию организации &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="351"/>
+        <location filename="catalogs/catorganizations.cpp" line="390"/>
         <source>Contractul &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt; a fost setat de bază.</source>
         <translation>Контракт &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt; установлен как основной.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="379"/>
+        <location filename="catalogs/catorganizations.cpp" line="418"/>
         <source>Organizația cu nume &quot;&lt;b&gt;%1&lt;/b&gt;&quot; există în baza de date.&lt;br&gt;Doriți să continuați validarea datelor ?</source>
         <translation>Организация с именем &quot;&lt;b&gt;%1&lt;/b&gt;&quot; существует в базе данных.&lt;br&gt;Продолжить сохранение данных ?</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="395"/>
+        <location filename="catalogs/catorganizations.cpp" line="620"/>
         <source>A fost creata organizatia noua &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Создана новая организация &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="397"/>
+        <location filename="catalogs/catorganizations.cpp" line="439"/>
         <source>Crearea obiectului.</source>
         <translation>Создание объекта.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="398"/>
+        <location filename="catalogs/catorganizations.cpp" line="440"/>
         <source>Crearea obiectului cu nume &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a reușit.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Создание объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="401"/>
+        <location filename="catalogs/catorganizations.cpp" line="623"/>
         <source>Eroare la crearea organizatiei &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Ошибка создания организации &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="411"/>
+        <location filename="catalogs/catorganizations.cpp" line="451"/>
         <source>Organizația &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; a fost creat cu succes.</source>
         <translation>Организация &lt;b&gt;%1&lt;/b&gt; &lt;br&gt;успешно создана.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="425"/>
+        <location filename="catalogs/catorganizations.cpp" line="465"/>
         <source>Eroare la modificarea datelor organizatiei &apos;%1&apos;: nu este determinat ID.</source>
         <translation>Ошибка изменения данных организации &apos;%1&apos;: не определён ID.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="430"/>
-        <source>Modificarea datelor organizatiei &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Изменения данных организации &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catorganizations.cpp" line="436"/>
-        <source>Eroare la modificarea datelor organizatiei &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Ошибка обновления данных организации &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catorganizations.cpp" line="440"/>
+        <location filename="catalogs/catorganizations.cpp" line="477"/>
         <source>Datele organizației &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; au fost modificate cu succes.</source>
         <translation>Данные организации &lt;b&gt;%1&lt;/b&gt; &lt;br&gt;успешно изменены.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="620"/>
+        <location filename="catalogs/catorganizations.cpp" line="674"/>
         <source>Cancel</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="483"/>
+        <location filename="catalogs/catorganizations.cpp" line="513"/>
         <source>Contract de bază</source>
         <translation>Контракт основной</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="545"/>
+        <location filename="catalogs/catorganizations.cpp" line="578"/>
         <source>Data încep.</source>
         <translation>Дата нач.</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="546"/>
+        <location filename="catalogs/catorganizations.cpp" line="579"/>
         <source>Denumirea contractului</source>
         <translation>Наименование контракта</translation>
     </message>
     <message>
-        <location filename="catalogs/catorganizations.cpp" line="615"/>
+        <location filename="catalogs/catorganizations.cpp" line="652"/>
+        <source>Datele organizatiei &apos;%1&apos; cu id=&apos;%2&apos; au fost modificate cu succes.</source>
+        <translation>Данные организации &apos;%1&apos; с id=&apos;%2&apos; успешно изменены.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catorganizations.cpp" line="655"/>
+        <source>Eroarea la modificarea datelor organizatiei &apos;%1&apos; cu id=&apos;%2&apos; - %1.</source>
+        <translation>Ошибка изменения данных организации &apos;%1&apos; c id=&apos;%2&apos; - %1.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catorganizations.cpp" line="668"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
@@ -1726,108 +1691,207 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="93"/>
+        <location filename="catalogs/catusers.cpp" line="102"/>
         <source>Utilizator (crearea) %1</source>
         <translation>Пользователь (создание) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="96"/>
+        <location filename="catalogs/catusers.cpp" line="105"/>
         <source>Utilizator (salvat) %1</source>
         <translation>Пользователь (записан) %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="54"/>
+        <location filename="catalogs/catusers.cpp" line="63"/>
         <source>Pentru lucru cu baza de date &quot;&lt;b&gt;%1&lt;/b&gt;&quot; &lt;br&gt;este necesar de creat primul utilizator.</source>
         <translation>Для работы с базой данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; &lt;br&gt;необходимо создать первого пользователя.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="91"/>
+        <location filename="catalogs/catusers.cpp" line="32"/>
+        <source>...lungimea maximum 50 de caractere</source>
+        <translation>...максимум 50 символов</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catusers.cpp" line="100"/>
         <source>Crearea administratorului aplicației %1</source>
         <translation>Создание администратора приложения  %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="109"/>
+        <location filename="catalogs/catusers.cpp" line="124"/>
         <source>Eroarea la atasarea &apos;id&apos; utilizatorului &apos;%1&apos;.</source>
         <translation>Ошибка установки &apos;id&apos; пользователю &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="111"/>
+        <location filename="catalogs/catusers.cpp" line="126"/>
         <source>Crearea utilizatorului.</source>
         <translation>Создание пользователя.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="112"/>
+        <location filename="catalogs/catusers.cpp" line="127"/>
         <source>Eroare la crearea utilizatorului &lt;b&gt;&quot;%1&quot;&lt;/b&gt;.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Ошибка создания пользователя &lt;b&gt;&quot;%1&quot;&lt;/b&gt;.&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="121"/>
+        <location filename="catalogs/catusers.cpp" line="136"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="122"/>
+        <location filename="catalogs/catusers.cpp" line="137"/>
         <source>Utilizatorul cu nume &quot;&lt;b&gt;%1&lt;/b&gt;&quot; există în baza de date.&lt;br&gt;Alegeți alt nume a utilizatorului pentru validare.</source>
         <translation>Пользователь с именем &quot;&lt;b&gt;%1&lt;/b&gt;&quot; существует в базе данных.&lt;br&gt;Выберите другое имя пользователя.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="130"/>
+        <location filename="catalogs/catusers.cpp" line="146"/>
         <source>A fost creat %1 utilizator cu nume &apos;%2&apos;.</source>
         <translation>Создана новый пользователь &apos;%1&apos; с именем &apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="134"/>
-        <source>Crearea obiectului.</source>
-        <translation>Создание объекта.</translation>
+        <location filename="catalogs/catusers.cpp" line="150"/>
+        <source>Crearea utilizatorului</source>
+        <translation>Создание пользователя</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="135"/>
-        <source>Crearea utilizatorului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; a eșuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Создание пользователя &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="catalogs/catusers.cpp" line="152"/>
+        <source>Validarea datelor utilizatorului &apos;%1&apos; nu s-a efectuat.</source>
+        <translation>Запись данных пользователя &apos;%1&apos; не выполнена.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="163"/>
+        <location filename="catalogs/catusers.cpp" line="153"/>
+        <source>eroarea indisponibila</source>
+        <translation>ошибка недоступна</translation>
+    </message>
+    <message>
+        <location filename="catalogs/catusers.cpp" line="179"/>
         <source>Nu este transmisa/indicata proprietatea &lt;&lt;-Id-&gt;&gt; clasei %1</source>
         <translation>Не передано свойство &lt;&lt;-Id-&gt;&gt; классу %1</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="165"/>
-        <location filename="catalogs/catusers.cpp" line="177"/>
+        <location filename="catalogs/catusers.cpp" line="181"/>
+        <location filename="catalogs/catusers.cpp" line="193"/>
         <source>Modificarea datelor.</source>
         <translation>Изменения данных.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="166"/>
-        <location filename="catalogs/catusers.cpp" line="178"/>
+        <location filename="catalogs/catusers.cpp" line="182"/>
+        <location filename="catalogs/catusers.cpp" line="194"/>
         <source>Modificarea datelor utilizatorului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Изменение данных пользователя &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="173"/>
+        <location filename="catalogs/catusers.cpp" line="189"/>
         <source>Datele utilizatorului cu nume &apos;%1&apos; id=&apos;%2&apos; au fost actualizate.</source>
         <translation>Данные пользователя &apos;%1&apos; с id=&apos;%2&apos; успешно обновлены.</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="236"/>
-        <source>Eroare la inserare datelor utilizatorului nou &apos;%1&apos; - %2</source>
-        <translation>Ошибка создания нового пользователя &apos;%1&apos; - &apos;%2&apos;</translation>
-    </message>
-    <message>
-        <location filename="catalogs/catusers.cpp" line="259"/>
+        <location filename="catalogs/catusers.cpp" line="285"/>
         <source>Eroare la actualizare datelor utilizatorului &apos;%1&apos; cu id=&apos;%2&apos;: %3</source>
         <translation>Ошибка обновления данных пользователя &apos;%1&apos; с id=&apos;%2&apos;: %3</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="268"/>
+        <location filename="catalogs/catusers.cpp" line="294"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="catalogs/catusers.cpp" line="269"/>
+        <location filename="catalogs/catusers.cpp" line="295"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
+    </message>
+</context>
+<context>
+    <name>ChoiceColumns</name>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="13"/>
+        <source>Alege colonițe</source>
+        <translation>Выбери колнки</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="98"/>
+        <location filename="docs/choicecolumns.cpp" line="156"/>
+        <source>Nu a fost determinat indexul din clasa &apos;%1&apos; !!!</source>
+        <translation>Не определён индекс из класса &apos;%1&apos; !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="165"/>
+        <source>imaginea atasata</source>
+        <translation>снимок прикреплённый</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="166"/>
+        <source>achitarea cu card</source>
+        <translation>оплата карточкой</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="167"/>
+        <source>numarul documentului</source>
+        <translation>№ документа</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="168"/>
+        <source>data documentului</source>
+        <translation>дата документа</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="169"/>
+        <source>(id) organizatiei</source>
+        <translation>(id) организации</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="170"/>
+        <source>organizatia</source>
+        <translation>организация</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="171"/>
+        <source>(id) contractului</source>
+        <translation>(id) контракт</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="172"/>
+        <source>contract</source>
+        <translation>контракт</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="173"/>
+        <source>(id) pacientului</source>
+        <translation>(id) пациент</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="174"/>
+        <source>pacientul</source>
+        <translation>пациент</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="175"/>
+        <source>IDNP pacientului</source>
+        <translation>IDNP пациента</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="176"/>
+        <source>(id) utilizatorului</source>
+        <translation>(id) пользователя</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="177"/>
+        <source>utilizatorul</source>
+        <translation>пользователь</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="178"/>
+        <source>suma</source>
+        <translation>сумма</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="179"/>
+        <source>cometariu</source>
+        <translation>комментарий</translation>
+    </message>
+    <message>
+        <location filename="docs/choicecolumns.cpp" line="193"/>
+        <source>Lista colonițelor</source>
+        <translation>Список колонок</translation>
     </message>
 </context>
 <context>
@@ -1919,65 +1983,75 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>CustomDialogInvestig</name>
     <message>
-        <location filename="customdialoginvestig.cpp" line="13"/>
+        <location filename="data/customdialoginvestig.cpp" line="14"/>
         <source>Alege investigațiile</source>
         <translation>Выбор обследования</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="83"/>
-        <location filename="customdialoginvestig.cpp" line="185"/>
-        <location filename="customdialoginvestig.cpp" line="224"/>
-        <location filename="customdialoginvestig.cpp" line="270"/>
+        <location filename="data/customdialoginvestig.cpp" line="82"/>
+        <location filename="data/customdialoginvestig.cpp" line="201"/>
+        <location filename="data/customdialoginvestig.cpp" line="240"/>
+        <location filename="data/customdialoginvestig.cpp" line="296"/>
         <source>Nu a fost determinat indexul din clasa &apos;%1&apos; !!!</source>
         <translation>Не определён индекс из класса &apos;%1&apos; !!!</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="93"/>
+        <location filename="data/customdialoginvestig.cpp" line="95"/>
+        <source>Selectarea sistemului</source>
+        <translation>Выбор системы</translation>
+    </message>
+    <message>
+        <location filename="data/customdialoginvestig.cpp" line="97"/>
+        <source>Nu este selectat nici un sistem !!!&lt;br&gt; Bifati sistemul necesar.</source>
+        <translation>Не выбрана систума !!!&lt;br&gt; Установите галочку нужной системы.</translation>
+    </message>
+    <message>
+        <location filename="data/customdialoginvestig.cpp" line="109"/>
         <source>organe interne</source>
         <translation>внутрение органы</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="94"/>
+        <location filename="data/customdialoginvestig.cpp" line="110"/>
         <source>sistemul urinar</source>
         <translation>мочевая система</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="95"/>
+        <location filename="data/customdialoginvestig.cpp" line="111"/>
         <source>prostata</source>
         <translation>простата</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="96"/>
+        <location filename="data/customdialoginvestig.cpp" line="112"/>
         <source>ginecologia</source>
         <translation>гинекология</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="97"/>
+        <location filename="data/customdialoginvestig.cpp" line="113"/>
         <source>gl.mamare</source>
         <translation>молочные железы</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="98"/>
+        <location filename="data/customdialoginvestig.cpp" line="114"/>
         <source>tiroida</source>
         <translation>щитовидная железа</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="99"/>
+        <location filename="data/customdialoginvestig.cpp" line="115"/>
         <source>sarcina până la 11 săptămâni</source>
         <translation>беременность до 11 недель</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="100"/>
+        <location filename="data/customdialoginvestig.cpp" line="116"/>
         <source>sarcina 11-14 săptămâni</source>
         <translation>беременность 11-14 недель</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="101"/>
+        <location filename="data/customdialoginvestig.cpp" line="117"/>
         <source>sarcina 15-40 săptămâni</source>
         <translation>беременность 15-40 недель</translation>
     </message>
     <message>
-        <location filename="customdialoginvestig.cpp" line="115"/>
+        <location filename="data/customdialoginvestig.cpp" line="131"/>
         <source>Lista investigațiilor</source>
         <translation>Список обследований</translation>
     </message>
@@ -2071,659 +2145,904 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>DataBase</name>
     <message>
-        <location filename="database.cpp" line="56"/>
+        <location filename="data/database.cpp" line="56"/>
         <source>Baza de date &quot;&lt;b&gt;%1&lt;/b&gt;&quot; este creata cu succes.</source>
         <oldsource>Baza de date &quot;&lt;b&gt;%1&lt;/b&gt;&quot; este creată cu succes.</oldsource>
         <translation>База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; успешно создана.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="84"/>
+        <location filename="data/database.cpp" line="84"/>
         <source>A fost creata tabela &apos;users&apos;.</source>
         <translation>Создана таблица &apos;users&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="87"/>
+        <location filename="data/database.cpp" line="87"/>
         <source>A fost creata tabela &apos;doctors&apos;.</source>
         <translation>Создана таблица &apos;doctors&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="90"/>
+        <location filename="data/database.cpp" line="93"/>
         <source>A fost creata tabela &apos;nurses&apos;.</source>
         <translation>Создана таблица &apos;nurses&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="93"/>
+        <location filename="data/database.cpp" line="99"/>
         <source>A fost creata tabela &apos;pacients&apos;.</source>
         <translation>Создана таблица &apos;pacients&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="96"/>
+        <location filename="data/database.cpp" line="108"/>
         <source>A fost creata tabela &apos;organizations&apos;.</source>
         <translation>Создана таблица &apos;organizations&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="99"/>
+        <location filename="data/database.cpp" line="111"/>
         <source>A fost creata tabela &apos;investigations&apos;.</source>
         <translation>Создана таблица &apos;investigations&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="102"/>
+        <location filename="data/database.cpp" line="114"/>
         <source>A fost creata tabela &apos;constants&apos;.</source>
         <translation>Создана таблица &apos;constants&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="105"/>
+        <location filename="data/database.cpp" line="117"/>
         <source>A fost creata tabela &apos;contracts&apos;.</source>
         <translation>Создана таблица &apos;contracts&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="108"/>
+        <location filename="data/database.cpp" line="105"/>
         <source>A fost creata tabela &apos;typesPrices&apos;.</source>
         <translation>Создана таблица &apos;typesPrices&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="111"/>
+        <location filename="data/database.cpp" line="120"/>
         <source>A fost creata tabela &apos;pricings&apos;.</source>
         <translation>Создана таблица &apos;pricings&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="114"/>
+        <location filename="data/database.cpp" line="123"/>
         <source>A fost creata tabela &apos;pricingsTable&apos;.</source>
         <translation>Создана таблица &apos;pricingsTable&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="117"/>
+        <location filename="data/database.cpp" line="129"/>
         <source>A fost creata tabela &apos;orderEcho&apos;.</source>
         <translation>Создана таблица &apos;orderEcho&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="120"/>
+        <location filename="data/database.cpp" line="132"/>
         <source>A fost creata tabela &apos;orderEchoTable&apos;.</source>
         <translation>Создана таблица &apos;orderEchoTable&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="123"/>
+        <location filename="data/database.cpp" line="138"/>
         <source>A fost creata tabela &apos;reportEcho&apos;.</source>
         <translation>Создана таблица &apos;reportEcho&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="126"/>
+        <location filename="data/database.cpp" line="144"/>
         <source>A fost creata tabela &apos;tableLiver&apos;.</source>
         <translation>Создана таблица &apos;tableLiver&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="129"/>
+        <location filename="data/database.cpp" line="147"/>
         <source>A fost creata tabela &apos;tableCholecist&apos;.</source>
         <translation>Создана таблица &apos;tableCholecist&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="132"/>
+        <location filename="data/database.cpp" line="150"/>
         <source>A fost creata tabela &apos;tablePancreas&apos;.</source>
         <translation>Создана таблица &apos;tablePancreas&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="135"/>
+        <location filename="data/database.cpp" line="153"/>
         <source>A fost creata tabela &apos;tableSpleen&apos;.</source>
         <translation>Создана таблица &apos;tableSpleen&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="138"/>
+        <location filename="data/database.cpp" line="156"/>
         <source>A fost creata tabela &apos;tableKidney&apos;.</source>
         <translation>Создана таблица &apos;tableKidney&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="141"/>
+        <location filename="data/database.cpp" line="159"/>
         <source>A fost creata tabela &apos;tableBladder&apos;.</source>
         <translation>Создана таблица &apos;tableBladder&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="144"/>
+        <location filename="data/database.cpp" line="162"/>
         <source>A fost creata tabela &apos;tableProstate&apos;.</source>
         <translation>Создана таблица &apos;tableProstate&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="147"/>
+        <location filename="data/database.cpp" line="165"/>
         <source>A fost creata tabela &apos;tableGynecology&apos;.</source>
         <translation>Создана таблица &apos;tableGynecology&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="150"/>
+        <location filename="data/database.cpp" line="168"/>
         <source>A fost creata tabela &apos;tableBreast&apos;.</source>
         <translation>Создана таблица &apos;tableBreast&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="153"/>
+        <location filename="data/database.cpp" line="171"/>
         <source>A fost creata tabela &apos;tableThyroid&apos;.</source>
         <translation>Создана таблица &apos;tableThyroid&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="156"/>
+        <location filename="data/database.cpp" line="174"/>
         <source>A fost creata tabela &apos;tableGestation0&apos;.</source>
         <translation>Создана таблица &apos;tableGestation0&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="159"/>
+        <location filename="data/database.cpp" line="177"/>
         <source>A fost creata tabela &apos;tableGestation1&apos;.</source>
         <translation>Создана таблица &apos;tableGestation1&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1618"/>
+        <location filename="data/database.cpp" line="3175"/>
         <source>%1 - getMapDataQuery()</source>
         <translation>%1 - getMapDataQuery()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1619"/>
+        <location filename="data/database.cpp" line="3176"/>
         <source>Solicitarea nereusita - %1</source>
         <translation>Запрос не выполнен - %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="558"/>
+        <location filename="data/database.cpp" line="570"/>
         <source>%1 - existNameObject()</source>
         <translation>%1 - existNameObject()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="44"/>
+        <location filename="data/database.cpp" line="44"/>
         <source>Baza de date &lt;b&gt;&quot;%1&quot;&lt;/b&gt; deja este creata !!! &lt;br&gt;%2</source>
         <translation>База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; уже создана !!! &lt;br&gt;%2</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="60"/>
+        <location filename="data/database.cpp" line="60"/>
         <source>Baza de date &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu este creata. &lt;br&gt;Verificati corectitudinea localizarii fisierului cu baza de date sau adresati-va administratorului aplicatiei.</source>
         <translation>База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не создана. &lt;br&gt;Проверьте путь к файлу базы данных или обратитесь к администратору приложения..</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="162"/>
+        <location filename="data/database.cpp" line="183"/>
         <source>A fost creata tabela &apos;settingsForm&apos;.</source>
         <translation>Создана таблица &apos;settingsForm&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="165"/>
+        <location filename="data/database.cpp" line="186"/>
         <source>A fost creata tabela &apos;settingsReports&apos;.</source>
         <translation>Создана таблица &apos;settingsReports&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="168"/>
+        <location filename="data/database.cpp" line="189"/>
         <source>A fost creata tabela &apos;settingsUsers&apos;.</source>
         <translation>Создана таблица &apos;settingsUsers&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="266"/>
+        <location filename="data/database.cpp" line="227"/>
         <source>Creata tabela &apos;imagesReports&apos; in baza de date &apos;DB_IMAGE&apos;.</source>
         <translation>Создана таблица &apos;imagesReports&apos; в базе данных &apos;DB_IMAGE&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="268"/>
+        <location filename="data/database.cpp" line="229"/>
         <source>Eroare la crearea tabelei &apos;imagesReports&apos; in baza de date &apos;DB_IMAGE&apos;.</source>
         <translation>Ошибка создании таблицы &apos;imagesReports&apos; в базе данных &apos;DB_IMAGE&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="277"/>
+        <location filename="data/database.cpp" line="238"/>
         <source>Fisierul &apos;:/xmls/investig.xml&apos; nu a fost citit !!!</source>
         <translation>Файл &apos;:/xmls/investig.xml&apos; не прочтён !!!</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="299"/>
+        <location filename="data/database.cpp" line="260"/>
         <source>Investigatia &apos;%1&apos; este introdusa in baza de date cu codul &apos;%2&apos;.</source>
         <translation>Исследование &apos;%1&apos; записано в базу данных с кодом &apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="301"/>
+        <location filename="data/database.cpp" line="262"/>
         <source>Eroare la inserare a datelor in tabela &apos;investigations&apos;: %1</source>
         <translation>Ошибка записи данных в таблицу &apos;investigations&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="320"/>
-        <location filename="database.cpp" line="322"/>
+        <location filename="data/database.cpp" line="281"/>
+        <location filename="data/database.cpp" line="283"/>
+        <location filename="data/database.cpp" line="285"/>
         <source>Prețuri comerciale</source>
         <translation>Цена коммерческая</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="327"/>
+        <location filename="data/database.cpp" line="293"/>
         <source>In baza de date este introdus tipul pretului &apos;Preturi comerciale&apos;.</source>
         <translation>В базу данных записан тип цены &apos;Цена коммерческая&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="329"/>
-        <location filename="database.cpp" line="345"/>
+        <location filename="data/database.cpp" line="295"/>
+        <location filename="data/database.cpp" line="316"/>
         <source>Eroare la inserare a datelor in tabela &apos;typesPrices&apos;: %1</source>
         <translation>Ошибка записи данных в таблицу &apos;typesPrices&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="336"/>
-        <location filename="database.cpp" line="338"/>
+        <location filename="data/database.cpp" line="302"/>
+        <location filename="data/database.cpp" line="304"/>
+        <location filename="data/database.cpp" line="306"/>
         <source>Prețuri CNAM</source>
         <translation>Цена CNAM</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="343"/>
+        <location filename="data/database.cpp" line="314"/>
         <source>In baza de date este introdus tipul pretului &apos;Preturi CNAM&apos;.</source>
         <translation>В базу данных записан тип цены &apos;Цена CNAM&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="353"/>
+        <location filename="data/database.cpp" line="324"/>
         <source>Fisierul &apos;:/xmls/settingsUsers.xml&apos; nu a fost citit !!!</source>
         <translation>Файл &apos;:/xmls/settingsUsers.xml&apos; не прочтён !!!</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="386"/>
-        <source>Setata/completata tabela &apos;settingsUsers&apos;.</source>
-        <translation>Заполнена таблица &apos;settingsUsers&apos;.</translation>
-    </message>
-    <message>
-        <location filename="database.cpp" line="388"/>
+        <location filename="data/database.cpp" line="375"/>
         <source>Eroare la inserare a datelor in tabela &apos;settingsUsers&apos;: %1</source>
         <translation>Ошибка записи данных в таблицу &apos;settingsUsers&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="411"/>
+        <location filename="data/database.cpp" line="395"/>
         <source>Eroare de executare a solicitarii de determinare &apos;id&apos; din tabela &apos;settingsForms&apos;: %1</source>
         <translation>Ошибка выполнения запроса определения &apos;id&apos; из таблицы &apos;settingsForms&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="435"/>
+        <location filename="data/database.cpp" line="419"/>
         <source>Eroare de executare a solicitarii de inserare a datelor in tabela &apos;settingsForms&apos;: %1</source>
         <translation>Ошибка выполнения запроса записи данных в таблицу &apos;settingsForms&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="455"/>
+        <location filename="data/database.cpp" line="439"/>
         <source>Eroare de executare a solicitarii de actualizare a datelor in tabela &apos;settingsForms&apos;: %1</source>
         <translation>Ошибка выполнения запроса обновления данных в таблице &apos;settingsForms&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="514"/>
+        <location filename="data/database.cpp" line="506"/>
         <source>Eroare de executare a solicitarii de actualizare a perioadei din tabela &apos;settingsForms&apos;: %1</source>
         <translation>Ошибка выполнения запроса обновления периода в таблице &apos;settingsForms&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="538"/>
+        <location filename="data/database.cpp" line="550"/>
         <source>Eroare de executare a solicitarii determinarii perioadei din tabela &apos;settingsForms&apos;: %1</source>
         <translation>Ошибка выполнения запроса определения периода в таблицы &apos;settingsForms&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="559"/>
-        <location filename="database.cpp" line="577"/>
-        <location filename="database.cpp" line="1660"/>
+        <location filename="data/database.cpp" line="571"/>
+        <location filename="data/database.cpp" line="589"/>
+        <location filename="data/database.cpp" line="3216"/>
         <source>Solicitarea nereusita: %1</source>
         <translation>Запрос не выполнен - %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="576"/>
+        <location filename="data/database.cpp" line="588"/>
         <source>%1 - existNameObjectReturnId()</source>
         <translation>%1 - existNameObjectReturnId()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="611"/>
+        <location filename="data/database.cpp" line="623"/>
         <source>%1: createNewObject(nameTable = %2): &lt;br&gt;Crearea obiectului a esuat.</source>
         <translation>%1: createNewObject(nameTable = %2): &lt;br&gt;Создание объекта не удалось.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="637"/>
+        <location filename="data/database.cpp" line="652"/>
         <source>%1: updateDataObject(nameTable = %2, _id = %3): &lt;br&gt;Modificarea datelor obiectului &lt;&lt;-%4-&gt;&gt; a esuat.</source>
         <translation>%1: updateDataObject(nameTable = %2, _id = %3): &lt;br&gt;Изменение данных объекта &lt;&lt;-%4-&gt;&gt; не выполнено.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="658"/>
+        <location filename="data/database.cpp" line="673"/>
         <source>%1: Executarea solicitarii nereusita !!!</source>
         <translation>%1: Выполнение запроса не удалось !!!</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="672"/>
+        <location filename="data/database.cpp" line="687"/>
         <source>%1: Executarea eliminarii obiectului nereusita !!!</source>
         <translation>%1: Выполнение удаления объекта не удалось !!!</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="700"/>
+        <location filename="data/database.cpp" line="717"/>
         <source>Eroare de executare a solicitarii &apos;getLastIdForTableByDatabase()&apos;: %1</source>
         <translation>Ошибка выполнения запроса &apos;getLastIdForTableByDatabase()&apos;: %1</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="785"/>
-        <location filename="database.cpp" line="797"/>
+        <location filename="data/database.cpp" line="799"/>
+        <location filename="data/database.cpp" line="811"/>
         <source>%1 - deletionMarkObject(nameTable = %2, id = %3)</source>
         <translation>%1 - deletionMarkObject(nameTable = %2, id = %3)</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="786"/>
+        <location filename="data/database.cpp" line="800"/>
         <source>Status &apos;deletionMark&apos; = -1 : nu poate fi negativ !!!</source>
         <translation>Статус &apos;deletionMark&apos; = -1 : не должен быть негативным !!!</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="798"/>
+        <location filename="data/database.cpp" line="812"/>
         <source>Modificarea statusului &apos;deletionMark&apos; a obiectului cu &apos;ID&apos;=%1 nu este reusita. Erroarea:%2</source>
         <translation>Изменение статуса &apos;deletionMark&apos; объекта с &apos;ID&apos;=%1 не выполнено. Ошибка:%2</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="843"/>
+        <location filename="data/database.cpp" line="856"/>
         <source>%1: postDocument(nameTable = %2): &lt;br&gt;Validarea documentului a esuat.</source>
         <translation>%1: postDocument(nameTable = %2): &lt;br&gt;Проведение документа не удалось.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="866"/>
+        <location filename="data/database.cpp" line="892"/>
         <source>%1 - createTableUsers()</source>
         <translation>%1 - createTableUsers()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="867"/>
+        <location filename="data/database.cpp" line="893"/>
         <source>Nu a fost creata tabela &quot;users&quot;.</source>
         <translation>Не создана таблица &quot;users&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="916"/>
+        <location filename="data/database.cpp" line="931"/>
         <source>%1 - createTableDoctors()</source>
         <translation>%1 - createTableDoctors()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="917"/>
+        <location filename="data/database.cpp" line="932"/>
         <source>Nu a fost creata tabela &quot;doctors&quot;.</source>
         <translation>Не создана таблица &quot;doctors&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="937"/>
+        <location filename="data/database.cpp" line="1061"/>
         <source>%1 - createTableNurses()</source>
         <translation>%1 - createTableNurses()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="938"/>
+        <location filename="data/database.cpp" line="1062"/>
         <source>Nu a fost creata tabela &quot;nurses&quot;.</source>
         <translation>Не создана таблица &quot;nurses&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="962"/>
+        <location filename="data/database.cpp" line="1194"/>
         <source>%1 - createTablePacients()</source>
         <translation>%1 - createTablePacients()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="963"/>
+        <location filename="data/database.cpp" line="1195"/>
         <source>Nu a fost creata tabela &quot;pacients&quot;.</source>
         <translation>Не создана таблица &quot;pacients&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="986"/>
+        <location filename="data/database.cpp" line="1371"/>
         <source>%1 - createTableOrganizations()</source>
         <translation>%1 - createTableOrganizations()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="987"/>
+        <location filename="data/database.cpp" line="1372"/>
         <source>Nu a fost creata tabela &quot;organizations&quot;.</source>
         <translation>Не создана таблица &quot;organizations&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1007"/>
+        <location filename="data/database.cpp" line="1413"/>
         <source>%1 - createTableContracts()</source>
         <translation>%1 - createTableContracts()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1008"/>
+        <location filename="data/database.cpp" line="1414"/>
         <source>Nu a fost creata tabela &quot;contracts&quot;.</source>
         <translation>Не создана таблица &quot;contracts&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1025"/>
-        <location filename="database.cpp" line="1065"/>
+        <location filename="data/database.cpp" line="1444"/>
+        <location filename="data/database.cpp" line="1489"/>
         <source>%1 - createTableInvestigations()</source>
         <translation>%1 - createTableInvestigations()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1026"/>
+        <location filename="data/database.cpp" line="1445"/>
         <source>Nu a fost creata tabela &quot;investigations&quot;.</source>
         <translation>Не создана таблица &quot;investigations&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1043"/>
+        <location filename="data/database.cpp" line="1330"/>
         <source>%1 - createTableTypesPrices()</source>
         <translation>%1 - createTableTypesPrices()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1044"/>
+        <location filename="data/database.cpp" line="90"/>
+        <source>A fost creata tabela &apos;fullNameDoctors&apos;.</source>
+        <translation>Создана таблица &apos;fullNameDoctors&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="96"/>
+        <source>A fost creata tabela &apos;fullNameNurses&apos;.</source>
+        <translation>Создана таблица &apos;fullNameNurses&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="102"/>
+        <source>A fost creata tabela &apos;fullNamePacients&apos;.</source>
+        <translation>Создана таблица &apos;fullNamePacients&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="126"/>
+        <source>A fost creata tabela &apos;pricingsPresentation&apos;.</source>
+        <translation>Создана таблица &apos;pricingsPresentation&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="135"/>
+        <source>A fost creata tabela &apos;orderEchoPresentation&apos;.</source>
+        <translation>Создана таблица &apos;orderEchoPresentation&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="141"/>
+        <source>A fost creata tabela &apos;reportEchoPresentation&apos;.</source>
+        <translation>Создана таблица &apos;reportEchoPresentation&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="180"/>
+        <source>A fost creata tabela &apos;registrationPatients&apos;.</source>
+        <translation>Создана таблица &apos;registrationPatients&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="192"/>
+        <source>A fost creata tabela &apos;conclusionTemplates&apos;.</source>
+        <translation>Создана таблица &apos;conclusionTemplates&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="195"/>
+        <source>A fost creata tabela &apos;imagesReports&apos;.</source>
+        <translation>Создана таблица &apos;imagesReports&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="373"/>
+        <source>Adaugata optiunea &apos;%1&apos; in tabela &apos;settingsUsers&apos;.</source>
+        <translation>Добавлена ​​опция &apos;%1&apos; в таблицу &apos;settingsUsers&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="973"/>
+        <location filename="data/database.cpp" line="1019"/>
+        <source>%1 - createTableFullNameDoctors()</source>
+        <translation>%1 - createTableFullNameDoctors()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="974"/>
+        <location filename="data/database.cpp" line="1020"/>
+        <source>Nu a fost creata tabela &quot;fullNameDoctors&quot;.</source>
+        <translation>Не создана таблица &quot;fullNameDoctors&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1104"/>
+        <location filename="data/database.cpp" line="1145"/>
+        <source>%1 - createTableFullNameNurses()</source>
+        <translation>%1 - createTableFullNameNurses()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1105"/>
+        <location filename="data/database.cpp" line="1146"/>
+        <source>Nu a fost creata tabela &quot;fullNameNurses&quot;.</source>
+        <translation>Не создана таблица &quot;fullNameNurses&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1244"/>
+        <location filename="data/database.cpp" line="1294"/>
+        <source>%1 - createTableFullNamePacients()</source>
+        <translation>%1 - createTableFullNamePacients()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1245"/>
+        <location filename="data/database.cpp" line="1295"/>
+        <source>Nu a fost creata tabela &quot;fullNamePacients&quot;.</source>
+        <translation>Не создана таблица &quot;fullNamePacients&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1331"/>
         <source>Nu a fost creata tabela &quot;typesPrices&quot;.</source>
         <translation>Не создана таблица &quot;typesPrices&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1066"/>
+        <location filename="data/database.cpp" line="1490"/>
         <source>Nu a fost creata tabela &quot;pricings&quot;.</source>
         <translation>Не создана таблица &quot;pricings&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1084"/>
+        <location filename="data/database.cpp" line="1523"/>
         <source>%1 - createTable_PricingsTable()</source>
         <translation>%1 - createTable_PricingsTable()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1085"/>
+        <location filename="data/database.cpp" line="1524"/>
         <source>Nu a fost creata tabela &quot;pricingsTable&quot;.</source>
         <translation>Не создана таблица &quot;pricingsTable&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1110"/>
+        <location filename="data/database.cpp" line="1616"/>
+        <source>%1 - createTablePricingsPresentation()</source>
+        <translation>%1 - createTablePricingsPresentation()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1617"/>
+        <source>Nu a fost creata tabela &quot;pricingsPresentation&quot;.</source>
+        <translation>Не создана таблица &quot;pricingsPresentation&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1775"/>
         <source>%1 - createTableOrderEcho()</source>
         <translation>%1 - createTableOrderEcho()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1111"/>
+        <location filename="data/database.cpp" line="1776"/>
         <source>Nu a fost creata tabela &quot;orderEcho&quot;.</source>
         <translation>Не создана таблица &quot;orderEcho&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1130"/>
+        <location filename="data/database.cpp" line="1810"/>
         <source>%1 - createTable_OrderEchoTable()</source>
         <translation>%1 - createTable_OrderEchoTable()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1131"/>
+        <location filename="data/database.cpp" line="1811"/>
         <source>Nu a fost creata tabela &quot;orderEchoTable&quot;.</source>
         <translation>Не создана таблица &quot;orderEchoTable&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1149"/>
+        <location filename="data/database.cpp" line="1909"/>
+        <location filename="data/database.cpp" line="2000"/>
+        <source>%1 - createTableOrderEchoPresentation()</source>
+        <translation>%1 - createTableOrderEchoPresentation()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="1910"/>
+        <location filename="data/database.cpp" line="2001"/>
+        <source>Nu a fost creata tabela &quot;orderEchoPresentation&quot;.</source>
+        <translation>Не создана таблица &quot;orderEchoPresentation&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="2047"/>
         <source>%1 - createTableConstants()</source>
         <translation>%1 - createTableConstants()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1150"/>
+        <location filename="data/database.cpp" line="2048"/>
         <source>Nu a fost creata tabela &quot;constants&quot;.</source>
         <translation>Не создана таблица &quot;constants&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1181"/>
+        <location filename="data/database.cpp" line="2114"/>
         <source>%1 - createTableReportEcho()</source>
         <translation>%1 - createTableReportEcho()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1182"/>
+        <location filename="data/database.cpp" line="2115"/>
         <source>Nu a fost creata tabela &quot;reportEcho&quot;.</source>
         <translation>Не создана таблица &quot;reportEcho&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1207"/>
+        <location filename="data/database.cpp" line="2155"/>
+        <source>%1 - createTableReportEchoPresentation()</source>
+        <translation>%1 - createTableReportEchoPresentation()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="2156"/>
+        <source>Nu a fost creata tabela &quot;reportEchoPresentation&quot;.</source>
+        <translation>Не создана таблица &quot;reportEchoPresentation&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="2252"/>
         <source>%1 - createTableLiver()</source>
         <translation>%1 - createTableLiver()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1208"/>
+        <location filename="data/database.cpp" line="2253"/>
         <source>Nu a fost creata tabela &quot;tableLiver&quot;.</source>
         <translation>Не создана таблица &quot;tableLiver&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1228"/>
+        <location filename="data/database.cpp" line="2289"/>
         <source>%1 - createTableCholecist()</source>
         <translation>%1 - createTableCholecist()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1229"/>
+        <location filename="data/database.cpp" line="2290"/>
         <source>Nu a fost creata tabela &quot;tableCholecist&quot;.</source>
         <translation>Не создана таблица &quot;tableCholecist&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1250"/>
+        <location filename="data/database.cpp" line="2328"/>
         <source>%1 - createTablePancreas()</source>
         <translation>%1 - createTablePancreas()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1251"/>
+        <location filename="data/database.cpp" line="2329"/>
         <source>Nu a fost creata tabela &quot;tablePancreas&quot;.</source>
         <translation>Не создана таблица &quot;tablePancreas&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1270"/>
+        <location filename="data/database.cpp" line="2363"/>
         <source>%1 - createTableSpleen()</source>
         <translation>%1 - createTableSpleen()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1271"/>
+        <location filename="data/database.cpp" line="2364"/>
         <source>Nu a fost creata tabela &quot;tableSpleen&quot;.</source>
         <translation>Не создана таблица &quot;tableSpleen&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1294"/>
+        <location filename="data/database.cpp" line="2408"/>
         <source>%1 - createTableKidney()</source>
         <translation>%1 - createTableKidney()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1295"/>
+        <location filename="data/database.cpp" line="2409"/>
         <source>Nu a fost creata tabela &apos;tableKidney&apos;.</source>
         <translation>Не создана таблица &quot;tableKidney&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1313"/>
+        <location filename="data/database.cpp" line="2441"/>
         <source>%1 - createTableBladder()</source>
         <translation>%1 - createTableBladder()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1314"/>
+        <location filename="data/database.cpp" line="2442"/>
         <source>Nu a fost creata tabela &apos;tableBladder&apos;.</source>
         <translation>Не создана таблица &quot;tableBladder&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1338"/>
+        <location filename="data/database.cpp" line="2486"/>
         <source>%1 - createTableProstate()</source>
         <translation>%1 - createTableProstate()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1339"/>
+        <location filename="data/database.cpp" line="2487"/>
         <source>Nu a fost creata tabela &apos;tableProstate&apos;.</source>
         <translation>Не создана таблица &quot;tableProstate&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1376"/>
+        <location filename="data/database.cpp" line="2558"/>
         <source>%1 - createTableGynecology()</source>
         <translation>%1 - createTableGynecology()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1377"/>
+        <location filename="data/database.cpp" line="2559"/>
         <source>Nu a fost creata tabela &apos;tableGynecology&apos;.</source>
         <translation>Не создана таблица &quot;tableGynecology&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1402"/>
+        <location filename="data/database.cpp" line="2608"/>
         <source>%1 - createTableBreast()</source>
         <translation>%1 - createTableBreast()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1403"/>
+        <location filename="data/database.cpp" line="2609"/>
         <source>Nu a fost creata tabela &apos;tableBreast&apos;.</source>
         <translation>Не создана таблица &quot;tableBreast&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1427"/>
+        <location filename="data/database.cpp" line="2654"/>
         <source>%1 - createTableThyroid()</source>
         <translation>%1 - createTableThyroid()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1428"/>
+        <location filename="data/database.cpp" line="2655"/>
         <source>Nu a fost creata tabela &apos;tableThyroid&apos;.</source>
         <translation>Не создана таблица &quot;tableThyroid&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1456"/>
+        <location filename="data/database.cpp" line="2708"/>
         <source>%1 - createTableGestation0()</source>
         <translation>%1 - createTableGestation0()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1457"/>
+        <location filename="data/database.cpp" line="2709"/>
         <source>Nu a fost creata tabela &apos;tableGestation0&apos;.</source>
         <translation>Не создана таблица &quot;tableGestation0&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1500"/>
+        <location filename="data/database.cpp" line="2792"/>
         <source>%1 - createTableGestation1()</source>
         <translation>%1 - createTableGestation1()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1501"/>
+        <location filename="data/database.cpp" line="2793"/>
         <source>Nu a fost creata tabela &apos;tableGestation1&apos;.</source>
         <translation>Не создана таблица &quot;tableGestation1&quot;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1521"/>
+        <location filename="data/database.cpp" line="2838"/>
+        <source>%1 - createTableRegistrationPatients()</source>
+        <translation>%1 - createTableRegistrationPatients()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="2839"/>
+        <source>Nu a fost creata tabela &quot;registrationPatients&quot;.</source>
+        <translation>Не создана таблица &quot;registrationPatients&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="2893"/>
         <source>%1 - createTableSettingsForm()</source>
         <translation>%1 - createTableSettingsForm()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1522"/>
+        <location filename="data/database.cpp" line="2894"/>
         <source>Nu a fost creata tabela &apos;settingsForm&apos;.</source>
         <translation>Не создана таблица &apos;settingsForm&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1547"/>
+        <location filename="data/database.cpp" line="2947"/>
         <source>%1 - createTableSettingsReports()</source>
         <translation>%1 - createTableSettingsReports()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1548"/>
+        <location filename="data/database.cpp" line="2948"/>
         <source>Nu a fost creata tabela &apos;settingsReports&apos;.</source>
         <translation>Не создана таблица &apos;settingsReports&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1569"/>
+        <location filename="data/database.cpp" line="2992"/>
         <source>%1 - createTableSettingsUsers()</source>
         <translation>%1 - createTableSettingsUsers()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1570"/>
+        <location filename="data/database.cpp" line="2993"/>
         <source>Nu a fost creata tabela &apos;settingsUsers&apos;.</source>
         <translation>Не создана таблица &apos;settingsUsers&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1637"/>
+        <location filename="data/database.cpp" line="3023"/>
+        <source>%1 - createTableConclusionTemplates()</source>
+        <translation>%1 - createTableConclusionTemplates()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="3024"/>
+        <source>Nu a fost creata tabela &apos;conclusionTemplates&apos;.</source>
+        <translation>Не создана таблица &quot;conclusionTemplates&quot;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="3067"/>
+        <source>%1 - createTableImagesReports()</source>
+        <translation>%1 - createTableImagesReports()</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="3068"/>
+        <source>Nu a fost creata tabela &apos;imagesReports&apos;.</source>
+        <translation>Не создана таблица &apos;imagesReports&apos;.</translation>
+    </message>
+    <message>
+        <location filename="data/database.cpp" line="3195"/>
         <source>Eroare determinarii existentii &apos;count(id)&apos; a documentului cu &apos;id=%1&apos; din tabela &apos;DB_IMAGE&apos;:
 </source>
         <translation>Ошибка определения &apos;count(id)&apos; документа с &apos;id=%1&apos; из таблицы &apos;DB_IMAGE&apos;:
 </translation>
     </message>
     <message>
-        <location filename="database.cpp" line="1659"/>
+        <location filename="data/database.cpp" line="3215"/>
         <source>%1 - existSubalternDocument()</source>
         <translation>%1 - existSubalternDocument()</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2129"/>
+        <location filename="data/database.cpp" line="3641"/>
         <source>Nu este indicata variabila globala &apos;sqlitePathBase&apos;.</source>
         <translation>Не определена глобальная переменная &apos;sqlitePathBase&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2144"/>
+        <location filename="data/database.cpp" line="3654"/>
         <source>Conectarea la baza de date &apos;%1&apos; nu a fost instalata.</source>
         <translation>Соединение с базой данных &apos;%1&apos; не установлено.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2152"/>
+        <location filename="data/database.cpp" line="3662"/>
         <source>Nu este indicata variabila globala &apos;pathImageBaseAppSettings&apos;.</source>
         <translation>Не определена глобальная переменная &apos;pathImageBaseAppSettings&apos;.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2158"/>
+        <location filename="data/database.cpp" line="3668"/>
         <source>Conectarea la baza de date &apos;db_image&apos; este instalata cu succes.</source>
         <translation>Соединение с базой данных &apos;db_image&apos; установлено успешно.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2163"/>
+        <location filename="data/database.cpp" line="3673"/>
         <source>Conectarea la baza de date &apos;db_image&apos; nu a fost instalata.</source>
         <translation>Соединение с базой данных &apos;db_image&apos; не установлено.</translation>
     </message>
     <message>
-        <location filename="database.cpp" line="2138"/>
+        <location filename="data/database.cpp" line="3650"/>
         <source>Conectarea la baza de date &apos;%1&apos; este instalata cu succes.</source>
         <translation>Соединение с базой данных &apos;%1&apos; установлено успешно.</translation>
+    </message>
+</context>
+<context>
+    <name>DatabaseSelection</name>
+    <message>
+        <location filename="data/databaseselection.ui" line="14"/>
+        <source>Dialog</source>
+        <translation>Диалог</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="38"/>
+        <source>Adauga      </source>
+        <translation>Добавить      </translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="65"/>
+        <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tipul conectării:&lt;br&gt;&lt;b&gt;&lt;u&gt;Unknow&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
+        <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Тип соединения:&lt;br&gt;&lt;b&gt;&lt;u&gt;Unknow&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="75"/>
+        <source>Unknow</source>
+        <translation>Unknow</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="88"/>
+        <source>Conectarea</source>
+        <translation>Соединение</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="105"/>
+        <source>Eliminare    </source>
+        <translation>Удалить    </translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.ui" line="122"/>
+        <source>Anulare      </source>
+        <translation>Закрыть      </translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="13"/>
+        <source>Alege/creează baza de date</source>
+        <translation>Выбор/создание базы данных</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="23"/>
+        <source>Crearea directoriei</source>
+        <translation>Создание директории</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="24"/>
+        <source>Directoria &lt;b&gt;&apos;USG&apos;&lt;/b&gt; pentru păstrarea setărilor aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
+        <translation>Директория &lt;b&gt;&apos;USG&apos;&lt;/b&gt; хранения настроек не была создана !!!&lt;br&gt;Обратитесь к администратору программы.</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="79"/>
+        <source>Tipul conectarii:&lt;br&gt;&lt;b&gt;&lt;u&gt;MySQL&lt;/u&gt;&lt;/b&gt;</source>
+        <translation>Тип соединения:&lt;br&gt;&lt;b&gt;&lt;u&gt;MySQL&lt;/u&gt;&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="81"/>
+        <source>Tipul conectarii:&lt;br&gt;&lt;b&gt;&lt;u&gt;Sqlite&lt;/u&gt;&lt;/b&gt;</source>
+        <translation>Тип соединения:&lt;br&gt;&lt;b&gt;&lt;u&gt;Sqlite&lt;/u&gt;&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="83"/>
+        <source>Tipul conectarii:&lt;br&lt;b&gt;&lt;u&gt;&gt;Unknow&lt;/u&gt;&lt;/b&gt;</source>
+        <translation>Тип соединения:&lt;br&lt;b&gt;&lt;u&gt;&gt;Unknow&lt;/u&gt;&lt;/b&gt;</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="119"/>
+        <source>Eliminarea setărilor</source>
+        <translation>Удаление настроек</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="119"/>
+        <source>Doriți să eliminați fișierul:&lt;br&gt;%1 ?</source>
+        <translation>Удалить файл настроек:&lt;br&gt;%1 ?</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="122"/>
+        <location filename="data/databaseselection.cpp" line="158"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="123"/>
+        <location filename="data/databaseselection.cpp" line="159"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="154"/>
+        <source>Crearea bazei de date</source>
+        <translation>Создание базы данных</translation>
+    </message>
+    <message>
+        <location filename="data/databaseselection.cpp" line="155"/>
+        <source>Adaugarea/crearea baza de date ?</source>
+        <translation>Добавить/создать базу данных ?</translation>
     </message>
 </context>
 <context>
@@ -2770,130 +3089,115 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Запись пациентов %1</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="69"/>
-        <source>Deschis documentul - &apos;Programarea pacienților&apos;.</source>
-        <translation>Открыть документ - &apos;Запись пациентов&apos;.</translation>
-    </message>
-    <message>
-        <location filename="docs/docappointmentspatients.cpp" line="102"/>
-        <source>A fost selectată data &apos;%1&apos; pentru programarea pacienților.</source>
-        <translation>Выбрана дата &apos;%1&apos; для записи докумнтов.</translation>
-    </message>
-    <message>
-        <location filename="docs/docappointmentspatients.cpp" line="163"/>
+        <location filename="docs/docappointmentspatients.cpp" line="162"/>
         <source>Eliminarea programării</source>
         <translation>Удаление записи пациентов</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="164"/>
+        <location filename="docs/docappointmentspatients.cpp" line="163"/>
         <source>Datele pacientului &lt;b&gt;&apos;%1&apos;&lt;/b&gt; nu au fost eliminate în baza de date.</source>
         <translation>Данные пациента &lt;b&gt;&apos;%1&apos;&lt;/b&gt; не удалены из базы данных.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="166"/>
-        <source>Programarea pacientului &apos;%1&apos; din data &apos;%2&apos; - eliminată nereușită a datelor din baza de date.</source>
-        <translation>Запись пациента &apos;%1&apos; от &apos;%2&apos; - не удалена из базы данных.</translation>
-    </message>
-    <message>
-        <location filename="docs/docappointmentspatients.cpp" line="171"/>
+        <location filename="docs/docappointmentspatients.cpp" line="168"/>
         <source>Programarea pacientului &apos;%1&apos; din data &apos;%2&apos; eliminată cu succes din baza de date.</source>
         <translation>Запись пациента &apos;%1&apos; от &apos;%2&apos; - успешно удалена из базы данных.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="177"/>
+        <location filename="docs/docappointmentspatients.cpp" line="174"/>
         <source>Datele programării din data &apos;%1&apos;&lt;br&gt; au fost eliminate cu succes în baza de date.</source>
         <translation>Данные записи от &apos;%1&apos;&lt;br&gt; успешно удалены из базы данных.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="241"/>
+        <location filename="docs/docappointmentspatients.cpp" line="246"/>
         <source>Datele programării din data &apos;%1&apos;&lt;br&gt; au fost salvate cu succes în baza de date.</source>
         <translation>Данные записи от &apos;%1&apos;&lt;br&gt; успешно записаны в базу данных.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="249"/>
+        <location filename="docs/docappointmentspatients.cpp" line="253"/>
         <source>Eroarea la validarea documentului de programare</source>
         <translation>Ошибка проведения документа записи пациента</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="251"/>
+        <location filename="docs/docappointmentspatients.cpp" line="255"/>
         <source>Validarea programării</source>
         <translation>Проведение записи пациента</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="251"/>
-        <location filename="docs/docappointmentspatients.cpp" line="293"/>
+        <location filename="docs/docappointmentspatients.cpp" line="255"/>
+        <location filename="docs/docappointmentspatients.cpp" line="296"/>
         <source>. Adresați-vă administratorului aplicației.</source>
         <translation>. Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="283"/>
+        <location filename="docs/docappointmentspatients.cpp" line="287"/>
         <source>Datele programării din data &apos;%1&apos;&lt;br&gt; au fost actualizate cu succes în baza de date.</source>
         <translation>Данные записи от &apos;%1&apos;&lt;br&gt; успешно обновлены в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="291"/>
+        <location filename="docs/docappointmentspatients.cpp" line="294"/>
         <source>Eroarea la revalidarea documentului de programare</source>
         <translation>Ошибка перепроведения документа записи пациента</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="293"/>
+        <location filename="docs/docappointmentspatients.cpp" line="296"/>
         <source>Revalidarea programării</source>
         <translation>Перепроведение записи пациента</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="302"/>
+        <location filename="docs/docappointmentspatients.cpp" line="306"/>
         <source>Printarea programării</source>
         <translation>Печать записи пациента</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="303"/>
+        <location filename="docs/docappointmentspatients.cpp" line="307"/>
         <source>Forma de tipar se află în procesul dezvoltării.&lt;br&gt;Urmăriți actualizările aplicației.&lt;br&gt;&lt;br&gt;Pentru informație suplimentară contactați administratorul aplicației.</source>
         <translation>Печатная форма находится в процессе разработки.&lt;br&gt;Следите за обновлениями приложения.&lt;br&gt;&lt;br&gt;За дополнительной информацией обратитесь к администратору программы..</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="313"/>
+        <location filename="docs/docappointmentspatients.cpp" line="317"/>
         <source>Marcarea rândului</source>
         <translation>Редактирование строки</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="313"/>
+        <location filename="docs/docappointmentspatients.cpp" line="317"/>
         <source>Nu este marcat rândul</source>
         <translation>Не выделена строка</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="413"/>
+        <location filename="docs/docappointmentspatients.cpp" line="423"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="414"/>
+        <location filename="docs/docappointmentspatients.cpp" line="424"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="433"/>
+        <location filename="docs/docappointmentspatients.cpp" line="443"/>
         <source>Salvează datele&lt;br&gt;programării.</source>
         <translation>Сохранить данные&lt;br&gt;записи пациента.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="443"/>
+        <location filename="docs/docappointmentspatients.cpp" line="453"/>
         <source>Generarea formei&lt;br&gt;de tipar.</source>
         <translation>Генерирование&lt;br&gt;печатной формы.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="453"/>
+        <location filename="docs/docappointmentspatients.cpp" line="463"/>
         <source>Eliminarea datelor&lt;br&gt;programării.</source>
         <translation>Удаление записи&lt;br&gt;пациентов.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="463"/>
+        <location filename="docs/docappointmentspatients.cpp" line="473"/>
         <source>Formează documentul&lt;br&gt;&lt;b&gt;&apos;Comanda ecografică&apos;&lt;/b&gt;&lt;br&gt;pe baza datelor programării.</source>
         <translation>Формирование документа&lt;br&gt;&lt;b&gt;&apos;Заказ исследование&apos;&lt;/b&gt;&lt;br&gt;на основании записи пациентов.</translation>
     </message>
     <message>
-        <location filename="docs/docappointmentspatients.cpp" line="473"/>
+        <location filename="docs/docappointmentspatients.cpp" line="483"/>
         <source>Închide forma&lt;br&gt;programării.</source>
         <translation>Закрыть форму&lt;br&gt;записи пациентов.</translation>
     </message>
@@ -2906,450 +3210,528 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="41"/>
+        <location filename="docs/docorderecho.ui" line="42"/>
         <source>Comanda ecografică nr. </source>
         <oldsource>Comanda pentru investigatie nr. </oldsource>
         <translation>Заказ обследование №. </translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="57"/>
+        <location filename="docs/docorderecho.ui" line="59"/>
+        <location filename="docs/docorderecho.cpp" line="1066"/>
         <source> din </source>
         <translation> от </translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="183"/>
+        <location filename="docs/docorderecho.ui" line="190"/>
         <source>Datele organizatiei</source>
         <translation>Данные организации</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="295"/>
+        <location filename="docs/docorderecho.ui" line="327"/>
         <source>Organizatia</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="221"/>
+        <location filename="docs/docorderecho.ui" line="353"/>
         <source>Contract</source>
         <translation>Контракт</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="143"/>
+        <location filename="docs/docorderecho.ui" line="145"/>
         <source>export Excel</source>
         <translation>экспорт в Excel</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="209"/>
+        <location filename="docs/docorderecho.ui" line="202"/>
         <source>Tipul preturilor</source>
         <translation>Тип цен</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="264"/>
+        <location filename="docs/docorderecho.ui" line="298"/>
         <source>Trimis de medic</source>
         <translation>Направил доктор</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="330"/>
-        <location filename="docs/docorderecho.ui" line="341"/>
+        <location filename="docs/docorderecho.ui" line="225"/>
+        <location filename="docs/docorderecho.ui" line="281"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="361"/>
+        <location filename="docs/docorderecho.ui" line="409"/>
         <source>Datele pacientului</source>
         <translation>Данные пациента</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="372"/>
+        <location filename="docs/docorderecho.ui" line="421"/>
         <source>Pacientul</source>
         <translation>Пациент</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="575"/>
+        <location filename="docs/docorderecho.ui" line="650"/>
         <source>Valideaza</source>
         <translation>Провести</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="613"/>
+        <location filename="docs/docorderecho.ui" line="690"/>
         <source>Goleste</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="424"/>
+        <location filename="docs/docorderecho.ui" line="475"/>
         <source>100.00 MDL</source>
         <translation>100.00 MDL</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="439"/>
+        <location filename="docs/docorderecho.ui" line="274"/>
+        <source>As.medicală</source>
+        <translation>Мед.сестра</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.ui" line="340"/>
+        <source>Medic</source>
+        <translation>Доктор</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.ui" line="488"/>
+        <source>achitarea card</source>
+        <translation>оплата кардом</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.ui" line="504"/>
         <source>nou</source>
         <translation>новый</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="468"/>
+        <location filename="docs/docorderecho.ui" line="534"/>
         <source>Polita</source>
         <translation>Полюс</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="480"/>
+        <location filename="docs/docorderecho.ui" line="547"/>
         <source>Adresa</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="507"/>
+        <location filename="docs/docorderecho.ui" line="576"/>
         <source>Telefon</source>
         <translation>Телефон</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="528"/>
+        <location filename="docs/docorderecho.ui" line="599"/>
         <source>IDNP</source>
         <translation>IDNP</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="540"/>
+        <location filename="docs/docorderecho.ui" line="612"/>
         <source>Anul nasterii</source>
         <translation>Дата рождения</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="594"/>
+        <location filename="docs/docorderecho.ui" line="670"/>
         <source>Editeaza</source>
         <translation>Изменить</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="627"/>
+        <location filename="docs/docorderecho.ui" line="710"/>
         <source>Istoria</source>
         <translation>История</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="650"/>
+        <location filename="docs/docorderecho.ui" line="737"/>
         <source>Comentariu</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="694"/>
+        <location filename="docs/docorderecho.ui" line="796"/>
         <source>Salvează</source>
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="718"/>
+        <location filename="docs/docorderecho.ui" line="785"/>
         <source>Validează</source>
         <translation>Провести</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="729"/>
+        <location filename="docs/docorderecho.ui" line="807"/>
         <source>Printează</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="754"/>
+        <location filename="docs/docorderecho.ui" line="818"/>
         <source>Raport</source>
         <translation>Протокол</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.ui" line="743"/>
+        <location filename="docs/docorderecho.ui" line="829"/>
         <source>Inchide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="151"/>
+        <location filename="docs/docorderecho.cpp" line="218"/>
         <source>Obiectul &apos;%1&apos; a fost salvat &lt;br&gt;in baza de date cu succes.</source>
         <translation>Объект &apos;%1&apos;&lt;br&gt; успешно сохранён в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="180"/>
+        <location filename="docs/docorderecho.cpp" line="247"/>
         <source>Comanda ecografica (crearea) %1</source>
         <translation>Заказ исследование (создание) %1</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="237"/>
+        <location filename="docs/docorderecho.cpp" line="333"/>
         <source>Comanda ecografica (validat) %1 %2</source>
         <translation>Заказ исследование (проведён) %1 %2</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="242"/>
-        <source>Nu au fost determinate datele documentului &apos;Comanda ecografica&apos; cu id=&apos;%1&apos;</source>
-        <translation>Не определены данные документа &apos;Заказ ультразвукового обследования&apos; id=%1</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="245"/>
-        <source>Deschis documentul &apos;Comanda ecografica&apos; nr.%1 din data %2 cu id=&apos;%3&apos;</source>
-        <translation>Открыт документ &apos;Заказ ультразвукового обследования&apos; № %1 от %2 id=%3</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="470"/>
-        <source>Verificarea datelor.</source>
-        <translation>Проверка данных.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="471"/>
-        <source>In baza de date exista pacientul cu IDNP:&lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - nume: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - anul nasterii: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;&lt;br&gt;Doriți să continuați validarea ?</source>
-        <translation>В базе данных существует пациент с IDNP:&lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - фамилия: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - имя: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - год рождения: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;&lt;br&gt;Продолжить сохранение данных ?</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="489"/>
-        <source>Pacientul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; a fost salvat in baza de date cu succes.</source>
-        <translation>Пациент &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; успешно сохранён в базе данных.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="492"/>
-        <source>Crearea pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Создан пациент &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="505"/>
-        <source>Crearea obiectului.</source>
-        <translation>Создание объекта.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="506"/>
-        <source>Salvarea datelor pacientului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Запись данных пациента &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="513"/>
-        <source>Datele pacientului &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; a fost modificate cu succes.</source>
-        <translation>Данные пациента &lt;b&gt;%1&lt;/b&gt; &lt;br&gt;успешно изменёны.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="516"/>
-        <source>Modificarea datelor pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
-        <translation>Изменения данных пациента &apos;%1&apos; с id=&apos;%2&apos;.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="524"/>
-        <source>Actualizarea datelor pacientului.</source>
-        <translation>Обновление данных пациента.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="525"/>
-        <source>Actualizarea datelor pacientului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Обновление данных пациента &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнено.&lt;br&gt;Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="534"/>
+        <location filename="docs/docorderecho.cpp" line="693"/>
         <source>Editarea datelor pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Редактирование данных пациента &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="653"/>
+        <location filename="docs/docorderecho.cpp" line="795"/>
         <source>Atentie</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="654"/>
+        <location filename="docs/docorderecho.cpp" line="796"/>
         <source>Investigatia &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; exista in tabel.</source>
         <translation>Обследование &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; существует в таблице.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="704"/>
+        <location filename="docs/docorderecho.cpp" line="857"/>
         <source>Editeaza rândul.</source>
         <translation>Редактирование строки.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="705"/>
+        <location filename="docs/docorderecho.cpp" line="858"/>
         <source>Șterge rândul.</source>
         <translation>Удалить строку.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="742"/>
-        <location filename="docs/docorderecho.cpp" line="749"/>
-        <location filename="docs/docorderecho.cpp" line="756"/>
-        <location filename="docs/docorderecho.cpp" line="763"/>
-        <location filename="docs/docorderecho.cpp" line="770"/>
+        <location filename="docs/docorderecho.cpp" line="895"/>
+        <location filename="docs/docorderecho.cpp" line="902"/>
+        <location filename="docs/docorderecho.cpp" line="909"/>
+        <location filename="docs/docorderecho.cpp" line="916"/>
+        <location filename="docs/docorderecho.cpp" line="923"/>
         <source>Controlul completării obiectelor</source>
         <translation>Проверка заполнения реквизитов</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="743"/>
+        <location filename="docs/docorderecho.cpp" line="896"/>
         <source>Nu este selectată &lt;b&gt;&apos;Organizația&apos;&lt;/b&gt; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="750"/>
+        <location filename="docs/docorderecho.cpp" line="903"/>
         <source>Nu este selectat &lt;b&gt;&apos;Contractul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Контракт&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="757"/>
+        <location filename="docs/docorderecho.cpp" line="910"/>
         <source>Nu este selectat &lt;b&gt;&apos;Tipul prețului&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Тип цен&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="764"/>
+        <location filename="docs/docorderecho.cpp" line="917"/>
         <source>Nu este selectat &lt;b&gt;&apos;Pacientul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Пациент&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="771"/>
+        <location filename="docs/docorderecho.cpp" line="924"/>
         <source>Nu este aleasa nici o investigatie !!!</source>
         <translation>Не выбрано ни одного обследования !!!</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="783"/>
-        <location filename="docs/docorderecho.cpp" line="835"/>
+        <location filename="docs/docorderecho.cpp" line="936"/>
+        <location filename="docs/docorderecho.cpp" line="1013"/>
         <source>Controlul validarii</source>
         <translation>Проверка проведения</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="784"/>
+        <location filename="docs/docorderecho.cpp" line="937"/>
         <source>Documentul nu este validat !!! 
 Raportul ecografic nu poate fi format.</source>
         <translation>Документ не проведен !!! 
 Эхографическое обследование не возможно сформировать.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="836"/>
+        <location filename="docs/docorderecho.cpp" line="1014"/>
         <source>Documentul nu este validat !!! 
 Printare nu este posibila.</source>
         <translation>Документ не проведён !!! 
 Печать не возможна.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="882"/>
-        <source>Document &apos;Comanda ecografica&apos; - printare: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Заказ ультразвукового обследования&apos; - печать: id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="886"/>
-        <source>Deschis designer</source>
-        <translation>Открыт дизайнер</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="889"/>
-        <source>Deschis preview</source>
-        <translation>Открыт просмотр</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="912"/>
-        <location filename="docs/docorderecho.cpp" line="942"/>
+        <location filename="docs/docorderecho.cpp" line="1139"/>
         <source>Validarea documentului</source>
         <translation>Проведение документа</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="912"/>
-        <source>Documentul nu este %1 !!! &lt;br&gt; Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="913"/>
-        <location filename="docs/docorderecho.cpp" line="933"/>
+        <location filename="docs/docorderecho.cpp" line="1165"/>
         <source>validat</source>
         <translation>проведён</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="913"/>
-        <location filename="docs/docorderecho.cpp" line="933"/>
+        <location filename="docs/docorderecho.cpp" line="1165"/>
         <source>salvat</source>
         <translation>записан</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="933"/>
+        <location filename="docs/docorderecho.cpp" line="1165"/>
         <source>Documentul a fost %1 cu succes&lt;br&gt; in baza de date.</source>
         <translation>Документ %1 успешно&lt;br&gt; в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="936"/>
-        <source>Document &apos;Comanda ecografica&apos; - crearea: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Заказ ультразвукового обследования&apos; - создание: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="943"/>
-        <source>Datele documentului nu au fost actualizate !!! &lt;br&gt; Adresați-vă administratorului aplicației.</source>
-        <translation>Обновление данных документа не выполнено !!! &lt;br&gt; Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="956"/>
+        <location filename="docs/docorderecho.cpp" line="1193"/>
         <source>Datele documentului au fost actualizate&lt;br&gt; cu succes.</source>
         <translation>Данные документа &lt;br&gt;успешно изменены.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="959"/>
-        <source>Document &apos;Comanda ecografica&apos; - modificat: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Заказ ультразвукового обследования&apos; - изменение: id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="162"/>
+        <location filename="docs/docorderecho.cpp" line="229"/>
         <source>Editarea datelor doctorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Редактирование данных доктора &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="985"/>
+        <location filename="docs/docorderecho.cpp" line="1244"/>
         <source>Comanda ecografica %1</source>
         <translation>Заказ исследование %1</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1057"/>
+        <location filename="docs/docorderecho.cpp" line="1343"/>
         <source>Deschide designer</source>
         <translation>Открыть дизайнер</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1061"/>
+        <location filename="docs/docorderecho.cpp" line="1347"/>
         <source>Deschide preview</source>
         <translation>Открыть просмотр</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1224"/>
-        <source>Verificarea numelui/prenumelui</source>
-        <translation>Проверка данных</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="1225"/>
-        <source>Nume, prenume pacientului nu au fost corect divizate !!!&lt;br&gt;Validarea datelor pacientului nu este posibila.&lt;br&gt;Adresativa administratorului aplicatiei.</source>
-        <translation>Фамилия, имя пациента не были корректно определены !!!&lt;br&gt;Утверждение данных пациента не возможно.&lt;br&gt;Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docorderecho.cpp" line="1246"/>
+        <location filename="docs/docorderecho.cpp" line="1544"/>
         <source>Corect</source>
         <translation>Корректно</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1248"/>
+        <location filename="docs/docorderecho.cpp" line="1546"/>
         <source>Incorect</source>
         <translation>Некорректно</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1251"/>
+        <location filename="docs/docorderecho.cpp" line="576"/>
+        <location filename="docs/docorderecho.cpp" line="688"/>
+        <location filename="docs/docorderecho.cpp" line="719"/>
+        <location filename="docs/docorderecho.cpp" line="1549"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1252"/>
+        <location filename="docs/docorderecho.cpp" line="36"/>
+        <source>...căutare după denumirea investigației sau după cuvânt cheie/model</source>
+        <translation>...поиск по наименованию обследования или или по ключевому слову/модели</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="577"/>
+        <location filename="docs/docorderecho.cpp" line="689"/>
+        <source>Nu sunt determinate datele pacientului !!!</source>
+        <translation>Не определены данные пациента !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="605"/>
+        <location filename="docs/docorderecho.cpp" line="617"/>
+        <source>Varificarea datelor</source>
+        <translation>Проверка данных</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="606"/>
+        <source>Pacientul(a) &lt;b&gt;%1, %2&lt;/b&gt; exista in baza da date.&lt;br&gt;Doriți să continuați ?</source>
+        <translation>Пациент(кa) &lt;b&gt;%1, %2&lt;/b&gt; существует в базе данных.&lt;br&gt;Продолжить ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="618"/>
+        <source>Pacientul(a) %1 exista in baza da date: - nume: %1
+ - prenume: %2
+ - anul nasterii: %3
+ - IDNP: %4</source>
+        <translation>Пациент(кa) %1 существует в базе данных: - фамилия: %1
+ - имя: %2
+ - год рождения: %3
+ - IDNP: %4</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="635"/>
+        <source>Datele pacientului &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; au fost introduse in baza de date cu succes.</source>
+        <translation>Данные пациента &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; успешно внесены в базу данных.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="638"/>
+        <source>Crearea: pacientul &apos;%1&apos; cu id=&apos;%2&apos;.</source>
+        <translation>Создание: пациент &apos;%1&apos; c id=&apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="649"/>
+        <location filename="docs/docorderecho.cpp" line="672"/>
+        <source>Validarea datelor</source>
+        <translation>Запись данных</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="651"/>
+        <source>Datele pacientului %1 nu au fost salvate in baza de date.</source>
+        <translation>Данные пациента %1 не сохранены в базе данных.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="652"/>
+        <location filename="docs/docorderecho.cpp" line="675"/>
+        <source>eroare indisponibila</source>
+        <translation>ошибка недоступна</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="661"/>
+        <source>Datele pacientului &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; au fost modificate cu succes.</source>
+        <translation>Данные пациента &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; успешно сохранены в базе данных.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="664"/>
+        <source>Modificare: datele pacientului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
+        <translation>Изменение: данные пациента &apos;%1&apos; c id=&apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="674"/>
+        <source>Datele pacientului %1 nu au fost modificate.</source>
+        <translation>Данные пациента %1 не изменены.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="720"/>
+        <source>Nu este determinat pacientul !!!</source>
+        <translation>Не определён пациент !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1066"/>
+        <source>Comanda ecografică nr.</source>
+        <translation>Заказ обследование №.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1066"/>
+        <source> (printare)</source>
+        <translation> (печать)</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1073"/>
+        <location filename="docs/docorderecho.cpp" line="1214"/>
+        <source>Printarea documentului</source>
+        <translation>Печать документа</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1075"/>
+        <source>Documentul nu poate fi printat.</source>
+        <translation>Документ не может быть распечатан.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1076"/>
+        <source>Nu a fost gasit fisierul sablon formei de tipar:
+%1</source>
+        <translation>Не найден файл шаблона печати:
+%1</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1093"/>
+        <source>Printare (designer): document &apos;Comanda ecografica&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer): документа &apos;Заказ обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1097"/>
+        <source>Printare (preview): document &apos;Comanda ecografica&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview): документа &apos;Заказ обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1141"/>
+        <source>Validarea documentului nu s-a efectuat.</source>
+        <translation>Проведение документа не выполнено.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1168"/>
+        <source>Crearea: documentul &apos;Comanda ecografica&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Создание: документа &apos;Заказ обследование&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1175"/>
+        <source>Actualizarea documentului</source>
+        <translation>Обновление документа</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1177"/>
+        <source>Actualizarea datelor documentului nu s-a efectuat.</source>
+        <translation>Обновление данных документа не выполнено.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1197"/>
+        <source>Modificare: document &apos;Comanda ecografica&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Изменение: документа &apos;Заказ обследование&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1217"/>
+        <location filename="docs/docorderecho.cpp" line="1219"/>
+        <location filename="docs/docorderecho.cpp" line="1221"/>
+        <source>Doriți să printați documentul ?</source>
+        <translation>Распечатать документ ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1225"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1226"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1550"/>
         <source>Divizarea numelui/prenumelui pacientului:&lt;br&gt; - nume: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%2&lt;/b&gt;</source>
         <translation>Разделение имени/фамилии пациентаi:&lt;br&gt; - Фамилия: &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; - Имя: &lt;b&gt;%2&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1255"/>
+        <location filename="docs/docorderecho.cpp" line="1553"/>
         <source>Nu arata</source>
         <translation>Не показывать</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1458"/>
-        <location filename="docs/docorderecho.cpp" line="1472"/>
+        <location filename="docs/docorderecho.cpp" line="1586"/>
+        <location filename="docs/docorderecho.cpp" line="1673"/>
+        <location filename="docs/docorderecho.cpp" line="1726"/>
+        <source>Nu a fost determinat statutul achitarii documentului.</source>
+        <translation>Не определён статус оплаты документа.</translation>
+    </message>
+    <message>
+        <location filename="docs/docorderecho.cpp" line="1858"/>
+        <location filename="docs/docorderecho.cpp" line="1872"/>
         <source>Cod</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1459"/>
-        <location filename="docs/docorderecho.cpp" line="1473"/>
+        <location filename="docs/docorderecho.cpp" line="1859"/>
+        <location filename="docs/docorderecho.cpp" line="1873"/>
         <source>Denumirea investigației</source>
         <translation>Наименование обследования</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1460"/>
-        <location filename="docs/docorderecho.cpp" line="1474"/>
+        <location filename="docs/docorderecho.cpp" line="1860"/>
+        <location filename="docs/docorderecho.cpp" line="1874"/>
         <source>Costul</source>
         <translation>Цена</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1495"/>
-        <location filename="docs/docorderecho.cpp" line="1512"/>
+        <location filename="docs/docorderecho.cpp" line="1895"/>
+        <location filename="docs/docorderecho.cpp" line="1912"/>
         <source>Solicitarea nu a fost executata.</source>
         <translation>Запрос не был выполнен.</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1573"/>
+        <location filename="docs/docorderecho.cpp" line="2008"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="docs/docorderecho.cpp" line="1574"/>
+        <location filename="docs/docorderecho.cpp" line="2009"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
@@ -3424,157 +3806,167 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Формирование цен (создание) %1</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="160"/>
+        <location filename="docs/docpricing.cpp" line="169"/>
         <source>Formarea prețurilor (validat) %1 %2</source>
         <translation>Формирование цен (проведён) %1 %2</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="297"/>
+        <location filename="docs/docpricing.cpp" line="306"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="298"/>
+        <location filename="docs/docpricing.cpp" line="307"/>
         <source>Tabela nu este goală. Doriți să goliți tabela ?</source>
         <translation>Таблица не пустая. Очистить таблицу ?</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="347"/>
+        <location filename="docs/docpricing.cpp" line="361"/>
         <source>Atentie</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="348"/>
+        <location filename="docs/docpricing.cpp" line="362"/>
         <source>Investigatia &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; exista in tabel.</source>
         <translation>Обследование &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; существует в таблице.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="405"/>
+        <location filename="docs/docpricing.cpp" line="422"/>
         <source>Prețurile investigațiilor ecografice</source>
         <translation>Цены эхографических обследований</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="432"/>
+        <location filename="docs/docpricing.cpp" line="462"/>
         <source>Prețurile investigațiilor ecografice nr.</source>
         <translation>Цены эхографических обследований №.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="480"/>
-        <location filename="docs/docpricing.cpp" line="486"/>
-        <location filename="docs/docpricing.cpp" line="492"/>
-        <location filename="docs/docpricing.cpp" line="498"/>
-        <location filename="docs/docpricing.cpp" line="504"/>
+        <location filename="docs/docpricing.cpp" line="516"/>
+        <source>Eliminarea imaginei.</source>
+        <translation>Удаление изображения.</translation>
+    </message>
+    <message>
+        <location filename="docs/docpricing.cpp" line="518"/>
+        <source>Eliminarea imaginei din directoriul temporar nu s-a efectuat !!!</source>
+        <translation>Удаление изображения из временной директории не выполнено !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docpricing.cpp" line="531"/>
+        <location filename="docs/docpricing.cpp" line="537"/>
+        <location filename="docs/docpricing.cpp" line="543"/>
+        <location filename="docs/docpricing.cpp" line="549"/>
+        <location filename="docs/docpricing.cpp" line="555"/>
         <source>Controlul completării obiectelor</source>
         <translation>Проверка заполнения реквизитов</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="481"/>
+        <location filename="docs/docpricing.cpp" line="532"/>
         <source>Nu este selectată &lt;b&gt;&apos;Organizația&apos;&lt;/b&gt; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="487"/>
+        <location filename="docs/docpricing.cpp" line="538"/>
         <source>Nu este selectat &lt;b&gt;&apos;Contractul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Контракт&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="493"/>
+        <location filename="docs/docpricing.cpp" line="544"/>
         <source>Nu este selectat &lt;b&gt;&apos;Tipul prețului&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Тип цен&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="499"/>
+        <location filename="docs/docpricing.cpp" line="550"/>
         <source>Tabela cu investigații și prețurile este pustie !!!</source>
         <translation>Таблица с ценами пустая !!!</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="505"/>
+        <location filename="docs/docpricing.cpp" line="556"/>
         <source>Nu este determinat &lt;b&gt;&apos;Autorul&apos;&lt;/b&gt; documentului !!!</source>
         <translation>Не определен &lt;b&gt;&apos;Автор&apos;&lt;/b&gt; документа !!!</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="569"/>
-        <location filename="docs/docpricing.cpp" line="598"/>
+        <location filename="docs/docpricing.cpp" line="620"/>
+        <location filename="docs/docpricing.cpp" line="649"/>
         <source>Validarea documentului</source>
         <translation>Проведение документа</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="569"/>
+        <location filename="docs/docpricing.cpp" line="620"/>
         <source>Documentul nu este %1 !!! &lt;br&gt; Adresați-vă administratorului aplicației.</source>
         <translation>Документ не %1 !!! &lt;br&gt; Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="570"/>
+        <location filename="docs/docpricing.cpp" line="621"/>
         <source>validat</source>
         <translation>проведён</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="570"/>
+        <location filename="docs/docpricing.cpp" line="621"/>
         <source>salvat</source>
         <translation>записан</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="591"/>
+        <location filename="docs/docpricing.cpp" line="642"/>
         <source>Documentul a fost salvat cu succes in baza de date.</source>
         <translation>Документ успешно сохранён в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="599"/>
+        <location filename="docs/docpricing.cpp" line="650"/>
         <source>Datele documentului nu au fost actualizate !!! &lt;br&gt; Adresați-vă administratorului aplicației.</source>
         <translation>Обновление данных документа не выполнено !!! &lt;br&gt; Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="612"/>
+        <location filename="docs/docpricing.cpp" line="663"/>
         <source>Datele documentului au fost&lt;br&gt;actualizate cu succes.</source>
         <translation>Данные документа &lt;br&gt;успешно изменены.</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="637"/>
+        <location filename="docs/docpricing.cpp" line="688"/>
         <source>Formarea prețurilor %1</source>
         <translation>Формирование цен %1</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="650"/>
+        <location filename="docs/docpricing.cpp" line="701"/>
         <source>Adaugă</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="671"/>
+        <location filename="docs/docpricing.cpp" line="722"/>
         <source>Completează</source>
         <translation>Заполнить</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="685"/>
+        <location filename="docs/docpricing.cpp" line="736"/>
         <source>cod</source>
         <translation>код</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="685"/>
+        <location filename="docs/docpricing.cpp" line="736"/>
         <source>denumirea</source>
         <translation>наименование</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="794"/>
+        <location filename="docs/docpricing.cpp" line="845"/>
         <source>Cod</source>
         <translation>Код</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="795"/>
+        <location filename="docs/docpricing.cpp" line="846"/>
         <source>Denumirea investigației</source>
         <translation>Наименование обследования</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="796"/>
+        <location filename="docs/docpricing.cpp" line="847"/>
         <source>Costul</source>
         <translation>Цена</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="875"/>
+        <location filename="docs/docpricing.cpp" line="926"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="docs/docpricing.cpp" line="876"/>
+        <location filename="docs/docpricing.cpp" line="927"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
@@ -3589,1389 +3981,1643 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="33"/>
+        <location filename="docs/docreportecho.ui" line="5043"/>
         <source>Parametrii</source>
         <translation>Параметры</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="65"/>
+        <location filename="docs/docreportecho.ui" line="165"/>
+        <location filename="docs/docreportecho.cpp" line="2150"/>
         <source>Raport ecografic nr.</source>
         <translation>Протокол ультразвук.исследования №.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="83"/>
+        <location filename="docs/docreportecho.ui" line="113"/>
         <source>din</source>
         <translation>от</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="141"/>
+        <location filename="docs/docreportecho.ui" line="197"/>
         <source>Pacient</source>
         <translation>Пациент</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="151"/>
-        <location filename="docs/docreportecho.ui" line="176"/>
+        <location filename="docs/docreportecho.ui" line="33"/>
+        <location filename="docs/docreportecho.ui" line="120"/>
+        <location filename="docs/docreportecho.ui" line="1265"/>
+        <location filename="docs/docreportecho.ui" line="1686"/>
+        <location filename="docs/docreportecho.ui" line="1697"/>
+        <location filename="docs/docreportecho.ui" line="2495"/>
+        <location filename="docs/docreportecho.ui" line="2506"/>
+        <location filename="docs/docreportecho.ui" line="2732"/>
+        <location filename="docs/docreportecho.ui" line="2743"/>
+        <location filename="docs/docreportecho.ui" line="3222"/>
+        <location filename="docs/docreportecho.ui" line="3233"/>
+        <location filename="docs/docreportecho.ui" line="3664"/>
+        <location filename="docs/docreportecho.ui" line="3675"/>
+        <location filename="docs/docreportecho.ui" line="3836"/>
+        <location filename="docs/docreportecho.ui" line="3847"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="166"/>
+        <location filename="docs/docreportecho.ui" line="5061"/>
         <source>Comanda ecografica nr.34 din 12.11.2021</source>
         <translation>Заказ на обследование №.34 от 12.11.2021</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="205"/>
+        <location filename="docs/docreportecho.ui" line="62"/>
         <source>Printeaza</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="216"/>
+        <location filename="docs/docreportecho.ui" line="73"/>
         <source>Valideaza</source>
         <translation>Провести</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="227"/>
+        <location filename="docs/docreportecho.ui" line="84"/>
         <source>Salveaza</source>
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="238"/>
+        <location filename="docs/docreportecho.ui" line="95"/>
         <source>Inchide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="270"/>
+        <location filename="docs/docreportecho.ui" line="226"/>
+        <location filename="docs/docreportecho.cpp" line="1003"/>
+        <location filename="docs/docreportecho.cpp" line="1094"/>
         <source>Organe interne</source>
         <translation>Внутренние органы</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="281"/>
+        <location filename="docs/docreportecho.ui" line="237"/>
+        <location filename="docs/docreportecho.cpp" line="1006"/>
+        <location filename="docs/docreportecho.cpp" line="1096"/>
         <source>Sistemul urinar</source>
         <translation>Мочевая система</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="292"/>
+        <location filename="docs/docreportecho.ui" line="248"/>
+        <location filename="docs/docreportecho.cpp" line="1009"/>
+        <location filename="docs/docreportecho.cpp" line="1098"/>
         <source>Prostata</source>
         <translation>Простата</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="303"/>
+        <location filename="docs/docreportecho.ui" line="259"/>
         <source>Ginecologic</source>
         <translation>Гинекология</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="314"/>
+        <location filename="docs/docreportecho.ui" line="270"/>
         <source>Glandele mamare</source>
         <translation>Молочные железы</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="325"/>
+        <location filename="docs/docreportecho.ui" line="281"/>
         <source>Glanda tiroida</source>
         <translation>Щитовидная железа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="336"/>
+        <location filename="docs/docreportecho.ui" line="292"/>
+        <location filename="docs/docreportecho.cpp" line="1021"/>
+        <location filename="docs/docreportecho.cpp" line="1106"/>
         <source>Sarcina până la 11 săptămâni</source>
         <translation>Беременность до 11 недель</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="347"/>
+        <location filename="docs/docreportecho.ui" line="303"/>
+        <location filename="docs/docreportecho.cpp" line="1024"/>
+        <location filename="docs/docreportecho.cpp" line="1108"/>
         <source>Sarcina 11-14 săptămâni</source>
         <translation>Беременность 11-14 недель</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="365"/>
+        <location filename="docs/docreportecho.ui" line="321"/>
         <source>Imagini</source>
         <translation>Изображения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="383"/>
-        <location filename="docs/docreportecho.ui" line="4301"/>
-        <location filename="docs/docreportecho.ui" line="4403"/>
-        <location filename="docs/docreportecho.ui" line="4499"/>
-        <location filename="docs/docreportecho.ui" line="4598"/>
-        <location filename="docs/docreportecho.ui" line="4697"/>
+        <location filename="docs/docreportecho.ui" line="339"/>
+        <location filename="docs/docreportecho.ui" line="4567"/>
+        <location filename="docs/docreportecho.ui" line="4669"/>
+        <location filename="docs/docreportecho.ui" line="4765"/>
+        <location filename="docs/docreportecho.ui" line="4864"/>
+        <location filename="docs/docreportecho.ui" line="4963"/>
         <source>Comentariu</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="459"/>
+        <location filename="docs/docreportecho.ui" line="415"/>
         <source>Pancreas</source>
         <translation>Поджелудочная железа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="479"/>
-        <location filename="docs/docreportecho.ui" line="859"/>
-        <location filename="docs/docreportecho.ui" line="1069"/>
-        <location filename="docs/docreportecho.ui" line="1220"/>
-        <location filename="docs/docreportecho.ui" line="1509"/>
-        <location filename="docs/docreportecho.ui" line="1673"/>
+        <location filename="docs/docreportecho.ui" line="435"/>
+        <location filename="docs/docreportecho.ui" line="815"/>
+        <location filename="docs/docreportecho.ui" line="1025"/>
+        <location filename="docs/docreportecho.ui" line="1221"/>
+        <location filename="docs/docreportecho.ui" line="1555"/>
+        <location filename="docs/docreportecho.ui" line="1754"/>
         <source>Formatiuni:</source>
         <translation>Образования:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="494"/>
+        <location filename="docs/docreportecho.ui" line="450"/>
         <source>ecogenitatea:</source>
         <translation>эхогенность:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="509"/>
-        <location filename="docs/docreportecho.ui" line="719"/>
-        <location filename="docs/docreportecho.ui" line="997"/>
+        <location filename="docs/docreportecho.ui" line="465"/>
+        <location filename="docs/docreportecho.ui" line="675"/>
+        <location filename="docs/docreportecho.ui" line="953"/>
         <source>parenchima:</source>
         <translation>паренхима:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="542"/>
+        <location filename="docs/docreportecho.ui" line="498"/>
         <source>corp:</source>
         <translation>тело:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="557"/>
+        <location filename="docs/docreportecho.ui" line="513"/>
         <source>coada:</source>
         <translation>хвост:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="572"/>
+        <location filename="docs/docreportecho.ui" line="528"/>
         <source>Cefal:</source>
         <translation>Голова:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="611"/>
+        <location filename="docs/docreportecho.ui" line="567"/>
         <source>Ficatul</source>
         <translation>Печень</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="622"/>
+        <location filename="docs/docreportecho.ui" line="578"/>
         <source>formatiuni:</source>
         <translation>образования:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="655"/>
-        <location filename="docs/docreportecho.ui" line="1036"/>
+        <location filename="docs/docreportecho.ui" line="611"/>
+        <location filename="docs/docreportecho.ui" line="992"/>
         <source>contur:</source>
         <translation>контур:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="692"/>
+        <location filename="docs/docreportecho.ui" line="648"/>
         <source>l.stang</source>
         <translation>д.левая</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="707"/>
+        <location filename="docs/docreportecho.ui" line="663"/>
         <source>v.lienalis</source>
         <translation>в.селезёночная</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="734"/>
+        <location filename="docs/docreportecho.ui" line="690"/>
         <source>duct.i/hepatice:</source>
         <translation>duct.i/hepatice:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="758"/>
+        <location filename="docs/docreportecho.ui" line="714"/>
         <source>v.porta</source>
         <translation>в.портальная</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="818"/>
+        <location filename="docs/docreportecho.ui" line="774"/>
         <source>ecogenitatea :</source>
         <translation>эхогенность:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="833"/>
+        <location filename="docs/docreportecho.ui" line="789"/>
         <source>Dimensiuni: l.drept</source>
         <translation>Размеры: д.правая</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="848"/>
+        <location filename="docs/docreportecho.ui" line="804"/>
         <source>Colecistul</source>
         <translation>Желчный пузырь</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="874"/>
+        <location filename="docs/docreportecho.ui" line="830"/>
         <source>Forma:</source>
         <translation>Форма:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="904"/>
+        <location filename="docs/docreportecho.ui" line="860"/>
         <source>dimens:</source>
         <translation>размеры:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="928"/>
-        <location filename="docs/docreportecho.ui" line="1186"/>
+        <location filename="docs/docreportecho.ui" line="884"/>
+        <location filename="docs/docreportecho.ui" line="1187"/>
         <source>peretii:</source>
         <translation>стенка:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="943"/>
+        <location filename="docs/docreportecho.ui" line="899"/>
         <source>coledoc:</source>
         <translation>холедок:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="986"/>
+        <location filename="docs/docreportecho.ui" line="942"/>
         <source>Splina</source>
         <translation>Селезёнка</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1012"/>
-        <location filename="docs/docreportecho.ui" line="1294"/>
-        <location filename="docs/docreportecho.ui" line="1585"/>
-        <location filename="docs/docreportecho.ui" line="1920"/>
-        <location filename="docs/docreportecho.ui" line="2114"/>
-        <location filename="docs/docreportecho.ui" line="2797"/>
+        <location filename="docs/docreportecho.ui" line="968"/>
+        <location filename="docs/docreportecho.ui" line="1340"/>
+        <location filename="docs/docreportecho.ui" line="1631"/>
+        <location filename="docs/docreportecho.ui" line="2001"/>
+        <location filename="docs/docreportecho.ui" line="2195"/>
+        <location filename="docs/docreportecho.ui" line="2958"/>
         <source>Dimensiuni:</source>
         <translation>Размеры:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1099"/>
+        <location filename="docs/docreportecho.ui" line="1055"/>
         <source>Concluzia (organe interne)</source>
         <translation>Заключение (внутренние органы)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1151"/>
+        <location filename="docs/docreportecho.ui" line="1152"/>
         <source>Vezica urinara</source>
         <oldsource>Veziva urinara</oldsource>
         <translation>Мочевой пузырь</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1162"/>
+        <location filename="docs/docreportecho.ui" line="1163"/>
         <source>Volumul:</source>
         <translation>Объём:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1247"/>
+        <location filename="docs/docreportecho.ui" line="1248"/>
         <source>Concluzia (sistemul urinar)</source>
         <translation>Заключение (мочевая система)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1282"/>
+        <location filename="docs/docreportecho.ui" line="1328"/>
         <source>Rinichii</source>
         <translation>Почки</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1319"/>
+        <location filename="docs/docreportecho.ui" line="1365"/>
         <source>r.drept:</source>
         <translation>д.правая:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1343"/>
+        <location filename="docs/docreportecho.ui" line="1389"/>
         <source>r.stang:</source>
         <translation>д.левая:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1380"/>
-        <location filename="docs/docreportecho.ui" line="1404"/>
+        <location filename="docs/docreportecho.ui" line="1426"/>
+        <location filename="docs/docreportecho.ui" line="1450"/>
         <source>corticomedular:</source>
         <translation>кортикомедулярный:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1447"/>
-        <location filename="docs/docreportecho.ui" line="1471"/>
+        <location filename="docs/docreportecho.ui" line="1493"/>
+        <location filename="docs/docreportecho.ui" line="1517"/>
         <source>pielocaliceal:</source>
         <translation>чашечно-лоханочный:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1558"/>
+        <location filename="docs/docreportecho.ui" line="1604"/>
         <source>transrectal</source>
         <translation>трансректальный</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1573"/>
-        <location filename="docs/docreportecho.ui" line="1873"/>
+        <location filename="docs/docreportecho.ui" line="1619"/>
+        <location filename="docs/docreportecho.ui" line="1954"/>
         <source>Metoda de examinare:</source>
         <translation>Метод обследования:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1613"/>
+        <location filename="docs/docreportecho.ui" line="1659"/>
         <source>Concluzia (prostata)</source>
         <translation>Заключение (простата)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1622"/>
-        <location filename="docs/docreportecho.ui" line="2413"/>
-        <location filename="docs/docreportecho.ui" line="3049"/>
-        <location filename="docs/docreportecho.ui" line="3458"/>
-        <location filename="docs/docreportecho.ui" line="3595"/>
+        <location filename="docs/docreportecho.ui" line="1083"/>
+        <location filename="docs/docreportecho.ui" line="1279"/>
+        <location filename="docs/docreportecho.ui" line="1721"/>
+        <location filename="docs/docreportecho.ui" line="2530"/>
+        <location filename="docs/docreportecho.ui" line="2767"/>
+        <location filename="docs/docreportecho.ui" line="3257"/>
+        <location filename="docs/docreportecho.ui" line="3686"/>
+        <location filename="docs/docreportecho.ui" line="3858"/>
         <source>Recomandări:</source>
         <translation>Рекомендации:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1653"/>
+        <location filename="docs/docreportecho.ui" line="1072"/>
+        <source>Adaugă</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.ui" line="1254"/>
+        <source>Șablon</source>
+        <translation>Шаблон</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.ui" line="1734"/>
         <source>Contur:</source>
         <translation>Контур:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1660"/>
-        <location filename="docs/docreportecho.ui" line="1797"/>
+        <location filename="docs/docreportecho.ui" line="1741"/>
+        <location filename="docs/docreportecho.ui" line="1878"/>
         <source>transabdominal</source>
         <translation>трансабдоминальный</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1680"/>
-        <location filename="docs/docreportecho.ui" line="2196"/>
-        <location filename="docs/docreportecho.ui" line="2245"/>
-        <location filename="docs/docreportecho.ui" line="2846"/>
-        <location filename="docs/docreportecho.ui" line="2910"/>
+        <location filename="docs/docreportecho.ui" line="1761"/>
+        <location filename="docs/docreportecho.ui" line="2277"/>
+        <location filename="docs/docreportecho.ui" line="2326"/>
+        <location filename="docs/docreportecho.ui" line="3007"/>
+        <location filename="docs/docreportecho.ui" line="3071"/>
         <source>volum:</source>
         <translation>объём:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1709"/>
+        <location filename="docs/docreportecho.ui" line="1790"/>
         <source>Ecogenitatea:</source>
         <translation>Эхогенность:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1716"/>
-        <location filename="docs/docreportecho.ui" line="2478"/>
-        <location filename="docs/docreportecho.ui" line="2635"/>
-        <location filename="docs/docreportecho.ui" line="2969"/>
+        <location filename="docs/docreportecho.ui" line="1797"/>
+        <location filename="docs/docreportecho.ui" line="2594"/>
+        <location filename="docs/docreportecho.ui" line="2796"/>
+        <location filename="docs/docreportecho.ui" line="3130"/>
         <source>Ecostructura:</source>
         <translation>Эхоструктура:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1786"/>
+        <location filename="docs/docreportecho.ui" line="1867"/>
         <source>Metoda de examinare, antecedente ginecologice ...</source>
         <translation>Метод обследования, анамнез гинекологический ...</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1809"/>
+        <location filename="docs/docreportecho.ui" line="1890"/>
         <source>Ziua ultimei menstruației:</source>
         <translation>Последний день менструации:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1821"/>
+        <location filename="docs/docreportecho.ui" line="1902"/>
         <source>transvaginal</source>
         <translation>трансвагинальный</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1849"/>
+        <location filename="docs/docreportecho.ui" line="1930"/>
         <source>TextLabel</source>
         <translation></translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1885"/>
+        <location filename="docs/docreportecho.ui" line="1966"/>
         <source>Antecedente:</source>
         <translation>Анамнез:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1909"/>
+        <location filename="docs/docreportecho.ui" line="1990"/>
         <source>Uterul</source>
         <translation>Матка</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1941"/>
+        <location filename="docs/docreportecho.ui" line="2022"/>
         <source>poziția:</source>
         <translation>позиция:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1965"/>
-        <location filename="docs/docreportecho.ui" line="2034"/>
-        <location filename="docs/docreportecho.ui" line="2102"/>
+        <location filename="docs/docreportecho.ui" line="2046"/>
+        <location filename="docs/docreportecho.ui" line="2115"/>
+        <location filename="docs/docreportecho.ui" line="2183"/>
         <source>ecostructura:</source>
         <translation>эхоструктура:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="1986"/>
-        <location filename="docs/docreportecho.ui" line="2541"/>
-        <location filename="docs/docreportecho.ui" line="2698"/>
-        <location filename="docs/docreportecho.ui" line="2985"/>
+        <location filename="docs/docreportecho.ui" line="2067"/>
+        <location filename="docs/docreportecho.ui" line="2657"/>
+        <location filename="docs/docreportecho.ui" line="2859"/>
+        <location filename="docs/docreportecho.ui" line="3146"/>
         <source>Formațiuni:</source>
         <translation>Образования:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2013"/>
+        <location filename="docs/docreportecho.ui" line="2094"/>
         <source>Ecou median:</source>
         <translation>Эндометрий:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2064"/>
+        <location filename="docs/docreportecho.ui" line="2145"/>
         <source>Colul uterin</source>
         <translation>Шейка матки</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2090"/>
+        <location filename="docs/docreportecho.ui" line="2171"/>
         <source>Sp.Douglas:</source>
         <translation>Пр.Douglas:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2135"/>
+        <location filename="docs/docreportecho.ui" line="2216"/>
         <source>plex.venoase:</source>
         <translation>венозные сплетения:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2169"/>
+        <location filename="docs/docreportecho.ui" line="2250"/>
         <source>Ovare</source>
         <translation>Яичники</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2175"/>
+        <location filename="docs/docreportecho.ui" line="2256"/>
         <source>Ovarul drept:</source>
         <translation>Яичник правый:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2218"/>
+        <location filename="docs/docreportecho.ui" line="2299"/>
         <source>Ovarul stâng:</source>
         <translation>Яичник левый:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2272"/>
-        <location filename="docs/docreportecho.ui" line="2296"/>
+        <location filename="docs/docreportecho.ui" line="2353"/>
+        <location filename="docs/docreportecho.ui" line="2377"/>
         <source>foliculi:</source>
         <translation>фоликулы:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2320"/>
-        <location filename="docs/docreportecho.ui" line="2356"/>
+        <location filename="docs/docreportecho.ui" line="2401"/>
+        <location filename="docs/docreportecho.ui" line="2437"/>
         <source>formațiuni:</source>
         <translation>образования:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2398"/>
+        <location filename="docs/docreportecho.ui" line="2479"/>
         <source>Concluzia ginecologică</source>
         <translation>Заключение (гинекология)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2467"/>
+        <location filename="docs/docreportecho.ui" line="2583"/>
         <source>Glanda mamară stânga</source>
         <translation>Молочная железа правая</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2499"/>
-        <location filename="docs/docreportecho.ui" line="2656"/>
+        <location filename="docs/docreportecho.ui" line="2615"/>
+        <location filename="docs/docreportecho.ui" line="2817"/>
         <source>Ducturile galactofore:</source>
         <translation>Молочные протоки:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2520"/>
-        <location filename="docs/docreportecho.ui" line="2677"/>
+        <location filename="docs/docreportecho.ui" line="2636"/>
+        <location filename="docs/docreportecho.ui" line="2838"/>
         <source>lig.Cooper:</source>
         <translation>связки Cooper:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2574"/>
-        <location filename="docs/docreportecho.ui" line="2731"/>
+        <location filename="docs/docreportecho.ui" line="2690"/>
+        <location filename="docs/docreportecho.ui" line="2892"/>
         <source>Gangl. limfatici :</source>
         <translation>Лимф.узлы:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2601"/>
+        <location filename="docs/docreportecho.ui" line="2717"/>
         <source>Concluzia (gl.mamare)</source>
         <translation>Заключение (молочные железы)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2624"/>
+        <location filename="docs/docreportecho.ui" line="2785"/>
         <source>Glanda mamară dreapta</source>
         <translation>Молочная железа левая</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2791"/>
+        <location filename="docs/docreportecho.ui" line="2952"/>
         <source>Galnda tiroidă</source>
         <translation>Щитовидная железа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2822"/>
+        <location filename="docs/docreportecho.ui" line="2983"/>
         <source>l.drept:</source>
         <translation>д.правая:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2886"/>
+        <location filename="docs/docreportecho.ui" line="3047"/>
         <source>l.stâng:</source>
         <translation>д.левая:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="2937"/>
+        <location filename="docs/docreportecho.ui" line="3098"/>
         <source>istmul</source>
         <translation>перешеек</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3013"/>
+        <location filename="docs/docreportecho.ui" line="3174"/>
         <source>Galgl.limfat.</source>
         <translation>Лимф.узлы.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3040"/>
+        <location filename="docs/docreportecho.ui" line="3201"/>
         <source>Concluzia (gl.tiroidă)</source>
         <translation>Заключение (щитовидная железа)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3115"/>
-        <location filename="docs/docreportecho.ui" line="3623"/>
+        <location filename="docs/docreportecho.ui" line="3311"/>
+        <location filename="docs/docreportecho.ui" line="3889"/>
         <source>Varsta gestationala, antecedente</source>
         <translation>Гестационный возраст, анамнез</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3126"/>
-        <location filename="docs/docreportecho.ui" line="3634"/>
+        <location filename="docs/docreportecho.ui" line="3322"/>
+        <location filename="docs/docreportecho.ui" line="3900"/>
         <source>Vizualizarea:</source>
         <translation>Визуализация:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3138"/>
-        <location filename="docs/docreportecho.ui" line="3646"/>
+        <location filename="docs/docreportecho.ui" line="3334"/>
+        <location filename="docs/docreportecho.ui" line="3912"/>
         <source>bună</source>
         <translation>хорошее</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3150"/>
-        <location filename="docs/docreportecho.ui" line="3658"/>
+        <location filename="docs/docreportecho.ui" line="3346"/>
+        <location filename="docs/docreportecho.ui" line="3924"/>
         <source>medie</source>
         <translation>среднее</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3162"/>
-        <location filename="docs/docreportecho.ui" line="3670"/>
+        <location filename="docs/docreportecho.ui" line="3358"/>
+        <location filename="docs/docreportecho.ui" line="3936"/>
         <source>dificilă</source>
         <translation>затруднённое</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3174"/>
-        <location filename="docs/docreportecho.ui" line="3682"/>
+        <location filename="docs/docreportecho.ui" line="3370"/>
+        <location filename="docs/docreportecho.ui" line="3948"/>
         <source>Antecedente obstetricale:</source>
         <translation>Анамнез акушерский:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3195"/>
-        <location filename="docs/docreportecho.ui" line="3703"/>
+        <location filename="docs/docreportecho.ui" line="3391"/>
+        <location filename="docs/docreportecho.ui" line="3969"/>
         <source>Varsta gestationala:</source>
         <translation>Гестационный возраст:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3238"/>
-        <location filename="docs/docreportecho.ui" line="3746"/>
+        <location filename="docs/docreportecho.ui" line="3434"/>
+        <location filename="docs/docreportecho.ui" line="4012"/>
         <source>Biometria fetală</source>
         <translation>Биометрия плода</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3249"/>
-        <location filename="docs/docreportecho.ui" line="3331"/>
-        <location filename="docs/docreportecho.ui" line="3872"/>
+        <location filename="docs/docreportecho.ui" line="3445"/>
+        <location filename="docs/docreportecho.ui" line="3527"/>
+        <location filename="docs/docreportecho.ui" line="4138"/>
         <source>, corespunde:</source>
         <translation>, соответствует:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3305"/>
+        <location filename="docs/docreportecho.ui" line="3501"/>
         <source>GS:</source>
         <translation>GS:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3312"/>
-        <location filename="docs/docreportecho.ui" line="3906"/>
+        <location filename="docs/docreportecho.ui" line="3508"/>
+        <location filename="docs/docreportecho.ui" line="4172"/>
         <source>CRL:</source>
         <translation>CRL:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3319"/>
-        <location filename="docs/docreportecho.ui" line="3834"/>
+        <location filename="docs/docreportecho.ui" line="3515"/>
+        <location filename="docs/docreportecho.ui" line="4100"/>
         <source>BCF:</source>
         <translation>BCF:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3341"/>
-        <location filename="docs/docreportecho.ui" line="4171"/>
+        <location filename="docs/docreportecho.ui" line="3537"/>
+        <location filename="docs/docreportecho.ui" line="4437"/>
         <source>Lichid amniotic:</source>
         <translation>Амниотическая жидкость:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3372"/>
-        <location filename="docs/docreportecho.ui" line="3509"/>
+        <location filename="docs/docreportecho.ui" line="3568"/>
+        <location filename="docs/docreportecho.ui" line="3740"/>
         <source>Miometru, colul uterin, ovare</source>
         <translation>Миометрий, шейка матки, яичники</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3383"/>
-        <location filename="docs/docreportecho.ui" line="3520"/>
+        <location filename="docs/docreportecho.ui" line="3579"/>
+        <location filename="docs/docreportecho.ui" line="3751"/>
         <source>Ovare:</source>
         <translation>Яичники:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3395"/>
-        <location filename="docs/docreportecho.ui" line="3532"/>
+        <location filename="docs/docreportecho.ui" line="3591"/>
+        <location filename="docs/docreportecho.ui" line="3763"/>
         <source>Miometriul:</source>
         <translation>Миометрий:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3407"/>
-        <location filename="docs/docreportecho.ui" line="3544"/>
+        <location filename="docs/docreportecho.ui" line="3603"/>
+        <location filename="docs/docreportecho.ui" line="3775"/>
         <source>Colul uterin:</source>
         <translation>Шейка матки:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3452"/>
+        <location filename="docs/docreportecho.ui" line="3648"/>
         <source>Concluzia (sarcina până la 11 săptămâni)</source>
         <translation>Заключение (беременность до 11 недель)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3589"/>
+        <location filename="docs/docreportecho.ui" line="3820"/>
         <source>Concluzia (sarcina 11-14 săptămâni)</source>
         <translation>Заключение (беременность 11-14 недель)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3757"/>
-        <location filename="docs/docreportecho.ui" line="3808"/>
+        <location filename="docs/docreportecho.ui" line="4023"/>
+        <location filename="docs/docreportecho.ui" line="4074"/>
         <source>, percentile</source>
         <translation>, процентиле</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3778"/>
-        <location filename="docs/docreportecho.ui" line="3946"/>
+        <location filename="docs/docreportecho.ui" line="4044"/>
+        <location filename="docs/docreportecho.ui" line="4212"/>
         <source>, corespunde</source>
         <translation>, соответствует</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3824"/>
+        <location filename="docs/docreportecho.ui" line="4090"/>
         <source>BPD:</source>
         <translation>BPD:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3841"/>
+        <location filename="docs/docreportecho.ui" line="4107"/>
         <source>BN :</source>
         <translation>BN :</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3860"/>
+        <location filename="docs/docreportecho.ui" line="4126"/>
         <source>NT:</source>
         <translation>NT:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3913"/>
+        <location filename="docs/docreportecho.ui" line="4179"/>
         <source>FL:</source>
         <translation>FL:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3964"/>
+        <location filename="docs/docreportecho.ui" line="4230"/>
         <source>Morfologia fetală</source>
         <translation>Морфология плода</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="3984"/>
+        <location filename="docs/docreportecho.ui" line="4250"/>
         <source>Calota craniană:</source>
         <translation>Calota craniană:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4005"/>
+        <location filename="docs/docreportecho.ui" line="4271"/>
         <source>Localizarea placentei:</source>
         <translation>Локализация плаценты:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4017"/>
+        <location filename="docs/docreportecho.ui" line="4283"/>
         <source>Plexurile coroidale:</source>
         <translation>Сплетение хориоидеи:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4029"/>
+        <location filename="docs/docreportecho.ui" line="4295"/>
         <source>Coloana vertebrală:</source>
         <translation>Позвоночник:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4050"/>
+        <location filename="docs/docreportecho.ui" line="4316"/>
         <source>Vezica urinară:</source>
         <translation>Мочевой пузырь:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4062"/>
+        <location filename="docs/docreportecho.ui" line="4328"/>
         <source>Peretele abdominal:</source>
         <translation>Брюшная стенка:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4074"/>
+        <location filename="docs/docreportecho.ui" line="4340"/>
         <source>Diafragma:</source>
         <translation>Диафрагма:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4129"/>
+        <location filename="docs/docreportecho.ui" line="4395"/>
         <source>Stomac:</source>
         <translation>Желудок:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4150"/>
+        <location filename="docs/docreportecho.ui" line="4416"/>
         <source>Sac vitelin:</source>
         <translation>Желточный мешок:</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4217"/>
+        <location filename="docs/docreportecho.ui" line="4483"/>
         <source>Imaginea 1</source>
         <translation>Изображение1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4248"/>
-        <location filename="docs/docreportecho.ui" line="4347"/>
-        <location filename="docs/docreportecho.ui" line="4446"/>
-        <location filename="docs/docreportecho.ui" line="4545"/>
-        <location filename="docs/docreportecho.ui" line="4644"/>
+        <location filename="docs/docreportecho.ui" line="4514"/>
+        <location filename="docs/docreportecho.ui" line="4613"/>
+        <location filename="docs/docreportecho.ui" line="4712"/>
+        <location filename="docs/docreportecho.ui" line="4811"/>
+        <location filename="docs/docreportecho.ui" line="4910"/>
         <source>Apasa pentru a alege imaginea</source>
         <translation>Нажми для выбора изображения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4287"/>
-        <location filename="docs/docreportecho.ui" line="4386"/>
-        <location filename="docs/docreportecho.ui" line="4485"/>
-        <location filename="docs/docreportecho.ui" line="4584"/>
-        <location filename="docs/docreportecho.ui" line="4683"/>
+        <location filename="docs/docreportecho.ui" line="4553"/>
+        <location filename="docs/docreportecho.ui" line="4652"/>
+        <location filename="docs/docreportecho.ui" line="4751"/>
+        <location filename="docs/docreportecho.ui" line="4850"/>
+        <location filename="docs/docreportecho.ui" line="4949"/>
         <source>Golește</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4316"/>
+        <location filename="docs/docreportecho.ui" line="4582"/>
         <source>Imaginea 2</source>
         <translation>Изображение2</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4415"/>
+        <location filename="docs/docreportecho.ui" line="4681"/>
         <source>Imaginea 3</source>
         <translation>Изображение3</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4514"/>
+        <location filename="docs/docreportecho.ui" line="4780"/>
         <source>Imaginea 4</source>
         <translation>Изображение4</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4613"/>
+        <location filename="docs/docreportecho.ui" line="4879"/>
         <source>Imaginea 5</source>
         <translation>Изображение5</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.ui" line="4741"/>
+        <location filename="docs/docreportecho.ui" line="5007"/>
         <source>Concluzia</source>
         <translation>Заключение</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="19"/>
+        <location filename="docs/docreportecho.cpp" line="22"/>
         <source>Raport ecografic %1</source>
         <translation>Эхографическое обследование %1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="808"/>
+        <location filename="docs/docreportecho.cpp" line="561"/>
+        <source>Inserarea imaginei.</source>
+        <translation>Сохранение изображения.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="563"/>
+        <location filename="docs/docreportecho.cpp" line="618"/>
+        <source>Imaginea nu a fost salvată în baza de date !!!</source>
+        <translation>Сохранение изображения не выполнено !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="616"/>
+        <source>Inserarea/actualizarea imaginei.</source>
+        <translation>Запись/обновление изображения.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="648"/>
+        <source>Imaginea nu a fost eliminată în baza de date !!!</source>
+        <translation>Изображение не удалено из базы данных !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="674"/>
+        <source>Inserarea comentariului.</source>
+        <translation>Запись комментария.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="676"/>
+        <source>Comentariul nu a fost inserat/actualizat în baza de date !!!</source>
+        <translation>Запись/обновление комментария не выполнено !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="910"/>
         <source>Deschide designer</source>
         <translation>Открыть дизайнер</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="812"/>
+        <location filename="docs/docreportecho.cpp" line="914"/>
         <source>Deschide preview</source>
         <translation>Открыть просмотр</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1381"/>
+        <location filename="docs/docreportecho.cpp" line="1012"/>
+        <location filename="docs/docreportecho.cpp" line="1100"/>
+        <source>Ginecologia</source>
+        <translation>Гинекология</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1015"/>
+        <location filename="docs/docreportecho.cpp" line="1102"/>
+        <source>Gl.mamare</source>
+        <translation>Молочные железы</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1018"/>
+        <location filename="docs/docreportecho.cpp" line="1104"/>
+        <source>Tiroida</source>
+        <translation>Щитовидная железа</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1036"/>
+        <location filename="docs/docreportecho.cpp" line="1053"/>
+        <source>Verificarea dublajului</source>
+        <translation>Проверка дубляжа</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1037"/>
+        <source>Concluzia &lt;b&gt;%1&lt;/b&gt; există ca șablon.&lt;br&gt;Doriți să prelungiți validarea ?</source>
+        <translation>Заключение &lt;b&gt;%1&lt;/b&gt; существует как шаблок.&lt;br&gt;Продолжить запись ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1040"/>
+        <location filename="docs/docreportecho.cpp" line="2004"/>
+        <location filename="docs/docreportecho.cpp" line="2020"/>
+        <location filename="docs/docreportecho.cpp" line="2036"/>
+        <location filename="docs/docreportecho.cpp" line="2052"/>
+        <location filename="docs/docreportecho.cpp" line="2068"/>
+        <location filename="docs/docreportecho.cpp" line="2084"/>
+        <location filename="docs/docreportecho.cpp" line="2100"/>
+        <location filename="docs/docreportecho.cpp" line="2116"/>
+        <location filename="docs/docreportecho.cpp" line="2672"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1041"/>
+        <location filename="docs/docreportecho.cpp" line="2005"/>
+        <location filename="docs/docreportecho.cpp" line="2021"/>
+        <location filename="docs/docreportecho.cpp" line="2037"/>
+        <location filename="docs/docreportecho.cpp" line="2053"/>
+        <location filename="docs/docreportecho.cpp" line="2069"/>
+        <location filename="docs/docreportecho.cpp" line="2085"/>
+        <location filename="docs/docreportecho.cpp" line="2101"/>
+        <location filename="docs/docreportecho.cpp" line="2117"/>
+        <location filename="docs/docreportecho.cpp" line="2673"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1054"/>
+        <source>Solicitarea incorecta de determinare dublajului in tabela &apos;conclusionTemplates&apos;.</source>
+        <translation>Запрос не корректен для определения дубляжа в таблице &apos;conclusionTemplates&apos;.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1073"/>
+        <source>Șablonul adăugat cu succes&lt;br&gt;în baza de date.</source>
+        <translation>Шаблон успешно добавлен&lt;br&gt;в базу данных.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1079"/>
+        <source>Adaugarea șablonului</source>
+        <translation>Добавление шаблона</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1080"/>
+        <source>Șablonul - &lt;b&gt;%1&lt;/b&gt; - nu a fost adaugat.</source>
+        <translation>Шаблон - &lt;b&gt;%1&lt;/b&gt; - не добавлен.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1203"/>
+        <location filename="docs/docreportecho.cpp" line="1253"/>
+        <location filename="docs/docreportecho.cpp" line="1304"/>
+        <location filename="docs/docreportecho.cpp" line="1344"/>
+        <location filename="docs/docreportecho.cpp" line="1385"/>
+        <location filename="docs/docreportecho.cpp" line="1428"/>
+        <location filename="docs/docreportecho.cpp" line="1440"/>
+        <location filename="docs/docreportecho.cpp" line="1456"/>
+        <location filename="docs/docreportecho.cpp" line="1498"/>
+        <location filename="docs/docreportecho.cpp" line="1516"/>
+        <location filename="docs/docreportecho.cpp" line="1573"/>
+        <location filename="docs/docreportecho.cpp" line="1646"/>
+        <source>... maximum 500 caractere</source>
+        <translation>...максимум 500 символов</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1216"/>
+        <location filename="docs/docreportecho.cpp" line="1271"/>
+        <source>...maximum 255 caractere</source>
+        <translation>...максимум 255 символов</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1322"/>
+        <location filename="docs/docreportecho.cpp" line="1403"/>
+        <location filename="docs/docreportecho.cpp" line="1474"/>
+        <location filename="docs/docreportecho.cpp" line="1534"/>
+        <location filename="docs/docreportecho.cpp" line="1592"/>
+        <location filename="docs/docreportecho.cpp" line="1665"/>
+        <source>... maximum 255 caractere</source>
+        <translation>...максимум 255 символов</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1360"/>
+        <location filename="docs/docreportecho.cpp" line="1366"/>
+        <location filename="docs/docreportecho.cpp" line="1504"/>
+        <source>... maximum 300 caractere</source>
+        <translation>...максимум 300 символов</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="1831"/>
         <source>Nu au fost determinate datele documentului &apos;Raport ecografic&apos; cu id=&apos;%1&apos;</source>
         <translation>Не определены данные документа &apos;Протокол исследования&apos; с id=%1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1384"/>
-        <source>Deschis documentul &apos;Raport ecografic&apos; nr.%1 din data %2 cu id=&apos;%3&apos;</source>
-        <translation>Открыт документ &apos;Протокол исследования&apos; № %1 от %2 id=%3</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1431"/>
+        <location filename="docs/docreportecho.cpp" line="1887"/>
+        <location filename="docs/docreportecho.cpp" line="1891"/>
         <source>Comanda ecografica nr.%1 din %2</source>
         <translation>Заказ исследование № %1 din %2</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1477"/>
+        <location filename="docs/docreportecho.cpp" line="1938"/>
         <source>menopauza &lt; 1 an.</source>
         <translation>менопауза &lt; 1 г.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1479"/>
+        <location filename="docs/docreportecho.cpp" line="1940"/>
         <source>menopauza %1 ani.</source>
         <translation>менопауза &lt; %1 (г./лет).</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1481"/>
+        <location filename="docs/docreportecho.cpp" line="1942"/>
         <source> a %1 zi de la ciclul menstrual</source>
         <translation> %1 день менстр.цикла</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1503"/>
-        <location filename="docs/docreportecho.cpp" line="1510"/>
-        <location filename="docs/docreportecho.cpp" line="1517"/>
-        <location filename="docs/docreportecho.cpp" line="1524"/>
-        <location filename="docs/docreportecho.cpp" line="1531"/>
-        <location filename="docs/docreportecho.cpp" line="1538"/>
-        <location filename="docs/docreportecho.cpp" line="1545"/>
-        <location filename="docs/docreportecho.cpp" line="1552"/>
-        <location filename="docs/docreportecho.cpp" line="1559"/>
-        <location filename="docs/docreportecho.cpp" line="1566"/>
-        <location filename="docs/docreportecho.cpp" line="1573"/>
-        <location filename="docs/docreportecho.cpp" line="1580"/>
-        <location filename="docs/docreportecho.cpp" line="1587"/>
+        <location filename="docs/docreportecho.cpp" line="1964"/>
+        <location filename="docs/docreportecho.cpp" line="1971"/>
+        <location filename="docs/docreportecho.cpp" line="1978"/>
+        <location filename="docs/docreportecho.cpp" line="1985"/>
+        <location filename="docs/docreportecho.cpp" line="1992"/>
         <source>Controlul completării obiectelor</source>
         <translation>Проверка заполнения реквизитов</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1504"/>
+        <location filename="docs/docreportecho.cpp" line="1965"/>
         <source>Nu este determinat &lt;b&gt;&apos;ID&apos;&lt;/b&gt; documentului !!!&lt;br&gt;Adresați-vă administratorului aplicației</source>
         <translation>Не определён &lt;b&gt;&apos;ID&apos;&lt;/b&gt; документа !!! &lt;br&gt;Обратитесь к администратору приложения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1511"/>
+        <location filename="docs/docreportecho.cpp" line="1972"/>
         <source>Nu este determinat &lt;b&gt;&apos;ID&apos;&lt;/b&gt; pacientului !!!&lt;br&gt;Adresați-vă administratorului aplicației</source>
         <translation>Не определён &lt;b&gt;&apos;ID&apos;&lt;/b&gt; пациента !!! &lt;br&gt;Обратитесь к администратору приложения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1518"/>
+        <location filename="docs/docreportecho.cpp" line="1979"/>
         <source>Nu este determinat &lt;b&gt;&apos;ID&apos;&lt;/b&gt; autorului documentului !!!&lt;br&gt;Adresați-vă administratorului aplicației</source>
         <translation>Не определён &lt;b&gt;&apos;ID&apos;&lt;/b&gt; автора документа !!! &lt;br&gt;Обратитесь к администратору приложения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1525"/>
+        <location filename="docs/docreportecho.cpp" line="1986"/>
         <source>Nu este indicat &lt;b&gt;&apos;Numărul&apos;&lt;/b&gt; documentului !!!&lt;br&gt;Adresați-vă administratorului aplicației</source>
         <translation>Не определён &lt;b&gt;&apos;Номер&apos;&lt;/b&gt; документа !!! &lt;br&gt;Обратитесь к администратору приложения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1532"/>
+        <location filename="docs/docreportecho.cpp" line="1993"/>
         <source>Nu este indicată &lt;b&gt;&apos;Concluzia&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
         <translation>Не заполнено &lt;b&gt;&apos;Заключение&apos;&lt;/b&gt; документа !!! &lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1539"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (organelor interne)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (внутр.органов)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1546"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sistemului urinar)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (мочевая система)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1553"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (prostatei)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (простата)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1560"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (ginecologica)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (гинекология)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1567"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (gl.mamare)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (молочные железы)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1574"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (gl.tiroide)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (щитовидная железа)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1581"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sarcina până la 11 săptămâni)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (беременность до 11 недель)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1588"/>
-        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sarcina 11-14 săptămâni)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Validarea nu este posibilă.</source>
-        <translation>Не заполнено &lt;b&gt;&apos;Заключение (беременность 11-14 недель)&apos;&lt;/b&gt; протокола !!! &lt;br&gt;Проведение документа не возможно.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="223"/>
-        <location filename="docs/docreportecho.cpp" line="1600"/>
+        <location filename="docs/docreportecho.cpp" line="235"/>
+        <location filename="docs/docreportecho.cpp" line="2133"/>
         <source>Verificarea setărilor</source>
         <translation>Проверка настроек</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="196"/>
+        <location filename="docs/docreportecho.cpp" line="202"/>
         <source>Nu este setată imaginea %1: %2</source>
         <translation>Изображение не установлено %1: %2</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="224"/>
+        <location filename="docs/docreportecho.cpp" line="236"/>
         <source>Imaginea nu este salvată în baza de date !!!&lt;br&gt;Nu este indicată localizarea bazei de date a imaginilor.&lt;br&gt;Deschideți setările aplicației și indicați drumul spre baza de date a imaginilor.</source>
         <translation>Изображение на записано в базу данных !!!&lt;br&gt;Не указан путь к базе данных с изображениями.&lt;br&gt;Откройте настройки приложения и укажите путь азе данных с изображениями.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="228"/>
+        <location filename="docs/docreportecho.cpp" line="240"/>
         <source>Imaginea nu este salvata. Nu este indicat drumul spre baza de date a imaginilor.</source>
         <translation>Изображение на записано. Не указан путь к базе данных с изображениями.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="252"/>
+        <location filename="docs/docreportecho.cpp" line="261"/>
+        <location filename="docs/docreportecho.cpp" line="646"/>
+        <source>Eliminarea imaginei.</source>
+        <translation>Удаление изображения.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="263"/>
+        <source>Eliminarea imaginei din directoriul temporar nu s-a efectuat !!!</source>
+        <translation>Удаление изображения из временной директории не выполнено !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="285"/>
         <source>Eroare de executare a solicitarii &apos;loadImageOpeningDocument&apos;: %1</source>
         <translation>Ошибка выполнения запроса &apos;loadImageOpeningDocument&apos;: %1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="332"/>
-        <location filename="docs/docreportecho.cpp" line="358"/>
-        <location filename="docs/docreportecho.cpp" line="384"/>
-        <location filename="docs/docreportecho.cpp" line="410"/>
-        <location filename="docs/docreportecho.cpp" line="436"/>
+        <location filename="docs/docreportecho.cpp" line="365"/>
+        <location filename="docs/docreportecho.cpp" line="391"/>
+        <location filename="docs/docreportecho.cpp" line="417"/>
+        <location filename="docs/docreportecho.cpp" line="443"/>
+        <location filename="docs/docreportecho.cpp" line="469"/>
         <source>Verificarea validării</source>
         <translation>Проверка проведения</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="333"/>
-        <location filename="docs/docreportecho.cpp" line="359"/>
-        <location filename="docs/docreportecho.cpp" line="385"/>
-        <location filename="docs/docreportecho.cpp" line="411"/>
-        <location filename="docs/docreportecho.cpp" line="437"/>
+        <location filename="docs/docreportecho.cpp" line="366"/>
+        <location filename="docs/docreportecho.cpp" line="392"/>
+        <location filename="docs/docreportecho.cpp" line="418"/>
+        <location filename="docs/docreportecho.cpp" line="444"/>
+        <location filename="docs/docreportecho.cpp" line="470"/>
         <source>Pentru a încărca imaginea este necesar de validat documentul.&lt;br&gt;Doriți să validați documentul ?</source>
         <translation>Для загрузки изображения необходимо провести документ.&lt;br&gt;Провести документ ?</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="341"/>
-        <location filename="docs/docreportecho.cpp" line="367"/>
-        <location filename="docs/docreportecho.cpp" line="393"/>
-        <location filename="docs/docreportecho.cpp" line="419"/>
-        <location filename="docs/docreportecho.cpp" line="445"/>
+        <location filename="docs/docreportecho.cpp" line="374"/>
+        <location filename="docs/docreportecho.cpp" line="400"/>
+        <location filename="docs/docreportecho.cpp" line="426"/>
+        <location filename="docs/docreportecho.cpp" line="452"/>
+        <location filename="docs/docreportecho.cpp" line="478"/>
         <source>Open File</source>
         <translation>Загрузить файл</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="458"/>
-        <location filename="docs/docreportecho.cpp" line="556"/>
+        <location filename="docs/docreportecho.cpp" line="494"/>
+        <location filename="docs/docreportecho.cpp" line="597"/>
         <source>Eroare la deschiderea fisierului &apos;%1&apos;.</source>
         <translation>Ошибка чтения файла &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="522"/>
-        <location filename="docs/docreportecho.cpp" line="567"/>
+        <location filename="docs/docreportecho.cpp" line="556"/>
+        <location filename="docs/docreportecho.cpp" line="611"/>
         <source>Imaginea este salvat cu succes în baza de date.</source>
         <translation>Изображение успешно сохранено в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="524"/>
-        <location filename="docs/docreportecho.cpp" line="569"/>
+        <location filename="docs/docreportecho.cpp" line="558"/>
+        <location filename="docs/docreportecho.cpp" line="613"/>
         <source>A fost salvata imaginea %1 cu succes in baza de date &apos;BD_IMAGE&apos;.</source>
         <translation>Изображение %1 успешно сохранено в базу данных &apos;BD_IMAGE&apos;.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="526"/>
-        <location filename="docs/docreportecho.cpp" line="571"/>
-        <source>Eroare de inserare a imaginei in baza de date:
-</source>
-        <translation>Ошибка сохранения изображения в базу данных:
-</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="590"/>
+        <location filename="docs/docreportecho.cpp" line="641"/>
         <source>Imaginea a fost eliminată cu succes din baza de date.</source>
         <translation>Изображение успешно удалено из базы данных.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="592"/>
+        <location filename="docs/docreportecho.cpp" line="643"/>
         <source>Imaginea %1 a fost eliminată cu succes din baza de date &apos;BD_IMAGE&apos;.</source>
         <translation>Изображение %1 успешно удалено из базы данных &apos;BD_IMAGE&apos;.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="594"/>
-        <location filename="docs/docreportecho.cpp" line="615"/>
-        <source>Eroare de eliminare a imaginei din baza de date:
-</source>
-        <translation>Ошибка удаления изображения из базы данных:
-</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1219"/>
+        <location filename="docs/docreportecho.cpp" line="1688"/>
         <source>Raport ecografic (crearea) %1</source>
         <translation>Протокол исследование (создание) %1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1375"/>
+        <location filename="docs/docreportecho.cpp" line="1825"/>
         <source>Raport ecografic (validat) %1 %2</source>
         <translation>Протокол исследование (проведён) %1 %2</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1450"/>
+        <location filename="docs/docreportecho.cpp" line="1911"/>
         <source>Imagini (atașate %1)</source>
         <translation>Изображения (прикреплено %1)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1601"/>
+        <location filename="docs/docreportecho.cpp" line="2000"/>
+        <location filename="docs/docreportecho.cpp" line="2016"/>
+        <location filename="docs/docreportecho.cpp" line="2032"/>
+        <location filename="docs/docreportecho.cpp" line="2048"/>
+        <location filename="docs/docreportecho.cpp" line="2064"/>
+        <location filename="docs/docreportecho.cpp" line="2080"/>
+        <location filename="docs/docreportecho.cpp" line="2096"/>
+        <location filename="docs/docreportecho.cpp" line="2112"/>
+        <source>Verificarea datelor</source>
+        <translation>Проверка данных</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2001"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (organelor interne)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (внутр.органы)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2017"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sistemului urinar)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (мочевая система)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2033"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (prostatei)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (простата)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2049"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (ginecologica)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (гинекология)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2065"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (gl.mamare)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (молочные железы)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2081"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (gl.tiroide)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (щит.железа)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2097"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sarcina până la 11 săptămâni)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (беременность до 11 недель)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2113"/>
+        <source>Nu este indicată &lt;b&gt;&apos;Concluzia (sarcina 11-14 săptămâni)&apos;&lt;/b&gt; raportului !!!&lt;br&gt;Doriți să continuați validarea documentului ?</source>
+        <translation>Не указано &lt;b&gt;&apos;Заключение (беременность 11 14 недель)&apos;&lt;/b&gt; протокола !!!&lt;br&gt;Продолжить проведение ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2134"/>
         <source>Nu este indicat directoriul cu șabloanele de tipar.&lt;br&gt;Tipărirea documentului nu este posibilă.</source>
         <translation>Не указан каталог с шаблонами печатны форм документов.&lt;br&gt;Печать документа не возможна.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1678"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (complex): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать: id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1692"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (organe interne): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(внутр.органы): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1706"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (sistemul urinar): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(мочевая система): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1721"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (prostata): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(простата): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1736"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (ginecologia): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(гинекология): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1749"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (gl.mamare): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(молочные железы): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1763"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (gl.tiroida): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(щитовидная железа): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1777"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (sarcina pana la 11 saptamani): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(беременность до 11 недель): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1791"/>
-        <source>Document &apos;Raport ecografic&apos; - printare (sarcina 11-14 săptămâni): id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
-        <translation>Документ &apos;Протокол исследования&apos; - печать(беременность 11-14 недель): id=&apos;%1&apos;, №=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1800"/>
-        <location filename="docs/docreportecho.cpp" line="1806"/>
-        <source>Deschis designer</source>
-        <translation>Открыт дизайнер</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1803"/>
-        <source>Deschis preview</source>
-        <translation>Открыт просмотр</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1828"/>
-        <location filename="docs/docreportecho.cpp" line="1839"/>
-        <location filename="docs/docreportecho.cpp" line="1848"/>
-        <location filename="docs/docreportecho.cpp" line="1857"/>
-        <location filename="docs/docreportecho.cpp" line="1866"/>
-        <location filename="docs/docreportecho.cpp" line="1879"/>
-        <location filename="docs/docreportecho.cpp" line="1889"/>
-        <location filename="docs/docreportecho.cpp" line="1903"/>
-        <location filename="docs/docreportecho.cpp" line="1916"/>
-        <location filename="docs/docreportecho.cpp" line="1928"/>
-        <location filename="docs/docreportecho.cpp" line="1940"/>
-        <location filename="docs/docreportecho.cpp" line="1952"/>
-        <location filename="docs/docreportecho.cpp" line="1964"/>
-        <location filename="docs/docreportecho.cpp" line="1987"/>
+        <location filename="docs/docreportecho.cpp" line="2604"/>
         <source>Validarea documentului</source>
         <translation>Проведение документа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1828"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Обратитесь к администратору программы.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="1829"/>
-        <location filename="docs/docreportecho.cpp" line="1842"/>
-        <location filename="docs/docreportecho.cpp" line="1851"/>
-        <location filename="docs/docreportecho.cpp" line="1860"/>
-        <location filename="docs/docreportecho.cpp" line="1869"/>
-        <location filename="docs/docreportecho.cpp" line="1882"/>
-        <location filename="docs/docreportecho.cpp" line="1892"/>
-        <location filename="docs/docreportecho.cpp" line="1906"/>
-        <location filename="docs/docreportecho.cpp" line="1919"/>
-        <location filename="docs/docreportecho.cpp" line="1931"/>
-        <location filename="docs/docreportecho.cpp" line="1943"/>
-        <location filename="docs/docreportecho.cpp" line="1955"/>
-        <location filename="docs/docreportecho.cpp" line="1967"/>
-        <location filename="docs/docreportecho.cpp" line="1975"/>
-        <location filename="docs/docreportecho.cpp" line="2002"/>
-        <location filename="docs/docreportecho.cpp" line="2012"/>
-        <location filename="docs/docreportecho.cpp" line="2022"/>
-        <location filename="docs/docreportecho.cpp" line="2032"/>
-        <location filename="docs/docreportecho.cpp" line="2045"/>
-        <location filename="docs/docreportecho.cpp" line="2055"/>
-        <location filename="docs/docreportecho.cpp" line="2068"/>
-        <location filename="docs/docreportecho.cpp" line="2080"/>
-        <location filename="docs/docreportecho.cpp" line="2092"/>
-        <location filename="docs/docreportecho.cpp" line="2104"/>
-        <location filename="docs/docreportecho.cpp" line="2116"/>
-        <location filename="docs/docreportecho.cpp" line="2128"/>
+        <location filename="docs/docreportecho.cpp" line="2614"/>
         <source>validat</source>
         <translation>проведён</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1829"/>
-        <location filename="docs/docreportecho.cpp" line="1842"/>
-        <location filename="docs/docreportecho.cpp" line="1851"/>
-        <location filename="docs/docreportecho.cpp" line="1860"/>
-        <location filename="docs/docreportecho.cpp" line="1869"/>
-        <location filename="docs/docreportecho.cpp" line="1882"/>
-        <location filename="docs/docreportecho.cpp" line="1892"/>
-        <location filename="docs/docreportecho.cpp" line="1906"/>
-        <location filename="docs/docreportecho.cpp" line="1919"/>
-        <location filename="docs/docreportecho.cpp" line="1931"/>
-        <location filename="docs/docreportecho.cpp" line="1943"/>
-        <location filename="docs/docreportecho.cpp" line="1955"/>
-        <location filename="docs/docreportecho.cpp" line="1967"/>
-        <location filename="docs/docreportecho.cpp" line="1975"/>
-        <location filename="docs/docreportecho.cpp" line="2002"/>
-        <location filename="docs/docreportecho.cpp" line="2012"/>
-        <location filename="docs/docreportecho.cpp" line="2022"/>
-        <location filename="docs/docreportecho.cpp" line="2032"/>
-        <location filename="docs/docreportecho.cpp" line="2045"/>
-        <location filename="docs/docreportecho.cpp" line="2055"/>
-        <location filename="docs/docreportecho.cpp" line="2068"/>
-        <location filename="docs/docreportecho.cpp" line="2080"/>
-        <location filename="docs/docreportecho.cpp" line="2092"/>
-        <location filename="docs/docreportecho.cpp" line="2104"/>
-        <location filename="docs/docreportecho.cpp" line="2116"/>
-        <location filename="docs/docreportecho.cpp" line="2128"/>
+        <location filename="docs/docreportecho.cpp" line="2614"/>
         <source>salvat</source>
         <translation>записан</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1840"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;liver&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;liver&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2150"/>
+        <source> din </source>
+        <translation> от </translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1849"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;cholecist&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;cholecist&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2150"/>
+        <source> (printare)</source>
+        <translation> (печать)</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1858"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;pancreas&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;pancreas&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2206"/>
+        <location filename="docs/docreportecho.cpp" line="2248"/>
+        <location filename="docs/docreportecho.cpp" line="2293"/>
+        <location filename="docs/docreportecho.cpp" line="2336"/>
+        <location filename="docs/docreportecho.cpp" line="2379"/>
+        <location filename="docs/docreportecho.cpp" line="2420"/>
+        <location filename="docs/docreportecho.cpp" line="2462"/>
+        <location filename="docs/docreportecho.cpp" line="2504"/>
+        <location filename="docs/docreportecho.cpp" line="2546"/>
+        <location filename="docs/docreportecho.cpp" line="2661"/>
+        <source>Printarea documentului</source>
+        <translation>Печать документа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1867"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;spleen&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;spleen&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2208"/>
+        <location filename="docs/docreportecho.cpp" line="2250"/>
+        <location filename="docs/docreportecho.cpp" line="2295"/>
+        <location filename="docs/docreportecho.cpp" line="2338"/>
+        <location filename="docs/docreportecho.cpp" line="2381"/>
+        <location filename="docs/docreportecho.cpp" line="2422"/>
+        <location filename="docs/docreportecho.cpp" line="2464"/>
+        <location filename="docs/docreportecho.cpp" line="2506"/>
+        <location filename="docs/docreportecho.cpp" line="2548"/>
+        <source>Printarea documentului nu este posibila.</source>
+        <translation>Проведение документа не возможна.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1880"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;kidney&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;kidney&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2209"/>
+        <location filename="docs/docreportecho.cpp" line="2251"/>
+        <location filename="docs/docreportecho.cpp" line="2296"/>
+        <location filename="docs/docreportecho.cpp" line="2339"/>
+        <location filename="docs/docreportecho.cpp" line="2382"/>
+        <location filename="docs/docreportecho.cpp" line="2423"/>
+        <location filename="docs/docreportecho.cpp" line="2465"/>
+        <location filename="docs/docreportecho.cpp" line="2507"/>
+        <location filename="docs/docreportecho.cpp" line="2549"/>
+        <source>Nu au fost incarcate datele in sablon - %1</source>
+        <translation>Не были загружены данные в шаблон - %1</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1890"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;bladder&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;bladder&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2224"/>
+        <location filename="docs/docreportecho.cpp" line="2232"/>
+        <source>Printare (designer) - complex: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) комплекс: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1904"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;prostate&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;prostate&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2228"/>
+        <source>Printare (preview) - complex: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) комплекс: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1917"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;gynecology&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gynecology&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2266"/>
+        <location filename="docs/docreportecho.cpp" line="2274"/>
+        <source>Printare (designer) - organs internal: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) внутр.органы: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1929"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;breast&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;breast&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2270"/>
+        <source>Printare (preview) - organs internal: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) внутр.органы: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1941"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;thyroid&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;thyroid&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2311"/>
+        <location filename="docs/docreportecho.cpp" line="2319"/>
+        <source>Printare (designer) - urinary system: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) мочевая система: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1953"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;gestation0&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gestation0&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2315"/>
+        <source>Printare (preview) - urinary system: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) мочевая система: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1965"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele pentru tabela &apos;gestation1&apos; nu au fost salvate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gestation1&apos; не записаны.&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2354"/>
+        <location filename="docs/docreportecho.cpp" line="2362"/>
+        <source>Printare (designer) - prostate: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) простата: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1974"/>
+        <location filename="docs/docreportecho.cpp" line="2358"/>
+        <source>Printare (preview) - prostate: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) простата: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2397"/>
+        <location filename="docs/docreportecho.cpp" line="2405"/>
+        <source>Printare (designer) - gynecology: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) гинекология: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2401"/>
+        <source>Printare (preview) - gynecology: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) гинекология: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2438"/>
+        <location filename="docs/docreportecho.cpp" line="2446"/>
+        <source>Printare (designer) - breast: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) молочные железы: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2442"/>
+        <source>Printare (preview) - breast: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) молочные железы: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2480"/>
+        <location filename="docs/docreportecho.cpp" line="2488"/>
+        <source>Printare (designer) - thyroid: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) щит. железа: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2484"/>
+        <source>Printare (preview) - thyroid: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) щит. железа: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2522"/>
+        <location filename="docs/docreportecho.cpp" line="2530"/>
+        <source>Printare (designer) - gestation0: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) gestation0: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2526"/>
+        <source>Printare (preview) - gestation0: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) gestation0: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2564"/>
+        <location filename="docs/docreportecho.cpp" line="2572"/>
+        <source>Printare (designer) - gestation1: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (designer) gestation1: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2568"/>
+        <source>Printare (preview) - gestation1: document &apos;Raport ecografic&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
+        <translation>Печать (preview) gestation1: документ &apos;Протокол обследования&apos; id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2606"/>
+        <source>Validarea documentului nu s-a efectuat.</source>
+        <translation>Проведение документа не выполнено.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="2613"/>
         <source>Documentul a fost %1 cu succes&lt;br&gt; in baza de date.</source>
         <translation>Документ %1 успешно&lt;br&gt; в базе данных.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1980"/>
+        <location filename="docs/docreportecho.cpp" line="2618"/>
         <source>Document &apos;Raport ecografic&apos; - crearea: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
         <translation>Документ &apos;Протокол исследования&apos; - создание: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1988"/>
-        <source>Datele documentului nu au fost actualizate !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Данные документа не обновлены !!!&lt;br&gt;Обратитесь к администратору приложения.</translation>
+        <location filename="docs/docreportecho.cpp" line="2624"/>
+        <source>Actualizarea documentului</source>
+        <translation>Обновление документа</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="1999"/>
-        <location filename="docs/docreportecho.cpp" line="2009"/>
-        <location filename="docs/docreportecho.cpp" line="2019"/>
-        <location filename="docs/docreportecho.cpp" line="2029"/>
-        <location filename="docs/docreportecho.cpp" line="2042"/>
-        <location filename="docs/docreportecho.cpp" line="2052"/>
-        <location filename="docs/docreportecho.cpp" line="2065"/>
-        <location filename="docs/docreportecho.cpp" line="2077"/>
-        <location filename="docs/docreportecho.cpp" line="2089"/>
-        <location filename="docs/docreportecho.cpp" line="2101"/>
-        <location filename="docs/docreportecho.cpp" line="2113"/>
-        <location filename="docs/docreportecho.cpp" line="2125"/>
-        <source>Revalidarea documentului</source>
-        <translation>Перепроведение документа</translation>
+        <location filename="docs/docreportecho.cpp" line="2626"/>
+        <source>Actualizarea datelor documentului nu s-a efectuat.</source>
+        <translation>Обновление данных документа не выполнено.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="2000"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;liver&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;liver&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2010"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;cholecist&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;cholecist&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2020"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;pancreas&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;pancreas&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2030"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;spleen&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;spleen&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2043"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;kidney&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;kidney&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2053"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;bladder&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;bladder&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2066"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;prostate&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;prostate&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2078"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;gynecology&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gynecology&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2090"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;breast&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;breast&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2102"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;thyroid&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;thyroid&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2114"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;gestation0&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gestation0&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2126"/>
-        <source>Documentul nu este %1 !!!&lt;br&gt;Datele tabelei &apos;gestation1&apos; nu au fost modificate.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
-        <translation>Документ не %1 !!! &lt;br&gt; Данные таблицы &apos;gestation1&apos; не обновлены.&lt;br&gt;Обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="docs/docreportecho.cpp" line="2135"/>
+        <location filename="docs/docreportecho.cpp" line="2634"/>
         <source>Datele documentului au fost actualizate&lt;br&gt; cu succes.</source>
         <translation>Данные документа &lt;br&gt;успешно изменены.</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="2140"/>
+        <location filename="docs/docreportecho.cpp" line="2638"/>
         <source>Document &apos;Raport ecografic&apos; - modificarea: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, pacientul=&apos;%4&apos;</source>
         <translation>Документ &apos;Протокол исследования&apos; - изменение: id=&apos;%1&apos;, nr.=&apos;%2&apos;, id_patient=&apos;%3&apos;, пациент=&apos;%4&apos;</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="3654"/>
+        <location filename="docs/docreportecho.cpp" line="2664"/>
+        <location filename="docs/docreportecho.cpp" line="2666"/>
+        <location filename="docs/docreportecho.cpp" line="2668"/>
+        <source>Doriți să printați documentul ?</source>
+        <translation>Распечатать документ ?</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3192"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;reportEcho&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;reportEcho&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3193"/>
+        <location filename="docs/docreportecho.cpp" line="3226"/>
+        <location filename="docs/docreportecho.cpp" line="3245"/>
+        <location filename="docs/docreportecho.cpp" line="3266"/>
+        <location filename="docs/docreportecho.cpp" line="3283"/>
+        <location filename="docs/docreportecho.cpp" line="3312"/>
+        <location filename="docs/docreportecho.cpp" line="3328"/>
+        <location filename="docs/docreportecho.cpp" line="3357"/>
+        <location filename="docs/docreportecho.cpp" line="3414"/>
+        <location filename="docs/docreportecho.cpp" line="3446"/>
+        <location filename="docs/docreportecho.cpp" line="3474"/>
+        <location filename="docs/docreportecho.cpp" line="3510"/>
+        <location filename="docs/docreportecho.cpp" line="3577"/>
+        <location filename="docs/docreportecho.cpp" line="3656"/>
+        <location filename="docs/docreportecho.cpp" line="3691"/>
+        <location filename="docs/docreportecho.cpp" line="3710"/>
+        <location filename="docs/docreportecho.cpp" line="3730"/>
+        <location filename="docs/docreportecho.cpp" line="3746"/>
+        <location filename="docs/docreportecho.cpp" line="3775"/>
+        <location filename="docs/docreportecho.cpp" line="3789"/>
+        <location filename="docs/docreportecho.cpp" line="3818"/>
+        <location filename="docs/docreportecho.cpp" line="3875"/>
+        <location filename="docs/docreportecho.cpp" line="3907"/>
+        <location filename="docs/docreportecho.cpp" line="3935"/>
+        <location filename="docs/docreportecho.cpp" line="3971"/>
+        <location filename="docs/docreportecho.cpp" line="4037"/>
+        <source>eroare indisponibila</source>
+        <translation>ошибка недоступна</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3225"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableLiver&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableLiver&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3244"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableCholecist&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableCholecist&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3265"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tablePancreas&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tablePancreas&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3282"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableSpleen&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableSpleen&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3311"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableKidney&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableKidney&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3327"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableBladder&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableBladder&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3356"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableProstate&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableProstate&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3413"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableGynecology&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableGynecology&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3445"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableBreast&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableBreast&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3473"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableThyroid&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableThyroid&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3509"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableGestation0&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableGestation0&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3576"/>
+        <source>Eroarea inserarii datelor documentului nr.%1 din tabela &apos;tableGestation1&apos; - %2</source>
+        <translation>Ошибка записи данных документа №.%1 в таблицу &apos;tableGestation1&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3655"/>
+        <source>Eroarea de actualizare datelor documentului nr.%1 din tabela &apos;reportEcho&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;reportEcho&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3690"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableLiver&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableLiver&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3709"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableCholecist&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableCholecist&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3729"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tablePancreas&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tablePancreas&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3745"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableSpleen&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableSpleen&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3774"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableKidney&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableKidney&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3788"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableBladder&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableBladder&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3817"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableProstate&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableProstate&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3874"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableGynecology&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableGynecology&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3906"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableBreast&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableBreast&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3934"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableThyroid&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableThyroid&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="3970"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableGestation0&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableGestation0&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="4036"/>
+        <source>Eroarea actualizarii datelor documentului nr.%1 din tabela &apos;tableGestation1&apos; - %2</source>
+        <translation>Ошибка обновления данных документа №.%1 в таблицу &apos;tableGestation1&apos; - %2</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="4062"/>
+        <source>Document &apos;Raport ecografic&apos; cu id=&apos;%1&apos;, nr.=&apos;%2&apos; - eroare la instalarea valorii &apos;attachedImages&apos; in documentul parinte &apos;Comanda ecografica&apos; cu id=&apos;%3&apos;.</source>
+        <translation>Документ &apos;Протокеол обследования&apos; c id=&apos;%1&apos;, №=&apos;%2&apos; - ошибка установки значения &apos;attachedImages&apos; в документе основание &apos;Заказ обследования&apos; c id=&apos;%3&apos;.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="4702"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="docs/docreportecho.cpp" line="3655"/>
+        <location filename="docs/docreportecho.cpp" line="4703"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
-</context>
-<context>
-    <name>HistoryVersion</name>
     <message>
-        <location filename="historyversion.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Диалог</translation>
+        <location filename="docs/docreportecho.cpp" line="4722"/>
+        <source>Parametrii documentului.</source>
+        <translation>Параметры документа.</translation>
     </message>
     <message>
-        <location filename="historyversion.cpp" line="10"/>
-        <source>Istoria versiunilor &apos;USG&apos;</source>
-        <translation>История версий &apos;USG&apos;</translation>
+        <location filename="docs/docreportecho.cpp" line="4732"/>
+        <source>Deschide&lt;br&gt;&quot;Istoria pacientului&quot;.</source>
+        <translation>Открыть&lt;br&gt;&quot;История пациента&quot;.</translation>
     </message>
     <message>
-        <location filename="historyversion.cpp" line="14"/>
-        <source>Deschisă forma &apos;Istoria versiunilor&apos;.</source>
-        <translation>Открыта форма &quot;История версий&quot;.</translation>
+        <location filename="docs/docreportecho.cpp" line="4742"/>
+        <source>Redactarea datelor&lt;br&gt;pacientului.</source>
+        <translation>Редакт. данных&lt;br&gt;пациента.</translation>
+    </message>
+    <message>
+        <location filename="docs/docreportecho.cpp" line="4753"/>
+        <location filename="docs/docreportecho.cpp" line="4755"/>
+        <location filename="docs/docreportecho.cpp" line="4757"/>
+        <source>Deschide documentul&lt;br&gt;&quot;Comanda ecografică&quot;.</source>
+        <translation>Открыть документ&lt;br&gt;&quot;Заказ обследование&quot;.</translation>
     </message>
 </context>
 <context>
     <name>InitLaunch</name>
     <message>
-        <location filename="initlaunch.ui" line="14"/>
+        <location filename="data/initlaunch.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="33"/>
+        <location filename="data/initlaunch.ui" line="35"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#1a5fb4;&quot;&gt;Selectați limba aplicației&lt;br&gt; și tipul lansării&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;&lt;span style=&quot; color:#1a5fb4;&quot;&gt;Выберите язык приложенияi&lt;br&gt;и тип запуска приложенияi&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="58"/>
+        <location filename="data/initlaunch.ui" line="60"/>
         <source>Selectează limba</source>
         <translation>Выбери язык</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="81"/>
+        <location filename="data/initlaunch.ui" line="83"/>
         <source>Prima lansare a aplicației</source>
         <translation>Первый запуск программы</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="91"/>
+        <location filename="data/initlaunch.ui" line="93"/>
         <source>Aplicația a fost transferată</source>
         <translation>Программа была перемещена</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="116"/>
+        <location filename="data/initlaunch.ui" line="118"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="initlaunch.ui" line="127"/>
+        <location filename="data/initlaunch.ui" line="129"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="initlaunch.cpp" line="11"/>
-        <location filename="initlaunch.cpp" line="113"/>
+        <location filename="data/initlaunch.cpp" line="11"/>
+        <location filename="data/initlaunch.cpp" line="113"/>
         <source>Lansarea aplicației %1</source>
         <oldsource>Lansarea aplicației</oldsource>
         <translation>Запуск программы %1</translation>
     </message>
     <message>
-        <location filename="initlaunch.cpp" line="77"/>
+        <location filename="data/initlaunch.cpp" line="77"/>
         <source>Aplicatia a fost transferata.</source>
         <translation>Приложение было перемещено.</translation>
     </message>
     <message>
-        <location filename="initlaunch.cpp" line="79"/>
+        <location filename="data/initlaunch.cpp" line="79"/>
         <source>Prima lansare a aplicatiei.</source>
         <translation>Первый запуск приложения.</translation>
     </message>
     <message>
-        <location filename="initlaunch.cpp" line="93"/>
+        <location filename="data/initlaunch.cpp" line="93"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="initlaunch.cpp" line="94"/>
+        <location filename="data/initlaunch.cpp" line="94"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
@@ -4981,204 +5627,208 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>ListDoc</name>
     <message>
-        <location filename="listdoc.ui" line="14"/>
+        <location filename="docs/listdoc.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="35"/>
+        <location filename="docs/listdoc.ui" line="35"/>
         <source>Setează filtru</source>
         <translation>Настройки фильтра</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="41"/>
+        <location filename="docs/listdoc.ui" line="41"/>
         <source>Perioada</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="53"/>
+        <location filename="docs/listdoc.ui" line="53"/>
         <source>Finisarea perioadei</source>
         <translation>Окончание периода</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="92"/>
+        <location filename="docs/listdoc.ui" line="92"/>
         <source>Lansarea perioadei</source>
         <translation>Начало периода</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="108"/>
+        <location filename="docs/listdoc.ui" line="108"/>
         <source>Filtru</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="120"/>
-        <location filename="listdoc.cpp" line="359"/>
+        <location filename="docs/listdoc.ui" line="120"/>
+        <location filename="docs/listdoc.cpp" line="428"/>
         <source>Autor</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="153"/>
-        <location filename="listdoc.cpp" line="357"/>
+        <location filename="docs/listdoc.ui" line="153"/>
+        <location filename="docs/listdoc.cpp" line="426"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="166"/>
+        <location filename="docs/listdoc.ui" line="166"/>
         <source>Număr documentului</source>
         <translation>Номер документа</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="189"/>
-        <location filename="listdoc.cpp" line="358"/>
+        <location filename="docs/listdoc.ui" line="189"/>
+        <location filename="docs/listdoc.cpp" line="427"/>
         <source>Contract</source>
         <translation>Контракт</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="239"/>
+        <location filename="docs/listdoc.ui" line="239"/>
         <source>Aplică</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="258"/>
+        <location filename="docs/listdoc.ui" line="258"/>
         <source>Golește</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="listdoc.ui" line="277"/>
+        <location filename="docs/listdoc.ui" line="277"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="105"/>
+        <location filename="docs/listdoc.cpp" line="96"/>
         <source>Selectează</source>
         <translation>Выбрать</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="147"/>
+        <location filename="docs/listdoc.cpp" line="138"/>
         <source>Validează</source>
         <translation>Провести</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="157"/>
+        <location filename="docs/listdoc.cpp" line="148"/>
         <source>Invalidează</source>
         <translation>Отмена проведения</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="167"/>
+        <location filename="docs/listdoc.cpp" line="158"/>
         <source>Printează</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="352"/>
+        <location filename="docs/listdoc.cpp" line="280"/>
+        <location filename="docs/listdoc.cpp" line="333"/>
+        <source>Determinarea dimensiunilor coloanelor</source>
+        <translation>Определение размера колонок</translation>
+    </message>
+    <message>
+        <location filename="docs/listdoc.cpp" line="282"/>
+        <location filename="docs/listdoc.cpp" line="335"/>
+        <source>Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!</source>
+        <translation>Не определены размеры колонок и направление сортировки !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/listdoc.cpp" line="421"/>
         <source>Documente: Formarea prețurilor</source>
         <translation>Документы: Формирование цен</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="354"/>
+        <location filename="docs/listdoc.cpp" line="423"/>
         <source>Număr</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="355"/>
+        <location filename="docs/listdoc.cpp" line="424"/>
         <source>Data</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="356"/>
+        <location filename="docs/listdoc.cpp" line="425"/>
         <source>Organizația (id)</source>
         <translation>Организация (id)</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="360"/>
+        <location filename="docs/listdoc.cpp" line="429"/>
         <source>Comentariu</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="366"/>
-        <location filename="listdoc.cpp" line="385"/>
-        <location filename="listdoc.cpp" line="401"/>
+        <location filename="docs/listdoc.cpp" line="435"/>
+        <location filename="docs/listdoc.cpp" line="454"/>
+        <location filename="docs/listdoc.cpp" line="470"/>
         <source>Informație</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="366"/>
-        <location filename="listdoc.cpp" line="385"/>
-        <location filename="listdoc.cpp" line="401"/>
+        <location filename="docs/listdoc.cpp" line="435"/>
+        <location filename="docs/listdoc.cpp" line="454"/>
+        <location filename="docs/listdoc.cpp" line="470"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="411"/>
+        <location filename="docs/listdoc.cpp" line="480"/>
         <source>Documentul cu numărul &apos;%1&apos; a fost marcat 
 pentru eliminarea din baza de date.</source>
         <translation>Документ № &apos;%1&apos; помечен 
 на удаление из базы данных.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="414"/>
+        <location filename="docs/listdoc.cpp" line="483"/>
         <source>Documentul cu numărul &apos;%1&apos; a fost demarcat 
 pentru eliminarea din baza de date.</source>
         <translation>Документ № &apos;%1&apos; снята пометка 
 на удаление из базы данных.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="421"/>
+        <location filename="docs/listdoc.cpp" line="490"/>
         <source>Marcarea/demarcarea documentului</source>
         <translation>Пометка/отмена пометки документа</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="422"/>
+        <location filename="docs/listdoc.cpp" line="491"/>
         <source>Marcarea/demarcarea documentului cu numărul &apos;%1&apos; nu este reusita.</source>
         <translation>Пометка/отмена пометки на удаление документа № &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнена.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="523"/>
-        <location filename="listdoc.cpp" line="535"/>
+        <location filename="docs/listdoc.cpp" line="604"/>
         <source>Verificarea perioadei</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="524"/>
-        <source>Data lansării perioade nu poate fi mai mare 
-decât data finisării perioadei !!!</source>
-        <translation>Дата начала периода не должна быть больше 
-даты окончание периодаi !!!</translation>
-    </message>
-    <message>
-        <location filename="listdoc.cpp" line="529"/>
-        <location filename="listdoc.cpp" line="541"/>
+        <location filename="docs/listdoc.cpp" line="598"/>
+        <location filename="docs/listdoc.cpp" line="610"/>
         <source>Perioada: </source>
         <translation>Период: </translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="536"/>
+        <location filename="docs/listdoc.cpp" line="605"/>
         <source>Data finisării perioadei nu poate fi mai mică decât 
 data lansării perioadei !!!</source>
         <translation>Дата окончание периода не должна быть меньше 
 даты начала периода !!!</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="670"/>
+        <location filename="docs/listdoc.cpp" line="739"/>
         <source>Marchează documentul cu nr.&quot;%1&quot; pentru eliminarea din baza de date.</source>
         <translation>Пометка на удаление документа № &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="672"/>
+        <location filename="docs/listdoc.cpp" line="741"/>
         <source>Demarchează documentul cu nr.&quot;%1&quot; pentru eliminarea din baza de date.</source>
         <translation>Отмена пометки на удаление документа № &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="674"/>
+        <location filename="docs/listdoc.cpp" line="743"/>
         <source>Crearea documentului nou.</source>
         <translation>Создать новый документ.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="675"/>
+        <location filename="docs/listdoc.cpp" line="744"/>
         <source>Editează documentul cu nr.&quot;%1&quot;.</source>
         <translation>Редактирование документа №.&quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="listdoc.cpp" line="758"/>
+        <location filename="docs/listdoc.cpp" line="827"/>
         <source>Lista documentelor: Formarea preturilor</source>
         <translation>Список документов: Формирование цен</translation>
     </message>
@@ -5186,678 +5836,806 @@ data lansării perioadei !!!</source>
 <context>
     <name>ListDocReportOrder</name>
     <message>
-        <location filename="listdocreportorder.ui" line="14"/>
+        <location filename="docs/listdocreportorder.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="34"/>
+        <location filename="docs/listdocreportorder.ui" line="34"/>
         <source>Seteaza filtru</source>
         <translation>Настройки фильтра</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="40"/>
+        <location filename="docs/listdocreportorder.ui" line="40"/>
         <source>Perioada</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="51"/>
+        <location filename="docs/listdocreportorder.ui" line="51"/>
         <source>Lansarea perioadei</source>
         <translation>Начало периода</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="127"/>
+        <location filename="docs/listdocreportorder.ui" line="127"/>
         <source>Finisarea perioadei</source>
         <translation>Окончание периода</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="134"/>
-        <location filename="listdocreportorder.ui" line="207"/>
-        <location filename="listdocreportorder.ui" line="218"/>
+        <location filename="docs/listdocreportorder.ui" line="134"/>
+        <location filename="docs/listdocreportorder.ui" line="207"/>
+        <location filename="docs/listdocreportorder.ui" line="218"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="144"/>
+        <location filename="docs/listdocreportorder.ui" line="144"/>
         <source>Filtru</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="164"/>
+        <location filename="docs/listdocreportorder.ui" line="164"/>
         <source>Organizatia</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="188"/>
+        <location filename="docs/listdocreportorder.ui" line="188"/>
         <source>Nr. documentului</source>
         <translation>Nr. документа</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="200"/>
-        <location filename="listdocreportorder.cpp" line="1170"/>
+        <location filename="docs/listdocreportorder.ui" line="200"/>
+        <location filename="docs/listdocreportorder.cpp" line="1675"/>
         <source>Contract</source>
         <translation>Контракт</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="252"/>
+        <location filename="docs/listdocreportorder.ui" line="252"/>
         <source>Aplica</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="268"/>
+        <location filename="docs/listdocreportorder.ui" line="268"/>
         <source>Goleste</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="284"/>
+        <location filename="docs/listdocreportorder.ui" line="284"/>
         <source>Inchide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="331"/>
+        <location filename="docs/listdocreportorder.ui" line="331"/>
         <source>Comanda ecografică - investigații  solicitate</source>
         <translation>Заказ исследования</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="337"/>
-        <location filename="listdocreportorder.ui" line="410"/>
+        <location filename="docs/listdocreportorder.ui" line="337"/>
+        <location filename="docs/listdocreportorder.ui" line="410"/>
         <source>Deschide</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="348"/>
-        <location filename="listdocreportorder.ui" line="456"/>
+        <location filename="docs/listdocreportorder.ui" line="348"/>
+        <location filename="docs/listdocreportorder.ui" line="456"/>
         <source>Printare</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="404"/>
+        <location filename="docs/listdocreportorder.ui" line="404"/>
         <source>Raport ecografic - concluzie</source>
         <translation>Протокол - заключение</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.ui" line="473"/>
+        <location filename="docs/listdocreportorder.ui" line="473"/>
         <source>Raport ecografic lipsește !!!</source>
         <translation>Протокол исследование отсутствует !!!</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="112"/>
-        <location filename="listdocreportorder.cpp" line="122"/>
+        <location filename="docs/listdocreportorder.cpp" line="139"/>
+        <location filename="docs/listdocreportorder.cpp" line="143"/>
+        <location filename="docs/listdocreportorder.cpp" line="147"/>
         <source>Verificarea perioadei</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="113"/>
-        <source>Data lansării perioade nu poate fi mai mare 
-decât data finisării perioadei !!!</source>
-        <translation>Дата начала периода не должна быть больше 
-даты окончание периодаi !!!</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="123"/>
+        <location filename="docs/listdocreportorder.cpp" line="140"/>
+        <location filename="docs/listdocreportorder.cpp" line="144"/>
+        <location filename="docs/listdocreportorder.cpp" line="148"/>
         <source>Data finisării perioadei nu poate fi mai mică decât 
 data lansării perioadei !!!</source>
         <translation>Дата окончание периода не должна быть меньше 
 даты начала периода !!!</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="147"/>
+        <location filename="docs/listdocreportorder.cpp" line="185"/>
+        <location filename="docs/listdocreportorder.cpp" line="187"/>
+        <location filename="docs/listdocreportorder.cpp" line="189"/>
+        <location filename="docs/listdocreportorder.cpp" line="2184"/>
+        <location filename="docs/listdocreportorder.cpp" line="2186"/>
+        <location filename="docs/listdocreportorder.cpp" line="2188"/>
         <source>Lista documentelor: Comanda ecografică</source>
         <translation>Список документов: Заказ исследование</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="154"/>
-        <source>Deschisa lista documentelor &apos;Raport ecografic&apos;</source>
-        <translation>Открыт список документов &apos;Протокол исследование&apos;</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="156"/>
+        <location filename="docs/listdocreportorder.cpp" line="181"/>
+        <location filename="docs/listdocreportorder.cpp" line="2193"/>
         <source>Lista documentelor: Raport ecografic</source>
         <translation>Список документов: Протокол исследования</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="157"/>
-        <source>Deschisa lista documentelor &apos;Comanda ecografica&apos;</source>
-        <translation>Открыт список документов &apos;Заказ исследование&apos;</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="257"/>
-        <location filename="listdocreportorder.cpp" line="285"/>
-        <location filename="listdocreportorder.cpp" line="337"/>
-        <location filename="listdocreportorder.cpp" line="360"/>
+        <location filename="docs/listdocreportorder.cpp" line="294"/>
+        <location filename="docs/listdocreportorder.cpp" line="296"/>
+        <location filename="docs/listdocreportorder.cpp" line="298"/>
+        <location filename="docs/listdocreportorder.cpp" line="328"/>
+        <location filename="docs/listdocreportorder.cpp" line="330"/>
+        <location filename="docs/listdocreportorder.cpp" line="332"/>
+        <location filename="docs/listdocreportorder.cpp" line="479"/>
+        <location filename="docs/listdocreportorder.cpp" line="481"/>
+        <location filename="docs/listdocreportorder.cpp" line="483"/>
+        <location filename="docs/listdocreportorder.cpp" line="510"/>
+        <location filename="docs/listdocreportorder.cpp" line="512"/>
+        <location filename="docs/listdocreportorder.cpp" line="514"/>
         <source>Informație</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="257"/>
-        <location filename="listdocreportorder.cpp" line="285"/>
-        <location filename="listdocreportorder.cpp" line="337"/>
-        <location filename="listdocreportorder.cpp" line="360"/>
+        <location filename="docs/listdocreportorder.cpp" line="294"/>
+        <location filename="docs/listdocreportorder.cpp" line="296"/>
+        <location filename="docs/listdocreportorder.cpp" line="298"/>
+        <location filename="docs/listdocreportorder.cpp" line="328"/>
+        <location filename="docs/listdocreportorder.cpp" line="330"/>
+        <location filename="docs/listdocreportorder.cpp" line="332"/>
+        <location filename="docs/listdocreportorder.cpp" line="479"/>
+        <location filename="docs/listdocreportorder.cpp" line="481"/>
+        <location filename="docs/listdocreportorder.cpp" line="483"/>
+        <location filename="docs/listdocreportorder.cpp" line="510"/>
+        <location filename="docs/listdocreportorder.cpp" line="512"/>
+        <location filename="docs/listdocreportorder.cpp" line="514"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="370"/>
+        <location filename="docs/listdocreportorder.cpp" line="525"/>
         <source>%1 - onClickBtnReport()</source>
         <translation>%1 - onClickBtnReport()</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="371"/>
-        <location filename="listdocreportorder.cpp" line="945"/>
-        <location filename="listdocreportorder.cpp" line="969"/>
-        <location filename="listdocreportorder.cpp" line="995"/>
+        <location filename="docs/listdocreportorder.cpp" line="526"/>
+        <location filename="docs/listdocreportorder.cpp" line="1374"/>
+        <location filename="docs/listdocreportorder.cpp" line="1398"/>
+        <location filename="docs/listdocreportorder.cpp" line="1424"/>
         <source>Nu a fost setata(sau setata incorect) variabila &apos;m_typeDoc&apos;.</source>
         <translation>Не установлено свойство &apos;m_typeDoc&apos;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="374"/>
-        <location filename="listdocreportorder.cpp" line="944"/>
-        <location filename="listdocreportorder.cpp" line="948"/>
-        <location filename="listdocreportorder.cpp" line="968"/>
-        <location filename="listdocreportorder.cpp" line="972"/>
+        <location filename="docs/listdocreportorder.cpp" line="529"/>
+        <location filename="docs/listdocreportorder.cpp" line="1373"/>
+        <location filename="docs/listdocreportorder.cpp" line="1377"/>
+        <location filename="docs/listdocreportorder.cpp" line="1397"/>
+        <location filename="docs/listdocreportorder.cpp" line="1401"/>
         <source>%1 - openPrintDesignerPreviewOrder()</source>
         <translation>%1 - openPrintDesignerPreviewOrder()</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="375"/>
-        <location filename="listdocreportorder.cpp" line="949"/>
-        <location filename="listdocreportorder.cpp" line="973"/>
-        <location filename="listdocreportorder.cpp" line="999"/>
+        <location filename="docs/listdocreportorder.cpp" line="530"/>
+        <location filename="docs/listdocreportorder.cpp" line="1378"/>
+        <location filename="docs/listdocreportorder.cpp" line="1402"/>
+        <location filename="docs/listdocreportorder.cpp" line="1428"/>
         <source>Nu a fost identificat &apos;id&apos; documentului pentru printare.</source>
         <translation>Не удалось определить &apos;id&apos; документа для печати.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="512"/>
+        <location filename="docs/listdocreportorder.cpp" line="736"/>
         <source>Nu este setata(sau setata incorect) variabila &apos;m_typeDoc&apos; !!!</source>
         <translation>Не определена переменная &apos;m_typeDoc&apos; !!!</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="534"/>
+        <location filename="docs/listdocreportorder.cpp" line="764"/>
         <source>Editeaza persoana juridica &apos;%1&apos;.</source>
         <translation>Редактирование юр.лица &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="535"/>
+        <location filename="docs/listdocreportorder.cpp" line="765"/>
         <source>Editeaza contractul &apos;%1&apos;.</source>
         <translation>Редактирование контракта &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="536"/>
+        <location filename="docs/listdocreportorder.cpp" line="766"/>
         <source>Editeaza datele pacientului &apos;%1&apos;.</source>
         <translation>Редактирование данных пациента &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="537"/>
-        <source>Printare documentului Nr.&apos;%1&apos; din %2.</source>
-        <translation>Печать документа № &apos;%1&apos; от %2.</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="538"/>
-        <source>Deschide &apos;Raport ecografic&apos;.</source>
-        <translation>Открыть &apos;Протокол исследования&apos;.</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="539"/>
+        <location filename="docs/listdocreportorder.cpp" line="768"/>
         <source>Deschide &apos;Istoria pacientului&apos; - &apos;%1;.</source>
         <translation>Открыть &apos;История пациента&apos; - &apos;%1;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="680"/>
+        <location filename="docs/listdocreportorder.cpp" line="1074"/>
         <source>Raport eco.</source>
         <translation>Протокол.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="685"/>
+        <location filename="docs/listdocreportorder.cpp" line="1079"/>
         <source>Tabela</source>
         <translation>Заключение</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="803"/>
-        <location filename="listdocreportorder.cpp" line="837"/>
+        <location filename="docs/listdocreportorder.cpp" line="1208"/>
+        <location filename="docs/listdocreportorder.cpp" line="1250"/>
         <source>Deschide designer</source>
         <translation>Открыть дизайнер</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="807"/>
-        <location filename="listdocreportorder.cpp" line="841"/>
+        <location filename="docs/listdocreportorder.cpp" line="1212"/>
+        <location filename="docs/listdocreportorder.cpp" line="1254"/>
         <source>Deschide preview</source>
         <translation>Открыть просмотр</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="921"/>
+        <location filename="docs/listdocreportorder.cpp" line="1350"/>
         <source>Perioada: </source>
         <translation>Период: </translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="926"/>
+        <location filename="docs/listdocreportorder.cpp" line="1355"/>
         <source>; filtru: </source>
         <translation>; фильтр: </translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="994"/>
-        <location filename="listdocreportorder.cpp" line="998"/>
+        <location filename="docs/listdocreportorder.cpp" line="1423"/>
+        <location filename="docs/listdocreportorder.cpp" line="1427"/>
         <source>%1 - openPrintDesignerPreviewReport()</source>
         <translation>%1 - openPrintDesignerPreviewReport()</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1015"/>
+        <location filename="docs/listdocreportorder.cpp" line="1444"/>
         <source>Nu este determinata proprietatea &apos;typeDoc&apos; !!! Completarea tabelei nu este posibila.</source>
         <translation>Не определено свойство &apos;typeDoc&apos; !!! Таблица не заполнена.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1165"/>
-        <location filename="listdocreportorder.cpp" line="1184"/>
+        <location filename="docs/listdocreportorder.cpp" line="1661"/>
+        <location filename="docs/listdocreportorder.cpp" line="1665"/>
+        <location filename="docs/listdocreportorder.cpp" line="1669"/>
+        <location filename="docs/listdocreportorder.cpp" line="1694"/>
+        <location filename="docs/listdocreportorder.cpp" line="1696"/>
         <source>Număr</source>
         <translation>Номер</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1166"/>
-        <location filename="listdocreportorder.cpp" line="1185"/>
+        <location filename="docs/listdocreportorder.cpp" line="1673"/>
+        <location filename="docs/listdocreportorder.cpp" line="1698"/>
         <source>Data</source>
         <translation>Дата</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1167"/>
+        <location filename="docs/listdocreportorder.cpp" line="1662"/>
+        <location filename="docs/listdocreportorder.cpp" line="1666"/>
+        <location filename="docs/listdocreportorder.cpp" line="1670"/>
         <source>Organizația (id)</source>
         <translation>Организация (id)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1168"/>
+        <location filename="docs/listdocreportorder.cpp" line="109"/>
+        <location filename="docs/listdocreportorder.cpp" line="111"/>
+        <location filename="docs/listdocreportorder.cpp" line="113"/>
+        <source>... căutarea după nume, prenume sau IDNP a pacientului</source>
+        <translation>... поиск по фамилии, имени или IDNP пациента</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="355"/>
+        <location filename="docs/listdocreportorder.cpp" line="383"/>
+        <location filename="docs/listdocreportorder.cpp" line="402"/>
+        <source>Eliminarea documentului.</source>
+        <translation>Удаление документа.</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="358"/>
+        <location filename="docs/listdocreportorder.cpp" line="360"/>
+        <location filename="docs/listdocreportorder.cpp" line="362"/>
+        <source>Există documente subordonate. Doriți să continuați ?</source>
+        <translation>Существует подчинённые документы. Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="364"/>
+        <source>Va fi eliminat documentul subordonat:
+%1</source>
+        <translation>Будет удалён подчинённый документ:
+%1</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="367"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="368"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="378"/>
+        <location filename="docs/listdocreportorder.cpp" line="396"/>
+        <source>Documentul a fost eliminat&lt;br&gt;cu succes din baza de date.</source>
+        <translation>Документ удалён&lt;br&gt;успешно.</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="385"/>
+        <location filename="docs/listdocreportorder.cpp" line="404"/>
+        <source>Documentul nu a fost eliminat din baza de date !!!</source>
+        <translation>Документ не был удалён !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="412"/>
+        <source>Solicitarea nereusita - %1</source>
+        <translation>Запрос не выполнен - %1</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="760"/>
+        <source>Deschide documentul</source>
+        <translation>Открыть документ</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="761"/>
+        <source>Printare documentului</source>
+        <translation>Печать документа</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="762"/>
+        <source>Eliminare documentului</source>
+        <translation>Удаление документа</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="803"/>
+        <location filename="docs/listdocreportorder.cpp" line="805"/>
+        <location filename="docs/listdocreportorder.cpp" line="808"/>
+        <source>Raport ecografic nr.%1 din %2</source>
+        <translation>Протокол обследования №%1 от %2</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="815"/>
+        <source>Documente subordonate</source>
+        <translation>Подчинённые документы</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="816"/>
+        <source>Editare - %1</source>
+        <translation>Редактирование - %1</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="817"/>
+        <source>Printare - %1</source>
+        <translation>Печать - %1</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="1663"/>
+        <location filename="docs/listdocreportorder.cpp" line="1667"/>
+        <location filename="docs/listdocreportorder.cpp" line="1671"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1169"/>
+        <location filename="docs/listdocreportorder.cpp" line="1674"/>
         <source>Contract (id)</source>
         <translation>Контракт (id)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1171"/>
-        <location filename="listdocreportorder.cpp" line="1187"/>
+        <location filename="docs/listdocreportorder.cpp" line="1676"/>
+        <location filename="docs/listdocreportorder.cpp" line="1700"/>
         <source>Pacient (id)</source>
         <translation>Пациент (id)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1172"/>
-        <location filename="listdocreportorder.cpp" line="1188"/>
+        <location filename="docs/listdocreportorder.cpp" line="1677"/>
+        <location filename="docs/listdocreportorder.cpp" line="1701"/>
         <source>Pacient (cautare)</source>
         <translation>Пациент (поиск)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1173"/>
+        <location filename="docs/listdocreportorder.cpp" line="1678"/>
         <source>Pacient</source>
         <translation>Пациент</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1174"/>
-        <location filename="listdocreportorder.cpp" line="1190"/>
+        <location filename="docs/listdocreportorder.cpp" line="1679"/>
+        <location filename="docs/listdocreportorder.cpp" line="1703"/>
         <source>IDNP</source>
         <translation>IDNP</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1175"/>
-        <location filename="listdocreportorder.cpp" line="1192"/>
+        <location filename="docs/listdocreportorder.cpp" line="1680"/>
+        <location filename="docs/listdocreportorder.cpp" line="1705"/>
         <source>Autor (id)</source>
         <translation>Автор (id)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1176"/>
-        <location filename="listdocreportorder.cpp" line="1193"/>
+        <location filename="docs/listdocreportorder.cpp" line="1681"/>
+        <location filename="docs/listdocreportorder.cpp" line="1706"/>
         <source>Autor</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1177"/>
+        <location filename="docs/listdocreportorder.cpp" line="1682"/>
         <source>Total (MDL)</source>
         <translation>Всего (MDL)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1178"/>
-        <location filename="listdocreportorder.cpp" line="1195"/>
+        <location filename="docs/listdocreportorder.cpp" line="1683"/>
+        <location filename="docs/listdocreportorder.cpp" line="1708"/>
         <source>Comentariu</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1186"/>
+        <location filename="docs/listdocreportorder.cpp" line="1699"/>
         <source>Comanda ecografica (id)</source>
         <translation>Заказ исследование (id)</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1189"/>
+        <location filename="docs/listdocreportorder.cpp" line="1702"/>
         <source>Pacientul</source>
         <translation>Пациент</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1191"/>
+        <location filename="docs/listdocreportorder.cpp" line="1704"/>
         <source>Comanda ecografica</source>
         <translation>Заказ исследование</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1194"/>
+        <location filename="docs/listdocreportorder.cpp" line="1707"/>
         <source>Concluzia</source>
         <translation>Заключение</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1212"/>
-        <location filename="listdocreportorder.cpp" line="1521"/>
+        <location filename="docs/listdocreportorder.cpp" line="1725"/>
+        <location filename="docs/listdocreportorder.cpp" line="2197"/>
         <source>Nu este determinat proprietatea &apos;m_typeDoc&apos; !!!</source>
         <translation>Не определено свойство &apos;m_typeDoc&apos; !!!</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1381"/>
+        <location filename="docs/listdocreportorder.cpp" line="1775"/>
+        <source>Determinarea perioadei</source>
+        <translation>Определение периода</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="1778"/>
+        <location filename="docs/listdocreportorder.cpp" line="1780"/>
+        <source>Nu a fost extrasă perioada din setările formei !!!</source>
+        <translation>Период не был извлечён из настроек формы !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="1831"/>
+        <source>Determinarea dimensiunilor coloanelor</source>
+        <translation>Определение размеров колонок</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="1833"/>
+        <source>Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!</source>
+        <translation>Не определены размеры колонок и направление сортировки !!!</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="1976"/>
+        <location filename="docs/listdocreportorder.cpp" line="1978"/>
+        <location filename="docs/listdocreportorder.cpp" line="1980"/>
         <source>Adaugă.</source>
         <translation>Добавить.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1391"/>
+        <location filename="docs/listdocreportorder.cpp" line="1992"/>
+        <location filename="docs/listdocreportorder.cpp" line="1994"/>
+        <location filename="docs/listdocreportorder.cpp" line="1996"/>
         <source>Editează.</source>
         <translation>Редактировать.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1401"/>
-        <source>Marchează pentru &lt;br&gt;eliminare.</source>
-        <translation>Пометка для удаления.</translation>
+        <location filename="docs/listdocreportorder.cpp" line="2007"/>
+        <source>Eliminare.</source>
+        <translation>Удаление.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1411"/>
+        <location filename="docs/listdocreportorder.cpp" line="2018"/>
+        <location filename="docs/listdocreportorder.cpp" line="2020"/>
+        <location filename="docs/listdocreportorder.cpp" line="2022"/>
         <source>Adaugă filtru.</source>
         <translation>Добавить фильтр.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1421"/>
+        <location filename="docs/listdocreportorder.cpp" line="2034"/>
+        <location filename="docs/listdocreportorder.cpp" line="2037"/>
+        <location filename="docs/listdocreportorder.cpp" line="2040"/>
         <source>Filtrare după&lt;br&gt;%1.</source>
         <translation>Фильтр &lt;br&gt;%1.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1432"/>
+        <location filename="docs/listdocreportorder.cpp" line="2053"/>
+        <location filename="docs/listdocreportorder.cpp" line="2055"/>
+        <location filename="docs/listdocreportorder.cpp" line="2057"/>
         <source>Golește filtru.</source>
         <translation>Очистить фильтр.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1442"/>
+        <location filename="docs/listdocreportorder.cpp" line="2069"/>
+        <location filename="docs/listdocreportorder.cpp" line="2071"/>
+        <location filename="docs/listdocreportorder.cpp" line="2073"/>
         <source>Actualizează tabela.</source>
         <translation>Обновление таблицы.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1452"/>
+        <location filename="docs/listdocreportorder.cpp" line="2085"/>
+        <location filename="docs/listdocreportorder.cpp" line="2087"/>
+        <source>Ascunde/afișează&lt;br&gt;colonițe.</source>
+        <translation>Скрыть/показать&lt;br&gt;столбцы.</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="2089"/>
+        <source>Ascunde/afișează &lt;br&gt;colonițe.</source>
+        <translation>Скрыть/показать&lt;br&gt;столбцы.</translation>
+    </message>
+    <message>
+        <location filename="docs/listdocreportorder.cpp" line="2100"/>
         <source>Printare.</source>
         <translation>Печать.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1462"/>
+        <location filename="docs/listdocreportorder.cpp" line="2110"/>
         <source>Crearea/deschiderea&lt;br&gt;documentului &apos;Raport ecografic&apos;.</source>
         <translation>Создать/открыть&lt;br&gt;документ &apos;Протокол исслед.&apos;.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1473"/>
+        <location filename="docs/listdocreportorder.cpp" line="2122"/>
+        <location filename="docs/listdocreportorder.cpp" line="2125"/>
+        <location filename="docs/listdocreportorder.cpp" line="2128"/>
         <source>Vizualizarea&lt;br&gt;părții tabelare sau concluziei.</source>
         <translation>Виуализация&lt;br&gt;таб.части или заключения.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1484"/>
+        <location filename="docs/listdocreportorder.cpp" line="2141"/>
+        <location filename="docs/listdocreportorder.cpp" line="2143"/>
+        <location filename="docs/listdocreportorder.cpp" line="2145"/>
         <source>Perioada și filtrului.</source>
         <translation>Период и фильтр.</translation>
     </message>
     <message>
-        <location filename="listdocreportorder.cpp" line="1494"/>
+        <location filename="docs/listdocreportorder.cpp" line="2157"/>
+        <location filename="docs/listdocreportorder.cpp" line="2160"/>
+        <location filename="docs/listdocreportorder.cpp" line="2163"/>
         <source>Căutarea pacientului&lt;br&gt;după: nume/prenume sau IDNP.</source>
         <translation>Поиск пациента по&lt;br&gt;: имя/фамилия или IDNP.</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="1513"/>
-        <source>Lista documentelor: Comanda pentru investigatie ecografice</source>
-        <translation>Список документов: Заказ исследование</translation>
-    </message>
-    <message>
-        <location filename="listdocreportorder.cpp" line="1517"/>
-        <source>Lista documentelor: Raport investigatia ecografica</source>
-        <translation>Список документов: Протокол исследование</translation>
     </message>
 </context>
 <context>
     <name>ListForm</name>
     <message>
-        <location filename="listform.ui" line="14"/>
+        <location filename="catalogs/listform.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="20"/>
+        <location filename="catalogs/listform.ui" line="20"/>
         <source>Editează</source>
         <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="23"/>
+        <location filename="catalogs/listform.ui" line="23"/>
         <source>F2</source>
         <translation>F2</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="30"/>
+        <location filename="catalogs/listform.ui" line="30"/>
         <source>Adaugă</source>
         <translation>Добавить</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="33"/>
+        <location filename="catalogs/listform.ui" line="33"/>
         <source>Ins</source>
         <translation>Ins</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="40"/>
+        <location filename="catalogs/listform.ui" line="40"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="43"/>
+        <location filename="catalogs/listform.ui" line="43"/>
         <source>Esc</source>
         <translation>Esc</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="66"/>
+        <location filename="catalogs/listform.ui" line="66"/>
         <source>Elimină</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="listform.ui" line="69"/>
+        <location filename="catalogs/listform.ui" line="69"/>
         <source>Del</source>
         <translation>Del</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="96"/>
-        <location filename="listform.cpp" line="160"/>
-        <location filename="listform.cpp" line="407"/>
+        <location filename="catalogs/listform.cpp" line="96"/>
+        <location filename="catalogs/listform.cpp" line="160"/>
+        <location filename="catalogs/listform.cpp" line="419"/>
         <source>Nu corect a fost transmisa proprietatea &apos;typeListForm&apos; clasei &apos;%1&apos; !!!</source>
         <translation>Не корректно переданно свойство &apos;typeListForm&apos; классу &apos;%1&apos; !!!</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="125"/>
+        <location filename="catalogs/listform.cpp" line="125"/>
         <source>NPP doctorului</source>
         <translation>ФИО врача</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="126"/>
-        <location filename="listform.cpp" line="133"/>
-        <location filename="listform.cpp" line="142"/>
-        <location filename="listform.cpp" line="151"/>
+        <location filename="catalogs/listform.cpp" line="126"/>
+        <location filename="catalogs/listform.cpp" line="133"/>
+        <location filename="catalogs/listform.cpp" line="142"/>
+        <location filename="catalogs/listform.cpp" line="151"/>
         <source>Telefoane</source>
         <translation>Телефоны</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="127"/>
-        <location filename="listform.cpp" line="134"/>
-        <location filename="listform.cpp" line="152"/>
+        <location filename="catalogs/listform.cpp" line="127"/>
+        <location filename="catalogs/listform.cpp" line="134"/>
+        <location filename="catalogs/listform.cpp" line="152"/>
         <source>E-mail</source>
         <translation>E-mail</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="128"/>
-        <location filename="listform.cpp" line="135"/>
-        <location filename="listform.cpp" line="144"/>
-        <location filename="listform.cpp" line="153"/>
+        <location filename="catalogs/listform.cpp" line="128"/>
+        <location filename="catalogs/listform.cpp" line="135"/>
+        <location filename="catalogs/listform.cpp" line="144"/>
+        <location filename="catalogs/listform.cpp" line="153"/>
         <source>Comentariu</source>
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="132"/>
+        <location filename="catalogs/listform.cpp" line="132"/>
         <source>NPP as.medicale</source>
         <translation>ФИО мед.сестры</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="139"/>
+        <location filename="catalogs/listform.cpp" line="139"/>
         <source>NPP pacientului</source>
         <translation>ФИО пациента</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="140"/>
+        <location filename="catalogs/listform.cpp" line="140"/>
         <source>Data nașterii</source>
         <translation>Дата рождения</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="141"/>
-        <location filename="listform.cpp" line="150"/>
+        <location filename="catalogs/listform.cpp" line="141"/>
+        <location filename="catalogs/listform.cpp" line="150"/>
         <source>Adresa</source>
         <translation>Адрес</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="148"/>
+        <location filename="catalogs/listform.cpp" line="148"/>
         <source>Denumirea organizației</source>
         <translation>Наименование организации</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="179"/>
+        <location filename="catalogs/listform.cpp" line="179"/>
         <source>Eroare la determinarea tipului tabelei. Nu este determinata proprietatea &apos;typeListForm&apos; !!!</source>
         <translation>Ошибка определения типы таблицы. Не определено свойство &apos;typeListForm&apos; !!!</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="344"/>
-        <location filename="listform.cpp" line="358"/>
-        <location filename="listform.cpp" line="372"/>
-        <location filename="listform.cpp" line="385"/>
-        <location filename="listform.cpp" line="401"/>
+        <location filename="catalogs/listform.cpp" line="356"/>
+        <location filename="catalogs/listform.cpp" line="370"/>
+        <location filename="catalogs/listform.cpp" line="384"/>
+        <location filename="catalogs/listform.cpp" line="397"/>
+        <location filename="catalogs/listform.cpp" line="413"/>
         <source>Obiectul &lt;b&gt;&apos;%1&apos;&lt;/b&gt; a fost salvat &lt;br&gt;in baza de date cu succes.</source>
         <translation>Объект &apos;%1&apos;&lt;br&gt; успешно сохранён в базе данных.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="436"/>
-        <location filename="listform.cpp" line="453"/>
-        <location filename="listform.cpp" line="470"/>
+        <location filename="catalogs/listform.cpp" line="448"/>
+        <location filename="catalogs/listform.cpp" line="465"/>
+        <location filename="catalogs/listform.cpp" line="482"/>
         <source>Datele obiectului &lt;b&gt;&apos;%1&apos;&lt;/b&gt; &lt;br&gt;au fost modificate cu succes.</source>
         <translation>Данные объекта &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;успешно обновлены.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="486"/>
-        <location filename="listform.cpp" line="502"/>
+        <location filename="catalogs/listform.cpp" line="498"/>
+        <location filename="catalogs/listform.cpp" line="514"/>
         <source>Datele obiectului &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;au fost modificate cu succes.</source>
         <translation>Данные объекта &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;успешно обновлены.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="509"/>
+        <location filename="catalogs/listform.cpp" line="521"/>
         <source>Eroare la editare a obiectului: nu este determinata proprietatea &apos;typeListForm&apos; !!!</source>
         <translation>Ошибка редактирования объекта: не определено свойство &apos;typeListForm&apos; !!!</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="143"/>
-        <location filename="listform.cpp" line="149"/>
+        <location filename="catalogs/listform.cpp" line="542"/>
+        <source>Obiectul &lt;b&gt;%1&lt;b&gt;&lt;br&gt; a fost marcat/demarcat cu succes in baza de date.</source>
+        <translation>Объект &lt;b&gt;%1&lt;b&gt;&lt;br&gt; успешно помечен в базе данных.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/listform.cpp" line="544"/>
+        <source>Obiectul &apos;%1&apos; cu id=&apos;%2&apos; a fost marcat/demarcat cu succes.</source>
+        <translation>Объект &apos;%1&apos; c id=&apos;%2&apos; успешно помечен в базе данных.</translation>
+    </message>
+    <message>
+        <location filename="catalogs/listform.cpp" line="143"/>
+        <location filename="catalogs/listform.cpp" line="149"/>
         <source>IDNP</source>
         <translation>IDNP</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="131"/>
+        <location filename="catalogs/listform.cpp" line="131"/>
         <source>Catalogul: Asistente medicale</source>
         <translation>Справочник: Мед.сёстры</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="138"/>
+        <location filename="catalogs/listform.cpp" line="138"/>
         <source>Catalogul: Pacienți</source>
         <translation>Справочник: Пациенты</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="147"/>
+        <location filename="catalogs/listform.cpp" line="147"/>
         <source>Catalogul: Persoane juridice</source>
         <translation>Справочник: Юридические лица</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="156"/>
+        <location filename="catalogs/listform.cpp" line="156"/>
         <source>Catalogul: Utilizatori</source>
         <translation>Справочник: Пользователи</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="157"/>
+        <location filename="catalogs/listform.cpp" line="157"/>
         <source>Nume utilizatorului</source>
         <translation>Имя пользователя</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="416"/>
-        <location filename="listform.cpp" line="517"/>
+        <location filename="catalogs/listform.cpp" line="428"/>
+        <location filename="catalogs/listform.cpp" line="529"/>
         <source>Atenție</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="416"/>
-        <location filename="listform.cpp" line="517"/>
+        <location filename="catalogs/listform.cpp" line="428"/>
+        <location filename="catalogs/listform.cpp" line="529"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="532"/>
-        <source>Obiectul &quot;%1&quot; a fost marcat 
-pentru eliminarea din baza de date.</source>
-        <translation>Объект &quot;%1&quot; помечен 
-на удаление из базы данных.</translation>
-    </message>
-    <message>
-        <location filename="listform.cpp" line="535"/>
-        <source>Obiectul &quot;%1&quot; a fost demarcat 
-pentru eliminarea din baza de date.</source>
-        <translation>Объект &quot;%1&quot; отмена пометки 
-на удаление из базы данных.</translation>
-    </message>
-    <message>
-        <location filename="listform.cpp" line="541"/>
-        <source>Obiectul &apos;%1&apos; cu id=&apos;%2&apos; a fost marcat pentru eliminarea din baza de date</source>
-        <translation>Объект &quot;%1&quot; с id=&apos;%2&apos; помечен на удаление из базы данных</translation>
-    </message>
-    <message>
-        <location filename="listform.cpp" line="543"/>
+        <location filename="catalogs/listform.cpp" line="546"/>
         <source>Marcarea/demarcarea obiectului</source>
         <translation>Пометка/отмена пометки объекта</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="544"/>
+        <location filename="catalogs/listform.cpp" line="547"/>
         <source>Marcarea/demarcarea obiectului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu este reusita.</source>
         <translation>Пометка/отмена пометки на удаление объекта &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не выполнена.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="545"/>
+        <location filename="catalogs/listform.cpp" line="548"/>
         <source>Eraoare la marcare pentru eliminarea din baza de date a obiectului &apos;%1&apos; cu id=&apos;%2&apos;</source>
         <translation>Ошибка пометки на удаления объекта &apos;%1&apos; с id=&apos;%2&apos;</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="580"/>
+        <location filename="catalogs/listform.cpp" line="583"/>
         <source>Marchează obiectul &quot;%1&quot; pentru eliminarea din baza de date.</source>
         <translation>Пометка на удаление объекта &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="582"/>
+        <location filename="catalogs/listform.cpp" line="585"/>
         <source>Demarchează obiectul &quot;%1&quot; pentru eliminarea din baza de date.</source>
         <translation>Отмена пометка на удаление объекта &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="584"/>
+        <location filename="catalogs/listform.cpp" line="587"/>
         <source>%1 - slotContextMenuRequested():</source>
         <translation>%1 - slotContextMenuRequested():</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="585"/>
+        <location filename="catalogs/listform.cpp" line="588"/>
         <source>Status &apos;deletionMark&apos; a obiectului cu ID=%1 nu este determinat !!!</source>
         <translation>Статус &apos;deletionMark&apos; объекта с ID=%1 не определен !!!</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="587"/>
+        <location filename="catalogs/listform.cpp" line="590"/>
         <source>Adaugă obiect nou.</source>
         <translation>Добавить новый объект.</translation>
     </message>
     <message>
-        <location filename="listform.cpp" line="588"/>
+        <location filename="catalogs/listform.cpp" line="591"/>
         <source>Editează obiect &quot;%1&quot;.</source>
         <translation>Редактирование объекта &quot;%1&quot;.</translation>
     </message>
@@ -5865,326 +6643,356 @@ pentru eliminarea din baza de date.</source>
 <context>
     <name>MainWindow</name>
     <message>
-        <location filename="mainwindow.ui" line="14"/>
+        <location filename="data/mainwindow.ui" line="14"/>
         <source>MainWindow</source>
         <translation>MainWindow</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="32"/>
+        <location filename="data/mainwindow.ui" line="32"/>
         <source>File</source>
         <translation>Файл</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="37"/>
+        <location filename="data/mainwindow.ui" line="37"/>
         <source>Cataloage</source>
         <translation>Справочники</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="42"/>
+        <location filename="data/mainwindow.ui" line="42"/>
         <source>Documente</source>
         <translation>Документы</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="47"/>
-        <location filename="mainwindow.cpp" line="385"/>
+        <location filename="data/mainwindow.ui" line="47"/>
+        <location filename="data/mainwindow.cpp" line="340"/>
         <source>Setări</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="mainwindow.ui" line="52"/>
+        <location filename="data/mainwindow.ui" line="52"/>
         <source>Asistență</source>
         <translation>Сервис</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="58"/>
+        <location filename="data/mainwindow.cpp" line="67"/>
         <source>Bara cu instrumente</source>
         <translation>Панель инструментов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="213"/>
-        <location filename="mainwindow.cpp" line="373"/>
+        <location filename="data/mainwindow.cpp" line="222"/>
+        <location filename="data/mainwindow.cpp" line="328"/>
         <source>Doctori</source>
         <translation>Доктора</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="214"/>
-        <location filename="mainwindow.cpp" line="374"/>
+        <location filename="data/mainwindow.cpp" line="223"/>
+        <location filename="data/mainwindow.cpp" line="329"/>
         <source>As.medicale</source>
         <translation>Мед.сёстры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="215"/>
-        <location filename="mainwindow.cpp" line="375"/>
+        <location filename="data/mainwindow.cpp" line="224"/>
+        <location filename="data/mainwindow.cpp" line="330"/>
         <source>Pacienți</source>
         <translation>Пациенты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="217"/>
-        <location filename="mainwindow.cpp" line="377"/>
+        <location filename="data/mainwindow.cpp" line="226"/>
+        <location filename="data/mainwindow.cpp" line="332"/>
         <source>Utilizatori</source>
         <translation>Пользователи</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="263"/>
+        <location filename="data/mainwindow.cpp" line="272"/>
         <source>Clasificatori</source>
         <translation>Классификатор</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="284"/>
-        <source>User manual</source>
-        <translation>Руководство пользователя</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="288"/>
-        <source>Istoria versiunilor</source>
-        <translation>История версий</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="378"/>
+        <location filename="data/mainwindow.cpp" line="333"/>
         <source>Programarea</source>
         <translation>Планирование</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="379"/>
+        <location filename="data/mainwindow.cpp" line="334"/>
         <source>Comanda ecograf.</source>
         <translation>Заказ исслед.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="266"/>
-        <location filename="mainwindow.cpp" line="382"/>
+        <location filename="data/mainwindow.cpp" line="275"/>
+        <location filename="data/mainwindow.cpp" line="337"/>
         <source>Investigații</source>
         <translation>Исследования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="383"/>
+        <location filename="data/mainwindow.ui" line="57"/>
+        <location filename="data/mainwindow.cpp" line="338"/>
         <source>Rapoarte</source>
         <translation>Отчёты</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="384"/>
+        <location filename="data/mainwindow.cpp" line="339"/>
         <source>Prețuri</source>
         <translation>Цены</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="296"/>
-        <location filename="mainwindow.cpp" line="386"/>
+        <location filename="data/mainwindow.cpp" line="305"/>
+        <location filename="data/mainwindow.cpp" line="341"/>
         <source>Despre aplicația</source>
         <translation>О приложении</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="216"/>
+        <location filename="data/mainwindow.cpp" line="225"/>
         <source>Persoane juridice</source>
         <translation>Юридические лица</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="218"/>
+        <location filename="data/mainwindow.cpp" line="227"/>
         <source>Setările aplicației</source>
         <translation>Настройки приложения</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="219"/>
+        <location filename="data/mainwindow.cpp" line="228"/>
         <source>Setările utilizatorilor</source>
         <translation>Настройки пользователей</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="221"/>
+        <location filename="data/mainwindow.cpp" line="229"/>
         <source>Formarea prețurilor</source>
         <translation>Формирование цен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="265"/>
+        <location filename="data/mainwindow.cpp" line="233"/>
+        <source>LimeReport (designer)</source>
+        <translation>LimeReport (designer)</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="274"/>
         <source>Tipul prețurilor</source>
         <translation>Тип цен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="798"/>
-        <location filename="mainwindow.cpp" line="801"/>
+        <location filename="data/mainwindow.cpp" line="293"/>
+        <source>Cod sursă</source>
+        <translation>Исходный код</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="297"/>
+        <source>Manual Online</source>
+        <translation>Руководство онлайн</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="301"/>
+        <source>Verifică versiunea nouă</source>
+        <translation>Проверить новую версию</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="399"/>
+        <location filename="data/mainwindow.cpp" line="803"/>
+        <location filename="data/mainwindow.cpp" line="812"/>
         <source>: utilizator (</source>
         <translation>: пользователь (</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="701"/>
+        <location filename="data/mainwindow.cpp" line="700"/>
         <source>Lista utilizatorilor</source>
         <translation>Список пользователей</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="494"/>
+        <location filename="data/mainwindow.cpp" line="490"/>
         <source>Nu a fost determinat indexul &apos;enum=TypeListForm&apos; !!!</source>
         <translation>Не определён индекс &apos;enum=TypeListForm&apos; !!!</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="751"/>
+        <location filename="data/mainwindow.cpp" line="750"/>
         <source>Examinarea ecografica</source>
         <translation>Протокол ультразвук.&lt;br&gt;исследования</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="292"/>
-        <source>Actualizarea aplicației</source>
-        <translation>Обновление приложения</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="220"/>
-        <source>Precesarea obiectelor marcate pentru eliminarea</source>
-        <translation>Удаление помеченных объектов</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="222"/>
+        <location filename="data/mainwindow.cpp" line="230"/>
         <source>Programarea pacienților</source>
         <translation>Запись пациентов</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="223"/>
+        <location filename="data/mainwindow.cpp" line="231"/>
         <source>Comanda ecografică</source>
         <translation>Заказ исследование</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="224"/>
+        <location filename="data/mainwindow.cpp" line="232"/>
         <source>Raport ecografic</source>
         <translation>Протокол исследование</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="304"/>
-        <source>%1   Modulul &lt;b&gt;&apos;Actualizarea aplicației&apos;&lt;/b&gt; se află în procesul dezvoltării.&lt;br&gt;Urmăriți actualizările aplicației. Pentru informații suplimentare contactați administratorul aplicației.</source>
-        <translation>%1   Модуль &lt;b&gt;&apos;Обновление приложения&apos;&lt;/b&gt; находится в разработке.&lt;br&gt;Следите за обновлениями приложения. За дополнительной информации обратитесь к администратору приложения.</translation>
-    </message>
-    <message>
-        <location filename="mainwindow.cpp" line="376"/>
+        <location filename="data/mainwindow.cpp" line="331"/>
         <source>Istoria</source>
         <translation>История</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="380"/>
+        <location filename="data/mainwindow.cpp" line="335"/>
         <source>Raport ecograf.</source>
-        <translation>Протокол</translation>
+        <translation>Протокол эх.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="381"/>
+        <location filename="data/mainwindow.cpp" line="336"/>
         <source>Centre medicale</source>
         <translation>Мед.центры</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="404"/>
+        <location filename="data/mainwindow.cpp" line="356"/>
+        <source>%1 - getVersionAppInTableSettingsUsers()</source>
+        <translation>%1 - getVersionAppInTableSettingsUsers()</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="357"/>
+        <source>Eroare solicitarii - determinarea versiunei aplicatiei - %1</source>
+        <translation>Ошибка запроса - определение версии программы - %1</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="372"/>
+        <source>%1 - setVersionAppInTableSettingsUsers()</source>
+        <translation>%1 - setVersionAppInTableSettingsUsers()</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="373"/>
         <source>Eroare de actualizare a veriunei aplicatiei din tabela &apos;settingsUsers&apos;.</source>
         <translation>Ошибка изменения версии приложения в таблице &apos;settingsUsers&apos;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="418"/>
+        <location filename="data/mainwindow.cpp" line="394"/>
+        <location filename="data/mainwindow.cpp" line="798"/>
+        <location filename="data/mainwindow.cpp" line="807"/>
+        <source> (MySQL: %1@%2): utilizator (</source>
+        <translation> (MySQL: %1@%2): пользователь (</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="397"/>
+        <source> (.sqlite3): utilizator (</source>
+        <translation> (.sqlite3): пользователь (</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="402"/>
         <source>%1   %2: Se completează catalogul &lt;b&gt;&lt;u&gt;&apos;Investigații&apos;&lt;/u&gt;&lt;/b&gt;.</source>
         <translation>%1   %2: Заполняется справочник &lt;b&gt;&lt;u&gt;&apos;Исследования&apos;&lt;/u&gt;&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="431"/>
+        <location filename="data/mainwindow.cpp" line="415"/>
         <source>%1   Aplicația a fost actualizată până la versiunea: USG v</source>
         <translation>%1   Приложение обновлено до версии: УЗИ v</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="451"/>
+        <location filename="data/mainwindow.cpp" line="445"/>
         <source>%1&lt;br&gt;%2 %3 Finisarea completării catalogului &lt;b&gt;&lt;u&gt;&apos;Investigații&apos;&lt;/u&gt;&lt;/b&gt; sursa - &lt;b&gt;Catalogul tarifelor unice (anexa nr.3)&lt;/b&gt;.&lt;br&gt;     &lt;b&gt;Vezi:&lt;/b&gt; &lt;em&gt;Meniu principal al aplicației -&gt; Cataloage -&gt; Clasificatori -&gt; Investigații&lt;em&gt;</source>
         <translation>%1&lt;br&gt;%2 %3 Окончание заполнения справочника &lt;b&gt;&lt;u&gt;&apos;Исследования&apos;&lt;/u&gt;&lt;/b&gt; источник - &lt;b&gt;Catalogul tarifelor unice (anexa nr.3)&lt;/b&gt;.&lt;br&gt;     &lt;b&gt;Vezi:&lt;/b&gt; &lt;em&gt;Главное меню приложения -&gt; Справочники -&gt; Классификатор -&gt; Исследования&lt;em&gt;</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="622"/>
-        <location filename="mainwindow.cpp" line="636"/>
+        <location filename="data/mainwindow.cpp" line="619"/>
+        <location filename="data/mainwindow.cpp" line="635"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicația.</source>
         <translation>Пользователь &apos;%1&apos; закончил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="627"/>
+        <location filename="data/mainwindow.cpp" line="624"/>
         <source>Finisarea lucrului</source>
         <translation>Завершение работы</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="627"/>
+        <location filename="data/mainwindow.cpp" line="624"/>
         <source>Doriți să inchideți aplicația ?</source>
         <translation>Вы хотите закрыть приложение?</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="629"/>
+        <location filename="data/mainwindow.cpp" line="627"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="630"/>
+        <location filename="data/mainwindow.cpp" line="628"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="648"/>
+        <location filename="data/mainwindow.cpp" line="647"/>
         <source>Lista cu doctori.</source>
         <translation>Список с докторами.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="658"/>
+        <location filename="data/mainwindow.cpp" line="657"/>
         <source>Lista as.medicale.</source>
         <translation>Список мед.сестёр.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="668"/>
+        <location filename="data/mainwindow.cpp" line="667"/>
         <source>Lista pacienților 
 înregistrați în baza de date.</source>
         <translation>Список пациентов 
 зарегистрированных в базе данных.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="679"/>
+        <location filename="data/mainwindow.cpp" line="678"/>
         <source>Vizualizarea istorie 
 pacienților.</source>
         <translation>Визуализация
 истории пациентов.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="690"/>
+        <location filename="data/mainwindow.cpp" line="689"/>
         <source>Lista persoanelor 
 juridice.</source>
         <translation>Список 
 мед.центров (юр.лиц).</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="711"/>
+        <location filename="data/mainwindow.cpp" line="710"/>
         <source>Clasificatorul investigațiilor</source>
         <translation>Классификатор исследований</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="721"/>
+        <location filename="data/mainwindow.cpp" line="720"/>
         <source>Documente cu
  formarea  preturilor</source>
         <translation>Документ
 формирование цен</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="731"/>
+        <location filename="data/mainwindow.cpp" line="730"/>
         <source>Programarea pacienților 
  la investigații ecografice</source>
         <translation>Запись пациентов
  на ультразвук.исследование</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="741"/>
+        <location filename="data/mainwindow.cpp" line="740"/>
         <source>Comanda pentru
  investigatiile ecografice</source>
         <translation>Заказ на ультразвук.
 исследование</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="761"/>
+        <location filename="data/mainwindow.cpp" line="760"/>
         <source>Rapoarte investigațiilor 
  ecografice</source>
         <translation>Отчёты ультрзвук.
 исследований</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="771"/>
+        <location filename="data/mainwindow.cpp" line="770"/>
         <source>Setările principale
 ale aplicației.</source>
         <translation>Основные настройки
 приложения.</translation>
     </message>
     <message>
-        <location filename="mainwindow.cpp" line="782"/>
+        <location filename="data/mainwindow.cpp" line="781"/>
         <source>Informația generală
 despre aplicația.</source>
         <translation>Общая информация
 о приложении.</translation>
+    </message>
+    <message>
+        <location filename="data/mainwindow.cpp" line="801"/>
+        <location filename="data/mainwindow.cpp" line="810"/>
+        <source> (.sqlite3): base - &apos;%1&apos;, utilizator (</source>
+        <translation> (.sqlite3): base - &apos;%1&apos;, пользователь (</translation>
     </message>
 </context>
 <context>
@@ -6260,162 +7068,49 @@ despre aplicația.</source>
         <translation>История пациента - %1</translation>
     </message>
     <message>
-        <location filename="catalogs/patienthistory.cpp" line="121"/>
-        <location filename="catalogs/patienthistory.cpp" line="122"/>
-        <location filename="catalogs/patienthistory.cpp" line="123"/>
-        <location filename="catalogs/patienthistory.cpp" line="124"/>
-        <location filename="catalogs/patienthistory.cpp" line="125"/>
-        <location filename="catalogs/patienthistory.cpp" line="237"/>
-        <location filename="catalogs/patienthistory.cpp" line="242"/>
-        <location filename="catalogs/patienthistory.cpp" line="247"/>
-        <location filename="catalogs/patienthistory.cpp" line="252"/>
-        <location filename="catalogs/patienthistory.cpp" line="257"/>
+        <location filename="catalogs/patienthistory.cpp" line="126"/>
+        <location filename="catalogs/patienthistory.cpp" line="127"/>
+        <location filename="catalogs/patienthistory.cpp" line="128"/>
+        <location filename="catalogs/patienthistory.cpp" line="129"/>
+        <location filename="catalogs/patienthistory.cpp" line="130"/>
+        <location filename="catalogs/patienthistory.cpp" line="244"/>
+        <location filename="catalogs/patienthistory.cpp" line="249"/>
+        <location filename="catalogs/patienthistory.cpp" line="254"/>
         <location filename="catalogs/patienthistory.cpp" line="259"/>
-        <location filename="catalogs/patienthistory.cpp" line="260"/>
-        <location filename="catalogs/patienthistory.cpp" line="261"/>
-        <location filename="catalogs/patienthistory.cpp" line="262"/>
-        <location filename="catalogs/patienthistory.cpp" line="263"/>
+        <location filename="catalogs/patienthistory.cpp" line="264"/>
+        <location filename="catalogs/patienthistory.cpp" line="266"/>
+        <location filename="catalogs/patienthistory.cpp" line="267"/>
+        <location filename="catalogs/patienthistory.cpp" line="268"/>
+        <location filename="catalogs/patienthistory.cpp" line="269"/>
+        <location filename="catalogs/patienthistory.cpp" line="270"/>
         <source>Imagine lipsește</source>
         <translation>Изображение отсутствует</translation>
     </message>
     <message>
-        <location filename="catalogs/patienthistory.cpp" line="202"/>
+        <location filename="catalogs/patienthistory.cpp" line="208"/>
         <source>Documente</source>
         <translation>Документы</translation>
     </message>
     <message>
-        <location filename="catalogs/patienthistory.cpp" line="223"/>
+        <location filename="catalogs/patienthistory.cpp" line="230"/>
         <source>Eroare de executare a solicitarii de extragere a imaginei: %1</source>
         <translation>Ошибка извлечения изображения &apos;loadImageOpeningDocument&apos;: %1</translation>
     </message>
 </context>
 <context>
-    <name>ProcessingObjectsMark</name>
-    <message>
-        <location filename="processingobjectsmark.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Диалог</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.ui" line="53"/>
-        <source>Control</source>
-        <translation>Проверить</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.ui" line="73"/>
-        <source>Închide</source>
-        <translation>Закрыть</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.ui" line="93"/>
-        <source>Eliminarea</source>
-        <translation>Удалить</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.ui" line="126"/>
-        <source>Selectează</source>
-        <translation>Выбрать</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="10"/>
-        <source>Procesarea obiectelor marcate pentru eliminarea</source>
-        <translation>Удаление помеченных объектов</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="53"/>
-        <source>Catalogul utilizatori: &apos;</source>
-        <translation>Справочник пользователи: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="60"/>
-        <source>Catalogul doctori: &apos;</source>
-        <translation>Справочник доктора: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="67"/>
-        <source>Catalogul as.medicale: &apos;</source>
-        <translation>Справочник мед.сёстры: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="74"/>
-        <source>Catalogul pacienți: &apos;</source>
-        <translation>Справочник пациенты: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="81"/>
-        <source>Catalogul organizații: &apos;</source>
-        <translation>Справочник организации: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="93"/>
-        <source>Investigația: &apos;</source>
-        <translation>Исследование: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="100"/>
-        <source>Tipul prețului: &apos;</source>
-        <translation>Тип цен: &apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="160"/>
-        <source>Obiecte marcate pentru eliminarea</source>
-        <translation>Объекты помеченные на удаление</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="160"/>
-        <source>id</source>
-        <translation>id</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="160"/>
-        <source>name table</source>
-        <translation>name table</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="176"/>
-        <source>Cataloage</source>
-        <translation>Справочники</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="255"/>
-        <source>Clasificatori</source>
-        <translation>Классификатор</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="293"/>
-        <source>Documente</source>
-        <translation>Документы</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="633"/>
-        <source>Nu este eliminata investigația cu codul=&apos;%1&apos;</source>
-        <translation>Не удалено исследование с кодом =&apos;%1&apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="646"/>
-        <source>Nu este eliminata din baza de date tabela documentului &apos;pricings&apos; cu id=&apos;%1&apos;</source>
-        <translation>Не удалена табличная часть документа &apos;pricings&apos; с id=&apos;%1&apos;</translation>
-    </message>
-    <message>
-        <location filename="processingobjectsmark.cpp" line="652"/>
-        <source>Nu este eliminata din baza de date tabela documentului &apos;orderEcho&apos; cu id=&apos;%1&apos;</source>
-        <translation>Не удалена табличная часть документа &apos;orderEcho&apos; с id=&apos;%1&apos;</translation>
-    </message>
-</context>
-<context>
     <name>QCoreApplication</name>
     <message>
-        <location filename="mainwindow.h" line="36"/>
+        <location filename="data/mainwindow.h" line="34"/>
         <source>USG</source>
         <translation>УЗИ</translation>
     </message>
     <message>
-        <location filename="mainwindow.h" line="38"/>
+        <location filename="data/mainwindow.h" line="36"/>
         <source>USG - Evidența examinărilor ecografice</source>
         <translation>УЗИ - Учёт ультразвуковых исследований</translation>
     </message>
     <message>
-        <location filename="main.cpp" line="114"/>
+        <location filename="main.cpp" line="135"/>
         <source>Crearea administratorului aplicației %1</source>
         <translation>Создание администратора приложения  %1</translation>
     </message>
@@ -6423,37 +7118,37 @@ despre aplicația.</source>
 <context>
     <name>RegistrationPatientsModel</name>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="86"/>
+        <location filename="models/registrationtablemodel.cpp" line="96"/>
         <source>id</source>
         <translation>id</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="88"/>
+        <location filename="models/registrationtablemodel.cpp" line="98"/>
         <source>Efectuat</source>
         <translation>Выполнен</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="90"/>
+        <location filename="models/registrationtablemodel.cpp" line="100"/>
         <source>Nume, prenume pacientului</source>
         <translation>Фамилия, имя пациента</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="92"/>
+        <location filename="models/registrationtablemodel.cpp" line="102"/>
         <source>Investigația</source>
         <translation>Исследование</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="94"/>
+        <location filename="models/registrationtablemodel.cpp" line="104"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="96"/>
+        <location filename="models/registrationtablemodel.cpp" line="106"/>
         <source>Doctor</source>
         <translation>Доктор</translation>
     </message>
     <message>
-        <location filename="models/registrationtablemodel.cpp" line="98"/>
+        <location filename="models/registrationtablemodel.cpp" line="108"/>
         <source>Comentariu / note</source>
         <translation>Комментарий/заметки</translation>
     </message>
@@ -6461,257 +7156,336 @@ despre aplicația.</source>
 <context>
     <name>Reports</name>
     <message>
-        <location filename="reports.ui" line="14"/>
+        <location filename="data/reports.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="46"/>
-        <location filename="reports.ui" line="78"/>
-        <location filename="reports.ui" line="243"/>
-        <location filename="reports.ui" line="292"/>
-        <location filename="reports.ui" line="357"/>
-        <location filename="reports.ui" line="364"/>
-        <location filename="reports.ui" line="389"/>
-        <location filename="reports.ui" line="440"/>
+        <location filename="data/reports.ui" line="46"/>
+        <location filename="data/reports.ui" line="78"/>
+        <location filename="data/reports.ui" line="243"/>
+        <location filename="data/reports.ui" line="292"/>
+        <location filename="data/reports.ui" line="400"/>
+        <location filename="data/reports.ui" line="425"/>
+        <location filename="data/reports.ui" line="457"/>
+        <location filename="data/reports.ui" line="478"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="57"/>
+        <location filename="data/reports.ui" line="57"/>
         <source>Designer</source>
         <translation>Дизайнер</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="95"/>
+        <location filename="data/reports.ui" line="95"/>
         <source>Export PDF</source>
         <translation>Экспорт PDF</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="115"/>
+        <location filename="data/reports.ui" line="115"/>
         <source>Setări</source>
         <translation>Настройки</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="135"/>
+        <location filename="data/reports.ui" line="135"/>
         <source>Printează</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="192"/>
+        <location filename="data/reports.ui" line="192"/>
         <source>Formează</source>
         <translation>Заполнить</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="220"/>
+        <location filename="data/reports.ui" line="220"/>
         <source>Tipul raportului</source>
         <translation>Тип отчёта</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="340"/>
+        <location filename="data/reports.ui" line="393"/>
+        <source>ascunde numele doctorului</source>
+        <translation>не показывать данные доктора</translation>
+    </message>
+    <message>
+        <location filename="data/reports.ui" line="411"/>
         <source>ascunde datele organizatiei</source>
         <translation>не показывать данные организации</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="347"/>
+        <location filename="data/reports.ui" line="498"/>
+        <source>achitarea numerar</source>
+        <translation>оплата наличными</translation>
+    </message>
+    <message>
+        <location filename="data/reports.ui" line="360"/>
         <source>Contract</source>
         <translation>Контракт</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="400"/>
+        <location filename="data/reports.ui" line="386"/>
         <source>ascunde semnatura si stampila</source>
         <translation>не показывать печать и подпись</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="412"/>
+        <location filename="data/reports.ui" line="379"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="419"/>
+        <location filename="data/reports.ui" line="418"/>
         <source>Doctor</source>
         <translation>Доктор</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="454"/>
+        <location filename="data/reports.ui" line="367"/>
         <source>ascunde logotip</source>
         <translation>не показывать логотип</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="474"/>
+        <location filename="data/reports.ui" line="436"/>
         <source>ascunde preturi si totaluri</source>
         <translation>не показывать цены и итоги</translation>
     </message>
     <message>
-        <location filename="reports.ui" line="484"/>
+        <location filename="data/reports.ui" line="471"/>
         <source>formează la deschidere/lansare</source>
         <translation>формировать при открытии/запуске приложения</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="10"/>
+        <location filename="data/reports.cpp" line="12"/>
         <source>Generatorul de rapoarte</source>
         <translation>Генератор отчетов</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="42"/>
+        <location filename="data/reports.cpp" line="59"/>
         <source>Pagina: </source>
         <translation>Страница: </translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="108"/>
+        <location filename="data/reports.cpp" line="138"/>
+        <location filename="data/reports.cpp" line="868"/>
         <source>&lt;&lt;- selectează raport -&gt;&gt;</source>
         <translation>&lt;- выбери отчёт-&gt;</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="316"/>
-        <location filename="reports.cpp" line="318"/>
+        <location filename="data/reports.cpp" line="283"/>
+        <source>Generarea raportului &apos;%1&apos; pe perioada %2 - %3</source>
+        <translation>Формирование отчёта &apos;%1&apos; за период %2 - %3</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="527"/>
+        <location filename="data/reports.cpp" line="529"/>
         <source>pe perioada: </source>
         <translation>за период: </translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="368"/>
-        <source>Eroare de executarea a solicitarii la inserarea setarilor raportului &apos;%1&apos; in tabela &apos;settingsReports&apos;.</source>
-        <translation>Ошибка выполнения запроса записи настроек отчёта &apos;%1&apos; в таблицу &apos;settingsReports&apos;.</translation>
+        <location filename="data/reports.cpp" line="610"/>
+        <location filename="data/reports.cpp" line="669"/>
+        <source>Setarile raportului</source>
+        <translation>Настройки отчёта</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="402"/>
-        <source>Eroare de executarea a solicitarii la actualizarea setarilor raportului &apos;%1&apos; in tabela &apos;settingsReports&apos;.</source>
-        <translation>Ошибка выполнения запроса обновления настроек отчёта &apos;%1&apos; в таблицу &apos;settingsReports&apos;.</translation>
+        <location filename="data/reports.cpp" line="612"/>
+        <source>Eroare de executarea a solicitarii la inserarea setarilor raportului &apos;%1&apos;</source>
+        <translation>Ошибка выполнения запроса при записи настроек отчёта &apos;%1&apos;</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="425"/>
+        <location filename="data/reports.cpp" line="613"/>
+        <location filename="data/reports.cpp" line="672"/>
+        <source>eroarea indisponibila</source>
+        <translation>ошибка недоступна</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="671"/>
+        <source>Eroare de executarea a solicitarii la actualizarea setarilor raportului &apos;%1&apos;</source>
+        <translation>Ошибка выполнения запроса при обновлении настроек отчёта &apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="695"/>
+        <source>Start render</source>
+        <translation>Start render</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="695"/>
+        <source>Cancel</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="710"/>
+        <source> page rendered</source>
+        <translation> page rendered</translation>
+    </message>
+    <message>
+        <location filename="data/reports.cpp" line="750"/>
         <source> din %1</source>
         <translation> от %1</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="439"/>
+        <location filename="data/reports.cpp" line="767"/>
         <source>Verificarea tipului raportului</source>
         <translation>Проверка типа отчёта</translation>
     </message>
     <message>
-        <location filename="reports.cpp" line="439"/>
+        <location filename="data/reports.cpp" line="767"/>
         <source>Nu este indicat tipul raportului !!!</source>
         <translation>Не указан тип отчёта !!!</translation>
     </message>
 </context>
 <context>
-    <name>UserManual</name>
+    <name>UpdateReleasesApp</name>
     <message>
-        <location filename="usermanual.ui" line="14"/>
-        <source>Dialog</source>
-        <translation>Диалог</translation>
+        <location filename="data/updatereleasesapp.cpp" line="20"/>
+        <location filename="data/updatereleasesapp.cpp" line="26"/>
+        <location filename="data/updatereleasesapp.cpp" line="44"/>
+        <location filename="data/updatereleasesapp.cpp" line="71"/>
+        <location filename="data/updatereleasesapp.cpp" line="77"/>
+        <source>Nu este efectuata actualizarea - </source>
+        <translation>Не выполнено обновление - </translation>
     </message>
     <message>
-        <location filename="usermanual.ui" line="44"/>
-        <source>prezentarea la lansarea aplicației</source>
-        <translation>показывать при запуске приложения</translation>
+        <location filename="data/updatereleasesapp.cpp" line="95"/>
+        <source>Eroare de inserare in tabela &apos;settingsUsers&apos; in timpul actualizarii la versiunea &apos;%1&apos; - %2</source>
+        <translation>Ошибка записи в таблицу &apos;settingsUsers&apos; в процессе обновления на версию &apos;%1&apos; - %2</translation>
     </message>
     <message>
-        <location filename="usermanual.ui" line="60"/>
-        <source>about:blank</source>
-        <translation>about:blank</translation>
+        <location filename="data/updatereleasesapp.cpp" line="105"/>
+        <location filename="data/updatereleasesapp.cpp" line="111"/>
+        <location filename="data/updatereleasesapp.cpp" line="132"/>
+        <location filename="data/updatereleasesapp.cpp" line="164"/>
+        <location filename="data/updatereleasesapp.cpp" line="170"/>
+        <location filename="data/updatereleasesapp.cpp" line="224"/>
+        <location filename="data/updatereleasesapp.cpp" line="230"/>
+        <location filename="data/updatereleasesapp.cpp" line="257"/>
+        <location filename="data/updatereleasesapp.cpp" line="303"/>
+        <location filename="data/updatereleasesapp.cpp" line="309"/>
+        <source>Eroare de actualizare a relizului &apos;</source>
+        <translation>Ошибка обновления релиза &apos;</translation>
     </message>
     <message>
-        <location filename="usermanual.cpp" line="10"/>
-        <source>User manual</source>
-        <translation>Руководство пользователя</translation>
+        <location filename="data/updatereleasesapp.cpp" line="180"/>
+        <location filename="data/updatereleasesapp.cpp" line="318"/>
+        <location filename="data/updatereleasesapp.cpp" line="325"/>
+        <source>Eroare de actualizare a documentului &apos;Comanda ecografica&apos; (inserarea atasarii imaginelor): </source>
+        <translation>Ошибка обновления документа &apos;Заказ обследования&apos; (прикрепление изображения): </translation>
+    </message>
+    <message>
+        <location filename="data/updatereleasesapp.cpp" line="187"/>
+        <source>Nu a fost resetata valoarea &apos;o&apos; la documente cu imaginile neatasate</source>
+        <translation>Сброс значения &apos;o&apos; не выполне в документах с неприкрепленными изображениями</translation>
+    </message>
+    <message>
+        <location filename="data/updatereleasesapp.cpp" line="192"/>
+        <location filename="data/updatereleasesapp.cpp" line="196"/>
+        <source>Eroare de actualizare a documentului &apos;Comanda ecografica&apos; (actualizarea datelor achitarii cu card): </source>
+        <translation>Ошибка обновления документа &apos;Заказ обследования&apos; (обновление данных оплаты кардом): </translation>
+    </message>
+    <message>
+        <location filename="data/updatereleasesapp.cpp" line="216"/>
+        <source>Nu a fost modificat statut de achitare a documentului cu id=&apos;%1&apos;</source>
+        <translation>Не обновлён статус оплаты документа с id=&apos;%1&apos;</translation>
+    </message>
+    <message>
+        <location filename="data/updatereleasesapp.cpp" line="338"/>
+        <source>Nu a fost creata tabela &apos;conclusionTemplates&apos; - </source>
+        <translation>Не создана таблица &apos;conclusionTemplates&apos; - </translation>
     </message>
 </context>
 <context>
     <name>UserSettings</name>
     <message>
-        <location filename="usersettings.ui" line="14"/>
+        <location filename="data/usersettings.ui" line="14"/>
         <source>Dialog</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="219"/>
+        <location filename="data/usersettings.ui" line="219"/>
         <source>Logotip</source>
         <translation>Логотип</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="253"/>
+        <location filename="data/usersettings.ui" line="237"/>
+        <source>Apasa pentru a alege imaginea (png)</source>
+        <translation>Нажмите для выбора изображения (png)</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.ui" line="253"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="281"/>
+        <location filename="data/usersettings.ui" line="281"/>
         <source>Setările suplimentare</source>
         <translation>Настройки дополнительные</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="318"/>
+        <location filename="data/usersettings.ui" line="318"/>
         <source>OK</source>
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="329"/>
+        <location filename="data/usersettings.ui" line="329"/>
         <source>Salvează</source>
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="340"/>
+        <location filename="data/usersettings.ui" line="340"/>
         <source>Închide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="59"/>
+        <location filename="data/usersettings.ui" line="59"/>
         <source>Utilizator</source>
         <translation>Пользователь</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="24"/>
+        <location filename="data/usersettings.ui" line="24"/>
         <source>Setările principale</source>
         <translation>Настройки основные</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="115"/>
+        <location filename="data/usersettings.ui" line="115"/>
         <source>Setările utilizatorului</source>
         <translation>Настройки пользователя</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="126"/>
+        <location filename="data/usersettings.ui" line="126"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="150"/>
+        <location filename="data/usersettings.ui" line="150"/>
         <source>Doctor</source>
         <translation>Доктор</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="171"/>
+        <location filename="data/usersettings.ui" line="171"/>
         <source>As.medicală</source>
         <translation>Мед.сестра</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="192"/>
+        <location filename="data/usersettings.ui" line="192"/>
         <source>Marca aparatului</source>
         <translation>Модель аппарата</translation>
     </message>
     <message>
-        <location filename="usersettings.ui" line="237"/>
-        <source>Apasa pentru a alege imaginea</source>
-        <translation>Нажми для выбора изображения</translation>
-    </message>
-    <message>
-        <location filename="usersettings.cpp" line="10"/>
-        <location filename="usersettings.cpp" line="540"/>
+        <location filename="data/usersettings.cpp" line="10"/>
+        <location filename="data/usersettings.cpp" line="647"/>
         <source>Setări utilizatorului %1</source>
         <translation>Настройки пользователя %1</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="177"/>
+        <location filename="data/usersettings.cpp" line="211"/>
         <source>Controlul completării obiectelor</source>
         <translation>Проверка заполнения реквизитов</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="178"/>
+        <location filename="data/usersettings.cpp" line="212"/>
         <source>Nu este selectat &lt;b&gt;&apos;Utilizatorul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Пользователь&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="445"/>
+        <location filename="data/usersettings.cpp" line="556"/>
         <source>Open File</source>
         <translation>Open File</translation>
     </message>
@@ -6720,113 +7494,143 @@ despre aplicația.</source>
         <translation type="obsolete">Aprecierea existentei setarilor utilizatorului &apos;%1&apos; nu s-a reusit.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="380"/>
+        <location filename="data/usersettings.cpp" line="491"/>
         <source>Nu este setată imaginea %1: %2</source>
         <translation>Изображение не установлено %1: %2</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="396"/>
+        <location filename="data/usersettings.cpp" line="507"/>
         <source>Logotipul este salvat cu succes în baza de date.</source>
         <translation>Логотип сохранён в базе данных успешно.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="104"/>
+        <location filename="data/usersettings.cpp" line="129"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="104"/>
+        <location filename="data/usersettings.cpp" line="129"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="107"/>
+        <location filename="data/usersettings.cpp" line="132"/>
         <source>Denumirea setării</source>
         <translation>Наименование настройки</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="107"/>
+        <location filename="data/usersettings.cpp" line="132"/>
         <source>Valoarea</source>
         <translation>Значение</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="107"/>
+        <location filename="data/usersettings.cpp" line="132"/>
         <source>id</source>
         <translation>id</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="399"/>
+        <location filename="data/usersettings.cpp" line="269"/>
+        <source>%1 - updateDataTableConstants()</source>
+        <translation>%1 - updateDataTableConstants()</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="303"/>
+        <source>Nu este actualizata variabila &apos;showQuestionCloseApp&apos; din tabela &apos;settingsUsers&apos; - %1</source>
+        <translation>Не обновлена переменная &apos;showQuestionCloseApp&apos; из таблицы &apos;settingsUsers&apos; - %1</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="317"/>
+        <location filename="data/usersettings.cpp" line="331"/>
+        <source>Nu este actualizata variabila &apos;showUserManual&apos; din tabela &apos;settingsUsers&apos; - %1</source>
+        <translation>Не обновлена переменная &apos;showUserManual&apos; из таблицы &apos;settingsUsers&apos; - %1</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="345"/>
+        <source>Nu este actualizata variabila &apos;order_splitFullName&apos; din tabela &apos;settingsUsers&apos; - %1</source>
+        <translation>Не обновлена переменная &apos;order_splitFullName&apos; из таблицы &apos;settingsUsers&apos; - %1</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="356"/>
+        <source>Nu este actualizata variabila &apos;updateListDoc&apos; din tabela &apos;settingsUsers&apos; - %1</source>
+        <translation>Не обновлена переменная &apos;updateListDoc&apos; из таблицы &apos;settingsUsers&apos; - %1</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="370"/>
+        <source>Nu este actualizata variabila &apos;showDesignerMenuPrint&apos; din tabela &apos;settingsUsers&apos; - %1</source>
+        <translation>Не обновлена переменная &apos;showDesignerMenuPrint&apos; из таблицы &apos;settingsUsers&apos; - %1</translation>
+    </message>
+    <message>
+        <location filename="data/usersettings.cpp" line="510"/>
         <source>Eroare de inserare a logotipului in baza de date:
 </source>
         <translation>Ошибка сохранения логотипа в базу данных:
 </translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="436"/>
+        <location filename="data/usersettings.cpp" line="547"/>
         <source>Verificarea validării</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="437"/>
+        <location filename="data/usersettings.cpp" line="548"/>
         <source>Pentru a încărca logotipul este necesar de salvat datele.&lt;br&gt;Doriți să salvați datele ?</source>
         <translation>Для выбора логотипа необходимо сохранить данные.&lt;br&gt;Сохранить ?</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="462"/>
+        <location filename="data/usersettings.cpp" line="573"/>
         <source>Logotipul este eliminat din baza de date.</source>
         <translation>Логотип удалён из базы данных.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="465"/>
+        <location filename="data/usersettings.cpp" line="576"/>
         <source>Eroare la eliminarea logotipului din baza de date:
 </source>
         <translation>Ошибка удаления логотипа из базы данных:
 </translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="477"/>
+        <location filename="data/usersettings.cpp" line="588"/>
         <source>Determinarea setărilor utilizatorului &apos;%1&apos; nu s-a reusit.</source>
         <translation>Не удалось определить настройки пользователя &quot;%1&quot;.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="481"/>
-        <location filename="usersettings.cpp" line="491"/>
+        <location filename="data/usersettings.cpp" line="592"/>
+        <location filename="data/usersettings.cpp" line="600"/>
         <source>Crearea obiectului.</source>
         <translation>Создание объекта.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="482"/>
+        <location filename="data/usersettings.cpp" line="593"/>
         <source>Actualizarea setarilor utilizatorului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu s-a efectuat.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Не удалось обновить настройки пользователя &quot;&lt;b&gt;%1&lt;/b&gt;&quot;.&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="485"/>
-        <location filename="usersettings.cpp" line="495"/>
+        <location filename="data/usersettings.cpp" line="247"/>
         <source>%1 - onWritingData()</source>
         <translation>%1 - onWritingData()</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="486"/>
+        <location filename="data/usersettings.cpp" line="270"/>
         <source>Nu s-a reusit actualizarea datelor setarilor utilizatorului cu ID:%1 !!!</source>
         <translation>Не выполнено обновление настроек пользователя с ID:%1 !!!</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="492"/>
+        <location filename="data/usersettings.cpp" line="601"/>
         <source>Setarile utilizatorului &quot;&lt;b&gt;%1&lt;/b&gt;&quot; nu au fost salvate in baza de date.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Настройки пользователя &quot;&lt;b&gt;%1&lt;/b&gt;&quot; не сохранены в базе данных.&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="496"/>
+        <location filename="data/usersettings.cpp" line="248"/>
         <source>Nu s-a reusit de salvat setarile utilizatorului cu ID:%1</source>
         <translation>Не удалось сохранить настройки для пользователя с идентификатором:%1</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="520"/>
+        <location filename="data/usersettings.cpp" line="627"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="usersettings.cpp" line="521"/>
+        <location filename="data/usersettings.cpp" line="628"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.

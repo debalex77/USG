@@ -154,5 +154,6 @@
         <file>img/update_app.png</file>
         <file>img/help_question.png</file>
         <file>img/table-cell.png</file>
+        <file>img/bug.png</file>
     </qresource>
 </RCC>

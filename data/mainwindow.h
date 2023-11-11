@@ -66,6 +66,7 @@ private slots:
     void updateTimerDocWidget();
     void checkUpdateApp();
     void openSourceCode();
+    void openReportBug();
     void openUserManual();
     void openAbout();
     void openListForm(const int indexEnum);

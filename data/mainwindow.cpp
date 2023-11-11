@@ -294,6 +294,11 @@ void MainWindow::initActions()
     ui->menuAssistance->addAction(actionSourceCode);
     connect(actionSourceCode, &QAction::triggered, this, &MainWindow::openSourceCode);
 
+    QAction* actionReportBug = new QAction(QIcon(":/img/bug.png"), tr("Raportează eroare"), this);
+    ui->menuAssistance->addAction(actionReportBug);
+    ui->menuAssistance->addSeparator();
+    connect(actionReportBug, &QAction::triggered, this, &MainWindow::openReportBug);
+
     QAction* action_user_manual = new QAction(QIcon(":/img/help_question.png"), tr("Manual Online"), this);
     ui->menuAssistance->addAction(action_user_manual);
     connect(action_user_manual, &QAction::triggered, this, &MainWindow::openUserManual);
@@ -316,6 +321,11 @@ void MainWindow::checkUpdateApp()
 void MainWindow::openSourceCode()
 {
     QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG"));
+}
+
+void MainWindow::openReportBug()
+{
+    QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/issues/new?assignees=&labels=&projects=&template=bug_report.md&title="));
 }
 
 void MainWindow::openUserManual()

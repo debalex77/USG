@@ -385,9 +385,85 @@ QString Reports::getMainQry()
         str = str + "  reportEcho.deletionMark = 2 AND "
                     "reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
         return str;
+
+    } else if (name_report == "Structura patologiilor"){
+
+        QString str;
+        str = "SELECT"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Steatoza%' THEN 1 ELSE 0 END) AS Steatoza,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Hepatomegalie%' THEN 1 ELSE 0 END) AS Hepatomegalie,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Chist hepatic%' THEN 1 ELSE 0 END) AS Chist_hepatic,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Hemangiom%' THEN 1 ELSE 0 END) AS Hemangiom,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Hipertenzia portală%' THEN 1 ELSE 0 END) AS Hipertenzia_portala,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Ciroza%' THEN 1 ELSE 0 END) AS Ciroza,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Formațiune de volum a ficatului%' THEN 1 ELSE 0 END) AS Formations_hepatic,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Colecistita cronică acalculoasă%' THEN 1 ELSE 0 END) + sum(CASE WHEN tableLiver.concluzion LIKE '%Brid inflexiune%' THEN 1 ELSE 0 END) AS Colecistita_acalculoasa,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Colecistita cronică calculoasă%' THEN 1 ELSE 0 END) AS Colecistita_calculoasa,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Polip colecistic%' THEN 1 ELSE 0 END) AS Polip_colecist,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Schimbări difuze în parenchimul pancreasului%' THEN 1 ELSE 0 END) AS Pancreatita,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Chist pancreasului%' THEN 1 ELSE 0 END) AS Chist_pancreas,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Formațiune de volum a pancreasului%' THEN 1 ELSE 0 END) AS Formations_pancreas,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Splenomegal%' THEN 1 ELSE 0 END) AS Splenomegalie,"
+              "  sum(CASE WHEN tableLiver.concluzion LIKE '%Formațiune de volum a splinei%' THEN 1 ELSE 0 END) AS Formations_spleen "
+              "FROM tableLiver "
+              "INNER JOIN reportEcho ON tableLiver.id_reportEcho = reportEcho.id "
+              "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+
+        return str;
     }
 
     return "";
+}
+
+QString Reports::getQuerySystem(const QString str_sytem)
+{
+    const QDateTime m_dateStart = QDateTime(ui->dateStart->date(), QTime(00,00,00));
+    const QDateTime m_dateEnd   = QDateTime(ui->dateEnd->date(), QTime(23,59,59));
+
+    if (str_sytem == "urinary_system_nozology"){
+        QString str;
+        str = "SELECT"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Micronefrolitiaza%' THEN 1 ELSE 0 END) AS Micronefrolitiaza,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Chist%' THEN 1 ELSE 0 END) AS Chist_renal,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Multichistoza%' THEN 1 ELSE 0 END) AS Multichistoza_renal,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Polichistoza%' THEN 1 ELSE 0 END) AS Polichistoza_renal,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Nefrolitiaza%' THEN 1 ELSE 0 END) AS Nefrolitiaza,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Hidronefroza%' THEN 1 ELSE 0 END) AS Hidronefroza,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Pielonefrita%' THEN 1 ELSE 0 END) AS Pielonefrita,"
+              "  sum(CASE WHEN tableKidney.concluzion LIKE '%Bloc%' THEN 1 ELSE 0 END) AS Bloc_renal "
+              "FROM tableKidney "
+              "INNER JOIN reportEcho ON tableKidney.id_reportEcho = reportEcho.id "
+              "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+        return str;
+    } else if (str_sytem == "breast_nozology"){
+        QString str;
+        str = "SELECT"
+              "  sum(CASE WHEN tableBreast.concluzion LIKE '%BI-RADS I%' THEN 1 ELSE 0 END) AS BI_I,"
+              "  sum(CASE WHEN tableBreast.concluzion LIKE '%Modificări fibro-chistice%' THEN 1 ELSE 0 END) AS BI_II,"
+              "  sum(CASE WHEN tableBreast.concluzion LIKE '%Fibroadenoma%' THEN 1 ELSE 0 END) AS BI_III,"
+              "  sum(CASE WHEN tableBreast.concluzion LIKE '%IV%' THEN 1 ELSE 0 END) AS BI_IV "
+              "FROM tableBreast "
+              "INNER JOIN reportEcho ON tableBreast.id_reportEcho = reportEcho.id "
+              "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+        qDebug() << str;
+        return str;
+    } else if (str_sytem == "ginecology_nozology"){
+        QString str;
+        str = "SELECT"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Miom uterin nodular%' THEN 1 ELSE 0 END) AS Miom_nodular,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Miom uterin difuz%' THEN 1 ELSE 0 END) AS Miom_difuz,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Chist ovarian%' THEN 1 ELSE 0 END) AS Chist_var,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Polichistoza ovariană%' THEN 1 ELSE 0 END) AS Polichistoza_ovar,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Endometrioza%' THEN 1 ELSE 0 END) AS Endometrioza,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Hiperplazia%' THEN 1 ELSE 0 END) + sum(CASE WHEN tableGynecology.concluzion LIKE '%Polip%' THEN 1 ELSE 0 END) AS Hiperplazia_polip,"
+              "  sum(CASE WHEN tableGynecology.concluzion LIKE '%Sarcina ectopică%' THEN 1 ELSE 0 END) AS Sarcina_ectopica "
+              "FROM tableGynecology "
+              "INNER JOIN reportEcho ON tableGynecology.id_reportEcho = reportEcho.id "
+              "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+        return str;
+    }
+
+    return nullptr;
 }
 
 void Reports::setImageForReports()
@@ -711,8 +787,24 @@ void Reports::generateReport()
     // *************************************************************************************
     // main table
     QSqlQueryModel* print_model_main = new QSqlQueryModel(this);
+
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
+
+    QSqlQueryModel* print_model_systemUrinary = new QSqlQueryModel(this);
+    QSqlQueryModel* print_model_breast = new QSqlQueryModel(this);
+    QSqlQueryModel* print_model_ginecology = new QSqlQueryModel(this);
+    if (ui->comboTypeReport->currentText() == "Structura patologiilor"){
+
+        print_model_systemUrinary->setQuery(getQuerySystem("urinary_system_nozology"));
+        m_report->dataManager()->addModel("table_urinary_system", print_model_systemUrinary, false);
+
+        print_model_breast->setQuery(getQuerySystem("breast_nozology"));
+        m_report->dataManager()->addModel("table_breast", print_model_breast, false);
+
+        print_model_ginecology->setQuery(getQuerySystem("ginecology_nozology"));
+        m_report->dataManager()->addModel("table_ginecology", print_model_ginecology, false);
+    }
 
     // *************************************************************************************
     // load, show and refresh
@@ -727,6 +819,9 @@ void Reports::generateReport()
     // delete model
     delete print_model_organization; // eliberam memoria
     delete print_model_main;
+    delete print_model_systemUrinary;
+    delete print_model_breast;
+    delete print_model_ginecology;
     delete model_img;
 }
 
@@ -750,6 +845,21 @@ void Reports::openDesignerReport()
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
 
+    QSqlQueryModel* print_model_systemUrinary = new QSqlQueryModel(this);
+    QSqlQueryModel* print_model_breast = new QSqlQueryModel(this);
+    QSqlQueryModel* print_model_ginecology = new QSqlQueryModel(this);
+    if (ui->comboTypeReport->currentText() == "Structura patologiilor"){
+
+        print_model_systemUrinary->setQuery(getQuerySystem("urinary_system_nozology"));
+        m_report->dataManager()->addModel("table_urinary_system", print_model_systemUrinary, false);
+
+        print_model_breast->setQuery(getQuerySystem("breast_nozology"));
+        m_report->dataManager()->addModel("table_breast", print_model_breast, false);
+
+        print_model_ginecology->setQuery(getQuerySystem("ginecology_nozology"));
+        m_report->dataManager()->addModel("table_ginecology", print_model_ginecology, false);
+    }
+
     // *************************************************************************************
     // load, show and refresh
     setReportVariabiles();
@@ -767,6 +877,9 @@ void Reports::openDesignerReport()
     // delete model
     delete print_model_organization; // eliberam memoria
     delete print_model_main;
+    delete print_model_systemUrinary;
+    delete print_model_breast;
+    delete print_model_ginecology;
     delete model_img;
 }
 
@@ -821,21 +934,89 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
         ui->frame_filter->setVisible(true);
 
     if (ui->comboTypeReport->currentText() == "Lista pacientilor (filtru - organizatii)"){
-        ui->comboOrganizations->setEnabled(true);
-        ui->comboContracts->setEnabled(true);
-        ui->comboDoctors->setEnabled(true);
+
+        ui->comboOrganizations->setVisible(true);
+        ui->label_organization->setVisible(true);
+        ui->btnEditOrganization->setVisible(true);
+
+        ui->comboContracts->setVisible(true);
+        ui->label_contract->setVisible(true);
+        ui->btnEditContract->setVisible(true);
+
+        ui->comboDoctors->setVisible(true);
+        ui->label_doctor->setVisible(true);
+        ui->btnEditDoctor->setVisible(true);
+
+        ui->hidePricesTotal->setVisible(true);
+        ui->cashPayment->setVisible(true);
+
     } else if (ui->comboTypeReport->currentText() == "Lista pacientilor (filtru - doctori)"){
-        ui->comboOrganizations->setEnabled(false);
-        ui->comboContracts->setEnabled(false);
-        ui->comboDoctors->setEnabled(true);
+
+        ui->comboOrganizations->setVisible(true);
+        ui->label_organization->setVisible(true);
+        ui->btnEditOrganization->setVisible(true);
+
+        ui->comboContracts->setVisible(true);
+        ui->label_contract->setVisible(true);
+        ui->btnEditContract->setVisible(true);
+
+        ui->comboDoctors->setVisible(true);
+        ui->label_doctor->setVisible(true);
+        ui->btnEditDoctor->setVisible(true);
+
+        ui->hidePricesTotal->setVisible(true);
+        ui->cashPayment->setVisible(true);
+
     } else if (ui->comboTypeReport->currentText() == "Volumul investigatiilor"){
-        ui->comboOrganizations->setEnabled(true);
-        ui->comboContracts->setEnabled(true);
-        ui->comboDoctors->setEnabled(true);
+
+        ui->comboOrganizations->setVisible(true);
+        ui->label_organization->setVisible(true);
+        ui->btnEditOrganization->setVisible(true);
+
+        ui->comboContracts->setVisible(true);
+        ui->label_contract->setVisible(true);
+        ui->btnEditContract->setVisible(true);
+
+        ui->comboDoctors->setVisible(false);
+        ui->label_doctor->setVisible(false);
+        ui->btnEditDoctor->setVisible(false);
+
+        ui->hidePricesTotal->setVisible(false);
+        ui->cashPayment->setVisible(false);
+
+    } else if (ui->comboTypeReport->currentText() == "Structura patologiilor"){
+
+        ui->comboOrganizations->setVisible(false);
+        ui->label_organization->setVisible(false);
+        ui->btnEditOrganization->setVisible(false);
+
+        ui->comboContracts->setVisible(false);
+        ui->label_contract->setVisible(false);
+        ui->btnEditContract->setVisible(false);
+
+        ui->comboDoctors->setVisible(false);
+        ui->label_doctor->setVisible(false);
+        ui->btnEditDoctor->setVisible(false);
+
+        ui->hidePricesTotal->setVisible(false);
+        ui->cashPayment->setVisible(false);
+
     } else {
-        ui->comboOrganizations->setEnabled(false);
-        ui->comboContracts->setEnabled(false);
-        ui->comboDoctors->setEnabled(false);
+
+        ui->comboOrganizations->setVisible(false);
+        ui->label_organization->setVisible(false);
+        ui->btnEditOrganization->setVisible(false);
+
+        ui->comboContracts->setVisible(false);
+        ui->label_contract->setVisible(false);
+        ui->btnEditContract->setVisible(false);
+
+        ui->comboDoctors->setVisible(false);
+        ui->label_doctor->setVisible(false);
+        ui->btnEditDoctor->setVisible(false);
+
+        ui->hidePricesTotal->setVisible(false);
+        ui->cashPayment->setVisible(false);
     }
 
     m_id = -1; // id raportului la starea initiala

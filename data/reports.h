@@ -35,6 +35,7 @@ private:
     void initPercentCombobox();
     void setStyleForButtom();
     QString getMainQry();
+    QString getQuerySystem(const QString str_sytem);
     void setImageForReports();
     void setReportVariabiles();
 
