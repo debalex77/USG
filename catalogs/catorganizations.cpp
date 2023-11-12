@@ -499,16 +499,26 @@ void CatOrganizations::initBtnToolBar()
 
     btnAddContract->setIcon(QIcon(":/img/add_x32.png"));
     btnAddContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAddContract->setStyleSheet("height: 12px; width: 12px;");
     btnAddContract->setShortcut(QKeySequence(Qt::Key_Insert));
+
     btnEditContract->setIcon(QIcon(":/img/edit_x32.png"));
     btnEditContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnEditContract->setStyleSheet("height: 12px; width: 12px;");
     btnEditContract->setShortcut(QKeySequence(Qt::Key_F2));
+
     btnDeletionContract->setIcon(QIcon(":/img/clear_x32.png"));
     btnDeletionContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnDeletionContract->setStyleSheet("height: 12px; width: 12px;");
     btnDeletionContract->setShortcut(QKeySequence(Qt::Key_Delete));
+
+#if defined(Q_OS_LINUX)
+    btnAddContract->setStyleSheet("height: 12px; width: 12px;");
+    btnEditContract->setStyleSheet("height: 12px; width: 12px;");
+    btnDeletionContract->setStyleSheet("height: 12px; width: 12px;");
+#elif defined(Q_OS_WIN)
+    btnAddContract->setStyleSheet("height: 14px; width: 14px;");
+    btnEditContract->setStyleSheet("height: 14px; width: 14px;");
+    btnDeletionContract->setStyleSheet("height: 14px; width: 14px;");
+#endif
+
     btnSetDefaultContract->setToolButtonStyle(Qt::ToolButtonTextOnly);
     btnSetDefaultContract->setText(tr("Contract de bază"));
     btnSetDefaultContract->setStyleSheet("border: 1px solid #8f8f91; "

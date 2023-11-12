@@ -18,7 +18,7 @@ About::About(QWidget *parent) :
                      "Free, open-source, cross-platform,<br>database SQLite3/MySQL/MariaDB"
                      "<br>"
                      "<p align=center><b> Autorul aplicației:</b> <br>"
-                     "Codreanu Alexandru").arg(APPLICATION_NAME, APPLICATION_VERSION);
+                     "alovada.med@gmail.com, Alovada-Med SRL").arg(APPLICATION_NAME, APPLICATION_VERSION);
     ui->textBrowser_about->setText(str);
 
     QString str_licenses = tr("<br>"
@@ -30,6 +30,7 @@ About::About(QWidget *parent) :
 
 #if defined(Q_OS_WIN)
     ui->textBrowser_about->setStyleSheet("font-size: 15px;");
+    ui->textBrowser_licenses->setStyleSheet("font-size: 15px;");
 #endif
 
     QDir dir;
@@ -54,6 +55,10 @@ About::About(QWidget *parent) :
         ui->text_version_SQLite->setText("version SQLite: " + db->getVersionSQLite());
 
     connect(ui->pushButton, &QAbstractButton::clicked, this, &About::close);
+
+#if defined(Q_OS_WIN)
+    ui->frame->setStyle(style_fusion);
+#endif
 }
 
 About::~About()

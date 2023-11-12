@@ -57,9 +57,19 @@ int resizeMainWindow(QApplication &a)
     font.setPixelSize(18);
     font.setBold(true);
     painter.setFont(font);
+#if defined(Q_OS_LINUX)
     painter.drawText(464, 94, QCoreApplication::tr("versiunea ") + VER);
     painter.drawText(536, 242, QCoreApplication::tr("autor:"));
     painter.drawText(378, 259, "alovada.med@gmail.com");
+#elif defined(Q_OS_WIN)
+    int id_font = QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(id_font).at(0);
+    font.setFamily(family);
+
+    painter.drawText(446, 94, QCoreApplication::tr("versiunea ") + VER);
+    painter.drawText(530, 242, QCoreApplication::tr("autor:"));
+    painter.drawText(358, 259, "alovada.med@gmail.com");
+#endif
 
     QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
     splash.show();

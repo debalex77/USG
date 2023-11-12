@@ -2,6 +2,7 @@
 #define ABOUT_H
 
 #include <QDialog>
+#include <QStyleFactory>
 #include "database.h"
 
 namespace Ui {
@@ -19,6 +20,7 @@ public:
 private:
     Ui::About *ui;
     DataBase* db;
+    QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // ABOUT_H
