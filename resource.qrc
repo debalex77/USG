@@ -155,5 +155,6 @@
         <file>img/help_question.png</file>
         <file>img/table-cell.png</file>
         <file>img/bug.png</file>
+        <file>img/usg_splash.png</file>
     </qresource>
 </RCC>

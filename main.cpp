@@ -1,5 +1,6 @@
 #include "data/mainwindow.h"
 #include "data/databaseselection.h"
+#include "data/version.h"
 
 #include <QGuiApplication>
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
@@ -26,6 +27,9 @@
 #include <QFile>
 #include <QDir>
 #include <QFontDatabase>
+#include <QSplashScreen>
+#include <QElapsedTimer>
+#include <QPainter>
 
 #include <data/database.h>
 #include <data/globals.h>
@@ -33,6 +37,8 @@
 #include <catalogs/catusers.h>
 #include "data/authorizationuser.h"
 #include "data/initlaunch.h"
+
+static const int LOAD_TIME_MSEC = 10 * 1000;
 
 //******************************************************************************************************************************
 
@@ -44,6 +50,26 @@ void messageHandler(QtMsgType type, const QMessageLogContext &context, const QSt
 int resizeMainWindow(QApplication &a)
 {
     MainWindow w;
+
+    QPixmap pixmap(":/img/usg_splash.png");
+    QPainter painter(&pixmap);
+    QFont font = painter.font();
+    font.setPixelSize(18);
+    font.setBold(true);
+    painter.setFont(font);
+    painter.drawText(464, 94, QCoreApplication::tr("versiunea ") + VER);
+    painter.drawText(536, 242, QCoreApplication::tr("autor:"));
+    painter.drawText(378, 259, "alovada.med@gmail.com");
+
+    QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+    splash.show();
+    QTimer::singleShot(10000, &splash, &QWidget::close); // keep displayed for 5 seconds
+    QElapsedTimer time;
+    time.start();
+    while( time.elapsed() < LOAD_TIME_MSEC ) {
+        const int progress = static_cast< double >( time.elapsed() ) / LOAD_TIME_MSEC * 100.0;
+        splash.showMessage(QCoreApplication::tr( "Încărcat: %1%" ).arg( progress ), Qt::AlignBottom | Qt::AlignRight);
+    }
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
     QDesktopWidget *desktop = QApplication::desktop();
@@ -57,6 +83,9 @@ int resizeMainWindow(QApplication &a)
 #endif
     w.resize(screenWidth * 0.8, screenHeight * 0.8);
     w.show(); // lansam feareastra principala
+
+    splash.finish(&w);
+
     return a.exec();
 }
 
@@ -87,6 +116,7 @@ int main(int argc, char *argv[])
     DatabaseSelection _select;
     if (_select.exec() != QDialog::Accepted)
         return 0;
+
     //******************************************************************************************************************************
     // initializam setarile aplicatiei
     AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
