@@ -71,6 +71,11 @@ int resizeMainWindow(QApplication &a)
 
     QDir dir;
     QPixmap pixmap(dir.toNativeSeparators("icons/usg_splash.png"));
+#if defined(Q_OS_LINUX)
+    if (pixmap.isNull())
+        pixmap.load(dir.toNativeSeparators("/usr/share/pixmaps/usg/usg_splash.png"));
+#endif
+
     if (! pixmap.isNull()){
         QPainter painter(&pixmap);
         QFont font = painter.font();
