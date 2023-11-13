@@ -51,35 +51,8 @@ int resizeMainWindow(QApplication &a)
 {
     MainWindow w;
 
-    QPixmap pixmap(":/img/usg_splash.png");
-    QPainter painter(&pixmap);
-    QFont font = painter.font();
-    font.setPixelSize(18);
-    font.setBold(true);
-    painter.setFont(font);
-#if defined(Q_OS_LINUX)
-    painter.drawText(464, 94, QCoreApplication::tr("versiunea ") + VER);
-    painter.drawText(536, 242, QCoreApplication::tr("autor:"));
-    painter.drawText(378, 259, "alovada.med@gmail.com");
-#elif defined(Q_OS_WIN)
-    int id_font = QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
-    QString family = QFontDatabase::applicationFontFamilies(id_font).at(0);
-    font.setFamily(family);
-
-    painter.drawText(446, 94, QCoreApplication::tr("versiunea ") + VER);
-    painter.drawText(530, 242, QCoreApplication::tr("autor:"));
-    painter.drawText(358, 259, "alovada.med@gmail.com");
-#endif
-
-    QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
-    splash.show();
-    QTimer::singleShot(10000, &splash, &QWidget::close); // keep displayed for 5 seconds
-    QElapsedTimer time;
-    time.start();
-    while( time.elapsed() < LOAD_TIME_MSEC ) {
-        const int progress = static_cast< double >( time.elapsed() ) / LOAD_TIME_MSEC * 100.0;
-        splash.showMessage(QCoreApplication::tr( "Încărcat: %1%" ).arg( progress ), Qt::AlignBottom | Qt::AlignRight);
-    }
+    //--------------------------------------------------
+    // schimbam dimensiunea ferestrei
 
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
     QDesktopWidget *desktop = QApplication::desktop();
@@ -92,9 +65,48 @@ int resizeMainWindow(QApplication &a)
     int screenHeight = screen->geometry().height();
 #endif
     w.resize(screenWidth * 0.8, screenHeight * 0.8);
-    w.show(); // lansam feareastra principala
 
-    splash.finish(&w);
+    //--------------------------------------------------
+    // setam splash pe 10 sec
+
+    QDir dir;
+    QPixmap pixmap(dir.toNativeSeparators("icons/usg_splash.png"));
+    if (! pixmap.isNull()){
+        QPainter painter(&pixmap);
+        QFont font = painter.font();
+        font.setPixelSize(18);
+        font.setBold(true);
+        painter.setFont(font);
+#if defined(Q_OS_LINUX)
+        painter.drawText(464, 94, QCoreApplication::tr("versiunea ") + VER);
+        painter.drawText(536, 242, QCoreApplication::tr("autor:"));
+        painter.drawText(378, 259, "alovada.med@gmail.com");
+#elif defined(Q_OS_WIN)
+        int id_font = QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
+        QString family = QFontDatabase::applicationFontFamilies(id_font).at(0);
+        font.setFamily(family);
+
+        painter.drawText(446, 94, QCoreApplication::tr("versiunea ") + VER);
+        painter.drawText(530, 242, QCoreApplication::tr("autor:"));
+        painter.drawText(358, 259, "alovada.med@gmail.com");
+#endif
+
+        QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
+        splash.show();
+        QTimer::singleShot(10000, &splash, &QWidget::close); // keep displayed for 5 seconds
+        QElapsedTimer time;
+        time.start();
+        while( time.elapsed() < LOAD_TIME_MSEC ) {
+            const int progress = static_cast< double >( time.elapsed() ) / LOAD_TIME_MSEC * 100.0;
+            splash.showMessage(QCoreApplication::tr( "Încărcat: %1%" ).arg( progress ), Qt::AlignBottom | Qt::AlignRight);
+        }
+
+        w.show(); // lansam feareastra principala
+        splash.finish(&w);
+    } else {
+        qWarning(logWarning()) << QCoreApplication::tr("Nu a fost gasit fisierul - 'icons/usg_splash.png'");
+        w.show(); // lansam feareastra principala
+    }
 
     return a.exec();
 }
