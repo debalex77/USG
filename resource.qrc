@@ -91,7 +91,6 @@
         <file>templets/Gynecology.lrxml</file>
         <file>templets/Order.lrxml</file>
         <file>templets/Organs internal.lrxml</file>
-        <file>templets/Patients directed by organization.lrxml</file>
         <file>templets/Prostate.lrxml</file>
         <file>templets/Thyroid.lrxml</file>
         <file>templets/Urinary system.lrxml</file>
