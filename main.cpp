@@ -38,7 +38,7 @@
 #include "data/authorizationuser.h"
 #include "data/initlaunch.h"
 
-static const int LOAD_TIME_MSEC = 10 * 1000;
+static const int LOAD_TIME_MSEC = 5 * 1000;
 
 //******************************************************************************************************************************
 

@@ -12,11 +12,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME); // denumirea organizatiei si aplicatiei
 
-    mdiArea = new QMdiArea(this);               // alocam memoria p/u MdiArea
-    mdiArea->setViewMode(QMdiArea::TabbedView); // proprietatea de prezentarea sub-windows
-    mdiArea->setTabsClosable(true);             // proprietatea de inchidere a sub-windows
-    setCentralWidget(mdiArea);                  // instalam ca widgetul central
-    mdiAreaCont = new MdiAreaContainer(mdiArea, this); //initierea container-lui MdiArea
+    mdiArea = new QMdiArea(this);                      // alocam memoria p/u MdiArea
+    mdiArea->setViewMode(QMdiArea::TabbedView);        // proprietatea de prezentarea sub-windows
+    mdiArea->setTabsClosable(true);                    // proprietatea de inchidere a sub-windows
+    setCentralWidget(mdiArea);                         // instalam ca widgetul central
+    mdiAreaCont = new MdiAreaContainer(mdiArea, this); // initierea container-lui MdiArea
+    downloader_version = new DownloaderVersion(this);  // verificarea versiunei
 
     update_app = new UpdateReleasesApp(this);
 
@@ -43,6 +44,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 MainWindow::~MainWindow()
 {
+    delete downloader_version;
     delete update_app;
     delete textEdit_dockWidget;
     delete dock_widget;
@@ -315,7 +317,9 @@ void MainWindow::initActions()
 
 void MainWindow::checkUpdateApp()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/releases"));
+    // verificam daca este versiunea noua
+    downloader_version->getData();
+    connect(downloader_version, &DownloaderVersion::onReady, this, &MainWindow::onReadyVersion);
 }
 
 void MainWindow::openSourceCode()
@@ -620,6 +624,47 @@ void MainWindow::onOpenLMDesigner()
     m_report = new LimeReport::ReportEngine(this);
     m_report->setShowDesignerModal(false);
     m_report->designReport();
+}
+
+void MainWindow::onReadyVersion()
+{
+    QDir dir;
+    QString path_file_version = dir.toNativeSeparators(QDir::tempPath() + "/usg_version.txt");
+    QFile file(path_file_version);
+    if (! file.open(QIODevice::ReadOnly))
+        return;
+
+    QString version_online = file.readAll().trimmed();
+    if (APPLICATION_VERSION != version_online){
+        textEdit_dockWidget->setHtml(tr("%1   %2: Există o versiune nouă a aplicației <b><u>%3</u></b>.")
+                                         .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"), version_online));
+        textEdit_dockWidget->setFixedHeight(70);
+        dock_widget->show();
+
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea actualizării"),
+                                 tr("Doriți să deschideți pagina pentru a descarca versiunea nouă ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
+        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
+#endif
+        if (messange_box.exec() == QMessageBox::Yes)
+            QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/releases"));
+    } else {
+        textEdit_dockWidget->setHtml(tr("%1   %2: Folosiți cea mai recentă versiune %3.")
+                                         .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"), APPLICATION_VERSION));
+        textEdit_dockWidget->setFixedHeight(70);
+        dock_widget->show();
+    }
+
+#if defined(Q_OS_LINUX)
+    QString str_cmd = "rm " + path_file_version;
+    system(str_cmd.toStdString().c_str());
+#elif defined (Q_OS_WIN)
+    QString str_cmd = "del " + path_file_version;
+    system(str_cmd.toStdString().c_str());
+#endif
 }
 
 void MainWindow::closeEvent(QCloseEvent *event)

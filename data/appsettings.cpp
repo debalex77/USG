@@ -457,10 +457,10 @@ void AppSettings::setDefaultPath()
     lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets/reports"));
     globals::pathReports = lineEditPathReports->text();
 #elif defined(Q_OS_WINDOWS)
-    lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets_win"));
+    lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets"));
     globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
-    lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets_win/reports"));
+    lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets/reports"));
     globals::pathReports = lineEditPathReports->text();
 #endif
 }

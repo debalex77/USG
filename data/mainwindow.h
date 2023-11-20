@@ -29,6 +29,7 @@
 #include "data/popup.h"
 #include <data/reports.h>
 #include <data/updatereleasesapp.h>
+#include "data/downloaderversion.h"
 
 //=============================================================
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
@@ -82,6 +83,7 @@ private slots:
     void openPricing();
     void removeSubWindow();
     void onOpenLMDesigner();
+    void onReadyVersion();
 
 private:
     Ui::MainWindow *ui;
@@ -129,6 +131,7 @@ private:
     PatientHistory* patient_history;
     UpdateReleasesApp* update_app;
     LimeReport::ReportEngine* m_report;
+    DownloaderVersion* downloader_version;
 
 protected:
     void closeEvent(QCloseEvent *event);

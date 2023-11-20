@@ -37,6 +37,7 @@ SOURCES += \
     data/customdialoginvestig.cpp \
     data/database.cpp \
     data/databaseselection.cpp \
+    data/downloaderversion.cpp \
     data/globals.cpp \
     data/initlaunch.cpp \
     data/loggingcategories.cpp \
@@ -78,6 +79,7 @@ HEADERS += \
     data/customdialoginvestig.h \
     data/database.h \
     data/databaseselection.h \
+    data/downloaderversion.h \
     data/globals.h \
     data/initlaunch.h \
     data/loggingcategories.h \
@@ -154,6 +156,7 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
+    releases.md \
     version.txt
 
 RESOURCES += \
@@ -163,7 +166,8 @@ macx{
     CONFIG += app_bundle
 }
 
-
+#----------------------------------------------------------------------------------------
+#---------------------------------- LIMEREPORT ------------------------------------------
 
 INCLUDEPATH += $$PWD/LimeReport/include
 DEPENDPATH += $$PWD/LimeReport/include
@@ -221,3 +225,11 @@ message($$LIBS)
     }
 }
 
+#----------------------------------------------------------------------------------------
+#------------------------------------- OPENSSL ------------------------------------------
+
+
+unix:!macx: LIBS += -L$$PWD/lib/openssl/ -lssl
+
+INCLUDEPATH += $$PWD/lib/openssl
+DEPENDPATH += $$PWD/lib/openssl
