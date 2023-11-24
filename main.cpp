@@ -98,7 +98,7 @@ int resizeMainWindow(QApplication &a)
 
         QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
         splash.show();
-        QTimer::singleShot(10000, &splash, &QWidget::close); // keep displayed for 5 seconds
+        QTimer::singleShot(LOAD_TIME_MSEC, &splash, &QWidget::close); // keep displayed for 5 seconds
         QElapsedTimer time;
         time.start();
         while( time.elapsed() < LOAD_TIME_MSEC ) {

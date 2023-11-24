@@ -46,6 +46,7 @@ SOURCES += \
     data/popup.cpp \
     data/reports.cpp \
     data/updatereleasesapp.cpp \
+    data/userpreferences.cpp \
     data/usersettings.cpp \
     delegates/checkboxdelegate.cpp \
     delegates/combodelegate.cpp \
@@ -88,6 +89,7 @@ HEADERS += \
     data/popup.h \
     data/reports.h \
     data/updatereleasesapp.h \
+    data/userpreferences.h \
     data/usersettings.h \
     data/version.h \
     delegates/checkboxdelegate.h \
@@ -123,6 +125,7 @@ FORMS += \
     data/initlaunch.ui \
     data/mainwindow.ui \
     data/reports.ui \
+    data/userpreferences.ui \
     data/usersettings.ui \
     docs/docappointmentspatients.ui \
     docs/docorderecho.ui \

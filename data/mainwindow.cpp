@@ -2,6 +2,7 @@
 #include "ui_mainwindow.h"
 #include "QSqlQuery"
 #include "QSqlError"
+#include "userpreferences.h"
 #include <QDirIterator>
 #include <QDockWidget>
 
@@ -334,7 +335,7 @@ void MainWindow::openReportBug()
 
 void MainWindow::openUserManual()
 {
-    QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/User-manual"));
+    QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/User-manual-(ro)"));
 }
 
 void MainWindow::updateTextBtn()
@@ -431,7 +432,7 @@ void MainWindow::updateTimer()
             dock_widget->show();
             if (update_app->execUpdateCurrentRelease(APPLICATION_VERSION)){
                 setVersionAppInTableSettingsUsers();
-                QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/wiki/Istoria-versiunilor#usg-v203"));
+                QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/blob/master/releases.md"));
             }
         }
         if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)
@@ -598,11 +599,14 @@ void MainWindow::openAppSettings()
 
 void MainWindow::openUserSettings()
 {
-    userSettings = new UserSettings(this);
-    userSettings->setAttribute(Qt::WA_DeleteOnClose);
-    userSettings->setWindowIcon(QIcon(":img/settings_x32.png"));
-    userSettings->setProperty("Id", globals::idUserApp);
-    userSettings->show();
+//    userSettings = new UserSettings(this);
+//    userSettings->setAttribute(Qt::WA_DeleteOnClose);
+//    userSettings->setWindowIcon(QIcon(":img/settings_x32.png"));
+//    userSettings->setProperty("Id", globals::idUserApp);
+//    userSettings->show();
+    auto preference = new UserPreferences(this);
+    preference->setProperty("Id", globals::idUserApp);
+    preference->exec();
 }
 
 void MainWindow::openPricing()
