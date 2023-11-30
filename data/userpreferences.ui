@@ -6,27 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>766</width>
-    <height>540</height>
+    <width>798</width>
+    <height>485</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <spacer name="horizontalSpacer">
-     <property name="orientation">
-      <enum>Qt::Horizontal</enum>
-     </property>
-     <property name="sizeHint" stdset="0">
-      <size>
-       <width>40</width>
-       <height>20</height>
-      </size>
-     </property>
-    </spacer>
-   </item>
    <item row="2" column="0" colspan="5">
     <widget class="QDockWidget" name="dockWidget">
      <property name="sizePolicy">
@@ -37,8 +24,8 @@
      </property>
      <property name="minimumSize">
       <size>
-       <width>88</width>
-       <height>108</height>
+       <width>200</width>
+       <height>140</height>
       </size>
      </property>
      <property name="features">
@@ -46,7 +33,7 @@
      </property>
      <widget class="QWidget" name="dockWidgetContents">
       <layout class="QGridLayout" name="gridLayout_11">
-       <item row="0" column="0">
+       <item row="0" column="0" colspan="2">
         <widget class="QTextBrowser" name="textBrowser">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -66,15 +53,18 @@
      </widget>
     </widget>
    </item>
-   <item row="0" column="2">
-    <widget class="QComboBox" name="comboUsers">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
+   <item row="0" column="4">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Horizontal</enum>
      </property>
-    </widget>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>40</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
    </item>
    <item row="1" column="0" colspan="5">
     <widget class="QSplitter" name="splitter">
@@ -181,16 +171,22 @@
             </widget>
            </item>
            <item row="2" column="3">
-            <widget class="QToolButton" name="toolButton_4">
+            <widget class="QToolButton" name="btnOpenNurses">
              <property name="text">
               <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset theme="system-search"/>
              </property>
             </widget>
            </item>
            <item row="1" column="3">
-            <widget class="QToolButton" name="toolButton_3">
+            <widget class="QToolButton" name="btnOpenDoctors">
              <property name="text">
               <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset theme="system-search"/>
              </property>
             </widget>
            </item>
@@ -212,9 +208,12 @@
             </widget>
            </item>
            <item row="0" column="3">
-            <widget class="QToolButton" name="toolButton_2">
+            <widget class="QToolButton" name="btnOpenOrganizations">
              <property name="text">
               <string>...</string>
+             </property>
+             <property name="icon">
+              <iconset theme="system-search"/>
              </property>
             </widget>
            </item>
@@ -470,15 +469,90 @@
            </item>
           </layout>
          </widget>
-         <widget class="QWidget" name="notEditable"/>
+         <widget class="QWidget" name="notEditable">
+          <layout class="QGridLayout" name="gridLayout_12">
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="versionApp">
+             <property name="enabled">
+              <bool>true</bool>
+             </property>
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="minimumSize">
+              <size>
+               <width>76</width>
+               <height>0</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_7">
+             <property name="text">
+              <string>Versiunea aplicației</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="horizontalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeType">
+              <enum>QSizePolicy::Expanding</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>239</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="1" column="1">
+            <spacer name="verticalSpacer_4">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+          </layout>
+         </widget>
         </widget>
        </item>
       </layout>
      </widget>
     </widget>
    </item>
-   <item row="0" column="4">
-    <spacer name="horizontalSpacer_2">
+   <item row="0" column="1">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Utilizator</string>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QToolButton" name="btnOpenUsers">
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset theme="system-search"/>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <spacer name="horizontalSpacer">
      <property name="orientation">
       <enum>Qt::Horizontal</enum>
      </property>
@@ -490,28 +564,65 @@
      </property>
     </spacer>
    </item>
-   <item row="0" column="1">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Utilizator</string>
+   <item row="0" column="2">
+    <widget class="QComboBox" name="comboUsers">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
      </property>
     </widget>
    </item>
-   <item row="0" column="3">
-    <widget class="QToolButton" name="toolButton">
-     <property name="text">
-      <string>...</string>
-     </property>
-     <property name="icon">
-      <iconset resource="../resource.qrc">
-       <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
-     </property>
-    </widget>
+   <item row="3" column="0" colspan="5">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnOk">
+       <property name="text">
+        <string>Ok</string>
+       </property>
+       <property name="icon">
+        <iconset theme="emblem-default"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnWrite">
+       <property name="text">
+        <string>Salvează</string>
+       </property>
+       <property name="icon">
+        <iconset theme="document-save"/>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClose">
+       <property name="text">
+        <string>Închide</string>
+       </property>
+       <property name="icon">
+        <iconset theme="window-close"/>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
- <resources>
-  <include location="../resource.qrc"/>
- </resources>
+ <resources/>
  <connections/>
 </ui>

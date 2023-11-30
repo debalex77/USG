@@ -340,5 +340,48 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         }
     }
 
+    if (current_release == release_2_0_4) {
+        QSqlQuery qry;
+        if (globals::thisSqlite){
+            qry.prepare("CREATE TABLE userPreferences ("
+                        "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                        "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
+                        "versionApp            TEXT (8),"
+                        "showQuestionCloseApp  INT,"
+                        "showUserManual        INT,"
+                        "showHistoryVersion    INT,"
+                        "order_splitFullName   INT,"
+                        "updateListDoc         TEXT (3),"
+                        "showDesignerMenuPrint INT,"
+                        "checkNewVersionApp    INT,"
+                        "databasesArchiving    INT"
+                        ");");
+        } else if (globals::thisMySQL){
+            qry.prepare("CREATE TABLE userPreferences ("
+                        "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
+                        "id_users              INT NOT Null,"
+                        "versionApp            VARCHAR (8),"
+                        "showQuestionCloseApp  BOOLEAN,"
+                        "showUserManual        BOOLEAN,"
+                        "showHistoryVersion    BOOLEAN,"
+                        "order_splitFullName   BOOLEAN,"
+                        "updateListDoc         VARCHAR (3),"
+                        "showDesignerMenuPrint BOOLEAN,"
+                        "checkNewVersionApp    BOOLEAN,"
+                        "databasesArchiving    BOOLEAN,"
+                        "KEY `userPreferences_users_id_idx` (`id_users`),"
+                        "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                        ");");
+        } else {
+            qCritical(logCritical()) << tr("Nu a fost determinată tipul bazei de date - actualizarea bazei de date la versiunea '%1' nu sa efectuat !!!").arg(release_2_0_4);
+            return false;
+        }
+
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu a fost creata tabela 'userPreferences' - ") + qry.lastError().text();
+            return false;
+        }
+    }
+
     return true;
 }

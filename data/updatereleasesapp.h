@@ -9,6 +9,7 @@
 #define release_1_1_3 "1.1.3"
 #define release_1_1_4 "1.1.4"
 #define release_1_1_5 "1.1.5"
+#define release_2_0_4 "2.0.4"
 
 class UpdateReleasesApp : public QObject
 {

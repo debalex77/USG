@@ -3,8 +3,11 @@
 
 #include <QDialog>
 #include <QKeyEvent>
-#include <QStringListModel>
+#include <QMessageBox>
 
+#include <catalogs/catgeneral.h>
+#include <catalogs/catusers.h>
+#include <catalogs/catorganizations.h>
 #include "data/database.h"
 #include "models/basesqlquerymodel.h"
 #include "popup.h"
@@ -54,6 +57,9 @@ signals:
 private slots:
     void dataWasModified();
 
+    bool onWritingData();
+    void onWritingDataClose();
+
     void slot_IdChanged();
     void slot_IdDoctorChanged();
     void slot_IdNurseChanged();
@@ -65,11 +71,25 @@ private slots:
     void activatedComboOrganizations(const int index);
 
     void onClickedListView(const QModelIndex index);
+    void onChangedValueUpdateListDoc(const int value);
+
+    void onOpenCatUsers();
+    void onOpenCatDoctors();
+    void onOpenCatNurses();
+    void onOpenCatOrganizations();
 
 private:
+    void setListWidget();
+    void initSetModels();
     void initConnections();
     void connectionsCombo();
     void disconnectCombo();
+    void connectionCheckBox();
+    void disconnectionCheckBox();
+
+    bool controlRequiredObjects();
+    bool insertDataIntoTable();
+    bool updateDataIntoTable();
 
 private:
     Ui::UserPreferences *ui;
@@ -96,8 +116,6 @@ private:
 
     DataBase* db;
     PopUp* popUp;
-
-    QStringListModel* model_listView;
 
     BaseSqlQueryModel* model_users;
     BaseSqlQueryModel* model_doctors;

@@ -1,6 +1,8 @@
 ## USG v2.0.4  
-* verificarea online a actualizărilor
+* verificarea versiunei noi a aplicației la lansarea aplicației 
 * corectarea drumului spre șabloanele de tipar la prima lansare (pentru OS Windows)
+* revăzută forma setărilor/preferințelor utilizatorului
+* în baza de date adaugată tabela nouă 'userPreferences' pentru păstrarea setărilor utilizatorilor
 
 ## USG v2.0.3
 * adaugat raport nou <b><u>Structura patologiilor</u></b>  
