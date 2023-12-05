@@ -354,7 +354,8 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
                         "updateListDoc         TEXT (3),"
                         "showDesignerMenuPrint INT,"
                         "checkNewVersionApp    INT,"
-                        "databasesArchiving    INT"
+                        "databasesArchiving    INT,"
+                        "showAsistantHelper    INT"
                         ");");
         } else if (globals::thisMySQL){
             qry.prepare("CREATE TABLE userPreferences ("
@@ -369,6 +370,7 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
                         "showDesignerMenuPrint BOOLEAN,"
                         "checkNewVersionApp    BOOLEAN,"
                         "databasesArchiving    BOOLEAN,"
+                        "showAsistantHelper    BOOLEAN,"
                         "KEY `userPreferences_users_id_idx` (`id_users`),"
                         "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                         ");");

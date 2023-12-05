@@ -185,6 +185,9 @@ void DataBase::creatingTables()
     if (createTableSettingsReports())
         qInfo(logInfo()) << tr("A fost creata tabela 'settingsReports'.");
 
+    if (createTableUserPreferences())
+        qInfo(logInfo()) << tr("A fost creata tabela 'userPreferences'.");
+
     if (createTableSettingsUsers())
         qInfo(logInfo()) << tr("A fost creata tabela 'settingsUsers'.");
 
@@ -2991,6 +2994,53 @@ bool DataBase::createTableSettingsUsers()
     } else {
         qWarning(logWarning()) << tr("%1 - createTableSettingsUsers()").arg(metaObject()->className())
                                << tr("Nu a fost creata tabela 'settingsUsers'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableUserPreferences()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE userPreferences ("
+                    "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
+                    "id_users              INT NOT Null,"
+                    "versionApp            VARCHAR (8),"
+                    "showQuestionCloseApp  BOOLEAN,"
+                    "showUserManual        BOOLEAN,"
+                    "showHistoryVersion    BOOLEAN,"
+                    "order_splitFullName   BOOLEAN,"
+                    "updateListDoc         VARCHAR (3),"
+                    "showDesignerMenuPrint BOOLEAN,"
+                    "checkNewVersionApp    BOOLEAN,"
+                    "databasesArchiving    BOOLEAN,"
+                    "showAsistantHelper    BOOLEAN,"
+                    "KEY `userPreferences_users_id_idx` (`id_users`),"
+                    "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE userPreferences ("
+                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
+                    "versionApp            TEXT (8),"
+                    "showQuestionCloseApp  INT,"
+                    "showUserManual        INT,"
+                    "showHistoryVersion    INT,"
+                    "order_splitFullName   INT,"
+                    "updateListDoc         TEXT (3),"
+                    "showDesignerMenuPrint INT,"
+                    "checkNewVersionApp    INT,"
+                    "databasesArchiving    INT,"
+                    "showAsistantHelper    INT"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableUserPreferences()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'userPreferences'.") + qry.lastError().text();
         return false;
     }
 }

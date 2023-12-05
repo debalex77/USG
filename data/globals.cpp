@@ -49,6 +49,7 @@ bool showQuestionCloseApp = false;
 bool order_splitFullName = false;
 int updateIntervalListDoc = 0;
 bool showDesignerMenuPrint = false;
+bool showAsistantHelper = false;
 
 int numSavedFilesLog = -1;
 

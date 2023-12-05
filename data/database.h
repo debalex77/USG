@@ -106,6 +106,7 @@ public:
     bool createTableSettingsForm();
     bool createTableSettingsReports();
     bool createTableSettingsUsers();
+    bool createTableUserPreferences();
     bool createTableConclusionTemplates();
     bool createTableImagesReports();
 
