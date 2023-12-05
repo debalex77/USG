@@ -341,6 +341,10 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
     }
 
     if (current_release == release_2_0_4) {
+
+        //--------------------------------------------------
+        // crearea tabelei noi
+
         QSqlQuery qry;
         if (globals::thisSqlite){
             qry.prepare("CREATE TABLE userPreferences ("
@@ -375,12 +379,56 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
                         "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                         ");");
         } else {
-            qCritical(logCritical()) << tr("Nu a fost determinată tipul bazei de date - actualizarea bazei de date la versiunea '%1' nu sa efectuat !!!").arg(release_2_0_4);
+            qCritical(logCritical()) << tr("Nu a fost determinată tipul bazei de date - actualizarea bazei de date la versiunea '%1' nu sa efectuat !!!")
+                                               .arg(release_2_0_4);
             return false;
         }
 
         if (! qry.exec()){
             qCritical(logCritical()) << tr("Nu a fost creata tabela 'userPreferences' - ") + qry.lastError().text();
+            return false;
+        }
+
+        //-------------------------------------------------
+        // inserarea datelor
+
+        qry.prepare("INSERT INTO userPreferences ("
+                    "id,"
+                    "id_users,"
+                    "versionApp,"
+                    "showQuestionCloseApp,"
+                    "showUserManual,"
+                    "showHistoryVersion,"
+                    "order_splitFullName,"
+                    "updateListDoc,"
+                    "showDesignerMenuPrint,"
+                    "checkNewVersionApp,"
+                    "databasesArchiving,"
+                    "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+        qry.addBindValue(1);
+        qry.addBindValue(globals::idUserApp);
+        qry.addBindValue("");
+        qry.addBindValue(globals::showQuestionCloseApp);
+        qry.addBindValue(globals::showUserManual);
+        qry.addBindValue(globals::showHistoryVersion);
+        qry.addBindValue(globals::order_splitFullName);
+        qry.addBindValue(globals::updateIntervalListDoc);
+        qry.addBindValue(globals::showDesignerMenuPrint);
+        qry.addBindValue(globals::checkNewVersionApp);
+        qry.addBindValue(globals::databasesArchiving);
+        qry.addBindValue(globals::showAsistantHelper);
+
+        if (! qry.exec())
+            qCritical(logCritical()) << tr("Nu au fost inserate date initiale in tabela 'userPreferences' %1.")
+                                            .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+
+        //------------------------------------------------
+        // eliminarea tabelei settingsUsers
+
+        qry.prepare("DROP TABLE settingsUsers;");
+        if (! qry.exec()){
+            qCritical(logCritical()) << tr("Nu este eliminata tabela 'settingsUsers' %1 ")
+                                            .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
             return false;
         }
     }

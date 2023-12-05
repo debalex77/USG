@@ -72,12 +72,21 @@ void UserPreferences::slot_IdChanged()
     if (m_Id == idx_unknow)
         return;
 
+    //--------------------------------------------------------------
+    // deconectarea pu a nu modifica forma
+
     disconnectCombo();
     disconnectionCheckBox();
+
+    //--------------------------------------------------------------
+    // setam 'comboUsers' dupa ID
 
     auto index_user = model_users->match(model_users->index(0, 0), Qt::UserRole, m_Id, 1, Qt::MatchExactly);
     if(!index_user.isEmpty())
         ui->comboUsers->setCurrentIndex(index_user.first().row());
+
+    //--------------------------------------------------------------
+    // tabela 'constants'
 
     QMap<QString, QString> items;
     if (db->getObjectDataByMainId("constants", "id_users", m_Id, items)){
@@ -97,6 +106,23 @@ void UserPreferences::slot_IdChanged()
             ui->brandUSG->setText(brandUSG);
     }
 
+    //--------------------------------------------------------------
+    // tabela 'userPreferences'
+
+    items.clear();
+    if (db->getObjectDataByMainId("userPreferences", "id_users", m_Id, items)){
+        ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
+        ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
+        ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
+        ui->check_splitFullNamePatient->setChecked(items.constFind("order_splitFullName").value().toInt());
+        ui->check_newVersion->setChecked(items.constFind("checkNewVersionApp").value().toInt());
+        ui->check_databasesArchiving->setChecked(items.constFind("databasesArchiving").value().toInt());
+        ui->showAsistantHelper->setChecked(items.constFind("showAsistantHelper").value().toInt());
+    }
+
+    //--------------------------------------------------------------
+    // setam logotipul
+
     QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", m_Id);
     QPixmap outPixmap = QPixmap();
     if (outPixmap.loadFromData(outByteArray)){
@@ -105,6 +131,9 @@ void UserPreferences::slot_IdChanged()
     } else {
 //        ui->btnClearLogo->setVisible(false);
     }
+
+    //--------------------------------------------------------------
+    // conectarea
 
     connectionsCombo();
     connectionCheckBox();
@@ -382,6 +411,9 @@ void UserPreferences::disconnectionCheckBox()
     disconnect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
 }
 
+// **********************************************************************************
+// --- inserarea si actualizarea datelor
+
 bool UserPreferences::controlRequiredObjects()
 {
     if (ui->comboUsers->currentIndex() == 0){
@@ -417,6 +449,34 @@ bool UserPreferences::insertDataIntoTable()
     db->getDatabase().transaction();
 
     QSqlQuery qry;
+
+    //----------------------------------------------
+    // inserarea datelor in tabela 'constants'
+
+    qry.prepare("INSERT INTO constants ("
+                "id_users,"
+                "id_organizations,"
+                "id_doctors,"
+                "id_nurses,"
+                "brandUSG) VALUES (?,?,?,?,?);");
+    qry.addBindValue(m_Id);
+    qry.addBindValue((m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization);
+    qry.addBindValue((m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor);
+    qry.addBindValue((m_idNurse == idx_unknow) ? QVariant() : m_idNurse);
+    qry.addBindValue(ui->brandUSG->text());
+    if (qry.exec()){
+        qInfo(logInfo()) << tr("Au fost inserate date in tabela 'constants' pentru utilizator '%1' cu id=%2.")
+                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+    } else {
+        qCritical(logCritical()) << tr("Nu au fost inserate date in tabela 'constants' pentru utilizator '%1' cu id=%2 %3")
+                                        .arg(ui->comboUsers->currentText(), QString::number(m_Id),
+                                             (qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+        return false;
+    }
+
+    //----------------------------------------------
+    // inserarea datelor in tabela 'userPreferences'
+
     qry.prepare("INSERT INTO userPreferences ("
                 "id,"
                 "id_users,"
@@ -428,7 +488,8 @@ bool UserPreferences::insertDataIntoTable()
                 "updateListDoc,"
                 "showDesignerMenuPrint,"
                 "checkNewVersionApp,"
-                "databasesArchiving) VALUES (?,?,?,?,?,?,?,?,?,?,?);");
+                "databasesArchiving,"
+                "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
     qry.addBindValue(m_Id);
     qry.addBindValue(m_Id);
     qry.addBindValue(VER);
@@ -456,15 +517,16 @@ bool UserPreferences::insertDataIntoTable()
         return false;
     }
 
-    if (! qry.exec()){
+    if (qry.exec()){
+        qInfo(logInfo()) << tr("Au fost inserate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
+                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+    } else {
         qWarning(logWarning()) << tr("Solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
         return false;
     }
 
     db->getDatabase().commit();
-
-    qInfo(logInfo()) << tr("Au fost inserate/salvate setarile utilizaturului cu id=%1 in baza de date").arg(m_Id);
 
     return true;
 }
@@ -474,6 +536,34 @@ bool UserPreferences::updateDataIntoTable()
     db->getDatabase().transaction();
 
     QSqlQuery qry;
+
+    //----------------------------------------------
+    // actualizarea datelor in tabela 'constants'
+
+    qry.prepare("UPDATE constants SET "
+                "id_organizations = :id_organizations,"
+                "id_doctors       = :id_doctors,"
+                "id_nurses        = :id_nurses,"
+                "brandUSG         = :brandUSG "
+                "WHERE id_users = :id_users;");
+    qry.bindValue(":id_users",         m_Id);
+    qry.bindValue(":id_organizations", (m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization);
+    qry.bindValue(":id_doctors",       (m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor);
+    qry.bindValue(":id_nurses",        (m_idNurse == idx_unknow) ? QVariant() : m_idNurse);
+    qry.bindValue(":brandUSG",         ui->brandUSG->text());
+    if (qry.exec()){
+        qInfo(logInfo()) << tr("Au fost actualizate date in tabela 'constants' pentru utilizator '%1' cu id=%2.")
+                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+    } else {
+        qCritical(logCritical()) << tr("Nu au fost actualizate date in tabela 'constants' pentru utilizator '%1' cu id=%2 %3")
+                                        .arg(ui->comboUsers->currentText(), QString::number(m_Id),
+                                             (qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+        return false;
+    }
+
+    //----------------------------------------------
+    // actualizarea datelor in tabela 'userPreferences'
+
     qry.prepare("UPDATE userPreferences SET "
                 "id_users              = :id_users,"
                 "versionApp            = :versionApp,"
@@ -484,7 +574,8 @@ bool UserPreferences::updateDataIntoTable()
                 "updateListDoc         = :updateListDoc,"
                 "showDesignerMenuPrint = :showDesignerMenuPrint,"
                 "checkNewVersionApp    = :checkNewVersionApp,"
-                "databasesArchiving    = :databasesArchiving "
+                "databasesArchiving    = :databasesArchiving,"
+                "showAsistantHelper    = :showAsistantHelper "
                 "WHERE id = :id;");
     qry.bindValue(":id",                    m_Id);
     qry.bindValue(":id_users",              m_Id);
@@ -498,6 +589,7 @@ bool UserPreferences::updateDataIntoTable()
         qry.bindValue(":showDesignerMenuPrint", (ui->check_showDesignerMenuPrint->isChecked() ? true : false));
         qry.bindValue(":checkNewVersionApp",    (ui->check_newVersion->isChecked() ? true : false));
         qry.bindValue(":databasesArchiving",    (ui->check_databasesArchiving->isChecked() ? true : false));
+        qry.bindValue(":showAsistantHelper",    (ui->showAsistantHelper->isChecked() ? true : false));
     } else if(globals::thisSqlite){
         qry.bindValue(":showQuestionCloseApp",  (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.bindValue(":showUserManual",        (ui->check_showUserManual->isChecked() ? 1 : 0));
@@ -507,21 +599,23 @@ bool UserPreferences::updateDataIntoTable()
         qry.bindValue(":showDesignerMenuPrint", (ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
         qry.bindValue(":checkNewVersionApp",    (ui->check_newVersion->isChecked() ? 1 : 0));
         qry.bindValue(":databasesArchiving",    (ui->check_databasesArchiving->isChecked() ? 1 : 0));
+        qry.bindValue(":showAsistantHelper",    (ui->showAsistantHelper->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
         return false;
     }
 
-    if (! qry.exec()){
-        qWarning(logWarning()) << tr("Actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
+    if (qry.exec()){
+        qInfo(logInfo()) << tr("Au fost actualizate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
+                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+    } else {
+        qWarning(logWarning()) << tr("Solicitarea de actualizare a datelor in tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
         return false;
     }
 
     db->getDatabase().commit();
-
-    qInfo(logInfo()) << tr("Au fost actualizate setarile utilizaturului cu id=%1 in baza de date").arg(m_Id);
 
     return true;
 }

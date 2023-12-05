@@ -44,6 +44,8 @@ extern bool showQuestionCloseApp;
 extern bool order_splitFullName;
 extern int updateIntervalListDoc;
 extern bool showDesignerMenuPrint;
+extern bool checkNewVersionApp;
+extern bool databasesArchiving;
 extern bool showAsistantHelper;
 
 extern int numSavedFilesLog; // fisiere de logare pastrate

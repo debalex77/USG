@@ -361,9 +361,9 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
     QString version_app;
     QSqlQuery qry;
     if (! globals::mySQLhost.isEmpty())
-        qry.prepare("SELECT versionApp FROM settingsUsers WHERE id_users = :id_users AND versionApp IS NOT Null;");
+        qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp IS NOT Null;");
     else
-        qry.prepare("SELECT versionApp FROM settingsUsers WHERE id_users = :id_users AND versionApp NOT NULL;");
+        qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp NOT NULL;");
     qry.bindValue(":id_users", globals::idUserApp);
     if (qry.exec() && qry.next())
         version_app = qry.value(0).toString();
@@ -378,9 +378,9 @@ void MainWindow::setVersionAppInTableSettingsUsers()
 {
     QSqlQuery qry;
     if (! globals::mySQLhost.isEmpty())
-        qry.prepare("UPDATE settingsUsers SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp IS NOT Null;");
+        qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp IS NOT Null;");
     else
-        qry.prepare("UPDATE settingsUsers SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp NOT NULL;");
+        qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp NOT NULL;");
     qry.bindValue(":versionApp", APPLICATION_VERSION);
     qry.bindValue(":id_users", globals::idUserApp);
     if (! qry.exec() && qry.next())

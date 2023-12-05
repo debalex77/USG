@@ -40,7 +40,7 @@ public:
 
     void loadInvestigationFromXml();
     void insertDataForTabletypesPrices();
-    void insertSetTableSettingsUsers(int id_new_user = 0);
+    void insertSetTableSettingsUsers();
 
     int findIdFromTableSettingsForm(const QString typeForm, const int numberSection) const;
     bool insertUpdateDataTableSettingsForm(const bool insertData, const QString typeForm, const int numberSection, const int sectionSize, int id_data = -1, int directionSorting = -1) const;

@@ -162,7 +162,7 @@ bool CatUsers::onWritingData()
             globals::nameUserApp = "admin";     // nume primului utilizator
             db->insertSetTableSettingsUsers();  // setarile utilizatorului
         } else {
-            db->insertSetTableSettingsUsers(m_Id); // setarile utilizatorului
+            db->insertSetTableSettingsUsers(); // setarile utilizatorului
         }
 
         setItNew(false);

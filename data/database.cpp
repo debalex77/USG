@@ -188,9 +188,6 @@ void DataBase::creatingTables()
     if (createTableUserPreferences())
         qInfo(logInfo()) << tr("A fost creata tabela 'userPreferences'.");
 
-    if (createTableSettingsUsers())
-        qInfo(logInfo()) << tr("A fost creata tabela 'settingsUsers'.");
-
     if (createTableConclusionTemplates())
         qInfo(logInfo()) << tr("A fost creata tabela 'conclusionTemplates'.");
 
@@ -319,68 +316,38 @@ void DataBase::insertDataForTabletypesPrices()
         qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'typesPrices': %1").arg(qry.lastError().text());
 }
 
-void DataBase::insertSetTableSettingsUsers(int id_new_user)
+void DataBase::insertSetTableSettingsUsers()
 {
-    QDomDocument investigXML;
-    QFile xmlFile(":/xmls/settingsUsers.xml");
-    if (!xmlFile.open(QIODevice::ReadOnly )){
-        qWarning(logWarning()) << tr("Fisierul ':/xmls/settingsUsers.xml' nu a fost citit !!!");
-    }
-    investigXML.setContent(&xmlFile);
-    xmlFile.close();
+    QSqlQuery qry;
+    qry.prepare("INSERT INTO userPreferences ("
+                "id,"
+                "id_users,"
+                "versionApp,"
+                "showQuestionCloseApp,"
+                "showUserManual,"
+                "showHistoryVersion,"
+                "order_splitFullName,"
+                "updateListDoc,"
+                "showDesignerMenuPrint,"
+                "checkNewVersionApp,"
+                "databasesArchiving,"
+                "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+    qry.addBindValue(globals::idUserApp);
+    qry.addBindValue(globals::idUserApp);
+    qry.addBindValue("");
+    qry.addBindValue(1);
+    qry.addBindValue(0);
+    qry.addBindValue(0);
+    qry.addBindValue(0);
+    qry.addBindValue(10);
+    qry.addBindValue(0);
+    qry.addBindValue(1);
+    qry.addBindValue(0);
+    qry.addBindValue(1);
 
-    QDomElement root = investigXML.documentElement();
-    QDomElement node = root.firstChild().toElement();
-    while(node.isNull() == false) {
-        if(node.tagName() == "entry"){
-            while(!node.isNull()){
-                const QString owner                 = node.attribute("owner", "owner");
-                const QString nameOption            = node.attribute("nameOption", "nameOption");
-                const QString versionApp            = node.attribute("versionApp", "versionApp");
-                const QString showQuestionCloseApp  = node.attribute("showQuestionCloseApp", "showQuestionCloseApp");
-                const QString showUserManual        = node.attribute("showUserManual", "showUserManual");
-                const QString showHistoryVersion    = node.attribute("showHistoryVersion", "showHistoryVersion");
-                const QString order_splitFullName   = node.attribute("order_splitFullName", "order_splitFullName");
-                const QString updateListDoc         = node.attribute("updateListDoc", "updateListDoc");
-                const QString showDesignerMenuPrint = node.attribute("showDesignerMenuPrint", "showDesignerMenuPrint");
-
-                QSqlQuery qry;
-                qry.prepare("INSERT INTO settingsUsers ("
-                            "id_users, owner, nameOption, versionApp, "
-                            "showQuestionCloseApp, showUserManual, showHistoryVersion, order_splitFullName, updateListDoc, showDesignerMenuPrint) "
-                            "VALUES (?,?,?,?,?,?,?,?,?,?);");
-                if (id_new_user == 0)
-                    qry.addBindValue(globals::idUserApp);
-                else
-                    qry.addBindValue(id_new_user);
-                qry.addBindValue(owner);
-                qry.addBindValue(nameOption);
-                if (globals::thisMySQL){
-                    qry.addBindValue((versionApp.isEmpty()) ? QVariant() : versionApp);
-                    qry.addBindValue((showQuestionCloseApp.isEmpty()) ? QVariant() : showQuestionCloseApp.toInt());
-                    qry.addBindValue((showUserManual.isEmpty()) ? QVariant() : showUserManual.toInt());
-                    qry.addBindValue((showHistoryVersion.isEmpty()) ? QVariant() : showHistoryVersion.toInt());
-                    qry.addBindValue((order_splitFullName.isEmpty()) ? QVariant() : order_splitFullName.toInt());
-                    qry.addBindValue((updateListDoc.isEmpty()) ? QVariant() : updateListDoc);
-                    qry.addBindValue((showDesignerMenuPrint.isEmpty()) ? QVariant() : true);
-                } else {
-                    qry.addBindValue((versionApp.isEmpty()) ? QVariant() : versionApp);
-                    qry.addBindValue((showQuestionCloseApp.isEmpty()) ? QVariant() : showQuestionCloseApp.toInt());
-                    qry.addBindValue((showUserManual.isEmpty()) ? QVariant() : showUserManual.toInt());
-                    qry.addBindValue((showHistoryVersion.isEmpty()) ? QVariant() : showHistoryVersion.toInt());
-                    qry.addBindValue((order_splitFullName.isEmpty()) ? QVariant() : order_splitFullName.toInt());
-                    qry.addBindValue((updateListDoc.isEmpty()) ? QVariant() : updateListDoc);
-                    qry.addBindValue((showDesignerMenuPrint.isEmpty()) ? QVariant() : 1);
-                }
-                if (qry.exec())
-                    qInfo(logInfo()) << tr("Adaugata optiunea '%1' in tabela 'settingsUsers'.").arg(nameOption);
-                else
-                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'settingsUsers': %1").arg(qry.lastError().text());
-                node = node.nextSibling().toElement();
-            }
-        }
-        node = node.nextSibling().toElement();
-    }
+    if (! qry.exec())
+        qCritical(logCritical()) << tr("Nu au fost inserate date initiale in tabela 'userPreferences' %1.")
+                                        .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
 }
 
 int DataBase::findIdFromTableSettingsForm(const QString typeForm, const int numberSection) const
@@ -3123,60 +3090,29 @@ bool DataBase::createTableImagesReports()
 void DataBase::updateVariableFromTableSettingsUser()
 {
     QSqlQuery qry;
-
-    // interogarea inchiderii aplicatiei
-    if (globals::thisMySQL)
-        qry.prepare("SELECT showQuestionCloseApp FROM settingsUsers WHERE showQuestionCloseApp IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT showQuestionCloseApp FROM settingsUsers WHERE showQuestionCloseApp NOT NULL AND id_users = :id_users;");
+    qry.prepare("SELECT "
+                "showQuestionCloseApp,"
+                "showUserManual,"
+                "showHistoryVersion,"
+                "order_splitFullName,"
+                "updateListDoc,"
+                "showDesignerMenuPrint,"
+                "checkNewVersionApp,"
+                "databasesArchiving,"
+                "showAsistantHelper FROM userPreferences WHERE id_users = :id_users;");
     qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::showQuestionCloseApp = qry.value(0).toBool();
-
-    // descifrarea NPP pacientului in comnada ecografica
-    if (globals::thisMySQL)
-        qry.prepare("SELECT order_splitFullName FROM settingsUsers WHERE order_splitFullName IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT order_splitFullName FROM settingsUsers WHERE order_splitFullName NOT NULL AND id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::order_splitFullName = qry.value(0).toBool();
-
-    // prezentarea User Manual
-    if (globals::thisMySQL)
-        qry.prepare("SELECT showUserManual FROM settingsUsers WHERE showUserManual IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT showUserManual FROM settingsUsers WHERE showUserManual NOT NULL AND id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::showUserManual = qry.value(0).toBool();
-
-    // prezentarea Istoriei versiunilor
-    if (globals::thisMySQL)
-        qry.prepare("SELECT showHistoryVersion FROM settingsUsers WHERE showHistoryVersion IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT showHistoryVersion FROM settingsUsers WHERE showHistoryVersion NOT NULL AND id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::showHistoryVersion = qry.value(0).toBool();
-
-    // timpul de actualizarea tabelei lista documete
-    if (globals::thisMySQL)
-        qry.prepare("SELECT updateListDoc FROM settingsUsers WHERE updateListDoc IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT updateListDoc FROM settingsUsers WHERE updateListDoc NOT NULL AND id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::updateIntervalListDoc = qry.value(0).toInt();
-
-    // acces la btn Designerului LimeReport
-    if (globals::thisMySQL)
-        qry.prepare("SELECT showDesignerMenuPrint FROM settingsUsers WHERE showDesignerMenuPrint IS NOT Null AND id_users = :id_users;");
-    else
-        qry.prepare("SELECT showDesignerMenuPrint FROM settingsUsers WHERE showDesignerMenuPrint NOT NULL AND id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
-    if (qry.exec() && qry.next())
-        globals::showDesignerMenuPrint = qry.value(0).toBool();
+    if (qry.exec() && qry.next()){
+        QSqlRecord rec = qry.record();
+        globals::showQuestionCloseApp  = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
+        globals::showUserManual        = qry.value(rec.indexOf("showUserManual")).toBool();
+        globals::showHistoryVersion    = qry.value(rec.indexOf("showHistoryVersion")).toBool();
+        globals::order_splitFullName   = qry.value(rec.indexOf("order_splitFullName")).toBool();
+        globals::updateIntervalListDoc = qry.value(rec.indexOf("updateListDoc")).toInt();
+        globals::showDesignerMenuPrint = qry.value(rec.indexOf("showDesignerMenuPrint")).toBool();
+        globals::checkNewVersionApp    = qry.value(rec.indexOf("checkNewVersionApp")).toBool();
+        globals::databasesArchiving    = qry.value(rec.indexOf("databasesArchiving")).toBool();
+        globals::showAsistantHelper    = qry.value(rec.indexOf("showAsistantHelper")).toBool();
+    }
 }
 
 // *******************************************************************
