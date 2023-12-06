@@ -3,6 +3,7 @@
 * corectarea drumului spre șabloanele de tipar la prima lansare (pentru OS Windows)
 * revăzută forma setărilor/preferințelor utilizatorului
 * în baza de date adaugată tabela nouă 'userPreferences' pentru păstrarea setărilor utilizatorilor
+* adaugat asistentul sfaturlor aplicației cu posibilitatea prezentării la lansarea aplicației 
 
 ## USG v2.0.3
 * adaugat raport nou <b><u>Structura patologiilor</u></b>  

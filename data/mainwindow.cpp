@@ -702,6 +702,8 @@ void MainWindow::onReadyVersion()
 void MainWindow::onShowAsistantTip()
 {
     asistant_tip =  new AsistantTipApp(this);
+    asistant_tip->setAttribute(Qt::WA_DeleteOnClose);
+    asistant_tip->setStep();
     asistant_tip->show();
 }
 
