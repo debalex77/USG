@@ -16,6 +16,7 @@
 #include <QProgressBar>
 
 #include "catalogs/catforsqltablemodel.h"
+#include "catalogs/asistanttipapp.h"
 #include "docs/listdoc.h"
 #include "docs/listdocreportorder.h"
 #include <catalogs/listform.h>
@@ -83,6 +84,7 @@ private slots:
     void removeSubWindow();
     void onOpenLMDesigner();
     void onReadyVersion();
+    void onShowAsistantTip();
 
 private:
     Ui::MainWindow *ui;
@@ -130,6 +132,7 @@ private:
     UpdateReleasesApp* update_app;
     LimeReport::ReportEngine* m_report;
     DownloaderVersion* downloader_version;
+    AsistantTipApp* asistant_tip;
 
 protected:
     void closeEvent(QCloseEvent *event);

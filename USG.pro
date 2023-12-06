@@ -22,6 +22,7 @@ CONFIG += c++11
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
 SOURCES += \
+    catalogs/asistanttipapp.cpp \
     catalogs/catcontracts.cpp \
     catalogs/catforsqltablemodel.cpp \
     catalogs/catgeneral.cpp \
@@ -64,6 +65,7 @@ SOURCES += \
     models/registrationtablemodel.cpp
 
 HEADERS += \
+    catalogs/asistanttipapp.h \
     catalogs/catcontracts.h \
     catalogs/catforsqltablemodel.h \
     catalogs/catgeneral.h \
@@ -107,6 +109,7 @@ HEADERS += \
     resources.rc
 
 FORMS += \
+    catalogs/asistanttipapp.ui \
     catalogs/catcontracts.ui \
     catalogs/catforsqltablemodel.ui \
     catalogs/catgeneral.ui \

@@ -57,6 +57,9 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+// **********************************************************************************
+// --- initierea connectarilor si prezentarea textului informativ
+
 void MainWindow::mDockWidgetShowTex(const QString txtMsg)
 {
     textEdit_dockWidget->setHtml(txtMsg);
@@ -310,11 +313,18 @@ void MainWindow::initActions()
     ui->menuAssistance->addAction(actionCheckUpdate);
     connect(actionCheckUpdate, &QAction::triggered, this, &MainWindow::checkUpdateApp);
 
+    QAction* actionShowAsistantTip = new QAction(QIcon::fromTheme("preferences-desktop-accessibility"), tr("Prezentarea asistentului de sfaturi"), this);
+    ui->menuAssistance->addAction(actionShowAsistantTip);
+    connect(actionShowAsistantTip, &QAction::triggered, this, &MainWindow::onShowAsistantTip);
+
     QAction* action_about = new QAction(QIcon(":/img/info_x32.png"), tr("Despre aplicația"), this);
     ui->menuAssistance->addSeparator();
     ui->menuAssistance->addAction(action_about);
     connect(action_about, &QAction::triggered, this, &MainWindow::openAbout);
 }
+
+// **********************************************************************************
+// --- procesarea actiunilor
 
 void MainWindow::checkUpdateApp()
 {
@@ -356,6 +366,9 @@ void MainWindow::updateTextBtn()
     btnAbout->setText(tr("Despre aplicația"));
 }
 
+// **********************************************************************************
+// --- procesarea determinarii/setarii versiunilor aplicatiei
+
 QString MainWindow::getVersionAppInTableSettingsUsers()
 {
     QString version_app;
@@ -395,6 +408,9 @@ void MainWindow::closeDatabases()
     if (db->getDatabaseImage().open())
         db->getDatabaseImage().close();
 }
+
+// **********************************************************************************
+// --- actualizarea la lansare aplicatiei
 
 void MainWindow::updateTimer()
 {
@@ -450,6 +466,10 @@ void MainWindow::updateTimer()
             QString str = dir.toNativeSeparators(dir.currentPath() + "/UserManual.pdf");
             QDesktopServices::openUrl(QUrl::fromLocalFile(str));
         }
+
+        // prezentarea sfaturilor
+        if (globals::showAsistantHelper)
+            onShowAsistantTip();
     }
 }
 
@@ -477,6 +497,9 @@ void MainWindow::updateTimerDocWidget()
         globals::firstLaunch = false;
     }
 }
+
+// **********************************************************************************
+// --- procesarea slot-urilor
 
 void MainWindow::openAbout()
 {
@@ -675,6 +698,15 @@ void MainWindow::onReadyVersion()
     system(str_cmd.toStdString().c_str());
 #endif
 }
+
+void MainWindow::onShowAsistantTip()
+{
+    asistant_tip =  new AsistantTipApp(this);
+    asistant_tip->show();
+}
+
+// **********************************************************************************
+// --- evenimentele formei
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
