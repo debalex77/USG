@@ -2,6 +2,9 @@
 #include "ui_userpreferences.h"
 #include "version.h"
 
+#include <QImageReader>
+#include <QImageWriter>
+
 UserPreferences::UserPreferences(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserPreferences)
@@ -26,6 +29,13 @@ UserPreferences::UserPreferences(QWidget *parent) :
     initSetModels(); // setam modelurile
 
     initConnections(); // connection
+
+    ui->btnClearLogo->setVisible(false);
+    ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea<br>(se recomanda 400x50 px)</a>");
+    ui->image_logo->setTextFormat(Qt::RichText);
+    ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    connect(ui->image_logo, QOverload<const QString &>::of(&QLabel::linkActivated), this,
+            QOverload<const QString &>::of(&UserPreferences::onLinkActivatedForOpenImage));
 }
 
 UserPreferences::~UserPreferences()
@@ -52,8 +62,13 @@ bool UserPreferences::onWritingData()
     if (! controlRequiredObjects())
         return false;
 
-    if (! insertDataIntoTable())
-        return false;
+    if (! existRecordInTable()){
+        if (! insertDataIntoTable())
+            return false;
+    } else {
+        if (! updateDataIntoTable())
+            return false;
+    }
 
     return true;
 }
@@ -111,13 +126,16 @@ void UserPreferences::slot_IdChanged()
 
     items.clear();
     if (db->getObjectDataByMainId("userPreferences", "id_users", m_Id, items)){
-        ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
-        ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
-        ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
-        ui->check_splitFullNamePatient->setChecked(items.constFind("order_splitFullName").value().toInt());
-        ui->check_newVersion->setChecked(items.constFind("checkNewVersionApp").value().toInt());
-        ui->check_databasesArchiving->setChecked(items.constFind("databasesArchiving").value().toInt());
-        ui->showAsistantHelper->setChecked(items.constFind("showAsistantHelper").value().toInt());
+        if (items.count() > 0){
+            ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
+            ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
+            ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
+            ui->check_splitFullNamePatient->setChecked(items.constFind("order_splitFullName").value().toInt());
+            ui->check_newVersion->setChecked(items.constFind("checkNewVersionApp").value().toInt());
+            ui->check_databasesArchiving->setChecked(items.constFind("databasesArchiving").value().toInt());
+            ui->showAsistantHelper->setChecked(items.constFind("showAsistantHelper").value().toInt());
+            ui->updateListDoc->setValue(items.constFind("updateListDoc").value().toInt());
+        }
     }
 
     //--------------------------------------------------------------
@@ -126,10 +144,10 @@ void UserPreferences::slot_IdChanged()
     QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", m_Id);
     QPixmap outPixmap = QPixmap();
     if (outPixmap.loadFromData(outByteArray)){
-//        ui->btnClearLogo->setVisible(true);
+        ui->btnClearLogo->setVisible(true);
         ui->image_logo->setPixmap(outPixmap.scaled(400, 50));
     } else {
-//        ui->btnClearLogo->setVisible(false);
+        ui->btnClearLogo->setVisible(false);
     }
 
     //--------------------------------------------------------------
@@ -191,6 +209,120 @@ void UserPreferences::activatedComboOrganizations(const int index)
     setIdOrganization(id_organization);
     dataWasModified();
 }
+
+// **********************************************************************************
+// --- procesarea logotipului, inserarea in BD
+
+bool UserPreferences::loadFile(const QString &fileName)
+{
+    QImageReader reader(fileName);
+    reader.setAutoTransform(true);
+    const QImage newImage = reader.read();
+    if (newImage.isNull()) {
+        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+                                 tr("Nu este setată imaginea %1: %2")
+                                 .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
+        return false;
+    }
+    ui->image_logo->setPixmap(QPixmap::fromImage(newImage).scaled(400,50));
+    ui->btnClearLogo->setVisible(true);
+
+    QFile file(fileName);
+    if (!file.open(QIODevice::ReadOnly))
+        return true;
+    QByteArray inByteArray = file.readAll();
+
+    QSqlQuery qry;
+    qry.prepare(QString("UPDATE constants SET logo = '%2' WHERE id_users = '%1';")
+                .arg(QString::number(m_Id), inByteArray.toBase64()));
+    if (qry.exec()){
+        popUp->setPopupText(tr("Logotipul este salvat cu succes în baza de date."));
+        popUp->show();
+    } else {
+        qDebug() << tr("Eroare de inserare a logotipului in baza de date:\n") << qry.lastError();
+    }
+    file.close();
+
+    return true;
+}
+
+static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMode acceptMode)
+{
+    static bool firstDialog = true;
+
+    if (firstDialog) {
+        firstDialog = false;
+        const QStringList picturesLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
+        dialog.setDirectory(picturesLocations.isEmpty() ? QDir::currentPath() : picturesLocations.last());
+    }
+
+    QStringList mimeTypeFilters;
+    const QByteArrayList supportedMimeTypes = acceptMode == QFileDialog::AcceptOpen
+                                                  ? QImageReader::supportedMimeTypes() : QImageWriter::supportedMimeTypes();
+    for (const QByteArray &mimeTypeName : supportedMimeTypes)
+        mimeTypeFilters.append(mimeTypeName);
+    mimeTypeFilters.sort();
+    dialog.setMimeTypeFilters(mimeTypeFilters);
+    dialog.selectMimeTypeFilter("image/png");
+    if (acceptMode == QFileDialog::AcceptSave)
+        dialog.setDefaultSuffix("png");
+}
+
+void UserPreferences::onLinkActivatedForOpenImage(const QString &link)
+{
+    if (link != "#LoadImage")
+        return;
+
+    if (m_Id == idx_unknow){
+        QMessageBox::StandardButton YesNo;
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea validării"),
+                                     tr("Pentru a încărca logotipul este necesar de salvat datele.<br>Doriți să salvați datele ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+        if (YesNo == QMessageBox::Yes)
+            onWritingData();
+        else
+            return;
+    }
+
+    QFileDialog dialog(this, tr("Open File"));
+    initializeImageFileDialog(dialog, QFileDialog::AcceptOpen);
+
+    if (dialog.exec() == QDialog::Accepted)
+        if (! dialog.selectedFiles().constFirst().isEmpty())
+            loadFile(dialog.selectedFiles().constFirst());
+    dialog.close();
+}
+
+void UserPreferences::clearImageLogo()
+{
+    QMessageBox messange_box(QMessageBox::Question,
+                             tr("Eliminarea logotipului"),
+                             tr("Doriți să eliminați logotipul din baza de date ?"),
+                             QMessageBox::Yes | QMessageBox::No, this);
+#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
+    messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
+    messange_box.setButtonText(QMessageBox::No, tr("Nu"));
+#endif
+    if (messange_box.exec() == QMessageBox::No)
+        return;
+
+    QSqlQuery qry;
+    qry.prepare(QString("UPDATE constants SET logo = NULL WHERE id_users = '%1';").arg(m_Id));
+    if (qry.exec()){
+        ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea<br>(se recomanda 400x50 px)</a>");
+        ui->image_logo->setTextFormat(Qt::RichText);
+        ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+        popUp->setPopupText(tr("Logotipul este eliminat din baza de date."));
+        popUp->show();
+    } else {
+        qCritical(logCritical()) << tr("Eroare la eliminarea logotipului din baza de date %1").arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+    }
+    ui->btnClearLogo->setVisible(false);
+}
+
+// **********************************************************************************
+// --- procesarea listView
 
 void UserPreferences::onClickedListView(const QModelIndex index)
 {
@@ -363,9 +495,13 @@ void UserPreferences::initConnections()
     connect(ui->btnOpenNurses, &QToolButton::clicked, this, &UserPreferences::onOpenCatNurses);
     connect(ui->btnOpenUsers, &QToolButton::clicked, this, &UserPreferences::onOpenCatUsers);
 
+    connect(ui->btnClearLogo, &QAbstractButton::clicked, this, &UserPreferences::clearImageLogo);
+
     connectionsCombo();
     connectionCheckBox();
 
+    connect(ui->btnOk, &QAbstractButton::clicked, this, &UserPreferences::onWritingDataClose);
+    connect(ui->btnWrite, &QAbstractButton::clicked, this, &UserPreferences::onWritingData);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &UserPreferences::close);
 }
 
@@ -409,6 +545,8 @@ void UserPreferences::disconnectionCheckBox()
     disconnect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+
+    disconnect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
 }
 
 // **********************************************************************************
@@ -442,6 +580,17 @@ bool UserPreferences::controlRequiredObjects()
 
     return true;
 
+}
+
+bool UserPreferences::existRecordInTable()
+{
+    QSqlQuery qry;
+    qry.prepare("SELECT COUNT(id) FROM userPreferences WHERE id_users = :id_users;");
+    qry.bindValue(":id_users", m_Id);
+    if (qry.exec() && qry.next())
+        return (qry.value(0).toInt() > 0);
+
+    return false;
 }
 
 bool UserPreferences::insertDataIntoTable()

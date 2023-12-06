@@ -391,7 +391,7 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
 
         //-------------------------------------------------
         // inserarea datelor
-
+        db->updateVariableFromTableSettingsUser();
         qry.prepare("INSERT INTO userPreferences ("
                     "id,"
                     "id_users,"
@@ -408,15 +408,15 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         qry.addBindValue(1);
         qry.addBindValue(globals::idUserApp);
         qry.addBindValue("");
-        qry.addBindValue(globals::showQuestionCloseApp);
-        qry.addBindValue(globals::showUserManual);
-        qry.addBindValue(globals::showHistoryVersion);
-        qry.addBindValue(globals::order_splitFullName);
-        qry.addBindValue(globals::updateIntervalListDoc);
-        qry.addBindValue(globals::showDesignerMenuPrint);
-        qry.addBindValue(globals::checkNewVersionApp);
-        qry.addBindValue(globals::databasesArchiving);
-        qry.addBindValue(globals::showAsistantHelper);
+        qry.addBindValue(1);
+        qry.addBindValue(0);
+        qry.addBindValue(0);
+        qry.addBindValue(0);
+        qry.addBindValue(10);
+        qry.addBindValue(0);
+        qry.addBindValue(1);
+        qry.addBindValue(0);
+        qry.addBindValue(1);
 
         if (! qry.exec())
             qCritical(logCritical()) << tr("Nu au fost inserate date initiale in tabela 'userPreferences' %1.")

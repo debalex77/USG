@@ -1,9 +1,0 @@
-<list_settings>
-  <entry id="1" id_users="" owner="Lansarea/închiderea aplicației" nameOption="interogarea la închiderea aplicației" versionApp="" showQuestionCloseApp="1" showUserManual="" showHistoryVersion="" order_splitFullName="" updateListDoc="" showDesignerMenuPrint=""/>
-  <entry id="2" id_users="" owner="Lansarea/închiderea aplicației" nameOption="prezentarea User manual (la lansare aplicației)" versionApp="" showQuestionCloseApp="" showUserManual="0" showHistoryVersion="" order_splitFullName="" updateListDoc="" showDesignerMenuPrint=""/>
-  <entry id="3" id_users="" owner="Lansarea/închiderea aplicației" nameOption="prezentarea Istoriei versiunilor (la lansare aplicației)" versionApp="" showQuestionCloseApp="" showUserManual="" showHistoryVersion="1" order_splitFullName="" updateListDoc="" showDesignerMenuPrint=""/>
-  <entry id="4" id_users="" owner="Setări neredactabile" nameOption="versiunea aplicației" versionApp="1.1.1" showQuestionCloseApp="" showUserManual="" showHistoryVersion="" order_splitFullName="" updateListDoc="" showDesignerMenuPrint=""/>
-  <entry id="5" id_users="" owner="Setări a documentelor" nameOption="prezentarea descifrării NPP pacientului" versionApp="" showQuestionCloseApp="" showUserManual="" showHistoryVersion="" order_splitFullName="1" updateListDoc="" showDesignerMenuPrint=""/>
-  <entry id="6" id_users="" owner="Setări a documentelor" nameOption="actualizarea listei de documente (în secunde)" versionApp="" showQuestionCloseApp="" showUserManual="" showHistoryVersion="" order_splitFullName="" updateListDoc="15" showDesignerMenuPrint=""/>
-  <entry id="7" id_users="" owner="Setări a documentelor" nameOption="prezentarea designerului(LimeReport) în meniu de printare" versionApp="" showQuestionCloseApp="" showUserManual="" showHistoryVersion="" order_splitFullName="" updateListDoc="" showDesignerMenuPrint=""/>
-</list_settings>

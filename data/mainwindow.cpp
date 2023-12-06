@@ -435,7 +435,16 @@ void MainWindow::updateTimer()
                 QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/blob/master/releases.md"));
             }
         }
+
+        // verificam versiunea noua
+        if (globals::checkNewVersionApp)
+            checkUpdateApp();
+
+        // prezentarea istoriei versiunilor
         if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)
+            QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/blob/master/releases.md"));
+
+        // prezentarea manualului online
         if (globals::showUserManual){
             QDir dir;
             QString str = dir.toNativeSeparators(dir.currentPath() + "/UserManual.pdf");
@@ -599,14 +608,10 @@ void MainWindow::openAppSettings()
 
 void MainWindow::openUserSettings()
 {
-//    userSettings = new UserSettings(this);
-//    userSettings->setAttribute(Qt::WA_DeleteOnClose);
-//    userSettings->setWindowIcon(QIcon(":img/settings_x32.png"));
-//    userSettings->setProperty("Id", globals::idUserApp);
-//    userSettings->show();
     auto preference = new UserPreferences(this);
     preference->setProperty("Id", globals::idUserApp);
-    preference->exec();
+    if (preference->exec() == QDialog::Accepted)
+        db->updateVariableFromTableSettingsUser();
 }
 
 void MainWindow::openPricing()

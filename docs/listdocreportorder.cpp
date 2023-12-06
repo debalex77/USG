@@ -613,6 +613,26 @@ void ListDocReportOrder::onClickBtnReport()
     }
 }
 
+void ListDocReportOrder::onClickBtnShowHideViewTab()
+{
+    if (pressed_btn_viewTab == -1){
+        pressed_btn_viewTab = 1;
+        ui->groupBox_table_order->setHidden(false);
+        ui->groupBox_table_report->setHidden(false);
+        QModelIndex index = ui->tableView->currentIndex();
+        onClickedTable(index);
+        btnViewTab->setStyleSheet("background-color: #dadbde");
+        ui->splitter->resize(1518, 190);
+    } else {
+        pressed_btn_viewTab = -1;
+        ui->groupBox_table_order->setHidden(true);
+        ui->groupBox_table_report->setHidden(true);
+        btnViewTab->setStyleSheet("background-color: #f6f7fa");
+    }
+    // formationPrinMenuForOrder();
+    // formationPrinMenuForReport();
+}
+
 void ListDocReportOrder::openHistoryPatients()
 {
     int _row = ui->tableView->currentIndex().row();
@@ -1192,107 +1212,98 @@ void ListDocReportOrder::initBtnToolBar()
             {
                 timer->start(globals::updateIntervalListDoc * 1000);
             });
-    connect(btnViewTab, &QAbstractButton::clicked, this, [this]()
-    {
-        if (pressed_btn_viewTab == -1){
-            pressed_btn_viewTab = 1;
-            ui->groupBox_table_order->setHidden(false);
-            ui->groupBox_table_report->setHidden(false);
-            QModelIndex index = ui->tableView->currentIndex();
-            onClickedTable(index);
-            btnViewTab->setStyleSheet("background-color: #dadbde");
-            ui->splitter->resize(1518, 190);
-        } else {
-            pressed_btn_viewTab = -1;
-            ui->groupBox_table_order->setHidden(true);
-            ui->groupBox_table_report->setHidden(true);
-            btnViewTab->setStyleSheet("background-color: #f6f7fa");
-        }
-    });
+    connect(btnViewTab, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnShowHideViewTab);
 
     // ----------------------------------------------------------------------------
     // meniu btn print order
 
-    db->updateVariableFromTableSettingsUser();
-    if (globals::showDesignerMenuPrint){
-        QAction *openDesignerOrder = new QAction(setUpMenu_order);
-        openDesignerOrder->setIcon(QIcon(":/images/design.png"));
-        openDesignerOrder->setText(tr("Deschide designer"));
+    formationPrinMenuForOrder();
 
-        QAction *openPreviewOrder  = new QAction(setUpMenu_order);
-        openPreviewOrder->setIcon(QIcon(":/images/Print.png"));
-        openPreviewOrder->setText(tr("Deschide preview"));
+    // db->updateVariableFromTableSettingsUser();
 
-        setUpMenu_order->addAction(openDesignerOrder);
-        setUpMenu_order->addAction(openPreviewOrder);
-        setUpMenu_order->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
-        setUpMenu_order->setAttribute(Qt::WA_TranslucentBackground);
-        setUpMenu_order->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-                                       " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+    // if (ui->btn_print_order->menu() != nullptr)
+    //     ui->btn_print_order->menu()->clear();
 
-        ui->btn_print_order->setMenu(setUpMenu_order);
-        ui->btn_open_order->setStyleSheet("width: 110px; height: 20px;");
-        ui->btn_print_order->setStyleSheet("width: 110px; height: 20px;");
+    // if (globals::showDesignerMenuPrint){
+    //     QAction *openDesignerOrder = new QAction(setUpMenu_order);
+    //     openDesignerOrder->setIcon(QIcon(":/images/design.png"));
+    //     openDesignerOrder->setText(tr("Deschide designer"));
 
-        connect(openDesignerOrder, &QAction::triggered, this, [this]()
-        {
-            openPrintDesignerPreviewOrder(false);
-        });
+    //     QAction *openPreviewOrder  = new QAction(setUpMenu_order);
+    //     openPreviewOrder->setIcon(QIcon(":/images/Print.png"));
+    //     openPreviewOrder->setText(tr("Deschide preview"));
 
-        connect(openPreviewOrder, &QAction::triggered, this, [this]()
-        {
-            openPrintDesignerPreviewOrder(true);
-        });
-    } else {
-        connect(ui->btn_print_order, &QPushButton::clicked, this, [this]()
-        {
-            openPrintDesignerPreviewOrder(true);
-        });
-    }
+    //     setUpMenu_order->addAction(openDesignerOrder);
+    //     setUpMenu_order->addAction(openPreviewOrder);
+    //     setUpMenu_order->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
+    //     setUpMenu_order->setAttribute(Qt::WA_TranslucentBackground);
+    //     setUpMenu_order->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
+    //                                    " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
 
-    connect(ui->btn_open_order, &QPushButton::clicked, this, &ListDocReportOrder::openDocOrderEchoByClickBtnTable);
+    //     ui->btn_print_order->setMenu(setUpMenu_order);
+    //     ui->btn_open_order->setStyleSheet("width: 110px; height: 20px;");
+    //     ui->btn_print_order->setStyleSheet("width: 110px; height: 20px;");
+
+    //     connect(openDesignerOrder, &QAction::triggered, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewOrder(false);
+    //     });
+
+    //     connect(openPreviewOrder, &QAction::triggered, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewOrder(true);
+    //     });
+    // } else {
+    //     connect(ui->btn_print_order, &QPushButton::clicked, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewOrder(true);
+    //     });
+    // }
+
+    // connect(ui->btn_open_order, &QPushButton::clicked, this, &ListDocReportOrder::openDocOrderEchoByClickBtnTable);
 
     // ----------------------------------------------------------------------------
     // meniu btn print report
 
-    db->updateVariableFromTableSettingsUser();
-    if (globals::showDesignerMenuPrint){
-        QAction *openDesignerReport = new QAction(setUpMenu_report);
-        openDesignerReport->setIcon(QIcon(":/images/design.png"));
-        openDesignerReport->setText(tr("Deschide designer"));
+    formationPrinMenuForReport();
+    // db->updateVariableFromTableSettingsUser();
+    // if (globals::showDesignerMenuPrint){
+    //     QAction *openDesignerReport = new QAction(setUpMenu_report);
+    //     openDesignerReport->setIcon(QIcon(":/images/design.png"));
+    //     openDesignerReport->setText(tr("Deschide designer"));
 
-        QAction *openPreviewReport  = new QAction(setUpMenu_report);
-        openPreviewReport->setIcon(QIcon(":/images/Print.png"));
-        openPreviewReport->setText(tr("Deschide preview"));
+    //     QAction *openPreviewReport  = new QAction(setUpMenu_report);
+    //     openPreviewReport->setIcon(QIcon(":/images/Print.png"));
+    //     openPreviewReport->setText(tr("Deschide preview"));
 
-        setUpMenu_report->addAction(openDesignerReport);
-        setUpMenu_report->addAction(openPreviewReport);
-        setUpMenu_report->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
-        setUpMenu_report->setAttribute(Qt::WA_TranslucentBackground);
-        setUpMenu_report->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-                                        " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+    //     setUpMenu_report->addAction(openDesignerReport);
+    //     setUpMenu_report->addAction(openPreviewReport);
+    //     setUpMenu_report->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
+    //     setUpMenu_report->setAttribute(Qt::WA_TranslucentBackground);
+    //     setUpMenu_report->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
+    //                                     " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
 
-        ui->btn_print_report->setMenu(setUpMenu_report);
-        ui->btn_print_report->setStyleSheet("width: 110px; height: 20px;");
-        ui->btn_open_report->setStyleSheet("width: 110px; height: 20px;");
+    //     ui->btn_print_report->setMenu(setUpMenu_report);
+    //     ui->btn_print_report->setStyleSheet("width: 110px; height: 20px;");
+    //     ui->btn_open_report->setStyleSheet("width: 110px; height: 20px;");
 
-        connect(openDesignerReport, &QAction::triggered, this, [this]()
-        {
-            openPrintDesignerPreviewReport(false);
-        });
+    //     connect(openDesignerReport, &QAction::triggered, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewReport(false);
+    //     });
 
-        connect(openPreviewReport, &QAction::triggered, this, [this]()
-        {
-            openPrintDesignerPreviewReport();
-        });
-    } else {
-        connect(ui->btn_print_report, &QPushButton::clicked, this, [this]()
-        {
-            openPrintDesignerPreviewReport();
-        });
-    }
+    //     connect(openPreviewReport, &QAction::triggered, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewReport();
+    //     });
+    // } else {
+    //     connect(ui->btn_print_report, &QPushButton::clicked, this, [this]()
+    //     {
+    //         openPrintDesignerPreviewReport();
+    //     });
+    // }
 
-    connect(ui->btn_open_report, &QPushButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
+    // connect(ui->btn_open_report, &QPushButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
 }
 
 void ListDocReportOrder::initBtnFilter()
@@ -1355,7 +1366,7 @@ void ListDocReportOrder::initBtnFilter()
 }
 
 // **********************************************************************************
-// --- actualizarea solicitarilor tabelelor, textului
+// --- procesarea perioadei
 
 void ListDocReportOrder::updateTextPeriod()
 {
@@ -1397,6 +1408,9 @@ void ListDocReportOrder::openDocOrderEchoByClickBtnTable()
     docOrderEcho->setProperty("Id", _id);
     docOrderEcho->show();
 }
+
+// **********************************************************************************
+// --- procesarea printarii
 
 void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
 {
@@ -1449,6 +1463,103 @@ void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
     else
         docReport->onPrintDocument(docReport->openDesigner);
 }
+
+void ListDocReportOrder::formationPrinMenuForOrder()
+{
+    db->updateVariableFromTableSettingsUser();
+
+    if (ui->btn_print_order->menu() != nullptr) // daca a fost setat meniu
+        ui->btn_print_order->menu()->clear();   // golim
+
+    if (globals::showDesignerMenuPrint){
+        QAction *openDesignerOrder = new QAction(setUpMenu_order);
+        openDesignerOrder->setIcon(QIcon(":/images/design.png"));
+        openDesignerOrder->setText(tr("Deschide designer"));
+
+        QAction *openPreviewOrder  = new QAction(setUpMenu_order);
+        openPreviewOrder->setIcon(QIcon(":/images/Print.png"));
+        openPreviewOrder->setText(tr("Deschide preview"));
+
+        setUpMenu_order->clear();
+        setUpMenu_order->addAction(openDesignerOrder);
+        setUpMenu_order->addAction(openPreviewOrder);
+        setUpMenu_order->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
+        setUpMenu_order->setAttribute(Qt::WA_TranslucentBackground);
+        setUpMenu_order->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
+                                       " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+
+        ui->btn_print_order->setMenu(setUpMenu_order);
+        ui->btn_open_order->setStyleSheet("width: 110px; height: 20px;");
+        ui->btn_print_order->setStyleSheet("width: 110px; height: 20px;");
+
+        connect(openDesignerOrder, &QAction::triggered, this, [this]()
+                {
+                    openPrintDesignerPreviewOrder(false);
+                });
+
+        connect(openPreviewOrder, &QAction::triggered, this, [this]()
+                {
+                    openPrintDesignerPreviewOrder(true);
+                });
+    } else {
+        connect(ui->btn_print_order, &QPushButton::clicked, this, [this]()
+                {
+                    openPrintDesignerPreviewOrder(true);
+                });
+    }
+
+    connect(ui->btn_open_order, &QPushButton::clicked, this, &ListDocReportOrder::openDocOrderEchoByClickBtnTable);
+}
+
+void ListDocReportOrder::formationPrinMenuForReport()
+{
+    db->updateVariableFromTableSettingsUser();
+
+    if (ui->btn_open_report->menu() != nullptr) // daca este setata menii
+        ui->btn_open_report->menu()->clear();   // golim
+
+    if (globals::showDesignerMenuPrint){
+        QAction *openDesignerReport = new QAction(setUpMenu_report);
+        openDesignerReport->setIcon(QIcon(":/images/design.png"));
+        openDesignerReport->setText(tr("Deschide designer"));
+
+        QAction *openPreviewReport  = new QAction(setUpMenu_report);
+        openPreviewReport->setIcon(QIcon(":/images/Print.png"));
+        openPreviewReport->setText(tr("Deschide preview"));
+
+        setUpMenu_report->clear();
+        setUpMenu_report->addAction(openDesignerReport);
+        setUpMenu_report->addAction(openPreviewReport);
+        setUpMenu_report->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
+        setUpMenu_report->setAttribute(Qt::WA_TranslucentBackground);
+        setUpMenu_report->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
+                                        " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+
+        ui->btn_print_report->setMenu(setUpMenu_report);
+        ui->btn_print_report->setStyleSheet("width: 110px; height: 20px;");
+        ui->btn_open_report->setStyleSheet("width: 110px; height: 20px;");
+
+        connect(openDesignerReport, &QAction::triggered, this, [this]()
+                {
+                    openPrintDesignerPreviewReport(false);
+                });
+
+        connect(openPreviewReport, &QAction::triggered, this, [this]()
+                {
+                    openPrintDesignerPreviewReport();
+                });
+    } else {
+        connect(ui->btn_print_report, &QPushButton::clicked, this, [this]()
+                {
+                    openPrintDesignerPreviewReport();
+                });
+    }
+
+    connect(ui->btn_open_report, &QPushButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
+}
+
+// **********************************************************************************
+// --- actualizarea solicitarilor tabelelor, textului
 
 void ListDocReportOrder::updateTableView()
 {

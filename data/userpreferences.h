@@ -70,6 +70,10 @@ private slots:
     void activatedComboNurses(const int index);
     void activatedComboOrganizations(const int index);
 
+    bool loadFile(const QString &fileName);
+    void onLinkActivatedForOpenImage(const QString &link);
+    void clearImageLogo();
+
     void onClickedListView(const QModelIndex index);
     void onChangedValueUpdateListDoc(const int value);
 
@@ -88,6 +92,7 @@ private:
     void disconnectionCheckBox();
 
     bool controlRequiredObjects();
+    bool existRecordInTable();
     bool insertDataIntoTable();
     bool updateDataIntoTable();
 

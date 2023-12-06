@@ -21,7 +21,6 @@
 #include <catalogs/listform.h>
 #include <data/about.h>
 #include "data/appsettings.h"
-#include "data/usersettings.h"
 #include "docs/docorderecho.h"
 #include "docs/docappointmentspatients.h"
 #include "data/mdiareacontainer.h"
@@ -35,7 +34,7 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.3"
+#define APPLICATION_VERSION     "2.0.4"
 
 //=============================================================
 
@@ -120,7 +119,6 @@ private:
     QToolButton *btnAbout;
 
     AppSettings*     appSett;
-    UserSettings*    userSettings;
     ListDoc*         listDoc;
     Reports*         reports;
     DocOrderEcho*    docOrderEcho;

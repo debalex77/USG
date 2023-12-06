@@ -112,6 +112,7 @@ private slots:
     void onClickBtnHideShowColumn();
     void onClickBtnPrint();
     void onClickBtnReport();
+    void onClickBtnShowHideViewTab();
     void openHistoryPatients();
     void filterRegExpChanged();
 
@@ -183,6 +184,8 @@ private:
     void openDocOrderEchoByClickBtnTable();
     void openPrintDesignerPreviewOrder(bool preview = true);
     void openPrintDesignerPreviewReport(bool preview = true);
+    void formationPrinMenuForOrder();
+    void formationPrinMenuForReport();
 
     void updateTableView();
     void updateTableViewOrderEcho();
