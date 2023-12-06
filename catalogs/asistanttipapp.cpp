@@ -22,6 +22,12 @@ AsistantTipApp::AsistantTipApp(QWidget *parent)
     ui->btnClose->setStyleSheet("width: 95px;");
 
     ui->show_launch->setChecked(globals::showAsistantHelper);
+
+#if defined(Q_OS_WIN)
+    ui->tip_text->setStyleSheet("font: 14px 'Cantarell';");
+    ui->frame->setStyle(style_fusion);
+#endif
+
 }
 
 AsistantTipApp::~AsistantTipApp()

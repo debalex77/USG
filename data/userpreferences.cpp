@@ -36,6 +36,11 @@ UserPreferences::UserPreferences(QWidget *parent) :
     ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     connect(ui->image_logo, QOverload<const QString &>::of(&QLabel::linkActivated), this,
             QOverload<const QString &>::of(&UserPreferences::onLinkActivatedForOpenImage));
+
+#if defined(Q_OS_WIN)
+    ui->frame->setStyle(style_fusion);
+    ui->frame_2->setStyle(style_fusion);
+#endif
 }
 
 UserPreferences::~UserPreferences()
@@ -412,6 +417,7 @@ void UserPreferences::setListWidget()
     foreach( const QString& item, LIST_ITEMS ) {
         n += 1;
         QListWidgetItem* listItem = new QListWidgetItem(item);
+#if defined(Q_OS_LINUX)
         if (n == page_general)
             listItem->setIcon(QIcon::fromTheme("preferences-system"));//listItem->setIcon(QIcon(":/img/settings_x32.png"));
         else if (n == page_launch)
@@ -420,6 +426,16 @@ void UserPreferences::setListWidget()
             listItem->setIcon(QIcon::fromTheme("edit-paste"));//listItem->setIcon(QIcon(":/img/orderEcho_x32.png"));
         else if (n == page_notedit)
             listItem->setIcon(QIcon::fromTheme("emblem-important"));//listItem->setIcon(QIcon(":/img/not-editable.png"));
+#elif defined(Q_OS_WIN)
+        if (n == page_general)
+            listItem->setIcon(QIcon(":/img/settings_x32.png"));
+        else if (n == page_launch)
+            listItem->setIcon(QIcon(":/img/update_app.png"));
+        else if (n == page_document)
+            listItem->setIcon(QIcon(":/img/orderEcho_x32.png"));
+        else if (n == page_notedit)
+            listItem->setIcon(QIcon(":/img/not-editable.png"));
+#endif
 
         ui->listWidget->addItem(listItem);
 

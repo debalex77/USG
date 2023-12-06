@@ -233,6 +233,9 @@ message($$LIBS)
 
 
 unix:!macx: LIBS += -L$$PWD/lib/openssl/ -lssl
+unix:!macx: LIBS += -L$$PWD/lib/openssl/ -lcrypto
+win32: LIBS += -L$$PWD/lib/openssl/ -llibssl
+win32: LIBS += -L$$PWD/lib/openssl/ -llibcrypto
 
 INCLUDEPATH += $$PWD/lib/openssl
 DEPENDPATH += $$PWD/lib/openssl

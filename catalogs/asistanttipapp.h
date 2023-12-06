@@ -2,6 +2,7 @@
 #define ASISTANTTIPAPP_H
 
 #include <QDialog>
+#include <QStyleFactory>
 #include <data/database.h>
 
 namespace Ui {
@@ -32,6 +33,7 @@ private:
 
     int current_step = 0;
     int max_step = 4;
+    QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // ASISTANTTIPAPP_H

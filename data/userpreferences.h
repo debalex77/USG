@@ -4,6 +4,7 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QStyleFactory>
 
 #include <catalogs/catgeneral.h>
 #include <catalogs/catusers.h>
@@ -126,6 +127,8 @@ private:
     BaseSqlQueryModel* model_doctors;
     BaseSqlQueryModel* model_nurses;
     BaseSqlQueryModel* model_organizations;
+
+    QStyle* style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor
