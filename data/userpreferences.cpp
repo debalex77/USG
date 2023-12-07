@@ -419,13 +419,13 @@ void UserPreferences::setListWidget()
         QListWidgetItem* listItem = new QListWidgetItem(item);
 #if defined(Q_OS_LINUX)
         if (n == page_general)
-            listItem->setIcon(QIcon::fromTheme("preferences-system"));//listItem->setIcon(QIcon(":/img/settings_x32.png"));
+            listItem->setIcon(QIcon::fromTheme("preferences-system"));
         else if (n == page_launch)
-            listItem->setIcon(QIcon::fromTheme("applications-internet"));//listItem->setIcon(QIcon(":/img/update_app.png"));
+            listItem->setIcon(QIcon::fromTheme("applications-internet"));
         else if (n == page_document)
-            listItem->setIcon(QIcon::fromTheme("edit-paste"));//listItem->setIcon(QIcon(":/img/orderEcho_x32.png"));
+            listItem->setIcon(QIcon::fromTheme("edit-paste"));
         else if (n == page_notedit)
-            listItem->setIcon(QIcon::fromTheme("emblem-important"));//listItem->setIcon(QIcon(":/img/not-editable.png"));
+            listItem->setIcon(QIcon::fromTheme("emblem-important"));
 #elif defined(Q_OS_WIN)
         if (n == page_general)
             listItem->setIcon(QIcon(":/img/settings_x32.png"));

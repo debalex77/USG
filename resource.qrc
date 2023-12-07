@@ -110,17 +110,10 @@
         <file>styles/markdown.css</file>
         <file>scripts/history.js</file>
         <file>styles/history.css</file>
-        <file>img_history/Designer.png</file>
-        <file>img_history/print_doc.png</file>
-        <file>img_history/write_logo.png</file>
         <file>img/image-files.png</file>
         <file>img/warning.png</file>
         <file>img/user_manual.png</file>
-        <file>html/user_manual.html</file>
         <file>styles/user_manual.css</file>
-        <file>img_manual/inteface.png</file>
-        <file>img_manual/firstLaunch.png</file>
-        <file>img_manual/settings.png</file>
         <file>img/medical-history.png</file>
         <file>img/element.png</file>
         <file>img/folder_yellow.png</file>
@@ -155,5 +148,17 @@
         <file>img/bug.png</file>
         <file>img/usg_splash.png</file>
         <file>img/not-editable.png</file>
+        <file>img/oxygen/application-exit.png</file>
+        <file>img/oxygen/braindump.png</file>
+        <file>img/oxygen/dialog-error.png</file>
+        <file>img/oxygen/dialog-information.png</file>
+        <file>img/oxygen/dialog-warning.png</file>
+        <file>img/oxygen/document-preview.png</file>
+        <file>img/oxygen/go-next.png</file>
+        <file>img/oxygen/go-previous.png</file>
+        <file>img/oxygen/kspread.png</file>
+        <file>img/oxygen/page-zoom.png</file>
+        <file>img/oxygen/tools-report-bug.png</file>
+        <file>img/oxygen/ktip.png</file>
     </qresource>
 </RCC>

@@ -414,7 +414,7 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         qry.addBindValue(0);
         qry.addBindValue(10);
         qry.addBindValue(0);
-        qry.addBindValue(1);
+        qry.addBindValue(0);
         qry.addBindValue(0);
         qry.addBindValue(1);
 

@@ -83,7 +83,7 @@
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/back-arrow.png</normaloff>:/img/back-arrow.png</iconset>
+          <normaloff>:/img/oxygen/go-previous.png</normaloff>:/img/oxygen/go-previous.png</iconset>
         </property>
        </widget>
       </item>
@@ -131,7 +131,7 @@
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/next-arrow.png</normaloff>:/img/next-arrow.png</iconset>
+          <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
         </property>
        </widget>
       </item>
@@ -142,7 +142,7 @@
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/back-arrow.png</normaloff>:/img/back-arrow.png</iconset>
+          <normaloff>:/img/oxygen/go-previous.png</normaloff>:/img/oxygen/go-previous.png</iconset>
         </property>
        </widget>
       </item>
@@ -153,7 +153,7 @@
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/next-arrow.png</normaloff>:/img/next-arrow.png</iconset>
+          <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
         </property>
        </widget>
       </item>

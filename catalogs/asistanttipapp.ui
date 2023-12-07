@@ -14,7 +14,8 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset theme="preferences-desktop-accessibility"/>
+   <iconset resource="../resource.qrc">
+    <normaloff>:/img/oxygen/ktip.png</normaloff>:/img/oxygen/ktip.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="1">
@@ -36,7 +37,8 @@
       <string>Precedent</string>
      </property>
      <property name="icon">
-      <iconset theme="go-previous"/>
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/oxygen/go-previous.png</normaloff>:/img/oxygen/go-previous.png</iconset>
      </property>
     </widget>
    </item>
@@ -49,7 +51,8 @@
       <string>Următor</string>
      </property>
      <property name="icon">
-      <iconset theme="go-next"/>
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
      </property>
     </widget>
    </item>
@@ -59,7 +62,8 @@
       <string>Închide</string>
      </property>
      <property name="icon">
-      <iconset theme="window-close"/>
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/oxygen/application-exit.png</normaloff>:/img/oxygen/application-exit.png</iconset>
      </property>
     </widget>
    </item>
@@ -94,6 +98,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

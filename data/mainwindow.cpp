@@ -313,7 +313,7 @@ void MainWindow::initActions()
     ui->menuAssistance->addAction(actionCheckUpdate);
     connect(actionCheckUpdate, &QAction::triggered, this, &MainWindow::checkUpdateApp);
 
-    QAction* actionShowAsistantTip = new QAction(QIcon::fromTheme("preferences-desktop-accessibility"), tr("Prezentarea asistentului de sfaturi"), this);
+    QAction* actionShowAsistantTip = new QAction(QIcon(":/img/oxygen/ktip.png"), tr("Prezentarea asistentului de sfaturi"), this);
     ui->menuAssistance->addAction(actionShowAsistantTip);
     connect(actionShowAsistantTip, &QAction::triggered, this, &MainWindow::onShowAsistantTip);
 
@@ -684,10 +684,9 @@ void MainWindow::onReadyVersion()
         if (messange_box.exec() == QMessageBox::Yes)
             QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/releases"));
     } else {
-        textEdit_dockWidget->setHtml(tr("%1   %2: Folosiți cea mai recentă versiune %3.")
-                                         .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"), APPLICATION_VERSION));
-        textEdit_dockWidget->setFixedHeight(70);
-        dock_widget->show();
+        QLabel* txt = new QLabel(this);
+        txt->setText(tr("Folosiți cea mai recentă versiune \"%1\".").arg(APPLICATION_VERSION));
+        statusBar()->addWidget(txt);
     }
 
 #if defined(Q_OS_LINUX)

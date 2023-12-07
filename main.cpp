@@ -137,6 +137,7 @@ int main(int argc, char *argv[])
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
     a.setStyleSheet(appStyle);              // setam stilul
+    // a.setStyle("Fusion");
 
     //******************************************************************************************************************************
     // alegem fisierul cu setari

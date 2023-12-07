@@ -282,7 +282,7 @@
                 </property>
                 <property name="icon">
                  <iconset resource="../resource.qrc">
-                  <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+                  <normaloff>:/img/oxygen/application-exit.png</normaloff>:/img/oxygen/application-exit.png</iconset>
                 </property>
                </widget>
               </item>
