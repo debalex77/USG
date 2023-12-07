@@ -5,6 +5,7 @@
 #include <QTranslator>
 #include <QKeyEvent>
 #include <QMessageBox>
+#include <QStyleFactory>
 #include <data/globals.h>
 
 namespace Ui {
@@ -34,6 +35,7 @@ private:
     Ui::InitLaunch *ui;
     QTranslator* translator;
     QString nameLocale;
+    QStyle* style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);

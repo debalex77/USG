@@ -49,6 +49,11 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     connect(ui->btnRemove, &QAbstractButton::clicked, this, &DatabaseSelection::onRemoveRowListWidget);
     connect(ui->btnCancel, &QAbstractButton::clicked, this, &DatabaseSelection::close);
     connect(ui->listWidget, QOverload<int>::of(&QListWidget::currentRowChanged), this, QOverload<int>::of(&DatabaseSelection::onCurrentRowChanged));
+
+#if defined(Q_OS_WIN)
+    ui->frame->setStyle(style_fusion);
+#endif
+
 }
 
 DatabaseSelection::~DatabaseSelection()

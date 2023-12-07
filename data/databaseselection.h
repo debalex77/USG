@@ -7,6 +7,7 @@
 #include <QMessageBox>
 #include <QStandardPaths>
 #include <QTimer>
+#include <QStyleFactory>
 #include "data/database.h"
 
 #if defined(Q_OS_LINUX)
@@ -59,6 +60,8 @@ private:
     QString dirConfigPath  = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config";
     QString fileConfigPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config/settings.conf";
 #endif
+
+    QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // DATABASESELECTION_H

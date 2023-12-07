@@ -34,6 +34,10 @@ InitLaunch::InitLaunch(QWidget *parent) :
 
     connect(ui->btnOK, &QPushButton::clicked, this, &InitLaunch::onWritingData);
     connect(ui->btnClose, &QPushButton::clicked, this, &InitLaunch::onClose);
+
+#if defined(Q_OS_WIN)
+    ui->frame->setStyle(style_fusion);
+#endif
 }
 
 InitLaunch::~InitLaunch()
