@@ -34,7 +34,6 @@
        <property name="font">
         <font>
          <pointsize>12</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -51,7 +50,6 @@
        <property name="font">
         <font>
          <pointsize>12</pointsize>
-         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -166,7 +164,6 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -179,7 +176,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>102</height>
+        <height>108</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -194,7 +191,6 @@
         <widget class="QLabel" name="label_5">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -213,7 +209,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -256,7 +251,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -266,7 +260,6 @@
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -290,7 +283,6 @@
         <widget class="QLabel" name="label_7">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -309,7 +301,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -319,7 +310,6 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -332,7 +322,6 @@
         <widget class="QLabel" name="label_13">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -345,7 +334,6 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -364,7 +352,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -374,7 +361,6 @@
         <widget class="QComboBox" name="comboNurse">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -384,7 +370,6 @@
         <widget class="QComboBox" name="comboDoctorExecute">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -398,7 +383,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>125</height>
+        <height>131</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -413,7 +398,6 @@
         <widget class="QLabel" name="label_6">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -432,7 +416,6 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -461,7 +444,6 @@
             <property name="font">
              <font>
               <pointsize>16</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -480,7 +462,6 @@
            <widget class="QCheckBox" name="cardPayment">
             <property name="font">
              <font>
-              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -496,7 +477,6 @@
         <widget class="QCheckBox" name="checkBox">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -526,7 +506,6 @@
              <widget class="QLabel" name="label_12">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -539,7 +518,6 @@
              <widget class="QLabel" name="label_11">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -555,7 +533,6 @@
              <widget class="QDateEdit" name="dateEditBirthday">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -568,7 +545,6 @@
              <widget class="QLabel" name="label_14">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -581,7 +557,6 @@
              <widget class="QLineEdit" name="editIDNP">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -591,7 +566,6 @@
              <widget class="QLabel" name="label_10">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -604,7 +578,6 @@
              <widget class="QLabel" name="label_9">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -617,7 +590,6 @@
              <widget class="QLineEdit" name="editAddress">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -627,7 +599,6 @@
              <widget class="QLineEdit" name="editPolicyMedical">
               <property name="font">
                <font>
-                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -642,7 +613,6 @@
         <widget class="QToolButton" name="btnNewPacient">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -662,7 +632,6 @@
         <widget class="QToolButton" name="btnEditPacient">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -682,7 +651,6 @@
         <widget class="QToolButton" name="btnClearPacient">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -702,7 +670,6 @@
         <widget class="QToolButton" name="btnPatientHistory">
          <property name="font">
           <font>
-           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -753,7 +720,6 @@
        </property>
        <property name="font">
         <font>
-         <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>
@@ -781,6 +747,12 @@
       </item>
       <item row="0" column="4">
        <widget class="QPushButton" name="btnOk">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Validează</string>
         </property>
@@ -792,6 +764,12 @@
       </item>
       <item row="0" column="5">
        <widget class="QPushButton" name="btnWrite">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Salvează</string>
         </property>
@@ -803,6 +781,12 @@
       </item>
       <item row="0" column="3">
        <widget class="QPushButton" name="btnPrint">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Printează</string>
         </property>
@@ -814,6 +798,12 @@
       </item>
       <item row="0" column="2">
        <widget class="QPushButton" name="btnReport">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Raport</string>
         </property>
@@ -825,6 +815,12 @@
       </item>
       <item row="0" column="6">
        <widget class="QPushButton" name="btnClose">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
         <property name="text">
          <string>Inchide</string>
         </property>
