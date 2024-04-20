@@ -176,6 +176,36 @@ void DataBase::creatingTables()
     if (createTableGestation1())
         qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation1'.");
 
+    if (createTableGestation2())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2'.");
+
+    if (createTableGestation2_biometry())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_biometry'.");
+
+    if (createTableGestation2_cranium())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_cranium'.");
+
+    if (createTableGestation2_snc())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_SNC'.");
+
+    if (createTableGestation2_heart())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_heart'.");
+
+    if (createTableGestation2_thorax())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_thorax'.");
+
+    if (createTableGestation2_abdomen())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_abdomen'.");
+
+    if (createTableGestation2_urinarySystem())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_urinarySystem'.");
+
+    if (createTableGestation2_other())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_other'.");
+
+    if (createTableGestation2_doppler())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_doppler'.");
+
     if (createTableRegistrationPatients())
         qInfo(logInfo()) << tr("A fost creata tabela 'registrationPatients'.");
 
@@ -2761,6 +2791,336 @@ bool DataBase::createTableGestation1()
     } else {
         qWarning(logWarning()) << tr("%1 - createTableGestation1()").arg(metaObject()->className())
                                << tr("Nu a fost creata tabela 'tableGestation1'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2 ("
+                    "id                                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho                         INTEGER NOT NULL CONSTRAINT tableGestation2_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "gestation_age                         TEXT (20),"
+                    "dateMenstruation                      TEXT (10),"
+                    "view_examination                      INTEGER,"
+                    "single_multiple_pregnancy             INTEGER,"
+                    "single_multiple_pregnancy_description TEXT,"
+                    "antecedent                            TEXT (150),"
+                    "comment                               TEXT (250),"
+                    "concluzion                            TEXT (500),"
+                    "recommendation                        TEXT (250) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_biometry()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_biometry ("
+                    "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho    INTEGER NOT NULL CONSTRAINT tableGestation2_biometry_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "BPD              TEXT (5),"
+                    "BPD_age          TEXT (20),"
+                    "HC               TEXT (5),"
+                    "HC_age           TEXT (20),"
+                    "AC               TEXT (5),"
+                    "AC_age           TEXT (20),"
+                    "FL               TEXT (5),"
+                    "FL_age           TEXT (20),"
+                    "FetusCorresponds TEXT (20) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_biometry()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_biometry'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_cranium()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_cranium ("
+                    "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2Cranium_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "calloteCranium                 INTEGER,"
+                    "facialeProfile                 INTEGER,"
+                    "nasalBones                     INTEGER,"
+                    "nasalBones_dimens              TEXT (5),"
+                    "eyeball                        INTEGER,"
+                    "eyeball_desciption             TEXT (100),"
+                    "nasolabialTriangle             INTEGER,"
+                    "nasolabialTriangle_description TEXT (100),"
+                    "nasalFold                      TEXT (5) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_cranium()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_cranium'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_snc()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_SNC ("
+                    "id                            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    "id_reportEcho                 INTEGER NOT NULL CONSTRAINT tableGestation2_SNC_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "hemispheres                   INTEGER,"
+                    "fissureSilvius                INTEGER,"
+                    "corpCalos                     INTEGER,"
+                    "ventricularSystem             INTEGER,"
+                    "ventricularSystem_description TEXT (70),"
+                    "cavityPellucidSeptum          INTEGER,"
+                    "choroidalPlex                 INTEGER,"
+                    "choroidalPlex_description     TEXT,"
+                    "cerebellum                    INTEGER,"
+                    "cerebellum_description        TEXT (70),"
+                    "vertebralColumn               INTEGER,"
+                    "vertebralColumn_description   TEXT (100)"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_snc()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_snc'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_heart()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_heart ("
+                    "id                                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho                            INTEGER NOT NULL CONSTRAINT tableGestation2_heart_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "position                                 TEXT (50),"
+                    "heartBeat                                INTEGER,"
+                    "heartBeat_frequency                      TEXT (5),"
+                    "heartBeat_rhythm                         INTEGER,"
+                    "pericordialCollections                   INTEGER,"
+                    "planPatruCamere                          INTEGER,"
+                    "planPatruCamere_description              TEXT (70),"
+                    "ventricularEjectionPathLeft              INTEGER,"
+                    "ventricularEjectionPathLeft_description  TEXT (70),"
+                    "ventricularEjectionPathRight             INTEGER,"
+                    "ventricularEjectionPathRight_description TEXT (70),"
+                    "intersectionVesselMagistral              INTEGER,"
+                    "intersectionVesselMagistral_description  TEXT (70),"
+                    "planTreiVase                             INTEGER,"
+                    "planTreiVase_description                 TEXT (70),"
+                    "archAorta                                INTEGER,"
+                    "planBicav                                INTEGER"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_heart()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_heart'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_thorax()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_thorax ("
+                    "id                         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho              INTEGER NOT NULL CONSTRAINT tableGestation2_thorax_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "pulmonaryAreas             INTEGER (1),"
+                    "pulmonaryAreas_description TEXT (70),"
+                    "pleuralCollections         INTEGER (1),"
+                    "diaphragm                  INTEGER (1) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_thorax()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_thorax'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_abdomen()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_abdomen ("
+                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableGestation2_abdomen_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "abdominalWall         INTEGER,"
+                    "abdominalCollections  INTEGER,"
+                    "stomach               INTEGER,"
+                    "stomach_description   TEXT (50),"
+                    "abdominalOrgans       INTEGER,"
+                    "cholecist             INTEGER,"
+                    "cholecist_description TEXT (50),"
+                    "intestine             INTEGER,"
+                    "intestine_description TEXT (70) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_abdomen()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_abdomen'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_urinarySystem()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_urinarySystem ("
+                    "id                   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    "id_reportEcho        INTEGER NOT NULL CONSTRAINT tableGestation2_urinarySystem_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "kidneys              INTEGER,"
+                    "kidneys_descriptions TEXT (70),"
+                    "ureter               INTEGER,"
+                    "ureter_descriptions  TEXT (70),"
+                    "bladder              INTEGER"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_urinarySystem()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_urinarySystem'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_other()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_other ("
+                    "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2_other_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "externalGenitalOrgans          INTEGER,"
+                    "externalGenitalOrgans_aspect   INTEGER,"
+                    "extremities                    INTEGER,"
+                    "extremities_descriptions       TEXT (150),"
+                    "fetusMass                      TEXT,"
+                    "placenta                       INTEGER,"
+                    "placentaLocalization           TEXT (50),"
+                    "placentaDegreeMaturation       TEXT (5),"
+                    "placentaDepth                  TEXT (5),"
+                    "placentaStructure              INTEGER,"
+                    "placentaStructure_descriptions TEXT (150),"
+                    "umbilicalCordon                INTEGER,"
+                    "umbilicalCordon_description    TEXT (70),"
+                    "insertionPlacenta              INTEGER,"
+                    "amnioticIndex                  TEXT (5),"
+                    "amnioticIndexAspect            INTEGER,"
+                    "amnioticBedDepth               TEXT (5),"
+                    "cervix                         TEXT (5),"
+                    "cervix_description             TEXT (150) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_other()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_other'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableGestation2_doppler()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableGestation2_doppler ("
+                    "id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho  INTEGER NOT NULL CONSTRAINT tableGestation2_doppler_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "ombilic_PI     TEXT (5),"
+                    "ombilic_RI     TEXT (5),"
+                    "ombilic_SD     REAL (5),"
+                    "ombilic_flux   INTEGER,"
+                    "cerebral_PI    TEXT (5),"
+                    "cerebral_RI    TEXT (5),"
+                    "cerebral_SD    TEXT (5),"
+                    "cerebral_flux  INTEGER,"
+                    "uterRight_PI   TEXT (5),"
+                    "uterRight_RI   TEXT (5),"
+                    "uterRight_SD   TEXT (5),"
+                    "uterRight_flux INTEGER,"
+                    "uterLeft_PI    TEXT (5),"
+                    "uterLeft_RI    TEXT (5),"
+                    "uterLeft_SD    TEXT (5),"
+                    "uterLeft_flux  INTEGER,"
+                    "ductVenos      TEXT (50) "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableGestation2_doppler()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableGestation2_doppler'.") + qry.lastError().text();
         return false;
     }
 }

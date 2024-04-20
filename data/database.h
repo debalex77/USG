@@ -102,6 +102,18 @@ public:
     bool createTableThyroid();
     bool createTableGestation0();
     bool createTableGestation1();
+
+    bool createTableGestation2();
+    bool createTableGestation2_biometry();
+    bool createTableGestation2_cranium();
+    bool createTableGestation2_snc();
+    bool createTableGestation2_heart();
+    bool createTableGestation2_thorax();
+    bool createTableGestation2_abdomen();
+    bool createTableGestation2_urinarySystem();
+    bool createTableGestation2_other();
+    bool createTableGestation2_doppler();
+
     bool createTableRegistrationPatients();
     bool createTableSettingsForm();
     bool createTableSettingsReports();
