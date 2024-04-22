@@ -69,6 +69,12 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     group_btn_gestation1->addButton(ui->gestation1_view_medium, 1);
     group_btn_gestation1->addButton(ui->gestation1_view_difficult, 2);
     ui->gestation1_view_medium->setChecked(true);
+
+    group_btn_gestation2 = new QButtonGroup(this);
+    group_btn_gestation2->addButton(ui->gestation2_trimestru2, 0);
+    group_btn_gestation2->addButton(ui->gestation2_trimestru3, 1);
+    ui->gestation2_trimestru2->setChecked(true);
+
     // ******************************************************************
 
     ui->image1->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea</a>");
@@ -1561,6 +1567,8 @@ void DocReportEcho::disconnections_thyroid()
 
 void DocReportEcho::connections_gestation0()
 {
+    ui->gestation0_gestation->setInputMask("DDs. Dz.");
+
     ui->gestation0_antecedent->setMaxLength(150);
     ui->gestation0_gestation->setMaxLength(20);
     ui->gestation0_GS_dimens->setMaxLength(5);

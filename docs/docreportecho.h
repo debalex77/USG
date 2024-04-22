@@ -345,6 +345,7 @@ private:
     QButtonGroup* group_btn_gynecology;
     QButtonGroup* group_btn_gestation0;
     QButtonGroup* group_btn_gestation1;
+    QButtonGroup* group_btn_gestation2;
 
     QString str_concluzion_organs_internal; // pentru concluziile pe blocuri
     QString str_concluzion_urinary_system;

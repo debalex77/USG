@@ -2799,7 +2799,22 @@ bool DataBase::createTableGestation2()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE tableGestation2 ("
+                    "`id`                                    int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`                         int NOT NULL,"
+                    "`gestation_age`                         varchar(20) DEFAULT NULL,"
+                    "`dateMenstruation`                      varchar(10) DEFAULT NULL,"
+                    "`view_examination`                      int DEFAULT NULL,"
+                    "`single_multiple_pregnancy`             int DEFAULT NULL,"
+                    "`single_multiple_pregnancy_description` varchar(250) DEFAULT NULL,"
+                    "`antecedent`                            varchar(150) DEFAULT NULL,"
+                    "`comment`                               varchar(250) DEFAULT NULL,"
+                    "`concluzion`                            varchar(500) DEFAULT NULL,"
+                    "`recommendation`                        varchar(250) DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2 ("
                     "id                                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -2808,7 +2823,7 @@ bool DataBase::createTableGestation2()
                     "dateMenstruation                      TEXT (10),"
                     "view_examination                      INTEGER,"
                     "single_multiple_pregnancy             INTEGER,"
-                    "single_multiple_pregnancy_description TEXT,"
+                    "single_multiple_pregnancy_description TEXT (250),"
                     "antecedent                            TEXT (150),"
                     "comment                               TEXT (250),"
                     "concluzion                            TEXT (500),"
@@ -2830,7 +2845,22 @@ bool DataBase::createTableGestation2_biometry()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_biometry` ("
+                    "`id`               int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`    int NOT NULL,"
+                    "`BPD`              varchar(5) DEFAULT NULL,"
+                    "`BPD_age`          varchar(20) DEFAULT NULL,"
+                    "`HC`               varchar(5) DEFAULT NULL,"
+                    "`HC_age`           varchar(20) DEFAULT NULL,"
+                    "`AC`               varchar(5) DEFAULT NULL,"
+                    "`AC_age`           varchar(20) DEFAULT NULL,"
+                    "`FL`               varchar(5) DEFAULT NULL,"
+                    "`FL_age`           varchar(20) DEFAULT NULL,"
+                    "`FetusCorresponds` varchar(20) DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_biometry_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_biometry_reportEcho_id_idx` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_biometry ("
                     "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -2861,7 +2891,22 @@ bool DataBase::createTableGestation2_cranium()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_cranium` ("
+                    "`id`                             int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`                  int NOT NULL,"
+                    "`calloteCranium`                 int DEFAULT NULL,"
+                    "`facialeProfile`                 int DEFAULT NULL,"
+                    "`nasalBones`                     int DEFAULT NULL,"
+                    "`nasalBones_dimens`              varchar(5) DEFAULT NULL,"
+                    "`eyeball`                        int DEFAULT NULL,"
+                    "`eyeball_desciption`             varchar(100) DEFAULT NULL,"
+                    "`nasolabialTriangle`             int DEFAULT NULL,"
+                    "`nasolabialTriangle_description` varchar(100) DEFAULT NULL,"
+                    "`nasalFold`                      varchar(5) DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_cranium_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_cranium_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_cranium ("
                     "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -2892,7 +2937,25 @@ bool DataBase::createTableGestation2_snc()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_SNC` ("
+                    "`id`                            int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`                 int NOT NULL,"
+                    "`hemispheres`                   int DEFAULT NULL,"
+                    "`fissureSilvius`                int DEFAULT NULL,"
+                    "`corpCalos`                     int DEFAULT NULL,"
+                    "`ventricularSystem`             int DEFAULT NULL,"
+                    "`ventricularSystem_description` varchar(70) DEFAULT NULL,"
+                    "`cavityPellucidSeptum`          int DEFAULT NULL,"
+                    "`choroidalPlex`                 int DEFAULT NULL,"
+                    "`choroidalPlex_description`     varchar(70) DEFAULT NULL,"
+                    "`cerebellum`                    int DEFAULT NULL,"
+                    "`cerebellum_description`        varchar(70) DEFAULT NULL,"
+                    "`vertebralColumn`               int DEFAULT NULL,"
+                    "`vertebralColumn_description`   varchar(100) DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_SNC_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_SNC_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_SNC ("
                     "id                            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
@@ -2904,7 +2967,7 @@ bool DataBase::createTableGestation2_snc()
                     "ventricularSystem_description TEXT (70),"
                     "cavityPellucidSeptum          INTEGER,"
                     "choroidalPlex                 INTEGER,"
-                    "choroidalPlex_description     TEXT,"
+                    "choroidalPlex_description     TEXT (70),"
                     "cerebellum                    INTEGER,"
                     "cerebellum_description        TEXT (70),"
                     "vertebralColumn               INTEGER,"
@@ -2926,7 +2989,30 @@ bool DataBase::createTableGestation2_heart()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_heart` ("
+                    "`id`                                       int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`                            int NOT NULL,"
+                    "`position`                                 varchar(50) DEFAULT NULL,"
+                    "`heartBeat`                                int DEFAULT NULL,"
+                    "`heartBeat_frequency`                      varchar(5) DEFAULT NULL,"
+                    "`heartBeat_rhythm`                         int DEFAULT NULL,"
+                    "`pericordialCollections`                   int DEFAULT NULL,"
+                    "`planPatruCamere`                          int DEFAULT NULL,"
+                    "`planPatruCamere_description`              varchar(70) DEFAULT NULL,"
+                    "`ventricularEjectionPathLeft`              int DEFAULT NULL,"
+                    "`ventricularEjectionPathLeft_description`  varchar(70) DEFAULT NULL,"
+                    "`ventricularEjectionPathRight`             int DEFAULT NULL,"
+                    "`ventricularEjectionPathRight_description` varchar(70) DEFAULT NULL,"
+                    "`intersectionVesselMagistral`              int DEFAULT NULL,"
+                    "`intersectionVesselMagistral_description`  varchar(70) DEFAULT NULL,"
+                    "`planTreiVase`                             int DEFAULT NULL,"
+                    "`planTreiVase_description`                 varchar(70) DEFAULT NULL,"
+                    "`archAorta`                                int DEFAULT NULL,"
+                    "`planBicav`                                int DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_heart_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_heart_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_heart ("
                     "id                                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -2965,7 +3051,17 @@ bool DataBase::createTableGestation2_thorax()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_thorax` ("
+                    "`id`                         int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`              int NOT NULL,"
+                    "`pulmonaryAreas`             int DEFAULT NULL,"
+                    "`pulmonaryAreas_description` varchar(70) DEFAULT NULL,"
+                    "`pleuralCollections`         int DEFAULT NULL,"
+                    "`diaphragm`                  int DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_thorax_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_thorax_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_thorax ("
                     "id                         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
