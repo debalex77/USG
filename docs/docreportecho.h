@@ -172,6 +172,7 @@ private slots:
     void clickBtnThyroid();
     void clickBtnGestation0();
     void clickBtnGestation1();
+    void clickBtnGestation2();
     void clickBtnComment();
     void clickBtnImages();
     void createMenuPrint();         // meniu print
@@ -203,6 +204,8 @@ private slots:
     void disconnections_gestation0();
     void connections_gestation1();         // conexiunea la bloc 'gestation 1'
     void disconnections_gestation1();
+    void connections_gestation2();         // conexiunea la bloc 'gestation 2'
+    void disconnections_gestation2();
 
     void slot_ItNewChanged();
     void slot_IdChanged();
@@ -233,7 +236,8 @@ private:
         page_thyroid         = 5,
         page_gestation0      = 6,
         page_gestation1      = 7,
-        page_images          = 8
+        page_gestation2      = 8,
+        page_images          = 9
     };
 
     enum IndexStatus
@@ -350,6 +354,7 @@ private:
     QString str_concluzion_thyroid;
     QString str_concluzion_gestation0;
     QString str_concluzion_gestation1;
+    QString str_concluzion_gestation2;
 
     LimeReport::ReportEngine* m_report;
 

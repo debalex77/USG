@@ -711,6 +711,7 @@ void DocReportEcho::initConnections()
     connect(ui->btnThyroid, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnThyroid);
     connect(ui->btnGestation0, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnGestation0);
     connect(ui->btnGestation1, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnGestation1);
+    connect(ui->btnGestation2, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnGestation2);
     connect(ui->btnComment, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnComment);
     connect(ui->btnImages, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnImages);
 
@@ -748,6 +749,7 @@ void DocReportEcho::initConnections()
     connect(this, &DocReportEcho::t_thyroideChanged, this, &DocReportEcho::initEnableBtn);
     connect(this, &DocReportEcho::t_gestation0Changed, this, &DocReportEcho::initEnableBtn);
     connect(this, &DocReportEcho::t_gestation1Changed, this, &DocReportEcho::initEnableBtn);
+    connect(this, &DocReportEcho::t_gestation2Changed, this, &DocReportEcho::initEnableBtn);
 
     createMenuPrint();
 
@@ -777,6 +779,9 @@ void DocReportEcho::openParameters()
     dialogInvestig->set_t_gynecology(m_gynecology);
     dialogInvestig->set_t_breast(m_breast);
     dialogInvestig->set_t_thyroide(m_thyroide);
+    dialogInvestig->set_t_gestation0(m_gestation0);
+    dialogInvestig->set_t_gestation1(m_gestation1);
+    dialogInvestig->set_t_gestation2(m_gestation2);
 
     if (dialogInvestig->exec() != QDialog::Accepted)
         return;
@@ -882,6 +887,13 @@ void DocReportEcho::clickBtnGestation1()
 {
     ui->stackedWidget->setCurrentIndex(page_gestation1);
     str_concluzion_gestation1.clear();
+    updateStyleBtnInvestigations();
+}
+
+void DocReportEcho::clickBtnGestation2()
+{
+    ui->stackedWidget->setCurrentIndex(page_gestation2);
+    str_concluzion_gestation2.clear();
     updateStyleBtnInvestigations();
 }
 
@@ -1678,6 +1690,74 @@ void DocReportEcho::disconnections_gestation1()
     }
 }
 
+void DocReportEcho::connections_gestation2()
+{
+    ui->gestation2_gestation_age->setInputMask("DDs. Dz.");
+    ui->gestation2_bpd_age->setInputMask("DDs. Dz.");
+    ui->gestation2_hc_age->setInputMask("DDs. Dz.");
+    ui->gestation2_ac_age->setInputMask("DDs. Dz.");
+    ui->gestation2_fl_age->setInputMask("DDs. Dz.");
+    ui->gestation2_fetus_age->setInputMask("DDs. Dz.");
+
+    // line edit
+    QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation2)->findChildren<QLineEdit*>();
+    for (int n = 0; n < list_line_edit.count(); n++) {
+        connect(list_line_edit[n], &QLineEdit::textChanged, this, &DocReportEcho::dataWasModified);
+    }
+    //plain text edit
+    QList<QPlainTextEdit*> list_plain_text_edit = ui->stackedWidget->widget(page_gestation2)->findChildren<QPlainTextEdit*>();
+    for (int n = 0; n < list_plain_text_edit.count(); n++) {
+        connect(list_plain_text_edit[n], &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
+    }
+    //combobox
+    QList<QComboBox*> list_combo = ui->stackedWidget->widget(page_gestation2)->findChildren<QComboBox*>();
+    for (int n = 0; n < list_combo.count(); n++) {
+        connect(list_combo[n], &QComboBox::currentTextChanged, this, &DocReportEcho::dataWasModified);
+    }
+
+    ui->gestation2_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
+    ui->gestation2_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
+    ui->gestation2_recommendation->setMaxLength(255);
+
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+            {
+                if (ui->gestation2_concluzion->toPlainText().length() > 500)
+                    ui->gestation2_concluzion->textCursor().deletePreviousChar();
+            });
+
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [this]()
+    {
+        if (str_concluzion_gestation2.isEmpty()){
+            str_concluzion_gestation2 = ui->concluzion->toPlainText();
+            if (str_concluzion_gestation2.isEmpty())
+                str_concluzion_gestation2 = "null";
+        }
+        if (str_concluzion_gestation2 == "null")
+            ui->concluzion->setPlainText(ui->gestation2_concluzion->toPlainText());
+        else
+            ui->concluzion->setPlainText(str_concluzion_gestation2 + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gestation2_concluzion->toPlainText());
+    });
+}
+
+void DocReportEcho::disconnections_gestation2()
+{
+    // line edit
+    QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation2)->findChildren<QLineEdit*>();
+    for (int n = 0; n < list_line_edit.count(); n++) {
+        disconnect(list_line_edit[n], &QLineEdit::textChanged, this, &DocReportEcho::dataWasModified);
+    }
+    //plain text edit
+    QList<QPlainTextEdit*> list_plain_text_edit = ui->stackedWidget->widget(page_gestation2)->findChildren<QPlainTextEdit*>();
+    for (int n = 0; n < list_plain_text_edit.count(); n++) {
+        disconnect(list_plain_text_edit[n], &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
+    }
+    //combobox
+    QList<QComboBox*> list_combo = ui->stackedWidget->widget(page_gestation2)->findChildren<QComboBox*>();
+    for (int n = 0; n < list_combo.count(); n++) {
+        disconnect(list_combo[n], &QComboBox::currentTextChanged, this, &DocReportEcho::dataWasModified);
+    }
+}
+
 // *******************************************************************
 // **************** PROCESAREA SLOT-URILOR ***************************
 
@@ -1708,6 +1788,8 @@ void DocReportEcho::slot_ItNewChanged()
             connections_gestation0();
         if (m_gestation1)
             connections_gestation1();
+        if (m_gestation2)
+            connections_gestation2();
 
         ui->comment->setHidden(true);
     }
@@ -2895,7 +2977,8 @@ void DocReportEcho::initEnableBtn()
             ! m_breast &&
             ! m_thyroide &&
             ! m_gestation0 &&
-            ! m_gestation1)
+            ! m_gestation1 &&
+            ! m_gestation2)
         ui->stackedWidget->setHidden(true);
     else
         ui->stackedWidget->setHidden(false);
@@ -2908,6 +2991,7 @@ void DocReportEcho::initEnableBtn()
     ui->btnThyroid->setHidden(! m_thyroide);
     ui->btnGestation0->setHidden(! m_gestation0);
     ui->btnGestation1->setHidden(! m_gestation1);
+    ui->btnGestation2->setHidden(! m_gestation2);
 
     ui->btnOrgansInternal->setEnabled(m_organs_internal);
     if (m_organs_internal && m_current_page == -1){
@@ -2963,6 +3047,13 @@ void DocReportEcho::initEnableBtn()
         ui->stackedWidget->setCurrentIndex(page_gestation1);
         ui->btnGestation1->setFocus();
         m_current_page = page_gestation1;
+    }
+
+    ui->btnGestation2->setEnabled(m_gestation2);
+    if (m_gestation2 && m_current_page == -1){
+        ui->stackedWidget->setCurrentIndex(page_gestation2);
+        ui->btnGestation2->setFocus();
+        m_current_page = page_gestation2;
     }
 }
 
@@ -3037,6 +3128,15 @@ void DocReportEcho::updateStyleBtnInvestigations()
                                          "border-color: navy;");
     } else {
         ui->btnGestation1->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
+                                         "border: 0px #8f8f91;");
+    }
+
+    if (ui->stackedWidget->currentIndex() == page_gestation2){
+        ui->btnGestation2->setStyleSheet("background: 0px #C2C2C3; "
+                                         "border: 1px inset blue; "
+                                         "border-color: navy;");
+    } else {
+        ui->btnGestation2->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
                                          "border: 0px #8f8f91;");
     }
 
