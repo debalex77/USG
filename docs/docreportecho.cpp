@@ -3690,6 +3690,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
             qry.prepare("INSERT INTO tableGestation2 ("
                         "id_reportEcho, "
                         "gestation_age, "
+                        "trimestru, "
                         "dateMenstruation, "
                         "view_examination, "
                         "single_multiple_pregnancy, "
@@ -3697,11 +3698,12 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         "antecedent, "
                         "comment, "
                         "concluzion, "
-                        "recommendation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
+                        "recommendation) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                         ";");
             qry.addBindValue(m_id);
             qry.addBindValue((ui->gestation2_gestation_age->text().isEmpty()) ? QVariant() : ui->gestation2_gestation_age->text());
             qry.addBindValue(ui->gestation2_dateMenstruation->date().toString("yyyy-MM-dd"));
+            qry.addBindValue((ui->gestation2_trimestru2->isChecked()) ? 2 : 3);
             qry.addBindValue(ui->gestation2_view_examination->currentIndex());
             qry.addBindValue(ui->gestation2_pregnancy->currentIndex());
             qry.addBindValue((ui->gestation2_pregnancy_description->text().isEmpty()) ? QVariant() : ui->gestation2_pregnancy_description->text());
@@ -3900,6 +3902,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
             qry.addBindValue((ui->gestation2_kidneys_description->text().isEmpty()) ? QVariant() : ui->gestation2_kidneys_description->text());
             qry.addBindValue(ui->gestation2_ureter->currentIndex());
             qry.addBindValue((ui->gestation2_ureter_description->text().isEmpty()) ? QVariant() : ui->gestation2_ureter_description->text());
+            qry.addBindValue(ui->gestation2_bladder->currentIndex());
             if (! qry.exec())
                 details_error = tr("Eroarea inserarii datelor documentului nr.%1 din tabela 'tableGestation2_urinarySystem' - %2")
                                     .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
@@ -3928,7 +3931,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         "cervix_description) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)"
                         ";");
             qry.addBindValue(m_id);
-            qry.addBindValue(QVariant());
+            qry.addBindValue(ui->gestation2_fetusSex->currentIndex());
             qry.addBindValue(QVariant());
             qry.addBindValue(ui->gestation2_extremities->currentIndex());
             qry.addBindValue((ui->gestation2_extremities_description->text().isEmpty()) ? QVariant() : ui->gestation2_extremities_description->text());
@@ -4460,6 +4463,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
             // main table
             qry.prepare("UPDATE tableGestation2 SET "
                         "gestation_age                         = :gestation_age, "
+                        "trimestru                             = :trimestru, "
                         "dateMenstruation                      = :dateMenstruation, "
                         "view_examination                      = :view_examination, "
                         "single_multiple_pregnancy             = :single_multiple_pregnancy, "
@@ -4471,6 +4475,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
                         ";");
             qry.bindValue(":id_reportEcho",                         m_id);
             qry.bindValue(":gestation_age",                         (ui->gestation2_gestation_age->text().isEmpty()) ? QVariant() : ui->gestation2_gestation_age->text());
+            qry.bindValue(":trimestru",                             (ui->gestation2_trimestru2->isChecked()) ? 2 : 3);
             qry.bindValue(":dateMenstruation",                      ui->gestation2_dateMenstruation->date().toString("yyyy-MM-dd"));
             qry.bindValue(":view_examination",                      ui->gestation2_view_examination->currentIndex());
             qry.bindValue(":single_multiple_pregnancy",             ui->gestation2_pregnancy->currentIndex());
@@ -4508,6 +4513,255 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
             if (! qry.exec())
                 details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_biometry' - %2")
                                     .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // cranium
+            qry.prepare("UPDATE tableGestation2_cranium SET "
+                        "calloteCranium                 = :calloteCranium, "
+                        "facialeProfile                 = :facialeProfile, "
+                        "nasalBones                     = :nasalBones, "
+                        "nasalBones_dimens              = :nasalBones_dimens, "
+                        "eyeball                        = :eyeball, "
+                        "eyeball_desciption             = :eyeball_desciption, "
+                        "nasolabialTriangle             = :nasolabialTriangle, "
+                        "nasolabialTriangle_description = :nasolabialTriangle_description, "
+                        "nasalFold = :nasalFold WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho",      m_id);
+            qry.bindValue(":calloteCranium",     ui->gestation2_calloteCranium->currentIndex());
+            qry.bindValue(":facialeProfile",     ui->gestation2_facialeProfile->currentIndex());
+            qry.bindValue(":nasalBones",         ui->gestation2_nasalBones->currentIndex());
+            qry.bindValue(":nasalBones_dimens",  (ui->gestation2_nasalBones_dimens->text().isEmpty()) ? QVariant() : ui->gestation2_nasalBones_dimens->text());
+            qry.bindValue(":eyeball",            ui->gestation2_eyeball->currentIndex());
+            qry.bindValue(":eyeball_desciption", (ui->gestation2_eyeball_desciption->text().isEmpty()) ? QVariant() : ui->gestation2_eyeball_desciption->text());
+            qry.bindValue(":nasolabialTriangle", ui->gestation2_nasolabialTriangle->currentIndex());
+            qry.bindValue(":nasolabialTriangle_description", (ui->gestation2_nasolabialTriangle_description->text().isEmpty()) ? QVariant() : ui->gestation2_nasolabialTriangle_description->text());
+            qry.bindValue(":nasalFold", (ui->gestation2_nasalFold->text().isEmpty()) ? QVariant() : ui->gestation2_nasalFold->text());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_cranium' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // SNC
+            qry.prepare("UPDATE tableGestation2_SNC SET "
+                        "hemispheres                   = :hemispheres, "
+                        "fissureSilvius                = :fissureSilvius, "
+                        "corpCalos                     = :corpCalos, "
+                        "ventricularSystem             = :ventricularSystem, "
+                        "ventricularSystem_description = :ventricularSystem_description, "
+                        "cavityPellucidSeptum          = :cavityPellucidSeptum, "
+                        "choroidalPlex                 = :choroidalPlex, "
+                        "choroidalPlex_description     = :choroidalPlex_description, "
+                        "cerebellum                    = :cerebellum, "
+                        "cerebellum_description        = :cerebellum_description, "
+                        "vertebralColumn               = :vertebralColumn, "
+                        "vertebralColumn_description = :vertebralColumn_description WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho", m_id);
+            qry.bindValue(":hemispheres",                   ui->gestation2_hemispheres->currentIndex());
+            qry.bindValue(":fissureSilvius",                ui->gestation2_fissureSilvius->currentIndex());
+            qry.bindValue(":corpCalos",                     ui->gestation2_corpCalos->currentIndex());
+            qry.bindValue(":ventricularSystem",             ui->gestation2_ventricularSystem->currentIndex());
+            qry.bindValue(":ventricularSystem_description", (ui->gestation2_ventricularSystem_description->text().isEmpty()) ? QVariant() : ui->gestation2_ventricularSystem_description->text());
+            qry.bindValue(":cavityPellucidSeptum",          ui->gestation2_cavityPellucidSeptum->currentIndex());
+            qry.bindValue(":choroidalPlex",                 ui->gestation2_choroidalPlex->currentIndex());
+            qry.bindValue(":choroidalPlex_description",     (ui->gestation2_choroidalPlex_description->text().isEmpty()) ? QVariant() : ui->gestation2_choroidalPlex_description->text());
+            qry.bindValue(":cerebellum",                    ui->gestation2_cerebellum->currentIndex());
+            qry.bindValue(":cerebellum_description",        (ui->gestation2_cerebellum_description->text().isEmpty()) ? QVariant() : ui->gestation2_cerebellum_description->text());
+            qry.bindValue(":vertebralColumn",               ui->gestation2_vertebralColumn->currentIndex());
+            qry.bindValue(":vertebralColumn_description",  (ui->gestation2_vertebralColumn_description->text().isEmpty()) ? QVariant() : ui->gestation2_vertebralColumn_description->text());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_SNC' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // heart
+            qry.prepare("UPDATE tableGestation2_heart SET "
+                        "`position`                              = :pos, "
+                        "heartBeat                               = :heartBeat, "
+                        "heartBeat_frequency                     = :heartBeat_frequency, "
+                        "heartBeat_rhythm                        = :heartBeat_rhythm, "
+                        "pericordialCollections                  = :pericordialCollections, "
+                        "planPatruCamere                         = :planPatruCamere, "
+                        "planPatruCamere_description             = :planPatruCamere_description, "
+                        "ventricularEjectionPathLeft             = :ventricularEjectionPathLeft, "
+                        "ventricularEjectionPathLeft_description = :ventricularEjectionPathLeft_description, "
+                        "ventricularEjectionPathRight            = :ventricularEjectionPathRight, "
+                        "ventricularEjectionPathRight_description = :ventricularEjectionPathRight_description, "
+                        "intersectionVesselMagistral              = :intersectionVesselMagistral, "
+                        "intersectionVesselMagistral_description  = :intersectionVesselMagistral_description, "
+                        "planTreiVase                             = :planTreiVase, "
+                        "planTreiVase_description                 = :planTreiVase_description, "
+                        "archAorta                                = :archAorta, "
+                        "planBicav = :planBicav WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho",                m_id);
+            qry.bindValue(":pos",                          (ui->gestation2_heartPosition->text().isEmpty()) ? QVariant() : ui->gestation2_heartPosition->text());
+            qry.bindValue(":heartBeat",                    ui->gestation2_heartBeat->currentIndex());
+            qry.bindValue(":heartBeat_frequency",          (ui->gestation2_heartBeat_frequency->text().isEmpty()) ? QVariant() : ui->gestation2_heartBeat_frequency->text());
+            qry.bindValue(":heartBeat_rhythm",             ui->gestation2_heartBeat_rhythm->currentIndex());
+            qry.bindValue(":pericordialCollections",       ui->gestation2_pericordialCollections->currentIndex());
+            qry.bindValue(":planPatruCamere",              ui->gestation2_planPatruCamere->currentIndex());
+            qry.bindValue(":planPatruCamere_description", (ui->gestation2_planPatruCamere_description->text().isEmpty()) ? QVariant() : ui->gestation2_planPatruCamere_description->text());
+            qry.bindValue(":ventricularEjectionPathLeft",  ui->gestation2_ventricularEjectionPathLeft->currentIndex());
+            qry.bindValue(":ventricularEjectionPathLeft_description", (ui->gestation2_ventricularEjectionPathLeft_description->text().isEmpty()) ? QVariant() : ui->gestation2_ventricularEjectionPathLeft_description->text());
+            qry.bindValue(":ventricularEjectionPathRight", ui->gestation2_ventricularEjectionPathRight->currentIndex());
+            qry.bindValue(":ventricularEjectionPathRight_description", (ui->gestation2_ventricularEjectionPathRight_description->text().isEmpty()) ? QVariant() : ui->gestation2_ventricularEjectionPathRight_description->text());
+            qry.bindValue(":intersectionVesselMagistral",  ui->gestation2_intersectionVesselMagistral->currentIndex());
+            qry.bindValue(":intersectionVesselMagistral_description", (ui->gestation2_intersectionVesselMagistral_description->text().isEmpty()) ? QVariant() : ui->gestation2_intersectionVesselMagistral_description->text());
+            qry.bindValue(":planTreiVase",                 ui->gestation2_planTreiVase->currentIndex());
+            qry.bindValue(":planTreiVase_description",    (ui->gestation2_planTreiVase_description->text().isEmpty()) ? QVariant() : ui->gestation2_planTreiVase_description->text());
+            qry.bindValue(":archAorta",                    ui->gestation2_archAorta->currentIndex());
+            qry.bindValue(":planBicav",                    ui->gestation2_planBicav->currentIndex());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_heart' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // thorax
+            qry.prepare("UPDATE tableGestation2_thorax SET "
+                        "pulmonaryAreas             = :pulmonaryAreas, "
+                        "pulmonaryAreas_description = :pulmonaryAreas_description, "
+                        "pleuralCollections         = :pleuralCollections, "
+                        "diaphragm = :diaphragm WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho",               m_id);
+            qry.bindValue(":pulmonaryAreas",              ui->gestation2_pulmonaryAreas->currentIndex());
+            qry.bindValue(":pulmonaryAreas_description", (ui->gestation2_pulmonaryAreas_description->text().isEmpty()) ? QVariant() : ui->gestation2_pulmonaryAreas_description->text());
+            qry.bindValue(":pleuralCollections",          ui->gestation2_pleuralCollections->currentIndex());
+            qry.bindValue(":diaphragm",                   ui->gestation2_diaphragm->currentIndex());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_thorax' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // abdomen
+            qry.prepare("UPDATE tableGestation2_abdomen SET "
+                        "abdominalWall         = :abdominalWall, "
+                        "abdominalCollections  = :abdominalCollections, "
+                        "stomach               = :stomach, "
+                        "stomach_description   = :stomach_description, "
+                        "abdominalOrgans       = :abdominalOrgans, "
+                        "cholecist             = :cholecist, "
+                        "cholecist_description = :cholecist_description, "
+                        "intestine             = :intestine, "
+                        "intestine_description = :intestine_description WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho",         m_id);
+            qry.bindValue(":abdominalWall",         ui->gestation2_abdominalWall->currentIndex());
+            qry.bindValue(":abdominalCollections",  ui->gestation2_abdominalCollections->currentIndex());
+            qry.bindValue(":stomach",               ui->gestation2_stomach->currentIndex());
+            qry.bindValue(":stomach_description",   (ui->gestation2_stomach_description->text().isEmpty()) ? QVariant() : ui->gestation2_stomach_description->text());
+            qry.bindValue(":abdominalOrgans",       ui->gestation2_abdominalOrgans->currentIndex());
+            qry.bindValue(":cholecist",             ui->gestation2_cholecist->currentIndex());
+            qry.bindValue(":cholecist_description", (ui->gestation2_cholecist_description->text().isEmpty()) ? QVariant() : ui->gestation2_cholecist_description->text());
+            qry.bindValue(":intestine",             ui->gestation2_intestine->currentIndex());
+            qry.bindValue(":intestine_description", (ui->gestation2_intestine_description->text().isEmpty()) ? QVariant() : ui->gestation2_intestine_description->text());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_abdomen' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // s.urinar
+            qry.prepare("UPDATE tableGestation2_urinarySystem SET "
+                        "kidneys              = :kidneys, "
+                        "kidneys_descriptions = :kidneys_descriptions, "
+                        "ureter               = :ureter, "
+                        "ureter_descriptions  = :ureter_descriptions, "
+                        "bladder = :bladder WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho",        m_id);
+            qry.bindValue(":kidneys",              ui->gestation2_kidneys->currentIndex());
+            qry.bindValue(":kidneys_descriptions", (ui->gestation2_kidneys_description->text().isEmpty()) ? QVariant() : ui->gestation2_kidneys_description->text());
+            qry.bindValue(":ureter",               ui->gestation2_ureter->currentIndex());
+            qry.bindValue(":ureter_descriptions",  (ui->gestation2_ureter_description->text().isEmpty()) ? QVariant() : ui->gestation2_ureter_description->text());
+            qry.bindValue(":bladder",              ui->gestation2_bladder->currentIndex());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_urinarySystem' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // other
+            qry.prepare("UPDATE tableGestation2_other SET "
+                        "externalGenitalOrgans          = :externalGenitalOrgans, "
+                        "externalGenitalOrgans_aspect   = :externalGenitalOrgans_aspect, "
+                        "extremities                    = :extremities, "
+                        "extremities_descriptions       = :extremities_descriptions, "
+                        "fetusMass                      = :fetusMass, "
+                        "placenta                       = :placenta, "
+                        "placentaLocalization           = :placentaLocalization, "
+                        "placentaDegreeMaturation       = :placentaDegreeMaturation, "
+                        "placentaDepth                  = :placentaDepth, "
+                        "placentaStructure              = :placentaStructure, "
+                        "placentaStructure_descriptions = :placentaStructure_descriptions, "
+                        "umbilicalCordon                = :umbilicalCordon, "
+                        "umbilicalCordon_description    = :umbilicalCordon_description, "
+                        "insertionPlacenta              = :insertionPlacenta, "
+                        "amnioticIndex                  = :amnioticIndex, "
+                        "amnioticIndexAspect            = :amnioticIndexAspect, "
+                        "amnioticBedDepth               = :amnioticBedDepth, "
+                        "cervix                         = :cervix, "
+                        "cervix_description = :cervix_description WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho", m_id);
+            qry.bindValue(":externalGenitalOrgans",        ui->gestation2_fetusSex->currentIndex());
+            qry.bindValue(":externalGenitalOrgans_aspect", QVariant());
+            qry.bindValue(":extremities", ui->gestation2_extremities->currentIndex());
+            qry.bindValue(":extremities_descriptions", (ui->gestation2_extremities_description->text().isEmpty()) ? QVariant() : ui->gestation2_extremities_description->text());
+            qry.bindValue(":fetusMass",             (ui->gestation2_fetusMass->text().isEmpty()) ? QVariant() : ui->gestation2_fetusMass->text());
+            qry.bindValue(":placenta",              ui->gestation2_placenta->currentIndex());
+            qry.bindValue(":placentaLocalization", (ui->gestation2_placenta_localization->text().isEmpty()) ? QVariant() : ui->gestation1_location_placenta->text());
+            qry.bindValue(":placentaDegreeMaturation", (ui->gestation2_placentaDegreeMaturation->text().isEmpty()) ? QVariant() : ui->gestation2_placentaDegreeMaturation->text());
+            qry.bindValue(":placentaDepth",        (ui->gestation2_placentaDepth->text().isEmpty()) ? QVariant() : ui->gestation2_placentaDepth->text());
+            qry.bindValue(":placentaStructure",     ui->gestation2_placentaStructure->currentIndex());
+            qry.bindValue(":placentaStructure_descriptions", (ui->gestation2_placentaStructure_description->text().isEmpty()) ? QVariant() : ui->gestation2_placentaStructure_description->text());
+            qry.bindValue(":umbilicalCordon",      ui->gestation2_umbilicalCordon->currentIndex());
+            qry.bindValue(":umbilicalCordon_description", (ui->gestation2_umbilicalCordon_description->text().isEmpty()) ? QVariant() : ui->gestation2_umbilicalCordon_description->text());
+            qry.bindValue(":insertionPlacenta",    ui->gestation2_insertionPlacenta->currentIndex());
+            qry.bindValue(":amnioticIndex",        (ui->gestation2_amnioticIndex->text().isEmpty()) ? QVariant() : ui->gestation2_amnioticIndex->text());
+            qry.bindValue(":amnioticIndexAspect",  ui->gestation2_amnioticIndexAspect->currentIndex());
+            qry.bindValue(":amnioticBedDepth",     (ui->gestation2_amnioticBedDepth->text().isEmpty()) ? QVariant() : ui->gestation2_amnioticBedDepth->text());
+            qry.bindValue(":cervix",               (ui->gestation2_cervix->text().isEmpty()) ? QVariant() : ui->gestation2_cervix->text());
+            qry.bindValue(":cervix_description",   (ui->gestation2_cervix_description->text().isEmpty()) ? QVariant() : ui->gestation2_cervix_description->text());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_other' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
+            // doppler
+            qry.prepare("UPDATE tableGestation2_doppler SET "
+                        "ombilic_PI     = :ombilic_PI, "
+                        "ombilic_RI     = :ombilic_RI, "
+                        "ombilic_SD     = :ombilic_SD, "
+                        "ombilic_flux   = :ombilic_flux, "
+                        "cerebral_PI    = :cerebral_PI, "
+                        "cerebral_RI    = :cerebral_RI, "
+                        "cerebral_SD    = :cerebral_SD, "
+                        "cerebral_flux  = :cerebral_flux, "
+                        "uterRight_PI   = :uterRight_PI, "
+                        "uterRight_RI   = :uterRight_RI, "
+                        "uterRight_SD   = :uterRight_SD, "
+                        "uterRight_flux = :uterRight_flux, "
+                        "uterLeft_PI    = :uterLeft_PI, "
+                        "uterLeft_RI    = :uterLeft_RI, "
+                        "uterLeft_SD    = :uterLeft_SD, "
+                        "uterLeft_flux  = :uterLeft_flux, "
+                        "ductVenos = :ductVenos WHERE id_reportEcho = :id_reportEcho"
+                        ";");
+            qry.bindValue(":id_reportEcho", m_id);
+            qry.bindValue(":ombilic_PI",   (ui->gestation2_ombilic_PI->text().isEmpty()) ? QVariant() : ui->gestation2_ombilic_PI->text());
+            qry.bindValue(":ombilic_RI",   (ui->gestation2_ombilic_RI->text().isEmpty()) ? QVariant() : ui->gestation2_ombilic_RI->text());
+            qry.bindValue(":ombilic_SD",   (ui->gestation2_ombilic_SD->text().isEmpty()) ? QVariant() : ui->gestation2_ombilic_SD->text());
+            qry.bindValue(":ombilic_flux",  ui->gestation2_ombilic_flux->currentIndex());
+            qry.bindValue(":cerebral_PI",  (ui->gestation2_cerebral_PI->text().isEmpty()) ? QVariant() : ui->gestation2_cerebral_PI->text());
+            qry.bindValue(":cerebral_RI",  (ui->gestation2_cerebral_RI->text().isEmpty()) ? QVariant() : ui->gestation2_cerebral_RI->text());
+            qry.bindValue(":cerebral_SD",  (ui->gestation2_cerebral_SD->text().isEmpty()) ? QVariant() : ui->gestation2_cerebral_SD->text());
+            qry.bindValue(":cerebral_flux", ui->gestation2_cerebral_flux->currentIndex());
+            qry.bindValue(":uterRight_PI",  (ui->gestation2_uterRight_PI->text().isEmpty()) ? QVariant() : ui->gestation2_uterRight_PI->text());
+            qry.bindValue(":uterRight_RI",  (ui->gestation2_uterRight_RI->text().isEmpty()) ? QVariant() : ui->gestation2_uterRight_RI->text());
+            qry.bindValue(":uterRight_SD",  (ui->gestation2_uterRight_SD->text().isEmpty()) ? QVariant() : ui->gestation2_uterRight_SD->text());
+            qry.bindValue(":uterRight_flux", ui->gestation2_uterRight_flux->currentIndex());
+            qry.bindValue(":uterLeft_PI",   (ui->gestation2_uterLeft_PI->text().isEmpty()) ? QVariant() : ui->gestation2_uterLeft_PI->text());
+            qry.bindValue(":uterLeft_RI",   (ui->gestation2_uterLeft_RI->text().isEmpty()) ? QVariant() : ui->gestation2_uterLeft_RI->text());
+            qry.bindValue(":uterLeft_SD",   (ui->gestation2_uterLeft_SD->text().isEmpty()) ? QVariant() : ui->gestation2_uterLeft_SD->text());
+            qry.bindValue(":uterLeft_flux", ui->gestation2_uterLeft_flux->currentIndex());
+            qry.bindValue(":ductVenos",     ui->gestation2_ductVenos->currentIndex());
+            if (! qry.exec())
+                details_error = tr("Eroarea actualizarii datelor documentului nr.%1 din tabela 'tableGestation2_doppler' - %2")
+                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+
         }
 
         if (details_error.isEmpty()){
