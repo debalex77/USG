@@ -3087,7 +3087,22 @@ bool DataBase::createTableGestation2_abdomen()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_abdomen` ("
+                    "`id`                    int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`         int NOT NULL,"
+                    "`abdominalWall`         int DEFAULT NULL,"
+                    "`abdominalCollections`  int DEFAULT NULL,"
+                    "`stomach`               int DEFAULT NULL,"
+                    "`stomach_description`   varchar(50) DEFAULT NULL,"
+                    "`abdominalOrgans`       int DEFAULT NULL,"
+                    "`cholecist`             int DEFAULT NULL,"
+                    "`cholecist_description` varchar(50) DEFAULT NULL,"
+                    "`intestine` int DEFAULT NULL,"
+                    "`intestine_description` varchar(70) DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_abdomen_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_abdomen_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_abdomen ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
@@ -3118,7 +3133,18 @@ bool DataBase::createTableGestation2_urinarySystem()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("");
+        qry.prepare("CREATE TABLE `tableGestation2_urinarySystem` ("
+                    "`id`                   int NOT NULL AUTO_INCREMENT,"
+                    "`id_reportEcho`        int NOT NULL,"
+                    "`kidneys`              int DEFAULT NULL,"
+                    "`kidneys_descriptions` varchar(70) DEFAULT NULL,"
+                    "`ureter`               int DEFAULT NULL,"
+                    "`ureter_descriptions`  varchar(70) DEFAULT NULL,"
+                    "`bladder`              int DEFAULT NULL,"
+                    "PRIMARY KEY (`id`),"
+                    "KEY `tableGestation2_urinarySystem_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableGestation2_urinarySystem_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_urinarySystem ("
                     "id                   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
