@@ -106,7 +106,6 @@
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -159,7 +158,6 @@
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -400,7 +398,6 @@
          <property name="font">
           <font>
            <pointsize>12</pointsize>
-           <weight>75</weight>
            <bold>true</bold>
           </font>
          </property>
@@ -450,8 +447,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>480</width>
-                <height>714</height>
+                <width>476</width>
+                <height>697</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_4">
@@ -459,7 +456,6 @@
                 <widget class="QGroupBox" name="groupBox_3">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -471,7 +467,6 @@
                    <widget class="QLineEdit" name="pancreas_ecogenity">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -481,7 +476,6 @@
                    <widget class="QLabel" name="label_20">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -497,7 +491,6 @@
                    <widget class="QLabel" name="label_19">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -513,7 +506,6 @@
                    <widget class="QLabel" name="label_18">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -529,7 +521,6 @@
                    <widget class="QLineEdit" name="pancreas_corp">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -539,7 +530,6 @@
                    <widget class="QLineEdit" name="pancreas_parenchyma">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -549,7 +539,6 @@
                    <widget class="QLabel" name="label_44">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -565,7 +554,6 @@
                    <widget class="QLabel" name="label_45">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -581,7 +569,6 @@
                    <widget class="QLabel" name="label_17">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -597,7 +584,6 @@
                    <widget class="QLineEdit" name="pancreas_cefal">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -610,7 +596,6 @@
                    <widget class="QLineEdit" name="pancreas_formations">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -623,7 +608,6 @@
                 <widget class="QGroupBox" name="groupBox">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -635,7 +619,6 @@
                    <widget class="QLabel" name="label_9">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -651,7 +634,6 @@
                    <widget class="QLineEdit" name="liver_left">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -661,7 +643,6 @@
                    <widget class="QLineEdit" name="liver_porta">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -671,7 +652,6 @@
                    <widget class="QLabel" name="label_6">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -700,7 +680,6 @@
                    <widget class="QLineEdit" name="liver_parenchyma">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -710,7 +689,6 @@
                    <widget class="QLabel" name="label_5">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -726,7 +704,6 @@
                    <widget class="QLabel" name="label_11">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -739,7 +716,6 @@
                    <widget class="QLabel" name="label_7">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -755,7 +731,6 @@
                    <widget class="QLabel" name="label_12">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -771,7 +746,6 @@
                    <widget class="QLineEdit" name="liver_right">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -781,7 +755,6 @@
                    <widget class="QLabel" name="label_10">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -797,7 +770,6 @@
                    <widget class="QLineEdit" name="liver_contour">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -807,7 +779,6 @@
                    <widget class="QLineEdit" name="liver_ecogenity">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -817,7 +788,6 @@
                    <widget class="QLineEdit" name="liver_lienalis">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -827,7 +797,6 @@
                    <widget class="QLineEdit" name="liver_duct_hepatic">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -837,7 +806,6 @@
                    <widget class="QLineEdit" name="liver_formations">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -847,7 +815,6 @@
                    <widget class="QLabel" name="label_8">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -863,7 +830,6 @@
                    <widget class="QLabel" name="label_4">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -879,7 +845,6 @@
                 <widget class="QGroupBox" name="groupBox_2">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -891,7 +856,6 @@
                    <widget class="QLabel" name="label_16">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -907,7 +871,6 @@
                    <widget class="QLabel" name="label_13">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -929,7 +892,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -939,7 +901,6 @@
                    <widget class="QLabel" name="label_14">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -955,7 +916,6 @@
                    <widget class="QLineEdit" name="cholecist_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -965,7 +925,6 @@
                    <widget class="QLabel" name="label_15">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -981,7 +940,6 @@
                    <widget class="QLabel" name="label_43">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -994,7 +952,6 @@
                    <widget class="QLineEdit" name="cholecist_formations">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1014,7 +971,6 @@
                    <widget class="QLineEdit" name="cholecist_form">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1027,7 +983,6 @@
                 <widget class="QGroupBox" name="groupBox_4">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1039,7 +994,6 @@
                    <widget class="QLabel" name="label_23">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1055,7 +1009,6 @@
                    <widget class="QLabel" name="label_21">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1071,7 +1024,6 @@
                    <widget class="QLineEdit" name="spleen_contour">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1081,7 +1033,6 @@
                    <widget class="QLabel" name="label_22">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1097,7 +1048,6 @@
                    <widget class="QLineEdit" name="spleen_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1107,7 +1057,6 @@
                    <widget class="QLineEdit" name="spleen_parenchyma">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1117,7 +1066,6 @@
                    <widget class="QLabel" name="label_24">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1133,7 +1081,6 @@
                    <widget class="QLineEdit" name="spleen_formations">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1146,7 +1093,6 @@
                 <widget class="QGroupBox" name="groupBox_16">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1196,7 +1142,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1239,8 +1184,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>422</width>
-                <height>480</height>
+                <width>420</width>
+                <height>470</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_14">
@@ -1248,7 +1193,6 @@
                 <widget class="QGroupBox" name="groupBox_7">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1260,7 +1204,6 @@
                    <widget class="QLabel" name="label_33">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -1276,7 +1219,6 @@
                    <widget class="QLineEdit" name="bladder_volum">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1286,7 +1228,6 @@
                    <widget class="QLabel" name="label_34">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1299,7 +1240,6 @@
                    <widget class="QLineEdit" name="bladder_walls">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1322,7 +1262,6 @@
                    <widget class="QLabel" name="label_35">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                      </font>
                     </property>
@@ -1335,7 +1274,6 @@
                    <widget class="QLineEdit" name="bladder_formations">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1348,7 +1286,6 @@
                 <widget class="QGroupBox" name="groupBox_17">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1407,7 +1344,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1433,7 +1369,6 @@
                 <widget class="QGroupBox" name="groupBox_6">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1445,7 +1380,6 @@
                    <widget class="QLabel" name="label_25">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                       <underline>false</underline>
                      </font>
@@ -1472,7 +1406,6 @@
                    <widget class="QLabel" name="label_26">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1488,7 +1421,6 @@
                    <widget class="QLineEdit" name="kidney_right">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1498,7 +1430,6 @@
                    <widget class="QLabel" name="label_27">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1514,7 +1445,6 @@
                    <widget class="QLineEdit" name="kidney_left">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1537,7 +1467,6 @@
                    <widget class="QLabel" name="label_28">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1553,7 +1482,6 @@
                    <widget class="QLineEdit" name="kidney_corticomed_right">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1563,7 +1491,6 @@
                    <widget class="QLabel" name="label_29">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1579,7 +1506,6 @@
                    <widget class="QLineEdit" name="kidney_corticomed_left">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1608,7 +1534,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1624,7 +1549,6 @@
                    <widget class="QLineEdit" name="kidney_pielocaliceal_right">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1634,7 +1558,6 @@
                    <widget class="QLabel" name="label_31">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1650,7 +1573,6 @@
                    <widget class="QLineEdit" name="kidney_pielocaliceal_left">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1673,7 +1595,6 @@
                    <widget class="QLabel" name="label_32">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                       <underline>false</underline>
                      </font>
@@ -1720,8 +1641,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>414</width>
-                <height>369</height>
+                <width>417</width>
+                <height>361</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_15">
@@ -1739,7 +1660,6 @@
                 <widget class="QLabel" name="label_36">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1752,7 +1672,6 @@
                 <widget class="QLabel" name="label_37">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1778,7 +1697,6 @@
                 <widget class="QGroupBox" name="groupBox_18">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -1805,7 +1723,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -1975,9 +1892,9 @@
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-193</y>
-                <width>717</width>
-                <height>719</height>
+                <y>0</y>
+                <width>592</width>
+                <height>705</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_27">
@@ -1991,7 +1908,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2003,7 +1919,6 @@
                    <widget class="QRadioButton" name="gynecology_btn_transabdom">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2016,7 +1931,6 @@
                    <widget class="QLabel" name="label_47">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2029,7 +1943,6 @@
                    <widget class="QRadioButton" name="gynecology_btn_transvaginal">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2042,7 +1955,6 @@
                    <widget class="QDateEdit" name="gynecology_dateMenstruation">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2055,7 +1967,6 @@
                    <widget class="QLabel" name="gynecology_text_date_menstruation">
                     <property name="font">
                      <font>
-                      <weight>75</weight>
                       <bold>true</bold>
                       <underline>true</underline>
                      </font>
@@ -2075,7 +1986,6 @@
                    <widget class="QLineEdit" name="gynecology_antecedent">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2085,7 +1995,6 @@
                    <widget class="QLabel" name="label_46">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2098,7 +2007,6 @@
                    <widget class="QLabel" name="label_48">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2123,7 +2031,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2135,7 +2042,6 @@
                    <widget class="QLabel" name="label_49">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2148,7 +2054,6 @@
                    <widget class="QLineEdit" name="gynecology_uterus_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2158,7 +2063,6 @@
                    <widget class="QLabel" name="label_50">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2174,7 +2078,6 @@
                    <widget class="QLineEdit" name="gynecology_uterus_pozition">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2184,7 +2087,6 @@
                    <widget class="QLabel" name="label_51">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2197,7 +2099,6 @@
                    <widget class="QLineEdit" name="gynecology_uterus_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2207,7 +2108,6 @@
                    <widget class="QLabel" name="label_52">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2226,7 +2126,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2236,7 +2135,6 @@
                    <widget class="QLabel" name="label_53">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2249,7 +2147,6 @@
                    <widget class="QLineEdit" name="gynecology_ecou_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2259,7 +2156,6 @@
                    <widget class="QLabel" name="label_54">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2272,7 +2168,6 @@
                    <widget class="QLineEdit" name="gynecology_ecou_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2291,7 +2186,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2309,7 +2203,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2319,7 +2212,6 @@
                    <widget class="QLabel" name="label_65">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2332,7 +2224,6 @@
                    <widget class="QLabel" name="label_56">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2345,7 +2236,6 @@
                    <widget class="QLabel" name="label_55">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2358,7 +2248,6 @@
                    <widget class="QLineEdit" name="gynecology_cervix_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2368,7 +2257,6 @@
                    <widget class="QLabel" name="label_66">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2403,7 +2291,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2422,7 +2309,6 @@
                    <widget class="QLineEdit" name="gynecology_ovary_right_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2432,7 +2318,6 @@
                    <widget class="QLabel" name="label_59">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2451,7 +2336,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2468,7 +2352,6 @@
                    <widget class="QLineEdit" name="gynecology_ovary_left_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2484,7 +2367,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2503,7 +2385,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2513,7 +2394,6 @@
                    <widget class="QLabel" name="label_61">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2529,7 +2409,6 @@
                    <widget class="QLineEdit" name="gynecology_follicule_right">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2539,7 +2418,6 @@
                    <widget class="QLabel" name="label_62">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2555,7 +2433,6 @@
                    <widget class="QLineEdit" name="gynecology_follicule_left">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2565,7 +2442,6 @@
                    <widget class="QLabel" name="label_63">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2593,7 +2469,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2603,7 +2478,6 @@
                    <widget class="QLabel" name="label_64">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2631,7 +2505,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2644,7 +2517,6 @@
                 <widget class="QGroupBox" name="groupBox_15">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2711,7 +2583,6 @@
                    <widget class="QLineEdit" name="gynecology_recommendation">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2738,8 +2609,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>335</width>
-                <height>577</height>
+                <width>332</width>
+                <height>567</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_31">
@@ -2753,7 +2624,6 @@
                  </property>
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2765,7 +2635,6 @@
                    <widget class="QLabel" name="label_75">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2778,7 +2647,6 @@
                    <widget class="QLineEdit" name="breast_left_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2788,7 +2656,6 @@
                    <widget class="QLabel" name="label_73">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2801,7 +2668,6 @@
                    <widget class="QLineEdit" name="breast_left_duct">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2811,7 +2677,6 @@
                    <widget class="QLabel" name="label_74">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2824,7 +2689,6 @@
                    <widget class="QLineEdit" name="breast_left_ligament">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2834,7 +2698,6 @@
                    <widget class="QLabel" name="label_76">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2859,7 +2722,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2869,7 +2731,6 @@
                    <widget class="QLabel" name="label_72">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2882,7 +2743,6 @@
                    <widget class="QLineEdit" name="breast_left_ganglions">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2895,7 +2755,6 @@
                 <widget class="QGroupBox" name="groupBox_19">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2910,7 +2769,6 @@
                    <widget class="QPlainTextEdit" name="breast_concluzion">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2968,7 +2826,6 @@
                 <widget class="QGroupBox" name="groupBox_12">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -2980,7 +2837,6 @@
                    <widget class="QLabel" name="label_67">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -2993,7 +2849,6 @@
                    <widget class="QLineEdit" name="breast_right_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3003,7 +2858,6 @@
                    <widget class="QLabel" name="label_68">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3016,7 +2870,6 @@
                    <widget class="QLineEdit" name="breast_right_duct">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3026,7 +2879,6 @@
                    <widget class="QLabel" name="label_69">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3039,7 +2891,6 @@
                    <widget class="QLineEdit" name="breast_right_ligament">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3049,7 +2900,6 @@
                    <widget class="QLabel" name="label_70">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3074,7 +2924,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3084,7 +2933,6 @@
                    <widget class="QLabel" name="label_71">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3097,7 +2945,6 @@
                    <widget class="QLineEdit" name="breast_right_ganglions">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3138,7 +2985,7 @@
                 <x>0</x>
                 <y>0</y>
                 <width>259</width>
-                <height>458</height>
+                <height>450</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_35">
@@ -3146,7 +2993,6 @@
                 <widget class="QGroupBox" name="groupBox_14">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3178,7 +3024,6 @@
                    <widget class="QLabel" name="label_78">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3194,7 +3039,6 @@
                    <widget class="QLineEdit" name="thyroid_right_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3204,7 +3048,6 @@
                    <widget class="QLabel" name="label_80">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3223,7 +3066,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3246,7 +3088,6 @@
                    <widget class="QLabel" name="label_79">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3262,7 +3103,6 @@
                    <widget class="QLineEdit" name="thyroid_left_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3272,7 +3112,6 @@
                    <widget class="QLabel" name="label_81">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3291,7 +3130,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3301,7 +3139,6 @@
                    <widget class="QLabel" name="label_82">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3317,7 +3154,6 @@
                    <widget class="QLineEdit" name="thyroid_istm">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3347,7 +3183,6 @@
                    <widget class="QLineEdit" name="thyroid_ecostructure">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3376,7 +3211,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3393,7 +3227,6 @@
                    <widget class="QLineEdit" name="thyroid_ganglions">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3406,7 +3239,6 @@
                 <widget class="QGroupBox" name="groupBox_20">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3427,7 +3259,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3512,8 +3343,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>516</width>
-                <height>560</height>
+                <width>511</width>
+                <height>548</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_40">
@@ -3521,7 +3352,6 @@
                 <widget class="QGroupBox" name="groupBox_21">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3533,7 +3363,6 @@
                    <widget class="QLabel" name="label_97">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3546,7 +3375,6 @@
                    <widget class="QRadioButton" name="gestation0_view_good">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3559,7 +3387,6 @@
                    <widget class="QRadioButton" name="gestation0_view_medium">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3572,7 +3399,6 @@
                    <widget class="QRadioButton" name="gestation0_view_difficult">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3585,7 +3411,6 @@
                    <widget class="QLabel" name="label_86">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3598,7 +3423,6 @@
                    <widget class="QLineEdit" name="gestation0_antecedent">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3608,7 +3432,6 @@
                    <widget class="QLabel" name="label_87">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3627,7 +3450,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3653,7 +3475,6 @@
                 <widget class="QGroupBox" name="groupBox_22">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3665,7 +3486,6 @@
                    <widget class="QLabel" name="label_91">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3678,7 +3498,6 @@
                    <widget class="QLineEdit" name="gestation0_GS_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3688,7 +3507,6 @@
                    <widget class="QLineEdit" name="gestation0_GS_age">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3711,7 +3529,6 @@
                    <widget class="QLineEdit" name="gestation0_CRL_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3721,7 +3538,6 @@
                    <widget class="QLineEdit" name="gestation0_CRL_age">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3752,7 +3568,6 @@
                    <widget class="QLabel" name="label_93">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3794,7 +3609,6 @@
                 <widget class="QGroupBox" name="groupBox_23">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3806,7 +3620,6 @@
                    <widget class="QLabel" name="label_96">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3819,7 +3632,6 @@
                    <widget class="QLabel" name="label_94">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3832,7 +3644,6 @@
                    <widget class="QLabel" name="label_95">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3845,7 +3656,6 @@
                    <widget class="QLineEdit" name="gestation0_cervix">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3855,7 +3665,6 @@
                    <widget class="QLineEdit" name="gestation0_miometer">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3865,7 +3674,6 @@
                    <widget class="QLineEdit" name="gestation0_ovary">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3878,7 +3686,6 @@
                 <widget class="QGroupBox" name="groupBox_24">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3965,8 +3772,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>441</width>
-                <height>846</height>
+                <width>433</width>
+                <height>826</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_45">
@@ -3974,7 +3781,6 @@
                 <widget class="QGroupBox" name="groupBox_27">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -3986,7 +3792,6 @@
                    <widget class="QLabel" name="label_112">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -3999,7 +3804,6 @@
                    <widget class="QLabel" name="label_113">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4012,7 +3816,6 @@
                    <widget class="QLabel" name="label_114">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4025,7 +3828,6 @@
                    <widget class="QLineEdit" name="gestation1_cervix">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4035,7 +3837,6 @@
                    <widget class="QLineEdit" name="gestation1_miometer">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4045,7 +3846,6 @@
                    <widget class="QLineEdit" name="gestation1_ovary">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4058,7 +3858,6 @@
                 <widget class="QGroupBox" name="groupBox_28">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -4131,7 +3930,6 @@
                 <widget class="QGroupBox" name="groupBox_25">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -4143,7 +3941,6 @@
                    <widget class="QLabel" name="label_103">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4156,7 +3953,6 @@
                    <widget class="QRadioButton" name="gestation1_view_good">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4169,7 +3965,6 @@
                    <widget class="QRadioButton" name="gestation1_view_medium">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4182,7 +3977,6 @@
                    <widget class="QRadioButton" name="gestation1_view_difficult">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4195,7 +3989,6 @@
                    <widget class="QLabel" name="label_104">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4208,7 +4001,6 @@
                    <widget class="QLineEdit" name="gestation1_antecedent">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4218,7 +4010,6 @@
                    <widget class="QLabel" name="label_105">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4237,7 +4028,6 @@
                     </property>
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4263,7 +4053,6 @@
                 <widget class="QGroupBox" name="groupBox_26">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -4275,7 +4064,6 @@
                    <widget class="QLabel" name="label_116">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4288,7 +4076,6 @@
                    <widget class="QLineEdit" name="gestation1_NT_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4298,7 +4085,6 @@
                    <widget class="QLabel" name="label_106">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4311,7 +4097,6 @@
                    <widget class="QLineEdit" name="gestation1_CRL_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4321,7 +4106,6 @@
                    <widget class="QLineEdit" name="gestation1_BN_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4331,7 +4115,6 @@
                    <widget class="QLabel" name="label_118">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4344,7 +4127,6 @@
                    <widget class="QLineEdit" name="gestation1_CRL_age">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4381,7 +4163,6 @@
                    <widget class="QLineEdit" name="gestation1_NT_percent">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4398,7 +4179,6 @@
                    <widget class="QLabel" name="label_110">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4411,7 +4191,6 @@
                    <widget class="QLineEdit" name="gestation1_BPD_age">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4421,7 +4200,6 @@
                    <widget class="QLineEdit" name="gestation1_BN_percent">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4431,7 +4209,6 @@
                    <widget class="QLineEdit" name="gestation1_BPD_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4458,7 +4235,6 @@
                    <widget class="QLineEdit" name="gestation1_BCF">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4468,7 +4244,6 @@
                    <widget class="QLineEdit" name="gestation1_FL_dimens">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4478,7 +4253,6 @@
                    <widget class="QLabel" name="label_119">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4497,7 +4271,6 @@
                 <widget class="QGroupBox" name="groupBox_29">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -4509,7 +4282,6 @@
                    <widget class="QLineEdit" name="gestation1_vertebral_column">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4519,7 +4291,6 @@
                    <widget class="QLabel" name="label_120">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4532,7 +4303,6 @@
                    <widget class="QLineEdit" name="gestation1_location_placenta">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4542,7 +4312,6 @@
                    <widget class="QLabel" name="label_127">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4555,7 +4324,6 @@
                    <widget class="QLabel" name="label_121">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4568,7 +4336,6 @@
                    <widget class="QLabel" name="label_122">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4581,7 +4348,6 @@
                    <widget class="QLineEdit" name="gestation1_callote_cranium">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4591,7 +4357,6 @@
                    <widget class="QLabel" name="label_124">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4604,7 +4369,6 @@
                    <widget class="QLabel" name="label_126">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4617,7 +4381,6 @@
                    <widget class="QLabel" name="label_125">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4630,7 +4393,6 @@
                    <widget class="QLineEdit" name="gestation1_abdominal_wall">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4640,7 +4402,6 @@
                    <widget class="QLineEdit" name="gestation1_bladder">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4657,7 +4418,6 @@
                    <widget class="QLineEdit" name="gestation1_stomach">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4667,7 +4427,6 @@
                    <widget class="QLineEdit" name="gestation1_diaphragm">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4677,7 +4436,6 @@
                    <widget class="QLabel" name="label_123">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4690,7 +4448,6 @@
                    <widget class="QLineEdit" name="gestation1_plex_choroid">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4700,7 +4457,6 @@
                    <widget class="QLabel" name="label_128">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4713,7 +4469,6 @@
                    <widget class="QLineEdit" name="gestation1_sac_vitelin">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4723,7 +4478,6 @@
                    <widget class="QLabel" name="label_129">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4736,7 +4490,6 @@
                    <widget class="QLineEdit" name="gestation1_amniotic_liquid">
                     <property name="font">
                      <font>
-                      <weight>50</weight>
                       <bold>false</bold>
                      </font>
                     </property>
@@ -4763,8 +4516,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>717</width>
-                <height>798</height>
+                <width>706</width>
+                <height>781</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_67">
@@ -6838,7 +6591,6 @@
                 <widget class="QGroupBox" name="groupBox_31">
                  <property name="font">
                   <font>
-                   <weight>75</weight>
                    <bold>true</bold>
                   </font>
                  </property>
@@ -6914,8 +6666,8 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>544</width>
-                <height>218</height>
+                <width>543</width>
+                <height>215</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_49">
