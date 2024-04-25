@@ -282,7 +282,7 @@ private:
 
     QString getStringTablesBySystems();
     void processingRequest();
-    void setDataFromTableLiver();          // setarea datelor in forma din tabele
+    void setDataFromTableLiver();          // inserarea datelor in forma din tabele
     void setDataFromTableCholecist();
     void setDataFromTablePancreas();
     void setDataFromTableSpleen();
@@ -294,6 +294,7 @@ private:
     void setDataFromTableThyroid();
     void setDataFromTableGestation0();
     void setDataFromTableGestation1();
+    void setDataFromTableGestation2();
 
 private:
     Ui::DocReportEcho *ui;

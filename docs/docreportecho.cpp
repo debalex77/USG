@@ -5420,6 +5420,146 @@ void DocReportEcho::setDataFromTableGestation1()
     }
 }
 
+void DocReportEcho::setDataFromTableGestation2()
+{
+    // main
+    QMap<QString, QString> items;
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2 WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_dateMenstruation->setDate(QDate::fromString(items.constFind("dateMenstruation").value(), "yyyy-MM-dd"));
+            ui->gestation2_gestation_age->setText(items.constFind("gestation_age").value());
+            ui->gestation2_view_examination->setCurrentIndex(items.constFind("view_examination").value().toInt());
+            if (items.constFind("trimestru").value().toInt() == 2)
+                ui->gestation2_trimestru2->setChecked(true);
+            else
+                ui->gestation2_trimestru3->setChecked(true);
+            ui->gestation2_pregnancy->setCurrentIndex(items.constFind("single_multiple_pregnancy").value().toInt());
+            ui->gestation2_pregnancy_description->setText(items.constFind("single_multiple_pregnancy_description").value());
+            ui->gestation2_comment->setPlainText(items.constFind("comment").value());
+            ui->gestation2_concluzion->setPlainText(items.constFind("concluzion").value());
+            ui->gestation2_recommendation->setText(items.constFind("recommendation").value());
+        }
+    }
+
+    // biometry
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_biometry WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_bpd->setText(items.constFind("bpd").value());
+            ui->gestation2_bpd_age->setText(items.constFind("bpd_age").value());
+            ui->gestation2_hc->setText(items.constFind("hc").value());
+            ui->gestation2_hc_age->setText(items.constFind("hc_age").value());
+            ui->gestation2_ac->setText(items.constFind("ac").value());
+            ui->gestation2_ac_age->setText(items.constFind("ac_age").value());
+            ui->gestation2_fl->setText(items.constFind("fl").value());
+            ui->gestation2_fl_age->setText(items.constFind("fl_age").value());
+            ui->gestation2_fetus_age->setText(items.constFind("FetusCorresponds").value());
+        }
+    }
+
+    // cranium
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_cranium WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_calloteCranium->setCurrentIndex(items.constFind("calloteCranium").value().toInt());
+            ui->gestation2_facialeProfile->setCurrentIndex(items.constFind("facialeProfile").value().toInt());
+            ui->gestation2_nasalBones->setCurrentIndex(items.constFind("nasalBones").value().toInt());
+            ui->gestation2_nasalBones_dimens->setText(items.constFind("nasalBones_dimens").value());
+            ui->gestation2_eyeball->setCurrentIndex(items.constFind("eyeball").value().toInt());
+            ui->gestation2_eyeball_desciption->setText(items.constFind("eyeball_desciption").value());
+            ui->gestation2_nasolabialTriangle->setCurrentIndex(items.constFind("nasolabialTriangle").value().toInt());
+            ui->gestation2_nasolabialTriangle_description->setText(items.constFind("nasolabialTriangle_description").value());
+            ui->gestation2_nasalFold->setText(items.constFind("nasalFold").value());
+        }
+    }
+
+    // SNC
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_SNC WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_hemispheres->setCurrentIndex(items.constFind("hemispheres").value().toInt());
+            ui->gestation2_fissureSilvius->setCurrentIndex(items.constFind("fissureSilvius").value().toInt());
+            ui->gestation2_corpCalos->setCurrentIndex(items.constFind("corpCalos").value().toInt());
+            ui->gestation2_ventricularSystem->setCurrentIndex(items.constFind("ventricularSystem").value().toInt());
+            ui->gestation2_ventricularSystem_description->setText(items.constFind("ventricularSystem_description").value());
+            ui->gestation2_cavityPellucidSeptum->setCurrentIndex(items.constFind("cavityPellucidSeptum").value().toInt());
+            ui->gestation2_choroidalPlex->setCurrentIndex(items.constFind("choroidalPlex").value().toInt());
+            ui->gestation2_choroidalPlex_description->setText(items.constFind("choroidalPlex_description").value());
+            ui->gestation2_cerebellum->setCurrentIndex(items.constFind("cerebellum").value().toInt());
+            ui->gestation2_cerebellum_description->setText(items.constFind("cerebellum_description").value());
+            ui->gestation2_vertebralColumn->setCurrentIndex(items.constFind("vertebralColumn").value().toInt());
+            ui->gestation2_vertebralColumn_description->setText(items.constFind("vertebralColumn_description").value());
+        }
+    }
+
+    // heart
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_heart WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_heartPosition->setText(items.constFind("position").value());
+            ui->gestation2_heartBeat->setCurrentIndex(items.constFind("heartBeat").value().toInt());
+            ui->gestation2_heartBeat_frequency->setText(items.constFind("heartBeat_frequency").value());
+            ui->gestation2_heartBeat_rhythm->setCurrentIndex(items.constFind("heartBeat_rhythm").value().toInt());
+            ui->gestation2_pericordialCollections->setCurrentIndex(items.constFind("pericordialCollections").value().toInt());
+            ui->gestation2_planPatruCamere->setCurrentIndex(items.constFind("planPatruCamere").value().toInt());
+            ui->gestation2_planPatruCamere_description->setText(items.constFind("planPatruCamere_description").value());
+            ui->gestation2_ventricularEjectionPathLeft->setCurrentIndex(items.constFind("ventricularEjectionPathLeft").value().toInt());
+            ui->gestation2_ventricularEjectionPathLeft_description->setText(items.constFind("ventricularEjectionPathLeft_description").value());
+            ui->gestation2_ventricularEjectionPathRight->setCurrentIndex(items.constFind("ventricularEjectionPathRight").value().toInt());
+            ui->gestation2_ventricularEjectionPathRight_description->setText(items.constFind("ventricularEjectionPathRight_description").value());
+            ui->gestation2_intersectionVesselMagistral->setCurrentIndex(items.constFind("intersectionVesselMagistral").value().toInt());
+            ui->gestation2_intersectionVesselMagistral_description->setText(items.constFind("intersectionVesselMagistral_description").value());
+            ui->gestation2_planTreiVase->setCurrentIndex(items.constFind("planTreiVase").value().toInt());
+            ui->gestation2_planTreiVase_description->setText(items.constFind("planTreiVase_description").value());
+            ui->gestation2_archAorta->setCurrentIndex(items.constFind("archAorta").value().toInt());
+            ui->gestation2_planBicav->setCurrentIndex(items.constFind("planBicav").value().toInt());
+        }
+    }
+
+    // thorax
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_thorax WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+            ui->gestation2_pulmonaryAreas->setCurrentIndex(items.constFind("pulmonaryAreas").value().toInt());
+            ui->gestation2_pulmonaryAreas_description->setText(items.constFind("pulmonaryAreas_description").value());
+            ui->gestation2_pleuralCollections->setCurrentIndex(items.constFind("pleuralCollections").value().toInt());
+            ui->gestation2_diaphragm->setCurrentIndex(items.constFind("diaphragm").value().toInt());
+        }
+    }
+
+    // abdomen
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_abdomen WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+
+        }
+    }
+
+    // s.urinar
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_urinarySystem WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+
+        }
+    }
+
+    // other
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_other WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+
+        }
+    }
+
+    // doppler
+    items.clear();
+    if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_doppler WHERE id_reportEcho = '%1';").arg(m_id), items)){
+        if (items.count() > 0){
+
+        }
+    }
+}
+
 // *******************************************************************
 // **************** EVENIMENTE FORMEI ********************************
 
