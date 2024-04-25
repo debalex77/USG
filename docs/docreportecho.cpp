@@ -1905,6 +1905,12 @@ void DocReportEcho::slot_IdChanged()
             connections_gestation1();
         }
 
+        if (m_gestation2){
+            disconnections_gestation2();
+            setDataFromTableGestation2();
+            connections_gestation2();
+        }
+
         int id_user = items.constFind("id_users").value().toInt();
         setIdUser(id_user);
 
@@ -5445,14 +5451,14 @@ void DocReportEcho::setDataFromTableGestation2()
     items.clear();
     if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_biometry WHERE id_reportEcho = '%1';").arg(m_id), items)){
         if (items.count() > 0){
-            ui->gestation2_bpd->setText(items.constFind("bpd").value());
-            ui->gestation2_bpd_age->setText(items.constFind("bpd_age").value());
-            ui->gestation2_hc->setText(items.constFind("hc").value());
-            ui->gestation2_hc_age->setText(items.constFind("hc_age").value());
-            ui->gestation2_ac->setText(items.constFind("ac").value());
-            ui->gestation2_ac_age->setText(items.constFind("ac_age").value());
-            ui->gestation2_fl->setText(items.constFind("fl").value());
-            ui->gestation2_fl_age->setText(items.constFind("fl_age").value());
+            ui->gestation2_bpd->setText(items.constFind("BPD").value());
+            ui->gestation2_bpd_age->setText(items.constFind("BPD_age").value());
+            ui->gestation2_hc->setText(items.constFind("HC").value());
+            ui->gestation2_hc_age->setText(items.constFind("HC_age").value());
+            ui->gestation2_ac->setText(items.constFind("AC").value());
+            ui->gestation2_ac_age->setText(items.constFind("AC_age").value());
+            ui->gestation2_fl->setText(items.constFind("FL").value());
+            ui->gestation2_fl_age->setText(items.constFind("FL_age").value());
             ui->gestation2_fetus_age->setText(items.constFind("FetusCorresponds").value());
         }
     }
@@ -5531,7 +5537,15 @@ void DocReportEcho::setDataFromTableGestation2()
     items.clear();
     if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_abdomen WHERE id_reportEcho = '%1';").arg(m_id), items)){
         if (items.count() > 0){
-
+            ui->gestation1_abdominal_wall->setText(items.constFind("abdominalWall").value());
+            ui->gestation2_abdominalCollections->setCurrentIndex(items.constFind("abdominalCollections").value().toInt());
+            ui->gestation2_stomach->setCurrentIndex(items.constFind("stomach").value().toInt());
+            ui->gestation2_stomach_description->setText(items.constFind("stomach_description").value());
+            ui->gestation2_abdominalOrgans->setCurrentIndex(items.constFind("abdominalOrgans").value().toInt());
+            ui->gestation2_cholecist->setCurrentIndex(items.constFind("cholecist").value().toInt());
+            ui->gestation2_cholecist_description->setText(items.constFind("cholecist_description").value());
+            ui->gestation2_intestine->setCurrentIndex(items.constFind("intestine").value().toInt());
+            ui->gestation2_intestine_description->setText(items.constFind("intestine_description").value());
         }
     }
 
@@ -5539,7 +5553,11 @@ void DocReportEcho::setDataFromTableGestation2()
     items.clear();
     if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_urinarySystem WHERE id_reportEcho = '%1';").arg(m_id), items)){
         if (items.count() > 0){
-
+            ui->gestation2_kidneys->setCurrentIndex(items.constFind("kidneys").value().toInt());
+            ui->gestation2_kidneys_description->setText(items.constFind("kidneys_descriptions").value());
+            ui->gestation2_ureter->setCurrentIndex(items.constFind("ureter").value().toInt());
+            ui->gestation2_ureter_description->setText(items.constFind("ureter_descriptions").value());
+            ui->gestation2_bladder->setCurrentIndex(items.constFind("bladder").value().toInt());
         }
     }
 
@@ -5547,7 +5565,24 @@ void DocReportEcho::setDataFromTableGestation2()
     items.clear();
     if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_other WHERE id_reportEcho = '%1';").arg(m_id), items)){
         if (items.count() > 0){
-
+            ui->gestation2_extremities->setCurrentIndex(items.constFind("extremities").value().toInt());
+            ui->gestation2_extremities_description->setText(items.constFind("extremities_descriptions").value());
+            ui->gestation2_placenta->setCurrentIndex(items.constFind("placenta").value().toInt());
+            ui->gestation2_placenta_localization->setText(items.constFind("placentaLocalization").value());
+            ui->gestation2_placentaDegreeMaturation->setText(items.constFind("placentaDegreeMaturation").value());
+            ui->gestation2_placentaDepth->setText(items.constFind("placentaDepth").value());
+            ui->gestation2_placentaStructure->setCurrentIndex(items.constFind("placentaStructure").value().toInt());
+            ui->gestation2_placentaStructure_description->setText(items.constFind("placentaStructure_descriptions").value());
+            ui->gestation2_umbilicalCordon->setCurrentIndex(items.constFind("umbilicalCordon").value().toInt());
+            ui->gestation2_umbilicalCordon_description->setText(items.constFind("umbilicalCordon_description").value());
+            ui->gestation2_insertionPlacenta->setCurrentIndex(items.constFind("insertionPlacenta").value().toInt());
+            ui->gestation2_amnioticIndex->setText(items.constFind("amnioticIndexAspect").value());
+            ui->gestation2_amnioticIndexAspect->setCurrentIndex(items.constFind("amnioticIndexAspect").value().toInt());
+            ui->gestation2_amnioticBedDepth->setText(items.constFind("amnioticBedDepth").value());
+            ui->gestation2_cervix->setText(items.constFind("cervix").value());
+            ui->gestation2_cervix_description->setText(items.constFind("cervix_description").value());
+            ui->gestation2_fetusMass->setText(items.constFind("fetusMass").value());
+            ui->gestation2_fetusSex->setCurrentIndex(items.constFind("externalGenitalOrgans").value().toInt());
         }
     }
 
@@ -5555,7 +5590,23 @@ void DocReportEcho::setDataFromTableGestation2()
     items.clear();
     if (db->getDataFromQueryByRecord(QString("SELECT * FROM tableGestation2_doppler WHERE id_reportEcho = '%1';").arg(m_id), items)){
         if (items.count() > 0){
-
+            ui->gestation2_ombilic_PI->setText(items.constFind("ombilic_PI").value());
+            ui->gestation2_ombilic_RI->setText(items.constFind("ombilic_RI").value());
+            ui->gestation2_ombilic_SD->setText(items.constFind("ombilic_SD").value());
+            ui->gestation2_ombilic_flux->setCurrentIndex(items.constFind("ombilic_flux").value().toInt());
+            ui->gestation2_cerebral_PI->setText(items.constFind("cerebral_PI").value());
+            ui->gestation2_cerebral_RI->setText(items.constFind("cerebral_RI").value());
+            ui->gestation2_cerebral_SD->setText(items.constFind("cerebral_SD").value());
+            ui->gestation2_cerebral_flux->setCurrentIndex(items.constFind("cerebral_flux").value().toInt());
+            ui->gestation2_uterRight_PI->setText(items.constFind("uterRight_PI").value());
+            ui->gestation2_uterRight_RI->setText(items.constFind("uterRight_RI").value());
+            ui->gestation2_uterRight_SD->setText(items.constFind("uterRight_SD").value());
+            ui->gestation2_uterRight_flux->setCurrentIndex(items.constFind("uterRight_flux").value().toInt());
+            ui->gestation2_uterLeft_PI->setText(items.constFind("uterLeft_PI").value());
+            ui->gestation2_uterLeft_RI->setText(items.constFind("uterLeft_RI").value());
+            ui->gestation2_uterLeft_SD->setText(items.constFind("uterLeft_SD").value());
+            ui->gestation2_uterLeft_flux->setCurrentIndex(items.constFind("uterLeft_flux").value().toInt());
+            ui->gestation2_ductVenos->setCurrentIndex(items.constFind("ductVenos").value().toInt());
         }
     }
 }
