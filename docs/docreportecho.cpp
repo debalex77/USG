@@ -38,6 +38,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     modelThyroid        = new QSqlQueryModel(this);
     modelGestationO     = new QSqlQueryModel(this);
     modelGestation1     = new QSqlQueryModel(this);
+    modelGestation2     = new QSqlQueryModel(this);
 
     // ******************************************************************
 
@@ -152,6 +153,7 @@ DocReportEcho::~DocReportEcho()
     delete modelThyroid;
     delete modelGestationO;
     delete modelGestation1;
+    delete modelGestation2;
     delete modelPatients;
     delete proxyPatient;
     delete completer;
@@ -2666,6 +2668,45 @@ void DocReportEcho::onPrint(const int _typeReport)
             m_report->previewReport();
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->designReport();
+        }
+    }
+
+    if (m_gestation2){
+        modelGestation2->setQuery(db->getQryForTableGestation2(m_id));
+        m_report->dataManager()->addModel("table_gestation2", modelGestation2, false);
+
+        // sablonul
+        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Gestation2.lrxml")){
+            QMessageBox msgBox;
+            msgBox.setWindowTitle(tr("Printarea documentului"));
+            msgBox.setIcon(QMessageBox::Warning);
+            msgBox.setText(tr("Printarea documentului nu este posibila."));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Gestation2.lrxml"));
+            msgBox.setStandardButtons(QMessageBox::Ok);
+            msgBox.setStyleSheet("QPushButton{width:120px;}");
+            msgBox.exec();
+
+            delete img_item;
+
+            this->show();
+
+            return;
+        }
+
+        // prezentam
+        m_report->setShowProgressDialog(true);
+        if (_typeReport == openDesigner){
+            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->designReport();
+        } else if (_typeReport == openPreview) {
+            qInfo(logInfo()) << tr("Printare (preview) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->previewReport();
+        } else {
+            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
         }

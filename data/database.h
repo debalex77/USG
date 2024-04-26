@@ -147,6 +147,7 @@ public:
     QString getQryForTableThyroidById(const int id_doc) const;
     QString getQryForTableGestation0dById(const int id_doc) const;
     QString getQryForTableGestation1dById(const int id_doc) const;
+    QString getQryForTableGestation2(const int id_doc) const;
 
     QString getQryForTableOrderById(const int id_doc, const QString str_price) const;
 
