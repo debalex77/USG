@@ -447,7 +447,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>476</width>
+                <width>480</width>
                 <height>697</height>
                </rect>
               </property>
@@ -1184,7 +1184,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>420</width>
+                <width>422</width>
                 <height>470</height>
                </rect>
               </property>
@@ -1641,7 +1641,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>417</width>
+                <width>414</width>
                 <height>361</height>
                </rect>
               </property>
@@ -1893,7 +1893,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>592</width>
+                <width>595</width>
                 <height>705</height>
                </rect>
               </property>
@@ -2609,7 +2609,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>332</width>
+                <width>335</width>
                 <height>567</height>
                </rect>
               </property>
@@ -3343,7 +3343,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>511</width>
+                <width>516</width>
                 <height>548</height>
                </rect>
               </property>
@@ -3772,7 +3772,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>433</width>
+                <width>441</width>
                 <height>826</height>
                </rect>
               </property>
@@ -4516,7 +4516,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>706</width>
+                <width>707</width>
                 <height>781</height>
                </rect>
               </property>
@@ -6312,6 +6312,11 @@
                     <widget class="QComboBox" name="gestation2_ombilic_flux">
                      <item>
                       <property name="text">
+                       <string>&lt;&lt;-alege-&gt;&gt;</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
                        <string>normal</string>
                       </property>
                      </item>
@@ -6384,6 +6389,11 @@
                     <widget class="QComboBox" name="gestation2_cerebral_flux">
                      <item>
                       <property name="text">
+                       <string>&lt;&lt;-alege-&gt;&gt;</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
                        <string>normal</string>
                       </property>
                      </item>
@@ -6433,6 +6443,11 @@
                    </item>
                    <item row="2" column="9">
                     <widget class="QComboBox" name="gestation2_uterRight_flux">
+                     <item>
+                      <property name="text">
+                       <string>&lt;&lt;-alege-&gt;&gt;</string>
+                      </property>
+                     </item>
                      <item>
                       <property name="text">
                        <string>normal</string>
@@ -6486,6 +6501,11 @@
                     <widget class="QComboBox" name="gestation2_uterLeft_flux">
                      <item>
                       <property name="text">
+                       <string>&lt;&lt;-alege-&gt;&gt;</string>
+                      </property>
+                     </item>
+                     <item>
+                      <property name="text">
                        <string>normal</string>
                       </property>
                      </item>
@@ -6498,6 +6518,11 @@
                    </item>
                    <item row="4" column="1" colspan="3">
                     <widget class="QComboBox" name="gestation2_ductVenos">
+                     <item>
+                      <property name="text">
+                       <string>&lt;&lt;-alege-&gt;&gt;</string>
+                      </property>
+                     </item>
                      <item>
                       <property name="text">
                        <string>normal</string>
@@ -6666,7 +6691,7 @@
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>543</width>
+                <width>544</width>
                 <height>215</height>
                </rect>
               </property>

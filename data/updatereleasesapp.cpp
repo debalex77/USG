@@ -433,5 +433,17 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         }
     }
 
+    if (current_release == release_2_0_5) {
+        db->createTableGestation2();
+        db->createTableGestation2_cranium();
+        db->createTableGestation2_snc();
+        db->createTableGestation2_heart();
+        db->createTableGestation2_thorax();
+        db->createTableGestation2_abdomen();
+        db->createTableGestation2_urinarySystem();
+        db->createTableGestation2_other();
+        db->createTableGestation2_doppler();
+    }
+
     return true;
 }

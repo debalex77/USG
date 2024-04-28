@@ -3017,6 +3017,12 @@ void DocReportEcho::setDefaultDataGestation1()
         ui->gestation1_recommendation->setText("consultația ginecologului, examen ecografic la 18-20 săptămâni a sarcinei");
 }
 
+void DocReportEcho::setDefaultDataGestation2()
+{
+    if (ui->gestation2_recommendation->text().isEmpty())
+        ui->gestation2_recommendation->setText("consultația ginecologului");
+}
+
 // *******************************************************************
 // **************** ACCESIBILITATEA BUTOANELOR ***********************
 
@@ -5617,7 +5623,7 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_umbilicalCordon->setCurrentIndex(items.constFind("umbilicalCordon").value().toInt());
             ui->gestation2_umbilicalCordon_description->setText(items.constFind("umbilicalCordon_description").value());
             ui->gestation2_insertionPlacenta->setCurrentIndex(items.constFind("insertionPlacenta").value().toInt());
-            ui->gestation2_amnioticIndex->setText(items.constFind("amnioticIndexAspect").value());
+            ui->gestation2_amnioticIndex->setText(items.constFind("amnioticIndex").value());
             ui->gestation2_amnioticIndexAspect->setCurrentIndex(items.constFind("amnioticIndexAspect").value().toInt());
             ui->gestation2_amnioticBedDepth->setText(items.constFind("amnioticBedDepth").value());
             ui->gestation2_cervix->setText(items.constFind("cervix").value());

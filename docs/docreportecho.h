@@ -98,7 +98,7 @@ public:
     void set_t_gestation1(bool t_gestation1) {m_gestation1 = t_gestation1; setDefaultDataGestation1(); emit t_gestation1Changed();}
     bool get_t_gestation1() const {return m_gestation1;}
 
-    void set_t_gestation2(bool t_gestation2) {m_gestation2 = t_gestation2; emit t_gestation2Changed();}
+    void set_t_gestation2(bool t_gestation2) {m_gestation2 = t_gestation2; setDefaultDataGestation2();emit t_gestation2Changed();}
     bool get_t_gestation2() const {return m_gestation2;}
 
     void setIdUser(int IdUser) {m_idUser = IdUser; emit IdUserChanged();}
@@ -269,6 +269,7 @@ private:
     void setDefaultDataThyroid();
     void setDefaultDataGestation0();
     void setDefaultDataGestation1();
+    void setDefaultDataGestation2();
 
     void initEnableBtn();                  // initierea accesului la btn + setarea focusului + paginei
     void updateStyleBtnInvestigations();

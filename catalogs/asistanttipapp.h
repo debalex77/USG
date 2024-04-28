@@ -32,7 +32,7 @@ private:
     DataBase* db;
 
     int current_step = 0;
-    int max_step = 4;
+    int max_step = 5;
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 
