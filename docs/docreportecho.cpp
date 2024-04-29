@@ -1,4 +1,4 @@
-#include "docreportecho.h"
+﻿#include "docreportecho.h"
 #include "ui_docreportecho.h"
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
 #include <QDesktopWidget>
@@ -75,6 +75,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     group_btn_gestation2->addButton(ui->gestation2_trimestru2, 0);
     group_btn_gestation2->addButton(ui->gestation2_trimestru3, 1);
     ui->gestation2_trimestru2->setChecked(true);
+    clickedGestation2Trimestru(0);
 
     // ******************************************************************
 
@@ -1570,6 +1571,8 @@ void DocReportEcho::disconnections_thyroid()
 void DocReportEcho::connections_gestation0()
 {
     ui->gestation0_gestation->setInputMask("DDs. Dz.");
+    ui->gestation0_GS_age->setInputMask("DDs. Dz.");
+    ui->gestation0_CRL_age->setInputMask("DDs. Dz.");
 
     ui->gestation0_antecedent->setMaxLength(150);
     ui->gestation0_gestation->setMaxLength(20);
@@ -1617,7 +1620,7 @@ void DocReportEcho::connections_gestation0()
 
 void DocReportEcho::disconnections_gestation0()
 {
-    QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation0)->findChildren<QLineEdit*>();
+        QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation0)->findChildren<QLineEdit*>();
     for (int n = 0; n < list_line_edit.count(); n++) {
         disconnect(list_line_edit[n], &QLineEdit::textChanged, this, &DocReportEcho::dataWasModified);
     }
@@ -1629,6 +1632,11 @@ void DocReportEcho::disconnections_gestation0()
 
 void DocReportEcho::connections_gestation1()
 {
+    ui->gestation1_gestation->setInputMask("DDs. Dz.");
+    ui->gestation1_CRL_age->setInputMask("DDs. Dz.");
+    ui->gestation1_BPD_age->setInputMask("DDs. Dz.");
+    ui->gestation1_FL_age->setInputMask("DDs. Dz.");
+
     ui->gestation1_antecedent->setMaxLength(150);
     ui->gestation1_gestation->setMaxLength(20);
     ui->gestation1_CRL_dimens->setMaxLength(5);
@@ -1655,6 +1663,8 @@ void DocReportEcho::connections_gestation1()
     ui->gestation1_miometer->setMaxLength(200);
     ui->gestation1_cervix->setMaxLength(200);
     ui->gestation1_ovary->setMaxLength(200);
+    ui->gestation1_sac_vitelin->setMaxLength(50);
+    ui->gestation1_sac_vitelin->setPlaceholderText(tr("... maximum 50 caractere"));
 
     QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation1)->findChildren<QLineEdit*>();
     for (int n = 0; n < list_line_edit.count(); n++) {
@@ -1702,6 +1712,60 @@ void DocReportEcho::disconnections_gestation1()
 
 void DocReportEcho::connections_gestation2()
 {
+    ui->gestation2_gestation_age->setMaxLength(20);
+    ui->gestation2_gestation_age->setPlaceholderText(tr("... maximum 20 caractere"));
+    ui->gestation2_pregnancy_description->setMaxLength(250);
+    ui->gestation2_pregnancy_description->setPlaceholderText(tr("... maximum 250 caractere"));
+    ui->gestation2_eyeball_desciption->setMaxLength(100);
+    ui->gestation2_eyeball_desciption->setPlaceholderText(tr("... maximum 100 caractere"));
+    ui->gestation2_nasolabialTriangle_description->setMaxLength(100);
+    ui->gestation2_nasolabialTriangle_description->setPlaceholderText(tr("... maximum 100 caractere"));
+    ui->gestation2_ventricularSystem_description->setMaxLength(70);
+    ui->gestation2_ventricularSystem_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_choroidalPlex_description->setMaxLength(70);
+    ui->gestation2_choroidalPlex_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_cerebellum_description->setMaxLength(70);
+    ui->gestation2_cerebellum_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_vertebralColumn_description->setMaxLength(100);
+    ui->gestation2_vertebralColumn_description->setPlaceholderText(tr("... maximum 100 caractere"));
+    ui->gestation2_heartPosition->setMaxLength(50);
+    ui->gestation2_heartPosition->setPlaceholderText(tr("... maximum 50 caractere"));
+    ui->gestation2_planPatruCamere_description->setMaxLength(70);
+    ui->gestation2_planPatruCamere_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_ventricularEjectionPathLeft_description->setMaxLength(70);
+    ui->gestation2_ventricularEjectionPathLeft_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_ventricularEjectionPathRight_description->setMaxLength(70);
+    ui->gestation2_ventricularEjectionPathRight_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_intersectionVesselMagistral_description->setMaxLength(70);
+    ui->gestation2_intersectionVesselMagistral_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_planTreiVase_description->setMaxLength(70);
+    ui->gestation2_planTreiVase_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_pulmonaryAreas_description->setMaxLength(70);
+    ui->gestation2_pulmonaryAreas_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_diaphragm_description->setMaxLength(70);
+    ui->gestation2_diaphragm_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_stomach_description->setMaxLength(50);
+    ui->gestation2_stomach_description->setPlaceholderText(tr("... maximum 50 caractere"));
+    ui->gestation2_cholecist_description->setMaxLength(50);
+    ui->gestation2_cholecist_description->setPlaceholderText(tr("... maximum 50 caractere"));
+    ui->gestation2_intestine_description->setMaxLength(70);
+    ui->gestation2_intestine_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_kidneys_description->setMaxLength(70);
+    ui->gestation2_kidneys_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_ureter_description->setMaxLength(70);
+    ui->gestation2_ureter_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_extremities_description->setMaxLength(150);
+    ui->gestation2_extremities_description->setPlaceholderText(tr("... maximum 150 caractere"));
+    ui->gestation2_placenta_localization->setMaxLength(50);
+    ui->gestation2_placenta_localization->setPlaceholderText(tr("... maximum 50 caractere"));
+    ui->gestation2_placentaStructure_description->setMaxLength(150);
+    ui->gestation2_placentaStructure_description->setPlaceholderText(tr("... maximum 150 caractere"));
+    ui->gestation2_umbilicalCordon_description->setMaxLength(70);
+    ui->gestation2_umbilicalCordon_description->setPlaceholderText(tr("... maximum 70 caractere"));
+    ui->gestation2_cervix_description->setMaxLength(150);
+    ui->gestation2_cervix_description->setPlaceholderText(tr("... maximum 150 caractere"));
+    ui->gestation2_comment->setPlaceholderText(tr("... maximum 250 caractere"));
+;
     ui->gestation2_gestation_age->setInputMask("DDs. Dz.");
     ui->gestation2_bpd_age->setInputMask("DDs. Dz.");
     ui->gestation2_hc_age->setInputMask("DDs. Dz.");
@@ -1729,14 +1793,17 @@ void DocReportEcho::connections_gestation2()
     ui->gestation2_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->gestation2_recommendation->setMaxLength(255);
 
-    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [=]()
-            {
-                if (ui->gestation2_concluzion->toPlainText().length() > 500)
-                    ui->gestation2_concluzion->textCursor().deletePreviousChar();
-            });
+    connect(ui->gestation2_comment, &QPlainTextEdit::textChanged, this, [=](){
+        if (ui->gestation2_comment->toPlainText().length() > 250)
+            ui->gestation2_comment->textCursor().deletePreviousChar();
+    });
 
-    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [=](){
+        if (ui->gestation2_concluzion->toPlainText().length() > 500)
+            ui->gestation2_concluzion->textCursor().deletePreviousChar();
+    });
+
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [this](){
         if (str_concluzion_gestation2.isEmpty()){
             str_concluzion_gestation2 = ui->concluzion->toPlainText();
             if (str_concluzion_gestation2.isEmpty())
@@ -1746,6 +1813,25 @@ void DocReportEcho::connections_gestation2()
             ui->concluzion->setPlainText(ui->gestation2_concluzion->toPlainText());
         else
             ui->concluzion->setPlainText(str_concluzion_gestation2 + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gestation2_concluzion->toPlainText());
+    });
+
+    connect(group_btn_gestation2, QOverload<int>::of(&QButtonGroup::idClicked),
+            this, QOverload<int>::of(&DocReportEcho::clickedGestation2Trimestru));
+
+    connect(ui->gestation2_nasalFold, &QLineEdit::editingFinished, this, [=]() {
+        ui->tabWidget_morfology->setCurrentIndex(1); // SNC
+    });
+
+    connect(ui->gestation2_vertebralColumn_description, &QLineEdit::editingFinished, this, [=](){
+        ui->tabWidget_morfology->setCurrentIndex(2); // heart
+    });
+
+    connect(ui->gestation2_diaphragm_description, &QLineEdit::editingFinished, this, [=](){
+        ui->tabWidget_morfology->setCurrentIndex(4); // abdomen
+    });
+
+    connect(ui->gestation2_intestine_description, &QLineEdit::editingFinished, this, [=](){
+        ui->tabWidget_morfology->setCurrentIndex(5); // s.urinar
     });
 }
 
@@ -1765,6 +1851,51 @@ void DocReportEcho::disconnections_gestation2()
     QList<QComboBox*> list_combo = ui->stackedWidget->widget(page_gestation2)->findChildren<QComboBox*>();
     for (int n = 0; n < list_combo.count(); n++) {
         disconnect(list_combo[n], &QComboBox::currentTextChanged, this, &DocReportEcho::dataWasModified);
+    }
+}
+
+void DocReportEcho::clickedGestation2Trimestru(const int id_button)
+{
+    if (id_button == 0){ // trimestru II
+        ui->gestation2_nasalBones->setEnabled(true);
+        ui->gestation2_nasalBones_dimens->setEnabled(true);
+        ui->gestation2_nasalFold->setEnabled(true);
+        ui->label_gestation2_nasalBones->setEnabled(true);
+        ui->label_gestation2_nasalBones_dimens->setEnabled(true);
+        ui->label_gestation2_nasalBones_mm->setEnabled(true);
+        ui->label_gestation2_nasalFold->setEnabled(true);
+        ui->label_gestation2_nasalFold_mm->setEnabled(true);
+
+        ui->label_gestation2_fissureSilvius->setEnabled(true);
+        ui->gestation2_fissureSilvius->setEnabled(true);
+        ui->label_gestation2_ventricularEjectionPathLeft->setEnabled(true);
+        ui->gestation2_ventricularEjectionPathLeft->setEnabled(true);
+        ui->gestation2_ventricularEjectionPathLeft_description->setEnabled(true);
+        ui->label_gestation2_ventricularEjectionPathRight->setEnabled(true);
+        ui->gestation2_ventricularEjectionPathRight->setEnabled(true);
+        ui->gestation2_ventricularEjectionPathRight_description->setEnabled(true);
+        ui->label_gestation2_planBicav->setEnabled(true);
+        ui->gestation2_planBicav->setEnabled(true);
+    } else { // trimestru III
+        ui->gestation2_nasalBones->setEnabled(false);
+        ui->gestation2_nasalBones_dimens->setEnabled(false);
+        ui->gestation2_nasalFold->setEnabled(false);
+        ui->label_gestation2_nasalBones->setEnabled(false);
+        ui->label_gestation2_nasalBones_dimens->setEnabled(false);
+        ui->label_gestation2_nasalBones_mm->setEnabled(false);
+        ui->label_gestation2_nasalFold->setEnabled(false);
+        ui->label_gestation2_nasalFold_mm->setEnabled(false);
+
+        ui->label_gestation2_fissureSilvius->setEnabled(false);
+        ui->gestation2_fissureSilvius->setEnabled(false);
+        ui->label_gestation2_ventricularEjectionPathLeft->setEnabled(false);
+        ui->gestation2_ventricularEjectionPathLeft->setEnabled(false);
+        ui->gestation2_ventricularEjectionPathLeft_description->setEnabled(false);
+        ui->label_gestation2_ventricularEjectionPathRight->setEnabled(false);
+        ui->gestation2_ventricularEjectionPathRight->setEnabled(false);
+        ui->gestation2_ventricularEjectionPathRight_description->setEnabled(false);
+        ui->label_gestation2_planBicav->setEnabled(false);
+        ui->gestation2_planBicav->setEnabled(false);
     }
 }
 
@@ -1798,8 +1929,10 @@ void DocReportEcho::slot_ItNewChanged()
             connections_gestation0();
         if (m_gestation1)
             connections_gestation1();
-        if (m_gestation2)
+        if (m_gestation2) {
+            ui->gestation2_dateMenstruation->setDate(QDate::currentDate());
             connections_gestation2();
+        }
 
         ui->comment->setHidden(true);
     }
@@ -3755,8 +3888,8 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         ";");
             qry.addBindValue(m_id);
             qry.addBindValue((ui->gestation2_gestation_age->text().isEmpty()) ? QVariant() : ui->gestation2_gestation_age->text());
-            qry.addBindValue(ui->gestation2_dateMenstruation->date().toString("yyyy-MM-dd"));
             qry.addBindValue((ui->gestation2_trimestru2->isChecked()) ? 2 : 3);
+            qry.addBindValue(ui->gestation2_dateMenstruation->date().toString("yyyy-MM-dd"));           
             qry.addBindValue(ui->gestation2_view_examination->currentIndex());
             qry.addBindValue(ui->gestation2_pregnancy->currentIndex());
             qry.addBindValue((ui->gestation2_pregnancy_description->text().isEmpty()) ? QVariant() : ui->gestation2_pregnancy_description->text());
@@ -5482,10 +5615,13 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_dateMenstruation->setDate(QDate::fromString(items.constFind("dateMenstruation").value(), "yyyy-MM-dd"));
             ui->gestation2_gestation_age->setText(items.constFind("gestation_age").value());
             ui->gestation2_view_examination->setCurrentIndex(items.constFind("view_examination").value().toInt());
-            if (items.constFind("trimestru").value().toInt() == 2)
+            if (items.constFind("trimestru").value().toInt() == 2){
                 ui->gestation2_trimestru2->setChecked(true);
-            else
+                clickedGestation2Trimestru(0);
+            } else {
                 ui->gestation2_trimestru3->setChecked(true);
+                clickedGestation2Trimestru(1);
+            }
             ui->gestation2_pregnancy->setCurrentIndex(items.constFind("single_multiple_pregnancy").value().toInt());
             ui->gestation2_pregnancy_description->setText(items.constFind("single_multiple_pregnancy_description").value());
             ui->gestation2_comment->setPlainText(items.constFind("comment").value());

@@ -207,6 +207,8 @@ private slots:
     void connections_gestation2();         // conexiunea la bloc 'gestation 2'
     void disconnections_gestation2();
 
+    void clickedGestation2Trimestru(const int id_button);
+
     void slot_ItNewChanged();
     void slot_IdChanged();
     void slot_IdPacientChanged();

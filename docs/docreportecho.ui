@@ -4539,7 +4539,7 @@
                 <widget class="QLineEdit" name="gestation2_pregnancy_description"/>
                </item>
                <item row="3" column="0" colspan="9">
-                <widget class="QTabWidget" name="tabWidget_2">
+                <widget class="QTabWidget" name="tabWidget_biometry_morfology">
                  <property name="currentIndex">
                   <number>0</number>
                  </property>
@@ -4780,7 +4780,7 @@
                   </attribute>
                   <layout class="QGridLayout" name="gridLayout_69">
                    <item row="1" column="0">
-                    <widget class="QTabWidget" name="tabWidget_3">
+                    <widget class="QTabWidget" name="tabWidget_morfology">
                      <property name="tabPosition">
                       <enum>QTabWidget::North</enum>
                      </property>
@@ -4815,14 +4815,14 @@
                         <widget class="QLineEdit" name="gestation2_nasalBones_dimens"/>
                        </item>
                        <item row="2" column="6">
-                        <widget class="QLabel" name="label_155">
+                        <widget class="QLabel" name="label_gestation2_nasalBones_mm">
                          <property name="text">
                           <string>mm</string>
                          </property>
                         </widget>
                        </item>
                        <item row="2" column="4">
-                        <widget class="QLabel" name="label_154">
+                        <widget class="QLabel" name="label_gestation2_nasalBones_dimens">
                          <property name="text">
                           <string>, lungimea</string>
                          </property>
@@ -4870,21 +4870,21 @@
                         </widget>
                        </item>
                        <item row="2" column="0">
-                        <widget class="QLabel" name="label_153">
+                        <widget class="QLabel" name="label_gestation2_nasalBones">
                          <property name="text">
                           <string>Oasele nazale</string>
                          </property>
                         </widget>
                        </item>
                        <item row="5" column="0">
-                        <widget class="QLabel" name="label_158">
+                        <widget class="QLabel" name="label_gestation2_nasalFold">
                          <property name="text">
                           <string>Pliul nazal</string>
                          </property>
                         </widget>
                        </item>
                        <item row="5" column="4">
-                        <widget class="QLabel" name="label_159">
+                        <widget class="QLabel" name="label_gestation2_nasalFold_mm">
                          <property name="text">
                           <string>mm</string>
                          </property>
@@ -5016,7 +5016,7 @@
                         </widget>
                        </item>
                        <item row="4" column="0">
-                        <widget class="QLabel" name="label_164">
+                        <widget class="QLabel" name="label_gestation2_cavityPellucidSeptum">
                          <property name="text">
                           <string>Cavitatea septului pellucid</string>
                          </property>
@@ -5088,7 +5088,7 @@
                         <widget class="QLineEdit" name="gestation2_cerebellum_description"/>
                        </item>
                        <item row="1" column="0">
-                        <widget class="QLabel" name="label_161">
+                        <widget class="QLabel" name="label_gestation2_fissureSilvius">
                          <property name="text">
                           <string>Fisura Silvius</string>
                          </property>
@@ -5437,14 +5437,14 @@
                         </widget>
                        </item>
                        <item row="5" column="0">
-                        <widget class="QLabel" name="label_174">
+                        <widget class="QLabel" name="label_gestation2_ventricularEjectionPathRight">
                          <property name="text">
                           <string>Cale de ejecție ventr.drept</string>
                          </property>
                         </widget>
                        </item>
                        <item row="4" column="0">
-                        <widget class="QLabel" name="label_173">
+                        <widget class="QLabel" name="label_gestation2_ventricularEjectionPathLeft">
                          <property name="text">
                           <string>Cale de ejecție ventr.stâng</string>
                          </property>
@@ -5529,7 +5529,7 @@
                         </widget>
                        </item>
                        <item row="8" column="2" colspan="2">
-                        <widget class="QLabel" name="label_178">
+                        <widget class="QLabel" name="label_gestation2_planBicav">
                          <property name="text">
                           <string>Planul bicav</string>
                          </property>
@@ -7589,9 +7589,9 @@ font: italic 11pt &quot;Cantarell&quot;;</string>
   <tabstop>btn_clear_image3</tabstop>
   <tabstop>gestation2_comment</tabstop>
   <tabstop>gestation2_concluzion</tabstop>
-  <tabstop>tabWidget_3</tabstop>
+  <tabstop>tabWidget_morfology</tabstop>
   <tabstop>tabWidget</tabstop>
-  <tabstop>tabWidget_2</tabstop>
+  <tabstop>tabWidget_biometry_morfology</tabstop>
   <tabstop>scrollArea_Images</tabstop>
   <tabstop>comment_image5</tabstop>
   <tabstop>comment_image1</tabstop>

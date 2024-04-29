@@ -12,6 +12,9 @@ UpdateReleasesApp::~UpdateReleasesApp()
 
 bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
 {
+    // QString str_current_release = current_release;
+    // int num_current_release = str_current_release.replace(".", "").toInt();
+
     if (current_release == release_1_1_3){
 
         QSqlQuery qry;
@@ -434,15 +437,26 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
     }
 
     if (current_release == release_2_0_5) {
-        db->createTableGestation2();
-        db->createTableGestation2_cranium();
-        db->createTableGestation2_snc();
-        db->createTableGestation2_heart();
-        db->createTableGestation2_thorax();
-        db->createTableGestation2_abdomen();
-        db->createTableGestation2_urinarySystem();
-        db->createTableGestation2_other();
-        db->createTableGestation2_doppler();
+        if (db->createTableGestation2())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2'.");
+        if (db->createTableGestation2_biometry())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_biometry'.");
+        if (db->createTableGestation2_cranium())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_cranium'.");
+        if (db->createTableGestation2_snc())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_SNC'.");
+        if (db->createTableGestation2_heart())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_heart'.");
+        if (db->createTableGestation2_thorax())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_thorax'.");
+        if (db->createTableGestation2_abdomen())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_abdomen'.");
+        if (db->createTableGestation2_urinarySystem())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_urinarySystem'.");
+        if (db->createTableGestation2_other())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_other'.");
+        if (db->createTableGestation2_doppler())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_doppler'.");
     }
 
     return true;
