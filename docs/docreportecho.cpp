@@ -2811,7 +2811,8 @@ void DocReportEcho::onPrint(const int _typeReport)
         m_report->dataManager()->addModel("table_gestation2", modelGestation2, false);
 
         // sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Gestation2.lrxml")){
+        if (! m_report->loadFromFile((ui->gestation2_trimestru2->isChecked()) ?
+                                     globals::pathTemplatesDocs + "/Gestation2.lrxml" : globals::pathTemplatesDocs + "/Gestation3.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
