@@ -566,7 +566,7 @@ void ListDocReportOrder::onClickBtnReport()
                     _cod == "1021." || _cod == "1022." || _cod == "1024." || _cod == "1050.19." || _cod == "1050.20." || _cod == "1050.61." || _cod == "1050.62." || _cod == "1050.63." ||
                     _cod == "1050.62.1." || _cod == "1050.62.2." || _cod == "1050.63.1.")
                     dialogInvestig->set_t_urinary_system(true);
-                if (_cod == "1025" || _cod == "1038" || _cod == "1050.55" || _cod == "1050.62.1" || _cod == "1050.62.2" ||
+                if (_cod == "1021" || _cod == "1025" || _cod == "1038" || _cod == "1050.55" || _cod == "1050.62.1" || _cod == "1050.62.2" ||
                     _cod == "1025." || _cod == "1038." || _cod == "1050.55." || _cod == "1050.62.1." || _cod == "1050.62.2.")
                     dialogInvestig->set_t_prostate(true);
                 if (_cod == "1026" || _cod == "1033" || _cod == "1050.22" || _cod == "1050.23" || _cod == "1050.25" || _cod == "1050.26" || _cod == "1050.62" || _cod == "1050.63"||
@@ -588,6 +588,8 @@ void ListDocReportOrder::onClickBtnReport()
                     dialogInvestig->set_t_gestation1(true);
                 if (_cod == "1029.1.1" || _cod == "1029.1.2" || _cod == "1029.2" || _cod == "1029.21" || _cod == "1029.3" || _cod == "1029.31" ||
                     _cod == "1029.1.1." || _cod == "1029.1.2." || _cod == "1029.2." || _cod == "1029.21." || _cod == "1029.3." || _cod == "1029.31.")
+                    dialogInvestig->set_t_gestation2(true);
+                if (_cod == "1029.1.1" || _cod == "1029.1.2" || _cod == "1029.2" || _cod == "1029.3")
                     dialogInvestig->set_t_gestation2(true);
             }
         }
