@@ -1,6 +1,7 @@
 ## USG v2.0.5
 * modificat documentul <b><u>'Raport ecografic'</u></b> - în document a fost adaugat examen ecografic în trimestru II și III de sarcină
-* adaugată forma de tipar trimestru II și III de sarcină (blancul corespunde raportului ecografic IMSP Institutul Mamei şi Copilului)
+* adaugată forma de tipar trimestru II și III de sarcină (blancul corespunde raportului ecografic al IMSP Institutul Mamei şi Copilului)
+* fixarea bug-lui la inchiderea <b><u>'Rapoarte'</u></b> - crash application
 * adaugată informație suplimentară în asistentul sfaturlor aplicației
 * fixate bug-urile minore
 

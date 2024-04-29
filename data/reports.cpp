@@ -1096,6 +1096,7 @@ void Reports::openCatDoctor()
 void Reports::closeEvent(QCloseEvent *event)
 {
     if (event->type() == QEvent::Close){
+        ui->pageNavigator->setValue(0); // fix bug - la inchiderea -> crash qApp
         saveSettingsReport();
     }
 }
