@@ -723,6 +723,7 @@ void DocReportEcho::initConnections()
     connect(ui->btnGestation2, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnGestation2);
     connect(ui->btnComment, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnComment);
     connect(ui->btnImages, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnImages);
+    connect(ui->btnNormograms, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnNormograms);
 
     connect(ui->btn_add_template_organsInternal, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
     connect(ui->btn_add_template_urinary_system, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
@@ -920,6 +921,13 @@ void DocReportEcho::clickBtnImages()
 {
     ui->stackedWidget->setCurrentIndex(page_images);
     updateStyleBtnInvestigations();
+}
+
+void DocReportEcho::clickBtnNormograms()
+{
+    normograms = new Normograms(this);
+    normograms->setAttribute(Qt::WA_DeleteOnClose);
+    normograms->show();
 }
 
 void DocReportEcho::createMenuPrint()
@@ -3187,6 +3195,10 @@ void DocReportEcho::initEnableBtn()
     ui->btnGestation0->setHidden(! m_gestation0);
     ui->btnGestation1->setHidden(! m_gestation1);
     ui->btnGestation2->setHidden(! m_gestation2);
+    if (m_gestation0 || m_gestation1 || m_gestation2)
+        ui->btnNormograms->setHidden(false);
+    else
+        ui->btnNormograms->setHidden(true);
 
     ui->btnOrgansInternal->setEnabled(m_organs_internal);
     if (m_organs_internal && m_current_page == -1){

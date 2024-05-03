@@ -206,6 +206,9 @@ void DataBase::creatingTables()
     if (createTableGestation2_doppler())
         qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_doppler'.");
 
+    if (createTableNormograms())
+        qInfo(logInfo()) << tr("A fost creata tabela 'normograms'.");
+
     if (createTableRegistrationPatients())
         qInfo(logInfo()) << tr("A fost creata tabela 'registrationPatients'.");
 
@@ -290,6 +293,44 @@ void DataBase::loadInvestigationFromXml()
                     qInfo(logInfo()) << tr("Investigatia '%1' este introdusa in baza de date cu codul '%2'.").arg(name, cod);
                 else
                     qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'investigations': %1").arg(qry.lastError().text());
+                node = node.nextSibling().toElement();
+            }
+        }
+        node = node.nextSibling().toElement();
+    }
+}
+
+void DataBase::loadNormogramsFromXml()
+{
+    QDomDocument investigXML;
+    QFile xmlFile(":/xmls/normograms.xml");
+    if (!xmlFile.open(QIODevice::ReadOnly )){
+        qWarning(logWarning()) << tr("Fisierul ':/xmls/normograms.xml' nu a fost citit !!!");
+    }
+    investigXML.setContent(&xmlFile);
+    xmlFile.close();
+
+    QDomElement root = investigXML.documentElement();
+    QDomElement node = root.firstChild().toElement();
+
+    while(node.isNull() == false) {
+        if(node.tagName() == "entry"){
+            while(!node.isNull()){
+                QString name       = node.attribute("name",        "name");
+                QString crl        = node.attribute("crl",         "crl");
+                QString _5_centile  = node.attribute("_5_centile",  "_5_centile");
+                QString _50_centile = node.attribute("_50_centile", "_50_centile");
+                QString _95_centile = node.attribute("_95_centile", "_95_centile");
+
+                QSqlQuery qry;
+                qry.prepare("INSERT INTO normograms (`name`, `crl`, `5_centile`, `50_centile`, `95_centile`) VALUES (?, ?, ?, ?, ?);");
+                qry.addBindValue(name);
+                qry.addBindValue(crl);
+                qry.addBindValue(_5_centile);
+                qry.addBindValue(_50_centile);
+                qry.addBindValue(_95_centile);
+                if (! qry.exec())
+                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'normograms': %1").arg(qry.lastError().text());
                 node = node.nextSibling().toElement();
             }
         }
@@ -3293,6 +3334,40 @@ bool DataBase::createTableGestation2_doppler()
     } else {
         qWarning(logWarning()) << tr("%1 - createTableGestation2_doppler()").arg(metaObject()->className())
                                << tr("Nu a fost creata tabela 'tableGestation2_doppler'.") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableNormograms()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE normograms ("
+                    "`id`         int NOT NULL AUTO_INCREMENT,"
+                    "`name`       varchar (30) NOT NULL,"
+                    "`crl`        varchar (5) NOT NULL,"
+                    "`5_centile`  DOUBLE NOT NULL,"
+                    "`50_centile` DOUBLE NOT NULL,"
+                    "`95_centile` DOUBLE NOT NULL,"
+                    "PRIMARY KEY (`id`)"
+                    ");");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE normograms ("
+                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "name         TEXT (30) NOT NULL,"
+                    "crl          TEXT (5) NOT NULL,"
+                    "`5_centile`  REAL NOT NULL,"
+                    "`50_centile` REAL NOT NULL,"
+                    "`95_centile` REAL NOT NULL "
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableNormograms()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'normograms'.") + qry.lastError().text();
         return false;
     }
 }

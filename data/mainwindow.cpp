@@ -225,18 +225,19 @@ void MainWindow::initButton()
 
 void MainWindow::initActions()
 {
-    QAction* actionDoctors       = new QAction(QIcon(":img/doctor_x32.png"), tr("Doctori"), this);
-    QAction* actionNurses        = new QAction(QIcon(":img/nurse_x32.png"), tr("As.medicale"), this);
-    QAction* actionPacients      = new QAction(QIcon(":img/pacient_x32.png"), tr("Pacienți"), this);
-    QAction* actionOrganizations = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
-    QAction* actionUsers         = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
-    QAction* actionAppSettings   = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
-    QAction* actionUserSettings  = new QAction(QIcon(":img/settings_x32.png"), tr("Setările utilizatorilor"), this);
-    QAction* actionOpenPricing  = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
-    QAction* actionOpenAppointments  = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
-    QAction* actionOpenOrderEcho  = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
-    QAction* actionOpenReportEcho  = new QAction(QIcon(":/img/examenEcho.png"), tr("Raport ecografic"), this);
-    QAction* actionOpenDesigner   = new QAction(QIcon("://images/logo1.png"), tr("LimeReport (designer)"), this);
+    QAction* actionDoctors          = new QAction(QIcon(":img/doctor_x32.png"), tr("Doctori"), this);
+    QAction* actionNurses           = new QAction(QIcon(":img/nurse_x32.png"), tr("As.medicale"), this);
+    QAction* actionPacients         = new QAction(QIcon(":img/pacient_x32.png"), tr("Pacienți"), this);
+    QAction* actionOrganizations    = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
+    QAction* actionUsers            = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
+    QAction* actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
+    QAction* actionUserSettings     = new QAction(QIcon(":img/settings_x32.png"), tr("Setările utilizatorilor"), this);
+    QAction* actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
+    QAction* actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
+    QAction* actionOpenOrderEcho    = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
+    QAction* actionOpenReportEcho   = new QAction(QIcon(":/img/examenEcho.png"), tr("Raport ecografic"), this);
+    QAction* actionOpenDesigner     = new QAction(QIcon("://images/logo1.png"), tr("LimeReport (designer)"), this);
+    QAction* actionOpenNormograms   = new QAction(QIcon("://img/normograma.png"), tr("Normograme"), this);
 
     connect(actionDoctors, &QAction::triggered, this, [this](){
         openListForm(static_cast<int>(ListForm::TypeListForm::Doctors));
@@ -276,6 +277,10 @@ void MainWindow::initActions()
     QMenu* clasifiers = new QMenu(ui->menuCataloage);
     ui->menuCataloage->addMenu(clasifiers);
     clasifiers->setTitle(tr("Clasificatori"));
+
+    ui->menuCataloage->addSeparator();
+    ui->menuCataloage->addAction(actionOpenNormograms);
+    connect(actionOpenNormograms, &QAction::triggered, this, &MainWindow::openNormograms);
 
     QAction* actionTypesPrice = new QAction(QIcon(":/img/typesPrices_x32.png"), tr("Tipul prețurilor"), this);
     QAction* actionInvestigations = new QAction(QIcon(":/img/investigations_x32.png"), tr("Investigații"), this);
@@ -540,6 +545,13 @@ void MainWindow::openListForm(const int indexEnum)
     mdiAreaCont->addWidget(listForm);
 
     connect(listForm, &ListForm::mCloseThisForm, this, &MainWindow::removeSubWindow);
+}
+
+void MainWindow::openNormograms()
+{
+    normograms = new Normograms(this);
+    normograms->setAttribute(Qt::WA_DeleteOnClose);
+    normograms->show();
 }
 
 void MainWindow::openCatInvestigations()

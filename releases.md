@@ -1,3 +1,10 @@
+## USG v2.0.6
+* adaugat catalogul cu normograme obstetricale:
+    * normograma translucența nucală
+    * normograma oasele nazale
+    * index lichidului amniotic
+* în documentul <b><u>'Raport ecografic'</u></b> este posibil de consultat normogramele
+
 ## USG v2.0.5
 * modificat documentul <b><u>'Raport ecografic'</u></b> - în document a fost adaugat examen ecografic în trimestru II și III de sarcină
 * adaugată forma de tipar trimestru II și III de sarcină (blancul corespunde raportului ecografic al IMSP Institutul Mamei şi Copilului)

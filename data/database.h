@@ -39,6 +39,7 @@ public:
     void creatingTables_DbImage();
 
     void loadInvestigationFromXml();
+    void loadNormogramsFromXml();
     void insertDataForTabletypesPrices();
     void insertSetTableSettingsUsers();
 
@@ -113,6 +114,8 @@ public:
     bool createTableGestation2_urinarySystem();
     bool createTableGestation2_other();
     bool createTableGestation2_doppler();
+
+    bool createTableNormograms();
 
     bool createTableRegistrationPatients();
     bool createTableSettingsForm();

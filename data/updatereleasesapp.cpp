@@ -459,5 +459,11 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
             qInfo(logInfo()) << tr("Actualizarea BD '2.0.5' - a fost creata tabela 'tableGestation2_doppler'.");
     }
 
+    if (current_release == release_2_0_6) {
+        if (db->createTableNormograms())
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.6' - a fost creata tabela 'normograms'.");
+        db->loadNormogramsFromXml();
+    }
+
     return true;
 }

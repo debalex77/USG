@@ -18,6 +18,8 @@
 #include <docs/docorderecho.h>
 #include <models/basesortfilterproxymodel.h>
 
+#include <catalogs/normograms.h>
+
 namespace Ui {
 class DocReportEcho;
 }
@@ -175,6 +177,7 @@ private slots:
     void clickBtnGestation2();
     void clickBtnComment();
     void clickBtnImages();
+    void clickBtnNormograms();
     void createMenuPrint();         // meniu print
     void clickOpenDesignerReport(); // deschidem designer
     void clickOpenPreviewReport();  // deschidem preview
@@ -322,34 +325,34 @@ private:
 
     int m_count_images = 0;
 
-    DataBase* db;
-    PopUp*    popUp;
-    QTimer*   timer;
+    DataBase *db;
+    PopUp    *popUp;
+    QTimer   *timer;
 
-    QCompleter* completer;
-    QStandardItemModel* modelPatients;
-    BaseSortFilterProxyModel* proxyPatient;
+    QCompleter               *completer;
+    QStandardItemModel       *modelPatients;
+    BaseSortFilterProxyModel *proxyPatient;
 
-    PatientHistory* history_patient;
+    PatientHistory *history_patient;
 
-    QStandardItemModel* model_logo;
-    QSqlQueryModel* modelOrganization;      // modele pu instalarea datelor
-    QSqlQueryModel* modelPatient_print;
-    QSqlQueryModel* modelOrgansInternal;
-    QSqlQueryModel* modelUrinarySystem;
-    QSqlQueryModel* modelProstate;
-    QSqlQueryModel* modelGynecology;
-    QSqlQueryModel* modelBreast;
-    QSqlQueryModel* modelThyroid;
-    QSqlQueryModel* modelGestationO;
-    QSqlQueryModel* modelGestation1;
-    QSqlQueryModel* modelGestation2;
+    QStandardItemModel *model_logo;
+    QSqlQueryModel     *modelOrganization;      // modele pu instalarea datelor
+    QSqlQueryModel     *modelPatient_print;
+    QSqlQueryModel     *modelOrgansInternal;
+    QSqlQueryModel     *modelUrinarySystem;
+    QSqlQueryModel     *modelProstate;
+    QSqlQueryModel     *modelGynecology;
+    QSqlQueryModel     *modelBreast;
+    QSqlQueryModel     *modelThyroid;
+    QSqlQueryModel     *modelGestationO;
+    QSqlQueryModel     *modelGestation1;
+    QSqlQueryModel     *modelGestation2;
 
-    QButtonGroup* group_btn_prostate;       // instalarea grupelor RadioButton pe blocuri
-    QButtonGroup* group_btn_gynecology;
-    QButtonGroup* group_btn_gestation0;
-    QButtonGroup* group_btn_gestation1;
-    QButtonGroup* group_btn_gestation2;
+    QButtonGroup *group_btn_prostate;       // instalarea grupelor RadioButton pe blocuri
+    QButtonGroup *group_btn_gynecology;
+    QButtonGroup *group_btn_gestation0;
+    QButtonGroup *group_btn_gestation1;
+    QButtonGroup *group_btn_gestation2;
 
     QString str_concluzion_organs_internal; // pentru concluziile pe blocuri
     QString str_concluzion_urinary_system;
@@ -361,7 +364,8 @@ private:
     QString str_concluzion_gestation1;
     QString str_concluzion_gestation2;
 
-    LimeReport::ReportEngine* m_report;
+    LimeReport::ReportEngine *m_report;
+    Normograms *normograms;
 
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 

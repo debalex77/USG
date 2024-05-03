@@ -17,6 +17,7 @@
 
 #include "catalogs/catforsqltablemodel.h"
 #include "catalogs/asistanttipapp.h"
+#include "catalogs/normograms.h"
 #include "docs/listdoc.h"
 #include "docs/listdocreportorder.h"
 #include <catalogs/listform.h>
@@ -35,7 +36,7 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.5"
+#define APPLICATION_VERSION     "2.0.6"
 
 //=============================================================
 
@@ -71,6 +72,7 @@ private slots:
     void openUserManual();
     void openAbout();
     void openListForm(const int indexEnum);
+    void openNormograms();
     void openCatInvestigations();
     void openCatTypesPrices();
     void openPatientAppointments();
@@ -89,20 +91,21 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
-    QMdiArea*         mdiArea;
-    MdiAreaContainer* mdiAreaCont;
+    QMdiArea         *mdiArea;
+    MdiAreaContainer *mdiAreaCont;
 
-    DataBase*  db;
-    PopUp*     popUp;
-    QTextEdit* textEdit;
-    QMenu*     menu;
-    QTimer*    timer;
-    QTimer*    timer_doc_widget;
-    int        pause_timer = 0; //pu pauza in 5 secunde
-    QProgressBar* progress;
+    DataBase     *db;
+    PopUp        *popUp;
+    QTextEdit    *textEdit;
+    QMenu        *menu;
+    QTimer       *timer;
+    QTimer       *timer_doc_widget;
+    QProgressBar *progress;
 
-    QDockWidget* dock_widget;
-    QTextEdit* textEdit_dockWidget;
+    int pause_timer = 0; //pu pauza in 5 secunde
+
+    QDockWidget *dock_widget;
+    QTextEdit   *textEdit_dockWidget;
 
     QToolBar    *toolBar;
     QToolButton *btnDoctors;
@@ -120,19 +123,20 @@ private:
     QToolButton *btnSettings;
     QToolButton *btnAbout;
 
-    AppSettings*     appSett;
-    ListDoc*         listDoc;
-    Reports*         reports;
-    DocOrderEcho*    docOrderEcho;
-    ListDocReportOrder* list_order;
-    ListDocReportOrder* list_report;
-    CatForSqlTableModel* cat_investigations;
-    DocAppointmentsPatients* registration_patients;
-    PatientHistory* patient_history;
-    UpdateReleasesApp* update_app;
-    LimeReport::ReportEngine* m_report;
-    DownloaderVersion* downloader_version;
-    AsistantTipApp* asistant_tip;
+    AppSettings              *appSett;
+    ListDoc                  *listDoc;
+    Reports                  *reports;
+    DocOrderEcho             *docOrderEcho;
+    ListDocReportOrder       *list_order;
+    ListDocReportOrder       *list_report;
+    Normograms               *normograms;
+    CatForSqlTableModel      *cat_investigations;
+    DocAppointmentsPatients  *registration_patients;
+    PatientHistory           *patient_history;
+    UpdateReleasesApp        *update_app;
+    LimeReport::ReportEngine *m_report;
+    DownloaderVersion        *downloader_version;
+    AsistantTipApp           *asistant_tip;
 
 protected:
     void closeEvent(QCloseEvent *event);

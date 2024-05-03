@@ -7,7 +7,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_QML_DEBUG_NO_WARNING
 CONFIG- = qml_debug
 
-VERSION                  = 2.0.5
+VERSION                  = 2.0.6
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
@@ -31,6 +31,7 @@ SOURCES += \
     catalogs/chooseformprint.cpp \
     catalogs/customperiod.cpp \
     catalogs/listform.cpp \
+    catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
     data/about.cpp \
     data/appsettings.cpp \
@@ -62,7 +63,8 @@ SOURCES += \
     models/basesortfilterproxymodel.cpp \
     models/basesqlquerymodel.cpp \
     models/basesqltablemodel.cpp \
-    models/registrationtablemodel.cpp
+    models/registrationtablemodel.cpp \
+    models/variantmaptablemodel.cpp
 
 HEADERS += \
     catalogs/asistanttipapp.h \
@@ -74,6 +76,7 @@ HEADERS += \
     catalogs/chooseformprint.h \
     catalogs/customperiod.h \
     catalogs/listform.h \
+    catalogs/normograms.h \
     catalogs/patienthistory.h \
     data/about.h \
     data/appsettings.h \
@@ -106,6 +109,7 @@ HEADERS += \
     models/basesqlquerymodel.h \
     models/basesqltablemodel.h \
     models/registrationtablemodel.h \
+    models/variantmaptablemodel.h \
     resources.rc
 
 FORMS += \
@@ -118,6 +122,7 @@ FORMS += \
     catalogs/chooseformprint.ui \
     catalogs/customperiod.ui \
     catalogs/listform.ui \
+    catalogs/normograms.ui \
     catalogs/patienthistory.ui \
     data/about.ui \
     data/appsettings.ui \

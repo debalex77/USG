@@ -160,5 +160,8 @@
         <file>img/oxygen/page-zoom.png</file>
         <file>img/oxygen/tools-report-bug.png</file>
         <file>img/oxygen/ktip.png</file>
+        <file>img/NT.png</file>
+        <file>img/normograma.png</file>
+        <file>xmls/normograms.xml</file>
     </qresource>
 </RCC>
