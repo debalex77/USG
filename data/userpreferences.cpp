@@ -20,6 +20,9 @@ UserPreferences::UserPreferences(QWidget *parent) :
 
     setListWidget(); // setam list widget
 
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
+    ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+
     ui->brandUSG->setMaxLength(200);
     ui->versionApp->setText(VER);
     ui->versionApp->setEnabled(false);
@@ -340,6 +343,8 @@ void UserPreferences::onClickedListView(const QModelIndex index)
         ui->stackedWidget->setCurrentIndex(page_launch);
     else if (index.row() == page_document)
         ui->stackedWidget->setCurrentIndex(page_document);
+    else if (index.row() == page_message)
+        ui->stackedWidget->setCurrentIndex(page_message);
     else if (index.row() == page_notedit)
         ui->stackedWidget->setCurrentIndex(page_notedit);
 }
@@ -410,6 +415,7 @@ void UserPreferences::setListWidget()
                                    << tr("Setările generale")
                                    << tr("Lansarea/închiderea")
                                    << tr("Setările documentelor")
+                                   << tr("Prezentarea mesajelor")
                                    << tr("Setările neredactabile");
 
     ui->listWidget->setIconSize(QSize(18,18));
@@ -424,6 +430,8 @@ void UserPreferences::setListWidget()
             listItem->setIcon(QIcon::fromTheme("applications-internet"));
         else if (n == page_document)
             listItem->setIcon(QIcon::fromTheme("edit-paste"));
+        else if (n == page_message)
+            listItem->setIcon(QIcon(":/img/info_x32.png"));
         else if (n == page_notedit)
             listItem->setIcon(QIcon::fromTheme("emblem-important"));
 #elif defined(Q_OS_WIN)
@@ -433,6 +441,8 @@ void UserPreferences::setListWidget()
             listItem->setIcon(QIcon(":/img/update_app.png"));
         else if (n == page_document)
             listItem->setIcon(QIcon(":/img/orderEcho_x32.png"));
+        else if (n == page_message)
+            listItem->setIcon(QIcon(":/img/info_x32.png"));
         else if (n == page_notedit)
             listItem->setIcon(QIcon(":/img/not-editable.png"));
 #endif

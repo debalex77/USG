@@ -12,6 +12,7 @@
 #include <QMediaPlayer>
 #include <QMediaPlaylist>
 #include <QVideoWidget>
+#include <infowindow.h>
 
 #include "data/popup.h"
 #include "data/database.h"
@@ -395,6 +396,8 @@ private:
     QLabel         *m_labelDuration  = nullptr;
     QLabel         *m_errorLabel     = nullptr;
     qint64         m_duration;
+
+    InfoWindow *info_win;
 
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 

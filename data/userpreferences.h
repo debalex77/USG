@@ -112,7 +112,8 @@ private:
         page_general  = 0,
         page_launch   = 1,
         page_document = 2,
-        page_notedit  = 3
+        page_message  = 3,
+        page_notedit  = 4
     };
 
     int m_Id             = idx_unknow;

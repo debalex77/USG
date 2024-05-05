@@ -64,6 +64,7 @@ SOURCES += \
     docs/docreportecho.cpp \
     docs/listdoc.cpp \
     docs/listdocreportorder.cpp \
+    infowindow.cpp \
     main.cpp \
     models/basecombomodel.cpp \
     models/basesortfilterproxymodel.cpp \
@@ -110,6 +111,7 @@ HEADERS += \
     docs/docreportecho.h \
     docs/listdoc.h \
     docs/listdocreportorder.h \
+    infowindow.h \
     models/basecombomodel.h \
     models/basesortfilterproxymodel.h \
     models/basesqlquerymodel.h \
@@ -144,6 +146,7 @@ FORMS += \
     docs/docreportecho.ui \
     docs/listdoc.ui \
     docs/listdocreportorder.ui \
+    infowindow.ui
 
 TRANSLATIONS += \
     USG_ro_RO.ts \

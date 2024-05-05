@@ -1180,9 +1180,23 @@ void DocReportEcho::clickBtnSelectConcluzionTemplates()
 
 void DocReportEcho::clickAddVideo()
 {
+    if (globals::show_content_info_video){
+        info_win = new InfoWindow(this);
+        info_win->setTitle(tr("Lucru cu fișierele video."));
+        info_win->setTex("<p style='font-family: Arial; font-size: 14px;'>"
+                         "Pentru lucru eficient cu fișiere video este necesar:<br><br>"
+                         "1. În <u>'setările aplicației'</u> de indicat <u>localizarea fișierelor video</u>.<br>"
+                         "Fișierele video se copie automat în directoriu de stocare la adăugarea în <u>lista cu video</u> din documentul "
+                         "<b><u>Raport ecografic</u></b>.<br><br>"
+                         "2. Fișiere video trebuie să fie convertate în formatul <b>'.mp4'</b>.<br><br>"
+                         "3. Denumirea fișierelor din directoriu de stocare (vezi punctul nr.1) nu trebuie să fie modificate (important !!!)."
+                         "La copierea automată, fișierelor este atașată denumirea(număr) pentru determinarea rapidă de către programa.</p>");
+        info_win->exec();
+    }
+
     QFileDialog fileDialog(this);
     fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
-    fileDialog.setWindowTitle(tr("Open Movie"));
+    fileDialog.setWindowTitle(tr("Alege video"));
     QStringList supportedMimeTypes = player->supportedMimeTypes();
     if (! supportedMimeTypes.isEmpty())
         fileDialog.setMimeTypeFilters(supportedMimeTypes);

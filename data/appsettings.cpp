@@ -788,6 +788,10 @@ void AppSettings::saveSettings()
     settApp->setValue("numSavedFilesLog", ui->numberLogFile->value());
     settApp->endGroup();
 
+    settApp->beginGroup("show_msg");
+    settApp->setValue("showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
+    settApp->endGroup();
+
     qInfo(logInfo()) << tr("Setările aplicației sunt salvate/modificate în fișierul - %1.").arg(globals::pathAppSettings);
 }
 
@@ -846,6 +850,10 @@ void AppSettings::loadSettings()
     globals::memoryUser       = settApp->value("memoryUser", false).toBool();
     globals::numSavedFilesLog = settApp->value("numSavedFilesLog", 10).toInt();  // determinam nr.fisierelor pu pastrare
     removeFilesLogOnStartApp();                                                  // eliminarea din sistem
+    settApp->endGroup();
+
+    settApp->beginGroup("show_msg");
+    globals::show_content_info_video = settApp->value("showMsgVideo", true).toBool();
     settApp->endGroup();
 
     globals::firstLaunch = false;
