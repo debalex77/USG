@@ -9,6 +9,9 @@
 #include <QSqlQueryModel>
 #include <LimeReport>
 #include <QFileDialog>
+#include <QMediaPlayer>
+#include <QMediaPlaylist>
+#include <QVideoWidget>
 
 #include "data/popup.h"
 #include "data/database.h"
@@ -177,6 +180,7 @@ private slots:
     void clickBtnGestation2();
     void clickBtnComment();
     void clickBtnImages();
+    void clickBtnVideo();
     void clickBtnNormograms();
     void createMenuPrint();         // meniu print
     void clickOpenDesignerReport(); // deschidem designer
@@ -188,6 +192,18 @@ private slots:
     void clickBtnClearImage5();
     void clickBtnAddConcluzionTemplates();
     void clickBtnSelectConcluzionTemplates();
+
+    void clickAddVideo();
+    void clickRemoveVideo();
+    void setUrl(const QUrl &url);
+    void clickPlayVideo();
+    void setPositionSlider(int seconds);
+    void mediaStateChanged(QMediaPlayer::State state);
+    void positionChanged(qint64 progress);
+    void durationChanged(qint64 duration);
+    void updateDurationInfo(qint64 currentInfo);
+    void handleError();
+    void changedCurrentRowPlayList(const int row);
 
     void connections_tags();               // conexiunea la tag
     void disconnections_tags();
@@ -242,7 +258,8 @@ private:
         page_gestation0      = 6,
         page_gestation1      = 7,
         page_gestation2      = 8,
-        page_images          = 9
+        page_images          = 9,
+        page_video           = 10
     };
 
     enum IndexStatus
@@ -261,6 +278,8 @@ private:
         n_image4 = 4,
         n_image5 = 5
     };
+
+    void constructionFormVideo();
 
     void setDefaultDataTableLiver();      // setarea datelor implicite initial
     void setDefaultDataTableCholecist();  // in dependenta de bloc + tag ale documentului
@@ -366,6 +385,16 @@ private:
 
     LimeReport::ReportEngine *m_report;
     Normograms *normograms;
+
+    QPushButton    *m_playButton     = nullptr;
+    QMediaPlayer   *player           = nullptr;
+    QListWidget    *list_play        = nullptr;
+    QLabel         *txt_title_player = nullptr;
+    QSlider        *m_positionSlider = nullptr;
+    QVideoWidget   *videoWidget      = nullptr;
+    QLabel         *m_labelDuration  = nullptr;
+    QLabel         *m_errorLabel     = nullptr;
+    qint64         m_duration;
 
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 

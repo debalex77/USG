@@ -1,6 +1,12 @@
-QT       += core gui sql
-QT       += webenginewidgets printsupport xml
-QT       += gui-private
+QT       += core \
+            gui \
+            sql \
+            webenginewidgets \
+            printsupport \
+            xml \
+            multimedia \
+            multimediawidgets \
+            gui-private
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 

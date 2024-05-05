@@ -340,6 +340,17 @@
         </widget>
        </item>
        <item>
+        <widget class="QCommandLinkButton" name="btnVideo">
+         <property name="text">
+          <string>Video</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource.qrc">
+           <normaloff>:/img/video.png</normaloff>:/img/video.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="QCommandLinkButton" name="btnNormograms">
          <property name="text">
           <string>Normograme</string>
@@ -441,7 +452,7 @@
           </sizepolicy>
          </property>
          <property name="currentIndex">
-          <number>8</number>
+          <number>10</number>
          </property>
          <widget class="QWidget" name="pageOrgansInternal">
           <layout class="QGridLayout" name="gridLayout_7">
@@ -7459,6 +7470,20 @@
                </item>
               </layout>
              </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="pageVideo">
+          <layout class="QGridLayout" name="gridLayout_79">
+           <item row="0" column="0">
+            <widget class="QFrame" name="frameVideo">
+             <property name="frameShape">
+              <enum>QFrame::StyledPanel</enum>
+             </property>
+             <property name="frameShadow">
+              <enum>QFrame::Raised</enum>
+             </property>
             </widget>
            </item>
           </layout>

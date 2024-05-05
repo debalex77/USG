@@ -163,5 +163,6 @@
         <file>img/NT.png</file>
         <file>img/normograma.png</file>
         <file>xmls/normograms.xml</file>
+        <file>img/video.png</file>
     </qresource>
 </RCC>

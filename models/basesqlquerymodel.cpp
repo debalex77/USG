@@ -332,6 +332,8 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
             return QIcon();
         else if (item.column() == orderSection_attachedImages && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
             return QIcon(":img/image-files.png");
+        else if (item.column() == orderSection_attachedImages && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 2)
+            return QIcon(":img/video.png");
         else if (item.column() == orderSection_cardPayment && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
             return QIcon(":img/payment_cash.png");
         else if (item.column() == orderSection_cardPayment && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)

@@ -58,4 +58,6 @@ int numSavedFilesLog = -1;
 QString connectionMade = nullptr;
 QPixmapCache cache_img;
 
+QString pathDirectoryVideo = nullptr;
+
 }

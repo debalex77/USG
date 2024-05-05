@@ -77,6 +77,7 @@ private:
     void initBtnImageBase(const QString appStyleBtn);
     void initBtnDirTemplets(const QString appStyleBtn);
     void initBtnDirReports(const QString appStyleBtn);
+    void initBtnDirVideo(const QString appStyleBtn);
 
     void initConnections();
 
@@ -118,6 +119,7 @@ private slots:
 
     void openDirTemplets();         // btn templets and reports
     void openDirReports();
+    void openDirVideo();
 
     void onBtnOKSettings();         // butoane principale ale formai
     void onBtnWriteSettings();
@@ -156,26 +158,30 @@ private:
     QString fileLogPath    = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/logs/usg.log";
 #endif
 
-    QLineEdit* lineEditPathTemplatesPrint;
-    QLineEdit* lineEditPathReports;
-    QLineEdit* lineEditPathDBSqlite;
-    QLineEdit* lineEditPathDBImage;
+    QLineEdit *lineEditPathTemplatesPrint;
+    QLineEdit *lineEditPathReports;
+    QLineEdit *lineEditPathDBSqlite;
+    QLineEdit *lineEditPathDBImage;
+    QLineEdit *lineEditPathVideo;
 
-    QToolButton* btnAdd;
-    QToolButton* btnEdit;
-    QToolButton* btnClear;
+    QToolButton *btnAdd;
+    QToolButton *btnEdit;
+    QToolButton *btnClear;
 
-    QToolButton* btnOpenDirTemplates;
-    QToolButton* btnRemoveDirTemplates;
+    QToolButton *btnOpenDirTemplates;
+    QToolButton *btnRemoveDirTemplates;
 
-    QToolButton* btnOpenDirReports;
-    QToolButton* btnRemoveDirReports;
+    QToolButton *btnOpenDirReports;
+    QToolButton *btnRemoveDirReports;
 
-    QToolButton* btnAddImage;
-    QToolButton* btnEditImage;
-    QToolButton* btnClearImage;
+    QToolButton *btnOpenDirVideo;
+    QToolButton *btnRemoveDirVideo;
 
-    QStandardItemModel* model_logs;
+    QToolButton *btnAddImage;
+    QToolButton *btnEditImage;
+    QToolButton *btnClearImage;
+
+    QStandardItemModel *model_logs;
 
 protected:
     void closeEvent(QCloseEvent *event);

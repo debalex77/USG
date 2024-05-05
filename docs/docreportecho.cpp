@@ -4,6 +4,7 @@
 #include <QDesktopWidget>
 #else
 
+#include <QDirIterator>
 #include <QFileDialog>
 #include <QImageReader>
 #include <QImageWriter>
@@ -110,6 +111,9 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
             QOverload<const QString &>::of(&DocReportEcho::onLinkActivatedForOpenImage5));
 
     // ******************************************************************
+    constructionFormVideo(); // forma video
+
+    // ******************************************************************
     initConnections();  // initiem conectarile
     connections_tags();
 
@@ -136,6 +140,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
 #if defined(Q_OS_WIN)
     ui->frame_btn->setStyle(style_fusion);
     ui->frame_table->setStyle(style_fusion);
+    ui->frameVideo->setStyle(style_fusion);
 #endif
 
     ui->frame_table->resize(900, ui->frame_btn->height());
@@ -158,6 +163,8 @@ DocReportEcho::~DocReportEcho()
     delete modelPatients;
     delete proxyPatient;
     delete completer;
+    delete player;
+    delete videoWidget;
     delete db;
     delete ui;
 }
@@ -723,6 +730,7 @@ void DocReportEcho::initConnections()
     connect(ui->btnGestation2, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnGestation2);
     connect(ui->btnComment, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnComment);
     connect(ui->btnImages, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnImages);
+    connect(ui->btnVideo, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnVideo);
     connect(ui->btnNormograms, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnNormograms);
 
     connect(ui->btn_add_template_organsInternal, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
@@ -920,6 +928,12 @@ void DocReportEcho::clickBtnComment()
 void DocReportEcho::clickBtnImages()
 {
     ui->stackedWidget->setCurrentIndex(page_images);
+    updateStyleBtnInvestigations();
+}
+
+void DocReportEcho::clickBtnVideo()
+{
+    ui->stackedWidget->setCurrentIndex(page_video);
     updateStyleBtnInvestigations();
 }
 
@@ -1159,6 +1173,124 @@ void DocReportEcho::clickBtnSelectConcluzionTemplates()
                 else if (ui->stackedWidget->currentIndex() == page_gestation1)
                     ui->gestation1_concluzion->setPlainText((ui->gestation1_concluzion->toPlainText().isEmpty()) ? str : ui->gestation1_concluzion->toPlainText() + " " + str);
             });
+}
+
+// *******************************************************************
+// **************** CONEXIUNI SI PROCESAREA VIDEO ********************
+
+void DocReportEcho::clickAddVideo()
+{
+    QFileDialog fileDialog(this);
+    fileDialog.setAcceptMode(QFileDialog::AcceptOpen);
+    fileDialog.setWindowTitle(tr("Open Movie"));
+    QStringList supportedMimeTypes = player->supportedMimeTypes();
+    if (! supportedMimeTypes.isEmpty())
+        fileDialog.setMimeTypeFilters(supportedMimeTypes);
+    fileDialog.setDirectory(QStandardPaths::standardLocations(QStandardPaths::MoviesLocation).value(0, QDir::homePath()));
+    if (fileDialog.exec() == QDialog::Accepted)
+        setUrl(fileDialog.selectedUrls().constFirst());
+}
+
+void DocReportEcho::clickRemoveVideo()
+{
+    list_play->removeItemWidget(list_play->currentItem());
+}
+
+void DocReportEcho::setUrl(const QUrl &url)
+{
+    QString str = url.toString();
+    str.remove(0,7); // eliminam -> file://
+    QFile::copy(str, globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
+
+    QListWidgetItem *itm = new QListWidgetItem;
+    itm->setText(url.fileName());
+    list_play->addItem(itm);
+}
+
+void DocReportEcho::clickPlayVideo()
+{
+    switch (player->state()) {
+    case QMediaPlayer::PlayingState:
+        player->pause();
+        break;
+    default:
+        player->play();
+        break;
+    }
+}
+
+void DocReportEcho::setPositionSlider(int seconds)
+{
+    // player->setPosition(seconds * 1000);
+    player->setPosition(seconds);
+}
+
+void DocReportEcho::mediaStateChanged(QMediaPlayer::State state)
+{
+    switch(state) {
+    case QMediaPlayer::PlayingState:
+        m_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPause));
+        break;
+    default:
+        m_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+        break;
+    }
+}
+
+void DocReportEcho::positionChanged(qint64 progress)
+{
+    // if (! m_positionSlider->isSliderDown())
+    //     m_positionSlider->setValue(progress / 1000);
+    m_positionSlider->setValue(progress);
+    updateDurationInfo(progress / 1000);
+}
+
+void DocReportEcho::durationChanged(qint64 duration)
+{
+    m_duration = duration / 1000;
+    // m_positionSlider->setMaximum(m_duration);
+
+    // m_positionSlider->setRange(0, duration);
+    m_positionSlider->setRange(0, duration);
+}
+
+void DocReportEcho::updateDurationInfo(qint64 currentInfo)
+{
+    QString tStr;
+    if (currentInfo || m_duration) {
+        QTime currentTime((currentInfo / 3600) % 60, (currentInfo / 60) % 60,
+            currentInfo % 60, (currentInfo * 1000) % 1000);
+        QTime totalTime((m_duration / 3600) % 60, (m_duration / 60) % 60,
+            m_duration % 60, (m_duration * 1000) % 1000);
+        QString format = "mm:ss";
+        if (m_duration > 3600)
+            format = "hh:mm:ss";
+        tStr = currentTime.toString(format) + " / " + totalTime.toString(format);
+    }
+    m_labelDuration->setText(tStr);
+}
+
+void DocReportEcho::handleError()
+{
+    m_playButton->setEnabled(false);
+    const QString errorString = player->errorString();
+    QString message = "Error: ";
+    if (errorString.isEmpty())
+        message += " #" + QString::number(int(player->error()));
+    else
+        message += errorString;
+    m_errorLabel->setText(message);
+}
+
+void DocReportEcho::changedCurrentRowPlayList(const int row)
+{
+    Q_UNUSED(row)
+    player->stop();
+
+    if (! m_playButton->isEnabled())
+        m_playButton->setEnabled(true);
+    player->setMedia(QUrl("file:///" + globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(row) + ".mp4"));
+    txt_title_player->setText("Se rulează - " + list_play->currentItem()->text());
 }
 
 // *******************************************************************
@@ -2065,6 +2197,25 @@ void DocReportEcho::slot_IdChanged()
     }
 
     //----------------------------------------------------------------------------
+    // video
+    QDirIterator it(globals::pathDirectoryVideo + "/",
+                    QStringList()
+                    << QString::number(m_id) + "_0.mp4"
+                    << QString::number(m_id) + "_1.mp4"
+                    << QString::number(m_id) + "_2.mp4"
+                    << QString::number(m_id) + "_3.mp4"
+                    << QString::number(m_id) + "_4.mp4"
+                    << QString::number(m_id) + "_5.mp4"
+                    << QString::number(m_id) + "_6.mp4",
+                    QDir::NoFilter,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        QFileInfo file(it.next());
+        QListWidgetItem *itm = new QListWidgetItem;
+        itm->setText(file.fileName());
+        list_play->addItem(itm);
+    }
+    //----------------------------------------------------------------------------
     // logarea
     if (items.count() == 0)
         qWarning(logInfo()) << tr("Nu au fost determinate datele documentului 'Raport ecografic' cu id='%1'")
@@ -2966,6 +3117,135 @@ void DocReportEcho::onClose()
 }
 
 // *******************************************************************
+// **************** CONSTRUCTIA FORMEI VIDEO *************************
+
+void DocReportEcho::constructionFormVideo()
+{
+    QString str_style_btn = "QToolButton {border: 1px solid #8f8f91; "
+                            "border-radius: 4px;"
+                            "width: 95px;}"
+                            "QToolButton:hover {background-color: rgb(234,243,250);}"
+                            "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}";
+
+    //---------------------------------------------------------------------------
+    // groupBox - play list
+
+    QGridLayout *gridLayout = new QGridLayout(this);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+
+    QSplitter *splitter = new QSplitter(this);
+    splitter->setObjectName(QString::fromUtf8("splitter"));
+    splitter->setOrientation(Qt::Horizontal);
+
+    QGroupBox *groupBox_list_play = new QGroupBox(splitter);
+    groupBox_list_play->setObjectName(QString::fromUtf8("groupBox_list_play"));
+    groupBox_list_play->setTitle(tr("Lista cu video"));
+    groupBox_list_play->setMinimumSize(QSize(240, 0));
+    groupBox_list_play->setMaximumSize(QSize(240, 16777215));
+
+    QGridLayout *gridLayout_groupBox_list_play = new QGridLayout(groupBox_list_play);
+    gridLayout_groupBox_list_play->setObjectName(QString::fromUtf8("gridLayout_groupBox_list_play"));
+
+    QToolButton *btn_remove_video = new QToolButton(groupBox_list_play);
+    btn_remove_video->setObjectName(QString::fromUtf8("btn_remove_video"));
+    btn_remove_video->setText(tr("Elimină"));
+    btn_remove_video->setIcon(QIcon(":/img/clear_x32.png"));
+    btn_remove_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    btn_remove_video->setStyleSheet(str_style_btn);
+    connect(btn_remove_video, &QAbstractButton::clicked, this, &DocReportEcho::clickRemoveVideo);
+
+    gridLayout_groupBox_list_play->addWidget(btn_remove_video, 0, 1, 1, 1);
+
+    QToolButton *btn_add_video = new QToolButton(groupBox_list_play);
+    btn_add_video->setObjectName(QString::fromUtf8("btn_add_video"));
+    btn_add_video->setText(tr("Adaugă"));
+    btn_add_video->setIcon(QIcon(":/img/add_x32.png"));
+    btn_add_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    btn_add_video->setStyleSheet(str_style_btn);
+    connect(btn_add_video, &QAbstractButton::clicked, this, &DocReportEcho::clickAddVideo);
+
+    gridLayout_groupBox_list_play->addWidget(btn_add_video, 0, 0, 1, 1);
+
+    QSpacerItem *spacer_toolBar_playList = new QSpacerItem(40, 20, QSizePolicy::Expanding, QSizePolicy::Minimum);
+
+    gridLayout_groupBox_list_play->addItem(spacer_toolBar_playList, 0, 2, 1, 1);
+
+    list_play = new QListWidget(groupBox_list_play);
+    list_play->setObjectName(QString::fromUtf8("list_play"));
+    connect(list_play, QOverload<int>::of(&QListWidget::currentRowChanged), this, QOverload<int>::of(&DocReportEcho::changedCurrentRowPlayList));
+
+    gridLayout_groupBox_list_play->addWidget(list_play, 1, 0, 1, 3);
+
+    splitter->addWidget(groupBox_list_play);
+
+    //---------------------------------------------------------------------------
+    // groupBox - player
+
+    QGroupBox *groupBox_player = new QGroupBox(splitter);
+    groupBox_player->setObjectName(QString::fromUtf8("groupBox_player"));
+    groupBox_player->setTitle(tr("Player"));
+
+    QGridLayout *gridLayout_player = new QGridLayout(groupBox_player);
+    gridLayout_player->setObjectName(QString::fromUtf8("gridLayout_player"));
+
+    txt_title_player = new QLabel(groupBox_player);
+    QFont font;
+    font.setBold(true);
+    txt_title_player->setFont(font);
+    txt_title_player->setStyleSheet(QString::fromUtf8("color: rgb(198, 70, 0);"));
+    txt_title_player->setAlignment(Qt::AlignCenter);
+
+    gridLayout_player->addWidget(txt_title_player, 0, 0, 1, 3);
+
+    player = new QMediaPlayer(groupBox_player, QMediaPlayer::VideoSurface);
+    player->setObjectName(QString::fromUtf8("player"));
+
+    videoWidget = new QVideoWidget(groupBox_player);
+    player->setVideoOutput(videoWidget);
+
+    gridLayout_player->addWidget(videoWidget, 1, 0, 1, 3);
+
+    m_playButton = new QPushButton(groupBox_player);
+    m_playButton->setObjectName(QString::fromUtf8("m_playButton"));
+    m_playButton->setEnabled(false);
+    m_playButton->setIcon(style()->standardIcon(QStyle::SP_MediaPlay));
+    connect(m_playButton, &QAbstractButton::clicked, this, &DocReportEcho::clickPlayVideo);
+
+    gridLayout_player->addWidget(m_playButton, 2, 0, 1, 1);
+
+    m_positionSlider = new QSlider(groupBox_player);
+    m_positionSlider->setObjectName(QString::fromUtf8("m_positionSlider"));
+    m_positionSlider->setOrientation(Qt::Horizontal);
+
+    gridLayout_player->addWidget(m_positionSlider, 2, 1, 1, 1);
+
+    m_labelDuration = new QLabel(groupBox_player);
+    m_labelDuration->setObjectName(QString::fromUtf8("m_labelDuration"));
+    connect(m_positionSlider, QOverload<int>::of(&QAbstractSlider::sliderMoved), this, QOverload<int>::of(&DocReportEcho::setPositionSlider));
+
+    gridLayout_player->addWidget(m_labelDuration, 2, 2, 1, 1);
+
+    m_errorLabel = new QLabel(groupBox_player);
+    m_errorLabel->setObjectName(QString::fromUtf8("m_errorLabel"));
+
+    gridLayout_player->addWidget(m_errorLabel, 3, 0, 1, 3);
+
+    splitter->addWidget(groupBox_player);
+
+    gridLayout->addWidget(splitter, 0, 0, 1, 1);
+
+    connect(player, &QMediaPlayer::stateChanged, this, &DocReportEcho::mediaStateChanged);
+    connect(player, &QMediaPlayer::positionChanged, this, &DocReportEcho::positionChanged);
+    connect(player, &QMediaPlayer::durationChanged, this, &DocReportEcho::durationChanged);
+    connect(player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
+            this, &DocReportEcho::handleError);
+
+    ui->frameVideo->setLayout(gridLayout);
+
+    videoWidget->show();
+}
+
+// *******************************************************************
 // **************** INSERAREA DATELOR IMPLICITE A DOCUMENTULUI *******
 
 void DocReportEcho::setDefaultDataTableLiver()
@@ -3358,11 +3638,20 @@ void DocReportEcho::updateStyleBtnInvestigations()
 
     if (ui->stackedWidget->currentIndex() == page_images){
         ui->btnImages->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
+                                     "border: 1px inset blue; "
+                                     "border-color: navy;");
     } else {
         ui->btnImages->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
+                                     "border: 0px #8f8f91;");
+    }
+
+    if (ui->stackedWidget->currentIndex() == page_video){
+        ui->btnVideo->setStyleSheet("background: 0px #C2C2C3; "
+                                    "border: 1px inset blue; "
+                                    "border-color: navy;");
+    } else {
+        ui->btnVideo->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
+                                    "border: 0px #8f8f91;");
     }
 }
 
@@ -4981,9 +5270,17 @@ void DocReportEcho::updateDataDocOrderEcho()
     if (m_id_docOrderEcho == idx_unknow || m_id_docOrderEcho == 0)
         return;
 
-    QString str = QString("UPDATE orderEcho SET attachedImages = '%1' WHERE id = '%2';")
-            .arg((m_count_images == 0) ? QString::number(m_count_images) : QString::number(1),
-                 QString::number(m_id_docOrderEcho));
+    QString str;
+    if (list_play->count() > 0) {
+        str = QString("UPDATE orderEcho SET attachedImages = '%1' WHERE id = '%2';")
+                .arg(QString::number(2),
+                     QString::number(m_id_docOrderEcho));
+    } else {
+        str = QString("UPDATE orderEcho SET attachedImages = '%1' WHERE id = '%2';")
+                .arg((m_count_images == 0) ? QString::number(m_count_images) : QString::number(1),
+                     QString::number(m_id_docOrderEcho));
+    }
+
     if (! db->execQuery(str))
         qCritical(logCritical()) << tr("Document 'Raport ecografic' cu id='%1', nr.='%2' - eroare la instalarea valorii 'attachedImages' in documentul parinte 'Comanda ecografica' cu id='%3'.")
                                         .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_id_docOrderEcho));
@@ -5812,6 +6109,8 @@ void DocReportEcho::setDataFromTableGestation2()
 
 void DocReportEcho::closeEvent(QCloseEvent *event)
 {
+    player->stop();
+
     if (isWindowModified()){
         const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
                                                                         tr("Datele au fost modificate.\n"

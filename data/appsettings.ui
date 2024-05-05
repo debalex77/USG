@@ -221,121 +221,6 @@
           <string>Localizarea fișierelor aplicației</string>
          </property>
          <layout class="QGridLayout" name="gridLayout_5">
-          <item row="0" column="2">
-           <widget class="QLineEdit" name="txtPathAppSettings">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>false</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="2">
-           <widget class="QLineEdit" name="txtPathLog">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="clearButtonEnabled">
-             <bool>true</bool>
-            </property>
-           </widget>
-          </item>
-          <item row="4" column="0">
-           <widget class="QLabel" name="label_5">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea bazei de date a imaginelor (.sqlite3)</string>
-            </property>
-           </widget>
-          </item>
-          <item row="3" column="0">
-           <widget class="QLabel" name="label_15">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea șabloanelor de rapoarte</string>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="0">
-           <widget class="QLabel" name="label_6">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea fișierului de logare</string>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="0">
-           <widget class="QLabel" name="label_14">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea formularelor de tipar</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="0">
-           <widget class="QLabel" name="label_4">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-            <property name="text">
-             <string>Localizarea fișierului cu setări</string>
-            </property>
-           </widget>
-          </item>
-          <item row="0" column="3">
-           <widget class="QToolButton" name="btnOpenSettings">
-            <property name="text">
-             <string>...</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../resource.qrc">
-              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="1" column="3">
-           <widget class="QToolButton" name="btnOpenLog">
-            <property name="text">
-             <string>...</string>
-            </property>
-            <property name="icon">
-             <iconset resource="../resource.qrc">
-              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
-            </property>
-           </widget>
-          </item>
-          <item row="2" column="2" colspan="2">
-           <widget class="QLineEdit" name="txtPathTemplatesPrint">
-            <property name="font">
-             <font>
-              <bold>false</bold>
-             </font>
-            </property>
-           </widget>
-          </item>
           <item row="3" column="2" colspan="2">
            <widget class="QLineEdit" name="txtPathReports">
             <property name="font">
@@ -357,6 +242,142 @@
             </property>
             <property name="clearButtonEnabled">
              <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea fișierului cu setări</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="2">
+           <widget class="QLineEdit" name="txtPathTemplatesPrint">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_14">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea formularelor de tipar</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QToolButton" name="btnOpenLog">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QToolButton" name="btnOpenSettings">
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../resource.qrc">
+              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea fișierului de logare</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_15">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea șabloanelor de rapoarte</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="txtPathAppSettings">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>false</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_5">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea bazei de date a imaginelor (.sqlite3)</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="txtPathLog">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="2" colspan="2">
+           <widget class="QLineEdit" name="txtPathVideo">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_19">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea fișierelor video</string>
             </property>
            </widget>
           </item>

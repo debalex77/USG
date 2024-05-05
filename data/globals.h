@@ -53,4 +53,7 @@ extern int numSavedFilesLog; // fisiere de logare pastrate
 extern QString connectionMade;
 
 extern QPixmapCache cache_img;
+
+extern QString pathDirectoryVideo;
+
 }

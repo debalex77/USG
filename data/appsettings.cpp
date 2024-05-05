@@ -1,6 +1,5 @@
 #include "appsettings.h"
 #include "ui_appsettings.h"
-#include <string.h>
 
 static const int width_textLog = 915;  // inaltimea si latimea tabelei 'textLog'
 static const int height_textLog = 430; // sa fie fixat la lansarea setarilor
@@ -146,6 +145,7 @@ void AppSettings::initBtnForm()
     initBtnImageBase(appStyleBtn);
     initBtnDirTemplets(appStyleBtn);
     initBtnDirReports(appStyleBtn);
+    initBtnDirVideo(appStyleBtn);
 }
 
 void AppSettings::initBtnSettingsApp()
@@ -316,6 +316,39 @@ void AppSettings::initBtnDirReports(const QString appStyleBtn)
     });
 }
 
+void AppSettings::initBtnDirVideo(const QString appStyleBtn)
+{
+    btnOpenDirVideo = new QToolButton(this);
+    btnOpenDirVideo->setIcon(QIcon(":/img/folder.png"));
+    btnOpenDirVideo->setStyleSheet(appStyleBtn);
+    btnOpenDirVideo->setCursor(Qt::PointingHandCursor);
+    btnOpenDirVideo->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
+
+    btnRemoveDirVideo = new QToolButton(this);
+    btnRemoveDirVideo->setIcon(QIcon(":/img/trash.png"));
+    btnRemoveDirVideo->setStyleSheet(appStyleBtn);
+    btnRemoveDirVideo->setCursor(Qt::PointingHandCursor);
+    btnRemoveDirVideo->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
+
+    lineEditPathVideo = new QLineEdit(this);
+    lineEditPathVideo->setStyleSheet(appStyleBtn);
+    lineEditPathVideo->setSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+
+    QHBoxLayout* layoutPathVideo = new QHBoxLayout;
+    layoutPathVideo->setContentsMargins(0, 0, 0, 0);
+    layoutPathVideo->setSpacing(0);
+    layoutPathVideo->addWidget(lineEditPathVideo);
+    layoutPathVideo->addWidget(btnOpenDirVideo);
+    layoutPathVideo->addWidget(btnRemoveDirVideo);
+    ui->txtPathVideo->setLayout(layoutPathVideo);
+
+    connect(btnOpenDirVideo, &QAbstractButton::clicked, this , &AppSettings::openDirVideo);
+    connect(btnRemoveDirVideo, &QAbstractButton::clicked, this, [this]()
+            {
+                lineEditPathVideo->clear();
+            });
+}
+
 void AppSettings::initConnections()
 {
     connect(lineEditPathDBSqlite, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
@@ -324,6 +357,7 @@ void AppSettings::initConnections()
     connect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(lineEditPathVideo, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
     connect(ui->tabView, QOverload<int>::of(&QTabWidget::currentChanged),
             this, QOverload<int>::of(&AppSettings::slot_currentIndexChangedTab));
@@ -644,6 +678,7 @@ void AppSettings::readSettings()
     disconnect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     disconnect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     disconnect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    disconnect(lineEditPathVideo, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
     disconnect(ui->nameBaseSqlite, &QLineEdit::editingFinished, this, &AppSettings::changeNameBaseSqlite);
     disconnect(lineEditPathDBSqlite, &QLineEdit::editingFinished, this, &AppSettings::changePathBaseSqlite);
@@ -689,6 +724,7 @@ void AppSettings::readSettings()
     ui->txtPathLog->setText(globals::pathLogAppSettings);
     lineEditPathTemplatesPrint->setText(globals::pathTemplatesDocs);
     lineEditPathReports->setText(globals::pathReports);
+    lineEditPathVideo->setText(globals::pathDirectoryVideo);
 
     ui->numberLogFile->setValue(globals::numSavedFilesLog);
 
@@ -706,6 +742,7 @@ void AppSettings::readSettings()
     connect(ui->txtPathLog, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathReports, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
     connect(lineEditPathTemplatesPrint, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
+    connect(lineEditPathVideo, &QLineEdit::textChanged, this, &AppSettings::dataWasModified);
 
     connect(ui->nameBaseSqlite, &QLineEdit::editingFinished, this, &AppSettings::changeNameBaseSqlite);
     connect(lineEditPathDBSqlite, &QLineEdit::editingFinished, this, &AppSettings::changePathBaseSqlite);
@@ -728,6 +765,7 @@ void AppSettings::saveSettings()
     settApp->beginGroup("path_app");
     settApp->setValue("pathTemplatesDocs", lineEditPathTemplatesPrint->text());
     settApp->setValue("pathReports",       lineEditPathReports->text());
+    settApp->setValue("pathVideo",         lineEditPathVideo->text());
     settApp->endGroup();
 
     settApp->beginGroup("connect");
@@ -771,6 +809,7 @@ void AppSettings::loadSettings()
     settApp->beginGroup("path_app");
     globals::pathTemplatesDocs  = settApp->value("pathTemplatesDocs", "").toString();
     globals::pathReports        = settApp->value("pathReports", "").toString();
+    globals::pathDirectoryVideo = settApp->value("pathVideo", "").toString();
     settApp->endGroup();
 
     settApp->beginGroup("connect");
@@ -1286,6 +1325,24 @@ void AppSettings::openDirReports()
 
     lineEditPathReports->setText(dir.toNativeSeparators(dir_reports));
     globals::pathReports = lineEditPathReports->text();
+}
+
+void AppSettings::openDirVideo()
+{
+    QDir dir;
+    QString pathVideo;
+    if (lineEditPathVideo->text().isEmpty())
+        pathVideo = dir.toNativeSeparators(QDir::currentPath());
+    else
+        pathVideo = dir.toNativeSeparators(lineEditPathVideo->text());
+
+    QString dir_video = QFileDialog::getExistingDirectory(this, tr("Alegeti directoriu"),
+                                                          pathVideo,
+                                                          QFileDialog::ShowDirsOnly
+                                                              | QFileDialog::DontResolveSymlinks);
+
+    lineEditPathVideo->setText(dir.toNativeSeparators(dir_video));
+    globals::pathDirectoryVideo = lineEditPathVideo->text();
 }
 
 // *******************************************************************
