@@ -39,4 +39,37 @@
   <entry name="index_amniotic" crl="37" _5_centile="75"  _50_centile="135" _95_centile="244" />
   <entry name="index_amniotic" crl="38" _5_centile="73"  _50_centile="132" _95_centile="239" />
   <entry name="index_amniotic" crl="39" _5_centile="72"  _50_centile="127" _95_centile="226" />
+  <entry name="umbilical_PI" crl="20" _5_centile="0.95"  _50_centile="1.22" _95_centile="1.56" />
+  <entry name="umbilical_PI" crl="21" _5_centile="0.94"  _50_centile="1.21" _95_centile="1.53" />
+  <entry name="umbilical_PI" crl="22" _5_centile="0.92"  _50_centile="1.18" _95_centile="1.50" />
+  <entry name="umbilical_PI" crl="23" _5_centile="0.90"  _50_centile="1.16" _95_centile="1.48" />
+  <entry name="umbilical_PI" crl="24" _5_centile="0.89"  _50_centile="1.14" _95_centile="1.45" />
+  <entry name="umbilical_PI" crl="25" _5_centile="0.87"  _50_centile="1.12" _95_centile="1.43" />
+  <entry name="umbilical_PI" crl="26" _5_centile="0.85"  _50_centile="1.10" _95_centile="1.40" />
+  <entry name="umbilical_PI" crl="27" _5_centile="0.84"  _50_centile="1.08" _95_centile="1.37" />
+  <entry name="umbilical_PI" crl="28" _5_centile="0.82"  _50_centile="1.06" _95_centile="1.34" />
+  <entry name="umbilical_PI" crl="29" _5_centile="0.80"  _50_centile="1.04" _95_centile="1.32" />
+  <entry name="umbilical_PI" crl="30" _5_centile="0.78"  _50_centile="1.02" _95_centile="1.30" />
+  <entry name="umbilical_PI" crl="31" _5_centile="0.76"  _50_centile="0.99" _95_centile="1.28" />
+  <entry name="umbilical_PI" crl="32" _5_centile="0.74"  _50_centile="0.97" _95_centile="1.26" />
+  <entry name="umbilical_PI" crl="33" _5_centile="0.73"  _50_centile="0.95" _95_centile="1.23" />
+  <entry name="umbilical_PI" crl="34" _5_centile="0.71"  _50_centile="0.93" _95_centile="1.20" />
+  <entry name="umbilical_PI" crl="35" _5_centile="0.69"  _50_centile="0.91" _95_centile="1.18" />
+  <entry name="umbilical_PI" crl="36" _5_centile="0.67"  _50_centile="0.89" _95_centile="1.16" />
+  <entry name="umbilical_PI" crl="37" _5_centile="0.65"  _50_centile="0.87" _95_centile="1.14" />
+  <entry name="umbilical_PI" crl="38" _5_centile="0.63"  _50_centile="0.85" _95_centile="1.12" />
+  <entry name="umbilical_PI" crl="39" _5_centile="0.61"  _50_centile="0.83" _95_centile="1.10" />
+  <entry name="umbilical_PI" crl="40" _5_centile="0.59"  _50_centile="0.80" _95_centile="1.08" />
+  <entry name="umbilical_PI" crl="41" _5_centile="0.57"  _50_centile="0.78" _95_centile="1.06" />
+  <entry name="uterine_PI" crl="20" _5_centile="0.70"  _50_centile="1.11" _95_centile="1.71" />
+  <entry name="uterine_PI" crl="21" _5_centile="0.68"  _50_centile="1.06" _95_centile="1.65" />
+  <entry name="uterine_PI" crl="22" _5_centile="0.65"  _50_centile="1.02" _95_centile="1.58" />
+  <entry name="uterine_PI" crl="23" _5_centile="0.63"  _50_centile="0.98" _95_centile="1.50" />
+  <entry name="uterine_PI" crl="24" _5_centile="0.60"  _50_centile="0.94" _95_centile="1.45" />
+  <entry name="uterine_PI" crl="25" _5_centile="0.58"  _50_centile="0.90" _95_centile="1.39" />
+  <entry name="uterine_PI" crl="26" _5_centile="0.56"  _50_centile="0.87" _95_centile="1.34" />
+  <entry name="uterine_PI" crl="27" _5_centile="0.54"  _50_centile="0.84" _95_centile="1.29" />
+  <entry name="uterine_PI" crl="28" _5_centile="0.53"  _50_centile="0.82" _95_centile="1.24" />
+  <entry name="uterine_PI" crl="29" _5_centile="0.51"  _50_centile="0.79" _95_centile="1.19" />
+  <entry name="uterine_PI" crl="30" _5_centile="0.50"  _50_centile="0.77" _95_centile="1.15" />
 </list_norm>
