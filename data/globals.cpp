@@ -61,5 +61,6 @@ QPixmapCache cache_img;
 QString pathDirectoryVideo = nullptr;
 
 bool show_content_info_video = true;
+bool show_info_reports       = true;
 
 }

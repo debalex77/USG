@@ -8,6 +8,7 @@
 #include <QSpinBox>
 #include <QStyleFactory>
 #include <QProgressDialog>
+#include <infowindow.h>
 
 #include <data/globals.h>
 #include <models/basesqlquerymodel.h>
@@ -67,31 +68,33 @@ private slots:
 private:
     Ui::Reports *ui;
 
-    DataBase* db;
+    DataBase *db;
 
-    QStandardItemModel* model_img;
+    QStandardItemModel *model_img;
 
-    BaseSqlQueryModel* modelOrganizations;
-    BaseSqlQueryModel* modelContracts;
-    BaseSqlQueryModel* modelDoctors;
-    CustomPeriod*      customPeriod;
+    BaseSqlQueryModel *modelOrganizations;
+    BaseSqlQueryModel *modelContracts;
+    BaseSqlQueryModel *modelDoctors;
+    CustomPeriod      *customPeriod;
 
-    CatOrganizations* cat_organization;
-    CatContracts*     cat_contract;
-    CatGeneral*       cat_doctor;
+    CatOrganizations *cat_organization;
+    CatContracts     *cat_contract;
+    CatGeneral       *cat_doctor;
 
-    QComboBox* m_scalePercent;
-    QSpinBox*  m_pageNavigator;
-    LimeReport::ReportEngine* m_report;
-    LimeReport::PreviewReportWidget* m_preview;
+    QComboBox *m_scalePercent;
+    QSpinBox  *m_pageNavigator;
+    LimeReport::ReportEngine        *m_report;
+    LimeReport::PreviewReportWidget *m_preview;
 
-    QProgressDialog* m_progressDialog;
+    QProgressDialog *m_progressDialog;
 
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    InfoWindow *info_window;
 
-    int m_id = -1;
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
+
+    int m_id          = -1;
     int m_id_onLaunch = -1;
-    int exist_logo = 0;
+    int exist_logo    = 0;
     int m_currentPage;
 
 protected:

@@ -164,5 +164,6 @@
         <file>img/normograma.png</file>
         <file>xmls/normograms.xml</file>
         <file>img/video.png</file>
+        <file>img/doppler.png</file>
     </qresource>
 </RCC>

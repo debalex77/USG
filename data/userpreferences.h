@@ -5,6 +5,7 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QStyleFactory>
+#include <QTableWidgetItem>
 
 #include <catalogs/catgeneral.h>
 #include <catalogs/catusers.h>
@@ -83,10 +84,11 @@ private slots:
     void onOpenCatNurses();
     void onOpenCatOrganizations();
 
-    void changeDataItemTabelMessege();
+    void changeDataItemTabelMessege(QTableWidgetItem *item);
 
 private:
     void setListWidget();
+    void setValueIntoTableMessage();
     void initSetModels();
     void initConnections();
     void connectionsCombo();

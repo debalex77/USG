@@ -72,4 +72,15 @@
   <entry name="uterine_PI" crl="28" _5_centile="0.53"  _50_centile="0.82" _95_centile="1.24" />
   <entry name="uterine_PI" crl="29" _5_centile="0.51"  _50_centile="0.79" _95_centile="1.19" />
   <entry name="uterine_PI" crl="30" _5_centile="0.50"  _50_centile="0.77" _95_centile="1.15" />
+  <entry name="uterine_PI" crl="31" _5_centile="0.49"  _50_centile="0.75" _95_centile="1.12" />
+  <entry name="uterine_PI" crl="32" _5_centile="0.48"  _50_centile="0.74" _95_centile="1.10" />
+  <entry name="uterine_PI" crl="33" _5_centile="0.47"  _50_centile="0.72" _95_centile="1.08" />
+  <entry name="uterine_PI" crl="34" _5_centile="0.46"  _50_centile="0.71" _95_centile="1.06" />
+  <entry name="uterine_PI" crl="35" _5_centile="0.46"  _50_centile="0.69" _95_centile="1.03" />
+  <entry name="uterine_PI" crl="36" _5_centile="0.45"  _50_centile="0.68" _95_centile="1.01" />
+  <entry name="uterine_PI" crl="37" _5_centile="0.45"  _50_centile="0.67" _95_centile="1.00" />
+  <entry name="uterine_PI" crl="38" _5_centile="0.44"  _50_centile="0.66" _95_centile="0.98" />
+  <entry name="uterine_PI" crl="39" _5_centile="0.44"  _50_centile="0.66" _95_centile="0.97" />
+  <entry name="uterine_PI" crl="40" _5_centile="0.44"  _50_centile="0.65" _95_centile="0.95" />
+  <entry name="uterine_PI" crl="41" _5_centile="0.44"  _50_centile="0.65" _95_centile="0.94" />
 </list_norm>

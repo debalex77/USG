@@ -57,4 +57,5 @@ extern QPixmapCache cache_img;
 extern QString pathDirectoryVideo;
 
 extern bool show_content_info_video;
+extern bool show_info_reports;
 }

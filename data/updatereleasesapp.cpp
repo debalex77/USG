@@ -465,5 +465,12 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         db->loadNormogramsFromXml();
     }
 
+    if (current_release == release_2_0_7) {
+        if (db->deleteDataFromTable("normograms"))
+            db->loadNormogramsFromXml();
+        else
+            qInfo(logInfo()) << tr("Actualizarea BD '2.0.7' nereusita !!! Eliminarea datelor din tabela 'normograms' este nereusita.");
+    }
+
     return true;
 }

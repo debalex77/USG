@@ -913,6 +913,18 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
     if (index == 0) // <<- selecteaza raportul->>
         return;
 
+    if (globals::show_info_reports){
+        info_window = new InfoWindow(this);
+        info_window->setTitle(tr("Descrierea rapoartelor"));
+        info_window->setTex(tr("<p style='font-family: Arial; font-size: 14px;'>"
+                               "Rapoarte:<br><br>"
+                               "1. Raport nr.1.<br><br>"
+                               "2. Raport nr.2.<br><br>"
+                               "3. Raport nr.3.<br><br>"
+                               "Urmează descrierea ...</p>"));
+        info_window->exec();
+    }
+
     if (m_id_onLaunch == -1)
         m_id_onLaunch = getIdReportShowOnLaunch();
 

@@ -29,7 +29,8 @@ UserPreferences::UserPreferences(QWidget *parent) :
 
     ui->dockWidget->close(); // ascundem panel pu informatii
 
-    initSetModels(); // setam modelurile
+    initSetModels();            // setam modelurile
+    setValueIntoTableMessage(); // setam prezentarea mesajelor
 
     initConnections(); // connection
 
@@ -343,16 +344,9 @@ void UserPreferences::onClickedListView(const QModelIndex index)
         ui->stackedWidget->setCurrentIndex(page_launch);
     else if (index.row() == page_document)
         ui->stackedWidget->setCurrentIndex(page_document);
-    else if (index.row() == page_message){
-        ui->stackedWidget->setCurrentIndex(page_message);
-        QTableWidgetItem *itm = ui->tableWidget->item(row_video, column_presentation);
-        disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
-        if (globals::show_content_info_video)
-            itm->setCheckState(Qt::Checked);
-        else
-            itm->setCheckState(Qt::Unchecked);
-        connect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
-    } else if (index.row() == page_notedit)
+    else if (index.row() == page_message)
+        ui->stackedWidget->setCurrentIndex(page_message);     
+    else if (index.row() == page_notedit)
         ui->stackedWidget->setCurrentIndex(page_notedit);
 }
 
@@ -413,17 +407,24 @@ void UserPreferences::onOpenCatOrganizations()
     cat_organization->show();
 }
 
-void UserPreferences::changeDataItemTabelMessege()
+void UserPreferences::changeDataItemTabelMessege(QTableWidgetItem *item)
 {
-    const int current_row = ui->tableWidget->currentRow();
-    QTableWidgetItem *itm = ui->tableWidget->currentItem();
+    int current_row = item->row();
     if (current_row == row_video){
-        if (itm->checkState() == Qt::Checked)
+        if (item->checkState() == Qt::Checked)
             globals::show_content_info_video = true;
         else
             globals::show_content_info_video = false;
         app_settings = new AppSettings(this);
         app_settings->setKeyAndValue("show_msg", "showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
+        app_settings->deleteLater();
+    } else if (current_row == row_report){
+        if (item->checkState() == Qt::Checked)
+            globals::show_info_reports = true;
+        else
+            globals::show_info_reports = false;
+        app_settings = new AppSettings(this);
+        app_settings->setKeyAndValue("show_msg", "showMsgReports", (globals::show_info_reports) ? 1 : 0);
         app_settings->deleteLater();
     }
 }
@@ -473,6 +474,29 @@ void UserPreferences::setListWidget()
 
     }
     connect(ui->listWidget, &QListWidget::clicked, this, &UserPreferences::onClickedListView);
+}
+
+void UserPreferences::setValueIntoTableMessage()
+{
+    // disconnect
+    disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
+
+    //-- info video
+    QTableWidgetItem *itm = ui->tableWidget->item(row_video, column_presentation);
+    if (globals::show_content_info_video)
+        itm->setCheckState(Qt::Checked);
+    else
+        itm->setCheckState(Qt::Unchecked);
+
+    //-- info reports
+    itm = ui->tableWidget->item(row_report, column_presentation);
+    if (globals::show_info_reports)
+        itm->setCheckState(Qt::Checked);
+    else
+        itm->setCheckState(Qt::Unchecked);
+
+    // connect
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
 }
 
 void UserPreferences::initSetModels()
@@ -548,7 +572,8 @@ void UserPreferences::initConnections()
     connectionsCombo();
     connectionCheckBox();
 
-    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
+    connect(ui->tableWidget, QOverload<QTableWidgetItem *>::of(&QTableWidget::itemChanged),
+            this, QOverload<QTableWidgetItem *>::of(&UserPreferences::changeDataItemTabelMessege));
 
     connect(ui->btnOk, &QAbstractButton::clicked, this, &UserPreferences::onWritingDataClose);
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &UserPreferences::onWritingData);

@@ -28,6 +28,17 @@ VariantMapTableModel::VariantMapTableModel(QObject *parent)
     : QAbstractTableModel{parent}
 {}
 
+VariantMapTableModel::TypeNormograms VariantMapTableModel::getTypeNormograms()
+{
+    return m_type_normograms;
+}
+
+void VariantMapTableModel::setTypeNormograms(TypeNormograms typeNormograms)
+{
+    m_type_normograms = typeNormograms;
+    emit typeNormogramsChanged();
+}
+
 void VariantMapTableModel::registerColumn(AbstractColumn *column)
 {
     _columns.append(column);
@@ -84,7 +95,7 @@ QVariant VariantMapTableModel::headerData(int section, Qt::Orientation orientati
         case section_id:
             return "id";
         case section_crl:
-            if (itIndexAmniotic)
+            if (m_type_normograms == INDEX_AMNIOTIC || m_type_normograms == DOPPLER)
                 return "Săptămâni";
             else
                 return "CRL, mm";

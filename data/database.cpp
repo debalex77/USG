@@ -75,6 +75,22 @@ QSqlDatabase DataBase::getDatabaseImage()
     return db_image.database("db_image");
 }
 
+bool DataBase::deleteDataFromTable(const QString name_table, const QString deletionCondition, const QString valueCondition)
+{
+    QSqlQuery qry;
+    QString str_qry;
+    if (deletionCondition == nullptr)
+        str_qry = QString("DELETE FROM %1;").arg(name_table);
+    else
+        str_qry = QString("DELETE FROM %1 WHERE %2 = '%3';").arg(name_table, deletionCondition, valueCondition);
+
+    qry.prepare(str_qry);
+    if (qry.exec())
+        return true;
+
+    return false;
+}
+
 // *******************************************************************
 // *************** CREAREA TABELELOR, OBIECTELOR *********************
 
@@ -316,8 +332,8 @@ void DataBase::loadNormogramsFromXml()
     while(node.isNull() == false) {
         if(node.tagName() == "entry"){
             while(!node.isNull()){
-                QString name       = node.attribute("name",        "name");
-                QString crl        = node.attribute("crl",         "crl");
+                QString name        = node.attribute("name",        "name");
+                QString crl         = node.attribute("crl",         "crl");
                 QString _5_centile  = node.attribute("_5_centile",  "_5_centile");
                 QString _50_centile = node.attribute("_50_centile", "_50_centile");
                 QString _95_centile = node.attribute("_95_centile", "_95_centile");

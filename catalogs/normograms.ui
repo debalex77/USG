@@ -31,30 +31,6 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_2">
-       <item row="3" column="0">
-        <spacer name="verticalSpacer">
-         <property name="orientation">
-          <enum>Qt::Vertical</enum>
-         </property>
-         <property name="sizeHint" stdset="0">
-          <size>
-           <width>20</width>
-           <height>355</height>
-          </size>
-         </property>
-        </spacer>
-       </item>
-       <item row="0" column="0">
-        <widget class="QCommandLinkButton" name="btnNT">
-         <property name="text">
-          <string>Translucența nucală</string>
-         </property>
-         <property name="icon">
-          <iconset resource="../resource.qrc">
-           <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
-         </property>
-        </widget>
-       </item>
        <item row="1" column="0">
         <widget class="QCommandLinkButton" name="btnBN">
          <property name="text">
@@ -74,6 +50,59 @@
          <property name="icon">
           <iconset resource="../resource.qrc">
            <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="7" column="0">
+        <spacer name="verticalSpacer">
+         <property name="orientation">
+          <enum>Qt::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>355</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="0">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QCommandLinkButton" name="btnNT">
+         <property name="text">
+          <string>Translucența nucală</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource.qrc">
+           <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QCommandLinkButton" name="btnDopplerUmbelical">
+         <property name="text">
+          <string>Doppler - a.ombelicală (PI)</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource.qrc">
+           <normaloff>:/img/doppler.png</normaloff>:/img/doppler.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QCommandLinkButton" name="btnDopplerUterine">
+         <property name="text">
+          <string>Doppler - a.uterine (PI)</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resource.qrc">
+           <normaloff>:/img/doppler.png</normaloff>:/img/doppler.png</iconset>
          </property>
         </widget>
        </item>
@@ -112,7 +141,8 @@
               <string notr="true">color: rgb(150, 73, 29);</string>
              </property>
              <property name="text">
-              <string>Translucența nucală (M.V. Medvedev 2012 a.)</string>
+              <string>Translucența nucală 
+sursa: M.V. Medvedev 2012 a.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -138,7 +168,8 @@
               <string notr="true">color: rgb(150, 73, 29);</string>
              </property>
              <property name="text">
-              <string>Oasele nazale (M.V.Medvedev 2012a.)</string>
+              <string>Oasele nazale 
+sursa: M.V.Medvedev 2012a.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
@@ -164,12 +195,71 @@
               <string notr="true">color: rgb(150, 73, 29);</string>
              </property>
              <property name="text">
-              <string>Index lichidului amniotic (T.Moore ... 1990a.)</string>
+              <string>Index lichidului amniotic 
+sursa: T.Moore ... 1990a.</string>
              </property>
              <property name="alignment">
               <set>Qt::AlignCenter</set>
              </property>
             </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_dopplerUterine">
+          <layout class="QGridLayout" name="gridLayout_7">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_4">
+             <property name="font">
+              <font>
+               <bold>true</bold>
+               <underline>true</underline>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(150, 73, 29);</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;A.uterine (PI)&lt;br&gt;sursa: The Fetal Medicine Foundation (&lt;a href=&quot;https://fetalmedicine.org/research/utpi&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;fetalmedicine.org&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="openExternalLinks">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QTableView" name="tableUterine"/>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="page_dopplerUmbelical">
+          <layout class="QGridLayout" name="gridLayout_8">
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_5">
+             <property name="font">
+              <font>
+               <bold>true</bold>
+               <underline>true</underline>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(150, 73, 29);</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;A.ombelicală (PI)&lt;br/&gt;sursa: The Fetal Medicine Foundation (&lt;a href=&quot;https://fetalmedicine.org/research/doppler&quot;&gt;&lt;span style=&quot; text-decoration: underline; color:#8ab4f8;&quot;&gt;fetalmedicine.org&lt;/span&gt;&lt;/a&gt;)&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignCenter</set>
+             </property>
+             <property name="openExternalLinks">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QTableView" name="tableUmbelical"/>
            </item>
           </layout>
          </widget>

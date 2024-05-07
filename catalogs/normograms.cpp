@@ -38,7 +38,7 @@ Normograms::Normograms(QWidget *parent)
     int screenHeight = screen->geometry().height();
 #endif
 
-    this->resize(680, 420);
+    this->resize(720, 480);
     int x = (screenWidth / 2) - (width() / 2);//*0.1;
     int y = (screenHeight / 2) - (height() / 2);//*0.1;
     move(x, y);
@@ -62,6 +62,8 @@ Normograms::~Normograms()
     delete model_nt;
     delete model_bn;
     delete model_indexAmniotic;
+    delete model_doppler_uterine;
+    delete model_doppler_umbelicale;
     delete db;
     delete ui;
 }
@@ -75,6 +77,7 @@ void Normograms::setModels()
     // --- NT
 
     model_nt = new VariantMapTableModel(this);
+    model_nt->setTypeNormograms(VariantMapTableModel::TypeNormograms::NT_BN);
     model_nt->registerColumn(new SimpleColumn("id"));
     model_nt->registerColumn(new SimpleColumn("crl"));
     model_nt->registerColumn(new SimpleColumn("5_centile"));
@@ -102,6 +105,7 @@ void Normograms::setModels()
     // --- BN
     norm_data.clear();
     model_bn = new VariantMapTableModel(this);
+    model_bn->setTypeNormograms(VariantMapTableModel::TypeNormograms::NT_BN);
     model_bn->registerColumn(new SimpleColumn("id"));
     model_bn->registerColumn(new SimpleColumn("crl"));
     model_bn->registerColumn(new SimpleColumn("5_centile"));
@@ -129,7 +133,7 @@ void Normograms::setModels()
     // --- index amniotic
     norm_data.clear();
     model_indexAmniotic = new VariantMapTableModel(this);
-    model_indexAmniotic->itIndexAmniotic = true;
+    model_indexAmniotic->setTypeNormograms(VariantMapTableModel::TypeNormograms::INDEX_AMNIOTIC);
     model_indexAmniotic->registerColumn(new SimpleColumn("id"));
     model_indexAmniotic->registerColumn(new SimpleColumn("crl"));
     model_indexAmniotic->registerColumn(new SimpleColumn("5_centile"));
@@ -153,6 +157,61 @@ void Normograms::setModels()
     }
     ui->tableIndexAmniotic->setModel(model_indexAmniotic);
     ui->tableIndexAmniotic->hideColumn(0);
+
+    // --- a.uterine
+    norm_data.clear();
+    model_doppler_uterine = new VariantMapTableModel(this);
+    model_doppler_uterine->setTypeNormograms(VariantMapTableModel::TypeNormograms::DOPPLER);
+    model_doppler_uterine->registerColumn(new SimpleColumn("id"));
+    model_doppler_uterine->registerColumn(new SimpleColumn("crl"));
+    model_doppler_uterine->registerColumn(new SimpleColumn("5_centile"));
+    model_doppler_uterine->registerColumn(new SimpleColumn("50_centile"));
+    model_doppler_uterine->registerColumn(new SimpleColumn("95_centile"));
+    qry.prepare("SELECT * FROM normograms WHERE name = :name;");
+    qry.bindValue(":name", "uterine_PI");
+    if (qry.exec()){
+        while (qry.next()){
+            QSqlRecord rec = qry.record();
+            norm_data.insert("id",         qry.value(rec.indexOf("id")).toInt());
+            norm_data.insert("crl",        qry.value(rec.indexOf("crl")).toString());
+            norm_data.insert("5_centile",  qry.value(rec.indexOf("5_centile")).toDouble());
+            norm_data.insert("50_centile", qry.value(rec.indexOf("50_centile")).toDouble());
+            norm_data.insert("95_centile", qry.value(rec.indexOf("95_centile")).toDouble());
+            model_doppler_uterine->addRow(norm_data);
+        }
+    } else {
+        qCritical(logCritical()) << "Solicitarea nereusita tabela 'normograms' - " + qry.lastError().text();
+    }
+    ui->tableUterine->setModel(model_doppler_uterine);
+    ui->tableUterine->hideColumn(0);
+
+    // --- a.umbelicale
+    norm_data.clear();
+    model_doppler_umbelicale = new VariantMapTableModel(this);
+    model_doppler_umbelicale->setTypeNormograms(VariantMapTableModel::TypeNormograms::DOPPLER);
+    model_doppler_umbelicale->registerColumn(new SimpleColumn("id"));
+    model_doppler_umbelicale->registerColumn(new SimpleColumn("crl"));
+    model_doppler_umbelicale->registerColumn(new SimpleColumn("5_centile"));
+    model_doppler_umbelicale->registerColumn(new SimpleColumn("50_centile"));
+    model_doppler_umbelicale->registerColumn(new SimpleColumn("95_centile"));
+    qry.prepare("SELECT * FROM normograms WHERE name = :name;");
+    qry.bindValue(":name", "umbilical_PI");
+    if (qry.exec()){
+        while (qry.next()){
+            QSqlRecord rec = qry.record();
+            norm_data.insert("id",         qry.value(rec.indexOf("id")).toInt());
+            norm_data.insert("crl",        qry.value(rec.indexOf("crl")).toString());
+            norm_data.insert("5_centile",  qry.value(rec.indexOf("5_centile")).toDouble());
+            norm_data.insert("50_centile", qry.value(rec.indexOf("50_centile")).toDouble());
+            norm_data.insert("95_centile", qry.value(rec.indexOf("95_centile")).toDouble());
+            model_doppler_umbelicale->addRow(norm_data);
+        }
+    } else {
+        qCritical(logCritical()) << "Solicitarea nereusita tabela 'normograms' - " + qry.lastError().text();
+    }
+    ui->tableUmbelical->setModel(model_doppler_umbelicale);
+    ui->tableUmbelical->hideColumn(0);
+
 }
 
 // *******************************************************************
@@ -163,6 +222,8 @@ void Normograms::initConnections()
     connect(ui->btnNT, &QAbstractButton::clicked, this, &Normograms::click_btn_NT);
     connect(ui->btnBN, &QAbstractButton::clicked, this, &Normograms::click_btn_BN);
     connect(ui->btnIndexAmniotic, &QAbstractButton::clicked, this, &Normograms::click_btn_indexAmniotic);
+    connect(ui->btnDopplerUterine, &QAbstractButton::clicked, this, &Normograms::click_btn_uterine);
+    connect(ui->btnDopplerUmbelical, &QAbstractButton::clicked, this, &Normograms::click_btn_umbelicale);
 }
 
 void Normograms::updateStyleBtnPressed()
@@ -191,6 +252,18 @@ void Normograms::updateStyleBtnPressed()
     } else {
         ui->btnIndexAmniotic->setStyleSheet(style_unpressed);
     }
+
+    if (ui->stackedWidget->currentIndex() == page_uterine){
+        ui->btnDopplerUterine->setStyleSheet(style_pressed);
+    } else {
+        ui->btnDopplerUterine->setStyleSheet(style_unpressed);
+    }
+
+    if (ui->stackedWidget->currentIndex() == page_umbelicale){
+        ui->btnDopplerUmbelical->setStyleSheet(style_pressed);
+    } else {
+        ui->btnDopplerUmbelical->setStyleSheet(style_unpressed);
+    }
 }
 
 void Normograms::click_btn_NT()
@@ -208,5 +281,17 @@ void Normograms::click_btn_BN()
 void Normograms::click_btn_indexAmniotic()
 {
     ui->stackedWidget->setCurrentIndex(page_index_amniotic);
+    updateStyleBtnPressed();
+}
+
+void Normograms::click_btn_uterine()
+{
+    ui->stackedWidget->setCurrentIndex(page_uterine);
+    updateStyleBtnPressed();
+}
+
+void Normograms::click_btn_umbelicale()
+{
+    ui->stackedWidget->setCurrentIndex(page_umbelicale);
     updateStyleBtnPressed();
 }

@@ -28,6 +28,8 @@ private slots:
     void click_btn_NT();
     void click_btn_BN();
     void click_btn_indexAmniotic();
+    void click_btn_uterine();
+    void click_btn_umbelicale();
 
 private:
     Ui::Normograms *ui;
@@ -35,13 +37,18 @@ private:
     enum IndexPage {
         page_nt             = 0,
         page_bn             = 1,
-        page_index_amniotic = 2
+        page_index_amniotic = 2,
+        page_uterine        = 3,
+        page_umbelicale     = 4
     };
 
     DataBase *db;
     VariantMapTableModel *model_nt;
     VariantMapTableModel *model_bn;
     VariantMapTableModel *model_indexAmniotic;
+    VariantMapTableModel *model_doppler_uterine;
+    VariantMapTableModel *model_doppler_umbelicale;
+
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 

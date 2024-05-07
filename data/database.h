@@ -34,6 +34,8 @@ public:
     QSqlDatabase getDatabase();
     QSqlDatabase getDatabaseImage();
 
+    bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
+
     void creatingTables();
     bool checkTable(const QString name_table);
     void creatingTables_DbImage();

@@ -789,7 +789,8 @@ void AppSettings::saveSettings()
     settApp->endGroup();
 
     settApp->beginGroup("show_msg");
-    settApp->setValue("showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
+    settApp->setValue("showMsgVideo",   (globals::show_content_info_video) ? 1 : 0);
+    settApp->setValue("showMsgReports", (globals::show_info_reports) ? 1 : 0);
     settApp->endGroup();
 
     qInfo(logInfo()) << tr("Setările aplicației sunt salvate/modificate în fișierul - %1.").arg(globals::pathAppSettings);
@@ -854,6 +855,7 @@ void AppSettings::loadSettings()
 
     settApp->beginGroup("show_msg");
     globals::show_content_info_video = settApp->value("showMsgVideo", true).toBool();
+    globals::show_info_reports       = settApp->value("showMsgReports", true).toBool();
     settApp->endGroup();
 
     globals::firstLaunch = false;
