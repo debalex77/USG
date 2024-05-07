@@ -83,6 +83,8 @@ private slots:
     void onOpenCatNurses();
     void onOpenCatOrganizations();
 
+    void changeDataItemTabelMessege();
+
 private:
     void setListWidget();
     void initSetModels();
@@ -116,6 +118,16 @@ private:
         page_notedit  = 4
     };
 
+    enum row_table_message {
+        row_video  = 0,
+        row_report = 1
+    };
+
+    enum column_table_message {
+        column_msg = 0,
+        column_presentation = 1
+    };
+
     int m_Id             = idx_unknow;
     int m_IdOrganization = idx_unknow;
     int m_idDoctor       = idx_unknow;
@@ -128,6 +140,8 @@ private:
     BaseSqlQueryModel* model_doctors;
     BaseSqlQueryModel* model_nurses;
     BaseSqlQueryModel* model_organizations;
+
+    AppSettings *app_settings;
 
     QStyle* style_fusion = QStyleFactory::create("Fusion");
 

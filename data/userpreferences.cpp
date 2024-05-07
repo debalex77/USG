@@ -343,9 +343,16 @@ void UserPreferences::onClickedListView(const QModelIndex index)
         ui->stackedWidget->setCurrentIndex(page_launch);
     else if (index.row() == page_document)
         ui->stackedWidget->setCurrentIndex(page_document);
-    else if (index.row() == page_message)
+    else if (index.row() == page_message){
         ui->stackedWidget->setCurrentIndex(page_message);
-    else if (index.row() == page_notedit)
+        QTableWidgetItem *itm = ui->tableWidget->item(row_video, column_presentation);
+        disconnect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
+        if (globals::show_content_info_video)
+            itm->setCheckState(Qt::Checked);
+        else
+            itm->setCheckState(Qt::Unchecked);
+        connect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
+    } else if (index.row() == page_notedit)
         ui->stackedWidget->setCurrentIndex(page_notedit);
 }
 
@@ -404,6 +411,21 @@ void UserPreferences::onOpenCatOrganizations()
     cat_organization->setAttribute(Qt::WA_DeleteOnClose);
     cat_organization->setProperty("Id", m_IdOrganization);
     cat_organization->show();
+}
+
+void UserPreferences::changeDataItemTabelMessege()
+{
+    const int current_row = ui->tableWidget->currentRow();
+    QTableWidgetItem *itm = ui->tableWidget->currentItem();
+    if (current_row == row_video){
+        if (itm->checkState() == Qt::Checked)
+            globals::show_content_info_video = true;
+        else
+            globals::show_content_info_video = false;
+        app_settings = new AppSettings(this);
+        app_settings->setKeyAndValue("show_msg", "showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
+        app_settings->deleteLater();
+    }
 }
 
 // **********************************************************************************
@@ -525,6 +547,8 @@ void UserPreferences::initConnections()
 
     connectionsCombo();
     connectionCheckBox();
+
+    connect(ui->tableWidget, &QTableWidget::itemChanged, this, &UserPreferences::changeDataItemTabelMessege);
 
     connect(ui->btnOk, &QAbstractButton::clicked, this, &UserPreferences::onWritingDataClose);
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &UserPreferences::onWritingData);
