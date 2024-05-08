@@ -281,6 +281,13 @@ void DataBase::creatingTables_DbImage()
 
 void DataBase::loadInvestigationFromXml()
 {
+    const int count_num = 107; // vezi resource.qrc - investig.xml
+    progress_dialog = new QProgressDialog(tr("Load investigations ..."), tr("Cancel"), 1, count_num);
+    progress_dialog->setWindowModality(Qt::WindowModal);
+    progress_dialog->show();
+
+    int progress = 0;
+
     QDomDocument investigXML;
     QFile xmlFile(":/xmls/investig.xml");
     if (!xmlFile.open(QIODevice::ReadOnly )){
@@ -309,15 +316,31 @@ void DataBase::loadInvestigationFromXml()
                     qInfo(logInfo()) << tr("Investigatia '%1' este introdusa in baza de date cu codul '%2'.").arg(name, cod);
                 else
                     qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'investigations': %1").arg(qry.lastError().text());
+
+                ++progress;
+                progress_dialog->setValue(progress);
+                if (progress_dialog->wasCanceled())
+                    break;
+
                 node = node.nextSibling().toElement();
             }
         }
         node = node.nextSibling().toElement();
     }
+
+    progress_dialog->close();
+    delete progress_dialog;
 }
 
 void DataBase::loadNormogramsFromXml()
 {
+    const int count_num = 116; // vezi resource.qrc - normograms.xml
+    progress_dialog = new QProgressDialog(tr("Load data normograms ..."), tr("Cancel"), 1, count_num);
+    progress_dialog->setWindowModality(Qt::WindowModal);
+    progress_dialog->show();
+
+    int progress = 0;
+
     QDomDocument investigXML;
     QFile xmlFile(":/xmls/normograms.xml");
     if (!xmlFile.open(QIODevice::ReadOnly )){
@@ -347,11 +370,20 @@ void DataBase::loadNormogramsFromXml()
                 qry.addBindValue(_95_centile);
                 if (! qry.exec())
                     qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'normograms': %1").arg(qry.lastError().text());
+
+                ++progress;
+                progress_dialog->setValue(progress);
+                if (progress_dialog->wasCanceled())
+                    break;
+
                 node = node.nextSibling().toElement();
             }
         }
         node = node.nextSibling().toElement();
     }
+
+    progress_dialog->close();
+    delete progress_dialog;
 }
 
 // *******************************************************************

@@ -1,3 +1,14 @@
+## USG v2.0.7
+* fixat bug-ul la printarea formelor de tipar în trimestrul II și III a sarcinei din baza de date MySQL
+* realizată vizualizarea istoriei versiunilor (offline)
+* adaugată funcția nouă de atașare a fișierelor video la documentul <b><u>'Raport ecografic'</u></b>
+* adaugată prezentarea informației suplimentare despre lucrul cu fișiere video și descrierea rapoartelor
+* în preferințele utilizatorului adaugată tabela cu alegerea prezentării mesajelor informaționale suplimentare (fișiere video și descrierea rapoartelor)
+* modificate datele normogramei de evaluare a translucenței nucale (sursa - <a href="https://fetalmedicine.org/research/assess/nt"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+* adaugate normograme obstetricale noi:
+    * doppler a.uterine (sursa - <a href="https://fetalmedicine.org/research/utp"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+    * doppler a.ombelicale (sursa - <a href="https://fetalmedicine.org/research/doppler"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+
 ## USG v2.0.6
 * adaugat catalogul cu normograme obstetricale:
     * normograma translucența nucală

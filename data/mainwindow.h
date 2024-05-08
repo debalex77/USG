@@ -36,7 +36,7 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.6"
+#define APPLICATION_VERSION     "2.0.7"
 
 //=============================================================
 
@@ -67,6 +67,7 @@ private slots:
     void updateTimer();
     void updateTimerDocWidget();
     void checkUpdateApp();
+    void openDescriptionRealease();
     void openSourceCode();
     void openReportBug();
     void openUserManual();
@@ -137,6 +138,7 @@ private:
     LimeReport::ReportEngine *m_report;
     DownloaderVersion        *downloader_version;
     AsistantTipApp           *asistant_tip;
+    InfoWindow               *info_window;
 
 protected:
     void closeEvent(QCloseEvent *event);

@@ -136,10 +136,10 @@ private slots:
     void setPathGlobalVariableAppSettings();
 private:
     Ui::AppSettings *ui;
-    QSettings* settApp;
-    QTranslator* translator;
-    DataBase* db;
-    PopUp* popUp;
+    QSettings       *settApp;
+    QTranslator     *translator;
+    DataBase        *db;
+    PopUp           *popUp;
 
 #if defined(Q_OS_LINUX)
     QString dirConfigPath  = QDir::homePath() + NAME_DIR_CONFIG_PATH;

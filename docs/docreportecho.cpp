@@ -1182,6 +1182,7 @@ void DocReportEcho::clickAddVideo()
 {
     if (globals::show_content_info_video){
         info_win = new InfoWindow(this);
+        info_win->setTypeInfo(InfoWindow::TypeInfo::INFO_VIDEO);
         info_win->setTitle(tr("Lucru cu fișierele video."));
         info_win->setTex("<p style='font-family: Arial; font-size: 14px;'>"
                          "Pentru lucru eficient cu fișiere video este necesar:<br><br>"
@@ -2212,23 +2213,32 @@ void DocReportEcho::slot_IdChanged()
 
     //----------------------------------------------------------------------------
     // video
-    QDirIterator it(globals::pathDirectoryVideo + "/",
-                    QStringList()
-                    << QString::number(m_id) + "_0.mp4"
-                    << QString::number(m_id) + "_1.mp4"
-                    << QString::number(m_id) + "_2.mp4"
-                    << QString::number(m_id) + "_3.mp4"
-                    << QString::number(m_id) + "_4.mp4"
-                    << QString::number(m_id) + "_5.mp4"
-                    << QString::number(m_id) + "_6.mp4",
-                    QDir::NoFilter,
-                    QDirIterator::Subdirectories);
-    while (it.hasNext()) {
-        QFileInfo file(it.next());
-        QListWidgetItem *itm = new QListWidgetItem;
-        itm->setText(file.fileName());
-        list_play->addItem(itm);
-    }
+
+     /** verificam daca este indicata directoriu de stocare a
+      ** fisierelor video.
+      ** Daca directoriu nu este indicat deschiderea documentului
+      ** poate dura foarte mult din cauza cautarii prin tot
+      ** hard discul a fisierelor video */
+    if (globals::pathDirectoryVideo != nullptr) {
+        QDirIterator it(globals::pathDirectoryVideo + "/",
+                        QStringList()
+                        << QString::number(m_id) + "_0.mp4"
+                        << QString::number(m_id) + "_1.mp4"
+                        << QString::number(m_id) + "_2.mp4"
+                        << QString::number(m_id) + "_3.mp4"
+                        << QString::number(m_id) + "_4.mp4"
+                        << QString::number(m_id) + "_5.mp4"
+                        << QString::number(m_id) + "_6.mp4",
+                        QDir::NoFilter,
+                        QDirIterator::Subdirectories);
+        while (it.hasNext()) {
+            QFileInfo file(it.next());
+            QListWidgetItem *itm = new QListWidgetItem;
+            itm->setText(file.fileName());
+            list_play->addItem(itm);
+        }
+    };
+
     //----------------------------------------------------------------------------
     // logarea
     if (items.count() == 0)

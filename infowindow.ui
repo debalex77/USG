@@ -12,7 +12,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>500</width>
+    <width>16777215</width>
     <height>16777215</height>
    </size>
   </property>
@@ -30,6 +30,7 @@
      <property name="font">
       <font>
        <pointsize>11</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
        <underline>true</underline>
       </font>
@@ -43,10 +44,14 @@
     </widget>
    </item>
    <item row="1" column="0" colspan="3">
-    <widget class="QTextBrowser" name="textBrowser"/>
+    <widget class="QTextBrowser" name="textBrowser">
+     <property name="styleSheet">
+      <string notr="true">background-color: rgb(222, 221, 218);</string>
+     </property>
+    </widget>
    </item>
    <item row="0" column="0">
-    <widget class="QLabel" name="label_2">
+    <widget class="QLabel" name="label_image">
      <property name="minimumSize">
       <size>
        <width>64</width>
@@ -75,6 +80,7 @@
      <property name="font">
       <font>
        <pointsize>16</pointsize>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>

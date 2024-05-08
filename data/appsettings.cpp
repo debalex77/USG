@@ -113,7 +113,7 @@ AppSettings::AppSettings(QWidget *parent) :
 AppSettings::~AppSettings()
 {
     delete translator;
-    delete settApp;
+    // delete settApp;
     delete db;
     delete popUp;
     delete lineEditPathDBImage;

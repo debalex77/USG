@@ -13,7 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_QML_DEBUG_NO_WARNING
 CONFIG- = qml_debug
 
-VERSION                  = 2.0.6
+VERSION                  = 2.0.7
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
@@ -173,7 +173,6 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
-    releases.md \
     version.txt
 
 RESOURCES += \

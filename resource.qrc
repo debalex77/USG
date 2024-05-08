@@ -165,5 +165,7 @@
         <file>xmls/normograms.xml</file>
         <file>img/video.png</file>
         <file>img/doppler.png</file>
+        <file>releases.md</file>
+        <file>img/user_preferences.png</file>
     </qresource>
 </RCC>

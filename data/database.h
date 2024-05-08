@@ -12,6 +12,7 @@
 #include <QDebug>
 #include <QMap>
 #include <QCryptographicHash>
+#include <QProgressDialog>
 
 #if (QT_VERSION > QT_VERSION_CHECK(5, 15, 2))
 #include <QRegularExpression>
@@ -166,10 +167,13 @@ public:
 
     QString getHTMLImageInfo();
     QString getHTMLImageWarning();
+
 private:
     QSqlDatabase db;
     QSqlDatabase db_image;
     quint32 key_encoding = 073; // encode_string & decode_string
+
+    QProgressDialog *progress_dialog;
 
 private:
     /* -- functiile interne cu baza de date -- */

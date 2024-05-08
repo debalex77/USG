@@ -915,6 +915,7 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
 
     if (globals::show_info_reports){
         info_window = new InfoWindow(this);
+        info_window->setTypeInfo(InfoWindow::TypeInfo::INFO_REPORT);
         info_window->setTitle(tr("Descrierea rapoartelor"));
         info_window->setTex(tr("<p style='font-family: Arial; font-size: 14px;'>"
                                "Rapoarte:<br><br>"

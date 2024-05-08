@@ -231,7 +231,7 @@ void MainWindow::initActions()
     QAction* actionOrganizations    = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
     QAction* actionUsers            = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
     QAction* actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
-    QAction* actionUserSettings     = new QAction(QIcon(":img/settings_x32.png"), tr("Setările utilizatorilor"), this);
+    QAction* actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
     QAction* actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
     QAction* actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
     QAction* actionOpenOrderEcho    = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
@@ -301,20 +301,24 @@ void MainWindow::initActions()
     ui->menuService->addAction(actionAppSettings);
     ui->menuService->addAction(actionUserSettings);
 
-    QAction* actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
+    QAction *actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
     ui->menuAssistance->addAction(actionSourceCode);
     connect(actionSourceCode, &QAction::triggered, this, &MainWindow::openSourceCode);
 
-    QAction* actionReportBug = new QAction(QIcon(":/img/bug.png"), tr("Raportează eroare"), this);
+    QAction *actionReportBug = new QAction(QIcon(":/img/bug.png"), tr("Raportează eroare"), this);
     ui->menuAssistance->addAction(actionReportBug);
     ui->menuAssistance->addSeparator();
     connect(actionReportBug, &QAction::triggered, this, &MainWindow::openReportBug);
 
-    QAction* action_user_manual = new QAction(QIcon(":/img/help_question.png"), tr("Manual Online"), this);
+    QAction *action_user_manual = new QAction(QIcon(":/img/help_question.png"), tr("Manual Online"), this);
     ui->menuAssistance->addAction(action_user_manual);
     connect(action_user_manual, &QAction::triggered, this, &MainWindow::openUserManual);
 
-    QAction* actionCheckUpdate = new QAction(QIcon(":/img/update_app.png"), tr("Verifică versiunea nouă"), this);
+    QAction *actionOpenReleases = new QAction(QIcon(":/img/history.png"), tr("Istoria versiunilor"), this);
+    ui->menuAssistance->addAction(actionOpenReleases);
+    connect(actionOpenReleases, &QAction::triggered, this, &MainWindow::openDescriptionRealease);
+
+    QAction *actionCheckUpdate = new QAction(QIcon(":/img/update_app.png"), tr("Verifică versiunea nouă"), this);
     ui->menuAssistance->addAction(actionCheckUpdate);
     connect(actionCheckUpdate, &QAction::triggered, this, &MainWindow::checkUpdateApp);
 
@@ -336,6 +340,19 @@ void MainWindow::checkUpdateApp()
     // verificam daca este versiunea noua
     downloader_version->getData();
     connect(downloader_version, &DownloaderVersion::onReady, this, &MainWindow::onReadyVersion);
+}
+
+void MainWindow::openDescriptionRealease()
+{
+    QFile file(":/releases.md");
+    if (! file.open(QIODevice::ReadOnly))
+        return;
+
+    info_window = new InfoWindow(this);
+    info_window->setAttribute(Qt::WA_DeleteOnClose);
+    info_window->setTypeInfo(InfoWindow::TypeInfo::INFO_REALEASE);
+    info_window->setTex(file.readAll());
+    info_window->show();
 }
 
 void MainWindow::openSourceCode()
@@ -453,7 +470,7 @@ void MainWindow::updateTimer()
             dock_widget->show();
             if (update_app->execUpdateCurrentRelease(APPLICATION_VERSION)){
                 setVersionAppInTableSettingsUsers();
-                QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/blob/master/releases.md"));
+                openDescriptionRealease();
             }
         }
 
@@ -463,7 +480,7 @@ void MainWindow::updateTimer()
 
         // prezentarea istoriei versiunilor
         if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)
-            QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/blob/master/releases.md"));
+            openDescriptionRealease();
 
         // prezentarea manualului online
         if (globals::showUserManual){
