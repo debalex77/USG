@@ -1,12 +1,45 @@
 <list_norm>
-  <entry name="normograma_nt" crl="45-50" _5_centile="0.74" _50_centile="1.52" _95_centile="2.3"  />
-  <entry name="normograma_nt" crl="51-55" _5_centile="0.76" _50_centile="1.54" _95_centile="2.32" />
-  <entry name="normograma_nt" crl="56-60" _5_centile="0.78" _50_centile="1.56" _95_centile="2.34" />
-  <entry name="normograma_nt" crl="61-65" _5_centile="0.81" _50_centile="1.59" _95_centile="2.37" />
-  <entry name="normograma_nt" crl="66-70" _5_centile="0.83" _50_centile="1.61" _95_centile="2.39" />
-  <entry name="normograma_nt" crl="71-75" _5_centile="0.85" _50_centile="1.63" _95_centile="2.41" />
-  <entry name="normograma_nt" crl="76-80" _5_centile="0.87" _50_centile="1.65" _95_centile="2.43" />
-  <entry name="normograma_nt" crl="81-84" _5_centile="0.89" _50_centile="1.67" _95_centile="2.45" />
+
+  <entry name="normograma_nt" crl="45" _5_centile="0.85" _50_centile="1.18" _95_centile="2.39"  />
+  <entry name="normograma_nt" crl="46" _5_centile="0.87" _50_centile="1.22" _95_centile="2.36"  />
+  <entry name="normograma_nt" crl="47" _5_centile="0.89" _50_centile="1.25" _95_centile="2.33"  />
+  <entry name="normograma_nt" crl="48" _5_centile="0.92" _50_centile="1.29" _95_centile="2.31"  />
+  <entry name="normograma_nt" crl="49" _5_centile="0.94" _50_centile="1.32" _95_centile="2.29"  />
+  <entry name="normograma_nt" crl="50" _5_centile="0.97" _50_centile="1.35" _95_centile="2.28"  />
+  <entry name="normograma_nt" crl="51" _5_centile="0.99" _50_centile="1.38" _95_centile="2.27"  />
+  <entry name="normograma_nt" crl="52" _5_centile="1.01" _50_centile="1.42" _95_centile="2.27"  />
+  <entry name="normograma_nt" crl="53" _5_centile="1.04" _50_centile="1.45" _95_centile="2.29"  />
+  <entry name="normograma_nt" crl="54" _5_centile="1.06" _50_centile="1.48" _95_centile="2.31"  />
+  <entry name="normograma_nt" crl="55" _5_centile="1.08" _50_centile="1.51" _95_centile="2.33"  />
+  <entry name="normograma_nt" crl="56" _5_centile="1.11" _50_centile="1.54" _95_centile="2.35"  />
+  <entry name="normograma_nt" crl="57" _5_centile="1.13" _50_centile="1.57" _95_centile="2.37"  />
+  <entry name="normograma_nt" crl="58" _5_centile="1.15" _50_centile="1.60" _95_centile="2.40"  />
+  <entry name="normograma_nt" crl="59" _5_centile="1.17" _50_centile="1.63" _95_centile="2.43"  />
+  <entry name="normograma_nt" crl="60" _5_centile="1.19" _50_centile="1.66" _95_centile="2.46"  />
+  <entry name="normograma_nt" crl="61" _5_centile="1.21" _50_centile="1.69" _95_centile="2.48"  />
+  <entry name="normograma_nt" crl="62" _5_centile="1.23" _50_centile="1.72" _95_centile="2.51"  />
+  <entry name="normograma_nt" crl="63" _5_centile="1.25" _50_centile="1.74" _95_centile="2.54"  />
+  <entry name="normograma_nt" crl="64" _5_centile="1.26" _50_centile="1.77" _95_centile="2.57"  />
+  <entry name="normograma_nt" crl="65" _5_centile="1.28" _50_centile="1.80" _95_centile="2.59"  />
+  <entry name="normograma_nt" crl="66" _5_centile="1.26" _50_centile="1.81" _95_centile="2.62"  />
+  <entry name="normograma_nt" crl="67" _5_centile="1.31" _50_centile="1.83" _95_centile="2.65"  />
+  <entry name="normograma_nt" crl="68" _5_centile="1.33" _50_centile="1.86" _95_centile="2.67"  />
+  <entry name="normograma_nt" crl="69" _5_centile="1.35" _50_centile="1.88" _95_centile="2.69"  />
+  <entry name="normograma_nt" crl="70" _5_centile="1.37" _50_centile="1.90" _95_centile="2.71"  />
+  <entry name="normograma_nt" crl="71" _5_centile="1.37" _50_centile="1.92" _95_centile="2.73"  />
+  <entry name="normograma_nt" crl="72" _5_centile="1.38" _50_centile="1.92" _95_centile="2.75"  />
+  <entry name="normograma_nt" crl="73" _5_centile="1.39" _50_centile="1.94" _95_centile="2.76"  />
+  <entry name="normograma_nt" crl="74" _5_centile="1.40" _50_centile="1.96" _95_centile="2.78"  />
+  <entry name="normograma_nt" crl="75" _5_centile="1.41" _50_centile="1.97" _95_centile="2.79"  />
+  <entry name="normograma_nt" crl="76" _5_centile="1.42" _50_centile="1.98" _95_centile="2.80"  />
+  <entry name="normograma_nt" crl="77" _5_centile="1.43" _50_centile="1.98" _95_centile="2.81"  />
+  <entry name="normograma_nt" crl="78" _5_centile="1.44" _50_centile="1.98" _95_centile="2.81"  />
+  <entry name="normograma_nt" crl="79" _5_centile="1.44" _50_centile="1.99" _95_centile="2.82"  />
+  <entry name="normograma_nt" crl="80" _5_centile="1.45" _50_centile="2.00" _95_centile="2.82"  />
+  <entry name="normograma_nt" crl="81" _5_centile="1.45" _50_centile="1.99" _95_centile="2.82"  />
+  <entry name="normograma_nt" crl="82" _5_centile="1.45" _50_centile="1.99" _95_centile="2.82"  />
+  <entry name="normograma_nt" crl="83" _5_centile="1.45" _50_centile="1.99" _95_centile="2.82"  />
+  <entry name="normograma_nt" crl="84" _5_centile="1.45" _50_centile="1.99" _95_centile="2.82"  />
   <entry name="normograma_bn" crl="45-50" _5_centile="1.35" _50_centile="1.75" _95_centile="2.15" />
   <entry name="normograma_bn" crl="51-55" _5_centile="1.4"  _50_centile="1.86" _95_centile="2.32" />
   <entry name="normograma_bn" crl="56-60" _5_centile="1.49" _50_centile="1.95" _95_centile="2.41" />
