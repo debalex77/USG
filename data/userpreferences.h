@@ -126,7 +126,7 @@ private:
     };
 
     enum column_table_message {
-        column_msg = 0,
+        column_msg          = 0,
         column_presentation = 1
     };
 
@@ -135,17 +135,17 @@ private:
     int m_idDoctor       = idx_unknow;
     int m_idNurse        = idx_unknow;
 
-    DataBase* db;
-    PopUp* popUp;
+    DataBase *db;
+    PopUp    *popUp;
 
-    BaseSqlQueryModel* model_users;
-    BaseSqlQueryModel* model_doctors;
-    BaseSqlQueryModel* model_nurses;
-    BaseSqlQueryModel* model_organizations;
+    BaseSqlQueryModel *model_users;
+    BaseSqlQueryModel *model_doctors;
+    BaseSqlQueryModel *model_nurses;
+    BaseSqlQueryModel *model_organizations;
 
     AppSettings *app_settings;
 
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

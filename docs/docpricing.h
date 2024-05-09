@@ -161,26 +161,26 @@ private:
 
 private:
     Ui::DocPricing *ui;
-    DataBase* db;
-    PopUp*    popUp;
+    DataBase *db;
+    PopUp    *popUp;
 
-    BaseSqlQueryModel* modelOrganizations;
-    BaseSqlQueryModel* modelContracts;
-    BaseSqlQueryModel* modelTypesPrices;
-    BaseSqlTableModel* modelTable;
-    BaseSortFilterProxyModel* proxy;
+    BaseSqlQueryModel *modelOrganizations;
+    BaseSqlQueryModel *modelContracts;
+    BaseSqlQueryModel *modelTypesPrices;
+    BaseSqlTableModel *modelTable;
+    BaseSortFilterProxyModel *proxy;
 
-    QMenu*       menu;
-    QToolBar*    toolBar;
-    QToolButton* btnAdd;
-    QToolButton* btnEdit;
-    QToolButton* btnDeletion;
-    QToolButton* btnFormsTable;
-    QLineEdit*   editSearch;
-    QComboBox*   comboSearch;
+    QMenu       *menu;
+    QToolBar    *toolBar;
+    QToolButton *btnAdd;
+    QToolButton *btnEdit;
+    QToolButton *btnDeletion;
+    QToolButton *btnFormsTable;
+    QLineEdit   *editSearch;
+    QComboBox   *comboSearch;
 
-    QLabel*        labelAuthor;
-    QTextDocument* documentPrint;
+    QLabel        *labelAuthor = nullptr;
+    QTextDocument *documentPrint;
 
     bool m_itNew         = false;
     int m_id             = idx_unknow;
@@ -192,9 +192,9 @@ private:
 
     QTimer* timer;
     QMap<QString, QString> itemsData;
-    CatForSqlTableModel* catInvestigations;
+    CatForSqlTableModel *catInvestigations;
 
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

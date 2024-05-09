@@ -19,8 +19,8 @@ public:
 
 private:
     Ui::About *ui;
-    DataBase* db;
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    DataBase  *db;
+    QStyle    *style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // ABOUT_H

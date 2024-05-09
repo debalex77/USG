@@ -917,12 +917,7 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
         info_window = new InfoWindow(this);
         info_window->setTypeInfo(InfoWindow::TypeInfo::INFO_REPORT);
         info_window->setTitle(tr("Descrierea rapoartelor"));
-        info_window->setTex(tr("<p style='font-family: Arial; font-size: 14px;'>"
-                               "Rapoarte:<br><br>"
-                               "1. Raport nr.1.<br><br>"
-                               "2. Raport nr.2.<br><br>"
-                               "3. Raport nr.3.<br><br>"
-                               "Urmează descrierea ...</p>"));
+        info_window->setTex(globals::str_content_message_report);
         info_window->exec();
     }
 

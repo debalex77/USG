@@ -115,17 +115,17 @@ private:
     QString m_name_organization = nullptr;
     int m_write_new_organziation = 0; // write = 1, valid = 2
 
-    DataBase* db;
-    PopUp* popUp;
+    DataBase *db;
+    PopUp    *popUp;
 
-    QToolBar*    toolBar; // pu toolBar contracte
-    QToolButton* btnAddContract;
-    QToolButton* btnEditContract;
-    QToolButton* btnDeletionContract;
-    QToolButton* btnSetDefaultContract;
+    QToolBar    *toolBar; // pu toolBar contracte
+    QToolButton *btnAddContract;
+    QToolButton *btnEditContract;
+    QToolButton *btnDeletionContract;
+    QToolButton *btnSetDefaultContract;
 
-    CatContracts*      catContracts;
-    BaseSqlQueryModel* modelCantract;
+    CatContracts      *catContracts;
+    BaseSqlQueryModel *modelCantract;
 
 protected:
     void closeEvent(QCloseEvent *event);

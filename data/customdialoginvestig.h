@@ -92,19 +92,19 @@ private:
 
     bool m_organs_internal = false;
     bool m_urinary_system  = false;
-    bool m_prostate   = false;
-    bool m_thyroide   = false;
-    bool m_gynecology = false;
-    bool m_breast     = false;
-    bool m_gestation0 = false;
-    bool m_gestation1 = false;
-    bool m_gestation2 = false;
+    bool m_prostate        = false;
+    bool m_thyroide        = false;
+    bool m_gynecology      = false;
+    bool m_breast          = false;
+    bool m_gestation0      = false;
+    bool m_gestation1      = false;
+    bool m_gestation2      = false;
 
-    QListWidget* widget;
-    QGroupBox*   viewBox;
-    QPushButton* btnOK;
-    QPushButton* btnClose;
-    QDialogButtonBox* buttonBox;
+    QListWidget      *widget;
+    QGroupBox        *viewBox;
+    QPushButton      *btnOK;
+    QPushButton      *btnClose;
+    QDialogButtonBox *buttonBox;
 };
 
 #endif // CUSTOMDIALOGINVESTIG_H

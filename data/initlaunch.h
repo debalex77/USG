@@ -33,9 +33,9 @@ private slots:
 
 private:
     Ui::InitLaunch *ui;
-    QTranslator* translator;
-    QString nameLocale;
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    QTranslator    *translator;
+    QString         nameLocale = nullptr;
+    QStyle         *style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);

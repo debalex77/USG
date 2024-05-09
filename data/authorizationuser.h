@@ -41,10 +41,10 @@ private slots:
 private:
     Ui::AuthorizationUser *ui;
     int m_Id = -1;     /* proprietatea - id obiectului */
-    DataBase* db;
+    DataBase *db;
 
-    QLineEdit* edit_password;
-    QToolButton* show_hide_password;
+    QLineEdit   *edit_password;
+    QToolButton *show_hide_password;
 
 protected:
     void changeEvent(QEvent *event);       // contolam traducerea aplicatiei

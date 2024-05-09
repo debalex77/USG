@@ -63,4 +63,31 @@ QString pathDirectoryVideo = nullptr;
 bool show_content_info_video = true;
 bool show_info_reports       = true;
 
+QString str_content_message_video = "<p style='font-family: Arial; font-size: 14px;'>"
+                                    "Pentru lucru eficient cu fișiere video este necesar:<br><br>"
+                                    "1. În <u>'setările aplicației'</u> de indicat <u>localizarea fișierelor video</u>.<br>"
+                                    "Fișierele video se copie automat în directoriu de stocare la adăugarea în <u>lista cu video</u> din documentul "
+                                    "<b><u>Raport ecografic</u></b>.<br><br>"
+                                    "2. Fișiere video trebuie să fie convertate în formatul <b>'.mp4'</b>.<br><br>"
+                                    "3. Denumirea fișierelor din directoriu de stocare (vezi punctul nr.1) nu trebuie să fie modificate (important !!!)."
+                                    "La copierea automată, fișierelor este atașată denumirea(număr) pentru determinarea rapidă de către programa.</p>";
+
+QString str_content_message_report = "<p style='font-family: Arial; font-size: 14px;'>"
+                                     "Rapoarte:<br><br>"
+                                     "1. Raport <b><u>'Lista pacienților (filtru organizații)'</u></b> - prezentarea datelor a pacienților (nume, prenume, anul nașterii și IDNP)"
+                                     " , denumirea investigației ecografice cu indicarea codului și prețul investigației.<br>"
+                                     "Filtrul raportului:"
+                                     " <ul><li>Organizația - organizația ce a indicat examen ecografic.</li>"
+                                     "     <li>Contract    - contractul organizației (exemplu - comercial sau CNAM).</li>"
+                                     "     <li>Doctor      - doctorul ce a indicat examinarea ecografică.</li></ul>"
+                                     "2. Raport <b><u>'Lista pacienților (filtru doctori)'</u></b> - prezentarea datelor a pacienților (nume, prenume, anul nașterii și IDNP)"
+                                     " , denumirea investigației ecografice cu indicarea codului și prețul investigației.<br>"
+                                     "Filtrul raportului:"
+                                     " <ul><li>Doctor - doctorul ce a indicat examinarea ecografică.</li></ul>"
+                                     "3. Raport <b><u>'Structura patologiilor'</u></b> - reprezintă evaluarea cantitativă a patologiilor ecografice.<br><br>"
+                                     "4. Raport <b><u>'Volumul investigațiilor'</u></b> - reprezintă evaluarea cantitativă a investigațiilor ecografice.<br>"
+                                     "Filtrul raportului:"
+                                     " <ul><li>Organizația - organizația ce a indicat examen ecografic.</li>"
+                                     "     <li>Contract    - contractul organizației (exemplu - comercial sau CNAM).</li></ul>";
+
 }

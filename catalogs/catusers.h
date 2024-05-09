@@ -68,11 +68,11 @@ private:
     int m_Id = -1;     /* proprietatea - id obiectului (-1 = nou creat) */
     QString m_name_user = nullptr;
 
-    DataBase* db;
-    PopUp* popUp;
+    DataBase *db;
+    PopUp    *popUp;
 
-    QLineEdit* edit_password;
-    QToolButton* show_hide_password;
+    QLineEdit   *edit_password;
+    QToolButton *show_hide_password;
 
 protected:
     void closeEvent(QCloseEvent *event);

@@ -114,19 +114,19 @@ private:
     TypeCatalog m_typeCatalog;
     TypeForm    m_typeForm;
 
-    QToolBar* toolBar;
-    QToolButton* btnBarAdd;
-    QToolButton* btnBarEdit;
-    QToolButton* btnBarDeletion;
-    QToolButton* btnBarUpdateTable;
+    QToolBar    *toolBar;
+    QToolButton *btnBarAdd;
+    QToolButton *btnBarEdit;
+    QToolButton *btnBarDeletion;
+    QToolButton *btnBarUpdateTable;
 
     int ret_id       = -1;      // date ce se determinam si returnam
     QString ret_cod  = nullptr; // cand typeForm = SelectForm
     QString ret_name = nullptr;
 
-    BaseSqlTableModel* model;
-    DataBase* db;
-    QMenu* menu;
+    BaseSqlTableModel *model;
+    DataBase          *db;
+    QMenu             *menu;
 
 protected:
     void changeEvent(QEvent *event);

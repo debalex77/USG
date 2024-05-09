@@ -29,11 +29,11 @@ private:
 
 private:
     Ui::AsistantTipApp *ui;
-    DataBase* db;
+    DataBase *db;
 
     int current_step = 0;
-    int max_step = 5;
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    int max_step     = 5;
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // ASISTANTTIPAPP_H

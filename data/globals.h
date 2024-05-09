@@ -58,4 +58,8 @@ extern QString pathDirectoryVideo;
 
 extern bool show_content_info_video;
 extern bool show_info_reports;
+
+extern QString str_content_message_video;
+extern QString str_content_message_report;
+
 }

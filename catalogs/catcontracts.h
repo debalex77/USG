@@ -70,13 +70,13 @@ private slots:
 
 private:
     Ui::CatContracts *ui;
-    DataBase* db;
-    BaseSqlQueryModel* model;
-    BaseSqlQueryModel* modelTypesPrices;
+    DataBase          *db;
+    BaseSqlQueryModel *model;
+    BaseSqlQueryModel *modelTypesPrices;
 
-    bool m_itNew = false;   /* proprietatea - obiectul nou creat */
-    int m_Id = -1;  /* proprietatea - id obiectului (-1 = nou creat) */
-    int m_IdOrganization = -1;
+    bool m_itNew          = false;   /* proprietatea - obiectul nou creat */
+    int m_Id              = -1;      /* proprietatea - id obiectului (-1 = nou creat) */
+    int m_IdOrganization  = -1;
     int m_id_types_prices = -1;
 
 protected:

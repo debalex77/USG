@@ -157,23 +157,23 @@ private slots:
 private:
     Ui::ListDoc *ui;
 
-    DataBase*  db;
-    PopUp*     popUp;
-    QMenu*     menu;
+    DataBase *db;
+    PopUp    *popUp;
+    QMenu    *menu;
 
-    QToolBar* toolBar;
-    QToolButton* btnSelect;
-    QToolButton* btnAdd;
-    QToolButton* btnEdit;
-    QToolButton* btnDeletion;
-    QToolButton* btnFilter;
-    QToolButton* btnAddFilter;
-    QToolButton* btnUpdateTable;
-    QToolButton* btnFilterRemove;
-    QToolButton* btnPost;
-    QToolButton* btnUnpost;
-    QToolButton* btnPrint;
-    QToolButton* btnPeriodDate;
+    QToolBar    *toolBar;
+    QToolButton *btnSelect;
+    QToolButton *btnAdd;
+    QToolButton *btnEdit;
+    QToolButton *btnDeletion;
+    QToolButton *btnFilter;
+    QToolButton *btnAddFilter;
+    QToolButton *btnUpdateTable;
+    QToolButton *btnFilterRemove;
+    QToolButton *btnPost;
+    QToolButton *btnUnpost;
+    QToolButton *btnPrint;
+    QToolButton *btnPeriodDate;
 
     static const int sz_id              = 5;    // size section default
     static const int sz_deletionMark    = 5;
@@ -187,13 +187,13 @@ private:
     static const int section_zero = 0;
     const QString type_doc = "DocPricing";
 
-    BaseSqlQueryModel* model;              // tableView
-    BaseSqlQueryModel* modelOrganizations; // filtru organization
-    BaseSqlQueryModel* modelContracts;     // filtru contract
-    BaseSqlQueryModel* modelUsers;         // filtru autor
-    BaseSortFilterProxyModel* proxy;       // model pu sortare
+    BaseSqlQueryModel *model;              // tableView
+    BaseSqlQueryModel *modelOrganizations; // filtru organization
+    BaseSqlQueryModel *modelContracts;     // filtru contract
+    BaseSqlQueryModel *modelUsers;         // filtru autor
+    BaseSortFilterProxyModel *proxy;       // model pu sortare
 
-    DocPricing* docPricing;
+    DocPricing *docPricing;
 
     bool m_itFilter       = false;       // proprietatile pu filtru
     bool m_itFilterPeriod = false;
@@ -208,7 +208,7 @@ private:
     QMap<QString, QVariant> itemsFilter;
     QMap<QString, QDateTime> itemsFilterPeriod;
 
-    QLabel* lablePeriodDate;
+    QLabel *lablePeriodDate;
 
 protected:
     void closeEvent(QCloseEvent *event);

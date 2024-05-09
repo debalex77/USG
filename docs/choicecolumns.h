@@ -106,11 +106,11 @@ private:
     bool show_sum            = false;
     bool show_comment        = false;
 
-    QListWidget* widget;
-    QGroupBox*   viewBox;
-    QPushButton* btnOK;
-    QPushButton* btnClose;
-    QDialogButtonBox* buttonBox;
+    QListWidget *widget;
+    QGroupBox   *viewBox;
+    QPushButton *btnOK;
+    QPushButton *btnClose;
+    QDialogButtonBox *buttonBox;
 };
 
 #endif // CHOICECOLUMNS_H

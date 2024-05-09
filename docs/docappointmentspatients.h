@@ -66,19 +66,19 @@ private:
 
 private:
     Ui::DocAppointmentsPatients *ui;
-    DataBase* db;
-    PopUp*    popUp;
+    DataBase *db;
+    PopUp    *popUp;
     QTime init_time = QTime(8,00,00);
 
     QMap<int, QString> items_organizations;
     QMap<int, QString> items_doctors;
 
-    RegistrationPatientsModel* model_main;
-    ComboDelegate* delegate_organizations;
-    ComboDelegate* delegate_doctors;
-    CheckBoxDelegate* delegate_execute;
+    RegistrationPatientsModel *model_main;
+    ComboDelegate             *delegate_organizations;
+    ComboDelegate             *delegate_doctors;
+    CheckBoxDelegate          *delegate_execute;
 
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

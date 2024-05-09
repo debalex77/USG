@@ -183,7 +183,7 @@ void PopUp::hidePop()
 void PopUp::setPopupOpacity(double opacity)
 {
     popupOpacity = opacity;
-
+    emit popupOpacityChanged();
     setWindowOpacity(opacity);
 }
 

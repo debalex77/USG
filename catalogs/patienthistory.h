@@ -47,12 +47,12 @@ private:
 private:
     Ui::PatientHistory *ui;
 
-    DataBase* db;
-    QCompleter* completer;
-    QStandardItemModel* model_patients;
-    BaseSortFilterProxyModel* proxy;
-    BaseSqlQueryModel* model_table;
-    CatGeneral* cat_patients;
+    DataBase                 *db;
+    QCompleter               *completer;
+    QStandardItemModel       *model_patients;
+    BaseSortFilterProxyModel *proxy;
+    BaseSqlQueryModel        *model_table;
+    CatGeneral               *cat_patients;
 
     int m_id_patient = -1;
 };

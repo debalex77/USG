@@ -229,46 +229,46 @@ private:
 
     static const int section_zero = 0;  // pu salvarea perioadei
 
-    DataBase* db;
-    PopUp*    popUp;
-    QMenu*    menu;
-    QMenu*    setUpMenu_order;
-    QMenu*    setUpMenu_report;
+    DataBase *db;
+    PopUp    *popUp;
+    QMenu    *menu;
+    QMenu    *setUpMenu_order;
+    QMenu    *setUpMenu_report;
 
-    BaseSqlQueryModel* modelOrganizations;
-    BaseSqlQueryModel* modelContracts;
-    BaseSqlQueryModel* modelTable;
-    BaseSqlQueryModel* model_view_table_order;
-    BaseSqlQueryModel* model_view_table_report;
-    BaseSortFilterProxyModel* proxyTable;
+    BaseSqlQueryModel *modelOrganizations;
+    BaseSqlQueryModel *modelContracts;
+    BaseSqlQueryModel *modelTable;
+    BaseSqlQueryModel *model_view_table_order;
+    BaseSqlQueryModel *model_view_table_report;
+    BaseSortFilterProxyModel *proxyTable;
 
-    QToolBar*    toolBar;
-    QToolButton* btnAdd;
-    QToolButton* btnEdit;
-    QToolButton* btnDeletion;
-    QToolButton* btnFilter;
-    QToolButton* btnAddFilter;
-    QToolButton* btnUpdateTable;
-    QToolButton* btnFilterRemove;
-    QToolButton* btnPrint;
-    QToolButton* btnReport;
-    QToolButton* btnViewTab;
-    QToolButton* btnPeriodDate;
-    QToolButton* btnSearch;
-    QToolButton* btnHideShowColumn;
+    QToolBar    *toolBar;
+    QToolButton *btnAdd;
+    QToolButton *btnEdit;
+    QToolButton *btnDeletion;
+    QToolButton *btnFilter;
+    QToolButton *btnAddFilter;
+    QToolButton *btnUpdateTable;
+    QToolButton *btnFilterRemove;
+    QToolButton *btnPrint;
+    QToolButton *btnReport;
+    QToolButton *btnViewTab;
+    QToolButton *btnPeriodDate;
+    QToolButton *btnSearch;
+    QToolButton *btnHideShowColumn;
 
-    QLabel*      lablePeriodDate;
-    QLineEdit*   editSearch;
+    QLabel    *lablePeriodDate;
+    QLineEdit *editSearch;
 
     int pressed_btn_viewTab = idx_unknow; // pu determinarea apasarii btn
 
-    DocOrderEcho* docOrderEcho;
-    CustomPeriod* customPeriod;
-    PatientHistory* patient_history;
+    DocOrderEcho   *docOrderEcho;
+    CustomPeriod   *customPeriod;
+    PatientHistory *patient_history;
 
-    QTimer* timer;
+    QTimer *timer;
 
-    ChoiceColumns* columns;
+    ChoiceColumns *columns;
 
 protected:
     void closeEvent(QCloseEvent *event);

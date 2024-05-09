@@ -96,20 +96,20 @@ private:
     static const int sz_telephone    = 120;
     static const int sz_address      = 350;
 
-    QToolButton* btnAdd;
-    QToolButton* btnEdit;
-    QToolButton* btnClear;
+    QToolButton *btnAdd;
+    QToolButton *btnEdit;
+    QToolButton *btnClear;
 
-    DataBase* db;
-    PopUp*    popUp;
-    QMenu*    menu;
+    DataBase *db;
+    PopUp    *popUp;
+    QMenu    *menu;
 
-    BaseSqlQueryModel*        model;
-    BaseSortFilterProxyModel* proxy;
+    BaseSqlQueryModel        *model;
+    BaseSortFilterProxyModel *proxy;
 
-    CatGeneral* cat_General;
-    CatUsers*   cat_Users;
-    CatOrganizations* cat_Organizations;
+    CatGeneral       *cat_General;
+    CatUsers         *cat_Users;
+    CatOrganizations *cat_Organizations;
 
 protected:
     void closeEvent(QCloseEvent *event);

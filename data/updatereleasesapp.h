@@ -24,7 +24,7 @@ public:
     bool execUpdateCurrentRelease(const QString current_release);
 
 private:
-    DataBase* db;
+    DataBase *db;
 };
 
 #endif // UPDATERELEASESAPP_H

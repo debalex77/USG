@@ -86,13 +86,13 @@ private:
     TypeCatalog m_typeCatalog; /* proprietatea - tipul catalogului */
     QString m_full_name = nullptr;
 
-    DataBase* db;
-    PopUp* popUp;
+    DataBase *db;
+    PopUp    *popUp;
 
-    int firstSpace = 0;
-    QString strName;
-    QString strPrenume;
-    QString strPatrimonic;
+    int firstSpace        = 0;
+    QString strName       = nullptr;
+    QString strPrenume    = nullptr;
+    QString strPatrimonic = nullptr;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

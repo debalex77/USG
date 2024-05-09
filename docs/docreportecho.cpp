@@ -1184,14 +1184,7 @@ void DocReportEcho::clickAddVideo()
         info_win = new InfoWindow(this);
         info_win->setTypeInfo(InfoWindow::TypeInfo::INFO_VIDEO);
         info_win->setTitle(tr("Lucru cu fișierele video."));
-        info_win->setTex("<p style='font-family: Arial; font-size: 14px;'>"
-                         "Pentru lucru eficient cu fișiere video este necesar:<br><br>"
-                         "1. În <u>'setările aplicației'</u> de indicat <u>localizarea fișierelor video</u>.<br>"
-                         "Fișierele video se copie automat în directoriu de stocare la adăugarea în <u>lista cu video</u> din documentul "
-                         "<b><u>Raport ecografic</u></b>.<br><br>"
-                         "2. Fișiere video trebuie să fie convertate în formatul <b>'.mp4'</b>.<br><br>"
-                         "3. Denumirea fișierelor din directoriu de stocare (vezi punctul nr.1) nu trebuie să fie modificate (important !!!)."
-                         "La copierea automată, fișierelor este atașată denumirea(număr) pentru determinarea rapidă de către programa.</p>");
+        info_win->setTex(globals::str_content_message_video);
         info_win->exec();
     }
 
@@ -3570,113 +3563,72 @@ void DocReportEcho::initEnableBtn()
 
 void DocReportEcho::updateStyleBtnInvestigations()
 {
-    if (ui->stackedWidget->currentIndex() == page_organs_internal){
-        ui->btnOrgansInternal->setStyleSheet("background: 0px #C2C2C3; "
-                                             "border: 1px inset blue; "
-                                             "border-color: navy;");
-    } else {
-        ui->btnOrgansInternal->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                             "border: 0px #8f8f91;");
-    }
+    const QString style_pressed = "background: 0px #C2C2C3; "
+                                  "border: 1px inset blue; "
+                                  "border-color: navy;";
 
-    if (ui->stackedWidget->currentIndex() == page_urinary_system){
-        ui->btnUrinarySystem->setStyleSheet("background: 0px #C2C2C3; "
-                                            "border: 1px inset blue; "
-                                            "border-color: navy;");
-    } else {
-        ui->btnUrinarySystem->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                            "border: 0px #8f8f91;");
-    }
+    const QString style_unpressed = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
+                                    "border: 0px #8f8f91;";
 
-    if (ui->stackedWidget->currentIndex() == page_prostate){
-        ui->btnProstate->setStyleSheet("background: 0px #C2C2C3; "
-                                       "border: 1px inset blue; "
-                                       "border-color: navy;");
-    } else {
-        ui->btnProstate->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                       "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_organs_internal)
+        ui->btnOrgansInternal->setStyleSheet(style_pressed);
+    else
+        ui->btnOrgansInternal->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_gynecology){
-        ui->btnGynecology->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
-    } else {
-        ui->btnGynecology->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_urinary_system)
+        ui->btnUrinarySystem->setStyleSheet(style_pressed);
+    else
+        ui->btnUrinarySystem->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_breast){
-        ui->btnBreast->setStyleSheet("background: 0px #C2C2C3; "
-                                     "border: 1px inset blue; "
-                                     "border-color: navy;");
-    } else {
-        ui->btnBreast->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                     "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_prostate)
+        ui->btnProstate->setStyleSheet(style_pressed);
+    else
+        ui->btnProstate->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_thyroid){
-        ui->btnThyroid->setStyleSheet("background: 0px #C2C2C3; "
-                                      "border: 1px inset blue; "
-                                      "border-color: navy;");
-    } else {
-        ui->btnThyroid->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                      "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_gynecology)
+        ui->btnGynecology->setStyleSheet(style_pressed);
+    else
+        ui->btnGynecology->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_gestation0){
-        ui->btnGestation0->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
-    } else {
-        ui->btnGestation0->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_breast)
+        ui->btnBreast->setStyleSheet(style_pressed);
+    else
+        ui->btnBreast->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_gestation1){
-        ui->btnGestation1->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
-    } else {
-        ui->btnGestation1->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_thyroid)
+        ui->btnThyroid->setStyleSheet(style_pressed);
+    else
+        ui->btnThyroid->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_gestation2){
-        ui->btnGestation2->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
-    } else {
-        ui->btnGestation2->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_gestation0)
+        ui->btnGestation0->setStyleSheet(style_pressed);
+    else
+        ui->btnGestation0->setStyleSheet(style_unpressed);
 
-    if (ui->comment->isVisible()){
-        ui->btnComment->setStyleSheet("background: 0px #C2C2C3; "
-                                         "border: 1px inset blue; "
-                                         "border-color: navy;");
-    } else {
-        ui->btnComment->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_gestation1)
+        ui->btnGestation1->setStyleSheet(style_pressed);
+    else
+        ui->btnGestation1->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_images){
-        ui->btnImages->setStyleSheet("background: 0px #C2C2C3; "
-                                     "border: 1px inset blue; "
-                                     "border-color: navy;");
-    } else {
-        ui->btnImages->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                     "border: 0px #8f8f91;");
-    }
+    if (ui->stackedWidget->currentIndex() == page_gestation2)
+        ui->btnGestation2->setStyleSheet(style_pressed);
+    else
+        ui->btnGestation2->setStyleSheet(style_unpressed);
 
-    if (ui->stackedWidget->currentIndex() == page_video){
-        ui->btnVideo->setStyleSheet("background: 0px #C2C2C3; "
-                                    "border: 1px inset blue; "
-                                    "border-color: navy;");
-    } else {
-        ui->btnVideo->setStyleSheet("background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                    "border: 0px #8f8f91;");
-    }
+    if (ui->comment->isVisible())
+        ui->btnComment->setStyleSheet(style_pressed);
+    else
+        ui->btnComment->setStyleSheet(style_unpressed);
+
+    if (ui->stackedWidget->currentIndex() == page_images)
+        ui->btnImages->setStyleSheet(style_pressed);
+    else
+        ui->btnImages->setStyleSheet(style_unpressed);
+
+    if (ui->stackedWidget->currentIndex() == page_video)
+        ui->btnVideo->setStyleSheet(style_pressed);
+    else
+        ui->btnVideo->setStyleSheet(style_unpressed);
 }
 
 // *******************************************************************

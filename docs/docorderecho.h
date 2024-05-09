@@ -241,37 +241,37 @@ private:
 
     QLabel* labelAuthor;
 
-    PopUp*    popUp;
-    QMenu*    menu;
-    QMenu*    setUpMenu;
-    DataBase* db;
-    QTimer*   timer;  // pu data si ora actuala
-    QCompleter* completer;
+    PopUp      *popUp;
+    QMenu      *menu;
+    QMenu      *setUpMenu;
+    DataBase   *db;
+    QTimer     *timer;  // pu data si ora actuala
+    QCompleter *completer;
 
-    BaseSqlQueryModel*  modelOrganizations;
-    BaseSqlQueryModel*  modelContracts;
-    BaseSqlQueryModel*  modelTypesPrices;
-    BaseSqlQueryModel*  modelDoctors;
-    BaseSqlQueryModel*  modelDoctorsExecute;
-    BaseSqlQueryModel*  modelNurses;
-    QStandardItemModel* modelPacients;
+    BaseSqlQueryModel  *modelOrganizations;
+    BaseSqlQueryModel  *modelContracts;
+    BaseSqlQueryModel  *modelTypesPrices;
+    BaseSqlQueryModel  *modelDoctors;
+    BaseSqlQueryModel  *modelDoctorsExecute;
+    BaseSqlQueryModel  *modelNurses;
+    QStandardItemModel *modelPacients;
 
-    BaseSqlTableModel*  modelTableSource;
-    BaseSqlTableModel*  modelTableOrder;
-    BaseSortFilterProxyModel* proxy;        // proxy - model pu tabelul source = sortarea tabelei
-    BaseSortFilterProxyModel* proxyPacient;
+    BaseSqlTableModel *modelTableSource;
+    BaseSqlTableModel *modelTableOrder;
+    BaseSortFilterProxyModel *proxy;        // proxy - model pu tabelul source = sortarea tabelei
+    BaseSortFilterProxyModel *proxyPacient;
 
-    QSqlQueryModel* print_model_organization;
-    QSqlQueryModel* print_model_patient;
-    QSqlQueryModel* print_model_table;
+    QSqlQueryModel *print_model_organization;
+    QSqlQueryModel *print_model_patient;
+    QSqlQueryModel *print_model_table;
 
-    CatGeneral* catDoctors;
+    CatGeneral *catDoctors;
     LimeReport::ReportEngine *m_report;
 
-    QStandardItemModel* model_img;
-    PatientHistory* patient_history;
+    QStandardItemModel *model_img;
+    PatientHistory     *patient_history;
 
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
+    QStyle *style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

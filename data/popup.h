@@ -12,13 +12,16 @@ class PopUp : public QWidget
     Q_OBJECT
 
     // proprietatea transparentei
-    Q_PROPERTY(float popupOpacity READ getPopupOpacity WRITE setPopupOpacity)
+    Q_PROPERTY(float popupOpacity READ getPopupOpacity WRITE setPopupOpacity NOTIFY popupOpacityChanged)
 
     void setPopupOpacity(double opacity);
     double getPopupOpacity() const;
 
 public:
     explicit PopUp(QWidget *parent = nullptr);
+
+signals:
+    void popupOpacityChanged();
 
 protected:
     void paintEvent(QPaintEvent *event);    // fundalul v-a fi desenat

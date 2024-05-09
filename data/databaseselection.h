@@ -46,8 +46,8 @@ private slots:
 
 private:
     Ui::DatabaseSelection *ui;
-    DataBase* db;
-    QTimer* timer;
+    DataBase *db;
+    QTimer   *timer;
 
 #if defined(Q_OS_LINUX)
     QString dirConfigPath  = QDir::homePath() + NAME_DIR_CONFIG_PATH;
