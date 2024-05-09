@@ -445,7 +445,6 @@ QString Reports::getQuerySystem(const QString str_sytem)
               "FROM tableBreast "
               "INNER JOIN reportEcho ON tableBreast.id_reportEcho = reportEcho.id "
               "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
-        qDebug() << str;
         return str;
     } else if (str_sytem == "ginecology_nozology"){
         QString str;

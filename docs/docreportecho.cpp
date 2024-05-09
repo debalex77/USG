@@ -247,12 +247,21 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
     }
 
     if (! QFile(globals::pathImageBaseAppSettings).exists() && globals::thisSqlite){
+#if defined(Q_OS_LINUX)
         QMessageBox::information(this,
                                  tr("Verificarea setărilor"),
                                  tr("Imaginea nu este salvată în baza de date !!!<br>"
                                     "Nu este indicată localizarea bazei de date a imaginilor.<br>"
                                     "Deschideți setările aplicației și indicați drumul spre baza de date a imaginilor."),
                                  QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::information(this,
+                                 tr("Verificarea set\304\203rilor"),
+                                 tr("Imaginea nu este salvat\304\203 \303\256n baza de date !!!<br>"
+                                    "Nu este indicat\304\203 localizarea bazei de date a imaginilor.<br>"
+                                    "Deschide\310\233i set\304\203rile aplica\310\233iei \310\231i indica\310\233i drumul spre baza de date a imaginilor."),
+                                 QMessageBox::Ok);
+#endif
         qInfo(logInfo()) << tr("Imaginea nu este salvata. Nu este indicat drumul spre baza de date a imaginilor.");
         return false;
     }
@@ -377,10 +386,17 @@ void DocReportEcho::onLinkActivatedForOpenImage1(const QString &link)
 
     if (m_id == idx_unknow){
         QMessageBox::StandardButton YesNo;
+#if defined(Q_OS_LINUX)
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea validării"),
                                      tr("Pentru a încărca imaginea este necesar de validat documentul.<br>Doriți să validați documentul ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca imaginea este necesar de validat documentul.<br>Dori\310\233i s\304\203 valida\310\233i documentul ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (YesNo == QMessageBox::Yes)
             onWritingData();
         else
@@ -403,10 +419,17 @@ void DocReportEcho::onLinkActivatedForOpenImage2(const QString &link)
 
     if (m_id == idx_unknow){
         QMessageBox::StandardButton YesNo;
+#if defined(Q_OS_LINUX)
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea validării"),
                                      tr("Pentru a încărca imaginea este necesar de validat documentul.<br>Doriți să validați documentul ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca imaginea este necesar de validat documentul.<br>Dori\310\233i s\304\203 valida\310\233i documentul ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (YesNo == QMessageBox::Yes)
             onWritingData();
         else
@@ -429,10 +452,17 @@ void DocReportEcho::onLinkActivatedForOpenImage3(const QString &link)
 
     if (m_id == idx_unknow){
         QMessageBox::StandardButton YesNo;
+#if defined(Q_OS_LINUX)
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea validării"),
                                      tr("Pentru a încărca imaginea este necesar de validat documentul.<br>Doriți să validați documentul ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca imaginea este necesar de validat documentul.<br>Dori\310\233i s\304\203 valida\310\233i documentul ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (YesNo == QMessageBox::Yes)
             onWritingData();
         else
@@ -455,10 +485,17 @@ void DocReportEcho::onLinkActivatedForOpenImage4(const QString &link)
 
     if (m_id == idx_unknow){
         QMessageBox::StandardButton YesNo;
+#if defined(Q_OS_LINUX)
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea validării"),
                                      tr("Pentru a încărca imaginea este necesar de validat documentul.<br>Doriți să validați documentul ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca imaginea este necesar de validat documentul.<br>Dori\310\233i s\304\203 valida\310\233i documentul ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (YesNo == QMessageBox::Yes)
             onWritingData();
         else
@@ -481,10 +518,17 @@ void DocReportEcho::onLinkActivatedForOpenImage5(const QString &link)
 
     if (m_id == idx_unknow){
         QMessageBox::StandardButton YesNo;
+#if defined(Q_OS_LINUX)
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea validării"),
                                      tr("Pentru a încărca imaginea este necesar de validat documentul.<br>Doriți să validați documentul ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        YesNo = QMessageBox::warning(this,
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca imaginea este necesar de validat documentul.<br>Dori\310\233i s\304\203 valida\310\233i documentul ?"),
+                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (YesNo == QMessageBox::Yes)
             onWritingData();
         else
@@ -1075,10 +1119,19 @@ void DocReportEcho::clickBtnAddConcluzionTemplates()
     qry.bindValue(":name", str);
     if (qry.exec()){
         if (qry.next() && qry.value(0).toString() == str) {
+
+#if defined(Q_OS_LINUX)
             QMessageBox msgBox(QMessageBox::Question,
                 tr("Verificarea dublajului"),
                 tr("Concluzia <b>%1</b> există ca șablon.<br>Doriți să prelungiți validarea ?").arg(str),
                     QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+            QMessageBox msgBox(QMessageBox::Question,
+                tr("Verificarea dublajului"),
+                tr("Concluzia <b>%1</b> exist\304\203 ca \310\231ablon.<br>Dori\310\233i s\304\203 prelungi\310\233i validarea ?").arg(str),
+                    QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
             msgBox.setButtonText(QMessageBox::Yes, tr("Da"));
             msgBox.setButtonText(QMessageBox::No, tr("Nu"));
@@ -1113,14 +1166,24 @@ void DocReportEcho::clickBtnAddConcluzionTemplates()
     qry.addBindValue(str);
     qry.addBindValue(str_system);
     if (qry.exec()){
+#if defined(Q_OS_LINUX)
         popUp->setPopupText(tr("Șablonul adăugat cu succes<br>"
                                "în baza de date."));
+#elif defined(Q_OS_WIN)
+        popUp->setPopupText(tr("\310\230ablonul ad\304\203ugat cu succes<br>"
+                               "\303\256n baza de date."));
+#endif
             popUp->show();
     } else {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);
+#if defined(Q_OS_LINUX)
         msgBox.setWindowTitle(tr("Adaugarea șablonului"));
         msgBox.setText(tr("Șablonul - <b>%1</b> - nu a fost adaugat.").arg(str));
+#elif defined(Q_OS_WIN)
+        msgBox.setWindowTitle(tr("Adaugarea \310\231ablonului"));
+        msgBox.setText(tr("\310\230ablonul - <b>%1</b> - nu a fost adaugat.").arg(str));
+#endif
         msgBox.setDetailedText(tr((qry.lastError().text().isEmpty()) ? "eroarea indisponibila" : qry.lastError().text().toStdString().c_str()));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setStyleSheet("QPushButton{width:120px;}");
@@ -1183,7 +1246,11 @@ void DocReportEcho::clickAddVideo()
     if (globals::show_content_info_video){
         info_win = new InfoWindow(this);
         info_win->setTypeInfo(InfoWindow::TypeInfo::INFO_VIDEO);
+#if defined(Q_OS_LINUX)
         info_win->setTitle(tr("Lucru cu fișierele video."));
+#elif defined(Q_OS_WIN)
+        info_win->setTitle(tr("Lucru cu fi\310\231ierele video."));
+#endif
         info_win->setTex(globals::str_content_message_video);
         info_win->exec();
     }
@@ -2315,7 +2382,11 @@ void DocReportEcho::slot_IdUserChanged()
 void DocReportEcho::slot_CountImagesChanged()
 {
     if (m_count_images > 0)
+#if defined(Q_OS_LINUX)
         ui->btnImages->setText(tr("Imagini (atașate %1)").arg(QString::number(m_count_images)));
+#elif defined(Q_OS_WIN)
+        ui->btnImages->setText(tr("Imagini (ata\310\231ate %1)").arg(QString::number(m_count_images)));
+#endif
 }
 
 void DocReportEcho::updateTextDateMenstruation()
@@ -2368,163 +2439,233 @@ void DocReportEcho::activatedItemCompleter(const QModelIndex &index)
 bool DocReportEcho::controlRequiredObjects()
 {
     if (m_id == idx_unknow){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> documentului !!!<br>Adresați-vă administratorului aplicației"),
                              QMessageBox::Ok, QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
+                             tr("Nu este determinat <b>'ID'</b> documentului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
+                             QMessageBox::Ok, QMessageBox::Ok);
+#endif
         return false;
     }
 
     if (m_idPacient == idx_unknow || m_idPacient == idx_write){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> pacientului !!!<br>Adresați-vă administratorului aplicației"),
                              QMessageBox::Ok, QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
+                             tr("Nu este determinat <b>'ID'</b> pacientului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
+                             QMessageBox::Ok, QMessageBox::Ok);
+#endif
         return false;
     }
 
     if (m_idUser == idx_unknow || m_idUser == idx_write){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> autorului documentului !!!<br>Adresați-vă administratorului aplicației"),
                              QMessageBox::Ok, QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
+                             tr("Nu este determinat <b>'ID'</b> autorului documentului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
+                             QMessageBox::Ok, QMessageBox::Ok);
+#endif
         return false;
     }
 
     if (ui->editDocNumber->text().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este indicat <b>'Numărul'</b> documentului !!!<br>Adresați-vă administratorului aplicației"),
                              QMessageBox::Ok, QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
+                             tr("Nu este indicat <b>'Num\304\203rul'</b> documentului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
+                             QMessageBox::Ok, QMessageBox::Ok);
+#endif
         return false;
     }
 
     if (ui->concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este indicată <b>'Concluzia'</b> raportului !!!<br>Validarea nu este posibilă."),
                              QMessageBox::Ok, QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
+                             tr("Nu este indicat\304\203 <b>'Concluzia'</b> raportului !!!<br>Validarea nu este posibil\304\203."),
+                             QMessageBox::Ok, QMessageBox::Ok);
+#endif
         return false;
     }
 
     if (m_organs_internal && ui->organsInternal_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (organelor interne)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (organelor interne)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_urinary_system && ui->urinary_system_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (sistemului urinar)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (sistemului urinar)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_prostate && ui->prostate_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (prostatei)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (prostatei)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_gynecology && ui->gynecology_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (ginecologica)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (ginecologic\304\203)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_breast && ui->breast_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (gl.mamare)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (gl.mamare)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_thyroide && ui->thyroid_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (gl.tiroide)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (gl.tiroide)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_gestation0 && ui->gestation0_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (sarcina până la 11 săptămâni)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (sarcina p\303\242n\304\203 la 11 s\304\203pt\304\203m\303\242ni)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
     }
 
     if (m_gestation1 && ui->gestation1_concluzion->toPlainText().isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Nu este indicată <b>'Concluzia (sarcina 11-14 săptămâni)'</b> raportului !!!<br>Doriți să continuați validarea documentului ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
+#elif defined(Q_OS_WIN)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Nu este indicat\304\203 <b>'Concluzia (sarcina 11-14 s\304\203pt\304\203m\303\242ni)'</b> raportului !!!<br>Dori\310\233i s\304\203 continua\310\233i validarea documentului ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
+#endif
+
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
         if (messange_box.exec() == QMessageBox::No)
             return false;
@@ -2536,11 +2677,19 @@ bool DocReportEcho::controlRequiredObjects()
 void DocReportEcho::onPrint(const int _typeReport)
 {
     if (globals::pathTemplatesDocs.isEmpty()){
+#if defined(Q_OS_LINUX)
         QMessageBox::warning(this,
                              tr("Verificarea setărilor"),
                              tr("Nu este indicat directoriul cu șabloanele de tipar.<br>"
                                 "Tipărirea documentului nu este posibilă."),
                              QMessageBox::Ok);
+#elif defined(Q_OS_WIN)
+        QMessageBox::warning(this,
+                             tr("Verificarea set\304\203rilor"),
+                             tr("Nu este indicat directoriul cu \310\231abloanele de tipar.<br>"
+                                "Tip\304\203rirea documentului nu este posibil\304\203."),
+                             QMessageBox::Ok);
+#endif
         return;
     }
 
@@ -3165,7 +3314,11 @@ void DocReportEcho::constructionFormVideo()
 
     QToolButton *btn_remove_video = new QToolButton(groupBox_list_play);
     btn_remove_video->setObjectName(QString::fromUtf8("btn_remove_video"));
+#if defined(Q_OS_LINUX)
     btn_remove_video->setText(tr("Elimină"));
+#elif defined(Q_OS_WIN)
+    btn_remove_video->setText(tr("Elimin\304\203"));
+#endif
     btn_remove_video->setIcon(QIcon(":/img/clear_x32.png"));
     btn_remove_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     btn_remove_video->setStyleSheet(str_style_btn);
@@ -3175,7 +3328,11 @@ void DocReportEcho::constructionFormVideo()
 
     QToolButton *btn_add_video = new QToolButton(groupBox_list_play);
     btn_add_video->setObjectName(QString::fromUtf8("btn_add_video"));
+#if defined(Q_OS_LINUX)
     btn_add_video->setText(tr("Adaugă"));
+#elif defined(Q_OS_WIN)
+    btn_add_video->setText(tr("Adaug\304\203"));
+#endif
     btn_add_video->setIcon(QIcon(":/img/add_x32.png"));
     btn_add_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     btn_add_video->setStyleSheet(str_style_btn);
@@ -3334,7 +3491,11 @@ void DocReportEcho::setDefaultDataProstate()
     if (ui->prostate_formations->text().isEmpty())
         ui->prostate_formations->setText("abs.");
     if (ui->prostate_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->prostate_recommendation->setText("consultația urologului");
+#elif defined(Q_OS_WIN)
+        ui->prostate_recommendation->setText("consulta\310\233ia urologului");
+#endif
 }
 
 void DocReportEcho::setDefaultDataGynecology()
@@ -3364,7 +3525,11 @@ void DocReportEcho::setDefaultDataGynecology()
     if (ui->gynecology_ovary_formations_left->toPlainText().isEmpty())
         ui->gynecology_ovary_formations_left->setPlainText("abs.");
     if (ui->gynecology_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gynecology_recommendation->setText("consultația ginecologului");
+#elif defined(Q_OS_WIN)
+        ui->prostate_recommendation->setText("consulta\310\233ia ginecologului");
+#endif
 }
 
 void DocReportEcho::setDefaultDataBreast()
@@ -3397,11 +3562,19 @@ void DocReportEcho::setDefaultDataThyroid()
     if (ui->thyroid_ecostructure->text().isEmpty())
         ui->thyroid_ecostructure->setText("omogenă");
     if (ui->thyroid_formations->toPlainText().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->thyroid_formations->setPlainText("l.drept - formațiuni lichidiene, solide abs.\nl.stâng - formațiuni lichidiene, solide abs.");
+#elif defined(Q_OS_WIN)
+        ui->thyroid_formations->setPlainText("l.drept - forma\310\233iuni lichidiene, solide abs.\nl.st\303\242ng - forma\310\233iuni lichidiene, solide abs.");
+#endif
     if (ui->thyroid_ganglions->text().isEmpty())
         ui->thyroid_ganglions->setText("fara modificări patologice");
     if (ui->thyroid_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->thyroid_recommendation->setText("consultația endocrinologului");
+#elif defined(Q_OS_WIN)
+        ui->prostate_recommendation->setText("consulta\310\233ia endocrinologului");
+#endif
 }
 
 void DocReportEcho::setDefaultDataGestation0()
@@ -3409,17 +3582,34 @@ void DocReportEcho::setDefaultDataGestation0()
     if (ui->gestation0_antecedent->text().isEmpty())
         ui->gestation0_antecedent->setText("abs.");
     if (ui->gestation0_BCF->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation0_BCF->setText("prezenți, ritmici");
+#elif defined(Q_OS_WIN)
+        ui->gestation0_BCF->setText("prezen\310\233i, ritmici");
+#endif
     if (ui->gestation0_liquid_amniotic->text().isEmpty())
         ui->gestation0_liquid_amniotic->setText("omogen, transparent");
     if (ui->gestation0_miometer->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation0_miometer->setText("omogen; formațiuni solide, lichidiene abs.");
+#elif defined(Q_OS_WIN)
+        ui->gestation0_miometer->setText("omogen; forma\310\233iuni solide, lichidiene abs.");
+#endif
     if (ui->gestation0_cervix->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation0_cervix->setText("omogen; formațiuni solide, lichidiene abs.; inchis, lungimea 32,9 mm");
+#elif defined(Q_OS_WIN)
+        ui->gestation0_cervix->setText("omogen; forma\310\233iuni solide, lichidiene abs.; \303\256nchis, lungimea 32,9 mm");
+#endif
     if (ui->gestation0_ovary->text().isEmpty())
         ui->gestation0_ovary->setText("aspect ecografic normal");
     if (ui->gestation0_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation0_recommendation->setText("consultația ginecologului, examen ecografic la 11-12 săptămâni a sarcinei");
+#elif defined(Q_OS_WIN)
+        ui->gestation0_recommendation->setText("consulta\310\233ia ginecologului, examen ecografic la 11-12 s\304\203pt\304\203m\303\242ni a sarcinei");
+#endif
+
 }
 
 void DocReportEcho::setDefaultDataGestation1()
@@ -3427,7 +3617,11 @@ void DocReportEcho::setDefaultDataGestation1()
     if (ui->gestation1_antecedent->text().isEmpty())
         ui->gestation1_antecedent->setText("abs.");
     if (ui->gestation1_BCF->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation1_BCF->setText("prezenți, ritmici");
+#elif defined(Q_OS_WIN)
+        ui->gestation1_BCF->setText("prezen\310\233i, ritmici");
+#endif
     if (ui->gestation1_callote_cranium->text().isEmpty())
         ui->gestation1_callote_cranium->setText("norm.");
     if (ui->gestation1_plex_choroid->text().isEmpty())
@@ -3447,19 +3641,35 @@ void DocReportEcho::setDefaultDataGestation1()
     if (ui->gestation1_amniotic_liquid->text().isEmpty())
         ui->gestation1_amniotic_liquid->setText("omogen, transparent");
     if (ui->gestation1_miometer->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation1_miometer->setText("omogen; formațiuni solide, lichidiene abs.");
+#elif defined(Q_OS_WIN)
+        ui->gestation1_miometer->setText("omogen; forma\310\233iuni solide, lichidiene abs.");
+#endif
     if (ui->gestation1_cervix->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation1_cervix->setText("omogen; formațiuni solide, lichidiene abs.; inchis, lungimea 32,9 mm");
+#elif defined(Q_OS_WIN)
+        ui->gestation1_cervix->setText("omogen; forma\310\233iuni solide, lichidiene abs.; \303\256nchis, lungimea 32,9 mm");
+#endif
     if (ui->gestation1_ovary->text().isEmpty())
         ui->gestation1_ovary->setText("aspect ecografic normal");
     if (ui->gestation1_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation1_recommendation->setText("consultația ginecologului, examen ecografic la 18-20 săptămâni a sarcinei");
+#elif defined(Q_OS_WIN)
+        ui->gestation1_recommendation->setText("consulta\310\233ia ginecologului, examen ecografic la 18-20 s\304\203pt\304\203m\303\242ni a sarcinei");
+#endif
 }
 
 void DocReportEcho::setDefaultDataGestation2()
 {
     if (ui->gestation2_recommendation->text().isEmpty())
+#if defined(Q_OS_LINUX)
         ui->gestation2_recommendation->setText("consultația ginecologului");
+#elif defined(Q_OS_WIN)
+        ui->gestation2_recommendation->setText("consulta\310\233ia ginecologului");
+#endif
 }
 
 // *******************************************************************
@@ -6088,10 +6298,17 @@ void DocReportEcho::closeEvent(QCloseEvent *event)
     player->stop();
 
     if (isWindowModified()){
+#if defined(Q_OS_LINUX)
         const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
                                                                         tr("Datele au fost modificate.\n"
                                                                            "Doriți să salvați aceste modificări ?"),
                                                                         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#elif defined(Q_OS_WIN)
+        const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
+                                                                        tr("Datele au fost modificate.\n"
+                                                                           "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
+#endif
         if (answer == QMessageBox::Yes){
             onWritingDataClose();
             event->accept();

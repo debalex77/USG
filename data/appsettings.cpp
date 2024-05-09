@@ -1010,6 +1010,7 @@ void AppSettings::removeFilesLogOnStartApp()
 
     QRegExp regx(globals::sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
 
+    QDir dir_file;
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
 
@@ -1022,7 +1023,7 @@ void AppSettings::removeFilesLogOnStartApp()
 #elif defined(Q_OS_MACOS)
                 system(QString("rm -f " + fileInfo.filePath()).toStdString().c_str());
 #elif defined(Q_OS_WIN)
-                system(QString("del /f " + fileInfo.filePath()).toStdString().c_str());
+                system(QString("del /f " + dir_file.toNativeSeparators(fileInfo.filePath())).toStdString().c_str());
 #endif
             }
             continue;
