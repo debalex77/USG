@@ -22,6 +22,7 @@ UserPreferences::UserPreferences(QWidget *parent) :
 
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive);
     ui->tableWidget->horizontalHeader()->setSectionResizeMode(0, QHeaderView::Stretch);
+    ui->tableWidget->verticalHeader()->setDefaultSectionSize(9);
 
     ui->brandUSG->setMaxLength(200);
     ui->versionApp->setText(VER);
