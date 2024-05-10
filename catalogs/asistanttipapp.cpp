@@ -65,7 +65,9 @@ void AsistantTipApp::stepPreview()
 
 void AsistantTipApp::onClose()
 {
-    if (ui->show_launch->checkState() != globals::showAsistantHelper){
+    bool m_show_launch = (ui->show_launch->checkState() == Qt::Checked) ? true : false;
+
+    if (m_show_launch != globals::showAsistantHelper){
         QSqlQuery qry;
         qry.prepare("UPDATE userPreferences SET showAsistantHelper = :showAsistantHelper WHERE id_users = :id_users;");
         qry.bindValue(":showAsistantHelper", ui->show_launch->isChecked());
