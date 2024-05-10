@@ -33,7 +33,8 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -49,7 +50,8 @@
       <widget class="QLabel" name="label_2">
        <property name="font">
         <font>
-         <pointsize>12</pointsize>
+         <pointsize>11</pointsize>
+         <weight>75</weight>
          <bold>true</bold>
         </font>
        </property>
@@ -164,6 +166,7 @@
      </property>
      <property name="font">
       <font>
+       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>
@@ -176,7 +179,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>108</height>
+        <height>92</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -191,6 +194,7 @@
         <widget class="QLabel" name="label_5">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -209,6 +213,7 @@
          </property>
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -251,6 +256,7 @@
          </property>
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -260,6 +266,7 @@
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -283,6 +290,7 @@
         <widget class="QLabel" name="label_7">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -301,6 +309,7 @@
          </property>
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -310,6 +319,7 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -322,6 +332,7 @@
         <widget class="QLabel" name="label_13">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -334,6 +345,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -352,6 +364,7 @@
          </property>
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -361,6 +374,7 @@
         <widget class="QComboBox" name="comboNurse">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -370,6 +384,7 @@
         <widget class="QComboBox" name="comboDoctorExecute">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -383,7 +398,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>131</height>
+        <height>114</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -398,6 +413,7 @@
         <widget class="QLabel" name="label_6">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -416,6 +432,7 @@
          </property>
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -443,7 +460,8 @@
            <widget class="QLabel" name="labelSumOrder">
             <property name="font">
              <font>
-              <pointsize>16</pointsize>
+              <pointsize>14</pointsize>
+              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -462,6 +480,7 @@
            <widget class="QCheckBox" name="cardPayment">
             <property name="font">
              <font>
+              <weight>50</weight>
               <bold>false</bold>
              </font>
             </property>
@@ -477,6 +496,7 @@
         <widget class="QCheckBox" name="checkBox">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -506,6 +526,7 @@
              <widget class="QLabel" name="label_12">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -518,6 +539,7 @@
              <widget class="QLabel" name="label_11">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -533,6 +555,7 @@
              <widget class="QDateEdit" name="dateEditBirthday">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -545,6 +568,7 @@
              <widget class="QLabel" name="label_14">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -557,6 +581,7 @@
              <widget class="QLineEdit" name="editIDNP">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -566,6 +591,7 @@
              <widget class="QLabel" name="label_10">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -578,6 +604,7 @@
              <widget class="QLabel" name="label_9">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -590,6 +617,7 @@
              <widget class="QLineEdit" name="editAddress">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -599,6 +627,7 @@
              <widget class="QLineEdit" name="editPolicyMedical">
               <property name="font">
                <font>
+                <weight>50</weight>
                 <bold>false</bold>
                </font>
               </property>
@@ -613,6 +642,7 @@
         <widget class="QToolButton" name="btnNewPacient">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -632,6 +662,7 @@
         <widget class="QToolButton" name="btnEditPacient">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -651,6 +682,7 @@
         <widget class="QToolButton" name="btnClearPacient">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -670,6 +702,7 @@
         <widget class="QToolButton" name="btnPatientHistory">
          <property name="font">
           <font>
+           <weight>50</weight>
            <bold>false</bold>
           </font>
          </property>
@@ -693,7 +726,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>68</height>
+        <height>69</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -720,6 +753,7 @@
        </property>
        <property name="font">
         <font>
+         <weight>50</weight>
          <bold>false</bold>
         </font>
        </property>

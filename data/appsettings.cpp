@@ -793,7 +793,7 @@ void AppSettings::saveSettings()
     settApp->setValue("showMsgReports", (globals::show_info_reports) ? 1 : 0);
     settApp->endGroup();
 
-    qInfo(logInfo()) << tr("Setările aplicației sunt salvate/modificate în fișierul - %1.").arg(globals::pathAppSettings);
+    qInfo(logInfo()) << tr("Setarile aplicatiei sunt salvate/modificate in fisierul - %1.").arg(globals::pathAppSettings);
 }
 
 void AppSettings::loadDataFromTableSettingsUsers()
@@ -985,7 +985,7 @@ void AppSettings::processingLoggingFiles(const QString nameMatches)
             else
                 str_cmd = "move \"" + nFile + "\" \"" + nNameFile + "\"";
             system(str_cmd.toStdString().c_str());
-            qInfo(logInfo()) << tr("Fișierul de logare este redenumit în '%1'.").arg(fileInfo.lastModified().toString("dd.MM.yyyy"));
+            qInfo(logInfo()) << tr("Fisierul de logare este redenumit în '%1'.").arg(fileInfo.lastModified().toString("dd.MM.yyyy"));
         }
 
 #endif

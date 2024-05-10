@@ -116,7 +116,13 @@ QVariant BaseSqlTableModel::dataFromCatForTableModel(const QModelIndex &index, i
             font.setStrikeOut(true);
             return font;
         } else {
+#if defined(Q_OS_LINUX)
             return value;
+#elif defined(Q_OS_WIN)
+            QFont font;
+            font.setPointSize(9);
+            return font;
+#endif
         }
     case Qt::BackgroundRole:  // culoarea fondalului
         if (QSqlTableModel::data(QSqlTableModel::index(index.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
@@ -132,6 +138,7 @@ QVariant BaseSqlTableModel::dataFromCatForTableModel(const QModelIndex &index, i
 QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlTableModel::data(index, role);
+    QFont font;
 
     switch (role) {
     case Qt::DisplayRole:
@@ -143,7 +150,12 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
     case Qt::EditRole:
         return value;
     case Qt::FontRole:
+#if defined(Q_OS_LINUX)
         return value;
+#elif defined(Q_OS_WIN)
+        font.setPointSize(9);
+        return font;
+#endif
     case Qt::BackgroundRole:  // culoarea fondalului
         if (QSqlTableModel::data(QSqlTableModel::index(index.row(), col_pricing_Price), Qt::DisplayRole).toInt() == 0)
             return QBrush(QColor(191,198,188));
@@ -164,6 +176,7 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
 QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlTableModel::data(index, role);
+    QFont font;
 
     switch (role) {
     case Qt::DisplayRole:
@@ -175,7 +188,12 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
     case Qt::EditRole:
         return value;
     case Qt::FontRole:
+#if defined(Q_OS_LINUX)
         return value;
+#elif defined(Q_OS_WIN)
+        font.setPointSize(9);
+        return font;
+#endif
     case Qt::BackgroundRole:  // culoarea fondalului
 //        if (m_tableSource == "tableSource" && index.column() == col_pricing_Price && QSqlTableModel::data(index, Qt::DisplayRole).toInt() == 0)
 //            return QBrush(QColor(165,172,162));

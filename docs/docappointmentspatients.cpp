@@ -165,7 +165,7 @@ bool DocAppointmentsPatients::removeData_Doc()
             action_remove = false;
             return action_remove;
         } else {
-            qInfo(logInfo()) << tr("Programarea pacientului '%1' din data '%2' eliminată cu succes din baza de date.")
+            qInfo(logInfo()) << tr("Programarea pacientului '%1' din data '%2' eliminata cu succes din baza de date.")
                                 .arg(_data_patient, ui->docDate->date().toString("dd.MM.yyyy"));
         }
     }

@@ -119,11 +119,21 @@ QVariant BaseSqlQueryModel::dataFromComboBox(const QModelIndex &item, int role) 
 
 QVariant BaseSqlQueryModel::dataFromUserSettings(const QModelIndex &item, int role) const
 {
+    QFont font;
+
     switch (role) {
     case Qt::UserRole:
         return dataFromParent(item, Id);
     case Qt::DisplayRole:
         return dataFromParent(item, Data);
+    case Qt::FontRole:
+#if defined(Q_OS_LINUX)
+        return QSqlQueryModel::data(item, role);
+#elif defined(Q_OS_WIN)
+
+        font.setPointSize(9);
+        return font;
+#endif
     default:
         return QSqlQueryModel::data(item, role);
     }
@@ -162,7 +172,13 @@ QVariant BaseSqlQueryModel::dataFromGeneralListForm(const QModelIndex &item, int
             font.setStrikeOut(true);
             return font;
         } else {
+#if defined(Q_OS_LINUX)
             return value;
+#elif defined(Q_OS_WIN)
+            QFont font;
+            font.setPointSize(9);
+            return font;
+#endif
         }
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
@@ -209,7 +225,13 @@ QVariant BaseSqlQueryModel::dataFromCatOrganizations(const QModelIndex &item, in
             font.setStrikeOut(true);
             return font;
         } else {
+#if defined(Q_OS_LINUX)
             return value;
+#elif defined(Q_OS_WIN)
+            QFont font;
+            font.setPointSize(9);
+            return font;
+#endif
         }
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 0), Qt::DisplayRole).toInt() == id_contract)
@@ -260,7 +282,13 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
             font.setStrikeOut(true);
             return font;
         } else {
+#if defined(Q_OS_LINUX)
             return value;
+#elif defined(Q_OS_WIN)
+            QFont font;
+            font.setPointSize(9);
+            return font;
+#endif
         }
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 0), Qt::DisplayRole).toInt() == id_contract)
@@ -279,6 +307,7 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
 QVariant BaseSqlQueryModel::dataFromDocPricing(const QModelIndex &item, int role) const
 {
     QVariant value = QSqlQueryModel::data(item, role);
+    QFont font;
 
     switch (role) {
     case Qt::DisplayRole:
@@ -286,7 +315,12 @@ QVariant BaseSqlQueryModel::dataFromDocPricing(const QModelIndex &item, int role
     case Qt::EditRole:
         return value;
     case Qt::FontRole:
+#if defined(Q_OS_LINUX)
         return value;
+#elif defined(Q_OS_WIN)
+        font.setPointSize(9);
+        return font;
+#endif
     case Qt::TextAlignmentRole:
         if (item.column() == 3) // sectia 'Cod'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
@@ -366,7 +400,13 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
             font.setStrikeOut(true);
             return font;
         } else {
+#if defined(Q_OS_LINUX)
             return value;
+#elif defined(Q_OS_WIN)
+            QFont font;
+            font.setPointSize(9);
+            return font;
+#endif
         }
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), orderSection_deletionMark), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
@@ -383,6 +423,7 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
 QVariant BaseSqlQueryModel::dataFrom_view_table_order(const QModelIndex &item, int role) const
 {
     QVariant value = QSqlQueryModel::data(item, role);
+    QFont font;
 
     switch (role) {
     case Qt::DisplayRole:
@@ -393,14 +434,19 @@ QVariant BaseSqlQueryModel::dataFrom_view_table_order(const QModelIndex &item, i
         return value;
     case Qt::EditRole:
         return value;
-    case Qt::FontRole:
-        return value;
     case Qt::TextAlignmentRole:
         if (item.column() == 3) // sectia 'Cod'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
         else if (item.column() == 5) // sectia 'Pret'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
         return value;
+    case Qt::FontRole:
+#if defined(Q_OS_WIN)
+        font.setPointSize(9);
+        return font;
+#elif defined(Q_OS_LINUX)
+        return value;
+#endif
     default:
         return value;
     }
