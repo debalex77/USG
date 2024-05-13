@@ -167,5 +167,9 @@
         <file>img/doppler.png</file>
         <file>releases.md</file>
         <file>img/user_preferences.png</file>
+        <file>img/icons_main/usg_about.png</file>
+        <file>img/icons_main/usg_docReport.png</file>
+        <file>img/icons_main/usg_preview.png</file>
+        <file>img/icons_main/usg_splash.png</file>
     </qresource>
 </RCC>
