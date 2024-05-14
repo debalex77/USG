@@ -49,6 +49,7 @@ class DocReportEcho : public QDialog
     Q_PROPERTY(bool t_gestation2 READ get_t_gestation2 WRITE set_t_gestation2 NOTIFY t_gestation2Changed)
 
     Q_PROPERTY(bool CountImages READ getCountImages WRITE setCountImages NOTIFY CountImagesChanged)
+    Q_PROPERTY(bool CountVideo READ getCountVideo WRITE setCountVideo NOTIFY CountVideoChanged)
 
 public:
     explicit DocReportEcho(QWidget *parent = nullptr);
@@ -116,6 +117,9 @@ public:
     void setCountImages(int CountImages){m_count_images = CountImages; emit CountImagesChanged();}
     int getCountImages() const {return m_count_images;}
 
+    void setCountVideo(int CountVideo) {m_count_video = CountVideo; emit CountVideoChanged();}
+    int getCountVideo() const {return m_count_video;}
+
     void onPrintDocument(const int _typeReport); // functiile exportate pu solicitarea din alte clase
 
     enum MethodOpenReport
@@ -145,6 +149,7 @@ signals:
     void PostDocument(); // pu actualizarea listei documentelor
     void mCloseThisForm();
     void CountImagesChanged(); // pu determinarea cantitatii imiginilor
+    void CountVideoChanged();
 
 private slots:
     void dataWasModified();    // modificarea datelor formei
@@ -235,6 +240,7 @@ private slots:
     void slot_IdDocOrderEchoChanged();
     void slot_IdUserChanged();
     void slot_CountImagesChanged();
+    void slot_CountVideoChanged();
 
     void updateTextDateMenstruation();    // actualizam textul cate zile de la cicl.menstr.
 
@@ -396,6 +402,7 @@ private:
     QLabel         *m_labelDuration  = nullptr;
     QLabel         *m_errorLabel     = nullptr;
     qint64         m_duration;
+    int            m_count_video     = 0;
 
     InfoWindow *info_win;
 

@@ -797,6 +797,7 @@ void DocReportEcho::initConnections()
 
     connect(this, &DocReportEcho::CountImagesChanged, this, &DocReportEcho::slot_CountImagesChanged);
     connect(this, &DocReportEcho::CountImagesChanged, this, &DocReportEcho::dataWasModified);
+    connect(this, &DocReportEcho::CountVideoChanged, this, &DocReportEcho::slot_CountVideoChanged);
 
     connect(this, &DocReportEcho::ItNewChanged, this, &DocReportEcho::slot_ItNewChanged);
     connect(this, &DocReportEcho::IdChanged, this, &DocReportEcho::slot_IdChanged);
@@ -2296,6 +2297,7 @@ void DocReportEcho::slot_IdChanged()
             QListWidgetItem *itm = new QListWidgetItem;
             itm->setText(file.fileName());
             list_play->addItem(itm);
+            setCountVideo(m_count_video + 1);
         }
     };
 
@@ -2386,6 +2388,16 @@ void DocReportEcho::slot_CountImagesChanged()
         ui->btnImages->setText(tr("Imagini (atașate %1)").arg(QString::number(m_count_images)));
 #elif defined(Q_OS_WIN)
         ui->btnImages->setText(tr("Imagini (ata\310\231ate %1)").arg(QString::number(m_count_images)));
+#endif
+}
+
+void DocReportEcho::slot_CountVideoChanged()
+{
+    if (m_count_video > 0)
+#if defined(Q_OS_LINUX)
+        ui->btnVideo->setText(tr("Video (atașate %1)").arg(QString::number(m_count_video)));
+#elif defined(Q_OS_WIN)
+        ui->btnVideo->setText(tr("Video (ata\310\231ate %1)").arg(QString::number(m_count_video)));
 #endif
 }
 
