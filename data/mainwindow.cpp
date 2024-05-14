@@ -484,9 +484,7 @@ void MainWindow::updateTimer()
 
         // prezentarea manualului online
         if (globals::showUserManual){
-            QDir dir;
-            QString str = dir.toNativeSeparators(dir.currentPath() + "/UserManual.pdf");
-            QDesktopServices::openUrl(QUrl::fromLocalFile(str));
+            openUserManual();
         }
 
         // prezentarea sfaturilor

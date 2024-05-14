@@ -121,6 +121,14 @@ int main(int argc, char *argv[])
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts); // initializare pluginului Qt WebEngine (specificul LimeReport)
     QApplication a(argc, argv);
 
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT OPENSSL =~=~=~=~=~=~=~=~=~=~=~=~";
+    qInfo(logInfo()) << "Support SSL: " << QSslSocket::supportsSsl();
+    qInfo(logInfo()) << "sslLibraryBuildVersionString: " << QSslSocket::sslLibraryBuildVersionString();
+    qInfo(logInfo()) << "sslLibraryVersionString " << QSslSocket::sslLibraryVersionString();
+    qInfo(logInfo()) << "";
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT SQL DRIVERS =~=~=~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo()) << QSqlDatabase::drivers();
+
 #if defined(Q_OS_WIN)
     QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
     QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Bold.ttf");
@@ -150,9 +158,11 @@ int main(int argc, char *argv[])
     AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
-    m_logFile.reset(new QFile(globals::pathLogAppSettings));
-    if (m_logFile.data()->open(QFile::Append | QFile::Text)){
-        qInstallMessageHandler(messageHandler);
+    if (QString(argv[1]) == "/debug") {
+        m_logFile.reset(new QFile(globals::pathLogAppSettings));
+        if (m_logFile.data()->open(QFile::Append | QFile::Text)){
+            qInstallMessageHandler(messageHandler);
+        }
     }
 
     //******************************************************************************************************************************
