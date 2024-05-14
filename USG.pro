@@ -173,6 +173,10 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
+    debian/control \
+    debian/postinst \
+    debian/preinst \
+    debian/prerm \
     version.txt
 
 RESOURCES += \

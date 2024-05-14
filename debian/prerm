@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+LOG_DIR=/var/log/usg
+ICON_DIR=/usr/share/pixmaps/usg
+CONF_DIR=/home/$USER/.config/USG
+SYMLINK=/usr/bin/usg
+
+if [ "$1" = "remove" ] || [ "$1" = "upgrade" ] ; then
+    rm -f $SYMLINK
+    if [ -f "$SYMLINK" ] ; then
+        rm $SYMLINK
+    fi
+    rm -rf $LOG_DIR
+    echo "Delete directory $LOG_DIR"
+    rm -rf $ICON_DIR
+    echo "Delete directory $ICON_DIR"
+    rm -rf $CONF_DIR
+    echo "Delete directory $CONF_DIR"
+    rm "/usr/share/applications/org.alovada.usg.desktop"
+    echo "Delete file - /usr/share/applications/org.alovada.usg.desktop"
+fi
+
+exit 0

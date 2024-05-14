@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+SRC_FILE=/opt/USG/USG.sh
+LOG_DIR=/var/log/usg
+TEMPLETS_DIR=/opt/USG/templets
+SYMLINK=/usr/bin/usg
+
+if [ "$1" = "configure" ] ; then
+    
+    ln -s $SRC_FILE $SYMLINK
+    
+    mkdir $LOG_DIR
+    echo "Create directory $LOG_DIR"
+    
+    chmod 777 $LOG_DIR
+    echo "File permissions $LOG_DIR"
+    
+    chmod 777 $TEMPLETS_DIR
+    echo "File permissions $TEMPLETS_DIR"
+
+fi
+
+exit 0
