@@ -287,6 +287,7 @@ private:
     };
 
     void constructionFormVideo();
+    void findVideoFiles();
 
     void setDefaultDataTableLiver();      // setarea datelor implicite initial
     void setDefaultDataTableCholecist();  // in dependenta de bloc + tag ale documentului

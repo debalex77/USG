@@ -1,4 +1,4 @@
-﻿#include "docreportecho.h"
+#include "docreportecho.h"
 #include "ui_docreportecho.h"
 #if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
 #include <QDesktopWidget>
@@ -828,6 +828,8 @@ void DocReportEcho::initConnections()
     connect(ui->comment_image4, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
     connect(ui->comment_image5, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
 
+
+
     connect(ui->btnOk, &QPushButton::clicked, this, &DocReportEcho::onWritingDataClose);
     connect(ui->btnWrite, &QPushButton::clicked, this, &DocReportEcho::onWritingData);
     connect(ui->btnClose, &QPushButton::clicked, this, &DocReportEcho::onClose);
@@ -1269,18 +1271,43 @@ void DocReportEcho::clickAddVideo()
 
 void DocReportEcho::clickRemoveVideo()
 {
-    list_play->removeItemWidget(list_play->currentItem());
+    QDir dir;
+    QMessageBox::StandardButton YesNo;
+    YesNo = QMessageBox::question(this,
+                                  tr("Eliminarea fișierului."),
+                                  tr("Doriți să eliminați fișierul:<br><u>%1</u> ?")
+                                  .arg(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text())),
+                                  QMessageBox::Yes | QMessageBox::No);
+    if (YesNo == QMessageBox::Yes){
+        QFile file_video(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text()));
+        if (file_video.remove()) {
+            popUp->setPopupText(tr("Fișierul eliminat cu succes."));
+            popUp->show();
+        }
+    }
+
+    QListWidgetItem *itm = list_play->takeItem(list_play->currentRow());
+    delete itm;
+
+    list_play->setCurrentRow(-1);
+
+    setCountVideo(m_count_video - 1);
+
+    qInfo(logInfo()) << tr("Eliminat fisierul video - %1").arg(QString::number(m_id) + "_" + QString::number(m_count_video + 1) + ".mp4");
 }
 
 void DocReportEcho::setUrl(const QUrl &url)
 {
+    QDir dir;
     QString str = url.toString();
     str.remove(0,7); // eliminam -> file://
-    QFile::copy(str, globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
+    QFile::copy(str, dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4"));
 
-    QListWidgetItem *itm = new QListWidgetItem;
-    itm->setText(url.fileName());
-    list_play->addItem(itm);
+    list_play->addItem(QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
+    setCountVideo(m_count_video + 1);
+    list_play->setCurrentRow(list_play->count());
+
+    qInfo(logInfo()) << tr("Atasat fisierul video - %1").arg(QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
 }
 
 void DocReportEcho::clickPlayVideo()
@@ -1360,7 +1387,9 @@ void DocReportEcho::handleError()
 
 void DocReportEcho::changedCurrentRowPlayList(const int row)
 {
-    Q_UNUSED(row)
+    if (row == -1)
+        return;
+
     player->stop();
 
     if (! m_playButton->isEnabled())
@@ -2281,24 +2310,7 @@ void DocReportEcho::slot_IdChanged()
       ** poate dura foarte mult din cauza cautarii prin tot
       ** hard discul a fisierelor video */
     if (globals::pathDirectoryVideo != nullptr) {
-        QDirIterator it(globals::pathDirectoryVideo + "/",
-                        QStringList()
-                        << QString::number(m_id) + "_0.mp4"
-                        << QString::number(m_id) + "_1.mp4"
-                        << QString::number(m_id) + "_2.mp4"
-                        << QString::number(m_id) + "_3.mp4"
-                        << QString::number(m_id) + "_4.mp4"
-                        << QString::number(m_id) + "_5.mp4"
-                        << QString::number(m_id) + "_6.mp4",
-                        QDir::NoFilter,
-                        QDirIterator::Subdirectories);
-        while (it.hasNext()) {
-            QFileInfo file(it.next());
-            QListWidgetItem *itm = new QListWidgetItem;
-            itm->setText(file.fileName());
-            list_play->addItem(itm);
-            setCountVideo(m_count_video + 1);
-        }
+        findVideoFiles();
     };
 
     //----------------------------------------------------------------------------
@@ -2399,6 +2411,8 @@ void DocReportEcho::slot_CountVideoChanged()
 #elif defined(Q_OS_WIN)
         ui->btnVideo->setText(tr("Video (ata\310\231ate %1)").arg(QString::number(m_count_video)));
 #endif
+    else
+        ui->btnVideo->setText(tr("Video"));
 }
 
 void DocReportEcho::updateTextDateMenstruation()
@@ -3335,6 +3349,7 @@ void DocReportEcho::constructionFormVideo()
     btn_remove_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     btn_remove_video->setStyleSheet(str_style_btn);
     connect(btn_remove_video, &QAbstractButton::clicked, this, &DocReportEcho::clickRemoveVideo);
+    connect(btn_remove_video, &QAbstractButton::clicked, this, &DocReportEcho::dataWasModified);
 
     gridLayout_groupBox_list_play->addWidget(btn_remove_video, 0, 1, 1, 1);
 
@@ -3349,6 +3364,7 @@ void DocReportEcho::constructionFormVideo()
     btn_add_video->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
     btn_add_video->setStyleSheet(str_style_btn);
     connect(btn_add_video, &QAbstractButton::clicked, this, &DocReportEcho::clickAddVideo);
+    connect(btn_add_video, &QAbstractButton::clicked, this, &DocReportEcho::dataWasModified);
 
     gridLayout_groupBox_list_play->addWidget(btn_add_video, 0, 0, 1, 1);
 
@@ -3429,6 +3445,26 @@ void DocReportEcho::constructionFormVideo()
     ui->frameVideo->setLayout(gridLayout);
 
     videoWidget->show();
+}
+
+void DocReportEcho::findVideoFiles()
+{
+    QDirIterator it(globals::pathDirectoryVideo + "/",
+                    QStringList()
+                    << QString::number(m_id) + "_0.mp4"
+                    << QString::number(m_id) + "_1.mp4"
+                    << QString::number(m_id) + "_2.mp4"
+                    << QString::number(m_id) + "_3.mp4"
+                    << QString::number(m_id) + "_4.mp4"
+                    << QString::number(m_id) + "_5.mp4"
+                    << QString::number(m_id) + "_6.mp4",
+                    QDir::NoFilter,
+                    QDirIterator::Subdirectories);
+    while (it.hasNext()) {
+        QFileInfo file(it.next());
+        list_play->addItem(file.fileName());
+        setCountVideo(m_count_video + 1);
+    }
 }
 
 // *******************************************************************
@@ -3981,7 +4017,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
         qry.addBindValue(m_idUser);
         qry.addBindValue(ui->concluzion->toPlainText());
         qry.addBindValue((ui->comment->toPlainText().isEmpty()) ? QVariant() : ui->comment->toPlainText());
-        qry.addBindValue((m_count_images == 0) ? m_count_images : 1);
+        qry.addBindValue((m_count_images == 0) ? QVariant() : 1);
         if (! qry.exec())
             details_error = tr("Eroarea inserarii datelor documentului nr.%1 din tabela 'reportEcho' - %2")
                                 .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
@@ -4758,7 +4794,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
         qry.bindValue(":id_users",       m_idUser);
         qry.bindValue(":concluzion",     ui->concluzion->toPlainText());
         qry.bindValue(":comment",        (ui->comment->toPlainText().isEmpty()) ? QVariant() : ui->comment->toPlainText());
-        qry.bindValue(":attachedImages", (m_count_images == 0) ? m_count_images : 1);
+        qry.bindValue(":attachedImages", (m_count_images == 0) ? QVariant() : 1);
         if (! qry.exec())
             details_error = tr("Eroarea de actualizare datelor documentului nr.%1 din tabela 'reportEcho' - %2")
                                 .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
