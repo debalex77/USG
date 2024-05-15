@@ -128,8 +128,11 @@ int main(int argc, char *argv[])
     qInfo(logInfo()) << "";
     qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT SQL DRIVERS =~=~=~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << QSqlDatabase::drivers();
+    qInfo(logInfo()) << "";
+
 
 #if defined(Q_OS_WIN)
+    qInfo(logInfo()) << "Load fonts 'Cantarell' for Windows.";
     QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
     QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Bold.ttf");
     QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Oblique.ttf");
@@ -141,6 +144,7 @@ int main(int argc, char *argv[])
 #endif
     //******************************************************************************************************************************
     // setam stilul a aplicatiei
+    qInfo(logInfo()) << "Load style applications.";
     QFile fileStyle(":/style.css");
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
@@ -149,16 +153,18 @@ int main(int argc, char *argv[])
 
     //******************************************************************************************************************************
     // alegem fisierul cu setari
+    qInfo(logInfo()) << "Open database selection.";
     DatabaseSelection _select;
     if (_select.exec() != QDialog::Accepted)
         return 0;
 
     //******************************************************************************************************************************
     // initializam setarile aplicatiei
+    qInfo(logInfo()) << "Load settings application.";
     AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
-    if (QString(argv[1]) == "" && QString(argv[1]) != "/debug") {
+    if (QString(argv[1]) == "44" && QString(argv[1]) != "/debug") {
         m_logFile.reset(new QFile(globals::pathLogAppSettings));
         if (m_logFile.data()->open(QFile::Append | QFile::Text)){
             qInstallMessageHandler(messageHandler);

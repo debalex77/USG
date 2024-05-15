@@ -1300,7 +1300,14 @@ void DocReportEcho::setUrl(const QUrl &url)
 {
     QDir dir;
     QString str = url.toString();
+#if defined(Q_OS_LINUX)
     str.remove(0,7); // eliminam -> file://
+#elif defined(Q_OS_WIN)
+    str.remove(0,8); // eliminam -> file:///
+    QFile file(str);
+    str = dir.toNativeSeparators(str);
+    qDebug() << str;
+#endif
     QFile::copy(str, dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4"));
 
     list_play->addItem(QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
@@ -3322,8 +3329,8 @@ void DocReportEcho::constructionFormVideo()
     //---------------------------------------------------------------------------
     // groupBox - play list
 
-    QGridLayout *gridLayout = new QGridLayout(this);
-    gridLayout->setObjectName(QString::fromUtf8("gridLayout"));
+    QGridLayout *gridLayout = new QGridLayout(ui->frameVideo);
+    gridLayout->setObjectName(QString::fromUtf8("gridLayout_video"));
 
     QSplitter *splitter = new QSplitter(this);
     splitter->setObjectName(QString::fromUtf8("splitter"));
@@ -3391,6 +3398,9 @@ void DocReportEcho::constructionFormVideo()
     gridLayout_player->setObjectName(QString::fromUtf8("gridLayout_player"));
 
     txt_title_player = new QLabel(groupBox_player);
+    // txt_title_player->setFrameShape(QFrame::Panel);
+    txt_title_player->setMaximumHeight(40);
+
     QFont font;
     font.setBold(true);
     txt_title_player->setFont(font);
@@ -3429,6 +3439,8 @@ void DocReportEcho::constructionFormVideo()
 
     m_errorLabel = new QLabel(groupBox_player);
     m_errorLabel->setObjectName(QString::fromUtf8("m_errorLabel"));
+    // m_errorLabel->setFrameShape(QFrame::Panel);
+    m_errorLabel->setMaximumHeight(40);
 
     gridLayout_player->addWidget(m_errorLabel, 3, 0, 1, 3);
 
@@ -3442,7 +3454,7 @@ void DocReportEcho::constructionFormVideo()
     connect(player, QOverload<QMediaPlayer::Error>::of(&QMediaPlayer::error),
             this, &DocReportEcho::handleError);
 
-    ui->frameVideo->setLayout(gridLayout);
+    // ui->frameVideo->setLayout(gridLayout);
 
     videoWidget->show();
 }
