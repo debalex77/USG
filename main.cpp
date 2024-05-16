@@ -164,7 +164,7 @@ int main(int argc, char *argv[])
     AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
-    if (QString(argv[1]) == "44" && QString(argv[1]) != "/debug") {
+    if (QString(argv[1]) == "" && QString(argv[1]) != "/debug") {
         m_logFile.reset(new QFile(globals::pathLogAppSettings));
         if (m_logFile.data()->open(QFile::Append | QFile::Text)){
             qInstallMessageHandler(messageHandler);

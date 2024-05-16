@@ -1,0 +1,49 @@
+2.0.8 (May 15th, 2024)
+  * fixed the bug when presenting the 'User Manual' (launching the program)
+  * added the function of presenting the log through (cmd) - 'USG /debug'
+  * document 'Ecographic Report' - optimized the code when attaching video files
+  * optimized the font in the list of documents (OS Windows)
+  * fixed the problem with the characters and symbols for the Romanian language (OS Windows)
+  * added images for metadatainfo (Linux package)
+  * fixed minor bugs
+
+2.0.7 (May 09th, 2024)
+  * fixed the bug when printing the pattern forms in the second and third trimester of gestation from the MySQL database
+  * view of version history (offline)
+  * added the new function of attaching video files to the 'Ultrasound Report' document
+  * added presentation of additional information about working with video files and description of reports
+  * in the user preferences added the table with the choice of presentation of additional informational messages (video files and description of reports)
+  * changed the data of the nuchal translucency evaluation normogram (source - fetalmedicine.org)
+  * added new obstetric normograms:
+    * doppler a.uterine (source - fetalmedicine.org)
+    * doppler a.umbilical (source - fetalmedicine.org)
+    
+2.0.6 (May 06th, 2024)
+  * added the catalog with obstetric normograms:
+  * nuchal translucency
+  * nasal bones
+  * amniotic fluid index
+  * in the document "Ultrasound report" it is possible to consult the normograms 
+  
+2.0.5 (April 29th, 2024)
+  * modified the document "Ultrasound report" - in the document, an ultrasound examination was added in the second and third trimesters of pregnancy
+  * added the second and third trimester of pregnancy template (the blank corresponds to the association of ultrasound doctors RM)
+  * fixed the bug when closing 'Reports' - crash application
+  * added additional information in the application tips assistant
+  * fixed minor bugs
+  
+2.0.4 (December 07th, 2023)
+  * checking for a new version when launching the application
+  * correcting the path towards font templates on the first launch (only for Windows OS)
+  * revised user settings/preferences window
+  * "userPreferences" table added to the database for storing user settings
+  * help assistant added with the option of launching it after the start of the application
+  
+2.0.3 (November 11th, 2023)
+  * added new report 'Structure of pathologies'
+  * optimized the presentation of report generator elements depending on the report type
+  * added license information
+  * added application bug reporting (online GitHub) in the main menu of the application
+  * final translation of the application interface into Russian
+  * added splash
+  * fixed minor bugs

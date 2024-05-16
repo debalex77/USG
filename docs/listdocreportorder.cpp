@@ -180,6 +180,7 @@ void ListDocReportOrder::slot_TypeDocChanged()
         ui->view_table->setHidden(true);
         setWindowTitle(tr("Lista documentelor: Raport ecografic"));
         setWindowIcon(QIcon(":/img/examenEcho.png"));
+        qInfo(logInfo()) << "Deschisa lista documentelor: Raport ecografic.";
     } else {
 #if defined(Q_OS_LINUX)
         setWindowTitle(tr("Lista documentelor: Comanda ecografică"));
@@ -189,6 +190,7 @@ void ListDocReportOrder::slot_TypeDocChanged()
         setWindowTitle(tr("Lista documentelor: Comanda ecografic\304\203"));
 #endif
         setWindowIcon(QIcon(":/img/orderEcho_x32.png"));
+        qInfo(logInfo()) << "Deschisa lista documentelor: Comanda ecografică.";
     }
     loadSizeSectionPeriodTable(true); // only period
     updateTableView();

@@ -1,0 +1,26 @@
+usg (2.0.8) UNRELEASED; urgency=medium
+
+  * fixed the bug when presenting the 'User Manual' (launching the program)
+  * added the function of presenting the log through (cmd) - 'USG /debug'
+  * document 'Ecographic Report' - optimized the code when attaching video files
+  * optimized the font in the list of documents (OS Windows)
+  * fixed the problem with the characters and symbols for Ro language (Windows)
+  * added images for metadatainfo (Linux package)
+  * fixed minor bugs
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Wed, 15 May 2024 20:45:00 +0300
+
+usg (2.0.7) UNRELEASED; urgency=medium
+
+  * fixed the bug when printing the pattern forms in the II and III trim. gestation (MySQL)
+  * view of version history (offline)
+  * added the new function of attaching video files
+  * added presentation of additional information about working with video files
+  * user preferences added the table informational messages (video files)
+  * changed the data of the NT evaluation normogram (source - fetalmedicine.org)
+  * added new obstetric normograms:
+    * doppler a.uterine (source - fetalmedicine.org)
+    * doppler a.umbilical (source - fetalmedicine.org)
+
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 09 May 2024 20:28:16 +0300

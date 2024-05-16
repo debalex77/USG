@@ -107,6 +107,7 @@ void DatabaseSelection::onConnectToBase()
     QDir file_conf;
     QString file_name = dirConfigPath + "/" + ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString() + ".conf";
     globals::pathAppSettings = file_conf.toNativeSeparators(file_name);
+    qInfo(logInfo()) << "Selection of connection to base - " + ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString();
     QDialog::accept();
 }
 

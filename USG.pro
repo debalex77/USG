@@ -13,7 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_QML_DEBUG_NO_WARNING
 CONFIG- = qml_debug
 
-VERSION                  = 2.0.7
+VERSION                  = 2.0.8
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
@@ -177,6 +177,10 @@ DISTFILES += \
     debian/postinst \
     debian/preinst \
     debian/prerm \
+    debian/usr/share/doc/usg/changelog \
+    debian/usr/share/doc/usg/changelog.Debian \
+    debian/usr/share/doc/usg/copyright \
+    debian/usr/share/metainfo/org.alovada.usg.metainfo.xml \
     version.txt
 
 RESOURCES += \

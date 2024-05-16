@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>usg</id>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>GPL-3.0-or-later</project_license>
+  <name>USG</name>
+  <summary>USG - Records of ultrasound examinations</summary>
+  <releases>
+    <release version="2.0.8" date="2024-05-15"/>
+    <release version="2.0.7" date="2024-05-09"/>
+    <release version="2.0.6" date="2024-05-06"/>
+    <release version="2.0.5" date="2024-04-29"/>
+    <release version="2.0.4" date="2023-12-07"/>
+    <release version="2.0.3" date="2023-11-11"/>
+    <release version="2.0.2" date="2023-11-09"/>
+    <release version="2.0.1" date="2023-10-29"/>
+  </releases>
+  <description>
+    <p>
+       The application for the records of patients who have passed ultrasound investigations, with the memory of contact
+details and identity documents.
+    </p>
+  </description>
+  <content_rating type="oars-1.1" />
+  <translation type="qt">usg</translation>
+  <screenshots>
+    <screenshot type="default">
+      <image>https://github.com/debalex77/USG/blob/master/img/icons_main/usg_preview.png</image>
+    </screenshot>
+    <screenshot>
+      <image>https://github.com/debalex77/USG/blob/master/img/icons_main/usg_docReport.png</image>
+    </screenshot>
+  </screenshots>    
+  <url type="homepage">https://github.com/debalex77/USG</url>  
+  <update_contact>https://github.com/debalex77/USG/issues/new</update_contact>
+</component>

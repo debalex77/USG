@@ -1,3 +1,12 @@
+## USG v2.0.8
+* fixat bug-ul la prezentarea <b><u>'User Manual'</u></b> (lansarea programei)
+* adaugată funcția de prezentare logării prin interpretorul liniei de comandă (cmd) - <b><u>'USG /debug'</u></b>
+* documentul <b><u>'Raport ecogrfic'</u></b> - optimizat codul la atașare fișierelor video
+* optimizat fontul în lista documentelor (OS Windows)
+* fixată problema cu caracterele și simbolurile pentru limba română (OS Windows)
+* adaugate imagini pentru metadate (package Linux)
+* fixate bug-urile minore
+
 ## USG v2.0.7
 * fixat bug-ul la printarea formelor de tipar în trimestrul II și III a sarcinei din baza de date MySQL
 * realizată vizualizarea istoriei versiunilor (offline)

@@ -483,9 +483,8 @@ void MainWindow::updateTimer()
             openDescriptionRealease();
 
         // prezentarea manualului online
-        if (globals::showUserManual){
+        if (globals::showUserManual)
             openUserManual();
-        }
 
         // prezentarea sfaturilor
         if (globals::showAsistantHelper)
@@ -694,7 +693,16 @@ void MainWindow::onReadyVersion()
         return;
 
     QString version_online = file.readAll().trimmed();
-    if (APPLICATION_VERSION != version_online){
+    version_online.replace(1,1,"");
+    version_online.replace(2,1,"");
+    const int num_version_online = version_online.toInt();
+
+    QString version_app = QString(APPLICATION_VERSION);
+    version_app.replace(1,1,"");
+    version_app.replace(2,1,"");
+    const int num_version_app = version_app.toInt();
+
+    if (APPLICATION_VERSION != version_online && num_version_app < num_version_online){
         textEdit_dockWidget->setHtml(tr("%1   %2: Există o versiune nouă a aplicației <b><u>%3</u></b>.")
                                          .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"), version_online));
         textEdit_dockWidget->setFixedHeight(70);

@@ -1273,11 +1273,21 @@ void DocReportEcho::clickRemoveVideo()
 {
     QDir dir;
     QMessageBox::StandardButton YesNo;
+
+#if defined(Q_OS_LINUX)
     YesNo = QMessageBox::question(this,
                                   tr("Eliminarea fișierului."),
                                   tr("Doriți să eliminați fișierul:<br><u>%1</u> ?")
                                   .arg(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text())),
                                   QMessageBox::Yes | QMessageBox::No);
+#elif defined(Q_OS_WIN)
+    YesNo = QMessageBox::question(this,
+                                  tr("Eliminarea fi\310\231ierului."),
+                                  tr("Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul:<br><u>%1</u> ?")
+                                  .arg(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text())),
+                                  QMessageBox::Yes | QMessageBox::No);
+#endif
+
     if (YesNo == QMessageBox::Yes){
         QFile file_video(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text()));
         if (file_video.remove()) {

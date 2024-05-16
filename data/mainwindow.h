@@ -36,7 +36,7 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.7"
+#define APPLICATION_VERSION     "2.0.8"
 
 //=============================================================
 
