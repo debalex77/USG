@@ -32,6 +32,9 @@ MainWindow::MainWindow(QWidget *parent)
     popUp = new PopUp(); // alocam memoria p/u vizualizarea notelor
     menu  = new QMenu(this);
 
+    txt_title_bar = new QLabel(ui->statusbar);
+    statusBar()->addWidget(txt_title_bar);
+
     initButton();
     initActions();
     updateTextBtn();
@@ -693,9 +696,10 @@ void MainWindow::onReadyVersion()
         return;
 
     QString version_online = file.readAll().trimmed();
-    version_online.replace(1,1,"");
-    version_online.replace(2,1,"");
-    const int num_version_online = version_online.toInt();
+    QString str_version_online = version_online;
+    str_version_online.replace(1,1,"");
+    str_version_online.replace(2,1,"");
+    const int num_version_online = str_version_online.toInt();
 
     QString version_app = QString(APPLICATION_VERSION);
     version_app.replace(1,1,"");
@@ -710,18 +714,18 @@ void MainWindow::onReadyVersion()
 
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea actualizării"),
-                                 tr("Doriți să deschideți pagina pentru a descarca versiunea nouă ?"),
+                                 tr("Doriți să descarcați versiunea nouă ?"),
                                  QMessageBox::Yes | QMessageBox::No, this);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
         messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
         messange_box.setButtonText(QMessageBox::No, tr("Nu"));
 #endif
-        if (messange_box.exec() == QMessageBox::Yes)
-            QDesktopServices::openUrl(QUrl("https://github.com/debalex77/USG/releases"));
+        if (messange_box.exec() == QMessageBox::Yes) {
+            downloadNewVersionApp(version_online);
+        }
+
     } else {
-        QLabel* txt = new QLabel(this);
-        txt->setText(tr("Folosiți cea mai recentă versiune \"%1\".").arg(APPLICATION_VERSION));
-        statusBar()->addWidget(txt);
+        txt_title_bar->setText(tr("Folosiți cea mai recentă versiune \"%1\".").arg(APPLICATION_VERSION));
     }
 
 #if defined(Q_OS_LINUX)
@@ -739,6 +743,45 @@ void MainWindow::onShowAsistantTip()
     asistant_tip->setAttribute(Qt::WA_DeleteOnClose);
     asistant_tip->setStep();
     asistant_tip->show();
+}
+
+void MainWindow::downloadNewVersionApp(const QString str_new_version)
+{
+#if defined(Q_OS_LINUX)
+    txt_title_bar->setText(tr("Se descarcă fișierul ... "));
+#elif defined(Q_OS_WIN)
+    txt_title_bar->setText(tr("Se descarc\304\203 fi\310\231ierul ... "));
+#endif
+
+    progress = new QProgressBar(ui->statusbar);
+    progress->setAlignment(Qt::AlignRight);
+    progress->setMaximumSize(120, 15);
+    ui->statusbar->addWidget(txt_title_bar);
+    ui->statusbar->addWidget(progress);
+
+    connect(&downloader, &Downloader::updateDownloadProgress, this, &MainWindow::onUpdateProgress);
+    connect(&downloader, &Downloader::finishedDownload, this, &MainWindow::onNewAppFinishedDownload);
+
+    QString str_url = GITHUB_URL_DOWNLOAD  "/v" + str_new_version + "/USG_v" + str_new_version + "_Linux_amd64.deb";
+    downloader.get(QStandardPaths::writableLocation(QStandardPaths::DownloadLocation), QUrl(str_url));
+}
+
+void MainWindow::onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal)
+{
+    progress->setMaximum(bytesTotal);
+    progress->setValue(bytesReceived);
+}
+
+void MainWindow::onNewAppFinishedDownload()
+{
+    delete progress;
+
+#if defined(Q_OS_LINUX)
+    txt_title_bar->setText(tr("Fișierul este descărcat cu succes."));
+#elif defined(Q_OS_WIN)
+    txt_title_bar->setText(tr("Fi\310\231ierul este desc\304\203rcat cu succes."));
+#endif
+
 }
 
 // **********************************************************************************

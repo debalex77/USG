@@ -585,7 +585,7 @@ void ListDocReportOrder::onClickBtnReport()
                 if (_cod == "1027" || _cod == "1027.1" || _cod == "1028" || _cod == "1028.1" || _cod == "1050.66" || _cod == "1050.67" ||
                     _cod == "1027." || _cod == "1027.1." || _cod == "1028." || _cod == "1028.1." || _cod == "1050.66." || _cod == "1050.67.")
                     dialogInvestig->set_t_gestation0(true);
-                if (_cod == "1028.4.1" || _cod == "1028.4.2" ||
+                if (_cod == "1027.4.1" || _cod == "1027.5.1" || _cod == "1028.4.1" || _cod == "1028.4.2" ||
                     _cod == "1028.4.1." || _cod == "1028.4.2.")
                     dialogInvestig->set_t_gestation1(true);
                 if (_cod == "1029.1.1" || _cod == "1029.1.2" || _cod == "1029.2" || _cod == "1029.21" || _cod == "1029.3" || _cod == "1029.31" ||

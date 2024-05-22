@@ -45,6 +45,7 @@ SOURCES += \
     data/customdialoginvestig.cpp \
     data/database.cpp \
     data/databaseselection.cpp \
+    data/downloader.cpp \
     data/downloaderversion.cpp \
     data/globals.cpp \
     data/initlaunch.cpp \
@@ -91,6 +92,7 @@ HEADERS += \
     data/customdialoginvestig.h \
     data/database.h \
     data/databaseselection.h \
+    data/downloader.h \
     data/downloaderversion.h \
     data/globals.h \
     data/initlaunch.h \

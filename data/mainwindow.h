@@ -31,13 +31,14 @@
 #include <data/reports.h>
 #include <data/updatereleasesapp.h>
 #include "data/downloaderversion.h"
+#include "data/downloader.h"
 
 //=============================================================
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
 #define APPLICATION_VERSION     "2.0.8"
-
+#define GITHUB_URL_DOWNLOAD     "https://github.com/debalex77/USG/releases/download"
 //=============================================================
 
 QT_BEGIN_NAMESPACE
@@ -89,6 +90,10 @@ private slots:
     void onReadyVersion();
     void onShowAsistantTip();
 
+    void downloadNewVersionApp(const QString str_new_version);
+    void onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal);
+    void onNewAppFinishedDownload();
+
 private:
     Ui::MainWindow *ui;
 
@@ -137,8 +142,11 @@ private:
     UpdateReleasesApp        *update_app;
     LimeReport::ReportEngine *m_report;
     DownloaderVersion        *downloader_version;
+    Downloader               downloader;
     AsistantTipApp           *asistant_tip;
     InfoWindow               *info_window;
+
+    QLabel *txt_title_bar = nullptr;
 
 protected:
     void closeEvent(QCloseEvent *event);
