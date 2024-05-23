@@ -13,6 +13,8 @@
 #define release_2_0_5 "2.0.5"
 #define release_2_0_6 "2.0.6"
 #define release_2_0_7 "2.0.7"
+#define release_2_0_8 "2.0.8"
+#define release_2_0_9 "2.0.9"
 
 class UpdateReleasesApp : public QObject
 {
@@ -22,6 +24,10 @@ public:
     ~UpdateReleasesApp();
 
     bool execUpdateCurrentRelease(const QString current_release);
+
+private:
+    int converVersionStringToNumber(const QString current_release) const;
+    bool updateRelease_2_0_9();
 
 private:
     DataBase *db;

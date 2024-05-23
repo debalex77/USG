@@ -23,7 +23,7 @@ QString mySQLuser          = nullptr;
 QString mySQLpasswdUser    = nullptr;
 
 QString fb_host          = nullptr;  // date de conectarea Firebird
-QString fb_nameBase     = nullptr;
+QString fb_nameBase      = nullptr;
 QString fb_port          = nullptr;
 QString fb_optionConnect = nullptr;
 QString fb_user          = nullptr;
@@ -46,12 +46,13 @@ QString nameUserApp = nullptr;
 bool memoryUser;
 
 bool showQuestionCloseApp = false;
-bool order_splitFullName = false;
+bool order_splitFullName  = false;
 int updateIntervalListDoc = 0;
 bool showDesignerMenuPrint = false;
-bool checkNewVersionApp = false;
-bool databasesArchiving = false;
-bool showAsistantHelper = false;
+bool checkNewVersionApp    = false;
+bool databasesArchiving    = false;
+bool showAsistantHelper    = false;
+bool showDocumentsInSeparatWindow = false;
 
 int numSavedFilesLog = -1;
 

@@ -14,6 +14,9 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
 
     setTitleDoc(); // setam titlu documentului
 
+    if (globals::showDocumentsInSeparatWindow)
+        setWindowFlag(Qt::Window);
+
     db            = new DataBase(this);
     popUp         = new PopUp(this);
     timer         = new QTimer(this); // alocam memoria

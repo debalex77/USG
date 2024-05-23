@@ -47,6 +47,7 @@ extern bool showDesignerMenuPrint;
 extern bool checkNewVersionApp;
 extern bool databasesArchiving;
 extern bool showAsistantHelper;
+extern bool showDocumentsInSeparatWindow;
 
 extern int numSavedFilesLog; // fisiere de logare pastrate
 

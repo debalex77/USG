@@ -745,6 +745,9 @@ void MainWindow::onShowAsistantTip()
     asistant_tip->show();
 }
 
+// **********************************************************************************
+// --- descarcarea fisierului cu aplicatia noua si prezentarea progress bar
+
 void MainWindow::downloadNewVersionApp(const QString str_new_version)
 {
 #if defined(Q_OS_LINUX)

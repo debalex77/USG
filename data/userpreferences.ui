@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>798</width>
-    <height>508</height>
+    <height>517</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -247,6 +247,7 @@
              </property>
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -258,6 +259,7 @@
                <widget class="QLabel" name="image_logo">
                 <property name="font">
                  <font>
+                  <weight>75</weight>
                   <bold>true</bold>
                  </font>
                 </property>
@@ -313,6 +315,7 @@
             <widget class="QGroupBox" name="groupBox_3">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -330,6 +333,7 @@
                 </property>
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -342,6 +346,7 @@
                <widget class="QCheckBox" name="check_databasesArchiving">
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -357,6 +362,7 @@
             <widget class="QGroupBox" name="groupBox_2">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -374,8 +380,12 @@
                 </property>
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
+                </property>
+                <property name="toolTip">
+                 <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La lansarea aplicației se verifică automat versiunea nouă a aplicației. În caz dacă este, se informează utilizatorul.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
                 </property>
                 <property name="text">
                  <string>Verificarea automată a versiunei noi a aplicației</string>
@@ -386,6 +396,7 @@
                <widget class="QCheckBox" name="check_showUserManual">
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -398,6 +409,7 @@
                <widget class="QCheckBox" name="showAsistantHelper">
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -426,49 +438,11 @@
          </widget>
          <widget class="QWidget" name="pageDocumentSettings">
           <layout class="QGridLayout" name="gridLayout_9">
-           <item row="4" column="0">
-            <spacer name="verticalSpacer_3">
-             <property name="orientation">
-              <enum>Qt::Vertical</enum>
-             </property>
-             <property name="sizeHint" stdset="0">
-              <size>
-               <width>20</width>
-               <height>197</height>
-              </size>
-             </property>
-            </spacer>
-           </item>
-           <item row="2" column="0">
-            <widget class="QCheckBox" name="check_showDesignerMenuPrint">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>meniu de printare: Preview + Designer (LimeReport)</string>
-             </property>
-            </widget>
-           </item>
-           <item row="1" column="0">
-            <widget class="QCheckBox" name="check_splitFullNamePatient">
-             <property name="sizePolicy">
-              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-               <horstretch>0</horstretch>
-               <verstretch>0</verstretch>
-              </sizepolicy>
-             </property>
-             <property name="text">
-              <string>prezentarea descifrării NPP pacientului</string>
-             </property>
-            </widget>
-           </item>
            <item row="0" column="0">
             <widget class="QGroupBox" name="groupBox_4">
              <property name="font">
               <font>
+               <weight>75</weight>
                <bold>true</bold>
               </font>
              </property>
@@ -480,6 +454,7 @@
                <widget class="QLabel" name="label_6">
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
@@ -501,12 +476,68 @@
                 </property>
                 <property name="font">
                  <font>
+                  <weight>50</weight>
                   <bold>false</bold>
                  </font>
                 </property>
                </widget>
               </item>
              </layout>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QCheckBox" name="check_splitFullNamePatient">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;În timpul validării datelor pacientului se efectuiază divizarea &lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;numelui&lt;/span&gt; și  &lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;prenumelui&lt;/span&gt; pacientului cu prezentarea fereastrei informative.&lt;/p&gt;&lt;p&gt;Este valabil numai pentru documentul &lt;span style=&quot; font-weight:600; text-decoration: underline;&quot;&gt;”Comanda ecografică”&lt;/span&gt;.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>prezentarea descifrării NPP pacientului</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <spacer name="verticalSpacer_3">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>197</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="0">
+            <widget class="QCheckBox" name="check_showDesignerMenuPrint">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;La butonul de printare apare un submeniu cu lansarea &lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;Designer (LimeReport)&lt;/span&gt; sau &lt;span style=&quot; font-style:italic; text-decoration: underline;&quot;&gt;Preview&lt;/span&gt; a documentului.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>meniu de printare: Preview + Designer (LimeReport)</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QCheckBox" name="showDocumentsInSeparatWindow">
+             <property name="toolTip">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Dacă este bifată, documentele se deschid ca fereastra autonomă cu butoanele de minimizare, maximizarea și închidere a ferestrei. În bara de sarcini apare fereastra aplicației și aparte ferestra documentului.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="text">
+              <string>deschiderea documentelor în fereastra aparte</string>
+             </property>
             </widget>
            </item>
           </layout>

@@ -22,6 +22,9 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
 
     setWindowTitle(tr("Raport ecografic %1").arg("[*]"));
 
+    if (globals::showDocumentsInSeparatWindow)
+        setWindowFlag(Qt::Window);
+
     // ******************************************************************
     db        = new DataBase(this);
     popUp     = new PopUp(this);

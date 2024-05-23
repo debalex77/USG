@@ -12,9 +12,6 @@ UpdateReleasesApp::~UpdateReleasesApp()
 
 bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
 {
-    // QString str_current_release = current_release;
-    // int num_current_release = str_current_release.replace(".", "").toInt();
-
     if (current_release == release_1_1_3){
 
         QSqlQuery qry;
@@ -470,6 +467,84 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
             db->loadNormogramsFromXml();
         else
             qInfo(logInfo()) << tr("Actualizarea BD '2.0.7' nereusita !!! Eliminarea datelor din tabela 'normograms' este nereusita.");
+    }
+
+    if (current_release == release_2_0_9) {
+        if (! updateRelease_2_0_9())
+            return false;
+    }
+
+    return true;
+}
+
+int UpdateReleasesApp::converVersionStringToNumber(const QString current_release) const
+{
+    int num_version = 0;
+    QString str_version = current_release;
+    str_version.replace(1,1,"");
+    str_version.replace(2,1,"");
+    num_version = str_version.toInt();
+    return num_version;
+}
+
+bool UpdateReleasesApp::updateRelease_2_0_9()
+{
+    QSqlQuery qry;
+
+    // crearea tabelei temporare
+    qry.prepare("CREATE TABLE sqlitestudio_temp_table0 AS SELECT * FROM userPreferences;");
+    if (! qry.exec()){
+        qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_2_0_9 "' (crearea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+        return false;
+    }
+
+    // eliminarea tabelei vechi
+    qry.prepare("DROP TABLE userPreferences;");
+    if (! qry.exec()){
+        qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_2_0_9 "' (eliminarea tabelei 'userPreferences'): ") + qry.lastError().text();
+        return false;
+    }
+
+    // crearea tabelei noi cu modificari
+    db->createTableUserPreferences();
+
+    // inserarea datelor
+    qry.prepare("INSERT INTO userPreferences ("
+                " id,"
+                " id_users,"
+                " versionApp,"
+                " showQuestionCloseApp,"
+                " showUserManual,"
+                " showHistoryVersion,"
+                " order_splitFullName,"
+                " updateListDoc,"
+                " showDesignerMenuPrint,"
+                " checkNewVersionApp,"
+                " databasesArchiving,"
+                " showAsistantHelper ) "
+                "SELECT "
+                " id,"
+                " id_users,"
+                " versionApp,"
+                " showQuestionCloseApp,"
+                " showUserManual,"
+                " showHistoryVersion,"
+                " order_splitFullName,"
+                " updateListDoc,"
+                " showDesignerMenuPrint,"
+                " checkNewVersionApp,"
+                " databasesArchiving,"
+                " showAsistantHelper FROM sqlitestudio_temp_table0;");
+    if (! qry.exec()){
+        qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_2_0_9 "' (inserarea datelor din tabela 'sqlitestudio_temp_table0' in tabela 'userPreferences'): ") + qry.lastError().text();
+        return false;
+    }
+
+    // eliminarea tabelei temporare
+    qry.prepare("DROP TABLE sqlitestudio_temp_table0;");
+    if (! qry.exec()){
+        qCritical(logCritical()) << tr("Eroare de actualizare a relizului '" release_2_0_9 "' (eliminarea tabelei 'sqlitestudio_temp_table0'): ") + qry.lastError().text();
+        return false;
     }
 
     return true;

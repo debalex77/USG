@@ -9,6 +9,9 @@ DocPricing::DocPricing(QWidget *parent) :
 
     setTitleDoc(); // setam titlu documentului
 
+    if (globals::showDocumentsInSeparatWindow)
+        setWindowFlag(Qt::Window);
+
     db    = new DataBase(this); // conectarea la BD
     menu  = new QMenu(this);    // meniu contextual
     popUp = new PopUp(this);    // vizualizarea mesajelor informationale

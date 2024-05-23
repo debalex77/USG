@@ -3640,6 +3640,7 @@ bool DataBase::createTableUserPreferences()
                     "checkNewVersionApp    BOOLEAN,"
                     "databasesArchiving    BOOLEAN,"
                     "showAsistantHelper    BOOLEAN,"
+                    "showDocumentsInSeparatWindow BOOLEAN,"
                     "KEY `userPreferences_users_id_idx` (`id_users`),"
                     "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
@@ -3656,7 +3657,8 @@ bool DataBase::createTableUserPreferences()
                     "showDesignerMenuPrint INT,"
                     "checkNewVersionApp    INT,"
                     "databasesArchiving    INT,"
-                    "showAsistantHelper    INT"
+                    "showAsistantHelper    INT,"
+                    "showDocumentsInSeparatWindow INT"
                     ");");
     else
         return false;
@@ -3757,19 +3759,21 @@ void DataBase::updateVariableFromTableSettingsUser()
                 "showDesignerMenuPrint,"
                 "checkNewVersionApp,"
                 "databasesArchiving,"
-                "showAsistantHelper FROM userPreferences WHERE id_users = :id_users;");
+                "showAsistantHelper,"
+                "showDocumentsInSeparatWindow FROM userPreferences WHERE id_users = :id_users;");
     qry.bindValue(":id_users", globals::idUserApp);
     if (qry.exec() && qry.next()){
         QSqlRecord rec = qry.record();
-        globals::showQuestionCloseApp  = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
-        globals::showUserManual        = qry.value(rec.indexOf("showUserManual")).toBool();
-        globals::showHistoryVersion    = qry.value(rec.indexOf("showHistoryVersion")).toBool();
-        globals::order_splitFullName   = qry.value(rec.indexOf("order_splitFullName")).toBool();
-        globals::updateIntervalListDoc = qry.value(rec.indexOf("updateListDoc")).toInt();
-        globals::showDesignerMenuPrint = qry.value(rec.indexOf("showDesignerMenuPrint")).toBool();
-        globals::checkNewVersionApp    = qry.value(rec.indexOf("checkNewVersionApp")).toBool();
-        globals::databasesArchiving    = qry.value(rec.indexOf("databasesArchiving")).toBool();
-        globals::showAsistantHelper    = qry.value(rec.indexOf("showAsistantHelper")).toBool();
+        globals::showQuestionCloseApp         = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
+        globals::showUserManual               = qry.value(rec.indexOf("showUserManual")).toBool();
+        globals::showHistoryVersion           = qry.value(rec.indexOf("showHistoryVersion")).toBool();
+        globals::order_splitFullName          = qry.value(rec.indexOf("order_splitFullName")).toBool();
+        globals::updateIntervalListDoc        = qry.value(rec.indexOf("updateListDoc")).toInt();
+        globals::showDesignerMenuPrint        = qry.value(rec.indexOf("showDesignerMenuPrint")).toBool();
+        globals::checkNewVersionApp           = qry.value(rec.indexOf("checkNewVersionApp")).toBool();
+        globals::databasesArchiving           = qry.value(rec.indexOf("databasesArchiving")).toBool();
+        globals::showAsistantHelper           = qry.value(rec.indexOf("showAsistantHelper")).toBool();
+        globals::showDocumentsInSeparatWindow = qry.value(rec.indexOf("showDocumentsInSeparatWindow")).toBool();
     }
 }
 

@@ -140,6 +140,7 @@ void UserPreferences::slot_IdChanged()
             ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
             ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
             ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
+            ui->showDocumentsInSeparatWindow->setChecked(items.constFind("showDocumentsInSeparatWindow").value().toInt());
             ui->check_splitFullNamePatient->setChecked(items.constFind("order_splitFullName").value().toInt());
             ui->check_newVersion->setChecked(items.constFind("checkNewVersionApp").value().toInt());
             ui->check_databasesArchiving->setChecked(items.constFind("databasesArchiving").value().toInt());
@@ -607,6 +608,7 @@ void UserPreferences::connectionCheckBox()
     connect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    connect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
 
@@ -619,6 +621,7 @@ void UserPreferences::disconnectionCheckBox()
     disconnect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    disconnect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
 
@@ -714,7 +717,8 @@ bool UserPreferences::insertDataIntoTable()
                 "showDesignerMenuPrint,"
                 "checkNewVersionApp,"
                 "databasesArchiving,"
-                "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+                "showAsistantHelper,"
+                "showDocumentsInSeparatWindow) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
     qry.addBindValue(m_Id);
     qry.addBindValue(m_Id);
     qry.addBindValue(VER);
@@ -727,6 +731,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? true : false));
         qry.addBindValue((ui->check_newVersion->isChecked() ? true : false));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? true : false));
+        qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
     } else if (globals::thisSqlite){
         qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_showUserManual->isChecked() ? 1 : 0));
@@ -736,6 +741,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_newVersion->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? 1 : 0));
+        qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
@@ -790,41 +796,44 @@ bool UserPreferences::updateDataIntoTable()
     // actualizarea datelor in tabela 'userPreferences'
 
     qry.prepare("UPDATE userPreferences SET "
-                "id_users              = :id_users,"
-                "versionApp            = :versionApp,"
-                "showQuestionCloseApp  = :showQuestionCloseApp,"
-                "showUserManual        = :showUserManual,"
-                "showHistoryVersion    = :showHistoryVersion,"
-                "order_splitFullName   = :order_splitFullName,"
-                "updateListDoc         = :updateListDoc,"
-                "showDesignerMenuPrint = :showDesignerMenuPrint,"
-                "checkNewVersionApp    = :checkNewVersionApp,"
-                "databasesArchiving    = :databasesArchiving,"
-                "showAsistantHelper    = :showAsistantHelper "
+                "id_users                     = :id_users,"
+                "versionApp                   = :versionApp,"
+                "showQuestionCloseApp         = :showQuestionCloseApp,"
+                "showUserManual               = :showUserManual,"
+                "showHistoryVersion           = :showHistoryVersion,"
+                "order_splitFullName          = :order_splitFullName,"
+                "updateListDoc                = :updateListDoc,"
+                "showDesignerMenuPrint        = :showDesignerMenuPrint,"
+                "checkNewVersionApp           = :checkNewVersionApp,"
+                "databasesArchiving           = :databasesArchiving,"
+                "showAsistantHelper           = :showAsistantHelper,"
+                "showDocumentsInSeparatWindow = :showDocumentsInSeparatWindow "
                 "WHERE id = :id;");
     qry.bindValue(":id",                    m_Id);
     qry.bindValue(":id_users",              m_Id);
     qry.bindValue(":versionApp",            VER);
     if(globals::thisMySQL){
-        qry.bindValue(":showQuestionCloseApp",  (ui->check_showQuestionClosingApp->isChecked() ? true : false));
-        qry.bindValue(":showUserManual",        (ui->check_showUserManual->isChecked() ? true : false));
-        qry.bindValue(":showHistoryVersion",    0);
-        qry.bindValue(":order_splitFullName",   (ui->check_splitFullNamePatient->isChecked() ? true : false));
-        qry.bindValue(":updateListDoc",         ui->updateListDoc->value());
-        qry.bindValue(":showDesignerMenuPrint", (ui->check_showDesignerMenuPrint->isChecked() ? true : false));
-        qry.bindValue(":checkNewVersionApp",    (ui->check_newVersion->isChecked() ? true : false));
-        qry.bindValue(":databasesArchiving",    (ui->check_databasesArchiving->isChecked() ? true : false));
-        qry.bindValue(":showAsistantHelper",    (ui->showAsistantHelper->isChecked() ? true : false));
+        qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? true : false));
+        qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? true : false));
+        qry.bindValue(":showHistoryVersion",           0);
+        qry.bindValue(":order_splitFullName",          (ui->check_splitFullNamePatient->isChecked() ? true : false));
+        qry.bindValue(":updateListDoc",                ui->updateListDoc->value());
+        qry.bindValue(":showDesignerMenuPrint",        (ui->check_showDesignerMenuPrint->isChecked() ? true : false));
+        qry.bindValue(":checkNewVersionApp",           (ui->check_newVersion->isChecked() ? true : false));
+        qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? true : false));
+        qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? true : false));
+        qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
     } else if(globals::thisSqlite){
-        qry.bindValue(":showQuestionCloseApp",  (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
-        qry.bindValue(":showUserManual",        (ui->check_showUserManual->isChecked() ? 1 : 0));
-        qry.bindValue(":showHistoryVersion",    0);
-        qry.bindValue(":order_splitFullName",   (ui->check_splitFullNamePatient->isChecked() ? 1 : 0));
-        qry.bindValue(":updateListDoc",         ui->updateListDoc->value());
-        qry.bindValue(":showDesignerMenuPrint", (ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
-        qry.bindValue(":checkNewVersionApp",    (ui->check_newVersion->isChecked() ? 1 : 0));
-        qry.bindValue(":databasesArchiving",    (ui->check_databasesArchiving->isChecked() ? 1 : 0));
-        qry.bindValue(":showAsistantHelper",    (ui->showAsistantHelper->isChecked() ? 1 : 0));
+        qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
+        qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? 1 : 0));
+        qry.bindValue(":showHistoryVersion",           0);
+        qry.bindValue(":order_splitFullName",          (ui->check_splitFullNamePatient->isChecked() ? 1 : 0));
+        qry.bindValue(":updateListDoc",                ui->updateListDoc->value());
+        qry.bindValue(":showDesignerMenuPrint",        (ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
+        qry.bindValue(":checkNewVersionApp",           (ui->check_newVersion->isChecked() ? 1 : 0));
+        qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? 1 : 0));
+        qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? 1 : 0));
+        qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
