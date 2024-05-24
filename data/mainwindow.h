@@ -14,6 +14,7 @@
 #include <QMenu>
 #include <QTimer>
 #include <QProgressBar>
+#include <QSystemTrayIcon>
 
 #include "catalogs/catforsqltablemodel.h"
 #include "catalogs/asistanttipapp.h"
@@ -94,6 +95,9 @@ private slots:
     void onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal);
     void onNewAppFinishedDownload();
 
+    void initMinimizeAppToTray();
+    void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
 private:
     Ui::MainWindow *ui;
 
@@ -147,6 +151,8 @@ private:
     InfoWindow               *info_window;
 
     QLabel *txt_title_bar = nullptr;
+
+    QSystemTrayIcon *trayIcon;
 
 protected:
     void closeEvent(QCloseEvent *event);

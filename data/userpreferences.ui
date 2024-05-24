@@ -323,7 +323,7 @@
               <string>Închiderea aplicației</string>
              </property>
              <layout class="QGridLayout" name="gridLayout_7">
-              <item row="0" column="0">
+              <item row="1" column="0">
                <widget class="QCheckBox" name="check_showQuestionClosingApp">
                 <property name="sizePolicy">
                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -342,7 +342,7 @@
                 </property>
                </widget>
               </item>
-              <item row="1" column="0">
+              <item row="2" column="0">
                <widget class="QCheckBox" name="check_databasesArchiving">
                 <property name="font">
                  <font>
@@ -352,6 +352,19 @@
                 </property>
                 <property name="text">
                  <string>Arhivarea automată a bazelor de date (numai pentru .sqlite)</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="0">
+               <widget class="QCheckBox" name="minimizeAppToTray">
+                <property name="font">
+                 <font>
+                  <weight>50</weight>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="text">
+                 <string>Minimizarea în tray la închiderea aplicației</string>
                 </property>
                </widget>
               </item>

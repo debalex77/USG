@@ -13,6 +13,9 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME); // denumirea organizatiei si aplicatiei
 
+    if (globals::minimizeAppToTray)
+        initMinimizeAppToTray();
+
     mdiArea = new QMdiArea(this);                      // alocam memoria p/u MdiArea
     mdiArea->setViewMode(QMdiArea::TabbedView);        // proprietatea de prezentarea sub-windows
     mdiArea->setTabsClosable(true);                    // proprietatea de inchidere a sub-windows
@@ -788,33 +791,107 @@ void MainWindow::onNewAppFinishedDownload()
 }
 
 // **********************************************************************************
+// --- minimizarea in tray
+
+void MainWindow::initMinimizeAppToTray()
+{
+    /* initierea iconitei in tray */
+    trayIcon = new QSystemTrayIcon(this);
+    trayIcon->setIcon(QIcon(":/img/eco_512x512.png"));
+    trayIcon->setToolTip(APPLICATION_NAME + " v" + APPLICATION_VERSION);
+
+    /* meniu */
+    QMenu * menu = new QMenu(this);
+#if defined(Q_OS_WIN)
+    QAction * viewWindow = new QAction(tr("Maximiza\310\233i fereastra"), this);
+    QAction * quitAction = new QAction(tr("Ie\310\231ire"), this);
+#elif defined(Q_OS_LINUX)
+    QAction * viewWindow = new QAction(tr("Maximizați fereastra"), this);
+    QAction * quitAction = new QAction(tr("Ieșire"), this);
+#endif
+
+    connect(viewWindow, &QAction::triggered, this, &MainWindow::show);
+    connect(quitAction, &QAction::triggered, this, &MainWindow::close);
+
+    menu->addAction(viewWindow);
+    menu->addAction(quitAction);
+
+    /* setam meniu contextual */
+    trayIcon->setContextMenu(menu);
+    trayIcon->show();
+
+    // connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
+    //         this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
+    connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
+}
+
+void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
+{
+    switch (reason){
+    case QSystemTrayIcon::Trigger:
+        if(globals::minimizeAppToTray){
+            if(!this->isVisible()){
+                this->show();
+            } else {
+                this->hide();
+            }
+        }
+        break;
+    default:
+        break;
+    }
+}
+
+// **********************************************************************************
 // --- evenimentele formei
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (! globals::showQuestionCloseApp){
-        closeDatabases();
-        qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals::nameUserApp);
-        event->accept();
-        return;
-    }
+    if (globals::minimizeAppToTray && this->isVisible()) {
 
-    QMessageBox messange_box(QMessageBox::Question, tr("Finisarea lucrului"), tr("Doriți să inchideți aplicația ?"),
-                                                                    QMessageBox::Yes | QMessageBox::No, this);
+        event->ignore();
+        this->hide();
+        QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
+
+#if defined(Q_OS_WIN)
+        trayIcon->showMessage(APPLICATION_NAME,
+                              tr("Aplica\310\233ia este minimizat\304\203 în tray. Pentru a maximiza fereastra aplica\310\233iei, face\310\233i clic pe pictograma aplica\310\233iei din tray."),
+                              icon,
+                              2000);
+#elif defined(Q_OS_LINUX)
+        trayIcon->showMessage(APPLICATION_NAME,
+                              tr("Aplicația este minimizată în tray. Pentru a maximiza fereastra aplicației, faceți clic pe pictograma aplicației din tray."),
+                              icon,
+                              2000);
+#endif
+
+    } else {
+
+        if (! globals::showQuestionCloseApp){
+            closeDatabases();
+            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.").arg(globals::nameUserApp);
+            event->accept();
+            return;
+        }
+
+        QMessageBox messange_box(QMessageBox::Question, tr("Finisarea lucrului"), tr("Doriți să inchideți aplicația ?"),
+                                 QMessageBox::Yes | QMessageBox::No, this);
 #if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-    messange_box.setButtonText(QMessageBox::No, tr("Nu"));
+        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
+        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
 //#else
 //    messange_box.addButton(tr("Da"), QMessageBox::Yes);
 //    messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
 #endif
-    if (messange_box.exec() == QMessageBox::Yes){
-        closeDatabases();
-         qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals::nameUserApp);
-         event->accept();
-     } else {
-         event->ignore();
-     }
+        if (messange_box.exec() == QMessageBox::Yes){
+            closeDatabases();
+            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals::nameUserApp);
+            event->accept();
+        } else {
+            event->ignore();
+        }
+
+    }
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)

@@ -137,6 +137,7 @@ void UserPreferences::slot_IdChanged()
     items.clear();
     if (db->getObjectDataByMainId("userPreferences", "id_users", m_Id, items)){
         if (items.count() > 0){
+            ui->minimizeAppToTray->setChecked(items.constFind("minimizeAppToTray").value().toInt());
             ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
             ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
             ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
@@ -607,6 +608,7 @@ void UserPreferences::connectionCheckBox()
     connect(ui->check_showUserManual, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    connect(ui->minimizeAppToTray, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
@@ -620,6 +622,7 @@ void UserPreferences::disconnectionCheckBox()
     disconnect(ui->check_showUserManual, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    disconnect(ui->minimizeAppToTray, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     disconnect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
@@ -718,7 +721,8 @@ bool UserPreferences::insertDataIntoTable()
                 "checkNewVersionApp,"
                 "databasesArchiving,"
                 "showAsistantHelper,"
-                "showDocumentsInSeparatWindow) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                "showDocumentsInSeparatWindow,"
+                "minimizeAppToTray) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
     qry.addBindValue(m_Id);
     qry.addBindValue(m_Id);
     qry.addBindValue(VER);
@@ -732,6 +736,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_newVersion->isChecked() ? true : false));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? true : false));
         qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
+        qry.addBindValue((ui->minimizeAppToTray->isChecked() ? true : false));
     } else if (globals::thisSqlite){
         qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_showUserManual->isChecked() ? 1 : 0));
@@ -742,6 +747,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_newVersion->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? 1 : 0));
         qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
+        qry.addBindValue((ui->minimizeAppToTray->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();
@@ -807,7 +813,8 @@ bool UserPreferences::updateDataIntoTable()
                 "checkNewVersionApp           = :checkNewVersionApp,"
                 "databasesArchiving           = :databasesArchiving,"
                 "showAsistantHelper           = :showAsistantHelper,"
-                "showDocumentsInSeparatWindow = :showDocumentsInSeparatWindow "
+                "showDocumentsInSeparatWindow = :showDocumentsInSeparatWindow,"
+                "minimizeAppToTray            = :minimizeAppToTray "
                 "WHERE id = :id;");
     qry.bindValue(":id",                    m_Id);
     qry.bindValue(":id_users",              m_Id);
@@ -823,6 +830,7 @@ bool UserPreferences::updateDataIntoTable()
         qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? true : false));
         qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? true : false));
         qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
+        qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? true : false));
     } else if(globals::thisSqlite){
         qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? 1 : 0));
@@ -834,6 +842,7 @@ bool UserPreferences::updateDataIntoTable()
         qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? 1 : 0));
         qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? 1 : 0));
         qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
+        qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
         db->getDatabase().rollback();

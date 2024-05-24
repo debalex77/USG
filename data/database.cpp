@@ -3760,7 +3760,8 @@ void DataBase::updateVariableFromTableSettingsUser()
                 "checkNewVersionApp,"
                 "databasesArchiving,"
                 "showAsistantHelper,"
-                "showDocumentsInSeparatWindow FROM userPreferences WHERE id_users = :id_users;");
+                "showDocumentsInSeparatWindow,"
+                "minimizeAppToTray FROM userPreferences WHERE id_users = :id_users;");
     qry.bindValue(":id_users", globals::idUserApp);
     if (qry.exec() && qry.next()){
         QSqlRecord rec = qry.record();
@@ -3774,6 +3775,7 @@ void DataBase::updateVariableFromTableSettingsUser()
         globals::databasesArchiving           = qry.value(rec.indexOf("databasesArchiving")).toBool();
         globals::showAsistantHelper           = qry.value(rec.indexOf("showAsistantHelper")).toBool();
         globals::showDocumentsInSeparatWindow = qry.value(rec.indexOf("showDocumentsInSeparatWindow")).toBool();
+        globals::minimizeAppToTray            = qry.value(rec.indexOf("minimizeAppToTray")).toBool();
     }
 }
 
