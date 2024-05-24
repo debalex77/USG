@@ -179,6 +179,7 @@ DISTFILES += \
     debian/postinst \
     debian/preinst \
     debian/prerm \
+    debian/usr/share/applications/org.alovada.usg.desktop \
     debian/usr/share/doc/usg/changelog \
     debian/usr/share/doc/usg/changelog.Debian \
     debian/usr/share/doc/usg/copyright \

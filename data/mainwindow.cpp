@@ -797,7 +797,7 @@ void MainWindow::initMinimizeAppToTray()
 {
     /* initierea iconitei in tray */
     trayIcon = new QSystemTrayIcon(this);
-    trayIcon->setIcon(QIcon(":/img/eco_512x512.png"));
+    trayIcon->setIcon(QIcon(":/img/eco_systemTray.png"));
     trayIcon->setToolTip(APPLICATION_NAME + " v" + APPLICATION_VERSION);
 
     /* meniu */

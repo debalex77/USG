@@ -1,3 +1,11 @@
+usg (2.0.9) UNRELEASED; urgency=medium
+
+  * added downloading the new version of the app with progress bar in status bar
+  * launch documents in the special window
+  * application minimization in tray
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Wed, 24 May 2024 17:10:00 +0300
+
 usg (2.0.8) UNRELEASED; urgency=medium
 
   * fixed the bug when presenting the 'User Manual' (launching the program)
@@ -21,6 +29,5 @@ usg (2.0.7) UNRELEASED; urgency=medium
   * added new obstetric normograms:
     * doppler a.uterine (source - fetalmedicine.org)
     * doppler a.umbilical (source - fetalmedicine.org)
-
 
  -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 09 May 2024 20:28:16 +0300

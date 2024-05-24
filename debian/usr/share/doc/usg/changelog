@@ -1,3 +1,8 @@
+2.0.9 (May 24th, 2024)
+  * added downloading the new version of the app with progress bar in status bar
+  * launch documents in the special window
+  * application minimization in tray
+
 2.0.8 (May 15th, 2024)
   * fixed the bug when presenting the 'User Manual' (launching the program)
   * added the function of presenting the log through (cmd) - 'USG /debug'

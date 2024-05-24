@@ -1,3 +1,8 @@
+## USG v2.0.9
+* realizată descărcarea versiunii noi a aplicației cu prezentarea progress bar-ului în status bar
+* adăugată opțiunea de a lansa documente (Formarea prețurilor, Comanda ecografică și Raport ecografic) în fereastra aparte de aplicația (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
+* realizată minimizarea aplicației în tray (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
+
 ## USG v2.0.8
 * fixat bug-ul la prezentarea <b><u>'User Manual'</u></b> (lansarea programei)
 * adaugată funcția de prezentare logării prin interpretorul liniei de comandă (cmd) - <b><u>'USG /debug'</u></b>
