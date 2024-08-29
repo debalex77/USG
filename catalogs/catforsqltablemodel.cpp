@@ -2,6 +2,7 @@
 #include "ui_catforsqltablemodel.h"
 
 #include <QDomDocument>
+#include <QScreen>
 
 CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     QDialog(parent),
@@ -13,6 +14,9 @@ CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     menu    = new QMenu(this);
     model   = new BaseSqlTableModel(this);
     toolBar = new QToolBar(this);
+    checkbox_delegate    = new CheckBoxDelegate(this);
+    db_spinbox_delegate  = new DoubleSpinBoxDelegate(0.00, 999999.99, 0.05, 2, this);
+    gr_investig_delegate = new ComboDelegate("SELECT id,name FROM investigationsGroup;", this);
 
     connect(ui->tableView, &QWidget::customContextMenuRequested, this, &CatForSqlTableModel::slotContextMenuRequested);
     connect(this, &CatForSqlTableModel::typeCatalogChanged, this, &CatForSqlTableModel::slot_typeCatalogChanged);
@@ -24,6 +28,9 @@ CatForSqlTableModel::~CatForSqlTableModel()
 {
     delete db;
     delete menu;
+    delete checkbox_delegate;
+    delete db_spinbox_delegate;
+    delete gr_investig_delegate;
     delete model;
     if (m_typeForm == TypeForm::SelectForm)
         delete toolBar;
@@ -32,24 +39,21 @@ CatForSqlTableModel::~CatForSqlTableModel()
 
 void CatForSqlTableModel::initBtnForm()
 {
-    ui->btnAdd->setIcon(QIcon(":/img/add_x32.png"));
-    ui->btnAdd->setStyleSheet("padding-left: 3px; text-align: left;");
+    ui->btnAdd->setToolTip(tr("Insereaza (ins)"));
+    ui->btnMarkDeletion->setToolTip(tr("Elimina (del)"));
+    ui->btnClose->setToolTip(tr("Inchide (esc)"));
+    ui->btnUpdate->setToolTip(tr("Actualizeaza (F5)"));
+
     ui->btnAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-    ui->btnAdd->setLayout(new QGridLayout);
-
-    ui->btnMarkDeletion->setIcon(QIcon(":/img/clear_x32.png"));
-    ui->btnMarkDeletion->setStyleSheet("padding-left: 3px; text-align: left;");
     ui->btnMarkDeletion->setShortcut(QKeySequence(Qt::Key_Delete));
-    ui->btnMarkDeletion->setLayout(new QGridLayout);
-
-    ui->btnClose->setIcon(QIcon(":/img/close_x32.png"));
-    ui->btnClose->setStyleSheet("padding-left: 3px; text-align: left;");
     ui->btnClose->setShortcut(QKeySequence(Qt::Key_Escape));
-    ui->btnClose->setLayout(new QGridLayout);
+    ui->btnUpdate->setShortcut(QKeySequence(Qt::Key_F5));
 
     connect(ui->btnAdd, &QAbstractButton::clicked, this, &CatForSqlTableModel::onAddRowTable);
     connect(ui->btnMarkDeletion, &QAbstractButton::clicked, this, &CatForSqlTableModel::onMarkDeletion);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &CatForSqlTableModel::onClose);
+    connect(ui->btnGroupInvestigation, &QAbstractButton::clicked, this, &CatForSqlTableModel::onOpenGroupInvestigations);
+    connect(ui->btnUpdate, &QAbstractButton::clicked, this, &CatForSqlTableModel::updateTableView);
 }
 
 void CatForSqlTableModel::initBtnToolBar()
@@ -102,10 +106,10 @@ void CatForSqlTableModel::updateTableView()
     switch (m_typeCatalog) {
     case Investigations:
         setWindowTitle(tr("Clasificatorul investigatiilor"));
-        model->setTable("investigations");
+        model->setTable("tmp_investigations");
         updateHeaderTableInvestigations();
         model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
-        model->setSort(investig_id, Qt::AscendingOrder);                  // sortarea datelor de la sectia 0
+        model->setSort(investig_id, Qt::AscendingOrder);     // sortarea datelor de la sectia 0
         break;
     case TypesPrices:
         setWindowTitle(tr("Tipul preturilor"));
@@ -113,6 +117,8 @@ void CatForSqlTableModel::updateTableView()
         updateHeaderTableTypesPrices();
         model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
         model->setSort(typePrice_id, Qt::AscendingOrder);                  // sortarea datelor de la sectia 0
+
+        ui->btnGroupInvestigation->setVisible(false);
         break;
     case ConclusionTemplates:
         setWindowTitle(tr("Șabloane concluziilor"));
@@ -139,14 +145,17 @@ void CatForSqlTableModel::updateTableView()
         ui->tableView->setColumnWidth(investig_deletionMark, 5);
         ui->tableView->setColumnHidden(investig_id, true); // ascundem id
         ui->tableView->setColumnWidth(investig_cod, 70);
-        ui->tableView->hideColumn(investig_use);
-        ui->tableView->setColumnWidth(investig_cod, 70);   // codul
-        ui->tableView->setColumnWidth(investig_name, 500); // denuimirea investigatiei
+        ui->tableView->setColumnWidth(investig_name, 1200); // denuimirea investigatiei
+        ui->tableView->setItemDelegateForColumn(investig_use, checkbox_delegate);
+        ui->tableView->setItemDelegateForColumn(investig_owner, gr_investig_delegate);
+        ui->tableView->resizeColumnsToContents();
         break;
     case TypesPrices:
         ui->tableView->setColumnWidth(typePrice_deletionMark, 5);
         ui->tableView->setColumnHidden(typePrice_id, true); // ascundem id
-        ui->tableView->setColumnWidth(typePrice_name, 1200);
+        ui->tableView->setColumnWidth(typePrice_name, 1100);
+        ui->tableView->setItemDelegateForColumn(typePrice_noncomercial, checkbox_delegate);
+        ui->tableView->setItemDelegateForColumn(typePrice_discount, db_spinbox_delegate);
         break;
     case ConclusionTemplates:
         ui->tableView->setColumnWidth(template_deletionMark, 5);
@@ -179,7 +188,8 @@ void CatForSqlTableModel::updateHeaderTableInvestigations()
              << tr("") // deletionMark
              << tr("Cod MS")
              << tr("Denumirea investigatiei")
-             << tr("Use");
+             << tr("Utilizare")
+             << tr("Grupa");
     for(int i = 0, j = 0; i < model->columnCount(); i++, j++){ // setam headerul
         model->setHeaderData(i, Qt::Horizontal, _headers[j]);
     }
@@ -327,6 +337,13 @@ void CatForSqlTableModel::onClose()
     emit mCloseThisForm();
 }
 
+void CatForSqlTableModel::onOpenGroupInvestigations()
+{
+    list_group = new GroupInvestigationList(this);
+    list_group->setAttribute(Qt::WA_DeleteOnClose);
+    list_group->show();
+}
+
 void CatForSqlTableModel::slotContextMenuRequested(QPoint pos)
 {
     int _row = ui->tableView->currentIndex().row();
@@ -345,13 +362,16 @@ void CatForSqlTableModel::slotContextMenuRequested(QPoint pos)
     }
 
     QAction* actionAddObject  = new QAction(QIcon(":/img/add_x32.png"), tr("Adauga obiect nou"), this);
+    QAction* actionEditObject = new QAction(QIcon(":/img/edit_x32.png"), tr("Editeaza obiect"), this);
     QAction* actionMarkObject = new QAction(QIcon(":/img/clear_x32.png"), strActionDelMark, this);
 
     connect(actionAddObject, &QAction::triggered, this, &CatForSqlTableModel::onAddRowTable);
+    connect(actionEditObject, &QAction::triggered, this, &CatForSqlTableModel::onEditRowTable);
     connect(actionMarkObject, &QAction::triggered, this, &CatForSqlTableModel::onMarkDeletion);
 
     menu->clear();
     menu->addAction(actionAddObject);
+    menu->addAction(actionEditObject);
     menu->addAction(actionMarkObject);
     menu->popup(ui->tableView->viewport()->mapToGlobal(pos)); // prezentarea meniului
 }

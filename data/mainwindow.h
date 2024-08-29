@@ -18,6 +18,7 @@
 
 #include "catalogs/catforsqltablemodel.h"
 #include "catalogs/asistanttipapp.h"
+#include "catalogs/groupinvestigationlist.h"
 #include "catalogs/normograms.h"
 #include "docs/listdoc.h"
 #include "docs/listdocreportorder.h"
@@ -38,7 +39,7 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.8"
+#define APPLICATION_VERSION     "2.0.9"
 #define GITHUB_URL_DOWNLOAD     "https://github.com/debalex77/USG/releases/download"
 //=============================================================
 
@@ -77,6 +78,8 @@ private slots:
     void openListForm(const int indexEnum);
     void openNormograms();
     void openCatInvestigations();
+    void openGroupInvestigation();
+    void openConcluzionTemplets();
     void openCatTypesPrices();
     void openPatientAppointments();
     void openOrderEcho();
@@ -141,6 +144,8 @@ private:
     ListDocReportOrder       *list_report;
     Normograms               *normograms;
     CatForSqlTableModel      *cat_investigations;
+    CatForSqlTableModel      *cat_concluzionTemplets;
+    GroupInvestigationList   *group_investigation;
     DocAppointmentsPatients  *registration_patients;
     PatientHistory           *patient_history;
     UpdateReleasesApp        *update_app;

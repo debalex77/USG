@@ -119,8 +119,6 @@ QVariant BaseSqlQueryModel::dataFromComboBox(const QModelIndex &item, int role) 
 
 QVariant BaseSqlQueryModel::dataFromUserSettings(const QModelIndex &item, int role) const
 {
-    QFont font;
-
     switch (role) {
     case Qt::UserRole:
         return dataFromParent(item, Id);
@@ -130,7 +128,7 @@ QVariant BaseSqlQueryModel::dataFromUserSettings(const QModelIndex &item, int ro
 #if defined(Q_OS_LINUX)
         return QSqlQueryModel::data(item, role);
 #elif defined(Q_OS_WIN)
-
+        QFont font;
         font.setPointSize(9);
         return font;
 #endif

@@ -290,10 +290,20 @@ void MainWindow::initActions()
 
     QAction* actionTypesPrice = new QAction(QIcon(":/img/typesPrices_x32.png"), tr("Tipul prețurilor"), this);
     QAction* actionInvestigations = new QAction(QIcon(":/img/investigations_x32.png"), tr("Investigații"), this);
+    QAction* actionGroupInvestigations = new QAction(QIcon(":/img/tree_yellow.png"), tr("Arbore investigațiilor"), this);
+    QAction* actionConcluzionTemplets = new QAction(QIcon(":/img/templates.png"), tr("Șabloane concluziilor"), this);
+
     clasifiers->addAction(actionInvestigations);
+    clasifiers->addAction(actionGroupInvestigations);
+    clasifiers->addSeparator();
     clasifiers->addAction(actionTypesPrice);
+    clasifiers->addSeparator();
+    clasifiers->addAction(actionConcluzionTemplets);
+
     connect(actionInvestigations, &QAction::triggered, this, &MainWindow::openCatInvestigations);
+    connect(actionGroupInvestigations, &QAction::triggered, this, &MainWindow::openGroupInvestigation);
     connect(actionTypesPrice, &QAction::triggered, this, &MainWindow::openCatTypesPrices);
+    connect(actionConcluzionTemplets, &QAction::triggered, this, &MainWindow::openConcluzionTemplets);
 
     ui->menuDocumente->addAction(actionOpenPricing);
     ui->menuDocumente->addSeparator();
@@ -587,13 +597,32 @@ void MainWindow::openCatInvestigations()
     connect(cat_investigations, &CatForSqlTableModel::mCloseThisForm, this, &MainWindow::removeSubWindow);
 }
 
+void MainWindow::openGroupInvestigation()
+{
+    group_investigation = new GroupInvestigationList(this);
+    group_investigation->setAttribute(Qt::WA_DeleteOnClose);
+    mdiAreaCont->addWidget(group_investigation);
+    group_investigation->show();
+}
+
+void MainWindow::openConcluzionTemplets()
+{
+    cat_concluzionTemplets = new CatForSqlTableModel(this);
+    cat_concluzionTemplets->setAttribute(Qt::WA_DeleteOnClose);
+    cat_concluzionTemplets->setWindowIcon(QIcon(":/img/templates.png"));
+    cat_concluzionTemplets->setProperty("typeCatalog", CatForSqlTableModel::TypeCatalog::ConclusionTemplates);
+    cat_concluzionTemplets->setProperty("typeForm",    CatForSqlTableModel::TypeForm::ListForm);
+    mdiAreaCont->addWidget(cat_concluzionTemplets);
+    cat_concluzionTemplets->show();
+}
+
 void MainWindow::openCatTypesPrices()
 {
     cat_investigations = new CatForSqlTableModel(this);
     cat_investigations->setAttribute(Qt::WA_DeleteOnClose);
     cat_investigations->setWindowIcon(QIcon(":/img/typesPrices_x32.png"));
     cat_investigations->setProperty("typeCatalog", cat_investigations->TypesPrices);
-    cat_investigations->setProperty("typeForm", cat_investigations->ListForm);
+    cat_investigations->setProperty("typeForm",    cat_investigations->ListForm);
     mdiAreaCont->addWidget(cat_investigations);
     cat_investigations->show();
 

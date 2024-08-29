@@ -3641,6 +3641,7 @@ bool DataBase::createTableUserPreferences()
                     "databasesArchiving    BOOLEAN,"
                     "showAsistantHelper    BOOLEAN,"
                     "showDocumentsInSeparatWindow BOOLEAN,"
+                    "minimizeAppToTray     BOOLEAN,"
                     "KEY `userPreferences_users_id_idx` (`id_users`),"
                     "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
@@ -3658,7 +3659,8 @@ bool DataBase::createTableUserPreferences()
                     "checkNewVersionApp    INT,"
                     "databasesArchiving    INT,"
                     "showAsistantHelper    INT,"
-                    "showDocumentsInSeparatWindow INT"
+                    "showDocumentsInSeparatWindow INT,"
+                    "minimizeAppToTray     INT"
                     ");");
     else
         return false;

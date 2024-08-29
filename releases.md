@@ -2,6 +2,10 @@
 * realizată descărcarea versiunii noi a aplicației cu prezentarea progress bar-ului în status bar
 * adăugată opțiunea de a lansa documente (Formarea prețurilor, Comanda ecografică și Raport ecografic) în fereastra aparte de aplicația (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
 * realizată minimizarea aplicației în tray (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
+* corectată întroducerea termenului în sistemul ginecologic și sarcinile (în caz când termenul conține cifre întregi - exemplu: sarcina 10 săptămâni)
+* corectată funcția de redactare în documentul <b><u>'Programarea pacienților'</u></b>
+* în catalogul <b><u>'Clasificatorul investigațiilor'</u></b> adaugat rechizit nou 'Grupa' pentru gruparea investigațiilor și prezentarea în catalogul <b><u>'Arbore investigațiilor'</u></b>
+* adaugată forma catalogului <b><u>'Arbore investigațiilor'</u></b> cu forma liberă de tipar a arborelui
 
 ## USG v2.0.8
 * fixat bug-ul la prezentarea <b><u>'User Manual'</u></b> (lansarea programei)

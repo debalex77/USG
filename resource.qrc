@@ -172,5 +172,7 @@
         <file>img/icons_main/usg_preview.png</file>
         <file>img/icons_main/usg_splash.png</file>
         <file>img/eco_systemTray.png</file>
+        <file>img/minus.png</file>
+        <file>img/tree_yellow.png</file>
     </qresource>
 </RCC>

@@ -30,6 +30,8 @@ QVariant RegistrationTableModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::DisplayRole:
         return cell_data.value(index, QVariant());
+    case Qt::EditRole:
+        return cell_data.value(index, QVariant());
     case Qt::UserRole:
         return cell_data.value(index, QVariant());
     case Qt::BackgroundRole:

@@ -13,7 +13,7 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 DEFINES += QT_QML_DEBUG_NO_WARNING
 CONFIG- = qml_debug
 
-VERSION                  = 2.0.8
+VERSION                  = 2.0.9
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
@@ -36,6 +36,8 @@ SOURCES += \
     catalogs/catusers.cpp \
     catalogs/chooseformprint.cpp \
     catalogs/customperiod.cpp \
+    catalogs/groupinvestigation.cpp \
+    catalogs/groupinvestigationlist.cpp \
     catalogs/listform.cpp \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
@@ -58,6 +60,7 @@ SOURCES += \
     data/userpreferences.cpp \
     delegates/checkboxdelegate.cpp \
     delegates/combodelegate.cpp \
+    delegates/doublespinboxdelegate.cpp \
     docs/choicecolumns.cpp \
     docs/docappointmentspatients.cpp \
     docs/docorderecho.cpp \
@@ -72,6 +75,8 @@ SOURCES += \
     models/basesqlquerymodel.cpp \
     models/basesqltablemodel.cpp \
     models/registrationtablemodel.cpp \
+    models/treeitem.cpp \
+    models/treemodel.cpp \
     models/variantmaptablemodel.cpp
 
 HEADERS += \
@@ -83,6 +88,8 @@ HEADERS += \
     catalogs/catusers.h \
     catalogs/chooseformprint.h \
     catalogs/customperiod.h \
+    catalogs/groupinvestigation.h \
+    catalogs/groupinvestigationlist.h \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
@@ -106,6 +113,7 @@ HEADERS += \
     data/version.h \
     delegates/checkboxdelegate.h \
     delegates/combodelegate.h \
+    delegates/doublespinboxdelegate.h \
     docs/choicecolumns.h \
     docs/docappointmentspatients.h \
     docs/docorderecho.h \
@@ -119,6 +127,8 @@ HEADERS += \
     models/basesqlquerymodel.h \
     models/basesqltablemodel.h \
     models/registrationtablemodel.h \
+    models/treeitem.h \
+    models/treemodel.h \
     models/variantmaptablemodel.h \
     resources.rc
 
@@ -131,6 +141,8 @@ FORMS += \
     catalogs/catusers.ui \
     catalogs/chooseformprint.ui \
     catalogs/customperiod.ui \
+    catalogs/groupinvestigation.ui \
+    catalogs/groupinvestigationlist.ui \
     catalogs/listform.ui \
     catalogs/normograms.ui \
     catalogs/patienthistory.ui \

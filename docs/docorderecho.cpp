@@ -15,7 +15,7 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     setTitleDoc(); // setam titlu documentului
 
     if (globals::showDocumentsInSeparatWindow)
-        setWindowFlag(Qt::Window);
+        setWindowFlags(Qt::Window);
 
     db            = new DataBase(this);
     popUp         = new PopUp(this);

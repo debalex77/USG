@@ -72,6 +72,15 @@ private slots:
     void activatedComboNurses(const int index);
     void activatedComboOrganizations(const int index);
 
+    void changeShowUserManual();
+    void changeDatabasesArchiving();
+    void changeShowDesignerMenuPrint();
+    void changeMinimizeAppToTray();
+    void changeShowQuestionClosingApp();
+    void changeShowDocumentsInSeparatWindow();
+    void changeNewVersion();
+    void changeSplitFullNamePatient();
+
     bool loadFile(const QString &fileName);
     void onLinkActivatedForOpenImage(const QString &link);
     void clearImageLogo();

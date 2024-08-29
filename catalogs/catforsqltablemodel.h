@@ -9,6 +9,11 @@
 #include <QToolButton>
 #include <QMenu>
 
+#include <delegates/checkboxdelegate.h>
+
+#include "catalogs/groupinvestigationlist.h"
+#include "delegates/combodelegate.h"
+#include "delegates/doublespinboxdelegate.h"
 #include "models/basesqltablemodel.h"
 #include "data/database.h"
 
@@ -73,7 +78,8 @@ private:
         investig_deletionMark = 1,
         investig_cod          = 2,
         investig_name         = 3,
-        investig_use          = 4
+        investig_use          = 4,
+        investig_owner        = 5
     };
 
     enum sectionsTypesPrices
@@ -102,6 +108,8 @@ private slots:
     void onMarkDeletion();
     void onClose();
 
+    void onOpenGroupInvestigations();
+
     void slotContextMenuRequested(QPoint pos);
     void slot_typeCatalogChanged();
     void slot_typeFormChanged();
@@ -120,13 +128,19 @@ private:
     QToolButton *btnBarDeletion;
     QToolButton *btnBarUpdateTable;
 
+    GroupInvestigationList *list_group;
+
     int ret_id       = -1;      // date ce se determinam si returnam
     QString ret_cod  = nullptr; // cand typeForm = SelectForm
     QString ret_name = nullptr;
 
-    BaseSqlTableModel *model;
+    BaseSqlTableModel *model;   
     DataBase          *db;
     QMenu             *menu;
+
+    CheckBoxDelegate      *checkbox_delegate;
+    DoubleSpinBoxDelegate *db_spinbox_delegate;
+    ComboDelegate         *gr_investig_delegate;
 
 protected:
     void changeEvent(QEvent *event);

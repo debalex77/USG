@@ -28,6 +28,10 @@
         <property name="text">
          <string>Adaugă</string>
         </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
@@ -35,12 +39,74 @@
         <property name="text">
          <string>Șterge</string>
         </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+        </property>
        </widget>
       </item>
       <item>
        <widget class="QPushButton" name="btnClose">
         <property name="text">
          <string>Închide</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>25</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnGroupInvestigation">
+        <property name="text">
+         <string>Arbore</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/tree_yellow.png</normaloff>:/img/tree_yellow.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <spacer name="verticalSpacer_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+        <property name="sizeType">
+         <enum>QSizePolicy::Preferred</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>40</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item>
+       <widget class="QPushButton" name="btnUpdate">
+        <property name="text">
+         <string>Actualizare</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/update_x32.png</normaloff>:/img/update_x32.png</iconset>
         </property>
        </widget>
       </item>
@@ -68,6 +134,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

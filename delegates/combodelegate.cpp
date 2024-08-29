@@ -1,9 +1,9 @@
 #include "combodelegate.h"
 #include <QDebug>
 
-ComboDelegate::ComboDelegate(QString str_qry, QObject *parent) : QItemDelegate(parent)
+ComboDelegate::ComboDelegate(QString str_qry, QObject *parent) :
+    QItemDelegate(parent), m_str_qry(str_qry)
 {
-    m_str_qry = str_qry;
 }
 
 QWidget *ComboDelegate::createEditor(QWidget *parent, const QStyleOptionViewItem &option, const QModelIndex &index) const
@@ -53,3 +53,5 @@ void ComboDelegate::setData(const int val)
         return;
     emit commitData(combo);
 }
+
+

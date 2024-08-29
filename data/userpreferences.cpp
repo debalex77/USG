@@ -80,6 +80,18 @@ bool UserPreferences::onWritingData()
             return false;
     }
 
+    /* dupa validare schimbam variabile globale
+     * ... dupa modificarea variabile globale sunt
+     * actualizate */
+    changeShowUserManual();
+    changeDatabasesArchiving();
+    changeShowDesignerMenuPrint();
+    changeMinimizeAppToTray();
+    changeShowQuestionClosingApp();
+    changeShowDocumentsInSeparatWindow();
+    changeNewVersion();
+    changeSplitFullNamePatient();
+
     return true;
 }
 
@@ -220,6 +232,49 @@ void UserPreferences::activatedComboOrganizations(const int index)
     const int id_organization = ui->comboOrganizations->itemData(index, Qt::UserRole).toInt();
     setIdOrganization(id_organization);
     dataWasModified();
+}
+
+// **********************************************************************************
+// --- procesarea chek box-urilor
+
+void UserPreferences::changeShowUserManual()
+{
+    globals::showUserManual = ui->check_showUserManual->isChecked();
+}
+
+void UserPreferences::changeDatabasesArchiving()
+{
+    globals::databasesArchiving = ui->check_databasesArchiving->isChecked();
+}
+
+void UserPreferences::changeShowDesignerMenuPrint()
+{
+    globals::showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
+}
+
+void UserPreferences::changeMinimizeAppToTray()
+{
+    globals::minimizeAppToTray = ui->minimizeAppToTray->isChecked();
+}
+
+void UserPreferences::changeShowQuestionClosingApp()
+{
+    globals::showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
+}
+
+void UserPreferences::changeShowDocumentsInSeparatWindow()
+{
+    globals::showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
+}
+
+void UserPreferences::changeNewVersion()
+{
+    globals::checkNewVersionApp = ui->check_newVersion->isChecked();
+}
+
+void UserPreferences::changeSplitFullNamePatient()
+{
+    globals::order_splitFullName = ui->check_splitFullNamePatient->isChecked();
 }
 
 // **********************************************************************************
@@ -604,7 +659,7 @@ void UserPreferences::disconnectCombo()
 }
 
 void UserPreferences::connectionCheckBox()
-{
+{    
     connect(ui->check_showUserManual, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
     connect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);

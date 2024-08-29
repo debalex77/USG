@@ -23,7 +23,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     setWindowTitle(tr("Raport ecografic %1").arg("[*]"));
 
     if (globals::showDocumentsInSeparatWindow)
-        setWindowFlag(Qt::Window);
+        setWindowFlags(Qt::Window);
 
     // ******************************************************************
     db        = new DataBase(this);
@@ -1835,9 +1835,9 @@ void DocReportEcho::disconnections_thyroid()
 
 void DocReportEcho::connections_gestation0()
 {
-    ui->gestation0_gestation->setInputMask("DDs. Dz.");
-    ui->gestation0_GS_age->setInputMask("DDs. Dz.");
-    ui->gestation0_CRL_age->setInputMask("DDs. Dz.");
+    ui->gestation0_gestation->setInputMask("99s. 9z.");
+    ui->gestation0_GS_age->setInputMask("99s. 9z.");
+    ui->gestation0_CRL_age->setInputMask("99s. 9z.");
 
     ui->gestation0_antecedent->setMaxLength(150);
     ui->gestation0_gestation->setMaxLength(20);
@@ -1897,10 +1897,10 @@ void DocReportEcho::disconnections_gestation0()
 
 void DocReportEcho::connections_gestation1()
 {
-    ui->gestation1_gestation->setInputMask("DDs. Dz.");
-    ui->gestation1_CRL_age->setInputMask("DDs. Dz.");
-    ui->gestation1_BPD_age->setInputMask("DDs. Dz.");
-    ui->gestation1_FL_age->setInputMask("DDs. Dz.");
+    ui->gestation1_gestation->setInputMask("99s. 9z.");
+    ui->gestation1_CRL_age->setInputMask("99s. 9z.");
+    ui->gestation1_BPD_age->setInputMask("99s. 9z.");
+    ui->gestation1_FL_age->setInputMask("99s. 9z.");
 
     ui->gestation1_antecedent->setMaxLength(150);
     ui->gestation1_gestation->setMaxLength(20);
@@ -2031,12 +2031,12 @@ void DocReportEcho::connections_gestation2()
     ui->gestation2_cervix_description->setPlaceholderText(tr("... maximum 150 caractere"));
     ui->gestation2_comment->setPlaceholderText(tr("... maximum 250 caractere"));
 ;
-    ui->gestation2_gestation_age->setInputMask("DDs. Dz.");
-    ui->gestation2_bpd_age->setInputMask("DDs. Dz.");
-    ui->gestation2_hc_age->setInputMask("DDs. Dz.");
-    ui->gestation2_ac_age->setInputMask("DDs. Dz.");
-    ui->gestation2_fl_age->setInputMask("DDs. Dz.");
-    ui->gestation2_fetus_age->setInputMask("DDs. Dz.");
+    ui->gestation2_gestation_age->setInputMask("99s. 9z.");
+    ui->gestation2_bpd_age->setInputMask("99s. 9z.");
+    ui->gestation2_hc_age->setInputMask("99s. 9z.");
+    ui->gestation2_ac_age->setInputMask("99s. 9z.");
+    ui->gestation2_fl_age->setInputMask("99s. 9z.");
+    ui->gestation2_fetus_age->setInputMask("99s. 9z.");
 
     // line edit
     QList<QLineEdit*> list_line_edit = ui->stackedWidget->widget(page_gestation2)->findChildren<QLineEdit*>();

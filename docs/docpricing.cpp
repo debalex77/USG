@@ -10,7 +10,7 @@ DocPricing::DocPricing(QWidget *parent) :
     setTitleDoc(); // setam titlu documentului
 
     if (globals::showDocumentsInSeparatWindow)
-        setWindowFlag(Qt::Window);
+        setWindowFlags(Qt::Window);
 
     db    = new DataBase(this); // conectarea la BD
     menu  = new QMenu(this);    // meniu contextual
@@ -489,7 +489,7 @@ void DocPricing::onPrint()
     out << "</table>\n"
         << "</body>\n"
         << "</html>\n";
-
+    qDebug() << strStream;
     QTextDocument* document = new QTextDocument();
     document->setHtml(strStream);
     documentPrint = document;
