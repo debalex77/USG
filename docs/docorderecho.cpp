@@ -33,7 +33,7 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::onDateTimeChanged);
 
     ui->editIDNP->setMaxLength(20);           // limitarea caracterilor
-    ui->editPolicyMedical->setMaxLength(12);
+    ui->editPolicyMedical->setMaxLength(20);
     ui->editAddress->setMaxLength(255);
     ui->editPhone->setMaxLength(100);
     ui->editFilterPattern->setPlaceholderText(tr("...căutare după denumirea investigației sau după cuvânt cheie/model"));

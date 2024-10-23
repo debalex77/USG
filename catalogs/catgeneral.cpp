@@ -31,7 +31,7 @@ CatGeneral::CatGeneral(QWidget *parent) :
     ui->editPrenume->setMaxLength(50);
     ui->editPatronimic->setMaxLength(50);
     ui->editIDNP->setMaxLength(20);
-    ui->editPoliceMed->setMaxLength(12);
+    ui->editPoliceMed->setMaxLength(20);
     ui->editAddress->setMaxLength(255);
     ui->editTelephone->setMaxLength(100);
     ui->editEmail->setMaxLength(100);

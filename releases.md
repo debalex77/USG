@@ -6,6 +6,8 @@
 * corectată funcția de redactare în documentul <b><u>'Programarea pacienților'</u></b>
 * în catalogul <b><u>'Clasificatorul investigațiilor'</u></b> adaugat rechizit nou 'Grupa' pentru gruparea investigațiilor și prezentarea în catalogul <b><u>'Arbore investigațiilor'</u></b>
 * adaugată forma catalogului <b><u>'Arbore investigațiilor'</u></b> cu forma liberă de tipar a arborelui
+* in catalogul <b><u>'Pacienți'</u></b> modificată lungimea rechizitului <u>'Polița medicală'</u> de la 12 simboluiri până la 20.
+* în documentul <b><u>'Raport ecografic'</u></b> corectată masca întroducerii datelor la sistemul obstetrical (vârsta gestațională, fătul corespunde vârstei etc.)
 
 ## USG v2.0.8
 * fixat bug-ul la prezentarea <b><u>'User Manual'</u></b> (lansarea programei)
