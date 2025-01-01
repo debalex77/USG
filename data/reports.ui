@@ -10,6 +10,11 @@
     <height>700</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -33,6 +38,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item row="0" column="5">
        <widget class="Line" name="line_2">
         <property name="orientation">
@@ -42,6 +53,25 @@
       </item>
       <item row="0" column="4">
        <widget class="QToolButton" name="btnZoomOut">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -53,6 +83,31 @@
       </item>
       <item row="0" column="10">
        <widget class="QToolButton" name="btnOpenDesigner">
+        <property name="minimumSize">
+         <size>
+          <width>92</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
         <property name="text">
          <string>Designer</string>
         </property>
@@ -74,6 +129,25 @@
       </item>
       <item row="0" column="6">
        <widget class="QToolButton" name="btnBackPage">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -87,9 +161,28 @@
        <widget class="QToolButton" name="btnExportPdf">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>92</width>
+          <height>21</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
         </property>
         <property name="text">
          <string>Export PDF</string>
@@ -107,9 +200,28 @@
        <widget class="QToolButton" name="btnSettingsReport">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>92</width>
+          <height>21</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
         </property>
         <property name="text">
          <string>Setări</string>
@@ -127,9 +239,28 @@
        <widget class="QToolButton" name="btnPrintReport">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>92</width>
+          <height>21</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
         </property>
         <property name="text">
          <string>Printează</string>
@@ -153,7 +284,7 @@
         </property>
         <property name="minimumSize">
          <size>
-          <width>0</width>
+          <width>70</width>
           <height>0</height>
          </size>
         </property>
@@ -184,9 +315,28 @@
        <widget class="QToolButton" name="btnGenerateReport">
         <property name="minimumSize">
          <size>
-          <width>0</width>
-          <height>0</height>
+          <width>92</width>
+          <height>21</height>
          </size>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
         </property>
         <property name="text">
          <string>Formează</string>
@@ -210,6 +360,7 @@
         </property>
         <property name="font">
          <font>
+          <family>Cantarell</family>
           <bold>true</bold>
          </font>
         </property>
@@ -239,6 +390,25 @@
       </item>
       <item row="0" column="2">
        <widget class="QToolButton" name="btnZoomIn">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -288,6 +458,25 @@
       </item>
       <item row="0" column="8">
        <widget class="QToolButton" name="btnNextPage">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -372,6 +561,7 @@
         <widget class="QLabel" name="label_organization">
          <property name="font">
           <font>
+           <family>Segoe UI</family>
            <bold>true</bold>
           </font>
          </property>
@@ -396,6 +586,25 @@
        </item>
        <item row="6" column="2">
         <widget class="QToolButton" name="btnEditDoctor">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -421,6 +630,25 @@
        </item>
        <item row="4" column="2">
         <widget class="QToolButton" name="btnEditContract">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -453,6 +681,25 @@
        </item>
        <item row="2" column="2">
         <widget class="QToolButton" name="btnEditOrganization">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -474,6 +721,25 @@
        </item>
        <item row="0" column="2">
         <widget class="QToolButton" name="btnChoicePeriod">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>

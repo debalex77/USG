@@ -7,11 +7,9 @@
 #include <QMenu>
 #include <QLabel>
 #include <QLineEdit>
-#include <QComboBox>
-#include <QToolBar>
-#include <QToolButton>
 #include <QSqlTableModel>
 #include <QStyleFactory>
+#include <LimeReport>
                             // Printare:
 #include <QTextStream>      // flux textului
 #include <QTextDocument>    // pu formarea documentului de text
@@ -22,11 +20,15 @@
 
 #include "data/popup.h"
 #include <data/globals.h>
+#include <data/enums.h>
 #include "data/database.h"
 #include "models/basesqlquerymodel.h"
 #include "models/basesqltablemodel.h"
 #include "models/basesortfilterproxymodel.h"
 #include "catalogs/catforsqltablemodel.h"
+#include <customs/custommessage.h>
+#include <catalogs/catorganizations.h>
+#include <catalogs/catcontracts.h>
 
 namespace Ui {
 class DocPricing;
@@ -82,6 +84,8 @@ public:
     int getPost() const
     {return m_post;}
 
+    void onPrintDocument(Enums::TYPE_PRINT type_print);
+
 signals:
     void ItNewChanged();
     void IdChanged();
@@ -111,6 +115,9 @@ private slots:
     void indexChangedComboContract(const int arg1);
     void indexChangedComboTypePrice(const int arg1);
 
+    void openCatOrganization();
+    void openCatContract();
+
     void addRowTable();              // *** slot-urile de adaugare
     void editRowTable();             // editare si eliminare a randurilor
     void deletionRowTable();         // din tabel
@@ -123,30 +130,14 @@ private slots:
     void onClickedRowTable(const QModelIndex &index); // la click-ul pe rand intram in regimul de redactare
 
     void getDataObject();
-    void onPrint();
+    void onPrint(Enums::TYPE_PRINT type_print);
     bool controlRequiredObjects();
     bool onWritingData();
     void onWritingDataClose();
     void onClose();
 
 private:
-    enum idx
-    {
-        idx_unknow   = -1,
-        idx_write    = 0,
-        idx_deletion = 1,
-        idx_post     = 2
-    };
 
-    enum Columns
-    {
-        column_Id           = 0,
-        column_DeletionMark = 1,
-        column_IdPricings   = 2,
-        column_Cod          = 3,
-        column_Name         = 4,
-        column_Price        = 5
-    };
     void setTitleDoc();
     void initBtnToolBar();
     void initFooterDoc();
@@ -170,31 +161,24 @@ private:
     BaseSqlTableModel *modelTable;
     BaseSortFilterProxyModel *proxy;
 
-    QMenu       *menu;
-    QToolBar    *toolBar;
-    QToolButton *btnAdd;
-    QToolButton *btnEdit;
-    QToolButton *btnDeletion;
-    QToolButton *btnFormsTable;
-    QLineEdit   *editSearch;
-    QComboBox   *comboSearch;
+    QMenu *menu;
 
     QLabel        *labelAuthor = nullptr;
     QTextDocument *documentPrint;
 
     bool m_itNew         = false;
-    int m_id             = idx_unknow;
-    int m_idOrganization = idx_unknow;
-    int m_idContract     = idx_unknow;
-    int m_idTypePrice    = idx_unknow;
-    int m_idUser         = idx_unknow;
-    int m_post           = idx_unknow;
+    int m_id             = Enums::IDX_UNKNOW;
+    int m_idOrganization = Enums::IDX_UNKNOW;
+    int m_idContract     = Enums::IDX_UNKNOW;
+    int m_idTypePrice    = Enums::IDX_UNKNOW;
+    int m_idUser         = Enums::IDX_UNKNOW;
+    int m_post           = Enums::IDX_UNKNOW;
 
     QTimer* timer;
     QMap<QString, QString> itemsData;
     CatForSqlTableModel *catInvestigations;
 
-    QStyle *style_fusion = QStyleFactory::create("Fusion");
+    LimeReport::ReportEngine *m_report;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

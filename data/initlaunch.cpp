@@ -51,6 +51,29 @@ void InitLaunch::dataWasModified()
     setWindowModified(true);
 }
 
+QString InitLaunch::getStyleForButtonMessageBox()
+{
+    return QString("QPushButton "
+                   "{"
+                   "  min-width: 60px;"
+                   "  border: 1px solid rgba(0, 0, 0, 0.2);"
+                   "  border-radius: 8px;"
+                   "  background-color: #f5f5f5;"
+                   "  color: #000000;"
+                   "  font-size: 13px;"
+                   "  padding: 4px 10px;"
+                   "  min-width: 80px;"
+                   "}"
+                   "QPushButton:hover "
+                   "{"
+                   "  background-color: #e0e0e0;"
+                   "}"
+                   "QPushButton:pressed "
+                   "{"
+                   "  background-color: #d0d0d0;"
+                   "}");
+}
+
 void InitLaunch::changeIndexComboLangApp(const int _index)
 {
     nameLocale = (_index == 0) ? "ro_RO" : "ru_RU"; // setam nameLocal dupa index alex
@@ -93,15 +116,25 @@ void InitLaunch::onClose()
 void InitLaunch::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
-        QMessageBox::StandardButton answer;
-        answer = QMessageBox::warning(this, tr("Modificarea datelor"),
-                                      tr("Datele au fost modificate.\n"
-                                      "Doriți să salvați aceste modificări ?"),
-                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (answer == QMessageBox::Yes){
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Datele au fost modificate.\n"
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(getStyleForButtonMessageBox());
+        noButton->setStyleSheet(getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             onWritingData();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {

@@ -33,6 +33,7 @@ public:
     bool createConnectBaseSqlite(QString &txtMessage);
 
     QSqlDatabase getDatabase();
+    QSqlDatabase getDatabaseThread();
     QSqlDatabase getDatabaseImage();
 
     bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
@@ -42,6 +43,7 @@ public:
     void creatingTables_DbImage();
 
     void loadInvestigationFromXml();
+    void updateInvestigationFromXML_2024();
     void loadNormogramsFromXml();
     void insertDataForTabletypesPrices();
     void insertSetTableSettingsUsers();
@@ -85,6 +87,7 @@ public:
     bool createTableOrganizations();
     bool createTableContracts();
     bool createTableInvestigations();
+    bool createTableInvestigationsGroup();
     bool createTablePricings();
     bool createTable_PricingsTable();
     bool createTablePricingsPresentation();
@@ -98,6 +101,7 @@ public:
     bool createTableCholecist();
     bool createTablePancreas();
     bool createTableSpleen();
+    bool createTableIntestinalLoop();
     bool createTableKidney();
     bool createTableBladder();
     bool createTableProstate();
@@ -126,7 +130,10 @@ public:
     bool createTableSettingsUsers();
     bool createTableUserPreferences();
     bool createTableConclusionTemplates();
+    bool createTableFormationsSystemTemplates();
     bool createTableImagesReports();
+
+    bool createIndexTables();
 
     enum REQUIRED_NUMBER
     {
@@ -168,9 +175,17 @@ public:
     QString getHTMLImageInfo();
     QString getHTMLImageWarning();
 
+    QString getStyleForButtonMessageBox();
+
+signals:
+    void updateProgress(const int num_records, const int value);
+    void finishedProgress(const QString txt);
+
 private:
     QSqlDatabase db;
     QSqlDatabase db_image;
+    QSqlDatabase db_thread;
+    QString m_connectionName = nullptr;
     quint32 key_encoding = 073; // encode_string & decode_string
 
     QProgressDialog *progress_dialog;
@@ -181,6 +196,7 @@ private:
     bool openDataBase();
     bool restoreDataDase();
     void closeDataBase();
+    bool enableForeignKeys();
 };
 
 #endif // DATABASE_H

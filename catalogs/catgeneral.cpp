@@ -349,14 +349,24 @@ static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMo
 void CatGeneral::onLinkActivatedForOpenImage(const QString &link)
 {
     if (m_Id == -1){
-        QMessageBox::StandardButton YesNo;
-        YesNo = QMessageBox::warning(this,
-                                     tr("Verificarea validării"),
-                                     tr("Pentru a încărca logotipul este necesar de salvat datele.<br>Doriți să salvați datele ?"),
-                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (YesNo == QMessageBox::Yes)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea validării"),
+                                 tr("Pentru a încărca logotipul este necesar de salvat datele.<br>"
+                                    "Doriți să salvați datele ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton)
             onWritingData();
-        else
+        else if (messange_box.clickedButton() == noButton)
+            return;
+        else if (messange_box.clickedButton() == cancelButton)
             return;
     }
 
@@ -414,7 +424,8 @@ void CatGeneral::slot_typeCatalogChanged()
     case Pacients:
         break;
     default:
-        qWarning(logWarning()) << tr("Nu a fost determinata proprietatea 'typeCatalog' !!!");
+        qWarning(logWarning()) << this->metaObject()->className()
+            << tr(": nu a fost determinata proprietatea 'typeCatalog' !!!");
         break;
     }
     slot_ItNewChanged();
@@ -476,7 +487,8 @@ void CatGeneral::slot_IdChanged()
         }
         break;
     default:
-        qWarning(logWarning()) << tr("Nu a fost determinanta proprietatea 'typeCatalog' !!!");
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": nu a fost determinanta proprietatea 'typeCatalog' !!!");
         break;
     }
 
@@ -559,11 +571,8 @@ void CatGeneral::fullNameChanged()
 void CatGeneral::fullNameSplit()
 {
     QString strFullName = ui->editFullName->text();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QStringList listStr = strFullName.split(QRegExp("\\s+"));
-#else
-    QStringList listStr = strFullName.split(QRegularExpression("\\s+"));
-#endif
+    static const QRegularExpression reg_listStr("\\s+");
+    QStringList listStr = strFullName.split(reg_listStr);
 
     int n;
 
@@ -606,21 +615,21 @@ bool CatGeneral::onWritingData()
             if (objectExistsInTableByName("doctors")){     // 1. verificam daca este obiectul in BD dupa rechizutul 'nume'
                 QMessageBox messange_box(QMessageBox::Question,
                                          tr("Verificarea datelor"),
-                                         tr("Doctor exista in baza de date:<br>"
+                                         tr("Doctor exist\304\203 \303\256n baza de date:<br>"
                                             " - nume: <b>%1</b><br>"
                                             " - prenume: <b>%2</b><br>"
                                             " - patronimic: <b>%3</b><br>"
-                                            ". <br>Doriți să continuați validarea ?").arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
-                                        QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-                messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//                messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//                messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-                auto answer = messange_box.exec();
-                if (answer == QMessageBox::No){
+                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
+                                             .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
+                                        QMessageBox::NoButton, this);
+                QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+                QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                messange_box.exec();
+
+                if (messange_box.clickedButton() == yesButton){
+                } else if (messange_box.clickedButton() == noButton) {
                     returnBool = false;
                     break;
                 }
@@ -673,21 +682,21 @@ bool CatGeneral::onWritingData()
             if (objectExistsInTableByName("nurses")){     // 1. verificam daca este obiectul in BD dupa rechizutul 'nume'
                 QMessageBox messange_box(QMessageBox::Question,
                                          tr("Verificarea datelor"),
-                                         tr("As.medicala exista in baza de date:<br>"
+                                         tr("As.medicala exist\304\203 \303\256n baza de date:<br>"
                                             " - nume: <b>%1</b><br>"
                                             " - prenume: <b>%2</b><br>"
                                             " - patronimic: <b>%3</b><br>"
-                                            ". <br>Doriți să continuați validarea ?").arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
-                                        QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-                messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//                messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//                messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-                auto answer = messange_box.exec();
-                if (answer == QMessageBox::No){
+                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
+                                             .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
+                                        QMessageBox::NoButton, this);
+                QPushButton *yesButton  = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+                QPushButton *noButton   = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                messange_box.exec();
+
+                if (messange_box.clickedButton() == yesButton){
+                } else if (messange_box.clickedButton() == noButton) {
                     returnBool = false;
                     break;
                 }
@@ -741,23 +750,22 @@ bool CatGeneral::onWritingData()
             if (objectExistsInTableByName("pacients")){
                 QMessageBox messange_box(QMessageBox::Question,
                                          tr("Verificarea datelor"),
-                                         tr("Pacientul exista in baza de date:<br>"
+                                         tr("Pacientul exist\304\203 \303\256n baza de date:<br>"
                                             " - nume: <b>%1</b><br>"
                                             " - prenume: <b>%2</b><br>"
                                             " - patronimic: <b>%3</b><br>"
-                                            " - anul nasterii: <b>%4</b><br>"
-                                            ". <br>Doriți să continuați validarea ?")
+                                            " - anul na\310\231terii: <b>%4</b><br>"
+                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
                                         .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text(), ui->dateEdit->date().toString("dd.MM.yyyy")),
-                                        QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-                messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//                messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//                messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-                auto answer = messange_box.exec();
-                if (answer == QMessageBox::No){
+                                        QMessageBox::NoButton, this);
+                QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+                QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+                messange_box.exec();
+
+                if (messange_box.clickedButton() == yesButton){
+                } else if (messange_box.clickedButton() == noButton) {
                     returnBool = false;
                     break;
                 }
@@ -805,7 +813,8 @@ bool CatGeneral::onWritingData()
         break;
 
     default:
-        qWarning(logWarning()) << tr("Nu a fost determinanta proprietatea 'typeCatalog' !!!");
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": nu a fost determinanta proprietatea 'typeCatalog' !!!");
         returnBool = false;
         break;
     }
@@ -830,22 +839,22 @@ void CatGeneral::closeEvent(QCloseEvent *event)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Datele au fost modificate.\n"
-                                    "Doriți să salvați aceste modificări ?"),
-                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes,    tr("Da"));
-        messange_box.setButtonText(QMessageBox::No,     tr("Nu"));
-        messange_box.setButtonText(QMessageBox::Cancel, tr("Anulare"));
-//#else
-//        messange_box.addButton(tr("Da"),      QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"),      QMessageBox::NoRole);
-//        messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
-#endif
-        auto answer = messange_box.exec();
-        if (answer == QMessageBox::Yes){
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             onWritingDataClose();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {

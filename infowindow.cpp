@@ -1,11 +1,6 @@
 #include "infowindow.h"
 #include "ui_infowindow.h"
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QScreen>
-#endif
 
 InfoWindow::InfoWindow(QWidget *parent)
     : QDialog(parent)
@@ -27,17 +22,9 @@ InfoWindow::InfoWindow(QWidget *parent)
     // ********************************************************
     // resize and move windows
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
-
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
 
     this->resize(680, 420);
     int x = (screenWidth / 2) - (width() / 2);//*0.1;

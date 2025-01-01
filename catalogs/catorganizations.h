@@ -4,8 +4,6 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
-#include <QToolBar>
-#include <QToolButton>
 #include <QMap>
 #include <QMapIterator>
 #include <QStandardPaths>
@@ -117,12 +115,6 @@ private:
 
     DataBase *db;
     PopUp    *popUp;
-
-    QToolBar    *toolBar; // pu toolBar contracte
-    QToolButton *btnAddContract;
-    QToolButton *btnEditContract;
-    QToolButton *btnDeletionContract;
-    QToolButton *btnSetDefaultContract;
 
     CatContracts      *catContracts;
     BaseSqlQueryModel *modelCantract;

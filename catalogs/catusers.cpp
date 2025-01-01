@@ -1,6 +1,8 @@
 #include "catusers.h"
 #include "ui_catusers.h"
 
+#include <customs/custommessage.h>
+
 CatUsers::CatUsers(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CatUsers)
@@ -121,7 +123,8 @@ bool CatUsers::onWritingData()
         // setam id
         setId(db->getLastIdForTable("users") + 1);
         if (m_Id == -1 || m_Id == 0){
-            qWarning(logWarning()) << tr("Eroarea la atasarea 'id' utilizatorului '%1'.").arg(ui->editNameUser->text());
+            qWarning(logWarning()) << this->metaObject()->className()
+                                   << tr(": eroarea la atasarea 'id' utilizatorului '%1'.").arg(ui->editNameUser->text());
             QMessageBox::warning(this,
                                  tr("Crearea utilizatorului."),
                                  tr("Eroare la crearea utilizatorului <b>\"%1\"</b>.<br>"
@@ -143,17 +146,17 @@ bool CatUsers::onWritingData()
         // crearea utilizatorului
         QString details_error;
         if (insertDataTableUsers(details_error)){
-            qInfo(logInfo()) << tr("A fost creat %1 utilizator cu nume '%2'.")
-                                .arg((globals::firstLaunch) ? "primul " : "", ui->editNameUser->text());
+            qInfo(logInfo()) << tr("A fost creat %1")
+                                .arg((globals::firstLaunch) ?
+                                             "primul utilizator cu nume 'admin'." :
+                                             "utilizator cu nume '" + ui->editNameUser->text() + "'.");
         } else {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Crearea utilizatorului"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Validarea datelor utilizatorului '%1' nu s-a efectuat.").arg(ui->editNameUser->text()));
-            msgBox.setDetailedText((details_error.isEmpty()) ? tr("eroarea indisponibila") : details_error);
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Crearea utilizatorului"));
+            msgBox->setTextTitle(tr("Validarea datelor utilizatorului '%1' nu s-a efectuat.").arg(ui->editNameUser->text()));
+            msgBox->setDetailedText((details_error.isEmpty()) ? tr("eroarea indisponibila") : details_error);
+            msgBox->exec();
+            msgBox->deleteLater();
             return false;
         }
         // setam variabile globale
@@ -176,7 +179,8 @@ bool CatUsers::onWritingData()
 
         // verificam daca a fost transmis proprietatea ID utilizatorului
         if (m_Id == - 1){
-            qWarning(logWarning()) << tr("Nu este transmisa/indicata proprietatea <<-Id->> clasei %1").arg(metaObject()->className());
+            qWarning(logWarning()) << this->metaObject()->className()
+                                   << tr(": nu este transmisa/indicata proprietatea <<-Id->> clasei %1").arg(metaObject()->className());
             QMessageBox::warning(this,
                                  tr("Modificarea datelor."),
                                  tr("Modificarea datelor utilizatorului \"<b>%1</b>\" nu s-a efectuat.<br>"
@@ -291,14 +295,25 @@ bool CatUsers::updateDataTableUsers()
 void CatUsers::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
-        const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
-                                                                        tr("Datele au fost modificate.\n"
-                                                                           "Doriți să salvați aceste modificări ?"),
-                                                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (answer == QMessageBox::Yes){
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Datele au fost modificate.\n"
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton){
             onWritingDataClose();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {

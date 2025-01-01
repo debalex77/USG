@@ -1,12 +1,8 @@
 #include "choicecolumns.h"
 #include <QGuiApplication>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QMessageBox>
 #include <QScreen>
 #include <QToolButton>
-#endif
 
 ChoiceColumns::ChoiceColumns(QWidget *parent) : QDialog(parent)
 {
@@ -17,17 +13,9 @@ ChoiceColumns::ChoiceColumns(QWidget *parent) : QDialog(parent)
     createLayout();
     createConnections();
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
-
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
 
     int x = (screenWidth / 2) - (318 / 2);
     int y = (screenHeight / 2) - (302 / 2);

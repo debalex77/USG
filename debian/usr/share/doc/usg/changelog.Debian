@@ -1,3 +1,16 @@
+usg (3.0.1) UNRELEASED; urgency=medium
+
+  * Migration of the application from Qt version 5.15.2 to version 6.5.3.
+  * Added splash screens for the new application.
+  * In the document list view 'Ultrasound Order', the column 'Submitted by...' has been added.
+  * In the document 'Ultrasound Report,' the following sections have been modified: Internal Organs, Urinary System.
+  * Updated the report generator LimeReport to version 1.7.7.
+  * Updated the OpenSSL driver to version 3.0.7 (a general-purpose cryptographic software library ensuring secure communication, data security, and privacy).
+  * Optimized the code for validation and completion requests of the 'Ultrasound Report' document.
+  * Specific database indexes have been created to reduce the execution time of query requests.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 02 January 2025 21:10:00 +0300
+
 usg (2.0.9) UNRELEASED; urgency=medium
 
   * added downloading the new version of the app with progress bar in status bar

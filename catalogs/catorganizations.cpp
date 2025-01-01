@@ -30,8 +30,6 @@ CatOrganizations::CatOrganizations(QWidget *parent) :
     modelCantract = new BaseSqlQueryModel(strQuery, this); // initierea modelului pu contracte
     updateTableContracts();                                // completarea tabelei cu contracte
 
-    ui->btnClearStamp->setStyleSheet("border: 1px solid #8f8f91; "
-                                 "border-radius: 4px;");
     connect(ui->btnClearStamp, &QToolButton::clicked, this, &CatOrganizations::clearImageStamp);
     ui->img_stamp->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea</a>");
     ui->img_stamp->setTextFormat(Qt::RichText);
@@ -66,11 +64,6 @@ CatOrganizations::CatOrganizations(QWidget *parent) :
 CatOrganizations::~CatOrganizations()
 {
     delete modelCantract;
-    delete btnAddContract;
-    delete btnEditContract;
-    delete btnDeletionContract;
-    delete btnSetDefaultContract;
-    delete toolBar;
     delete db;
     delete popUp;
     delete ui;
@@ -227,14 +220,24 @@ void CatOrganizations::onLinkActivatedForOpenImage(const QString &link)
         return;
 
     if (m_Id == -1){
-        QMessageBox::StandardButton YesNo;
-        YesNo = QMessageBox::warning(this,
-                                     tr("Verificarea validării"),
-                                     tr("Pentru a încărca imagine este necesar de salvat datele.<br>Doriți să salvați datele ?"),
-                                     QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (YesNo == QMessageBox::Yes)
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea valid\304\203rii"),
+                                 tr("Pentru a \303\256nc\304\203rca imagine este necesar de salvat datele.<br>"
+                                    "Dori\310\233i s\304\203 salva\310\233i datele ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton)
             onWritingData();
-        else
+        else if (messange_box.clickedButton() == noButton)
+            return;
+        else if (messange_box.clickedButton() == cancelButton)
             return;
     }
 
@@ -256,25 +259,25 @@ void CatOrganizations::createNewContract()
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Datele obiectului <b>%1</b> nu sunt salvate.<br>"
-                                    "Doriți să salvați datele ?").arg(ui->editName->text()),
-                                 QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-        if (messange_box.exec() == QMessageBox::Yes){
+                                    "Dori\310\233i s\304\203 salva\310\233i datele ?").arg(ui->editName->text()),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             m_write_new_organziation = 1;
-            if (!onWritingData())
+            if (! onWritingData())
                 return;
-        } else {
+        } else if (messange_box.clickedButton() == noButton) {
             return;
         }
     }
     if (m_Id == -1){
-        qWarning(logWarning()) << tr("Crearea contractului pentru organizatia '%1' - nu este determinat 'id' organizatiei.")
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": crearea contractului pentru organizatia '%1' - nu este determinat 'id' organizatiei.")
                                   .arg(ui->editName->text());
     }
     catContracts = new CatContracts(this);
@@ -291,20 +294,18 @@ void CatOrganizations::editContract()
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Datele obiectului <b>%1</b> nu sunt salvate.<br>"
-                                    "Doriți să salvați datele ?").arg(ui->editName->text()),
-                                 QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-        auto answer = messange_box.exec();
-        if (answer == QMessageBox::Yes){
+                                    "Dori\310\233i s\304\203 salva\310\233i datele ?").arg(ui->editName->text()),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             if (!onWritingData())
                 return;
-        } else {
+        } else if (messange_box.clickedButton() == noButton) {
             return;
         }
     }
@@ -353,7 +354,8 @@ void CatOrganizations::markDeletionContract()
     } else {
         QMessageBox::warning(this, tr("Marcarea/demarcarea obiectului"),
                              tr("Marcarea/demarcarea obiectului \"<b>%1</b>\" nu este reusita.").arg(_nameContract), QMessageBox::Ok);
-        qWarning(logWarning()) << tr("Eroare la marcare eliminarii din baza de date a obiectului '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": eroare la marcare eliminarii din baza de date a obiectului '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
     }
     updateTableContracts();
 }
@@ -380,7 +382,8 @@ void CatOrganizations::setDefaultContract()
                              tr("Modificarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
                                 "Adresați-vă administratorului aplicației.").arg(ui->editName->text()),
                              QMessageBox::Ok);
-        qWarning(logWarning()) << tr("Eroare la atasarea contractului de baza a organizatiei '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": eroare la atasarea contractului de baza a organizatiei '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
         return;
     }
 
@@ -415,17 +418,17 @@ bool CatOrganizations::onWritingData()
         if (existObjectInTableOrganizations()){
             QMessageBox messange_box(QMessageBox::Question,
                                      tr("Verificarea datelor"),
-                                     tr("Organizația cu nume \"<b>%1</b>\" există în baza de date.<br>"
-                                        "Doriți să continuați validarea datelor ?").arg(ui->editName->text()),
-                                     QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-            messange_box.setButtonText(QMessageBox::No,  tr("Nu"));
-//#else
-//            messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//            messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-            if (messange_box.exec() == QMessageBox::No){
+                                     tr("Organiza\310\233ia cu nume \"<b>%1</b>\" exist\304\203 \303\256n baza de date.<br>"
+                                        "Dori\310\233i s\304\203 continua\310\233i validarea datelor ?").arg(ui->editName->text()),
+                                     QMessageBox::NoButton, this);
+            QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+            QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+            yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+            noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+            messange_box.exec();
+
+            if (messange_box.clickedButton() == yesButton) {
+            } else if (messange_box.clickedButton() == noButton) {
                return false;
             }
         }
@@ -462,7 +465,8 @@ bool CatOrganizations::onWritingData()
                                  tr("Modificarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
                                     "Adresați-vă administratorului aplicației.").arg(ui->editName->text()),
                                  QMessageBox::Ok);
-            qWarning(logWarning()) << tr("Eroare la modificarea datelor organizatiei '%1': nu este determinat ID.").arg(ui->editName->text());
+            qWarning(logWarning()) << this->metaObject()->className()
+                                   << tr(": eroare la modificarea datelor organizatiei '%1': nu este determinat ID.").arg(ui->editName->text());
             return false;
         }
         // modificam datele utilizatorului
@@ -491,51 +495,10 @@ void CatOrganizations::onWritingDataClose()
 
 void CatOrganizations::initBtnToolBar()
 {
-    toolBar = new QToolBar(this);
-    btnAddContract        = new QToolButton(this);
-    btnEditContract       = new QToolButton(this);
-    btnDeletionContract   = new QToolButton(this);
-    btnSetDefaultContract = new QToolButton(this);
-
-    btnAddContract->setIcon(QIcon(":/img/add_x32.png"));
-    btnAddContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAddContract->setShortcut(QKeySequence(Qt::Key_Insert));
-
-    btnEditContract->setIcon(QIcon(":/img/edit_x32.png"));
-    btnEditContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnEditContract->setShortcut(QKeySequence(Qt::Key_F2));
-
-    btnDeletionContract->setIcon(QIcon(":/img/clear_x32.png"));
-    btnDeletionContract->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnDeletionContract->setShortcut(QKeySequence(Qt::Key_Delete));
-
-#if defined(Q_OS_LINUX)
-    btnAddContract->setStyleSheet("height: 12px; width: 12px;");
-    btnEditContract->setStyleSheet("height: 12px; width: 12px;");
-    btnDeletionContract->setStyleSheet("height: 12px; width: 12px;");
-#elif defined(Q_OS_WIN)
-    btnAddContract->setStyleSheet("height: 14px; width: 14px;");
-    btnEditContract->setStyleSheet("height: 14px; width: 14px;");
-    btnDeletionContract->setStyleSheet("height: 14px; width: 14px;");
-#endif
-
-    btnSetDefaultContract->setToolButtonStyle(Qt::ToolButtonTextOnly);
-    btnSetDefaultContract->setText(tr("Contract de bază"));
-    btnSetDefaultContract->setStyleSheet("border: 1px solid #8f8f91; "
-                                         "border-radius: 4px; "
-                                         "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                         "height: 16px; width: 140px;");
-    toolBar->addWidget(btnAddContract);
-    toolBar->addWidget(btnEditContract);
-    toolBar->addWidget(btnDeletionContract);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnSetDefaultContract);
-    ui->layoutToolBar->addWidget(toolBar);
-
-    connect(btnAddContract, &QAbstractButton::clicked, this, &CatOrganizations::createNewContract);
-    connect(btnEditContract, &QAbstractButton::clicked, this, &CatOrganizations::editContract);
-    connect(btnDeletionContract, &QAbstractButton::clicked, this, &CatOrganizations::markDeletionContract);
-    connect(btnSetDefaultContract, &QAbstractButton::clicked, this, &CatOrganizations::setDefaultContract);
+    connect(ui->btnAddContract, &QToolButton::clicked, this, &CatOrganizations::createNewContract);
+    connect(ui->btnEditContract, &QToolButton::clicked, this, &CatOrganizations::editContract);
+    connect(ui->btnDeletionContract, &QToolButton::clicked, this, &CatOrganizations::markDeletionContract);
+    connect(ui->btnSetDefaultContract, &QToolButton::clicked, this, &CatOrganizations::setDefaultContract);
 }
 
 // *******************************************************************
@@ -630,7 +593,8 @@ bool CatOrganizations::insertIntoTableOrganizations()
         qInfo(logInfo()) << tr("A fost creata organizatia noua '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
         return true;
     } else {
-        qWarning(logWarning()) << tr("Eroare la crearea organizatiei '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": eroare la crearea organizatiei '%1' cu id='%2'.").arg(ui->editName->text(), QString::number(m_Id));
         return false;
     }
 }
@@ -662,7 +626,8 @@ bool CatOrganizations::updateDataTableOrganizations()
         qInfo(logInfo()) << tr("Datele organizatiei '%1' cu id='%2' au fost modificate cu succes.").arg(ui->editName->text(), QString::number(m_Id));
         return true;
     } else {
-        qWarning(logWarning()) << tr("Eroarea la modificarea datelor organizatiei '%1' cu id='%2' - %1.").arg(ui->editName->text(), QString::number(m_Id), qry.lastError().text());
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << tr(": eroarea la modificarea datelor organizatiei '%1' cu id='%2' - %1.").arg(ui->editName->text(), QString::number(m_Id), qry.lastError().text());
         return false;
     }
 }
@@ -676,23 +641,22 @@ void CatOrganizations::closeEvent(QCloseEvent *event)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Verificarea datelor"),
                                  tr("Datele au fost modificate.\n"
-                                    "Doriți să salvați aceste modificări ?"),
-                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-        messange_box.setButtonText(QMessageBox::Cancel, tr("Cancel"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-//        messange_box.addButton(tr("Anuleaza"), QMessageBox::RejectRole);
-#endif
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
 
-        auto answer = messange_box.exec();
-        if (answer == QMessageBox::Yes){
+        if (messange_box.clickedButton() == yesButton) {
             onWritingData();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {

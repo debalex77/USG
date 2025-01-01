@@ -1,0 +1,186 @@
+/* --------------------- QPushButton --------------------- */
+QPushButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QPushButton:hover
+{
+    background-color: #e0e0e0;
+}
+QPushButton:pressed
+{
+    background-color: #d0d0d0;
+}
+/* --------------------- QLineEdit --------------------- */
+QLineEdit
+{
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 8px;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QLineEdit::focus
+{
+  border: 1px inset blue;
+  border-radius: 4px;
+  min-height: 18px;
+}
+QLineEdit:!enabled
+{
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: LightGray;
+  min-height: 18px;
+  color: #646464;
+}
+/* --------------------- QComboBox --------------------- */
+QComboBox
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 5px;
+    padding: 4px 8px;
+    color: #000000;
+    font-size: 13px;
+}
+QComboBox:hover
+{
+    border-color: rgba(0, 0, 0, 0.4);
+}
+QComboBox:focus
+{
+    border-color: #00baff;                /* Albastrul standard macOS pentru focus */
+}
+QComboBox::drop-down
+{
+    border-left: 1px solid rgba(0, 0, 0, 0.2);
+    width: 20px;
+    background-color: #f5f5f5;
+}
+QComboBox::down-arrow
+{
+    image: url(://img/drop-down-arrow.png);
+    width: 12px;
+    height: 12px;
+}
+QComboBox QAbstractItemView {
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    selection-background-color: #00baff; /* Fundal albastru pentru item selectat */
+    selection-color: #ffffff;            /* Text alb pentru item selectat */
+    background-color: #ffffff;           /* Fundal alb pentru lista derulantă */
+    color: #000000;                      /* Text negru pentru itemele nesemnificate */
+    outline: none;                       /* Elimină conturul implicit */
+}
+QComboBox QAbstractItemView::item {
+    padding: 4px 8px;
+    border: none;
+}
+QComboBox QAbstractItemView::item:selected {
+    background-color: #00baff; /* Fundal albastru pentru item selectat */
+    color: #ffffff;            /* Text alb pentru item selectat */
+}
+/* --------------------- QDateEdit --------------------- */
+QDateEdit
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QDateEdit::focus
+{
+  border: 1px inset blue;
+  border-radius: 4px;
+  min-height: 18px;
+}
+QDateEdit:!enabled
+{
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: LightGray;
+  min-height: 18px;
+  color: #646464;
+}
+/* --------------------- QDateTimeEdit ------------------ */
+QDateTimeEdit
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QDateTimeEdit::focus
+{
+  border: 1px inset blue;
+  border-radius: 4px;
+  min-height: 18px;
+}
+QDateTimeEdit:!enabled
+{
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: LightGray;
+  min-height: 18px;
+  color: #646464;
+}
+/* --------------------- QGroupBox ------------------ */
+QGroupBox
+{
+  background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #E0E0E0, stop: 1 #FFFFFF);
+  border: 1px solid gray;
+  border-radius: 5px;
+  padding: 10px;
+  margin-top: 3ex;
+}
+/* --------------------- QTextEdit ------------------ */
+QTextEdit {
+    background-color: #f8f9fa; /* Culoare de fundal deschisă */
+    border: 1px solid #cccccc; /* Border subțire gri */
+    border-radius: 6px;        /* Colțuri rotunjite */
+    padding: 4px;              /* Spațiere internă */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font specific macOS */
+    font-size: 13px;           /* Dimensiune text */
+    color: #333333;            /* Culoare text */
+}
+
+QTextEdit:focus {
+    border: 1px solid #007aff; /* Border albastru când are focus */
+    background-color: #ffffff; /* Fundal alb */
+}
+
+QTextEdit[readOnly="true"] {
+    background-color: #e9ecef; /* Fundal gri deschis pentru mod read-only */
+    color: #6c757d;            /* Text gri */
+    border: 1px solid #bbbbbb; /* Border mai puțin pronunțat */
+}
+/* --------------------- QPlainTextEdit ------------------ */
+QPlainTextEdit {
+    background-color: #f8f9fa; /* Culoare de fundal deschisă */
+    border: 1px solid #cccccc; /* Border subțire gri */
+    border-radius: 6px;        /* Colțuri rotunjite */
+    padding: 4px;              /* Spațiere internă */
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font specific macOS */
+    font-size: 14px;           /* Dimensiune text */
+    color: #333333;            /* Culoare text */
+}
+
+QPlainTextEdit:focus {
+    border: 1px solid #007aff; /* Border albastru când are focus */
+    background-color: #ffffff; /* Fundal alb */
+}
+
+QPlainTextEdit[readOnly="true"] {
+    background-color: #e9ecef; /* Fundal gri deschis pentru mod read-only */
+    color: #6c757d;            /* Text gri */
+    border: 1px solid #bbbbbb; /* Border mai puțin pronunțat */
+}
+

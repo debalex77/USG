@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>1010</width>
-    <height>800</height>
+    <height>757</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -33,8 +38,8 @@
       <widget class="QLabel" name="label">
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
+         <family>Segoe UI</family>
+         <pointsize>13</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -50,8 +55,8 @@
       <widget class="QLabel" name="label_2">
        <property name="font">
         <font>
-         <pointsize>11</pointsize>
-         <weight>75</weight>
+         <family>Segoe UI</family>
+         <pointsize>13</pointsize>
          <bold>true</bold>
         </font>
        </property>
@@ -97,19 +102,6 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_5">
-      <item row="0" column="0">
-       <widget class="QLineEdit" name="editFilterPattern">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>true</bool>
-        </property>
-       </widget>
-      </item>
       <item row="1" column="0" colspan="2">
        <widget class="QSplitter" name="splitter">
         <property name="sizePolicy">
@@ -139,17 +131,39 @@
         </widget>
        </widget>
       </item>
-      <item row="0" column="1">
-       <widget class="QToolButton" name="btn_export_xlsx">
-        <property name="text">
-         <string>export Excel</string>
+      <item row="0" column="0" colspan="2">
+       <widget class="QLineEdit" name="editFilterPattern">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
         </property>
-        <property name="icon">
-         <iconset resource="../resource.qrc">
-          <normaloff>:/img/xls.png</normaloff>:/img/xls.png</iconset>
+        <property name="styleSheet">
+         <string notr="true">QLineEdit {
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f5f5f5;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QLineEdit::focus
+{
+  border: 1px inset blue;
+  border-radius: 4px;
+  min-height: 18px;
+}
+QLineEdit:!enabled {
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: LightGray;
+  min-height: 18px;
+  color: #646464;
+}</string>
         </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        <property name="clearButtonEnabled">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
@@ -166,12 +180,12 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageDataOrganization">
       <property name="geometry">
@@ -179,7 +193,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>92</height>
+        <height>115</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -194,7 +208,7 @@
         <widget class="QLabel" name="label_5">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -213,7 +227,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -221,6 +235,25 @@
        </item>
        <item row="2" column="6">
         <widget class="QToolButton" name="btnCreateCatDoctor">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -256,7 +289,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -266,7 +299,7 @@
         <widget class="QLabel" name="label_8">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -277,6 +310,25 @@
        </item>
        <item row="2" column="7">
         <widget class="QToolButton" name="btnOpenCatDoctor">
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -290,7 +342,7 @@
         <widget class="QLabel" name="label_7">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -309,7 +361,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -319,7 +371,7 @@
         <widget class="QLabel" name="label_3">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -332,7 +384,7 @@
         <widget class="QLabel" name="label_13">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -345,7 +397,7 @@
         <widget class="QLabel" name="label_4">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -364,7 +416,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -374,7 +426,7 @@
         <widget class="QComboBox" name="comboNurse">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -384,7 +436,7 @@
         <widget class="QComboBox" name="comboDoctorExecute">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -398,7 +450,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>114</height>
+        <height>138</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -413,7 +465,7 @@
         <widget class="QLabel" name="label_6">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -432,7 +484,7 @@
          </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -460,8 +512,8 @@
            <widget class="QLabel" name="labelSumOrder">
             <property name="font">
              <font>
+              <family>Segoe UI</family>
               <pointsize>14</pointsize>
-              <weight>75</weight>
               <bold>true</bold>
              </font>
             </property>
@@ -480,7 +532,7 @@
            <widget class="QCheckBox" name="cardPayment">
             <property name="font">
              <font>
-              <weight>50</weight>
+              <family>Segoe UI</family>
               <bold>false</bold>
              </font>
             </property>
@@ -496,7 +548,7 @@
         <widget class="QCheckBox" name="checkBox">
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>Segoe UI</family>
            <bold>false</bold>
           </font>
          </property>
@@ -526,7 +578,7 @@
              <widget class="QLabel" name="label_12">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -539,7 +591,7 @@
              <widget class="QLabel" name="label_11">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -555,7 +607,7 @@
              <widget class="QDateEdit" name="dateEditBirthday">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -568,7 +620,7 @@
              <widget class="QLabel" name="label_14">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -581,7 +633,7 @@
              <widget class="QLineEdit" name="editIDNP">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -591,7 +643,7 @@
              <widget class="QLabel" name="label_10">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -604,7 +656,7 @@
              <widget class="QLabel" name="label_9">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -617,7 +669,7 @@
              <widget class="QLineEdit" name="editAddress">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -627,7 +679,7 @@
              <widget class="QLineEdit" name="editPolicyMedical">
               <property name="font">
                <font>
-                <weight>50</weight>
+                <family>Segoe UI</family>
                 <bold>false</bold>
                </font>
               </property>
@@ -640,11 +692,37 @@
        </item>
        <item row="0" column="3">
         <widget class="QToolButton" name="btnNewPacient">
+         <property name="minimumSize">
+          <size>
+           <width>84</width>
+           <height>21</height>
+          </size>
+         </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>.AppleSystemUIFont</family>
+           <pointsize>-1</pointsize>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
          </property>
          <property name="text">
           <string>Valideaza</string>
@@ -660,11 +738,37 @@
        </item>
        <item row="0" column="4">
         <widget class="QToolButton" name="btnEditPacient">
+         <property name="minimumSize">
+          <size>
+           <width>84</width>
+           <height>21</height>
+          </size>
+         </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>.AppleSystemUIFont</family>
+           <pointsize>-1</pointsize>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
          </property>
          <property name="text">
           <string>Editeaza</string>
@@ -680,11 +784,37 @@
        </item>
        <item row="0" column="5">
         <widget class="QToolButton" name="btnClearPacient">
+         <property name="minimumSize">
+          <size>
+           <width>84</width>
+           <height>21</height>
+          </size>
+         </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>.AppleSystemUIFont</family>
+           <pointsize>-1</pointsize>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
          </property>
          <property name="text">
           <string>Goleste</string>
@@ -700,11 +830,37 @@
        </item>
        <item row="0" column="6">
         <widget class="QToolButton" name="btnPatientHistory">
+         <property name="minimumSize">
+          <size>
+           <width>84</width>
+           <height>21</height>
+          </size>
+         </property>
          <property name="font">
           <font>
-           <weight>50</weight>
+           <family>.AppleSystemUIFont</family>
+           <pointsize>-1</pointsize>
            <bold>false</bold>
           </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
          </property>
          <property name="text">
           <string>Istoria</string>
@@ -726,7 +882,7 @@
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>69</height>
+        <height>68</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -746,14 +902,14 @@
         </rect>
        </property>
        <property name="sizePolicy">
-        <sizepolicy hsizetype="Minimum" vsizetype="Maximum">
+        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
          <horstretch>0</horstretch>
          <verstretch>0</verstretch>
         </sizepolicy>
        </property>
        <property name="font">
         <font>
-         <weight>50</weight>
+         <family>Segoe UI</family>
          <bold>false</bold>
         </font>
        </property>
@@ -776,6 +932,12 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_7">
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item row="0" column="0">
        <layout class="QHBoxLayout" name="layoutAuthor"/>
       </item>
@@ -786,6 +948,12 @@
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>108</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="text">
          <string>Validează</string>
@@ -799,10 +967,16 @@
       <item row="0" column="5">
        <widget class="QPushButton" name="btnWrite">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>108</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="text">
          <string>Salvează</string>
@@ -821,6 +995,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>108</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Printează</string>
         </property>
@@ -838,6 +1018,12 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
+        <property name="minimumSize">
+         <size>
+          <width>108</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Raport</string>
         </property>
@@ -850,10 +1036,16 @@
       <item row="0" column="6">
        <widget class="QPushButton" name="btnClose">
         <property name="sizePolicy">
-         <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
           <verstretch>0</verstretch>
          </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>108</width>
+          <height>0</height>
+         </size>
         </property>
         <property name="text">
          <string>Inchide</string>
@@ -906,7 +1098,6 @@
   <tabstop>btnClose</tabstop>
   <tabstop>btnClearPacient</tabstop>
   <tabstop>editNumberDoc</tabstop>
-  <tabstop>btn_export_xlsx</tabstop>
   <tabstop>btnEditPacient</tabstop>
   <tabstop>btnCreateCatDoctor</tabstop>
   <tabstop>btnOpenCatDoctor</tabstop>

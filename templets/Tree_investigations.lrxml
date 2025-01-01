@@ -6,24 +6,23 @@
       <item ClassName="LimeReport::PageDesignIntf" Type="Object">
         <objectName Type="QString">page1</objectName>
         <itemIndexMethod Type="enumAndFlags" Value="0"/>
-        <sceneRect x="-50" Type="QRect" width="2200" height="3075" y="-50"/>
+        <sceneRect Type="QRect" height="2899" width="2259" x="-50" y="-50"/>
         <bspTreeDepth Type="int" Value="5"/>
-        <font underline="0" pointSize="11" Type="QFont" weight="50" italic="0" family="Cantarell"/>
-        <sortCacheEnabled Type="bool" Value="0"/>
+        <font Type="QFont" family="Cantarell" italic="0" pointSize="11" underline="0" weight="50"/>
         <stickyFocus Type="bool" Value="0"/>
         <minimumRenderSize Type="qreal" Value="0"/>
         <focusOnTouch Type="bool" Value="1"/>
         <pageItem ClassName="PageItem" Type="Object">
           <objectName Type="QString">Reportpage1</objectName>
-          <geometry x="0" Type="QRect" width="2100" height="2970" y="0"/>
+          <geometry Type="QRect" height="2794" width="2159" x="0" y="0"/>
           <children Type="Collection">
             <item ClassName="Data" Type="Object">
               <objectName Type="QString">DataBand1</objectName>
-              <geometry x="50" Type="QRect" width="2000" height="96" y="150"/>
+              <geometry Type="QRect" height="96" width="2059" x="50" y="150"/>
               <children Type="Collection">
                 <item ClassName="TextItem" Type="Object">
                   <objectName Type="QString">TextItem1</objectName>
-                  <geometry x="54" Type="QRect" width="1496" height="50" y="32"/>
+                  <geometry Type="QRect" height="50" width="1496" x="54" y="32"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>
@@ -42,7 +41,7 @@
                   <alignment Type="enumAndFlags" Value="129"/>
                   <autoWidth Type="enumAndFlags" Value="0"/>
                   <autoHeight Type="bool" Value="0"/>
-                  <font underline="1" pointSize="10" Type="QFont" weight="75" italic="0" family="Segoe UI"/>
+                  <font Type="QFont" family="Segoe UI" italic="0" pointSize="10" underline="1" weight="75"/>
                   <backgroundOpacity Type="int" Value="100"/>
                   <backgroundMode Type="enumAndFlags" Value="1"/>
                   <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -103,15 +102,15 @@
             </item>
             <item ClassName="SubDetail" Type="Object">
               <objectName Type="QString">SubDetailBand1</objectName>
-              <geometry x="50" Type="QRect" width="2000" height="58" y="246"/>
+              <geometry Type="QRect" height="58" width="2059" x="50" y="246"/>
               <children Type="Collection">
                 <item ClassName="HLayout" Type="Object">
                   <objectName Type="QString">HorizontalLayout5</objectName>
-                  <geometry x="48" Type="QRect" width="1522" height="50" y="2"/>
+                  <geometry Type="QRect" height="50" width="1522" x="48" y="2"/>
                   <children Type="Collection">
                     <item ClassName="TextItem" Type="Object">
                       <objectName Type="QString">TextItem5</objectName>
-                      <geometry x="0" Type="QRect" width="76" height="50" y="0"/>
+                      <geometry Type="QRect" height="50" width="76" x="0" y="0"/>
                       <children Type="Collection"/>
                       <zOrder Type="qreal" Value="-1"/>
                       <borders Type="enumAndFlags" Value="0"/>
@@ -130,7 +129,7 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font underline="0" pointSize="9" Type="QFont" weight="50" italic="0" family="Segoe UI"/>
+                      <font Type="QFont" family="Segoe UI" italic="0" pointSize="9" underline="0" weight="50"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
                       <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -158,15 +157,15 @@
                     </item>
                     <item ClassName="HLayout" Type="Object">
                       <objectName Type="QString">HorizontalLayout3</objectName>
-                      <geometry x="76" Type="QRect" width="1446" height="50" y="0"/>
+                      <geometry Type="QRect" height="50" width="1446" x="76" y="0"/>
                       <children Type="Collection">
                         <item ClassName="HLayout" Type="Object">
                           <objectName Type="QString">HorizontalLayout4</objectName>
-                          <geometry x="0" Type="QRect" width="1446" height="50" y="0"/>
+                          <geometry Type="QRect" height="50" width="1446" x="0" y="0"/>
                           <children Type="Collection">
                             <item ClassName="TextItem" Type="Object">
                               <objectName Type="QString">TextItem2</objectName>
-                              <geometry x="0" Type="QRect" width="150" height="50" y="0"/>
+                              <geometry Type="QRect" height="50" width="150" x="0" y="0"/>
                               <children Type="Collection"/>
                               <zOrder Type="qreal" Value="-2"/>
                               <borders Type="enumAndFlags" Value="0"/>
@@ -185,7 +184,7 @@
                               <alignment Type="enumAndFlags" Value="129"/>
                               <autoWidth Type="enumAndFlags" Value="0"/>
                               <autoHeight Type="bool" Value="1"/>
-                              <font underline="0" pointSize="9" Type="QFont" weight="50" italic="0" family="Segoe UI"/>
+                              <font Type="QFont" family="Segoe UI" italic="0" pointSize="9" underline="0" weight="50"/>
                               <backgroundOpacity Type="int" Value="100"/>
                               <backgroundMode Type="enumAndFlags" Value="1"/>
                               <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -213,7 +212,7 @@
                             </item>
                             <item ClassName="TextItem" Type="Object">
                               <objectName Type="QString">TextItem3</objectName>
-                              <geometry x="150" Type="QRect" width="1296" height="50" y="0"/>
+                              <geometry Type="QRect" height="50" width="1296" x="150" y="0"/>
                               <children Type="Collection"/>
                               <zOrder Type="qreal" Value="-2"/>
                               <borders Type="enumAndFlags" Value="0"/>
@@ -232,7 +231,7 @@
                               <alignment Type="enumAndFlags" Value="129"/>
                               <autoWidth Type="enumAndFlags" Value="0"/>
                               <autoHeight Type="bool" Value="1"/>
-                              <font underline="0" pointSize="9" Type="QFont" weight="50" italic="0" family="Segoe UI"/>
+                              <font Type="QFont" family="Segoe UI" italic="0" pointSize="9" underline="0" weight="50"/>
                               <backgroundOpacity Type="int" Value="100"/>
                               <backgroundMode Type="enumAndFlags" Value="1"/>
                               <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -340,11 +339,11 @@
             </item>
             <item ClassName="ReportHeader" Type="Object">
               <objectName Type="QString">ReportHeader3</objectName>
-              <geometry x="50" Type="QRect" width="2000" height="100" y="50"/>
+              <geometry Type="QRect" height="100" width="2059" x="50" y="50"/>
               <children Type="Collection">
                 <item ClassName="ShapeItem" Type="Object">
                   <objectName Type="QString">ShapeItem4</objectName>
-                  <geometry x="0" Type="QRect" width="1998" height="80" y="16"/>
+                  <geometry Type="QRect" height="80" width="1998" x="0" y="16"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>
@@ -369,7 +368,7 @@
                 </item>
                 <item ClassName="TextItem" Type="Object">
                   <objectName Type="QString">TextItem4</objectName>
-                  <geometry x="110" Type="QRect" width="1730" height="58" y="26"/>
+                  <geometry Type="QRect" height="58" width="1730" x="110" y="26"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>
@@ -388,7 +387,7 @@
                   <alignment Type="enumAndFlags" Value="132"/>
                   <autoWidth Type="enumAndFlags" Value="0"/>
                   <autoHeight Type="bool" Value="0"/>
-                  <font underline="0" pointSize="12" Type="QFont" weight="75" italic="0" family="Segoe UI"/>
+                  <font Type="QFont" family="Segoe UI" italic="0" pointSize="12" underline="0" weight="75"/>
                   <backgroundOpacity Type="int" Value="100"/>
                   <backgroundMode Type="enumAndFlags" Value="0"/>
                   <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -479,7 +478,7 @@
         <item ClassName="LimeReport::ConnectionDesc" Type="Object">
           <objectName Type="QString"></objectName>
           <name Type="QString">alovada</name>
-          <driver Type="QString">QSQLCIPHER</driver>
+          <driver Type="QString">QSQLITE</driver>
           <databaseName Type="QString">/home/alex/Qt_projects/Database/alovada.sqlite3</databaseName>
           <userName Type="QString"></userName>
           <password Type="QString" Value=""/>

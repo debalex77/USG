@@ -6,16 +6,6 @@
 #include <data/database.h>
 #include <data/loggingcategories.h>
 
-#define release_1_1_3 "1.1.3"
-#define release_1_1_4 "1.1.4"
-#define release_1_1_5 "1.1.5"
-#define release_2_0_4 "2.0.4"
-#define release_2_0_5 "2.0.5"
-#define release_2_0_6 "2.0.6"
-#define release_2_0_7 "2.0.7"
-#define release_2_0_8 "2.0.8"
-#define release_2_0_9 "2.0.9"
-
 class UpdateReleasesApp : public QObject
 {
     Q_OBJECT
@@ -24,13 +14,26 @@ public:
     ~UpdateReleasesApp();
 
     bool execUpdateCurrentRelease(const QString current_release);
+    void initializeUpdateFunctions();
 
 private:
-    int converVersionStringToNumber(const QString current_release) const;
-    bool updateRelease_2_0_9();
+    void updateRelease_2_0_4();
+    void updateRelease_2_0_5();
+    void updateRelease_2_0_6();
+    void updateRelease_2_0_7();
+    void updateRelease_2_0_9();
+
+    void updateRelease_3_0_1();
+    void updateTablePacients_release_3_0_1();
+    void updateTableKidney_release_3_0_1();
+    void updateTableIntestinalLoops_release_3_0_1();
+    void updateTableformationsSystemTemplates_release_3_0_1();
+    void createIndex_release_3_0_1();
+    void createIndexForBaseImage_3_0_1();
 
 private:
-    DataBase *db;
+    DataBase* db;
+    QMap<int, QMap<int, QMap<int, std::function<void()>>>> updateFunctions;
 };
 
 #endif // UPDATERELEASESAPP_H

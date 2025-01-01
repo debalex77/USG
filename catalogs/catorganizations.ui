@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>510</width>
-    <height>312</height>
+    <height>295</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -18,6 +23,7 @@
     <widget class="QLabel" name="label">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -33,6 +39,7 @@
     <widget class="QLabel" name="label_2">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -48,6 +55,7 @@
     <widget class="QLabel" name="label_4">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -119,11 +127,148 @@
        <string>Contracte</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_4">
+       <item row="0" column="0">
+        <layout class="QHBoxLayout" name="layoutToolBar">
+         <property name="spacing">
+          <number>6</number>
+         </property>
+         <property name="topMargin">
+          <number>0</number>
+         </property>
+         <item>
+          <widget class="QToolButton" name="btnAddContract">
+           <property name="styleSheet">
+            <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resource.qrc">
+             <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnEditContract">
+           <property name="styleSheet">
+            <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resource.qrc">
+             <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnDeletionContract">
+           <property name="styleSheet">
+            <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+           </property>
+           <property name="text">
+            <string>...</string>
+           </property>
+           <property name="icon">
+            <iconset resource="../resource.qrc">
+             <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="Line" name="line">
+           <property name="orientation">
+            <enum>Qt::Vertical</enum>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QToolButton" name="btnSetDefaultContract">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>21</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+           </property>
+           <property name="text">
+            <string>Contract de baza</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <spacer name="horizontalSpacer_4">
+           <property name="orientation">
+            <enum>Qt::Horizontal</enum>
+           </property>
+           <property name="sizeHint" stdset="0">
+            <size>
+             <width>40</width>
+             <height>20</height>
+            </size>
+           </property>
+          </spacer>
+         </item>
+        </layout>
+       </item>
        <item row="1" column="0">
         <widget class="QTableView" name="tableViewContracts"/>
-       </item>
-       <item row="0" column="0">
-        <layout class="QHBoxLayout" name="layoutToolBar"/>
        </item>
       </layout>
      </widget>
@@ -153,6 +298,21 @@
        </item>
        <item row="0" column="2">
         <widget class="QToolButton" name="btnClearStamp">
+         <property name="styleSheet">
+          <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+         </property>
          <property name="text">
           <string>...</string>
          </property>
@@ -230,8 +390,15 @@
    </item>
    <item row="3" column="2">
     <widget class="QPushButton" name="btnOK">
+     <property name="minimumSize">
+      <size>
+       <width>104</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>false</bold>
       </font>
      </property>
@@ -246,6 +413,12 @@
    </item>
    <item row="3" column="3" colspan="2">
     <widget class="QPushButton" name="btnWrite">
+     <property name="minimumSize">
+      <size>
+       <width>104</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Salvează</string>
      </property>
@@ -257,6 +430,12 @@
    </item>
    <item row="3" column="5">
     <widget class="QPushButton" name="btnCancel">
+     <property name="minimumSize">
+      <size>
+       <width>104</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Închide</string>
      </property>

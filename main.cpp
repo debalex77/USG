@@ -1,23 +1,13 @@
 #include "data/mainwindow.h"
 #include "data/databaseselection.h"
-#include "data/version.h"
 
 #include <QGuiApplication>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QScreen>
-#endif
-
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-#include <QTextCodec>
-#endif
-
 #include <QTranslator>
+#include <QStyleHints>
 
 // includem librarii pentru logare
 #include <QScopedPointer>
@@ -40,6 +30,13 @@
 
 static const int LOAD_TIME_MSEC = 5 * 1000;
 
+#if defined(Q_OS_MACOS)
+
+extern void setupCustomAppDelegate();
+extern bool isDarkModeEnabledMacOS();
+
+#endif
+
 //******************************************************************************************************************************
 
 QScopedPointer<QFile>   m_logFile;  // indicator pentru logare
@@ -53,24 +50,40 @@ int resizeMainWindow(QApplication &a)
 
     //--------------------------------------------------
     // schimbam dimensiunea ferestrei
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
+
+#if defined(Q_OS_LINUX) || (Q_OS_WIN)
+
     int screenWidth  = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
     w.resize(screenWidth * 0.8, screenHeight * 0.8);
+
+#elif defined(Q_OS_MACOS)
+
+    QRect availableGeometry = screen->availableGeometry();
+    int screenWidth = availableGeometry.width();
+    int screenHeight = availableGeometry.height();
+
+    // Setează dimensiuni minime și maxime
+    w.setMinimumSize(screenWidth * 0.5, screenHeight * 0.5);
+    w.setMaximumSize(screenWidth, screenHeight);
+
+#endif
 
     //--------------------------------------------------
     // setam splash pe 10 sec
 
     QDir dir;
-    QPixmap pixmap(dir.toNativeSeparators("icons/usg_splash.png"));
+    QPixmap pixmap;
+    QDate current_date = QDate::currentDate();
+    int current_year = current_date.year();
+    if (current_date >= QDate(current_year, 12, 15) || current_date <= QDate(current_year, 01, 15))
+        pixmap.load(":/icons/splash_santa.png");
+    else if (current_date >= QDate(current_date.year(), 12, 1) || current_date <= QDate(current_year, 03, 01).addDays(-1))
+        pixmap.load(":/icons/splash_snow.png");
+    else
+        pixmap.load(":/icons/usg_splash.png");
+
 #if defined(Q_OS_LINUX)
     if (pixmap.isNull())
         pixmap.load(dir.toNativeSeparators("/usr/share/pixmaps/usg/usg_splash.png"));
@@ -79,21 +92,51 @@ int resizeMainWindow(QApplication &a)
     if (! pixmap.isNull()){
         QPainter painter(&pixmap);
         QFont font = painter.font();
-        font.setPixelSize(18);
         font.setBold(true);
-        painter.setFont(font);
-#if defined(Q_OS_LINUX)
-        painter.drawText(464, 94, QCoreApplication::tr("versiunea ") + VER);
-        painter.drawText(536, 242, QCoreApplication::tr("autor:"));
-        painter.drawText(378, 259, "alovada.med@gmail.com");
-#elif defined(Q_OS_WIN)
-        int id_font = QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
-        QString family = QFontDatabase::applicationFontFamilies(id_font).at(0);
-        font.setFamily(family);
 
-        painter.drawText(446, 94, QCoreApplication::tr("versiunea ") + VER);
+#if defined(Q_OS_LINUX)
+        font.setPixelSize(18);
+#elif defined(Q_OS_WIN)
+        font.setFamily("Segoe UI");
+#endif
+        painter.setFont(font); // Setăm fontul înainte de a desena textul
+
+#if defined(Q_OS_LINUX)
+        font.setPointSize(20);
+        painter.setFont(font);
+        painter.drawText(96, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
+        font.setPointSize(11);
+        painter.setFont(font);
+        painter.drawText(464, 74, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
+        painter.drawText(536, 242, QCoreApplication::tr("autor:"));
+        painter.drawText(400, 259, USG_COMPANY_EMAIL);
+        font.setPointSize(9);
+        painter.setFont(font);
+        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
+#elif defined(Q_OS_WIN)
+        font.setPointSize(18);
+        painter.setFont(font);
+        painter.drawText(132, 48, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
+        font.setPointSize(11);
+        painter.setFont(font);
+        painter.drawText(464, 68, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
+        painter.drawText(534, 242, QCoreApplication::tr("autor:"));
+        painter.drawText(400, 259, USG_COMPANY_EMAIL);
+        font.setPointSize(9);
+        painter.setFont(font);
+        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
+#elif defined(Q_OS_MACOS)
+        font.setPointSize(22);
+        painter.setFont(font);
+        painter.drawText(182, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
+        font.setPointSize(13);
+        painter.setFont(font);
+        painter.drawText(468, 74, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
         painter.drawText(530, 242, QCoreApplication::tr("autor:"));
-        painter.drawText(358, 259, "alovada.med@gmail.com");
+        painter.drawText(408, 259, USG_COMPANY_EMAIL);
+        font.setPointSize(10);
+        painter.setFont(font);
+        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
 #endif
 
         QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
@@ -107,6 +150,22 @@ int resizeMainWindow(QApplication &a)
         }
 
         w.show(); // lansam feareastra principala
+
+#if defined(Q_OS_MACOS)
+
+        // Redimensionează fereastra la 80% din dimensiunea ecranului
+        w.resize(screenWidth * 0.8, screenHeight * 0.8);
+
+        // Calculează poziția pentru centrare
+        int windowWidth = w.width();
+        int windowHeight = w.height();
+        int posX = availableGeometry.x() + (screenWidth - windowWidth) / 2;
+        int posY = availableGeometry.y() + (screenHeight - windowHeight) / 2;
+
+        // Mută fereastra în centru
+        w.move(posX, posY);
+#endif
+
         splash.finish(&w);
     } else {
         qWarning(logWarning()) << QCoreApplication::tr("Nu a fost gasit fisierul - 'icons/usg_splash.png'");
@@ -118,8 +177,32 @@ int resizeMainWindow(QApplication &a)
 
 int main(int argc, char *argv[])
 {
+
+#if defined(Q_OS_MACOS)
+    setupCustomAppDelegate(); // Configurează delegate-ul pentru a elimina eroarea - vezi fisierul AppDelegate.mm
+#endif
+
     QApplication::setAttribute(Qt::AA_ShareOpenGLContexts); // initializare pluginului Qt WebEngine (specificul LimeReport)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Floor);
+
     QApplication a(argc, argv);
+
+#if defined (Q_OS_LINUX)
+    int fontId = QFontDatabase::addApplicationFont(":/Fonts/segoeUI/segoeui.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont font(family); // Setează mărimea dorită
+    font.setPointSize(11);
+    QApplication::setFont(font); // Setează fontul pentru întreaga aplicație
+#elif defined(Q_OS_WIN)
+    int fontId = QFontDatabase::addApplicationFont(":/Fonts/segoeUI/segoeui.ttf");
+    QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
+    QFont font(family); // Setează mărimea dorită
+    font.setPointSize(10);
+    QApplication::setFont(font); // Setează fontul pentru întreaga aplicație
+#elif defined(Q_OS_MACOS)
+    QFont font("San Francisco", 13); // Setează mărimea dorită
+    QApplication::setFont(font); // Setează fontul pentru întreaga aplicație
+#endif
 
     qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT OPENSSL =~=~=~=~=~=~=~=~=~=~=~=~";
     qInfo(logInfo()) << "Support SSL: " << QSslSocket::supportsSsl();
@@ -130,31 +213,47 @@ int main(int argc, char *argv[])
     qInfo(logInfo()) << QSqlDatabase::drivers();
     qInfo(logInfo()) << "";
 
-
-#if defined(Q_OS_WIN)
-    qInfo(logInfo()) << "Load fonts 'Cantarell' for Windows.";
-    QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Regular.ttf");
-    QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Bold.ttf");
-    QFontDatabase::addApplicationFont(":/Fonts/Cantarell-Oblique.ttf");
-    QFontDatabase::addApplicationFont(":/Fonts/Cantarell-BoldOblique.ttf");
-#endif
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QTextCodec::setCodecForLocale(QTextCodec::codecForName("cp8859"));
-#endif
     //******************************************************************************************************************************
     // setam stilul a aplicatiei
-    qInfo(logInfo()) << "Load style applications.";
-    QFile fileStyle(":/style.css");
+
+    a.setStyle("Fusion");
+
+#if defined (Q_OS_LINUX)
+    QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
     a.setStyleSheet(appStyle);              // setam stilul
-    // a.setStyle("Fusion");
+#elif defined(Q_OS_WIN)
+    QFile fileStyle(":/styles/style_linux.qss");
+    fileStyle.open(QFile::ReadOnly);
+    QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
+    a.setStyleSheet(appStyle);              // setam stilul
+#elif defined (Q_OS_MACOS)
+    QFile fileStyle(":/styles/style_linux.qss");
+    fileStyle.open(QFile::ReadOnly);
+    QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
+    a.setStyleSheet(appStyle);              // setam stilul
+#endif
+    qInfo(logInfo()) << "Load style applications.";
 
     //******************************************************************************************************************************
     // alegem fisierul cu setari
     qInfo(logInfo()) << "Open database selection.";
     DatabaseSelection _select;
+
+#if defined(Q_OS_MACOS)
+    // Dacă tema dark este detectată
+    if (isDarkModeEnabledMacOS()) {
+        QMessageBox::warning(
+            &_select, // Pointer către fereastra principală
+            QCoreApplication::tr("Verificarea temei OS"),
+            QCoreApplication::tr("Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
+                                 "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
+                                 "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
+            QMessageBox::Ok);
+    }
+#endif
+
     if (_select.exec() != QDialog::Accepted)
         return 0;
 
@@ -164,7 +263,7 @@ int main(int argc, char *argv[])
     AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
-    if (QString(argv[1]) == "" && QString(argv[1]) != "/debug") { // !=
+    if (QString(argv[1]) == "" && QString(argv[1]) == "/debug") { // !=
         m_logFile.reset(new QFile(globals::pathLogAppSettings));
         if (m_logFile.data()->open(QFile::Append | QFile::Text)){
             qInstallMessageHandler(messageHandler);
@@ -177,7 +276,7 @@ int main(int argc, char *argv[])
         InitLaunch* initLaunch = new InitLaunch();        // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
         initLaunch->setAttribute(Qt::WA_DeleteOnClose);   // setam atributul de eliberare a memoriei la inchiderea ferestrei
         if (initLaunch->exec() != QDialog::Accepted){
-            delete appSettings;
+            // appSettings->deleteLater();
             return 1;
         }
         QTranslator* translator = new QTranslator();                                                                          // daca limba a fost schimbata
@@ -213,11 +312,22 @@ int main(int argc, char *argv[])
             appSettings->setKeyAndValue("on_start", "idUserApp",   db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
             appSettings->setKeyAndValue("on_start", "nameUserApp", db->encode_string(globals::nameUserApp));                // ulterioara la logare urmatoare a aplicatiei
             appSettings->setKeyAndValue("on_start", "memoryUser",  (globals::memoryUser) ? 1 : 0);
-            delete db;
+            qDebug() << "thisSqlite: " << globals::thisSqlite;
+            qDebug() << "thisMySQL: " << globals::thisMySQL;
+            qDebug() << "user: " << globals::nameUserApp;
+            qDebug() << "id user: " << globals::idUserApp;
+            qDebug() << "lang app: " << globals::langApp;
+            qDebug() << "index type SQL:" << globals::indexTypeSQL;
             resizeMainWindow(a); // resetam dimensiunile ferestrei principale
+            db->deleteLater();
         } else {                                             // 3. exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
             appSettings->loadSettings();                     // determinam/incarcam setarile principale ale aplicatiei
-
+            qDebug() << "thisSqlite: " << globals::thisSqlite;
+            qDebug() << "thisMySQL: " << globals::thisMySQL;
+            qDebug() << "user: " << globals::nameUserApp;
+            qDebug() << "id user: " << globals::idUserApp;
+            qDebug() << "lang app: " << globals::langApp;
+            qDebug() << "index type SQL:" << globals::indexTypeSQL;
             AuthorizationUser* authUser = new AuthorizationUser();  // lansam autorizarea
             authUser->setProperty("Id", globals::idUserApp);
             if (authUser->exec() != QDialog::Accepted)
@@ -226,11 +336,11 @@ int main(int argc, char *argv[])
             appSettings->setKeyAndValue("on_start", "idUserApp",   db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
             appSettings->setKeyAndValue("on_start", "nameUserApp", db->encode_string(globals::nameUserApp));                // ulterioara la logare urmatoare a aplicatiei
             appSettings->setKeyAndValue("on_start", "memoryUser",  (globals::memoryUser) ? 1 : 0);
-            delete db;
             resizeMainWindow(a);
+            db->deleteLater();
         }
     }
-    delete appSettings;
+    appSettings->deleteLater();
 }
 
 // realizarea procesarii

@@ -68,13 +68,13 @@ bool CatContracts::controlRequiredObjects()
 {
     if (ui->comboOrganizations->currentIndex() == -1){
         QMessageBox::warning(this, tr("Verificarea datelor."),
-                             tr("Nu este indicata \"<b>Organizatia</b>\" !!!"), QMessageBox::Ok);
+                             tr("Nu este indicat\304\203 \"<b>Organiza\310\233ia</b>\" !!!"), QMessageBox::Ok);
         return false;
     }
 
     if (ui->editName->text().isEmpty()){
         QMessageBox::warning(this, tr("Verificarea datelor."),
-                             tr("Nu este indicata \"<b>Denumirea</b>\" contractului !!!"), QMessageBox::Ok);
+                             tr("Nu este indicat\304\203 \"<b>Denumirea</b>\" contractului !!!"), QMessageBox::Ok);
         return false;
     }
 
@@ -258,7 +258,7 @@ bool CatContracts::onWritingData()
         if (! insertIntoTableContracts()){
             QMessageBox::warning(this, tr("Crearea obiectului."),
                                  tr("Salvarea datelor contractului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresati-va administratorului aplicatiei.")
+                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
                                      .arg(ui->comboOrganizations->currentText()), QMessageBox::Ok);
             return false;
         }
@@ -271,7 +271,7 @@ bool CatContracts::onWritingData()
         if (! updateDataTableContracts()){
             QMessageBox::warning(this, tr("Modificarea datelor."),
                                  tr("Modificarea datelor contractului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresati-va administratorului aplicatiei.")
+                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
                                  .arg(ui->comboOrganizations->currentText()), QMessageBox::Ok);
             return false;
         }
@@ -296,39 +296,26 @@ void CatContracts::onClose()
 void CatContracts::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
-#if defined(Q_OS_LINUX)
+
         QMessageBox messange_box(QMessageBox::Question,
-                                 tr("Verificarea datelor"),
-                                 tr("Datele au fost modificate.\n"
-                                    "Doriți să salvați aceste modificări ?"),
-                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-#elif defined(Q_OS_MACOS)
-        QMessageBox messange_box(QMessageBox::Question,
-                                 tr("Verificarea datelor"),
-                                 tr("Datele au fost modificate.\n"
-                                    "Doriți să salvați aceste modificări ?"),
-                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-#elif defined(Q_OS_WIN)
-        QMessageBox messange_box(QMessageBox::Question,
-                                 tr("Verificarea datelor"),
+                                 tr("Modificarea datelor"),
                                  tr("Datele au fost modificate.\n"
                                     "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
-                                 QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel, this);
-#endif
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes,    tr("Da"));
-        messange_box.setButtonText(QMessageBox::No,     tr("Nu"));
-        messange_box.setButtonText(QMessageBox::Cancel, tr("Cancel"));
-//#else
-//        messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//        messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-//        messange_box.addButton(tr("Anuleaza"), QMessageBox::RejectRole);
-#endif
-        auto answer = messange_box.exec();
-        if (answer == QMessageBox::Yes){
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton){
             onWritingDataClose();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton){
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton){
             event->ignore();
         }
     } else {

@@ -34,7 +34,6 @@ private:
     void getNameReportsFromDorectory();
     void initConnections();
     void initPercentCombobox();
-    void setStyleForButtom();
     QString getMainQry();
     QString getQuerySystem(const QString str_sytem);
     void setImageForReports();

@@ -30,16 +30,12 @@ BaseSqlQueryModel::BaseSqlQueryModel(QString &strQuery, QObject *parent): QSqlQu
     if (strQuery.isEmpty()){
         return;
     }
-    QSqlQuery query;
+    QSqlQuery query(QSqlDatabase::database("MainConnection"));
     query.prepare(strQuery);
     if (!query.exec()){
         qDebug() << tr("Nu s-a reusit de executat solicitarea. Eroarea: ") + query.lastError().text();
     }
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QSqlQueryModel::setQuery(query); // setam solicitarea in model
-#else
     QSqlQueryModel::setQuery(std::move(query)); // setam solicitarea in model
-#endif
 }
 
 int BaseSqlQueryModel::rowCount(const QModelIndex &parent) const
@@ -119,6 +115,10 @@ QVariant BaseSqlQueryModel::dataFromComboBox(const QModelIndex &item, int role) 
 
 QVariant BaseSqlQueryModel::dataFromUserSettings(const QModelIndex &item, int role) const
 {
+#if defined(Q_OS_WIN)
+    QFont font;
+    font.setPointSize(9);
+#endif
     switch (role) {
     case Qt::UserRole:
         return dataFromParent(item, Id);
@@ -128,8 +128,6 @@ QVariant BaseSqlQueryModel::dataFromUserSettings(const QModelIndex &item, int ro
 #if defined(Q_OS_LINUX)
         return QSqlQueryModel::data(item, role);
 #elif defined(Q_OS_WIN)
-        QFont font;
-        font.setPointSize(9);
         return font;
 #endif
     default:
@@ -159,10 +157,6 @@ QVariant BaseSqlQueryModel::dataFromGeneralListForm(const QModelIndex &item, int
             return value;
     case Qt::TextAlignmentRole:
         return value;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    case Qt::TextColorRole:
-        return value;
-#endif
     case Qt::FontRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
@@ -212,10 +206,6 @@ QVariant BaseSqlQueryModel::dataFromCatOrganizations(const QModelIndex &item, in
             return value;
     case Qt::TextAlignmentRole:
         return value;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    case Qt::TextColorRole:
-        return value;
-#endif
     case Qt::FontRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
@@ -268,11 +258,9 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
         else
             return value;
     case Qt::TextAlignmentRole:
+        if (item.column() == 2)
+            return int(Qt::AlignHCenter | Qt::AlignVCenter);
         return value;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    case Qt::TextColorRole:
-        return value;
-#endif
     case Qt::FontRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
@@ -314,6 +302,7 @@ QVariant BaseSqlQueryModel::dataFromDocPricing(const QModelIndex &item, int role
         return value;
     case Qt::FontRole:
 #if defined(Q_OS_LINUX)
+        Q_UNUSED(font)
         return value;
 #elif defined(Q_OS_WIN)
         font.setPointSize(9);
@@ -378,19 +367,9 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
         if(item.column() == orderSection_numberDoc ||
                 item.column() == orderSection_sum ||
                 item.column() == orderSection_user){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            return Qt::AlignHCenter + Qt::AlignVCenter;
-#else
             return Qt::AlignHCenter;
-#endif
         }
         return value;
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    case Qt::TextColorRole:
-        return value;
-#else
-
-#endif
     case Qt::FontRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), orderSection_deletionMark), Qt::DisplayRole).toInt() == 1){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
@@ -443,6 +422,7 @@ QVariant BaseSqlQueryModel::dataFrom_view_table_order(const QModelIndex &item, i
         font.setPointSize(9);
         return font;
 #elif defined(Q_OS_LINUX)
+        Q_UNUSED(font)
         return value;
 #endif
     default:

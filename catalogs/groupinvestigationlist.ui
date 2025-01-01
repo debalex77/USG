@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>654</width>
+    <width>766</width>
     <height>517</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -16,6 +21,12 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="2">
     <widget class="QPushButton" name="btnRemove">
+     <property name="minimumSize">
+      <size>
+       <width>106</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Elimină</string>
      </property>
@@ -27,6 +38,12 @@
    </item>
    <item row="0" column="1">
     <widget class="QPushButton" name="btnEdit">
+     <property name="minimumSize">
+      <size>
+       <width>106</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Editează</string>
      </property>
@@ -51,6 +68,12 @@
    </item>
    <item row="0" column="0">
     <widget class="QPushButton" name="btnAdd">
+     <property name="minimumSize">
+      <size>
+       <width>106</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Adaugă</string>
      </property>
@@ -62,6 +85,12 @@
    </item>
    <item row="0" column="4">
     <widget class="QPushButton" name="btnClose">
+     <property name="minimumSize">
+      <size>
+       <width>106</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Închide</string>
      </property>
@@ -73,6 +102,12 @@
    </item>
    <item row="0" column="3">
     <widget class="QPushButton" name="btnPrint">
+     <property name="minimumSize">
+      <size>
+       <width>106</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Printează</string>
      </property>

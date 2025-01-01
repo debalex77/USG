@@ -24,7 +24,7 @@ bool Downloader::get(const QString& targetFolder, const QUrl& url)
     }
 
     QNetworkRequest request(url);
-    request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true); // permitem redirectionarea
+    // request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true); // permitem redirectionarea
     m_currentReply = m_manager.get(request);                               // lansam descarcarea
 
     // conectarea pu citirea datelor si progresului

@@ -1,6 +1,8 @@
 QT       += core \
             gui \
             sql \
+            widgets \
+            network \
             webenginewidgets \
             printsupport \
             xml \
@@ -8,12 +10,51 @@ QT       += core \
             multimediawidgets \
             gui-private
 
-greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
+#-----------------------------------------------------------------------
+#------ Verifică dacă versiunea de Qt este cel puțin 6.5.3
+greaterThan(QT_MAJOR_VERSION, 6) {
+    message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
+} else:equals(QT_MAJOR_VERSION, 6) {
+    greaterThan(QT_MINOR_VERSION, 5) {
+        message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
+    } else:equals(QT_MINOR_VERSION, 5) {
+        greaterThan(QT_PATCH_VERSION, 2) {
+            message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
+        } else {
+            error("This project requires Qt version 6.5.3 or higher.")
+        }
+    }
+} else {
+    error("This project requires Qt version 6.5.3 or higher.")
+}
+
+
+#greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 DEFINES += QT_QML_DEBUG_NO_WARNING
-CONFIG- = qml_debug
+CONFIG  -= qml_debug
 
-VERSION                  = 2.0.9
+#-----------------------------------------------------------------------
+#------ INFO APP
+
+# Definim componentele versiunii
+USG_VERSION_MAJOR   = 3
+USG_VERSION_MINOR   = 0
+USG_VERSION_RELEASE = 1
+USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
+VERSION             = "$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE"
+DEFINES += USG_VERSION_MAJOR=$$USG_VERSION_MAJOR
+DEFINES += USG_VERSION_MINOR=$$USG_VERSION_MINOR
+DEFINES += USG_VERSION_RELEASE=$$USG_VERSION_RELEASE
+DEFINES += USG_VERSION_FULL=\\\"$$USG_VERSION_FULL\\\"
+
+# email companiei
+DEFINES += USG_COMPANY_EMAIL="\\\"alovada.med@gmail.com\\\""
+
+# mesaj de versiune a aplicatiei
+message("VERSION: $$USG_VERSION_FULL")
+
+# Denumirea companiei, product, desription
 QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
@@ -21,11 +62,17 @@ QMAKE_TARGET_COPYRIGHT   = Codreanu Alexandru
 RC_ICONS = img/eco_512x512.ico
 ICON = img/eco_512x512.icns
 
-CONFIG += c++11
+#-----------------------------------------------------------------------
+#------ CONFIG APP
 
-# You can make your code fail to compile if it uses deprecated APIs.
-# In order to do so, uncomment the following line.
-#DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
+CONFIG += c++17
+
+#-----------------------------------------------------------------------
+#------ SOURCES, HEADERS, FORMS, TRANSLATIONS
+
+mac {
+    SOURCES += AppDelegate.mm
+}
 
 SOURCES += \
     catalogs/asistanttipapp.cpp \
@@ -41,6 +88,9 @@ SOURCES += \
     catalogs/listform.cpp \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
+    customs/custommessage.cpp \
+    customs/lineeditcustom.cpp \
+    customs/searchlineedit.cpp \
     data/about.cpp \
     data/appsettings.cpp \
     data/authorizationuser.cpp \
@@ -74,6 +124,9 @@ SOURCES += \
     models/basesortfilterproxymodel.cpp \
     models/basesqlquerymodel.cpp \
     models/basesqltablemodel.cpp \
+    models/documenttablemodel.cpp \
+    models/loaddatatask.cpp \
+    models/paginatedsqlmodel.cpp \
     models/registrationtablemodel.cpp \
     models/treeitem.cpp \
     models/treemodel.cpp \
@@ -93,6 +146,9 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
+    customs/custommessage.h \
+    customs/lineeditcustom.h \
+    customs/searchlineedit.h \
     data/about.h \
     data/appsettings.h \
     data/authorizationuser.h \
@@ -101,6 +157,7 @@ HEADERS += \
     data/databaseselection.h \
     data/downloader.h \
     data/downloaderversion.h \
+    data/enums.h \
     data/globals.h \
     data/initlaunch.h \
     data/loggingcategories.h \
@@ -126,11 +183,13 @@ HEADERS += \
     models/basesortfilterproxymodel.h \
     models/basesqlquerymodel.h \
     models/basesqltablemodel.h \
+    models/documenttablemodel.h \
+    models/loaddatatask.h \
+    models/paginatedsqlmodel.h \
     models/registrationtablemodel.h \
     models/treeitem.h \
     models/treemodel.h \
-    models/variantmaptablemodel.h \
-    resources.rc
+    models/variantmaptablemodel.h
 
 FORMS += \
     catalogs/asistanttipapp.ui \
@@ -146,6 +205,7 @@ FORMS += \
     catalogs/listform.ui \
     catalogs/normograms.ui \
     catalogs/patienthistory.ui \
+    customs/custommessage.ui \
     data/about.ui \
     data/appsettings.ui \
     data/authorizationuser.ui \
@@ -163,8 +223,8 @@ FORMS += \
     infowindow.ui
 
 TRANSLATIONS += \
-    USG_ro_RO.ts \
-    USG_ru_RU.ts \
+    translate/USG_ro_RO.ts \
+    translate/USG_ru_RU.ts
 
 CONFIG += lrelease
 CONFIG += embed_translations
@@ -178,10 +238,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     Fonts/Cantarell Bold.ttf \
     Fonts/Cantarell-Bold.otf \
-    Fonts/Cantarell-Bold.ttf \
     Fonts/Cantarell-BoldOblique.ttf \
     Fonts/Cantarell-Oblique.ttf \
-    Fonts/Cantarell-Regular.otf \
     Fonts/Cantarell-Regular.ttf \
     Fonts/freefontsdownload.txt \
     Fonts/www.freefontsdownload.net.url \
@@ -267,11 +325,6 @@ message($$LIBS)
 #----------------------------------------------------------------------------------------
 #------------------------------------- OPENSSL ------------------------------------------
 
-
-unix:!macx: LIBS += -L$$PWD/lib/openssl/ -lssl
-unix:!macx: LIBS += -L$$PWD/lib/openssl/ -lcrypto
-win32: LIBS += -L$$PWD/lib/openssl/ -llibssl
-win32: LIBS += -L$$PWD/lib/openssl/ -llibcrypto
-
-INCLUDEPATH += $$PWD/lib/openssl
-DEPENDPATH += $$PWD/lib/openssl
+unix:!macx: LIBS += -L$$PWD/openssl/ -lssl -lcrypto
+win32: LIBS += -L$$PWD/openssl/ -llibssl -llibcrypto
+INCLUDEPATH += $$PWD/openssl

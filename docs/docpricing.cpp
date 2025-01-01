@@ -53,6 +53,9 @@ DocPricing::DocPricing(QWidget *parent) :
 
     connectionsToIndexChangedCombobox(); // conectarea la modificarea indexului combobox-urilor
 
+    connect(ui->btnOpenCatOrganization, &QToolButton::clicked, this, &DocPricing::openCatOrganization);
+    connect(ui->btnOpenCatContract, &QToolButton::clicked, this, &DocPricing::openCatContract);
+
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocPricing::dataWasModified);
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocPricing::onDateTimeChanged);
 
@@ -60,24 +63,19 @@ DocPricing::DocPricing(QWidget *parent) :
     connect(ui->tableView, QOverload<const QModelIndex&>::of(&QTableView::clicked),   // la apasare btn Key_Return sau Key_Enter
             this, &DocPricing::onClickedRowTable);                                    // intram in regimul de redactare a sectiei 'Cost'
 
-    connect(ui->btnPrint, &QAbstractButton::clicked, this, &DocPricing::onPrint);
+    connect(ui->btnPrint, &QAbstractButton::clicked, this, [this]()
+            {
+        onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+            });
+
     connect(ui->btnOK, &QAbstractButton::clicked, this, &DocPricing::onWritingDataClose);
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &DocPricing::onWritingData);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &DocPricing::onClose);
 
-#if defined(Q_OS_WIN)
-    ui->frame_table->setStyle(style_fusion);
-    ui->frame_footer->setStyle(style_fusion);
-#endif
 }
 
 DocPricing::~DocPricing()
 {
-    delete btnAdd;
-    delete btnEdit;
-    delete btnDeletion;
-    delete btnFormsTable;
-    delete toolBar;
     delete db;
     delete popUp;
     delete modelOrganizations;
@@ -88,6 +86,11 @@ DocPricing::~DocPricing()
     delete catInvestigations;
     delete timer;
     delete ui;
+}
+
+void DocPricing::onPrintDocument(Enums::TYPE_PRINT type_print)
+{
+    onPrint(type_print);
 }
 
 void DocPricing::dataWasModified()
@@ -146,11 +149,9 @@ void DocPricing::slot_IdChanged()
         ui->editNumberDoc->setDisabled(!ui->editNumberDoc->text().isEmpty());
         if (globals::thisMySQL){
             QString str_date = items.constFind("dateDoc").value();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            str_date = str_date.replace(QRegExp("T"), " ").replace(".000","");
-#else
-            str_date = str_date.replace(QRegularExpression("T"), " ").replace(".000","");
-#endif
+            static const QRegularExpression replaceT("T");
+            static const QRegularExpression removeMilliseconds("\\.000");
+            str_date = str_date.replace(replaceT, " ").replace(removeMilliseconds,"");
             ui->dateTimeDoc->setDateTime(QDateTime::fromString(str_date, "yyyy-MM-dd hh:mm:ss"));
         } else
             ui->dateTimeDoc->setDateTime(QDateTime::fromString(items.constFind("dateDoc").value(), "yyyy-MM-dd hh:mm:ss"));
@@ -276,6 +277,37 @@ void DocPricing::indexChangedComboTypePrice(const int arg1)
     dataWasModified();
 }
 
+void DocPricing::openCatOrganization()
+{
+    if (m_idOrganization == 0 || m_idOrganization == Enums::IDX_UNKNOW)
+        return;
+
+    qInfo(logInfo()) << tr("Editarea/vizualizarea datelor organizatiei '%1' cu id='%2'.")
+                            .arg(ui->comboOrganization->currentText(), QString::number(m_idOrganization));
+
+    CatOrganizations *cat_organization = new CatOrganizations(this);
+    cat_organization->setAttribute(Qt::WA_DeleteOnClose);
+    cat_organization->setProperty("itNew", false);
+    cat_organization->setProperty("Id", m_idOrganization);
+    cat_organization->show();
+}
+
+void DocPricing::openCatContract()
+{
+    if (m_idContract == 0 || m_idContract == Enums::IDX_UNKNOW)
+        return;
+
+    qInfo(logInfo()) << tr("Editarea/vizualizarea datelor contractului '%1' cu id='%2'.")
+                            .arg(ui->comboContract->currentText(), QString::number(m_idContract));
+
+    CatContracts *cat_contract = new CatContracts(this);
+    cat_contract->setAttribute(Qt::WA_DeleteOnClose);
+    cat_contract->setProperty("itNew", false);
+    cat_contract->setProperty("Id", m_idContract);
+    cat_contract->show();
+
+}
+
 void DocPricing::addRowTable()
 {
     delete catInvestigations; // sa nu dublam toolBar si btn in clasa CatForSqlTableModel
@@ -292,7 +324,7 @@ void DocPricing::addRowTable()
 void DocPricing::editRowTable()
 {
     int row = ui->tableView->currentIndex().row();
-    ui->tableView->edit(proxy->index(row, column_Price));
+    ui->tableView->edit(proxy->index(row, Enums::PRICING_COLUMN_PRICE));
 }
 
 void DocPricing::deletionRowTable()
@@ -304,13 +336,21 @@ void DocPricing::deletionRowTable()
 void DocPricing::completeTableDocPricing()
 {
     if (modelTable->rowCount() > 0){
-        QMessageBox::StandardButton YesNo;
-        YesNo = QMessageBox::question(this,
-                                      tr("Verificarea datelor."),
-                                      tr("Tabela nu este goală. Doriți să goliți tabela ?"),
-                                      QMessageBox::Yes | QMessageBox::No);
-        if (YesNo == QMessageBox::Yes)
-            modelTable->clear();
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Verificarea datelor"),
+                                 tr("Tabela nu este goal\304\203. Dori\310\233i s\304\203 goli\310\233i tabela ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
+            updateTableView();
+        } else if (messange_box.clickedButton() == noButton) {
+
+        }
     }
 
     int lastIdTable = db->getLastIdForTable("pricingsTable");
@@ -320,37 +360,35 @@ void DocPricing::completeTableDocPricing()
      * si tabela 'investigations' din BD sqlite */
     QMap<QString, QString> items;
     modelTable->setFilter(QString("id_pricings=%1").arg(m_id));
-    QString strQry = "SELECT cod,name FROM investigations WHERE deletionMark = 0;";
+    QString strQry = "SELECT cod,name FROM investigations WHERE deletionMark = 0 AND use = '1';";
     if (db->getDataFromQuery(strQry, items)){
         QMapIterator<QString, QString> it(items);
         while (it.hasNext()) {
             it.next();
             int _row = modelTable->rowCount();
             modelTable->insertRow(_row);
-            modelTable->setData(modelTable->index(_row, column_Id), lastIdTable + _row + 1);
-            modelTable->setData(modelTable->index(_row, column_DeletionMark), idx_write);
-            modelTable->setData(modelTable->index(_row, column_IdPricings), lastIdDoc);
-            modelTable->setData(modelTable->index(_row, column_Cod),  it.key());
-            modelTable->setData(modelTable->index(_row, column_Name), it.value());
-            modelTable->setData(modelTable->index(_row, column_Price), 0);
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_ID), lastIdTable + _row + 1);
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_DEL_MARK), Enums::IDX_WRITE);
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_ID_PRICINGS), lastIdDoc);
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_COD),  it.key());
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_NAME), it.value());
+            modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_PRICE), 0);
         }
     }
 }
 
 void DocPricing::filterRegExpChanged()
 {
-    if (comboSearch->currentIndex() == 0)
-        proxy->setFilterKeyColumn(column_Cod);
+    QString typeSearch = ui->editSearch->getSearchOptionSelected();
+    if (typeSearch == "code")
+        proxy->setFilterKeyColumn(Enums::PRICING_COLUMN_COD);
+    else if (typeSearch == "name")
+        proxy->setFilterKeyColumn(Enums::PRICING_COLUMN_NAME);
     else
-        proxy->setFilterKeyColumn(column_Name);
+        return;
 
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRegExp regExp(editSearch->text(), Qt::CaseInsensitive, QRegExp::RegExp);
-    proxy->setFilterRegExp(regExp);
-#else
-    QRegularExpression regExp(editSearch->text(), QRegularExpression::CaseInsensitiveOption);
+    QRegularExpression regExp(ui->editSearch->text(), QRegularExpression::CaseInsensitiveOption);
     proxy->setFilterRegularExpression(regExp);
-#endif
 }
 
 void DocPricing::getDataSelectable()
@@ -360,10 +398,10 @@ void DocPricing::getDataSelectable()
     QString _name = catInvestigations->getSelectName();
 
     for (int n = 0; n < proxy->rowCount(); n++) {
-        if (ui->tableView->model()->data(proxy->index(n, column_Cod), Qt::DisplayRole).toString() == _cod){
+        if (ui->tableView->model()->data(proxy->index(n, Enums::PRICING_COLUMN_COD), Qt::DisplayRole).toString() == _cod){
             QMessageBox::warning(this, tr("Atentie"),
                                  tr("Investigatia <b>'%1 - %2'</b> exista in tabel.").arg(_cod, _name), QMessageBox::Ok);
-            ui->tableView->setCurrentIndex(proxy->index(n, column_Name));
+            ui->tableView->setCurrentIndex(proxy->index(n, Enums::PRICING_COLUMN_NAME));
             return;
         }
     }
@@ -371,19 +409,19 @@ void DocPricing::getDataSelectable()
 
     int _row = modelTable->rowCount();
     modelTable->insertRow(_row);
-    modelTable->setData(modelTable->index(_row, column_Id), lastIdTable + _row + 1);
-    modelTable->setData(modelTable->index(_row, column_DeletionMark), idx_write);
-    modelTable->setData(modelTable->index(_row, column_IdPricings), m_id);
-    modelTable->setData(modelTable->index(_row, column_Cod), _cod);
-    modelTable->setData(modelTable->index(_row, column_Name), _name);
-    modelTable->setData(modelTable->index(_row, column_Price), 0);
-    ui->tableView->setCurrentIndex(modelTable->index(_row, column_Price));
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_ID), lastIdTable + _row + 1);
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_DEL_MARK), Enums::IDX_WRITE);
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_ID_PRICINGS), m_id);
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_COD), _cod);
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_NAME), _name);
+    modelTable->setData(modelTable->index(_row, Enums::PRICING_COLUMN_PRICE), 0);
+    ui->tableView->setCurrentIndex(modelTable->index(_row, Enums::PRICING_COLUMN_PRICE));
 }
 
 void DocPricing::onClickedRowTable(const QModelIndex &index)
 {
     int _row = index.row();
-    QModelIndex indexEdit = proxy->index(_row, column_Price);
+    QModelIndex indexEdit = proxy->index(_row, Enums::PRICING_COLUMN_PRICE);
     ui->tableView->setCurrentIndex(indexEdit);
     ui->tableView->edit(indexEdit);
 }
@@ -391,7 +429,7 @@ void DocPricing::onClickedRowTable(const QModelIndex &index)
 void DocPricing::getDataObject()
 {
     itemsData.clear();
-    if (m_id != idx_unknow)
+    if (m_id != Enums::IDX_UNKNOW)
     itemsData.insert("id",               QString::number(m_id));
     itemsData.insert("deletionMark",     (m_post) ? QString::number(2) : QString::number(0));
     itemsData.insert("numberDoc",        ui->editNumberDoc->text());
@@ -403,129 +441,41 @@ void DocPricing::getDataObject()
     itemsData.insert("comment",          ui->editComment->text());
 }
 
-void DocPricing::onPrint()
+void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
 {
-    if (m_itNew)
+    // *************************************************************************************
+    // alocam memoria
+    m_report = new LimeReport::ReportEngine(this);
+
+    m_report->setPreviewWindowTitle(tr("Lista pre\310\233urilor nr.") + ui->editNumberDoc->text() +
+                                    tr(" din ") + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"));
+
+    m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
+    m_report->dataManager()->setReportVariable("id_pricing", m_id);
+    m_report->dataManager()->setReportVariable("organization", ui->comboOrganization->currentText());
+    m_report->dataManager()->setReportVariable("date", ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy"));
+
+    if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Pricing.lrxml")){
+        QDir dir;
+        CustomMessage *msgBox = new CustomMessage(this);
+        msgBox->setWindowTitle(tr("Printarea documentului"));
+        msgBox->setTextTitle(tr("Documentul nu poate fi printat."));
+        msgBox->setDetailedText(tr("Nu a fost gasit fi\310\231ierul formei de tipar:\n%1").arg(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Pricing.lrxml")));
+        msgBox->exec();
+        msgBox->deleteLater();
+
+        delete m_report;
+
         return;
-    if (ui->comboOrganization->currentText().isEmpty())
-        return;
-
-    QString strStream;
-    QTextStream out(&strStream);
-
-    QDir dir;
-    QString img_path_logo = dir.toNativeSeparators(QDir::tempPath() + "/USG_pricing_" + QString::number(m_id));
-
-    const int rowCount    = ui->tableView->model()->rowCount();
-    const int columnCount = ui->tableView->model()->columnCount();
-
-    out << "<html\n>"
-        << "<head\n>"
-        << "<meta Content = \"Text/html; charset=Windows-1251\">\n"
-        << QString("<title>%1</title>\n").arg(tr("Prețurile investigațiilor ecografice"))
-        << "</head>\n";
-
-    QSqlQuery qry;
-    qry.prepare("SELECT constants.id_organizations, "
-                "constants.logo,"
-                "organizations.IDNP, "
-                "organizations.name, "
-                "organizations.address, "
-                "organizations.telephone, "
-                "organizations.email "
-                "FROM constants "
-                "INNER JOIN organizations ON constants.id_organizations = organizations.id "
-                "WHERE constants.id_users = :id_users;");
-    qry.bindValue(":id_users", m_idUser);
-    if (qry.exec() && qry.next()){
-        QSqlRecord rec = qry.record();
-        QByteArray logo_array = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toByteArray());
-        QPixmap px_logo;
-        if (! logo_array.isEmpty() && px_logo.loadFromData(logo_array, "png")){
-            if (px_logo.save(img_path_logo, "png")){
-                out << QString("<body><img src=%1 width=\"600\" height=\"80\" alt=\"Logo\"></body>").arg(img_path_logo);
-            }
-        }
-        out << "<style> .caption {text-align:  right;}</style>"     // date despre organizatia
-            << "<div class=\"caption\">\n"
-            << QString("<p>%1<br>"
-                       "<b><u>c/f:</u></b> %2<br>"
-                       "<b><u>adresa:</u></b> %3<br>"
-                       "<b><u>telefon:</u></b> %4<br>"
-                       "<b><u>e-mail:</u></b> %5<br<br</p>\n").arg(qry.value(rec.indexOf("name")).toString(),
-                        qry.value(rec.indexOf("IDNP")).toString(),
-                        qry.value(rec.indexOf("address")).toString(),
-                        qry.value(rec.indexOf("telephone")).toString(),
-                        qry.value(rec.indexOf("email")).toString())
-            << "</div>";
     }
 
-    out << "<style> .text {text-align:  center;}</style>"       // titlu formei de tipar
-        << "<div class=\"text\">\n"
-        << QString("<p><h4>%1%2 din data %3<br>pentru %4</h4></p>\n").arg(tr("Prețurile investigațiilor ecografice nr."),
-                                                                          ui->editNumberDoc->text(),
-                                                                          ui->dateTimeDoc->date().toString("dd.MM.yyyy"),
-                                                                          ui->comboOrganization->currentText())
-        << "</div>"
-        << "<body bgcolor = #ffffff link= 5000A0>\n>"
-        << "<table border = 1 cellspacing=0 cellpadding=2>\n";
-
-    out << "<thead><tr bgcolor=#f0f0f0>";
-    for (int column = 0; column < columnCount; column++)
-        if (!ui->tableView->isColumnHidden(column))
-            out << QString("<th>%1</th>").arg(ui->tableView->model()->headerData(column, Qt::Horizontal).toString());
-    out << "</tr></thead>\n";
-
-    for (int row = 0; row < rowCount; row++){
-        out << "<tr>";
-        for (int column = 0; column < columnCount; column++){
-            if (!ui->tableView->isColumnHidden(column)){
-                QString data = ui->tableView->model()->data(ui->tableView->model()->index(row, column)).toString().simplified();
-                out << QString("<td bkcolor=0>%1</td>").arg(!data.isEmpty() ? data : QString("&nbsp;"));
-            }
-        }
-        out << "</tr>\n";
+    if (type_print == Enums::TYPE_PRINT::OPEN_DESIGNER){
+        m_report->designReport();
+    } else {
+        m_report->previewReport();
     }
-    out << "</table>\n"
-        << "</body>\n"
-        << "</html>\n";
-    qDebug() << strStream;
-    QTextDocument* document = new QTextDocument();
-    document->setHtml(strStream);
-    documentPrint = document;
 
-    QPrinter printer;
-    QPrintPreviewDialog *dialog = new QPrintPreviewDialog(&printer, 0);
-    dialog->resize(800, 600);
-
-    connect(dialog, &QPrintPreviewDialog::paintRequested, this, [=](QPrinter *previewPrinter) {
-            document->print(previewPrinter);
-        });
-    dialog->exec();
-
-    if (QFile(img_path_logo).exists()){
-        QString str_cmd;
-#if defined(Q_OS_LINUX)
-        str_cmd = "rm -f " + img_path_logo;
-#elif defined(Q_OS_MACOS)
-        str_cmd = "rm -f " + img_path_logo;
-#elif defined(Q_OS_WIN)
-        str_cmd = "del /f " + img_path_logo;
-#endif
-        try {
-            system(str_cmd.toStdString().c_str());
-        } catch (...) {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Eliminarea imaginei."));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Eliminarea imaginei din directoriul temporar nu s-a efectuat !!!"));
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.exec();
-            throw;
-        }
-    }
-    delete dialog;
-    delete document;
+    m_report->deleteLater();
 }
 
 bool DocPricing::controlRequiredObjects()
@@ -612,8 +562,8 @@ bool DocPricing::onWritingData()
 //        return false;
 //    }
 
-    if (m_post == idx_unknow)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
-        setPost(idx_write);    // setam post = idx_write
+    if (m_post == Enums::IDX_UNKNOW)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
+        setPost(Enums::IDX_WRITE);    // setam post = idx_write
 
     if (m_itNew){
         m_id = db->getLastIdForTable("pricings") + 1; // incercare de a seta 'id' documentului
@@ -621,26 +571,26 @@ bool DocPricing::onWritingData()
         QString strQry = insertDataTablePricings();
         if (! db->execQuery(strQry)){
             QMessageBox::warning(this, tr("Validarea documentului"), tr("Documentul nu este %1 !!! <br> Adresați-vă administratorului aplicației.")
-                                 .arg((m_post == idx_post) ? tr("validat") : tr("salvat")), QMessageBox::Ok);
-            m_id = idx_unknow;   // setam la valoarea initiala
-            setPost(idx_unknow); // setam m_post la valoarea initiala
+                                 .arg((m_post == Enums::IDX_POST) ? tr("validat") : tr("salvat")), QMessageBox::Ok);
+            m_id = Enums::IDX_UNKNOW;   // setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala
             return false;
         }
 
         for (int i = 0; i < modelTable->rowCount(); ++i) {                           // corectam valoarea indexului 'deletionMark'
-            modelTable->setData(modelTable->index(i, column_DeletionMark), m_post);  // si 'id' documentului din tabela
-            modelTable->setData(modelTable->index(i, column_IdPricings), m_id);
+            modelTable->setData(modelTable->index(i, Enums::PRICING_COLUMN_DEL_MARK), m_post);  // si 'id' documentului din tabela
+            modelTable->setData(modelTable->index(i, Enums::PRICING_COLUMN_ID_PRICINGS), m_id);
         }
 
         if (! modelTable->submitAll()){                // daca nu a fost salvata tabela:
             db->removeObjectById("pricings", m_id);    // 1.eliminam datele salvate mai sus din sqlite
-            m_id = idx_unknow;                         // 2.setam la valoarea initiala
-            setPost(idx_unknow);                       // 3.setam m_post la valoarea initiala
+            m_id = Enums::IDX_UNKNOW;                         // 2.setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW);                       // 3.setam m_post la valoarea initiala
             qCritical(logCritical()) << modelTable->lastError().text();
             return false;
         }
 
-        if (m_post == idx_write){
+        if (m_post == Enums::IDX_WRITE){
             updateTableView();
             popUp->setPopupText(tr("Documentul a fost salvat cu succes in baza de date."));
             popUp->show();
@@ -652,8 +602,8 @@ bool DocPricing::onWritingData()
             QMessageBox::warning(this, tr("Validarea documentului"),
                                  tr("Datele documentului nu au fost actualizate !!! <br> Adresați-vă administratorului aplicației."),
                                  QMessageBox::Ok);
-            m_id = idx_unknow;   // setam la valoarea initiala
-            setPost(idx_unknow); // setam m_post la valoarea initiala
+            m_id = Enums::IDX_UNKNOW;   // setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala
             return false;
         }
 
@@ -661,7 +611,7 @@ bool DocPricing::onWritingData()
             qCritical(logCritical()) << modelTable->lastError().text();
             return false;
         }
-        if (m_post == idx_write){
+        if (m_post == Enums::IDX_WRITE){
             updateTableView();
             popUp->setPopupText(tr("Datele documentului au fost<br>actualizate cu succes."));
             popUp->show();
@@ -674,7 +624,7 @@ bool DocPricing::onWritingData()
 
 void DocPricing::onWritingDataClose()
 {
-    setPost(idx_post); // setam proprietatea 'post'
+    setPost(Enums::IDX_POST); // setam proprietatea 'post'
 
     if (onWritingData())
         QDialog::accept();
@@ -693,72 +643,13 @@ void DocPricing::setTitleDoc()
 
 void DocPricing::initBtnToolBar()
 {
-    toolBar       = new QToolBar(this);
-    btnAdd        = new QToolButton(this);
-    btnEdit       = new QToolButton(this);
-    btnDeletion   = new QToolButton(this);
-    btnFormsTable = new QToolButton(this);
+    ui->editSearch->setSearchOptionSelected("code");
+    connect(ui->btnFormsTable, &QAbstractButton::clicked, this, &DocPricing::completeTableDocPricing);
+    connect(ui->btnAdd, &QAbstractButton::clicked, this, &DocPricing::addRowTable);
+    connect(ui->btnEdit, &QAbstractButton::clicked, this, &DocPricing::editRowTable);
+    connect(ui->btnDeletion, &QAbstractButton::clicked, this, &DocPricing::deletionRowTable);
 
-    btnAdd->setIcon(QIcon(":/img/add_x32.png").pixmap(16,16));
-    btnAdd->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnAdd->setText(tr("Adaugă"));
-    btnAdd->setStyleSheet("border: 1px solid #8f8f91;"
-                             "padding-left: 5px;"
-                             "text-align: left;"
-                             "border-radius: 4px;"
-                             "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                             "height: 18px;");
-    btnAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-
-    btnEdit->setIcon(QIcon(":/img/edit_x32.png"));
-    btnEdit->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnEdit->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnEdit->setShortcut(QKeySequence(Qt::Key_F2));
-
-    btnDeletion->setIcon(QIcon(":/img/clear_x32.png"));
-    btnDeletion->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnDeletion->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnDeletion->setShortcut(QKeySequence(Qt::Key_Delete));
-
-    btnFormsTable->setIcon(QIcon(":/img/select_x32.png").pixmap(16,16));
-    btnFormsTable->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnFormsTable->setText(tr("Completează"));
-    btnFormsTable->setStyleSheet("border: 1px solid #8f8f91;"
-                             "padding-left: 5px;"
-                             "text-align: left;"
-                             "border-radius: 4px;"
-                             "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                             "height: 18px; width: 90px;");
-
-    editSearch = new QLineEdit(this);
-    editSearch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    editSearch->setClearButtonEnabled(true);
-
-    comboSearch = new QComboBox(this);
-    comboSearch->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Preferred);
-    comboSearch->addItems(QStringList() << tr("cod") << tr("denumirea"));
-    comboSearch->setCurrentIndex(0);
-
-    toolBar->addWidget(btnAdd);
-    toolBar->addWidget(btnEdit);
-    toolBar->addWidget(btnDeletion);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnFormsTable);
-    toolBar->addSeparator();
-    toolBar->addWidget(editSearch);
-    toolBar->addSeparator();
-    toolBar->addWidget(comboSearch);
-
-    QSpacerItem *itemSpacer = new QSpacerItem(1,1, QSizePolicy::Preferred, QSizePolicy::Fixed);
-    ui->layoutToolBar->addWidget(toolBar);
-    ui->layoutToolBar->addSpacerItem(itemSpacer);
-
-    connect(btnFormsTable, &QAbstractButton::clicked, this, &DocPricing::completeTableDocPricing);
-    connect(btnAdd, &QAbstractButton::clicked, this, &DocPricing::addRowTable);
-    connect(btnEdit, &QAbstractButton::clicked, this, &DocPricing::editRowTable);
-    connect(btnDeletion, &QAbstractButton::clicked, this, &DocPricing::deletionRowTable);
-
-    connect(editSearch, &QLineEdit::textChanged, this, &DocPricing::filterRegExpChanged);
+    connect(ui->editSearch, &QLineEdit::textChanged, this, &DocPricing::filterRegExpChanged);
 }
 
 void DocPricing::initFooterDoc()
@@ -777,26 +668,6 @@ void DocPricing::initFooterDoc()
     ui->layoutAuthor->addWidget(labelPix);
     ui->layoutAuthor->addWidget(labelAuthor);
     ui->layoutAuthor->addSpacerItem(new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed));
-
-    ui->btnPrint->setIcon(QIcon(":/img/print_x32.png"));
-    ui->btnPrint->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnPrint->setLayout(new QGridLayout);
-    ui->btnPrint->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_P));
-
-    ui->btnOK->setIcon(QIcon(":/img/accept_button.png"));
-    ui->btnOK->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnOK->setLayout(new QGridLayout);
-    ui->btnOK->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_Return));
-
-    ui->btnWrite->setIcon(QIcon(":/img/write_doc.png"));
-    ui->btnWrite->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnWrite->setLayout(new QGridLayout);
-    ui->btnWrite->setShortcut(QKeySequence(Qt::Key_Control | Qt::Key_S));
-
-    ui->btnClose->setIcon(QIcon(":/img/close_x32.png"));
-    ui->btnClose->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnClose->setLayout(new QGridLayout);
-    ui->btnClose->setShortcut(QKeySequence(Qt::Key_Escape));
 }
 
 void DocPricing::updateTableView()
@@ -805,7 +676,7 @@ void DocPricing::updateTableView()
         modelTable->clear();
         modelTable->setTable("pricingsTable");
         modelTable->setFilter(QString("id_pricings=%1").arg(m_id));
-        modelTable->setSort(column_Cod, Qt::AscendingOrder);
+        modelTable->setSort(Enums::PRICING_COLUMN_COD, Qt::AscendingOrder);
         modelTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
         proxy->setSourceModel(modelTable);
         ui->tableView->setModel(proxy);
@@ -815,16 +686,16 @@ void DocPricing::updateTableView()
         modelTable->clear();
         modelTable->setTable("pricingsTable");
         modelTable->setFilter(QString("id_pricings=%1").arg(m_id));
-        modelTable->setSort(column_Cod, Qt::AscendingOrder);
+        modelTable->setSort(Enums::PRICING_COLUMN_COD, Qt::AscendingOrder);
         modelTable->setEditStrategy(QSqlTableModel::OnManualSubmit);
         proxy->setSourceModel(modelTable);
         ui->tableView->setModel(proxy);
         modelTable->select();
         ui->tableView->selectRow(0);
     }
-    ui->tableView->hideColumn(column_Id);           // id
-    ui->tableView->hideColumn(column_DeletionMark); // deletionMark
-    ui->tableView->hideColumn(column_IdPricings);   // id_pricings
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN_ID);           // id
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN_DEL_MARK); // deletionMark
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN_ID_PRICINGS);   // id_pricings
     ui->tableView->horizontalHeader()->setStretchLastSection(true);         // extinderea ultimei sectiei
     ui->tableView->setSortingEnabled(true);                                 // setam posibilitatea sortarii
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);     // setam alegerea randului
@@ -833,9 +704,9 @@ void DocPricing::updateTableView()
     ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);                            // initializam meniu contextual
     ui->tableView->horizontalHeader()->setSortIndicator(3, Qt::SortOrder::AscendingOrder); // sortarea dupa 3 sectie(Cod)
-    ui->tableView->verticalHeader()->setDefaultSectionSize(16);    
-    ui->tableView->setColumnWidth(column_Cod, 70);   // codul
-    ui->tableView->setColumnWidth(column_Name, 500); // denuimirea investigatiei
+    // ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+    ui->tableView->setColumnWidth(Enums::PRICING_COLUMN_COD, 70);   // codul
+    ui->tableView->setColumnWidth(Enums::PRICING_COLUMN_NAME, 500); // denuimirea investigatiei
     updateHeaderTable();
 }
 
@@ -926,14 +797,25 @@ void DocPricing::disconnectionsToIndexChangedCombobox()
 void DocPricing::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
-        const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
-                                                                        tr("Datele au fost modificate.\n"
-                                                                           "Doriți să salvați aceste modificări ?"),
-                                                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (answer == QMessageBox::Yes){
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Modificarea datelor"),
+                                 tr("Datele au fost modificate.\n"
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             onWritingDataClose();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {
@@ -955,7 +837,7 @@ void DocPricing::keyPressEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Return || event->key() == Qt::Key_Enter){
         if (ui->tableView->focusWidget()){
             int _row = ui->tableView->currentIndex().row();
-            QModelIndex indexEdit = proxy->index(_row, column_Price);
+            QModelIndex indexEdit = proxy->index(_row, Enums::PRICING_COLUMN_PRICE);
             onClickedRowTable(indexEdit);
             ui->tableView->clearFocus();
         } else {

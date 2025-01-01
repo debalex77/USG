@@ -3,6 +3,7 @@
 
 #include <QDomDocument>
 #include <QScreen>
+#include <QToolButton>
 
 CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     QDialog(parent),
@@ -13,7 +14,6 @@ CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     db      = new DataBase(this);
     menu    = new QMenu(this);
     model   = new BaseSqlTableModel(this);
-    toolBar = new QToolBar(this);
     checkbox_delegate    = new CheckBoxDelegate(this);
     db_spinbox_delegate  = new DoubleSpinBoxDelegate(0.00, 999999.99, 0.05, 2, this);
     gr_investig_delegate = new ComboDelegate("SELECT id,name FROM investigationsGroup;", this);
@@ -21,7 +21,7 @@ CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     connect(ui->tableView, &QWidget::customContextMenuRequested, this, &CatForSqlTableModel::slotContextMenuRequested);
     connect(this, &CatForSqlTableModel::typeCatalogChanged, this, &CatForSqlTableModel::slot_typeCatalogChanged);
     connect(this, &CatForSqlTableModel::typeFormChanged, this, &CatForSqlTableModel::slot_typeFormChanged);
-    connect(model, &QAbstractItemModel::dataChanged, this, &CatForSqlTableModel::onDataChangedItemModel);
+    connect(model, &QAbstractItemModel::dataChanged, this, &CatForSqlTableModel::onDataChangedItemModel, Qt::QueuedConnection);
 }
 
 CatForSqlTableModel::~CatForSqlTableModel()
@@ -32,8 +32,6 @@ CatForSqlTableModel::~CatForSqlTableModel()
     delete db_spinbox_delegate;
     delete gr_investig_delegate;
     delete model;
-    if (m_typeForm == TypeForm::SelectForm)
-        delete toolBar;
     delete ui;
 }
 
@@ -54,65 +52,30 @@ void CatForSqlTableModel::initBtnForm()
     connect(ui->btnClose, &QAbstractButton::clicked, this, &CatForSqlTableModel::onClose);
     connect(ui->btnGroupInvestigation, &QAbstractButton::clicked, this, &CatForSqlTableModel::onOpenGroupInvestigations);
     connect(ui->btnUpdate, &QAbstractButton::clicked, this, &CatForSqlTableModel::updateTableView);
+    connect(ui->btnCatalogCost, &QAbstractButton::clicked, this, &CatForSqlTableModel::printCatalogCost);
 }
 
 void CatForSqlTableModel::initBtnToolBar()
 {   
-    toolBar->clear();
-    btnBarAdd          = new QToolButton(this);
-    btnBarEdit         = new QToolButton(this);
-    btnBarDeletion     = new QToolButton(this);
-    btnBarUpdateTable  = new QToolButton(this);
-
-    btnBarAdd->setIcon(QIcon(":/img/add_x32.png"));
-    btnBarAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnBarAdd->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnBarAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-
-    btnBarEdit->setIcon(QIcon(":/img/edit_x32.png"));
-    btnBarEdit->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnBarEdit->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnBarEdit->setShortcut(QKeySequence(Qt::Key_F2));
-
-    btnBarDeletion->setIcon(QIcon(":/img/clear_x32.png"));
-    btnBarDeletion->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnBarDeletion->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnBarDeletion->setShortcut(QKeySequence(Qt::Key_Delete));
-
-    btnBarUpdateTable->setIcon(QIcon(":/img/update_x32.png"));
-    btnBarUpdateTable->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnBarUpdateTable->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnBarUpdateTable->setShortcut(QKeySequence(Qt::Key_F5));
-
-    toolBar->addSeparator();
-    toolBar->addWidget(btnBarAdd);
-    toolBar->addWidget(btnBarEdit);
-    toolBar->addWidget(btnBarDeletion);
-    toolBar->addWidget(btnBarUpdateTable);
-    toolBar->addSeparator();
-
-    QSpacerItem *itemSpacer = new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->layoutToolBar->addWidget(toolBar);
-    ui->layoutToolBar->addItem(itemSpacer);
-
-    connect(btnBarAdd, &QToolButton::clicked, this, &CatForSqlTableModel::onAddRowTable);
-    connect(btnBarEdit, &QToolButton::clicked, this, &CatForSqlTableModel::onEditRowTable);
-    connect(btnBarDeletion, &QToolButton::clicked, this, &CatForSqlTableModel::onMarkDeletion);
-    connect(btnBarUpdateTable, &QToolButton::clicked, this, &CatForSqlTableModel::updateTableView);
+    connect(ui->btnBarAdd, &QToolButton::clicked, this, &CatForSqlTableModel::onAddRowTable);
+    connect(ui->btnBarEdit, &QToolButton::clicked, this, &CatForSqlTableModel::onEditRowTable);
+    connect(ui->btnBarDeletion, &QToolButton::clicked, this, &CatForSqlTableModel::onMarkDeletion);
+    connect(ui->btnBarUpdateTable, &QToolButton::clicked, this, &CatForSqlTableModel::updateTableView);
 }
 
 void CatForSqlTableModel::updateTableView()
 {
     switch (m_typeCatalog) {
     case Investigations:
-        setWindowTitle(tr("Clasificatorul investigatiilor"));
-        model->setTable("tmp_investigations");
+        setWindowTitle(tr("Clasificatorul investiga\310\233iilor"));
+        model->setTable("investigations");
+        // model->setSort(investig_owner, Qt::AscendingOrder);
         updateHeaderTableInvestigations();
         model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
         model->setSort(investig_id, Qt::AscendingOrder);     // sortarea datelor de la sectia 0
         break;
     case TypesPrices:
-        setWindowTitle(tr("Tipul preturilor"));
+        setWindowTitle(tr("Tipul pre\310\233urilor"));
         model->setTable("typesPrices");
         updateHeaderTableTypesPrices();
         model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
@@ -121,7 +84,7 @@ void CatForSqlTableModel::updateTableView()
         ui->btnGroupInvestigation->setVisible(false);
         break;
     case ConclusionTemplates:
-        setWindowTitle(tr("Șabloane concluziilor"));
+        setWindowTitle(tr("\310\230abloane concluziilor"));
         model->setTable("conclusionTemplates");
         if (m_filter_templates != nullptr){
             if (globals::thisMySQL)
@@ -133,6 +96,19 @@ void CatForSqlTableModel::updateTableView()
         model->setSort(template_name, Qt::AscendingOrder);
         updateHeaderTableConclusionTemplates();
         break;
+    case SystemTemplates:
+        setWindowTitle(tr("\310\230abloane descrierilor forma\310\233iunilor"));
+        model->setTable("formationsSystemTemplates");
+        if (m_filter_templates != nullptr){
+            if (globals::thisMySQL)
+                model->setFilter(QString("typeSystem = '%1'").arg(m_filter_templates));
+            else
+                model->setFilter(QString("typeSystem = '%1'").arg(m_filter_templates));
+        }
+        model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
+        model->setSort(template_system_name, Qt::AscendingOrder);
+        updateHeaderTableFormationsBySystemTemplates();
+        break;
     default:
         break;
     }
@@ -142,34 +118,41 @@ void CatForSqlTableModel::updateTableView()
 
     switch (m_typeCatalog) {
     case Investigations:
-        ui->tableView->setColumnWidth(investig_deletionMark, 5);
+        ui->tableView->setColumnWidth(investig_deletionMark, 25);
         ui->tableView->setColumnHidden(investig_id, true); // ascundem id
         ui->tableView->setColumnWidth(investig_cod, 70);
-        ui->tableView->setColumnWidth(investig_name, 1200); // denuimirea investigatiei
+        ui->tableView->setColumnWidth(investig_name, 900); // denuimirea investigatiei
+        ui->tableView->setColumnWidth(investig_use, 80); // denuimirea investigatiei
         ui->tableView->setItemDelegateForColumn(investig_use, checkbox_delegate);
         ui->tableView->setItemDelegateForColumn(investig_owner, gr_investig_delegate);
-        ui->tableView->resizeColumnsToContents();
         break;
     case TypesPrices:
-        ui->tableView->setColumnWidth(typePrice_deletionMark, 5);
+        ui->tableView->setColumnWidth(typePrice_deletionMark, 25);
         ui->tableView->setColumnHidden(typePrice_id, true); // ascundem id
         ui->tableView->setColumnWidth(typePrice_name, 1100);
         ui->tableView->setItemDelegateForColumn(typePrice_noncomercial, checkbox_delegate);
         ui->tableView->setItemDelegateForColumn(typePrice_discount, db_spinbox_delegate);
         break;
     case ConclusionTemplates:
-        ui->tableView->setColumnWidth(template_deletionMark, 5);
+        ui->tableView->setColumnWidth(template_deletionMark, 25);
         ui->tableView->setColumnHidden(template_id, true); // ascundem id
         ui->tableView->setColumnWidth(template_cod, 50);
         ui->tableView->setColumnWidth(template_name, 550);
+        break;
+    case SystemTemplates:
+         ui->tableView->setColumnWidth(template_system_deletionMark, 25);
+        ui->tableView->setColumnHidden(template_system_id, true); // ascundem id
+        ui->tableView->setColumnWidth(template_system_name, 550);
         break;
     default:
         break;
     }
 
+    // ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
+    // ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);     // initializam meniu contextual
     ui->tableView->horizontalHeader()->setStretchLastSection(true); // largirea ultimei colonite
-    ui->tableView->verticalHeader()->setDefaultSectionSize(14);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     if (m_typeForm == TypeForm::SelectForm){
         model->setMainFlag(Qt::ItemIsSelectable | Qt::ItemIsEnabled);
         ui->tableView->setEditTriggers(QAbstractItemView::NoEditTriggers | QAbstractItemView::SelectedClicked);
@@ -221,6 +204,18 @@ void CatForSqlTableModel::updateHeaderTableConclusionTemplates()
     }
 }
 
+void CatForSqlTableModel::updateHeaderTableFormationsBySystemTemplates()
+{
+    QStringList _headers;
+    _headers << tr("id")
+             << tr("") // deletionMark
+             << tr("Descrierea")
+             << tr("Sistema");
+    for(int i = 0, j = 0; i < model->columnCount(); i++, j++){ // setam headerul
+        model->setHeaderData(i, Qt::Horizontal, _headers[j]);
+    }
+}
+
 QString CatForSqlTableModel::getNameTable()
 {
     QString nameTable;
@@ -234,6 +229,9 @@ QString CatForSqlTableModel::getNameTable()
     case ConclusionTemplates:
         nameTable = "conclusionTemplates";
         break;
+    case SystemTemplates:
+        nameTable = "formationsSystemTemplates";
+        break;
     }
     return nameTable;
 }
@@ -242,8 +240,15 @@ void CatForSqlTableModel::onSelectRowTable(const QModelIndex &index)
 {
     int _row     = index.row();
     int _id      = model->index(_row, investig_id).data(Qt::DisplayRole).toInt();
-    QString _cod = model->index(_row, investig_cod).data(Qt::DisplayRole).toString();
-    QString _name = model->index(_row, investig_name).data(Qt::DisplayRole).toString();
+    QString _cod;
+    QString _name;
+    if (m_typeCatalog == SystemTemplates) {
+        _cod = nullptr;
+        _name = model->index(_row, template_system_name).data(Qt::DisplayRole).toString();
+    } else {
+        _cod = model->index(_row, investig_cod).data(Qt::DisplayRole).toString();
+        _name = model->index(_row, investig_name).data(Qt::DisplayRole).toString();
+    }
 
     ret_id = _id;
     ret_cod = _cod;
@@ -273,10 +278,19 @@ void CatForSqlTableModel::onAddRowTable()
         ui->tableView->edit(model->index(row, typePrice_name));
         break;
     case ConclusionTemplates:
-        model->setData(model->index(row, template_id), row + 1);
+        model->setData(model->index(row, template_id), db->getLastIdForTable("conclusionTemplates") + 1);
         model->setData(model->index(row, template_deletionMark), 0);
-        ui->tableView->setCurrentIndex(model->index(row, template_cod));
-        ui->tableView->edit(model->index(row, template_cod));
+        model->setData(model->index(row, template_cod), db->getLastIdForTable("conclusionTemplates") + 1);
+        ui->tableView->setCurrentIndex(model->index(row, template_name));
+        ui->tableView->edit(model->index(row, template_name));
+        break;
+    case SystemTemplates:
+        model->setData(model->index(row, template_system_id), db->getLastIdForTable("formationsSystemTemplates") + 1);
+        model->setData(model->index(row, template_system_deletionMark), 0);
+        if (m_filter_templates != nullptr && m_typeCatalog == SystemTemplates)
+            model->setData(model->index(row, template_system_system), m_filter_templates);
+        ui->tableView->setCurrentIndex(model->index(row, template_system_name));
+        ui->tableView->edit(model->index(row, template_system_name));
         break;
     default:
         break;
@@ -299,7 +313,10 @@ void CatForSqlTableModel::onEditRowTable()
         ui->tableView->edit(model->index(_index.row(), typePrice_name));
         break;
     case ConclusionTemplates:
-        ui->tableView->edit(model->index(_index.row(), template_cod));
+        ui->tableView->edit(model->index(_index.row(), template_name));
+        break;
+    case SystemTemplates:
+        ui->tableView->edit(model->index(_index.row(), template_system_name));
         break;
     default:
         break;
@@ -386,9 +403,11 @@ void CatForSqlTableModel::slot_typeFormChanged()
 {
     if (m_typeForm == TypeForm::ListForm){
         ui->frameBtn->setVisible(true);
+        ui->layoutToolBar->hide(); // ascunde toate butoane
         initBtnForm();
     } else if (m_typeForm == TypeForm::SelectForm){
         ui->frameBtn->setVisible(false);
+        ui->layoutToolBar->show(); // prezentam butoane
         initBtnToolBar();
     }
     updateTableView();
@@ -397,16 +416,24 @@ void CatForSqlTableModel::slot_typeFormChanged()
 void CatForSqlTableModel::onDataChangedItemModel()
 {
     int row = ui->tableView->currentIndex().row();
+    int column = ui->tableView->currentIndex().column();
+
     QModelIndex index;
     switch (m_typeCatalog) {
     case Investigations:
-        index = ui->tableView->model()->index(row, investig_name, QModelIndex());
+        if (column == investig_cod)
+            index = ui->tableView->model()->index(row, investig_name, QModelIndex());
+        else if (column == investig_name)
+            index = ui->tableView->model()->index(row, investig_use, QModelIndex());
         break;
     case TypesPrices:
         index = ui->tableView->model()->index(row, typePrice_discount, QModelIndex());
         break;
     case ConclusionTemplates:
         index = ui->tableView->model()->index(row, template_name, QModelIndex());
+        break;
+    case SystemTemplates:
+        index = ui->tableView->model()->index(row, template_system_name, QModelIndex());
         break;
     default:
         break;
@@ -419,6 +446,80 @@ void CatForSqlTableModel::onDataChangedItemModel()
     model->submitAll();                    // tranzactia de transfer de datele in BD
 }
 
+void CatForSqlTableModel::printCatalogCost()
+{
+    QDir dir;
+
+    // Deschidem fișierul XML
+    QFile file(":/xmls/investig_2024.xml");
+    if (! file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning(logWarning()) << "Nu se poate deschide fișierul XML:" << file.errorString();
+        return;
+    }
+
+    // Citim și parsează XML-ul
+    QDomDocument doc;
+    if (! doc.setContent(&file)) {
+        qWarning(logWarning()) << "Eroare la parsarea fișierului XML.";
+        file.close();
+        return;
+    }
+    file.close();
+
+    QDomElement root = doc.documentElement();
+    if (root.tagName() != "list_investigation") {
+        qWarning(logWarning()) << "Tagul rădăcină al fișierului XML este incorect.";
+        return;
+    }
+
+    print_model = new QStandardItemModel(this);
+
+    // Parcurgem intrările din XML
+    QDomNodeList entries = root.elementsByTagName("entry");
+    for (int i = 0; i < entries.count(); ++i) {
+        QDomElement entry = entries.at(i).toElement();
+        if (entry.isNull())
+            continue;
+
+        QString cod  = entry.attribute("cod");
+        QString name = entry.attribute("name");
+        QString cost = entry.attribute("cost");
+
+        QStandardItem* item_cod = new QStandardItem();
+        item_cod->setData(cod, Qt::DisplayRole);
+
+        QStandardItem* item_name = new QStandardItem();
+        item_name->setData(name, Qt::DisplayRole);
+
+        QStandardItem* item_cost = new QStandardItem();
+        item_cost->setData(QString::number(cost.toInt(), 'f', 2) , Qt::DisplayRole);
+
+        QList<QStandardItem *> items;
+        items.append(item_cod);
+        items.append(item_name);
+        items.append(item_cost);
+        print_model->appendRow(items);
+    }
+
+    m_report = new LimeReport::ReportEngine(this);
+
+    m_report->dataManager()->clearUserVariables();
+    m_report->dataManager()->addModel("print_model", print_model, false);
+    m_report->setShowProgressDialog(true);
+    m_report->setPreviewWindowTitle(tr("Catalogul tarifelor unice (modificat 2024)"));
+    if (! m_report->loadFromFile(dir.toNativeSeparators(globals::pathTemplatesDocs + "/CatalogCost.lrxml"))) {
+        QMessageBox::warning(this,
+                             tr("Verificarea \310\231ablonului"),
+                             tr("Nu a fost g\304\203sit formular de tipar !!!<br>"
+                                "Probabil \303\256n set\304\203rile aplica\310\233iei nu este setat corect drumul spre formularele de tipar."),
+                             QMessageBox::Ok);
+    }
+    m_report->previewReport();
+
+    print_model->deleteLater();
+    m_report->deleteLater();
+}
+
 void CatForSqlTableModel::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange){
@@ -426,16 +527,20 @@ void CatForSqlTableModel::changeEvent(QEvent *event)
         // traducem  titlu
         switch (m_typeCatalog) {
         case Investigations:
-            setWindowTitle(tr("Clasificatorul investigatiilor"));
+            setWindowTitle(tr("Clasificatorul investiga\310\233iilor"));
             updateHeaderTableInvestigations();
             break;
         case TypesPrices:
-            setWindowTitle(tr("Tipul preturilor"));
+            setWindowTitle(tr("Tipul pre\310\233urilor"));
             updateHeaderTableTypesPrices();
             break;
         case ConclusionTemplates:
-            setWindowTitle(tr("Șabloane concluziilor"));
+            setWindowTitle(tr("\310\230abloane concluziilor"));
             updateHeaderTableConclusionTemplates();
+            break;
+        case SystemTemplates:
+            setWindowTitle(tr("\310\230abloane concluziilor"));
+            updateHeaderTableFormationsBySystemTemplates();
             break;
         default:
             break;

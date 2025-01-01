@@ -3,6 +3,8 @@
 #include "qprogressdialog.h"
 #include "ui_reports.h"
 
+#include <customs/custommessage.h>
+
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Reports)
@@ -60,10 +62,18 @@ Reports::Reports(QWidget *parent) :
 
     initConnections();
     initPercentCombobox();
-    setStyleForButtom();
 
     ui->frame_preview->resize(616, ui->frame_preview->height());
     ui->comboTypeReport->resize(260, ui->comboTypeReport->height());
+
+#if defined(Q_OS_MACOS)
+    ui->btnGenerateReport->setStyleSheet("font-size: 13px;");
+    ui->btnOpenDesigner->setStyleSheet("font-size: 13px;");
+    ui->btnPrintReport->setStyleSheet("font-size: 13px;");
+    ui->btnExportPdf->setStyleSheet("font-size: 13px;");
+    ui->btnSettingsReport->setStyleSheet("font-size: 13px;");
+#endif
+
 }
 
 Reports::~Reports()
@@ -102,13 +112,18 @@ void Reports::loadSettingsReport()
                 this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
 
         if (globals::thisMySQL){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString().replace(QRegExp("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString().replace(QRegExp("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-#else
-            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString().replace(QRegularExpression("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString().replace(QRegularExpression("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-#endif
+            static const QRegularExpression replaceT("T");
+            static const QRegularExpression removeMilliseconds("\\.000");
+            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2)
+                                                                 .toString()
+                                                                 .replace(replaceT, " ")
+                                                                 .replace(removeMilliseconds,""),
+                                                             "yyyy-MM-dd hh:mm:ss"));
+            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3)
+                                                               .toString()
+                                                               .replace(replaceT, " ")
+                                                               .replace(removeMilliseconds,""),
+                                                           "yyyy-MM-dd hh:mm:ss"));
         } else {
             ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString(), "yyyy-MM-dd hh:mm:ss"));
             ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString(), "yyyy-MM-dd hh:mm:ss"));
@@ -224,49 +239,6 @@ void Reports::initPercentCombobox()
     ui->comboScalePercent->setCurrentIndex(4);
 }
 
-void Reports::setStyleForButtom()
-{
-    ui->btnGenerateReport->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                         "border-radius: 4px;"
-                                         "width: 95px;}"
-                                         "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                         "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}");
-    ui->btnZoomIn->setStyleSheet("border: 1px solid #8f8f91; "
-                                 "border-radius: 4px;");
-    ui->btnZoomOut->setStyleSheet("border: 1px solid #8f8f91; "
-                                  "border-radius: 4px;");
-    ui->btnPrintReport->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                      "border-radius: 4px;"
-                                      "width: 95px;}"
-                                      "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                      "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}");
-    ui->btnOpenDesigner->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                       "border-radius: 4px;"
-                                       "width: 95px;}"
-                                       "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                       "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}");
-    ui->btnExportPdf->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                    "border-radius: 4px;"
-                                    "width: 95px;}"
-                                    "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                    "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}");
-    ui->btnSettingsReport->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                         "border-radius: 4px;"
-                                         "width: 95px;}"
-                                         "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                         "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa)}");
-
-    ui->comboScalePercent->setStyle(style_fusion);
-    ui->comboScalePercent->setStyleSheet("min-width: 3em;");
-
-#if defined(Q_OS_WIN)
-    ui->frame->setStyle(style_fusion);
-    ui->frame_filter->setStyle(style_fusion);
-    ui->frame_preview->setStyle(style_fusion);
-#endif
-
-}
-
 // **********************************************************************************
 // --- procesarea solicitarilor raportului
 
@@ -338,6 +310,16 @@ QString Reports::getMainQry()
 
         str_qry = str_qry + QString(" orderEcho.dateDoc BETWEEN '%1' AND '%2';").arg(m_dateStart.toString("yyyy-MM-dd hh:mm:ss"), m_dateEnd.toString("yyyy-MM-dd hh:mm:ss"));
 
+#ifdef QT_DEBUG
+        qDebug() << "Raport 'Lista pacientilor (filtru - organizatii)' solicitarea: ";
+        qDebug() << str_qry;
+#else
+        if (QCoreApplication::arguments().count() > 1
+            && QCoreApplication::arguments()[1].contains("/debug")){
+            qDebug() << str_qry;
+        }
+#endif
+
         return str_qry;
 
     } else if (name_report == "Lista pacientilor (filtru - doctori)"){
@@ -384,6 +366,17 @@ QString Reports::getMainQry()
 
         str = str + "  reportEcho.deletionMark = 2 AND "
                     "reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+
+#ifdef QT_DEBUG
+        qDebug() << "Raport 'Volumul investigatiilor' solicitarea: ";
+        qDebug() << str;
+#else
+        if (QCoreApplication::arguments().count() > 1
+            && QCoreApplication::arguments()[1].contains("/debug")){
+            qDebug() << str;
+        }
+#endif
+
         return str;
 
     } else if (name_report == "Structura patologiilor"){
@@ -408,6 +401,16 @@ QString Reports::getMainQry()
               "FROM tableLiver "
               "INNER JOIN reportEcho ON tableLiver.id_reportEcho = reportEcho.id "
               "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
+
+#ifdef QT_DEBUG
+        qDebug() << "Raport 'Structura patologiilor' solicitarea: ";
+        qDebug() << str;
+#else
+        if (QCoreApplication::arguments().count() > 1
+            && QCoreApplication::arguments()[1].contains("/debug")){
+            qDebug() << str;
+        }
+#endif
 
         return str;
     }
@@ -605,14 +608,12 @@ void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData
             db->getDatabase().commit();
         } else {
             db->getDatabase().rollback();
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Setarile raportului"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Eroare de executarea a solicitarii la inserarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
-            msgBox.setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Setarile raportului"));
+            msgBox->setTextTitle(tr("Eroare de executarea a solicitarii la inserarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
+            msgBox->setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
+            msgBox->exec();
+            msgBox->deleteLater();
         }
 
     } else {
@@ -664,14 +665,12 @@ void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData
             db->getDatabase().commit();
         } else {
             db->getDatabase().rollback();
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Setarile raportului"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Eroare de executarea a solicitarii la actualizarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
-            msgBox.setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Setarile raportului"));
+            msgBox->setTextTitle(tr("Eroare de executarea a solicitarii la actualizarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
+            msgBox->setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
+            msgBox->exec();
+            msgBox->deleteLater();
         }
     }
 }
@@ -696,6 +695,7 @@ void Reports::renderStarted()
 #if defined(Q_OS_LINUX)
         connect(m_progressDialog, &QProgressDialog::canceled, m_report, &LimeReport::ReportEngine::cancelRender);
 #elif defined(Q_OS_WIN)
+        //connect(m_progressDialog, &QProgressDialog::canceled, m_report, &LimeReport::ReportEngine::cancelRender);
         connect(m_progressDialog, SIGNAL(canceled()), m_report, SLOT(cancelRender()));
 #endif
         QApplication::processEvents();
@@ -732,11 +732,7 @@ void Reports::slotScalePercentChanged(const int percent)
 {
     Q_UNUSED(percent)
     QString txt = ui->comboScalePercent->currentText();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    m_preview->setScalePercent(txt.remove(txt.count() - 1, 1).toInt());
-#else
     m_preview->setScalePercent(txt.remove(txt.size() - 1, 1).toInt());
-#endif
 }
 
 void Reports::slotPageNavigatorChanged(const int page)

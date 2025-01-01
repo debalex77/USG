@@ -1,15 +1,18 @@
 #include "listdoc.h"
 #include "ui_listdoc.h"
 
+#include <customs/custommessage.h>
+
 ListDoc::ListDoc(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ListDoc)
 {
     ui->setupUi(this);
 
-    db = new DataBase(this); // conectarea la BD
+    db    = new DataBase(this); // conectarea la BD
     menu  = new QMenu(this); // meniu contextual
     popUp = new PopUp(this); // mesaje
+    customPeriod = new CustomPeriod(this);
 
     QString strQuery;
     model = new BaseSqlQueryModel(strQuery, ui->tabView); // model principal pu solicitarea din BD
@@ -65,177 +68,56 @@ ListDoc::~ListDoc()
 {
     delete menu;
     delete popUp;
-    delete toolBar;
     delete proxy;
     delete modelOrganizations;
     delete modelContracts;
     delete modelUsers;
     delete model;
+    delete customPeriod;
     delete db;
     delete ui;
 }
 
 void ListDoc::initBtnToolBar()
 {
-    toolBar         = new QToolBar(this);
-    btnSelect       = new QToolButton(toolBar);
-    btnAdd          = new QToolButton(toolBar);
-    btnEdit         = new QToolButton(toolBar);
-    btnDeletion     = new QToolButton(toolBar);
-    btnFilter       = new QToolButton(toolBar);
-    btnAddFilter    = new QToolButton(toolBar);
-    btnFilterRemove = new QToolButton(toolBar);
-    btnUpdateTable  = new QToolButton(toolBar);
-    btnPost         = new QToolButton(toolBar);
-    btnUnpost       = new QToolButton(toolBar);
-    btnPrint        = new QToolButton(toolBar);
-    btnPeriodDate   = new QToolButton(toolBar);
-
-    btnSelect->setIcon(QIcon(":/img/select_x32.png").pixmap(16,16));
-    btnSelect->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnSelect->setText(tr("Selectează"));
-    btnSelect->setStyleSheet("border: 1px solid #8f8f91;"
-                             "padding-left: 5px;"
-                             "text-align: left;"
-                             "border-radius: 4px;"
-                             "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                             "height: 18px; width: 100px;");
-    btnSelect->setVisible(m_modeSelection);
-
-    btnAdd->setIcon(QIcon(":/img/add_x32.png"));
-    btnAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAdd->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-
-    btnEdit->setIcon(QIcon(":/img/edit_x32.png"));
-    btnEdit->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnEdit->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnEdit->setShortcut(QKeySequence(Qt::Key_F2));
-
-    btnDeletion->setIcon(QIcon(":/img/clear_x32.png"));
-    btnDeletion->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnDeletion->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnDeletion->setShortcut(QKeySequence(Qt::Key_Delete));
-
-    btnAddFilter->setIcon(QIcon(":/img/filter-add-icon.png"));
-    btnAddFilter->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAddFilter->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-
-    btnFilter->setIcon(QIcon(":/img/filter-icon.png"));
-    btnFilter->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnFilter->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-
-    btnFilterRemove->setIcon(QIcon(":/img/filter-delete-icon.png"));
-    btnFilterRemove->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnFilterRemove->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-
-    btnUpdateTable->setIcon(QIcon(":/img/update_x32.png"));
-    btnUpdateTable->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnUpdateTable->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnUpdateTable->setShortcut(QKeySequence(Qt::Key_F5));
-
-    btnPost->setIcon(QIcon(":/img/document_accept.png").pixmap(14, 14));
-    btnPost->setText(tr("Validează"));
-    btnPost->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnPost->setStyleSheet("border: 1px solid #8f8f91; "
-                           "padding-left: 5px; padding-right: 5px;"
-                           "text-align: left; "
-                           "border-radius: 4px; "
-                           "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                           "height: 18px; width: 100px;");
-
-    btnUnpost->setIcon(QIcon(":/img/document_remove.png").pixmap(14, 14));
-    btnUnpost->setText(tr("Invalidează"));
-    btnUnpost->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnUnpost->setStyleSheet("border: 1px solid #8f8f91; "
-                           "padding-left: 5px; padding-right: 5px;"
-                           "text-align: left; "
-                           "border-radius: 4px; "
-                           "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                           "height: 18px; width: 100px;");
-
-    btnPrint->setIcon(QIcon(":/img/print_x32.png").pixmap(14, 14));
-    btnPrint->setText(tr("Printează"));
-    btnPrint->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnPrint->setStyleSheet("border: 1px solid #8f8f91; "
-                           "padding-left: 5px; padding-right: 5px;"
-                           "text-align: left; "
-                           "border-radius: 4px; "
-                           "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                           "height: 18px; width: 100px;");
-
-    btnPeriodDate->setIcon(QIcon(":/img/date_period.png"));
-    btnPeriodDate->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnPeriodDate->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-
-    toolBar->addWidget(btnSelect);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnAdd);
-    toolBar->addWidget(btnEdit);
-    toolBar->addWidget(btnDeletion);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnAddFilter);
-    toolBar->addWidget(btnFilter);
-    toolBar->addWidget(btnFilterRemove);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnUpdateTable);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnPost);
-    toolBar->addWidget(btnUnpost);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnPrint);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnPeriodDate);
-
-    QSpacerItem *itemSpacer = new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed);
-    ui->layoutToolBar->addWidget(toolBar);
-    ui->layoutToolBar->addSpacerItem(itemSpacer);
-    lablePeriodDate = new QLabel(this);
-    lablePeriodDate->setStyleSheet("color: blue; font-weight: bold;");
-    ui->layoutToolBar->addWidget(lablePeriodDate);
-
     if (m_modeSelection)
-        connect(btnSelect, &QAbstractButton::clicked, this, &ListDoc::selectDocPricing);
-    connect(btnAdd, &QAbstractButton::clicked, this, &ListDoc::createNewDocPricing);    
-    connect(btnEdit, &QAbstractButton::clicked, this, &ListDoc::editDocPricing);
-    connect(btnDeletion, &QAbstractButton::clicked, this, &ListDoc::deletionMarkDocPricing);
+        connect(ui->btnSelect, &QAbstractButton::clicked, this, &ListDoc::selectDocPricing);
 
-    connect(btnAddFilter, &QAbstractButton::clicked, this, &ListDoc::addFilterForListDoc);
-    connect(btnFilter, &QAbstractButton::clicked, this, &ListDoc::setFilterByIdOrganization);
-    connect(btnFilterRemove, &QAbstractButton::clicked, this, &ListDoc::removeFilterByIdOrganization);
+    connect(ui->btnAdd, &QAbstractButton::clicked, this, &ListDoc::createNewDocPricing);
+    connect(ui->btnEdit, &QAbstractButton::clicked, this, &ListDoc::editDocPricing);
+    connect(ui->btnDeletion, &QAbstractButton::clicked, this, &ListDoc::deletionMarkDocPricing);
 
-    connect(btnUpdateTable, &QAbstractButton::clicked, this, &ListDoc::updateTableView);
+    connect(ui->btnAddFilter, &QAbstractButton::clicked, this, &ListDoc::addFilterForListDoc);
+    connect(ui->btnFilter, &QAbstractButton::clicked, this, &ListDoc::setFilterByIdOrganization);
+    connect(ui->btnFilterRemove, &QAbstractButton::clicked, this, &ListDoc::removeFilterByIdOrganization);
 
-    connect(btnPost, &QAbstractButton::clicked, this, &ListDoc::postDoc);
-    connect(btnUnpost, &QAbstractButton::clicked, this, &ListDoc::unpostDoc);
-    connect(btnPrint, &QAbstractButton::clicked, this, &ListDoc::onPrintDoc);
+    connect(ui->btnUpdateTable, &QAbstractButton::clicked, this, &ListDoc::updateTableView);
 
-    connect(btnPeriodDate, &QAbstractButton::clicked, this, &ListDoc::openFilterPeriod);
+    connect(ui->btnPrint, &QAbstractButton::clicked, this, &ListDoc::onPrintDoc);
+
+    connect(ui->btnPeriodDate, &QAbstractButton::clicked, this, &ListDoc::openFilterPeriod);
 
     connect(this, &ListDoc::ItFilterChanged, this, &ListDoc::slot_ItFilterChanged);
     connect(this, &ListDoc::ItFilterPeriodChanged, this, &ListDoc::slot_ItFilterPeriodChanged);
     connect(this, &ListDoc::IdOrganizationChanged, this, &ListDoc::slot_IdOrganizationChanged);
     connect(this, &ListDoc::IdContractChanged, this, &ListDoc::slot_IdContractChanged);
     connect(this, &ListDoc::IdUserChanged, this, &ListDoc::slot_IdUserChanged);
+    connect(this, &ListDoc::ModeSelectionChanged, this, &ListDoc::slot_ModeSelectionChanged);
 }
 
 void ListDoc::initBtnFilter()
 {
-    ui->btnFilterApply->setIcon(QIcon(":/img/accept_button.png"));
-    ui->btnFilterApply->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnFilterApply->setLayout(new QGridLayout);
-
-    ui->btnFilterClear->setIcon(QIcon(":/img/button_delete.png"));
-    ui->btnFilterClear->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnFilterClear->setLayout(new QGridLayout);
-
-    ui->btnFilterClose->setIcon(QIcon(":/img/close_x32.png"));
-    ui->btnFilterClose->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnFilterClose->setLayout(new QGridLayout);
-
+    connect(ui->btnChoicePeriod, &QPushButton::clicked, this, &ListDoc::onClickChoicePeriod);
     connect(ui->btnFilterApply, &QAbstractButton::clicked, this, &ListDoc::applyFilter);
     connect(ui->btnFilterClear, &QAbstractButton::clicked, this, &ListDoc::clearItemsFilter);
     connect(ui->btnFilterClose, &QAbstractButton::clicked, this, &ListDoc::closeFilterComplex);
+}
+
+void ListDoc::updateTextPeriod()
+{
+    ui->lablePeriodDate->setText(tr("Perioada: ") +
+                                 ui->filterStartDateTime->dateTime().toString("dd.MM.yyyy") +
+                                 " - " + ui->filterEndDateTime->dateTime().toString("dd.MM.yyyy"));
 }
 
 void ListDoc::loadSizeSectionPeriodTable(bool only_period)
@@ -257,13 +139,10 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
             QString str_date_start;
             QString str_date_end;
             if (globals::thisMySQL){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                str_date_start = qry.value(0).toString().replace(QRegExp("T"), " ").replace(".000","");
-                str_date_end   = qry.value(1).toString().replace(QRegExp("T"), " ").replace(".000","");
-#else
-                str_date_start = qry.value(0).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-                str_date_end   = qry.value(1).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-#endif
+                static const QRegularExpression replaceT("T");
+                static const QRegularExpression removeMilliseconds("\\.000");
+                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
+                str_date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
             } else {
                 str_date_start = qry.value(0).toString();
                 str_date_end   = qry.value(1).toString();
@@ -276,14 +155,12 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
 
             //---------- prezentarea erorii
             if (! qry.lastError().text().isEmpty()){
-                QMessageBox msgBox;
-                msgBox.setWindowTitle(tr("Determinarea dimensiunilor coloanelor"));
-                msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText(tr("Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!"));
-                msgBox.setDetailedText(qry.lastError().text());
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.setStyleSheet("QPushButton{width:120px;}");
-                msgBox.exec();
+                CustomMessage *msgBox = new CustomMessage(this);
+                msgBox->setWindowTitle(tr("Determinarea dimensiunilor coloanelor"));
+                msgBox->setTextTitle(tr("Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!"));
+                msgBox->setDetailedText(qry.lastError().text());
+                msgBox->exec();
+                msgBox->deleteLater();
             }
         }
         return;
@@ -329,14 +206,12 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
 
         //---------- prezentarea erorii
         if (! qry.lastError().text().isEmpty()){
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Determinarea dimensiunilor coloanelor"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!"));
-            msgBox.setDetailedText(qry.lastError().text());
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Determinarea dimensiunilor coloanelor"));
+            msgBox->setTextTitle(tr("Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!"));
+            msgBox->setDetailedText(qry.lastError().text());
+            msgBox->exec();
+            msgBox->deleteLater();
         }
     }
 
@@ -406,7 +281,7 @@ void ListDoc::updateTableView()
     ui->tabView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
     ui->tabView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
     ui->tabView->setContextMenuPolicy(Qt::CustomContextMenu);  // initializam meniu contextual
-    ui->tabView->verticalHeader()->setDefaultSectionSize(14);
+    ui->tabView->verticalHeader()->setDefaultSectionSize(30);
     ui->tabView->horizontalHeader()->setStretchLastSection(true);      // extinderea ultimei sectiei
     if (m_currentRow != -1)
         ui->tabView->selectRow(m_currentRow);
@@ -427,6 +302,29 @@ void ListDoc::updateHeaderTable()
     model->setHeaderData(section_Contract, Qt::Horizontal, tr("Contract"));
     model->setHeaderData(section_author, Qt::Horizontal, tr("Autor"));
     model->setHeaderData(section_comment, Qt::Horizontal, tr("Comentariu"));
+}
+
+void ListDoc::onClickChoicePeriod()
+{
+    customPeriod->setDateStart(ui->filterStartDateTime->date());
+    customPeriod->setDateEnd(ui->filterEndDateTime->date());
+    connect(customPeriod, &CustomPeriod::mChangePeriod, this, &ListDoc::onChangeCustomPeriod);
+    customPeriod->show();
+}
+
+void ListDoc::onChangeCustomPeriod()
+{
+    QDateTime _startDate = customPeriod->getDateStart();
+    QDateTime _endDate   = customPeriod->getDateEnd();
+
+    ui->filterStartDateTime->setDateTime(_startDate);
+    ui->filterEndDateTime->setDateTime(_endDate);
+
+    updateTextPeriod();
+
+    updateTableView();   // actualizam/completam datele tabelei
+    updateHeaderTable(); // actualizam denumirea sectiilor
+
 }
 
 void ListDoc::selectDocPricing()
@@ -564,20 +462,20 @@ void ListDoc::clearItemsFilter()
     updateTableView(); // actualizam tabela
 }
 
-void ListDoc::postDoc()
-{
-    if (!controlRequiredObjects())
-        return;
-}
-
-void ListDoc::unpostDoc()
-{
-
-}
-
 void ListDoc::onPrintDoc()
 {
+    if (ui->tabView->currentIndex().row() == -1){
+        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
+        return;
+    }
+    int _id = proxy->data(proxy->index(ui->tabView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
 
+    docPricing = new DocPricing(this);
+    docPricing->setAttribute(Qt::WA_DeleteOnClose);
+    docPricing->setProperty("ItNew", false);
+    docPricing->setProperty("Id", _id);
+    docPricing->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+    docPricing->deleteLater();
 }
 
 void ListDoc::openFilterPeriod()
@@ -588,14 +486,8 @@ void ListDoc::openFilterPeriod()
 
 void ListDoc::onStartDateTimeChanged()
 {
-//    if (ui->filterStartDateTime->dateTime() > ui->filterEndDateTime->dateTime()){
-//        QMessageBox::warning(this, tr("Verificarea perioadei"),
-//                             tr("Data lansării perioade nu poate fi mai mare \ndecât data finisării perioadei !!!"),
-//                             QMessageBox::Ok, QMessageBox::Ok);
-//        return;
-//    }
     itemsFilterPeriod.insert("startDate", ui->filterStartDateTime->dateTime());
-    lablePeriodDate->setText(tr("Perioada: ") + ui->filterStartDateTime->dateTime().toString("dd.MM.yyyy") + " - " + ui->filterEndDateTime->dateTime().toString("dd.MM.yyyy"));
+    updateTextPeriod();
 ;}
 
 void ListDoc::onEndDateTimeChanged()
@@ -607,7 +499,7 @@ void ListDoc::onEndDateTimeChanged()
         return;
     }
     itemsFilterPeriod.insert("endDate", ui->filterEndDateTime->dateTime());
-    lablePeriodDate->setText(tr("Perioada: ") + ui->filterStartDateTime->dateTime().toString("dd.MM.yyyy") + " - " + ui->filterEndDateTime->dateTime().toString("dd.MM.yyyy"));
+    updateTextPeriod();
 }
 
 void ListDoc::indexChangedFilterComboOrganization(const int arg1)
@@ -722,7 +614,10 @@ void ListDoc::slot_IdUserChanged()
 
 void ListDoc::slot_ModeSelectionChanged()
 {
-    btnSelect->setVisible(m_modeSelection);
+    if (m_modeSelection)
+        ui->btnSelect->show();
+    else
+        ui->btnSelect->hide();
 }
 
 void ListDoc::slotContextMenuRequested(QPoint pos)

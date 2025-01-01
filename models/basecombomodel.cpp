@@ -16,11 +16,7 @@ BaseComboModel::BaseComboModel( const QString& visualColumn, const QString& quer
     query.prepare(QString( "SELECT %1.id, %2 FROM %3" ).arg(queryTail.split( ' ' ).first(), visualColumn, queryTail));
     // I.e. query.prepare( "SELECT country.id, countryname || ' - ' || countrycode  FROM country" );
     query.exec();
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QSqlQueryModel::setQuery( query );
-#else
     QSqlQueryModel::setQuery( std::move(query) );
-#endif
 }
 
 QVariant BaseComboModel::dataFromParent( QModelIndex index, int column ) const

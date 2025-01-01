@@ -35,9 +35,9 @@
     #define NAME_FILE_LOG_PATH    "var/log/usg/usg.log"
 #elif defined(Q_OS_MACOS)
     #define NAME_DIR_CONFIG_PATH  "/.config/USG"
-    #define NAME_FILE_CONFIG_PATH "/.config/USG/settings.conf"
-    #define NAME_DIR_LOG_PATH     "/.local/USG/logs"
-    #define NAME_FILE_LOG_PATH    "/.local/USG/logs/usg.log"
+    #define NAME_FILE_CONFIG_PATH "/.config/USG/settings.ini"
+    #define NAME_DIR_LOG_PATH     "/Library/Logs/USG"
+    #define NAME_FILE_LOG_PATH    "/Library/Logs/USG/usg.log"
 #elif defined(Q_OS_WIN)
 
 #endif

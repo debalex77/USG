@@ -15,8 +15,7 @@
     #define NAME_FILE_CONFIG_PATH "/.config/USG/settings.conf"
 #elif defined(Q_OS_MACOS)
     #define NAME_DIR_CONFIG_PATH  "/.config/USG"
-    #define NAME_FILE_CONFIG_PATH "/.config/USG/settings.conf"
-    #define NAME_DIR_LOG_PATH     "/.local/USG/logs"
+    #define NAME_FILE_CONFIG_PATH "/.config/USG/settings.ini"
 #elif defined(Q_OS_WIN)
 #endif
 
@@ -55,7 +54,6 @@ private:
 #elif defined(Q_OS_MACOS)
     QString dirConfigPath  = QDir::homePath() + NAME_DIR_CONFIG_PATH;
     QString fileConfigPath = QDir::homePath() + NAME_FILE_CONFIG_PATH;
-    QString dirLogPath     = QDir::homePath() + NAME_DIR_LOG_PATH;
 #elif defined(Q_OS_WIN)
     QString dirConfigPath  = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config";
     QString fileConfigPath = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/config/settings.conf";

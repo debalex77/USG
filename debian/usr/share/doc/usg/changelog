@@ -1,3 +1,13 @@
+3.0.1 (January 02th, 2025)
+  * Migration of the application from Qt version 5.15.2 to version 6.5.3.
+  * Added splash screens for the new application.
+  * In the document list view 'Ultrasound Order', the column 'Submitted by...' has been added.
+  * In the document 'Ultrasound Report,' the following sections have been modified: Internal Organs, Urinary System.
+  * Updated the report generator LimeReport to version 1.7.7.
+  * Updated the OpenSSL driver to version 3.0.7 (a general-purpose cryptographic software library ensuring secure communication, data security, and privacy).
+  * Optimized the code for validation and completion requests of the 'Ultrasound Report' document.
+  * Specific database indexes have been created to reduce the execution time of query requests.
+
 2.0.9 (May 24th, 2024)
   * added downloading the new version of the app with progress bar in status bar
   * launch documents in the special window

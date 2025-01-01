@@ -82,10 +82,11 @@ private:
         orderSection_searchPacient  = 11,
         orderSection_pacient        = 12,
         orderSection_IDNP           = 13,
-        orderSection_idUser         = 14,
-        orderSection_user           = 15,
-        orderSection_sum            = 16,
-        orderSection_comment        = 17
+        orderSection_doctor         = 14,
+        orderSection_idUser         = 15,
+        orderSection_user           = 16,
+        orderSection_sum            = 17,
+        orderSection_comment        = 18
     };
     QVariant dataFromDocOrderEcho(const QModelIndex &item, int role = Qt::DisplayRole) const;
     QVariant dataFrom_view_table_order(const QModelIndex &item, int role = Qt::DisplayRole) const;

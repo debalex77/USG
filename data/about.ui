@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>897</width>
-    <height>442</height>
+    <height>490</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Informația despre aplicația</string>
@@ -110,7 +115,7 @@
         <widget class="QLabel" name="text_version_SQLite">
          <property name="font">
           <font>
-           <weight>75</weight>
+           <family>Cantarell</family>
            <bold>true</bold>
           </font>
          </property>
@@ -150,7 +155,7 @@
         <widget class="QLabel" name="text_versionQt">
          <property name="font">
           <font>
-           <weight>75</weight>
+           <family>Cantarell</family>
            <bold>true</bold>
           </font>
          </property>
@@ -242,6 +247,12 @@
    </item>
    <item row="1" column="2">
     <widget class="QPushButton" name="pushButton">
+     <property name="minimumSize">
+      <size>
+       <width>80</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>OK</string>
      </property>

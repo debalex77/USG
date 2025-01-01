@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>517</width>
+    <width>551</width>
     <height>250</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -33,6 +38,12 @@
    </item>
    <item row="1" column="2">
     <widget class="QPushButton" name="btnPreview">
+     <property name="minimumSize">
+      <size>
+       <width>112</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Precedent</string>
      </property>
@@ -44,6 +55,12 @@
    </item>
    <item row="1" column="3">
     <widget class="QPushButton" name="btnNext">
+     <property name="minimumSize">
+      <size>
+       <width>112</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="layoutDirection">
       <enum>Qt::RightToLeft</enum>
      </property>
@@ -58,6 +75,12 @@
    </item>
    <item row="1" column="4">
     <widget class="QPushButton" name="btnClose">
+     <property name="minimumSize">
+      <size>
+       <width>112</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Închide</string>
      </property>

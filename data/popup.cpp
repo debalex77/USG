@@ -3,13 +3,7 @@
 #include <QPainter>
 #include <QDebug>
 #include <QGuiApplication>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QApplication>
-#include <QDesktopWidget>
-#else
-#include <QGuiApplication>
 #include <QScreen>
-#endif
 
 PopUp::PopUp(QWidget *parent) : QWidget(parent)
 {
@@ -106,17 +100,10 @@ void PopUp::show()
     animation.setStartValue(0.0);   // Стартовое значение будет 0 (полностью прозрачный виджет)
     animation.setEndValue(1.0);     // Конечное - полностью непрозрачный виджет
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    setGeometry(QApplication::desktop()->geometry().width() - 36 - width() + QApplication::desktop()->geometry().x(),
-                QApplication::desktop()->geometry().height() - 56 - height() + QApplication::desktop()->geometry().y(),
-                width(),
-                height());
-#else
     setGeometry(QGuiApplication::primaryScreen()->geometry().width() - 36 - width() + QGuiApplication::primaryScreen()->geometry().x(),
                 QGuiApplication::primaryScreen()->geometry().height() - 56 - height() + QGuiApplication::primaryScreen()->geometry().y(),
                 width(),
                 height());
-#endif
 
 
     QWidget::show();                // Отображаем виджет, который полностью прозрачен

@@ -6,16 +6,243 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>930</width>
+    <width>1166</width>
     <height>673</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_6">
-   <item row="0" column="0">
-    <layout class="QHBoxLayout" name="layoutToolBar"/>
+   <item row="1" column="0">
+    <widget class="QSplitter" name="splitter_3">
+     <property name="orientation">
+      <enum>Qt::Vertical</enum>
+     </property>
+     <widget class="QTableView" name="tableView"/>
+     <widget class="QSplitter" name="splitter">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <widget class="QGroupBox" name="groupBox_table_order">
+       <property name="font">
+        <font>
+         <family>.AppleSystemUIFont</family>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(32, 74, 135);</string>
+       </property>
+       <property name="title">
+        <string>Comanda ecografică - investigații  solicitate</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>4</number>
+        </property>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="btn_open_order">
+          <property name="minimumSize">
+           <size>
+            <width>106</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Deschide</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <widget class="QPushButton" name="btn_print_order">
+          <property name="minimumSize">
+           <size>
+            <width>106</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Printare</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="3">
+         <spacer name="horizontalSpacer_3">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1" colspan="3">
+         <widget class="QTableView" name="view_table">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <bold>false</bold>
+            <underline>false</underline>
+           </font>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QGroupBox" name="groupBox_table_report">
+       <property name="font">
+        <font>
+         <family>.AppleSystemUIFont</family>
+         <bold>true</bold>
+         <underline>true</underline>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(143, 89, 2);</string>
+       </property>
+       <property name="title">
+        <string>Raport ecografic - concluzie</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_4">
+        <property name="leftMargin">
+         <number>4</number>
+        </property>
+        <property name="topMargin">
+         <number>4</number>
+        </property>
+        <property name="rightMargin">
+         <number>4</number>
+        </property>
+        <property name="bottomMargin">
+         <number>4</number>
+        </property>
+        <item row="0" column="0">
+         <widget class="QPushButton" name="btn_open_report">
+          <property name="minimumSize">
+           <size>
+            <width>106</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Deschide</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="2">
+         <spacer name="horizontalSpacer_2">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="0" colspan="3">
+         <widget class="QTableView" name="view_table_report">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>16777215</width>
+            <height>200</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <bold>false</bold>
+            <underline>false</underline>
+           </font>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QPushButton" name="btn_print_report">
+          <property name="minimumSize">
+           <size>
+            <width>106</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="text">
+           <string>Printare</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="0" colspan="3">
+         <widget class="QLabel" name="text_empty_report">
+          <property name="font">
+           <font>
+            <pointsize>12</pointsize>
+            <bold>true</bold>
+           </font>
+          </property>
+          <property name="text">
+           <string>Raport ecografic lipsește !!!</string>
+          </property>
+          <property name="alignment">
+           <set>Qt::AlignCenter</set>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </widget>
    </item>
    <item row="0" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupPeriodFilter">
@@ -27,6 +254,7 @@
      </property>
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -44,6 +272,7 @@
           <widget class="QLabel" name="label">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -62,6 +291,7 @@
            </property>
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -91,6 +321,7 @@
           <widget class="QDateTimeEdit" name="filterEndDateTime">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -120,6 +351,7 @@
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -130,6 +362,31 @@
          </item>
          <item row="0" column="2">
           <widget class="QToolButton" name="btnChoicePeriod">
+           <property name="minimumSize">
+            <size>
+             <width>0</width>
+             <height>0</height>
+            </size>
+           </property>
+           <property name="styleSheet">
+            <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
@@ -148,6 +405,7 @@
           <widget class="QComboBox" name="filterComboOrganization">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -157,6 +415,7 @@
           <widget class="QLabel" name="label_4">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -169,6 +428,7 @@
           <widget class="QComboBox" name="filterComboContract">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -181,6 +441,7 @@
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -193,6 +454,7 @@
           <widget class="QLabel" name="label_5">
            <property name="font">
             <font>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -203,22 +465,60 @@
          </item>
          <item row="3" column="1">
           <widget class="QToolButton" name="btnOpenCatOrganization">
+           <property name="styleSheet">
+            <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset resource="../resource.qrc">
              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
            </property>
           </widget>
          </item>
          <item row="5" column="1">
           <widget class="QToolButton" name="btnOpenCatContract">
+           <property name="styleSheet">
+            <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+           </property>
            <property name="text">
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="resource.qrc">
+            <iconset resource="../resource.qrc">
              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
            </property>
           </widget>
@@ -243,8 +543,15 @@
         </item>
         <item>
          <widget class="QPushButton" name="btnFilterApply">
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
@@ -252,15 +559,22 @@
            <string>Aplica</string>
           </property>
           <property name="icon">
-           <iconset resource="resource.qrc">
+           <iconset resource="../resource.qrc">
             <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btnFilterClear">
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
@@ -268,15 +582,22 @@
            <string>Goleste</string>
           </property>
           <property name="icon">
-           <iconset resource="resource.qrc">
+           <iconset resource="../resource.qrc">
             <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
           </property>
          </widget>
         </item>
         <item>
          <widget class="QPushButton" name="btnFilterClose">
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
@@ -284,7 +605,7 @@
            <string>Inchide</string>
           </property>
           <property name="icon">
-           <iconset resource="resource.qrc">
+           <iconset resource="../resource.qrc">
             <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
           </property>
          </widget>
@@ -307,185 +628,469 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QSplitter" name="splitter_3">
-     <property name="orientation">
-      <enum>Qt::Vertical</enum>
-     </property>
-     <widget class="QTableView" name="tableView"/>
-     <widget class="QSplitter" name="splitter">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <widget class="QGroupBox" name="groupBox_table_order">
+   <item row="0" column="0">
+    <layout class="QHBoxLayout" name="layoutToolBar">
+     <item>
+      <widget class="QToolButton" name="btnAdd">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnEdit">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnDeletion">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnAddFilter">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-add-icon.png</normaloff>:/img/filter-add-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnFilter">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-icon.png</normaloff>:/img/filter-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnFilterRemove">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-delete-icon.png</normaloff>:/img/filter-delete-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnUpdateTable">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/update_x32.png</normaloff>:/img/update_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnHideShowColumn">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/table-cell.png</normaloff>:/img/table-cell.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPrint">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnReport">
+       <property name="minimumSize">
+        <size>
+         <width>88</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+       </property>
+       <property name="text">
+        <string>Raport</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/examenEcho.png</normaloff>:/img/examenEcho.png</iconset>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnViewTab">
+       <property name="minimumSize">
+        <size>
+         <width>88</width>
+         <height>21</height>
+        </size>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+       </property>
+       <property name="text">
+        <string>Tabela</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/view_table.png</normaloff>:/img/view_table.png</iconset>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_6">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPeriodDate">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/date_period.png</normaloff>:/img/date_period.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_7">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnSearch">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/search_pacients.png</normaloff>:/img/search_pacients.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QLineEdit" name="editSearch">
+       <property name="clearButtonEnabled">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_4">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeType">
+        <enum>QSizePolicy::Preferred</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lablePeriodDate">
        <property name="font">
         <font>
+         <family>Segoe UI</family>
          <bold>true</bold>
-         <underline>true</underline>
         </font>
        </property>
        <property name="styleSheet">
-        <string notr="true">color: rgb(32, 74, 135);</string>
+        <string notr="true">color: rgb(44, 103, 255);</string>
        </property>
-       <property name="title">
-        <string>Comanda ecografică - investigații  solicitate</string>
+       <property name="text">
+        <string>Perioada:</string>
        </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <item row="0" column="1">
-         <widget class="QPushButton" name="btn_open_order">
-          <property name="text">
-           <string>Deschide</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <widget class="QPushButton" name="btn_print_order">
-          <property name="text">
-           <string>Printare</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="3">
-         <spacer name="horizontalSpacer_3">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1" colspan="3">
-         <widget class="QTableView" name="view_table">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>95</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-            <underline>false</underline>
-           </font>
-          </property>
-         </widget>
-        </item>
-       </layout>
+       <property name="alignment">
+        <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+       </property>
       </widget>
-      <widget class="QGroupBox" name="groupBox_table_report">
-       <property name="font">
-        <font>
-         <bold>true</bold>
-         <underline>true</underline>
-        </font>
-       </property>
-       <property name="styleSheet">
-        <string notr="true">color: rgb(143, 89, 2);</string>
-       </property>
-       <property name="title">
-        <string>Raport ecografic - concluzie</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_4">
-        <item row="0" column="0">
-         <widget class="QPushButton" name="btn_open_report">
-          <property name="text">
-           <string>Deschide</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="2">
-         <spacer name="horizontalSpacer_2">
-          <property name="orientation">
-           <enum>Qt::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="0" colspan="3">
-         <widget class="QTableView" name="view_table_report">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <property name="maximumSize">
-           <size>
-            <width>16777215</width>
-            <height>95</height>
-           </size>
-          </property>
-          <property name="font">
-           <font>
-            <bold>false</bold>
-            <underline>false</underline>
-           </font>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1">
-         <widget class="QPushButton" name="btn_print_report">
-          <property name="text">
-           <string>Printare</string>
-          </property>
-          <property name="icon">
-           <iconset resource="resource.qrc">
-            <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="0" colspan="3">
-         <widget class="QLabel" name="text_empty_report">
-          <property name="font">
-           <font>
-            <pointsize>12</pointsize>
-            <bold>true</bold>
-           </font>
-          </property>
-          <property name="text">
-           <string>Raport ecografic lipsește !!!</string>
-          </property>
-          <property name="alignment">
-           <set>Qt::AlignCenter</set>
-          </property>
-         </widget>
-        </item>
-       </layout>
-      </widget>
-     </widget>
-    </widget>
+     </item>
+    </layout>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="resource.qrc"/>
+  <include location="../resource.qrc"/>
  </resources>
  <connections/>
 </ui>

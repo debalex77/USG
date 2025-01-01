@@ -39,7 +39,6 @@
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
 #define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
 #define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define APPLICATION_VERSION     "2.0.9"
 #define GITHUB_URL_DOWNLOAD     "https://github.com/debalex77/USG/releases/download"
 //=============================================================
 
@@ -100,6 +99,9 @@ private slots:
 
     void initMinimizeAppToTray();
     void iconActivated(QSystemTrayIcon::ActivationReason reason);
+
+    void handleUpdateProgress(int num_records, int value);
+    void handleFinishedProgress(const QString textTitle);
 
 private:
     Ui::MainWindow *ui;

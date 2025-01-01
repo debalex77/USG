@@ -1,11 +1,7 @@
 #include "chooseformprint.h"
 #include "ui_chooseformprint.h"
 #include <QGuiApplication>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QScreen>
-#endif
 
 ChooseFormPrint::ChooseFormPrint(QWidget *parent) :
     QDialog(parent),
@@ -31,17 +27,9 @@ ChooseFormPrint::ChooseFormPrint(QWidget *parent) :
     connect(ui->btnOK, &QPushButton::clicked, this, &ChooseFormPrint::onAccept);
     connect(ui->btnClose, &QPushButton::clicked, this, &ChooseFormPrint::close);
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
-
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
 
     int x = (screenWidth / 2) - (width() / 2);//*0.1;
     int y = (screenHeight / 2) - (height() / 2);//*0.1;

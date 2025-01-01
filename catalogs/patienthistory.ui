@@ -10,6 +10,11 @@
     <height>788</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
@@ -21,7 +26,7 @@
    <item row="1" column="0" colspan="6">
     <widget class="QGroupBox" name="groupBox">
      <property name="sizePolicy">
-      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
        <horstretch>0</horstretch>
        <verstretch>0</verstretch>
       </sizepolicy>
@@ -29,11 +34,12 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>235</height>
+       <height>190</height>
       </size>
      </property>
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -43,8 +49,15 @@
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
        <widget class="QTableView" name="tableView">
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>150</height>
+         </size>
+        </property>
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -55,6 +68,25 @@
    </item>
    <item row="0" column="4">
     <widget class="QToolButton" name="btnOpenCatPatient">
+     <property name="styleSheet">
+      <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+     </property>
      <property name="text">
       <string>...</string>
      </property>
@@ -189,11 +221,12 @@
      <property name="maximumSize">
       <size>
        <width>16777215</width>
-       <height>120</height>
+       <height>135</height>
       </size>
      </property>
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -206,11 +239,12 @@
         <property name="maximumSize">
          <size>
           <width>16777215</width>
-          <height>61</height>
+          <height>84</height>
          </size>
         </property>
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -269,6 +303,25 @@
    </item>
    <item row="0" column="3">
     <widget class="QToolButton" name="btnClearPatient">
+     <property name="styleSheet">
+      <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+     </property>
      <property name="text">
       <string>...</string>
      </property>

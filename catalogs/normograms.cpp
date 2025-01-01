@@ -1,10 +1,6 @@
 #include "normograms.h"
 #include "ui_normograms.h"
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QScreen>
-#endif
 
 Normograms::Normograms(QWidget *parent)
     : QDialog(parent)
@@ -25,18 +21,9 @@ Normograms::Normograms(QWidget *parent)
 
     // ********************************************************
     // resize and move windows
-
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
-
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
 
     this->resize(720, 480);
     int x = (screenWidth / 2) - (width() / 2);//*0.1;

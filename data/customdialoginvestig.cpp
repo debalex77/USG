@@ -1,12 +1,9 @@
 #include "customdialoginvestig.h"
 #include <QGuiApplication>
 #include <QToolButton>
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-#include <QDesktopWidget>
-#else
 #include <QMessageBox>
 #include <QScreen>
-#endif
+#include <customs/custommessage.h>
 
 CustomDialogInvestig::CustomDialogInvestig(QWidget *parent):
     QDialog(parent)
@@ -18,17 +15,9 @@ CustomDialogInvestig::CustomDialogInvestig(QWidget *parent):
     createLayout();
     createConnections();
 
-#if (QT_VERSION < QT_VERSION_CHECK(5, 15, 1))
-    QDesktopWidget *desktop = QApplication::desktop();
-
-    int screenWidth = desktop->screenGeometry().width();
-    int screenHeight = desktop->screenGeometry().height();
-#else
     QScreen *screen = QGuiApplication::primaryScreen();
-
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
-#endif
 
     int x = (screenWidth / 2) - (318 / 2);
     int y = (screenHeight / 2) - (302 / 2);
@@ -91,12 +80,11 @@ void CustomDialogInvestig::save()
         m_gestation0 == false &&
         m_gestation1 == false &&
         m_gestation2 == false){
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Selectarea sistemului"));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Nu este selectat nici un sistem !!!<br> Bifati sistemul necesar."));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
+        CustomMessage *msgBox = new CustomMessage(this);
+        msgBox->setWindowTitle(tr("Selectarea sistemului"));
+        msgBox->setTextTitle(tr("Nu este selectat nici un sistem !!!<br> Bifati sistemul necesar."));
+        msgBox->exec();
+        msgBox->deleteLater();
         return;
     }
     QDialog::accept();
@@ -132,6 +120,8 @@ void CustomDialogInvestig::createOtherWidgets()
     buttonBox = new QDialogButtonBox;
     btnOK    = buttonBox->addButton(QDialogButtonBox::Ok);
     btnClose = buttonBox->addButton(QDialogButtonBox::Close);
+    btnOK->setMinimumWidth(80);
+    btnClose->setMinimumWidth(80);
 }
 
 void CustomDialogInvestig::createLayout()

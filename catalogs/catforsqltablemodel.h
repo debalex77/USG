@@ -5,9 +5,8 @@
 #include <QSqlTableModel>
 #include <QMessageBox>
 #include <QMenu>
-#include <QToolBar>
-#include <QToolButton>
-#include <QMenu>
+#include <LimeReport>
+#include <QStandardItemModel>
 
 #include <delegates/checkboxdelegate.h>
 
@@ -31,7 +30,7 @@ public:
     explicit CatForSqlTableModel(QWidget *parent = nullptr);
     ~CatForSqlTableModel();
 
-    enum TypeCatalog{Investigations, TypesPrices, ConclusionTemplates};
+    enum TypeCatalog{Investigations, TypesPrices, ConclusionTemplates, SystemTemplates};
     Q_ENUM(TypeCatalog)
     enum TypeForm{ListForm, SelectForm};
     Q_ENUM(TypeForm)
@@ -69,6 +68,7 @@ private:
     void updateHeaderTableInvestigations();
     void updateHeaderTableTypesPrices();
     void updateHeaderTableConclusionTemplates();
+    void updateHeaderTableFormationsBySystemTemplates();
 
     QString getNameTable();
 
@@ -100,6 +100,14 @@ private:
         template_system       = 4
     };
 
+    enum sectionsSystemFormationsTemplates
+    {
+        template_system_id           = 0,
+        template_system_deletionMark = 1,
+        template_system_name         = 2,
+        template_system_system       = 3
+    };
+
 private slots:
     void onSelectRowTable(const QModelIndex &index);
 
@@ -115,18 +123,13 @@ private slots:
     void slot_typeFormChanged();
 
     void onDataChangedItemModel();
+    void printCatalogCost();
 
 private:
     Ui::CatForSqlTableModel *ui;
 
     TypeCatalog m_typeCatalog;
     TypeForm    m_typeForm;
-
-    QToolBar    *toolBar;
-    QToolButton *btnBarAdd;
-    QToolButton *btnBarEdit;
-    QToolButton *btnBarDeletion;
-    QToolButton *btnBarUpdateTable;
 
     GroupInvestigationList *list_group;
 
@@ -137,6 +140,9 @@ private:
     BaseSqlTableModel *model;   
     DataBase          *db;
     QMenu             *menu;
+
+    LimeReport::ReportEngine *m_report;
+    QStandardItemModel *print_model;
 
     CheckBoxDelegate      *checkbox_delegate;
     DoubleSpinBoxDelegate *db_spinbox_delegate;

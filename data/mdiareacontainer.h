@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QMdiArea>
+#include <QMdiSubWindow>
 
 class MdiAreaContainer : public QObject
 {
@@ -17,8 +18,14 @@ public:
     virtual void addWidget(QWidget *widget);
     virtual void remove(int index);
 
+    QMdiSubWindow *currentSubWindow();
+
+private:
+    void updateCachedSubWindowList() const; // Updates the cached list
+
 private:
     QMdiArea *m_mdiArea;
+    mutable QList<QMdiSubWindow *> cachedSubWindowList; // Cache for subwindows
 };
 
 #endif // MDIAREACONTAINER_H

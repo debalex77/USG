@@ -10,14 +10,29 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
+  </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QPushButton" name="btnEdit">
+     <property name="minimumSize">
+      <size>
+       <width>102</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Editează</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/edit_x32.png</normaloff>:/img/edit_x32.png</iconset>
      </property>
      <property name="shortcut">
       <string>F2</string>
@@ -26,8 +41,18 @@
    </item>
    <item row="0" column="0">
     <widget class="QPushButton" name="btnAdd">
+     <property name="minimumSize">
+      <size>
+       <width>102</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Adaugă</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
      </property>
      <property name="shortcut">
       <string>Ins</string>
@@ -36,8 +61,18 @@
    </item>
    <item row="3" column="0">
     <widget class="QPushButton" name="btnCancel">
+     <property name="minimumSize">
+      <size>
+       <width>102</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Închide</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
      </property>
      <property name="shortcut">
       <string>Esc</string>
@@ -62,8 +97,18 @@
    </item>
    <item row="2" column="0">
     <widget class="QPushButton" name="btnDelMark">
+     <property name="minimumSize">
+      <size>
+       <width>102</width>
+       <height>0</height>
+      </size>
+     </property>
      <property name="text">
       <string>Elimină</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../resource.qrc">
+       <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
      </property>
      <property name="shortcut">
       <string>Del</string>
@@ -72,6 +117,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

@@ -22,6 +22,7 @@ public:
 
 private:
     void dataWasModified();
+    QString getStyleForButtonMessageBox();
 
 private slots:
     void changeIndexComboLangApp(const int _index);

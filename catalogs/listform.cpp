@@ -17,26 +17,6 @@ ListForm::ListForm(QWidget *parent) :
     proxy = new BaseSortFilterProxyModel(this);
     proxy->setListFormType(BaseSortFilterProxyModel::ListFormType::ListCatalog);
 
-    ui->btnAdd->setIcon(QIcon(":/img/add_x32.png"));
-    ui->btnAdd->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnAdd->setLayout(new QGridLayout);
-    ui->btnAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-
-    ui->btnEdit->setIcon(QIcon(":/img/edit_x32.png"));
-    ui->btnEdit->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnEdit->setLayout(new QGridLayout);
-    ui->btnEdit->setShortcut(QKeySequence(Qt::Key_F2));
-
-    ui->btnDelMark->setIcon(QIcon(":/img/clear_x32.png"));
-    ui->btnDelMark->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnDelMark->setLayout(new QGridLayout);
-    ui->btnDelMark->setShortcut(QKeySequence(Qt::Key_Delete));
-
-    ui->btnCancel->setIcon(QIcon(":/img/close_x32.png"));
-    ui->btnCancel->setStyleSheet("padding-left: 3px; text-align: left;");
-    ui->btnCancel->setLayout(new QGridLayout);
-    ui->btnCancel->setShortcut(QKeySequence(Qt::Key_Escape));
-
     connect(this, &ListForm::typeListFormChanged, this, &ListForm::changedTypeListForm);
 
     connect(ui->btnAdd, &QAbstractButton::clicked, this, &ListForm::onAddObject);
@@ -109,7 +89,7 @@ void ListForm::updateTableView()
     ui->tabView->setSelectionMode(QAbstractItemView::SingleSelection);               // setam singura alegerea(nu multipla)
     ui->tabView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
     ui->tabView->setContextMenuPolicy(Qt::CustomContextMenu);                        // initializam meniu contextual
-    ui->tabView->verticalHeader()->setDefaultSectionSize(14);
+    // ui->tabView->verticalHeader()->setDefaultSectionSize(14);
     ui->tabView->horizontalHeader()->setStretchLastSection(true);                    // extinderea ultimei sectiei
     ui->tabView->setFocus();                                                         // focusam la tabela
     ui->tabView->selectRow(0);                                                       // selectam primul rand

@@ -13,6 +13,7 @@
 
 #include "database.h"
 #include <QDomDocument>
+#include <QThread>
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -73,6 +74,11 @@ QSqlDatabase DataBase::getDatabase()
     return db.database();
 }
 
+QSqlDatabase DataBase::getDatabaseThread()
+{
+    return db_thread.database(m_connectionName);
+}
+
 QSqlDatabase DataBase::getDatabaseImage()
 {
     return db_image.database("db_image");
@@ -98,7 +104,7 @@ bool DataBase::deleteDataFromTable(const QString name_table, const QString delet
 // *************** CREAREA TABELELOR, OBIECTELOR *********************
 
 void DataBase::creatingTables()
-{
+{    
     if (createTableUsers())
         qInfo(logInfo()) << tr("A fost creata tabela 'users'.");
 
@@ -128,6 +134,9 @@ void DataBase::creatingTables()
 
     if (createTableInvestigations())
         qInfo(logInfo()) << tr("A fost creata tabela 'investigations'.");
+
+    if (createTableInvestigationsGroup())
+        qInfo(logInfo()) << tr("A fost creata tabela 'investigationsGroup'.");
 
     if (createTableConstants())
         qInfo(logInfo()) << tr("A fost creata tabela 'constants'.");
@@ -170,6 +179,9 @@ void DataBase::creatingTables()
 
     if (createTableSpleen())
         qInfo(logInfo()) << tr("A fost creata tabela 'tableSpleen'.");
+
+    if (createTableIntestinalLoop())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableIntestinalLoop'.");
 
     if (createTableKidney())
         qInfo(logInfo()) << tr("A fost creata tabela 'tableKidney'.");
@@ -243,8 +255,12 @@ void DataBase::creatingTables()
     if (createTableConclusionTemplates())
         qInfo(logInfo()) << tr("A fost creata tabela 'conclusionTemplates'.");
 
+    if (createTableFormationsSystemTemplates())
+        qInfo(logInfo()) << tr("A fost creata tabela 'formationsSystemTemplates'.");
+
     if (createTableImagesReports())
         qInfo(logInfo()) << tr("A fost creata tabela 'imagesReports'.");
+
 }
 
 bool DataBase::checkTable(const QString name_table)
@@ -284,11 +300,7 @@ void DataBase::creatingTables_DbImage()
 
 void DataBase::loadInvestigationFromXml()
 {
-    const int count_num = 107; // vezi resource.qrc - investig.xml
-    progress_dialog = new QProgressDialog(tr("Load investigations ..."), tr("Cancel"), 1, count_num);
-    progress_dialog->setWindowModality(Qt::WindowModal);
-    progress_dialog->show();
-
+    int count_num = 107; // vezi resource.qrc - investig.xml
     int progress = 0;
 
     QDomDocument investigXML;
@@ -321,9 +333,7 @@ void DataBase::loadInvestigationFromXml()
                     qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'investigations': %1").arg(qry.lastError().text());
 
                 ++progress;
-                progress_dialog->setValue(progress);
-                if (progress_dialog->wasCanceled())
-                    break;
+                emit updateProgress(count_num, progress);
 
                 node = node.nextSibling().toElement();
             }
@@ -331,17 +341,91 @@ void DataBase::loadInvestigationFromXml()
         node = node.nextSibling().toElement();
     }
 
-    progress_dialog->close();
-    delete progress_dialog;
+    emit finishedProgress(tr("Au fost încărcate %1 investigatii.").arg(QString::number(count_num)));
+
+}
+
+void DataBase::updateInvestigationFromXML_2024()
+{
+    // Deschidem fișierul XML
+    QFile file(":/xmls/investig_2024.xml");
+    if (! file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qWarning(logWarning()) << "Nu se poate deschide fișierul XML:" << file.errorString();
+        return;
+    }
+
+    // Citim și parsează XML-ul
+    QDomDocument doc;
+    if (! doc.setContent(&file)) {
+        qWarning(logWarning()) << "Eroare la parsarea fișierului XML ':/xmls/investig_2024.xml' ";
+        file.close();
+        return;
+    }
+    file.close();
+
+    QDomElement root = doc.documentElement();
+    if (root.tagName() != "list_investigation") {
+        qWarning(logWarning()) << "Tagul rădăcină al fișierului XML este incorect.";
+        return;
+    }
+
+    // Marcăm toate înregistrările existente în SQLite ca `use=0`
+    QSqlQuery query;
+    if (! query.exec("UPDATE investigations SET `use` = 0;")) {
+        qWarning(logWarning()) << "Nu a fost gasita nici o investigatiei: " << query.lastError().text();
+        // return;
+    }
+
+    // Parcurgem intrările din XML
+    QDomNodeList entries = root.elementsByTagName("entry");
+    for (int i = 0; i < entries.count(); ++i) {
+        QDomElement entry = entries.at(i).toElement();
+        if (entry.isNull())
+            continue;
+
+        QString cod = entry.attribute("cod");
+        QString name = entry.attribute("name");
+        QString owner = entry.attribute("owner");
+
+        // Verificăm dacă codul există deja în baza de date
+        query.prepare("SELECT id FROM investigations WHERE cod = :cod;");
+        query.bindValue(":cod", cod);
+        if (! query.exec()) {
+            qWarning(logWarning()) << "Eroare la interogarea codului: " << query.lastError().text();
+            continue;
+        }
+
+        if (query.next()) {
+            // Codul există -> Actualizăm
+            query.prepare("UPDATE investigations SET name = :name, `use` = 1 WHERE cod = :cod;");
+            query.bindValue(":name", name);
+            query.bindValue(":cod", cod);
+            if (! query.exec()) {
+                qWarning(logWarning()) << "Eroare la actualizarea codului: " << query.lastError().text();
+            } else {
+                qInfo(logInfo()) << "Investigatia cu codul " << cod << " a fost actualizata cu succes.";
+            }
+        } else {
+            // Codul nu există -> Inserăm
+            query.prepare("INSERT INTO investigations (deletionMark, cod, name, `use`, owner) "
+                          "VALUES (0, :cod, :name, 1, :owner);");
+            query.bindValue(":cod",  cod);
+            query.bindValue(":name", name);
+            query.bindValue(":owner", owner);
+            if (! query.exec()) {
+                qWarning(logWarning()) << "Eroare la inserarea codului: " << query.lastError().text();
+            } else {
+                qInfo(logInfo()) << "A fost inserata investigatia noua cu codul " << cod << ".";
+            }
+        }
+    }
+
+    qInfo(logInfo()) << "Actualizat clasificatorul \"Investigatii\" pe anul 2024.";
 }
 
 void DataBase::loadNormogramsFromXml()
 {
     const int count_num = 116; // vezi resource.qrc - normograms.xml
-    progress_dialog = new QProgressDialog(tr("Load data normograms ..."), tr("Cancel"), 1, count_num);
-    progress_dialog->setWindowModality(Qt::WindowModal);
-    progress_dialog->show();
-
     int progress = 0;
 
     QDomDocument investigXML;
@@ -375,9 +459,7 @@ void DataBase::loadNormogramsFromXml()
                     qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'normograms': %1").arg(qry.lastError().text());
 
                 ++progress;
-                progress_dialog->setValue(progress);
-                if (progress_dialog->wasCanceled())
-                    break;
+                emit updateProgress(count_num, progress);
 
                 node = node.nextSibling().toElement();
             }
@@ -385,8 +467,8 @@ void DataBase::loadNormogramsFromXml()
         node = node.nextSibling().toElement();
     }
 
-    progress_dialog->close();
-    delete progress_dialog;
+    emit finishedProgress(tr("Au fost încărcate %1 elemente a normogramelor.").arg(QString::number(count_num)));
+
 }
 
 // *******************************************************************
@@ -399,13 +481,7 @@ void DataBase::insertDataForTabletypesPrices()
     qry.prepare("INSERT INTO typesPrices (id, deletionMark, name, discount, noncomercial) VALUES ( ?, ?, ?, ?, ?);");
     qry.addBindValue(m_id);
     qry.addBindValue(0);
-#if defined(Q_OS_LINUX)
-    qry.addBindValue(tr("Prețuri comerciale"));
-#elif defined(Q_OS_MACOS)
-    qry.addBindValue(tr("Prețuri comerciale"));
-#elif defined(Q_OS_WIN)
     qry.addBindValue(tr("Pre\310\233uri comerciale"));
-#endif
     qry.addBindValue(0);
     if (globals::thisMySQL)
         qry.addBindValue(false);
@@ -420,13 +496,7 @@ void DataBase::insertDataForTabletypesPrices()
     qry.prepare("INSERT INTO typesPrices (id, deletionMark, name, discount, noncomercial) VALUES ( ?, ?, ?, ?, ?);");
     qry.addBindValue(m_id + 1);
     qry.addBindValue(0);
-#if defined(Q_OS_LINUX)
-    qry.addBindValue(tr("Prețuri CNAM"));
-#elif defined(Q_OS_MACOS)
-    qry.addBindValue(tr("Prețuri CNAM"));
-#elif defined(Q_OS_WIN)
     qry.addBindValue(tr("Pre\310\233uri CNAM"));
-#endif
     qry.addBindValue(0);
     if (globals::thisMySQL)
         qry.addBindValue(true);
@@ -627,13 +697,10 @@ void DataBase::getPeiodFromTableSettingsForm(const int id_data, const QString ty
     qry.bindValue(":typeForm", typeForm);
     if (qry.exec() && qry.next()){
         if (globals::thisMySQL){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            date_start = qry.value(0).toString().replace(QRegExp("T"), " ").replace(".000","");
-            date_end   = qry.value(1).toString().replace(QRegExp("T"), " ").replace(".000","");
-#else
-            date_start = qry.value(0).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-            date_end   = qry.value(1).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-#endif
+            static const QRegularExpression replaceT("T");
+            static const QRegularExpression removeMilliseconds("\\.000");
+            date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
+            date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
         }else {
             date_start = qry.value(0).toString();
             date_end   = qry.value(1).toString();
@@ -1257,7 +1324,7 @@ bool DataBase::createTablePacients()
                     "name          VARCHAR (80) NOT Null,"
                     "fName         VARCHAR (50),"
                     "mName         VARCHAR (50),"
-                    "medicalPolicy VARCHAR (12),"
+                    "medicalPolicy VARCHAR (20),"
                     "birthday      DATE NOT Null,"
                     "address       VARCHAR (255),"
                     "telephone     VARCHAR (100),"
@@ -1271,7 +1338,7 @@ bool DataBase::createTablePacients()
                     "name          TEXT (80) NOT NULL,"
                     "fName         TEXT (50),"
                     "mName         TEXT (50),"
-                    "medicalPolicy TEXT (12),"
+                    "medicalPolicy TEXT (20),"
                     "birthday      TEXT (10) NOT NULL,"
                     "address       TEXT (255),"
                     "telephone     TEXT (100),"
@@ -1518,6 +1585,7 @@ bool DataBase::createTableInvestigations()
                     "cod          VARCHAR (10),"
                     "name         VARCHAR (500),"
                     "`use`        BOOLEAN,"
+                    "owner        VARCHAR (150),"
                     "KEY `idx_investigations_cod` (`cod`),"
                     "KEY `idx_investigations_name` (`name`));");
     else if (globals::connectionMade == "Sqlite")
@@ -1526,7 +1594,8 @@ bool DataBase::createTableInvestigations()
                     "deletionMark INTEGER NOT NULL,"
                     "cod          TEXT (10) NOT NULL,"
                     "name         TEXT (500) NOT NULL,"
-                    "use          INTEGER NOT NULL);");
+                    "use          INTEGER NOT NULL,"
+                    "owner        TEXT);");
     else
         return false;
 
@@ -1535,6 +1604,45 @@ bool DataBase::createTableInvestigations()
     } else {
         qWarning(logWarning()) << tr("%1 - createTableInvestigations()").arg(metaObject()->className())
                                << tr("Nu a fost creata tabela \"investigations\".") + qry.lastError().text();
+        return false;
+    }
+}
+
+bool DataBase::createTableInvestigationsGroup()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE if not exists investigationsGroup ("
+                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
+                    "deletionMark INT,"
+                    "cod          VARCHAR (10),"
+                    "name         VARCHAR (50),"
+                    "nameForPrint VARCHAR (250)"
+                    ");");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE if not exists investigationsGroup ("
+                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
+                    "deletionMark INTEGER NOT NULL,"
+                    "cod          TEXT,"
+                    "name         TEXT,"
+                    "nameForPrint TEXT);");
+    else
+        return false;
+
+    if (qry.exec()){
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('1','0','1','Complex','Examen ecografic complex');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('2','0','2','Org.interne','Examen ecografic a organelor interne');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('3','0','3','Sist.urinar','Examen ecografic sistemului urinar');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('4','0','4','Ginecologia','Examen ecografic ginecologic');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('5','0','5','Prostata, scrot','Examen ecografic a prostatei și scrotului');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('6','0','6','Screening','Examen ecografic în sarcină');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('7','0','7','Gl.tiroida','Examen ecografic gl.tiroide');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('8','0','8','Gl.mamare','Examen ecografic gl.mamare');");
+        qry.exec("INSERT INTO investigationsGroup (id, deletionMark, cod, name, nameForPrint) VALUES ('9','0','9','Alte','Examen ecografic neclasificat');");
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableInvestigationsGroup()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela \"investigationsGroup\".") + qry.lastError().text();
         return false;
     }
 }
@@ -2458,6 +2566,35 @@ bool DataBase::createTableSpleen()
     }
 }
 
+bool DataBase::createTableIntestinalLoop()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE if not exists tableIntestinalLoop ("
+                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
+                    "id_reportEcho INT NOT Null,"
+                    "formations    VARCHAR (300),"
+                    "KEY `tableIntestinalLoop_reportEcho_id_idx` (`id_reportEcho`),"
+                    "CONSTRAINT `tableIntestinalLoop_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
+                    ");");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE tableIntestinalLoop ("
+                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tableIntestinalLoop_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "formations    TEXT DEFAULT NULL"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableIntestinalLoop()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela \"tableIntestinalLoop\".") + qry.lastError().text();
+        return false;
+    }
+}
+
 bool DataBase::createTableKidney()
 {
     QSqlQuery qry;
@@ -2465,6 +2602,8 @@ bool DataBase::createTableKidney()
         qry.prepare("CREATE TABLE if not exists tableKidney ("
                     "id                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho       INT NOT Null,"
+                    "`contour_right` ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',"
+                    "`contour_left`  ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',"
                     "dimens_right        VARCHAR (15),"
                     "dimens_left         VARCHAR (15),"
                     "corticomed_right    VARCHAR (5),"
@@ -2472,6 +2611,7 @@ bool DataBase::createTableKidney()
                     "pielocaliceal_right VARCHAR (30),"
                     "pielocaliceal_left  VARCHAR (30),"
                     "formations          VARCHAR (500),"
+                    "`suprarenal_formations` VARCHAR(500) COLLATE utf8mb4_general_ci DEFAULT NULL,"
                     "concluzion          VARCHAR (500),"
                     "recommendation      VARCHAR (255),"
                     "KEY `tableKidney_reportEcho_id_idx` (`id_reportEcho`),"
@@ -2479,17 +2619,20 @@ bool DataBase::createTableKidney()
                     ");");
     else if (globals::connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableKidney ("
-                    "id                  INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho       INTEGER NOT NULL CONSTRAINT tableKidney_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "dimens_right        TEXT (15),"
-                    "dimens_left         TEXT (15),"
-                    "corticomed_right    TEXT (5),"
-                    "corticomed_left     TEXT (5),"
-                    "pielocaliceal_right TEXT (30),"
-                    "pielocaliceal_left  TEXT (30),"
-                    "formations          TEXT (500),"
-                    "concluzion          TEXT (500),"
-                    "recommendation      TEXT (255)"
+                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableKidney_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
+                    "contour_right         TEXT CHECK(contour_right IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',"
+                    "contour_left          TEXT CHECK(contour_left IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',"
+                    "dimens_right          TEXT DEFAULT NULL,"
+                    "dimens_left           TEXT DEFAULT NULL,"
+                    "corticomed_right      TEXT DEFAULT NULL,"
+                    "corticomed_left       TEXT DEFAULT NULL,"
+                    "pielocaliceal_right   TEXT DEFAULT NULL,"
+                    "pielocaliceal_left    TEXT DEFAULT NULL,"
+                    "formations            TEXT DEFAULT NULL,"
+                    "suprarenal_formations TEXT DEFAULT NULL,"
+                    "concluzion            TEXT DEFAULT NULL,"
+                    "recommendation        TEXT DEFAULT NULL"
                     ");");
     else
         return false;
@@ -3393,7 +3536,7 @@ bool DataBase::createTableNormograms()
 {
     QSqlQuery qry;
     if (globals::connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE normograms ("
+        qry.prepare("CREATE TABLE if not exists normograms ("
                     "`id`         int NOT NULL AUTO_INCREMENT,"
                     "`name`       varchar (30) NOT NULL,"
                     "`crl`        varchar (5) NOT NULL,"
@@ -3403,7 +3546,7 @@ bool DataBase::createTableNormograms()
                     "PRIMARY KEY (`id`)"
                     ");");
     else if (globals::connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE normograms ("
+        qry.prepare("CREATE TABLE if not exists normograms ("
                     "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "name         TEXT (30) NOT NULL,"
                     "crl          TEXT (5) NOT NULL,"
@@ -3705,6 +3848,47 @@ bool DataBase::createTableConclusionTemplates()
     }
 }
 
+bool DataBase::createTableFormationsSystemTemplates()
+{
+    QSqlQuery qry;
+    if (globals::connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
+                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
+                    "deletionMark INT NOT Null,"
+                    "name         VARCHAR (500) NOT Null,"
+                    "typeSystem   ENUM('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)', "
+                    "                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)', "
+                    "                   'Prostata', 'Recomandari (prostata)', "
+                    "                   'Tiroida', 'Recomandari (tiroida)', "
+                    "                   'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',"
+                    "                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)', "
+                    "                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)') DEFAULT 'Unknow'"
+                    ");");
+    else if (globals::connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
+                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
+                    "deletionMark INT NOT NULL,"
+                    "name         TEXT NOT NULL,"
+                    "typeSystem   TEXT CHECK(typeSystem IN ('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)', "
+                    "                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)', "
+                    "                   'Prostata', 'Recomandari (prostata)', "
+                    "                   'Tiroida', 'Recomandari (tiroida)', "
+                    "                   'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',"
+                    "                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)', "
+                    "                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)')) DEFAULT 'Unknow'"
+                    ");");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableFormationsSystemTemplates()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'formationsSystemTemplates'.") + qry.lastError().text();
+        return false;
+    }
+}
+
 bool DataBase::createTableImagesReports()
 {
     if (globals::connectionMade == "Sqlite" || globals::connectionMade == nullptr)
@@ -3747,6 +3931,301 @@ bool DataBase::createTableImagesReports()
                                << tr("Nu a fost creata tabela 'imagesReports'.") + qry.lastError().text();
         return false;
     }
+}
+
+bool DataBase::createIndexTables()
+{
+    QSqlQuery qry;
+
+    if (qry.exec("CREATE INDEX idx_name_fName_pacients ON pacients(name, fName);"))
+        qInfo(logInfo()) << "creat indexul 'idx_name_fName_pacients'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_name_fName_pacients'.";
+
+    if (qry.exec("CREATE INDEX idx_name_fName_IDNP_pacients ON pacients(name, fName, IDNP);"))
+        qInfo(logInfo()) << "creat indexul 'idx_name_fName_IDNP_pacients'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_name_fName_IDNP_pacients'.";
+
+    //-----------------------------------------------------------------
+    //---------------- pricing
+
+    if (qry.exec("CREATE INDEX idx_dateDoc_pricing ON pricings(dateDoc);"))
+        qInfo(logInfo()) << "creat indexul 'idx_dateDoc_pricing'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_dateDoc_pricing'.";
+
+    if (qry.exec("CREATE INDEX idx_id_organizations_pricing ON pricings(id_organizations);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_organizations_pricing'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_organizations_pricing'.";
+
+    if (qry.exec("CREATE INDEX idx_id_contracts_pricing ON pricings(id_contracts);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_contracts_pricing'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_contracts_pricing'.";
+
+    if (qry.exec("CREATE INDEX idx_id_users_pricing ON pricings(id_users);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_users_pricing'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_users_pricing'.";
+
+    if (qry.exec("CREATE INDEX idx_id_typesPrices_pricing ON pricings(id_typesPrices);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_typesPrices_pricing'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_typesPrices_pricing'.";
+
+    //-----------------------------------------------------------------
+    //---------------- pricingsTable
+
+    if (qry.exec("CREATE INDEX idx_id_pricings_pricingTable ON pricingsTable(id_pricings);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_pricings_pricingTable'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_pricings_pricingTable'.";
+
+    //-----------------------------------------------------------------
+    //---------------- orderEcho
+
+    if (qry.exec("CREATE INDEX idx_id_organizations_order ON orderEcho(id_organizations);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_organizations_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_organizations_order'.";
+
+    if (qry.exec("CREATE INDEX idx_id_contracts_order ON orderEcho(id_contracts);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_contracts_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_contracts_order'.";
+
+    if (qry.exec("CREATE INDEX idx_id_pacients_order ON orderEcho(id_pacients);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_pacients_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_pacients_order'.";
+
+    if (qry.exec("CREATE INDEX idx_id_doctors_order ON orderEcho(id_doctors);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_doctors_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_doctors_order'.";
+
+    if (qry.exec("CREATE INDEX idx_id_users_order ON orderEcho(id_users);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_users_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_users_order'.";
+
+    if (qry.exec("CREATE INDEX idx_dateDoc_order ON orderEcho(dateDoc);"))
+        qInfo(logInfo()) << "creat indexul 'idx_dateDoc_order'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_dateDoc_order'.";
+
+    //----------------------------------------------------------------
+    //----------------- orderEchoTable
+
+    if (qry.exec("CREATE INDEX idx_id_orderEcho_orderTable ON orderEchoTable(id_orderEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_orderEcho_orderTable'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_orderEcho_orderTable'.";
+
+    //----------------------------------------------------------------
+    //----------------- reportEcho
+
+    if (qry.exec("CREATE INDEX idx_dateDoc_report ON reportEcho(dateDoc);"))
+        qInfo(logInfo()) << "creat indexul 'idx_dateDoc_report'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_dateDoc_report'.";
+
+    if (qry.exec("CREATE INDEX idx_id_pacients_report ON reportEcho(id_pacients);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_pacients_report'.";
+    else
+        qCritical(logCritical()) << "Eroare : nu a fost creat indexul 'idx_id_pacients_report'.";
+
+    if (qry.exec("CREATE INDEX idx_id_orderEcho_report ON reportEcho(id_orderEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_orderEcho_report'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_orderEcho_report'.";
+
+    if (qry.exec("CREATE INDEX idx_id_users_report ON reportEcho(id_users);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_users_report'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_users_report'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableCholecist
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_cholecist ON tableCholecist(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_cholecist'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_cholecist'.";
+
+    //---------------------------------------------------------------
+    //----------------- tablePancreas
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_pancreas ON tablePancreas(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_pancreas'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_pancreas'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableSpleen
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_spleen ON tableSpleen(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_spleen'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_spleen'.";
+
+
+    //---------------------------------------------------------------
+    //----------------- tableIntestinalLoop
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_intestin ON tableIntestinalLoop(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_intestin'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_intestin'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableKidney
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_kidney ON tableKidney(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_kidney'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_kidney'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableBladder
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_bladder ON tableBladder(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_bladder'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_bladder'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableProstate
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_prostate ON tableProstate(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_prostate'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_prostate'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableGynecology
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_gynecology ON tableGynecology(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_gynecology'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_gynecology'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableBreast
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_breast ON tableBreast(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_breast'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_breast'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableThyroid
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_thyroid ON tableThyroid(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_thyroid'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_thyroid'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableGestation0
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_ges0 ON tableGestation0(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_ges0'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_ges0'.";
+
+    //---------------------------------------------------------------
+    //----------------- tableGestation1
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_ges1 ON tableGestation1(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_ges1'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_ges1'.";
+
+    //---------------------------------------------------------------
+    //----------------- tables Gestation2
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_ges2 ON tableGestation2(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_ges2'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_ges2'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_bio ON tableGestation2_biometry(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_bio'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_bio'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_cr ON tableGestation2_cranium(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_cr'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_cr'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_snc ON tableGestation2_SNC(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_snc'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_snc'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_heart ON tableGestation2_heart(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_heart'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_heart'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_thorax ON tableGestation2_thorax(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_thorax'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_thorax'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_abd ON tableGestation2_abdomen(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_abd'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_abd'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_us ON tableGestation2_urinarySystem(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_us'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_us'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_other ON tableGestation2_other(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_other'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_other'.";
+
+    if (qry.exec("CREATE INDEX idx_id_reportEcho_doppler ON tableGestation2_doppler(id_reportEcho);"))
+        qInfo(logInfo()) << "creat indexul 'idx_id_reportEcho_doppler'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_reportEcho_doppler'.";
+
+    //---------------------------------------------------------------
+    //----------------- formationsSystemTemplates
+
+    if (qry.exec("CREATE INDEX idx_name_typeSystem_formationsSystemTemplates ON formationsSystemTemplates(name, typeSystem);"))
+        qInfo(logInfo()) << "creat indexul 'idx_name_typeSystem_formationsSystemTemplates'.";
+    else
+        qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_name_typeSystem_formationsSystemTemplates'.";
+
+    //---------------------------------------------------------------
+    //----------------- db_image
+
+    if (globals::thisSqlite) {
+
+        QSqlQuery qry_image(QSqlDatabase::database("db_image"));
+
+        if (qry_image.exec("CREATE INDEX idx_id_documents_imagesReports ON imagesReports(id_reportEcho, id_orderEcho, id_patients, id_user);"))
+            qInfo(logInfo()) << "creat indexul 'idx_id_documents_imagesReports'.";
+        else
+            qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_documents_imagesReports'.";
+
+    } else {
+
+        if (qry.exec("CREATE INDEX idx_id_documents_imagesReports ON imagesReports(id_reportEcho, id_orderEcho, id_patients, id_user);"))
+            qInfo(logInfo()) << "creat indexul 'idx_id_documents_imagesReports'.";
+        else
+            qCritical(logCritical()) << "Eroare: nu a fost creat indexul 'idx_id_documents_imagesReports'.";
+
+    }
+
+    return true;
 }
 
 void DataBase::updateVariableFromTableSettingsUser()
@@ -3939,20 +4418,23 @@ QString DataBase::getQryForTableOrgansInternalById(const int id_doc) const
                    "  tableSpleen.contur AS spleen_contur,"
                    "  tableSpleen.parenchim AS spleen_parenchim,"
                    "  tableSpleen.formations AS spleen_formations,"
+                   "  tableIntestinalLoop.formations AS intestinal_formations,"
                    "  tableLiver.concluzion AS organs_internal_concluzion,"
                    "  tableLiver.recommendation AS recommendation,"
                    "  reportEcho.concluzion AS concluzion "
                    "FROM "
                    "  reportEcho "
-                   "INNER JOIN "
+                   "LEFT JOIN "
                    "  reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "INNER JOIN "
+                   "LEFT JOIN "
                    "  tableLiver ON reportEcho.id = tableLiver.id_reportEcho "
-                   "INNER JOIN "
+                   "LEFT JOIN "
+                   "  tableIntestinalLoop ON reportEcho.id = tableIntestinalLoop.id_reportEcho "
+                   "LEFT JOIN "
                    "  tableCholecist ON reportEcho.id = tableCholecist.id_reportEcho "
-                   "INNER JOIN "
+                   "LEFT JOIN "
                    "  tablePancreas ON reportEcho.id = tablePancreas.id_reportEcho "
-                   "INNER JOIN "
+                   "LEFT JOIN "
                    "  tableSpleen ON reportEcho.id = tableSpleen.id_reportEcho "
                    "WHERE "
                    "  reportEcho.deletionMark = '2' AND "
@@ -3966,6 +4448,8 @@ QString DataBase::getQryForTableUrinarySystemById(const int id_doc) const
 {
     return QString("SELECT "
                    "      reportEchoPresentation.docPresentationDate AS title_report,"
+                   "      tableKidney.contour_right,"
+                   "      tableKidney.contour_left,"
                    "      tableKidney.dimens_right,"
                    "      tableKidney.dimens_left,"
                    "      tableKidney.corticomed_right,"
@@ -3973,6 +4457,7 @@ QString DataBase::getQryForTableUrinarySystemById(const int id_doc) const
                    "      tableKidney.pielocaliceal_right,"
                    "      tableKidney.pielocaliceal_left,"
                    "      tableKidney.formations AS kidney_formations,"
+                   "      tableKidney.suprarenal_formations,"
                    "      tableBladder.volum AS bladder_volum,"
                    "      tableBladder.walls AS bladder_walls,"
                    "      tableBladder.formations AS bladder_formations,"
@@ -3981,8 +4466,8 @@ QString DataBase::getQryForTableUrinarySystemById(const int id_doc) const
                    "      reportEcho.concluzion "
                    "FROM reportEcho "
                    "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  INNER JOIN tableKidney ON reportEcho.id = tableKidney.id_reportEcho "
-                   "  INNER JOIN tableBladder ON reportEcho.id = tableBladder.id_reportEcho "
+                   "  LEFT JOIN tableKidney ON reportEcho.id = tableKidney.id_reportEcho "
+                   "  LEFT JOIN tableBladder ON reportEcho.id = tableBladder.id_reportEcho "
                    "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(QString::number(id_doc));
 }
 
@@ -4599,6 +5084,29 @@ QString DataBase::getHTMLImageWarning()
     return QString("<img src = \"qrc:///img/warning.png\" alt = \"info\" width=\"20\" height=\"20\" align=\"left\" />");
 }
 
+QString DataBase::getStyleForButtonMessageBox()
+{
+    return QString("QPushButton "
+                   "{"
+                   "  min-width: 60px;"
+                   "  border: 1px solid rgba(0, 0, 0, 0.2);"
+                   "  border-radius: 8px;"
+                   "  background-color: #f5f5f5;"
+                   "  color: #000000;"
+                   "  font-size: 13px;"
+                   "  padding: 4px 10px;"
+                   "  min-width: 80px;"
+                   "}"
+                   "QPushButton:hover "
+                   "{"
+                   "  background-color: #e0e0e0;"
+                   "}"
+                   "QPushButton:pressed "
+                   "{"
+                   "  background-color: #d0d0d0;"
+                   "}");
+}
+
 // *******************************************************************
 // ******** FUNCTIILE PRIVATE DE CONECTARE LA BD *********************
 
@@ -4606,7 +5114,7 @@ bool DataBase::openDataBase()
 {
     if (globals::connectionMade == "MySQL"){
 
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", "MainConnection");
         db.setHostName(globals::mySQLhost);         // localhost
         db.setDatabaseName(globals::mySQLnameBase); // USGdb
         db.setPort(globals::mySQLport.toInt());
@@ -4615,8 +5123,11 @@ bool DataBase::openDataBase()
         db.setPassword(globals::mySQLpasswdUser);
         if (db.open()){
             qInfo(logInfo()) << "Conectarea cu baza de date MYSQL instalata cu succes";
-            if (globals::firstLaunch)
+            if (globals::firstLaunch) {
                 creatingTables();
+                loadNormogramsFromXml();
+                createIndexTables();
+            }
         } else {
             qWarning(logWarning()) << "Conectarea cu baza de date MYSQL lipseste: " + db.lastError().text();
             return false;
@@ -4637,8 +5148,13 @@ bool DataBase::openDataBase()
             qInfo(logInfo()) << "";
             qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~= LANSARE NOUA =~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
             qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals::sqliteNameBase);
-            if (globals::firstLaunch)
+            if (! enableForeignKeys())
+                qWarning(logWarning()) << "Nu a fost activata suportul cheii externe";
+            if (globals::firstLaunch) {
                 creatingTables();
+                loadNormogramsFromXml();
+                // create index se afla dupa crearea db_image, vezi crearea db_image
+            }
         } else {
             qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals::sqliteNameBase)
                                    << db.lastError().text();
@@ -4657,6 +5173,7 @@ bool DataBase::openDataBase()
                 qInfo(logInfo()) << tr("Conectarea la baza de date 'db_image' este instalata cu succes.");
                 if (globals::firstLaunch){
                     creatingTables_DbImage();
+                    createIndexTables();
                 }
             } else {
                 qWarning(logWarning()) << tr("Conectarea la baza de date 'db_image' nu a fost instalata.")
@@ -4664,6 +5181,7 @@ bool DataBase::openDataBase()
                 return false;
             }
         }
+
     }
     return true;
 }
@@ -4679,4 +5197,19 @@ bool DataBase::restoreDataDase()
 void DataBase::closeDataBase()
 {
     db.close();
+}
+
+bool DataBase::enableForeignKeys()
+{
+    QSqlQuery qry;
+    qry.prepare("PRAGMA foreign_keys = ON;");
+    if(! qry.exec()){
+        qDebug() << "Error - enable foreign_keys.";
+        qDebug() << qry.lastError().text();
+        return false;
+    } else {
+        qDebug() << "Enable foreign_keys succes.";
+        return true;
+    }
+    return false;
 }

@@ -16,9 +16,11 @@ ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
     popUp            = new PopUp(this);    // mesaje
     customPeriod     = new CustomPeriod(this);
 
-    QString strQuery;
-    modelTable       = new BaseSqlQueryModel(strQuery, ui->tableView); // model principal pu solicitarea din BD
-    modelTable->setProperty("modelParent", BaseSqlQueryModel::ModelParent::ListOrderReport);
+    modelTable = new PaginatedSqlModel(this);
+
+    // QString strQuery;
+    // modelTable       = new BaseSqlQueryModel(strQuery, ui->tableView); // model principal pu solicitarea din BD
+    // modelTable->setProperty("modelParent", BaseSqlQueryModel::ModelParent::ListOrderReport);
 
     QString str_qry_view_table_order;
     model_view_table_order = new BaseSqlQueryModel(str_qry_view_table_order, ui->view_table);
@@ -54,6 +56,9 @@ ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
     initBtnToolBar();
     initBtnFilter();
 
+    // Conectăm scroll-ul
+    connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged, this, &ListDocReportOrder::onScroll);
+
     connect(ui->filterComboOrganization, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, QOverload<int>::of(&ListDocReportOrder::indexChangedComboOrganization));
     connect(ui->filterComboContract, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -87,10 +92,36 @@ ListDocReportOrder::~ListDocReportOrder()
     delete modelOrganizations;
     delete model_view_table_order;
     delete model_view_table_report;
-    delete toolBar;
     delete customPeriod;
     delete db;
     delete ui;
+}
+
+void ListDocReportOrder::onScroll(int value)
+{
+    if (loadDocumentsFull){ // se seteaza la enableLineEditSearch()
+        if (timer->isActive())
+            timer->stop();  // oprim timer sa nu actualizeze tabela
+        return;             // nu mai incarcam date
+    }
+
+    if (value > 0 && timer->isActive()) {
+        // oprim timer principal
+        timer->stop();
+        qInfo(logInfo()) << "Detectat scroll - timer principal pentru actualizarea listei de documente este oprit !!!";
+
+        // Pornim un timer temporar pentru a restarta timer-ul principal
+        QTimer::singleShot(2 * 60 * 1000, this, [this]() {
+            timer->start(globals::updateIntervalListDoc * 1000);
+            qInfo(logInfo()) << "Timer principal pentru actualizarea documentelor startat din nou !!!";
+        });
+    }
+
+    int maxScroll = ui->tableView->verticalScrollBar()->maximum();
+    if (value == maxScroll) {
+        qInfo(logInfo()) << "Scroll detectat la capăt, se încărca mai multe date...";
+        modelTable->fetchMoreData();
+    }
 }
 
 void ListDocReportOrder::updateMainTableByTimer()
@@ -100,18 +131,37 @@ void ListDocReportOrder::updateMainTableByTimer()
 
 void ListDocReportOrder::enableLineEditSearch()
 {
-    if (editSearch->isEnabled()){
-        editSearch->setEnabled(false);
-        editSearch->setPlaceholderText(tr(""));
+    if (ui->editSearch->isEnabled()){
+        ui->editSearch->setEnabled(false);
     } else {
-        editSearch->setEnabled(true);
-#if defined(Q_OS_LINUX)
-        editSearch->setPlaceholderText(tr("... căutarea după nume, prenume sau IDNP a pacientului"));
-#elif defined(Q_OS_MACOS)
-        editSearch->setPlaceholderText(tr("... căutarea după nume, prenume sau IDNP a pacientului"));
-#elif defined(Q_OS_WIN)
-        editSearch->setPlaceholderText(tr("... c\304\203utarea dup\304\203 nume, prenume sau IDNP a pacientului"));
-#endif
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Set\304\203ri de c\304\203utare a pa cientului"),
+                                 tr("1.Pentru c\304\203utarea documentelor pacientului dup\304\203 nume, prenume sau IDNP este necesar "
+                                    "de \303\256nc\304\203rcat toate documentele de la ini\310\233ierea programei.<br>"
+                                    "2.Paginarea formei de prezentare a documentelor o s\304\203 fie dezactivat\304\203.<br>"
+                                    "3.Dac\304\203 documente sunt \303\256n cantitate mare, procesul de \303\256nc\304\203rcare poate dura timp \303\256ndelungat.<br><br>"
+                                    "Dori\310\233i s\304\203 continua\310\233i ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton){
+            if (m_typeDoc == orderEcho) {
+                ui->filterStartDateTime->setDateTime(QDateTime(QDate(2021,01,01), QTime(00,00,00)));
+                ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12,31), QTime(23,59,59)));
+                updateTextPeriod();
+                connect(modelTable, &PaginatedSqlModel::updateProgress, this, &ListDocReportOrder::updateProgress);
+                connect(modelTable, &PaginatedSqlModel::finishedProgress, this, &ListDocReportOrder::finishedProgress);
+                updateTableViewOrderEchoFull();
+                loadDocumentsFull = true;
+            }
+            ui->editSearch->setEnabled(true);
+        } else if (messange_box.clickedButton() == noButton) {
+
+        }
     }
 }
 
@@ -135,19 +185,9 @@ void ListDocReportOrder::onEndDateTimeChanged()
 {
     updateTextPeriod();
     if (ui->filterStartDateTime->dateTime() > ui->filterEndDateTime->dateTime()){
-#if defined(Q_OS_LINUX)
-        QMessageBox::warning(this, tr("Verificarea perioadei"),
-                             tr("Data finisării perioadei nu poate fi mai mică decât \ndata lansării perioadei !!!"),
-                             QMessageBox::Ok, QMessageBox::Ok);
-#elif defined(Q_OS_MACOS)
-        QMessageBox::warning(this, tr("Verificarea perioadei"),
-                             tr("Data finisării perioadei nu poate fi mai mică decât \ndata lansării perioadei !!!"),
-                             QMessageBox::Ok, QMessageBox::Ok);
-#elif defined(Q_OS_WIN)
         QMessageBox::warning(this, tr("Verificarea perioadei"),
                              tr("Data finis\304\203rii perioadei nu poate fi mai mic\304\203 dec\303\242t \ndata lans\304\203rii perioadei !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-#endif
     }
 }
 
@@ -172,7 +212,7 @@ void ListDocReportOrder::slot_TypeDocChanged()
         timer->start(globals::updateIntervalListDoc * 1000);
 
     if (m_typeDoc == reportEcho){
-        btnReport->setDisabled(true);
+        ui->btnReport->setDisabled(true);
         ui->filterComboOrganization->setEnabled(false);
         ui->filterComboContract->setEnabled(false);
         ui->btnOpenCatContract->setEnabled(false);
@@ -182,13 +222,7 @@ void ListDocReportOrder::slot_TypeDocChanged()
         setWindowIcon(QIcon(":/img/examenEcho.png"));
         qInfo(logInfo()) << "Deschisa lista documentelor: Raport ecografic.";
     } else {
-#if defined(Q_OS_LINUX)
-        setWindowTitle(tr("Lista documentelor: Comanda ecografică"));
-#elif defined(Q_OS_MACOS)
-        setWindowTitle(tr("Lista documentelor: Comanda ecografică"));
-#elif defined(Q_OS_WIN)
         setWindowTitle(tr("Lista documentelor: Comanda ecografic\304\203"));
-#endif
         setWindowIcon(QIcon(":/img/orderEcho_x32.png"));
         qInfo(logInfo()) << "Deschisa lista documentelor: Comanda ecografică.";
     }
@@ -292,13 +326,9 @@ void ListDocReportOrder::onClickBtnAdd()
 void ListDocReportOrder::onClickBtnEdit()
 {
     if (ui->tableView->currentIndex().row() == idx_unknow){
-#if defined(Q_OS_LINUX)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_MACOS)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_WIN)
-        QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#endif
+        QMessageBox::warning(this,
+                             tr("Informa\310\233ie"),
+                             tr("Nu este marcat randul !!!."), QMessageBox::Ok);
         return;
     }
 
@@ -326,19 +356,14 @@ void ListDocReportOrder::onClickBtnDeletion()
 {
     const int _row = ui->tableView->currentIndex().row();
     if (_row == idx_unknow){
-#if defined(Q_OS_LINUX)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_MACOS)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_WIN)
-        QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#endif
+        QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat r\303\242ndul !!!."), QMessageBox::Ok);
         return;
     }
     const int _id = proxyTable->index(_row, section_id).data(Qt::DisplayRole).toInt();
 
     QSqlQuery qry;
     if (m_typeDoc == orderEcho){
+        qry.exec("PRAGMA foreign_keys = ON;");
         qry.prepare("SELECT "
                     "  reportEchoPresentation.docPresentation "
                     "FROM "
@@ -356,24 +381,12 @@ void ListDocReportOrder::onClickBtnDeletion()
                 QMessageBox msgBox;
                 msgBox.setWindowTitle(tr("Eliminarea documentului."));
                 msgBox.setIcon(QMessageBox::Warning);
-#if defined(Q_OS_LINUX)
-                msgBox.setText(tr("Există documente subordonate. Doriți să continuați ?"));
-#elif defined(Q_OS_MACOS)
-                msgBox.setText(tr("Există documente subordonate. Doriți să continuați ?"));
-#elif defined(Q_OS_WIN)
                 msgBox.setText(tr("Exist\304\203 documente subordonate. Dori\310\233i s\304\203 continua\310\233i ?"));
-#endif
                 msgBox.setDetailedText(tr("Va fi eliminat documentul subordonat:\n%1").arg(doc_presentation));
                 msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                msgBox.setButtonText(QMessageBox::Yes, tr("Da"));
-                msgBox.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//                msgBox.addButton(tr("Da"), QMessageBox::YesRole);
-//                msgBox.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
                 msgBox.setStyleSheet("QPushButton{width:120px;}");
                 if (msgBox.exec() == QMessageBox::Yes){
+                    qry.exec("PRAGMA foreign_keys = ON;");
                     qry.prepare("DELETE FROM orderEcho WHERE id = :id;");
                     qry.bindValue(":id", _id);
                     if (qry.exec()){
@@ -392,6 +405,7 @@ void ListDocReportOrder::onClickBtnDeletion()
                     }
                 }
             } else {
+                qry.exec("PRAGMA foreign_keys = ON;");
                 qry.prepare("DELETE FROM orderEcho WHERE id = :id;");
                 qry.bindValue(":id", _id);
                 if (qry.exec()){
@@ -477,13 +491,7 @@ void ListDocReportOrder::onClickBtnHideShowColumn()
 void ListDocReportOrder::onClickBtnPrint()
 {
     if (ui->tableView->currentIndex().row() == idx_unknow){
-#if defined(Q_OS_LINUX)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_MACOS)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_WIN)
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#endif
         return;
     }
     if (m_typeDoc == orderEcho){
@@ -492,7 +500,7 @@ void ListDocReportOrder::onClickBtnPrint()
         docOrderEcho->setAttribute(Qt::WA_DeleteOnClose);
         docOrderEcho->setProperty("ItNew", false);
         docOrderEcho->setProperty("Id", _id);
-        docOrderEcho->onPrintDocument(DocOrderEcho::TypePrint::openPreview);
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
         docOrderEcho->close();
     } else {
         int _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), report_id), Qt::DisplayRole).toInt();
@@ -508,13 +516,7 @@ void ListDocReportOrder::onClickBtnPrint()
 void ListDocReportOrder::onClickBtnReport()
 {
     if (ui->tableView->currentIndex().row() == idx_unknow){
-#if defined(Q_OS_LINUX)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_MACOS)
-        QMessageBox::warning(this, tr("Informație"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#elif defined(Q_OS_WIN)
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
-#endif
         return;
     }
 
@@ -547,6 +549,7 @@ void ListDocReportOrder::onClickBtnReport()
         report->setProperty("Id", _id_report);
         report->setProperty("IdDocOrderEcho", _id);
         report->show();
+        connect(report, &DocReportEcho::PostDocument, this, &ListDocReportOrder::updateTableView);
     } else {
 
         const int _idPacient = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_idPacient), Qt::DisplayRole).toInt();
@@ -614,6 +617,7 @@ void ListDocReportOrder::onClickBtnReport()
         doc_report->setProperty("IdPacient", _idPacient);
         doc_report->setProperty("IdDocOrderEcho", _id);
         doc_report->show();
+        connect(doc_report, &DocReportEcho::PostDocument, this, &ListDocReportOrder::updateTableView);
     }
 }
 
@@ -625,16 +629,12 @@ void ListDocReportOrder::onClickBtnShowHideViewTab()
         ui->groupBox_table_report->setHidden(false);
         QModelIndex index = ui->tableView->currentIndex();
         onClickedTable(index);
-        btnViewTab->setStyleSheet("background-color: #dadbde");
         ui->splitter->resize(1518, 190);
     } else {
         pressed_btn_viewTab = -1;
         ui->groupBox_table_order->setHidden(true);
         ui->groupBox_table_report->setHidden(true);
-        btnViewTab->setStyleSheet("background-color: #f6f7fa");
     }
-    // formationPrinMenuForOrder();
-    // formationPrinMenuForReport();
 }
 
 void ListDocReportOrder::openHistoryPatients()
@@ -659,13 +659,9 @@ void ListDocReportOrder::filterRegExpChanged()
         proxyTable->setFilterKeyColumn(section_searchPacient);
     else
         proxyTable->setFilterKeyColumn(report_search_patient);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRegExp regExp(editSearch->text(), Qt::CaseInsensitive, QRegExp::RegExp);
-    proxyTable->setFilterRegExp(regExp);
-#else
-    QRegularExpression regExp(editSearch->text(), QRegularExpression::CaseInsensitiveOption);
+
+    QRegularExpression regExp(ui->editSearch->text(), QRegularExpression::CaseInsensitiveOption);
     proxyTable->setFilterRegularExpression(regExp);
-#endif
 }
 
 void ListDocReportOrder::onClickedTable(const QModelIndex &index)
@@ -834,14 +830,17 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
         if (qry.exec()){
             qry.next();
             _id_report = qry.value(0).toInt();
-            if (globals::thisMySQL)
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                presentationDoc = tr("Raport ecografic nr.%1 din %2").arg(qry.value(1).toString(), qry.value(2).toString().replace(QRegExp("T"), " ").replace(".000",""));
-#else
-                presentationDoc = tr("Raport ecografic nr.%1 din %2").arg(qry.value(1).toString(), qry.value(2).toString().replace(QRegularExpression("T"), " ").replace(".000",""));
-#endif
-            else
+            if (globals::thisMySQL){
+                static const QRegularExpression replaceT("T");
+                static const QRegularExpression removeMilliseconds("\\.000");
+                presentationDoc = tr("Raport ecografic nr.%1 din %2")
+                                      .arg(qry.value(1).toString(),
+                                           qry.value(2).toString()
+                                               .replace(replaceT, " ")
+                                               .replace(removeMilliseconds,""));
+            } else {
                 presentationDoc = tr("Raport ecografic nr.%1 din %2").arg(qry.value(1).toString(), qry.value(2).toString());
+            }
         } else {
             qDebug() << qry.lastError().text();
         }
@@ -1036,187 +1035,67 @@ QString ListDocReportOrder::enumToString(TypeDoc typeDoc)
 
 void ListDocReportOrder::initBtnToolBar()
 {
-    // ----------------------------------------------------------------------------
-    // alocarea memoriei
 
-    toolBar         = new QToolBar(this);
-    btnAdd          = new QToolButton(toolBar);
-    btnEdit         = new QToolButton(toolBar);
-    btnDeletion     = new QToolButton(toolBar);
-    btnFilter       = new QToolButton(toolBar);
-    btnAddFilter    = new QToolButton(toolBar);
-    btnFilterRemove = new QToolButton(toolBar);
-    btnUpdateTable  = new QToolButton(toolBar);
-    btnPrint        = new QToolButton(toolBar);
-    btnReport       = new QToolButton(toolBar);
-    btnViewTab      = new QToolButton(toolBar);
-    btnPeriodDate   = new QToolButton(toolBar);
-    btnSearch       = new QToolButton(toolBar);
-    btnHideShowColumn = new QToolButton(toolBar);
+#if defined(Q_OS_MACOS)
+    ui->btnReport->setStyleSheet("font-size: 13px;");
+    ui->btnViewTab->setStyleSheet("font-size: 13px;");
+#endif
 
-    // ----------------------------------------------------------------------------
-    // setarea stilului btn
-
-    btnAdd->setIcon(QIcon(":/img/add_x32.png"));
-    btnAdd->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAdd->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnAdd->setShortcut(QKeySequence(Qt::Key_Insert));
-    btnAdd->setObjectName("toolBtn_add"); // pu adresare din css
-
-    btnEdit->setIcon(QIcon(":/img/edit_x32.png"));
-    btnEdit->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnEdit->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnEdit->setShortcut(QKeySequence(Qt::Key_F2));
-    btnEdit->setObjectName("toolBtn_edit"); // pu adresare din css
-
-    btnDeletion->setIcon(QIcon(":/img/clear_x32.png"));
-    btnDeletion->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnDeletion->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnDeletion->setShortcut(QKeySequence(Qt::Key_Delete));
-    btnDeletion->setObjectName("toolBtn_remove"); // pu adresare din css
-
-    btnAddFilter->setIcon(QIcon(":/img/filter-add-icon.png"));
-    btnAddFilter->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnAddFilter->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnAddFilter->setObjectName("toolBtn_add_filter"); // pu adresare din css
-
-    btnFilter->setIcon(QIcon(":/img/filter-icon.png"));
-    btnFilter->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnFilter->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnFilter->setObjectName("toolBtn_filter"); // pu adresare din css
-
-    btnFilterRemove->setIcon(QIcon(":/img/filter-delete-icon.png"));
-    btnFilterRemove->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnFilterRemove->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnFilterRemove->setObjectName("toolBtn_filter_remove"); // pu adresare din css
-
-    btnUpdateTable->setIcon(QIcon(":/img/update_x32.png"));
-    btnUpdateTable->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnUpdateTable->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnUpdateTable->setShortcut(QKeySequence(Qt::Key_F5));
-    btnUpdateTable->setObjectName("toolBtn_update"); // pu adresare din css
-
-    btnHideShowColumn->setIcon(QIcon(":/img/table-cell.png"));
-    btnHideShowColumn->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnHideShowColumn->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnHideShowColumn->setObjectName("toolBtn_update"); // pu adresare din css
-
-    btnPrint->setIcon(QIcon(":/img/print.png"));//.pixmap(14, 14));
-    btnPrint->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnPrint->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnPrint->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_F5));
-
-    btnReport->setIcon(QIcon(":/img/examenEcho.png").pixmap(14, 14));
-    btnReport->setText(tr("Raport eco."));
-    btnReport->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnReport->setObjectName("tool_btn_report");
-
-    btnViewTab->setIcon(QIcon(":/img/view_table.png").pixmap(14, 14));
-    btnViewTab->setText(tr("Tabela"));
-    btnViewTab->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
-    btnViewTab->setObjectName("tool_btn_report");
-
-    btnPeriodDate->setIcon(QIcon(":/img/date_period.png"));
-    btnPeriodDate->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnPeriodDate->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnPeriodDate->setObjectName("toolBtn_period"); // pu adresare din css
-
-    btnSearch->setIcon(QIcon(":/img/search_pacients.png"));
-    btnSearch->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnSearch->setStyleSheet("padding-left: 2px; padding-right: 2px; height: 18px; width: 12px;");
-    btnSearch->setObjectName("toolBtn_search"); // pu adresare din css
-
-    editSearch = new QLineEdit(this);
-    editSearch->setSizePolicy(QSizePolicy::Expanding, QSizePolicy::Preferred);
-    editSearch->setClearButtonEnabled(true);
-    editSearch->setEnabled(false);
+    ui->editSearch->setEnabled(false);
+    ui->editSearch->setPlaceholderText(tr("... c\304\203utarea dup\304\203 nume, prenume sau IDNP a pacientului"));
 
     // ----------------------------------------------------------------------------
     // instalam filtrul evenimentelor pu prezentarea indiciilor (подсказки)
 
-    btnAdd->setMouseTracking(true);
-    btnAdd->installEventFilter(this);
-    btnEdit->setMouseTracking(true);
-    btnEdit->installEventFilter(this);
-    btnDeletion->setMouseTracking(true);
-    btnDeletion->installEventFilter(this);
-    btnAddFilter->setMouseTracking(true);
-    btnAddFilter->installEventFilter(this);
-    btnFilter->setMouseTracking(true);
-    btnFilter->installEventFilter(this);
-    btnFilterRemove->setMouseTracking(true);
-    btnFilterRemove->installEventFilter(this);
-    btnUpdateTable->setMouseTracking(true);
-    btnUpdateTable->installEventFilter(this);
-    btnPrint->setMouseTracking(true);
-    btnPrint->installEventFilter(this);
-    btnReport->setMouseTracking(true);
-    btnReport->installEventFilter(this);
-    btnViewTab->setMouseTracking(true);
-    btnViewTab->installEventFilter(this);
-    btnPeriodDate->setMouseTracking(true);
-    btnPeriodDate->installEventFilter(this);
-    btnSearch->setMouseTracking(true);
-    btnSearch->installEventFilter(this);
-    btnHideShowColumn->setMouseTracking(true);
-    btnHideShowColumn->installEventFilter(this);
+    ui->btnAdd->setMouseTracking(true);
+    ui->btnAdd->installEventFilter(this);
+    ui->btnEdit->setMouseTracking(true);
+    ui->btnEdit->installEventFilter(this);
+    ui->btnDeletion->setMouseTracking(true);
+    ui->btnDeletion->installEventFilter(this);
+    ui->btnAddFilter->setMouseTracking(true);
+    ui->btnAddFilter->installEventFilter(this);
+    ui->btnFilter->setMouseTracking(true);
+    ui->btnFilter->installEventFilter(this);
+    ui->btnFilterRemove->setMouseTracking(true);
+    ui->btnFilterRemove->installEventFilter(this);
+    ui->btnUpdateTable->setMouseTracking(true);
+    ui->btnUpdateTable->installEventFilter(this);
+    ui->btnPrint->setMouseTracking(true);
+    ui->btnPrint->installEventFilter(this);
+    ui->btnReport->setMouseTracking(true);
+    ui->btnReport->installEventFilter(this);
+    ui->btnViewTab->setMouseTracking(true);
+    ui->btnViewTab->installEventFilter(this);
+    ui->btnPeriodDate->setMouseTracking(true);
+    ui->btnPeriodDate->installEventFilter(this);
+    ui->btnSearch->setMouseTracking(true);
+    ui->btnSearch->installEventFilter(this);
+    ui->btnHideShowColumn->setMouseTracking(true);
+    ui->btnHideShowColumn->installEventFilter(this);
 
-    // ----------------------------------------------------------------------------
-    // crearea toolBar-ului
-
-    toolBar->addSeparator();
-    toolBar->addWidget(btnAdd);
-    toolBar->addWidget(btnEdit);
-    toolBar->addWidget(btnDeletion);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnAddFilter);
-    toolBar->addWidget(btnFilter);
-    toolBar->addWidget(btnFilterRemove);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnUpdateTable);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnHideShowColumn);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnPrint);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnReport);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnViewTab);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnPeriodDate);
-    toolBar->addSeparator();
-    toolBar->addWidget(btnSearch);
-    toolBar->addWidget(editSearch);
-
-    QSpacerItem *itemSpacer = new QSpacerItem(0,0, QSizePolicy::Preferred, QSizePolicy::Fixed);
-    ui->layoutToolBar->addWidget(toolBar);
-    ui->layoutToolBar->addSpacerItem(itemSpacer);
-
-    lablePeriodDate = new QLabel(this);
-    lablePeriodDate->setStyleSheet("color: blue; font-weight: bold;");
-    ui->layoutToolBar->addWidget(lablePeriodDate);
     updateTextPeriod();
 
-    connect(btnAdd, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnAdd);
-    connect(btnEdit, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnEdit);
-    connect(btnDeletion, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnDeletion);
-    connect(btnAddFilter, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnAddFilter);
-    connect(btnFilter, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnFilterByIdOrganization);
-    connect(btnFilterRemove, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnFilterRemove);
-    connect(btnUpdateTable, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnUpdateTable);
-    connect(btnHideShowColumn, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnHideShowColumn);
-    connect(btnPrint, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnPrint);
-    connect(btnReport, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
+    connect(ui->btnAdd, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnAdd);
+    connect(ui->btnEdit, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnEdit);
+    connect(ui->btnDeletion, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnDeletion);
+    connect(ui->btnAddFilter, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnAddFilter);
+    connect(ui->btnFilter, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnFilterByIdOrganization);
+    connect(ui->btnFilterRemove, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnFilterRemove);
+    connect(ui->btnUpdateTable, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnUpdateTable);
+    connect(ui->btnHideShowColumn, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnHideShowColumn);
+    connect(ui->btnPrint, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnPrint);
+    connect(ui->btnReport, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
 
-    connect(btnSearch, &QAbstractButton::clicked, this, &ListDocReportOrder::enableLineEditSearch);
-    connect(btnPeriodDate, &QAbstractButton::clicked, this, &ListDocReportOrder::onClosePeriodFilter);
+    connect(ui->btnSearch, &QToolButton::clicked, this, &ListDocReportOrder::enableLineEditSearch);
+    connect(ui->btnPeriodDate, &QToolButton::clicked, this, &ListDocReportOrder::onClosePeriodFilter);
 
-    connect(editSearch, &QLineEdit::textChanged, this, &ListDocReportOrder::filterRegExpChanged);
-    connect(editSearch, &QLineEdit::textEdited, this, [this]()
+    connect(ui->editSearch, &QLineEdit::textChanged, this, &ListDocReportOrder::filterRegExpChanged);
+    connect(ui->editSearch, &QLineEdit::textEdited, this, [this]()
             {
                 timer->start(globals::updateIntervalListDoc * 1000);
             });
-    connect(btnViewTab, &QAbstractButton::clicked, this, &ListDocReportOrder::onClickBtnShowHideViewTab);
+    connect(ui->btnViewTab, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnShowHideViewTab);
 
     // ----------------------------------------------------------------------------
     // meniu btn print order
@@ -1374,18 +1253,18 @@ void ListDocReportOrder::initBtnFilter()
 
 void ListDocReportOrder::updateTextPeriod()
 {
-    lablePeriodDate->setText(tr("Perioada: ") +
+    ui->lablePeriodDate->setText(tr("Perioada: ") +
                              ui->filterStartDateTime->dateTime().toString("dd.MM.yyyy") + " - " +
                              ui->filterEndDateTime->dateTime().toString("dd.MM.yyyy"));
     if (ui->filterComboOrganization->currentIndex() > 0){
-        QString str = lablePeriodDate->text();
+        QString str = ui->lablePeriodDate->text();
         str = str + tr("; filtru: ") + ui->filterComboOrganization->currentText();
-        lablePeriodDate->setText(str);
+        ui->lablePeriodDate->setText(str);
     }
     if (ui->filterComboContract->currentIndex() > 0){
-        QString str = lablePeriodDate->text();
+        QString str = ui->lablePeriodDate->text();
         str = str + " (" + ui->filterComboContract->currentText() +")";
-        lablePeriodDate->setText(str);
+        ui->lablePeriodDate->setText(str);
     }
 }
 
@@ -1437,9 +1316,9 @@ void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
     docOrderEcho->setProperty("ItNew", false);
     docOrderEcho->setProperty("Id", _id);
     if (preview)
-        docOrderEcho->onPrintDocument(DocOrderEcho::TypePrint::openPreview);
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
     else
-        docOrderEcho->onPrintDocument(DocOrderEcho::TypePrint::openDesigner);
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER);
 }
 
 void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
@@ -1568,7 +1447,8 @@ void ListDocReportOrder::formationPrinMenuForReport()
 void ListDocReportOrder::updateTableView()
 {
     if (m_typeDoc == unknowDoc){
-        qWarning(logWarning()) << tr("Nu este determinata proprietatea 'typeDoc' !!! Completarea tabelei nu este posibila.");
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << ": nu este determinata proprietatea 'typeDoc' !!! Completarea tabelei nu este posibila.";
         return;
     }
     if (m_typeDoc == orderEcho)
@@ -1581,8 +1461,8 @@ void ListDocReportOrder::updateTableViewOrderEcho()
 {
     m_currentRow = ui->tableView->currentIndex().row();
 
-     QString strQry;
-     if (globals::thisMySQL)
+    QString strQry;
+    if (globals::thisMySQL)
         strQry = "SELECT orderEcho.id,"
                  "orderEcho.deletionMark,"
                  "orderEcho.attachedImages,"
@@ -1597,6 +1477,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
                  "fullNamePacients.nameBirthday AS searchPacients,"
                  "fullNamePacients.name AS pacient,"
                  "pacients.IDNP,"
+                 "fullNameDoctors.nameAbbreviated AS doctor,"
                  "users.id AS idUser,"
                  "users.name AS user,"
                  "orderEcho.sum,"
@@ -1606,8 +1487,9 @@ void ListDocReportOrder::updateTableViewOrderEcho()
                  "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
                  "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
                  "INNER JOIN fullNamePacients ON orderEcho.id_pacients = fullNamePacients.id_pacients "
+                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
                  "INNER JOIN users ON orderEcho.id_users = users.id";
-     else
+    else
         strQry = "SELECT orderEcho.id,"
                  "orderEcho.deletionMark,"
                  "orderEcho.attachedImages,"
@@ -1625,6 +1507,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
                  "substr(pacients.birthday, 1, 4) AS searchPacients,"
                  "pacients.name ||' '|| pacients.fName AS pacient,"
                  "pacients.IDNP,"
+                 "fullNameDoctors.nameAbbreviated AS doctor,"
                  "users.id AS idUser,"
                  "users.name AS user,"
                  "orderEcho.sum,"
@@ -1633,6 +1516,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
                  "INNER JOIN organizations ON orderEcho.id_organizations = organizations.id "
                  "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
                  "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
+                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
                  "INNER JOIN users ON orderEcho.id_users = users.id";
     if (! m_numberDoc.isEmpty() || m_idOrganization > 0 || m_idContract > 0)
         strQry = strQry + " WHERE ";
@@ -1657,10 +1541,38 @@ void ListDocReportOrder::updateTableViewOrderEcho()
     else
         strQry = strQry + QString(" WHERE orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
 
-    modelTable->setQuery(strQry);
+    strQry = strQry + " ORDER BY orderEcho.dateDoc DESC "
+                      " LIMIT :limit OFFSET :offset;";
 
-    while (modelTable->canFetchMore())
-        modelTable->fetchMore();
+#ifdef QT_DEBUG
+    qDebug() << "----------------------------------------------------------------------------------------------------------'";
+    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
+    qDebug() << strQry;
+#else
+    if (QCoreApplication::arguments().count() > 1
+        && QCoreApplication::arguments()[1].contains("/debug")){
+        qDebug() << strQry;
+    }
+#endif
+
+    int scrollPosition = ui->tableView->verticalScrollBar()->value();
+    int maxScroll = ui->tableView->verticalScrollBar()->maximum();
+
+    int rowHeight = ui->tableView->rowHeight(0); // Calculăm înălțimea rândului
+    int startRow = 0;
+    if (rowHeight > 0)
+        startRow = scrollPosition / rowHeight;
+    else
+        Q_UNUSED(startRow)
+
+    if (scrollPosition == 0) {
+        modelTable->resetPagination();    // resetarea
+        modelTable->setPagination(50, 0); // setarea initiala paginarii
+        modelTable->setStrQuery(strQry);  // setarea textului solicitarii
+        modelTable->fetchMoreData();      // prelucrarea solicitarii si prezentarea datelor
+    } else if (scrollPosition < maxScroll) {
+        modelTable->updateVisibleData(scrollPosition, rowHeight);
+    }
 
     proxyTable->setSourceModel(modelTable);
     ui->tableView->setModel(proxyTable);
@@ -1674,13 +1586,132 @@ void ListDocReportOrder::updateTableViewOrderEcho()
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
     ui->tableView->setSortingEnabled(true);                              // setam posibilitatea sortarii
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
-    ui->tableView->verticalHeader()->setDefaultSectionSize(10);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);      // extinderea ultimei sectiei
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu); // initializam meniu contextual
+
     if (m_currentRow != idx_unknow)
         ui->tableView->selectRow(m_currentRow);
     else
         ui->tableView->selectRow(0);
+    updateHeaderTableOrderEcho();
+}
+
+void ListDocReportOrder::updateTableViewOrderEchoFull()
+{
+    QString strQry;
+    if (globals::thisMySQL)
+        strQry = "SELECT orderEcho.id,"
+                 "orderEcho.deletionMark,"
+                 "orderEcho.attachedImages,"
+                 "orderEcho.cardPayment,"
+                 "orderEcho.numberDoc,"
+                 "orderEcho.dateDoc,"
+                 "organizations.id AS idOrganization,"
+                 "organizations.name AS organization,"
+                 "contracts.id AS idContract,"
+                 "contracts.name AS Contract,"
+                 "pacients.id AS idPacient,"
+                 "fullNamePacients.nameBirthday AS searchPacients,"
+                 "fullNamePacients.name AS pacient,"
+                 "pacients.IDNP,"
+                 "fullNameDoctors.nameAbbreviated AS doctor,"
+                 "users.id AS idUser,"
+                 "users.name AS user,"
+                 "orderEcho.sum,"
+                 "orderEcho.comment "
+                 "FROM orderEcho "
+                 "INNER JOIN organizations ON orderEcho.id_organizations = organizations.id "
+                 "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
+                 "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
+                 "INNER JOIN fullNamePacients ON orderEcho.id_pacients = fullNamePacients.id_pacients "
+                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
+                 "INNER JOIN users ON orderEcho.id_users = users.id";
+    else
+        strQry = "SELECT orderEcho.id,"
+                 "orderEcho.deletionMark,"
+                 "orderEcho.attachedImages,"
+                 "orderEcho.cardPayment,"
+                 "orderEcho.numberDoc,"
+                 "orderEcho.dateDoc,"
+                 "organizations.id AS idOrganization,"
+                 "organizations.name AS organization,"
+                 "contracts.id AS idContract,"
+                 "contracts.name AS Contract,"
+                 "pacients.id AS idPacient,"
+                 "pacients.name ||' '|| pacients.fName ||' '|| pacients.mName ||', '|| "
+                 "substr(pacients.birthday, 9, 2) ||'.'|| "
+                 "substr(pacients.birthday, 6, 2) ||'.'|| "
+                 "substr(pacients.birthday, 1, 4) AS searchPacients,"
+                 "pacients.name ||' '|| pacients.fName AS pacient,"
+                 "pacients.IDNP,"
+                 "fullNameDoctors.nameAbbreviated AS doctor,"
+                 "users.id AS idUser,"
+                 "users.name AS user,"
+                 "orderEcho.sum,"
+                 "orderEcho.comment "
+                 "FROM orderEcho "
+                 "INNER JOIN organizations ON orderEcho.id_organizations = organizations.id "
+                 "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
+                 "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
+                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
+                 "INNER JOIN users ON orderEcho.id_users = users.id";
+    if (! m_numberDoc.isEmpty() || m_idOrganization > 0 || m_idContract > 0)
+        strQry = strQry + " WHERE ";
+    if (! m_numberDoc.isEmpty())
+        strQry = strQry + QString("orderEcho.numberDoc = '%1'").arg(m_numberDoc);
+    if (m_idOrganization > 0){
+        if (! m_numberDoc.isEmpty())
+            strQry = strQry + " AND ";
+        strQry = strQry + QString("orderEcho.id_organizations = '%1'").arg(m_idOrganization);
+    }
+    if (m_idContract > 0){
+        if (! m_numberDoc.isEmpty() || m_idOrganization > 0)
+            strQry = strQry + " AND ";
+        strQry = strQry + QString("orderEcho.id_contracts = '%1'").arg(m_idContract);
+    }
+
+    QString startDate = ui->filterStartDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString endDate   = ui->filterEndDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+    if (! m_numberDoc.isEmpty() || m_idOrganization > 0 || m_idContract > 0)
+        strQry = strQry + QString(" AND orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
+    else
+        strQry = strQry + QString(" WHERE orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
+
+    strQry = strQry + " ORDER BY orderEcho.dateDoc DESC;";
+
+#ifdef QT_DEBUG
+    qDebug() << "----------------------------------------------------------------------------------------------------------'";
+    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
+    qDebug() << strQry;
+#else
+    if (QCoreApplication::arguments().count() > 1
+        && QCoreApplication::arguments()[1].contains("/debug")){
+        qDebug() << strQry;
+    }
+#endif
+
+    modelTable->setStrQuery(strQry);
+    modelTable->fetchMoreDataFull();
+
+    proxyTable->setSourceModel(modelTable);
+    ui->tableView->setModel(proxyTable);
+    ui->tableView->hideColumn(section_id);
+    ui->tableView->hideColumn(section_idOrganization);
+    ui->tableView->hideColumn(section_idContract);
+    ui->tableView->hideColumn(section_idPacient);
+    ui->tableView->hideColumn(section_searchPacient);
+    ui->tableView->hideColumn(section_idUser);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);  // setam alegerea randului
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
+    ui->tableView->setSortingEnabled(true);                              // setam posibilitatea sortarii
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);      // extinderea ultimei sectiei
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu); // initializam meniu contextual
+
+    ui->tableView->selectRow(0);
     updateHeaderTableOrderEcho();
 }
 
@@ -1767,7 +1798,7 @@ void ListDocReportOrder::updateTableViewReportEcho()
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
     ui->tableView->setSortingEnabled(true);                              // setam posibilitatea sortarii
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
-    ui->tableView->verticalHeader()->setDefaultSectionSize(10);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);  // extinderea ultimei sectiei
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);      // initializam meniu contextual
     if (m_currentRow != idx_unknow)
@@ -1784,19 +1815,9 @@ void ListDocReportOrder::updateHeaderTableOrderEcho()
     modelTable->setHeaderData(section_attachedImages, Qt::Horizontal, QIcon(":img/image-files.png"), Qt::DecorationRole);
     modelTable->setHeaderData(section_cardPayment, Qt::Horizontal, tr(""));
     modelTable->setHeaderData(section_cardPayment, Qt::Horizontal, QIcon(":img/master_card.png"), Qt::DecorationRole);
-#if defined(Q_OS_LINUX)
-    modelTable->setHeaderData(section_numberDoc, Qt::Horizontal, tr("Număr"));
-    modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organizația (id)"));
-    modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organizația"));
-#elif defined(Q_OS_MACOS)
-    modelTable->setHeaderData(section_numberDoc, Qt::Horizontal, tr("Număr"));
-        modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organizația (id)"));
-        modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organizația"));
-#elif defined(Q_OS_WIN)
     modelTable->setHeaderData(section_numberDoc, Qt::Horizontal, tr("Num\304\203r"));
     modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organiza\310\233ia (id)"));
     modelTable->setHeaderData(section_Organization, Qt::Horizontal, tr("Organiza\310\233ia"));
-#endif
     modelTable->setHeaderData(section_dateDoc, Qt::Horizontal, tr("Data"));
     modelTable->setHeaderData(section_idContract, Qt::Horizontal, tr("Contract (id)"));
     modelTable->setHeaderData(section_Contract, Qt::Horizontal, tr("Contract"));
@@ -1804,6 +1825,7 @@ void ListDocReportOrder::updateHeaderTableOrderEcho()
     modelTable->setHeaderData(section_searchPacient, Qt::Horizontal, tr("Pacient (cautare)"));
     modelTable->setHeaderData(section_pacient, Qt::Horizontal, tr("Pacient"));
     modelTable->setHeaderData(section_IDNP, Qt::Horizontal, tr("IDNP"));
+    modelTable->setHeaderData(section_doctor, Qt::Horizontal, tr("Trimis de ..."));
     modelTable->setHeaderData(section_idUser, Qt::Horizontal, tr("Autor (id)"));
     modelTable->setHeaderData(section_user, Qt::Horizontal, tr("Autor"));
     modelTable->setHeaderData(section_sum, Qt::Horizontal, tr("Total (MDL)"));
@@ -1817,11 +1839,7 @@ void ListDocReportOrder::updateHeaderTableReportEcho()
     modelTable->setHeaderData(report_attachedImages, Qt::Horizontal, QIcon(":img/image-files.png"), Qt::DecorationRole);
     modelTable->setHeaderData(report_cardPayment, Qt::Horizontal, tr(""));
     modelTable->setHeaderData(report_cardPayment, Qt::Horizontal, QIcon(":img/master_card.png"), Qt::DecorationRole);
-#if defined(Q_OS_LINUX)
-    modelTable->setHeaderData(report_numberDoc, Qt::Horizontal, tr("Număr"));
-#elif defined(Q_OS_WIN)
     modelTable->setHeaderData(report_numberDoc, Qt::Horizontal, tr("Num\304\203r"));
-#endif
     modelTable->setHeaderData(report_dateDoc, Qt::Horizontal, tr("Data"));
     modelTable->setHeaderData(report_id_orderEcho, Qt::Horizontal, tr("Comanda ecografica (id)"));
     modelTable->setHeaderData(report_id_patient, Qt::Horizontal, tr("Pacient (id)"));
@@ -1874,13 +1892,10 @@ void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
             QString str_date_start;
             QString str_date_end;
             if (globals::thisMySQL){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-                str_date_start = qry.value(0).toString().replace(QRegExp("T"), " ").replace(".000","");
-                str_date_end   = qry.value(1).toString().replace(QRegExp("T"), " ").replace(".000","");
-#else
-                str_date_start = qry.value(0).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-                str_date_end   = qry.value(1).toString().replace(QRegularExpression("T"), " ").replace(".000","");
-#endif
+                static const QRegularExpression replaceT("T");
+                static const QRegularExpression removeMilliseconds("\\.000");
+                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(".000","");
+                str_date_end   = qry.value(1).toString().replace(removeMilliseconds, " ").replace(".000","");
             } else {
                 str_date_start = qry.value(0).toString();
                 str_date_end   = qry.value(1).toString();
@@ -1901,11 +1916,7 @@ void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
                 QMessageBox msgBox;
                 msgBox.setWindowTitle(tr("Determinarea perioadei"));
                 msgBox.setIcon(QMessageBox::Warning);
-#if defined(Q_OS_LINUX)
-                msgBox.setText(tr("Nu a fost extrasă perioada din setările formei !!!"));
-#elif defined(Q_OS_WIN)
                 msgBox.setText(tr("Nu a fost extras\304\203 perioada din set\304\203rile formei !!!"));
-#endif
                 msgBox.setDetailedText(qry.lastError().text());
                 msgBox.setStandardButtons(QMessageBox::Ok);
                 msgBox.exec();
@@ -2037,6 +2048,8 @@ int ListDocReportOrder::sizeSectionDefault(const int numberSection)
             return sz_pacient;
         case section_IDNP:
             return sz_idnp;
+        case section_doctor:
+            return sz_doctor;
         case section_idUser:
             return sz_id_user;
         case section_user:
@@ -2096,41 +2109,29 @@ void ListDocReportOrder::closeEvent(QCloseEvent *event)
 
 bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
 {
-    if (obj == btnAdd){
+    if (obj == ui->btnAdd){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnAdd->pos().x() - 20, btnAdd->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Adaugă."));         // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Adaugă."));         // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnAdd->pos().x() - 20, ui->btnAdd->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Adaug\304\203."));  // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnEdit){
+    } else if (obj == ui->btnEdit){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnEdit->pos().x() - 20, btnEdit->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Editează."));       // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Editează."));       // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnEdit->pos().x() - 20, ui->btnEdit->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Editeaz\304\203.")); // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnDeletion){
+    } else if (obj == ui->btnDeletion){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnDeletion->pos().x() - 46, btnDeletion->pos().y() + 30)); // determinam parametrii globali
+            QPoint p = mapToGlobal(QPoint(ui->btnDeletion->pos().x() - 46, ui->btnDeletion->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Eliminare."));       // setam textul
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
@@ -2138,92 +2139,60 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnAddFilter){
+    } else if (obj == ui->btnAddFilter){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnAddFilter->pos().x() - 50, btnAddFilter->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Adaugă filtru."));  // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Adaugă filtru."));  // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnAddFilter->pos().x() - 50, ui->btnAddFilter->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Adaug\304\203 filtru."));  // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnFilter){
+    } else if (obj == ui->btnFilter){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnFilter->pos().x() - 56, btnFilter->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Filtrare după<br>%1.")
-                                .arg(proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_Organization), Qt::DisplayRole).toString())); // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Filtrare după<br>%1.")
-                                .arg(proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_Organization), Qt::DisplayRole).toString())); // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnFilter->pos().x() - 56, ui->btnFilter->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Filtrare dup\304\203<br>%1.")
                                 .arg(proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_Organization), Qt::DisplayRole).toString())); // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnFilterRemove){
+    } else if (obj == ui->btnFilterRemove){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnFilterRemove->pos().x() - 50, btnFilterRemove->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Golește filtru."));       // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Golește filtru."));       // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnFilterRemove->pos().x() - 50, ui->btnFilterRemove->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Gole\310\231te filtru."));       // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnUpdateTable){
+    } else if (obj == ui->btnUpdateTable){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnUpdateTable->pos().x() - 60, btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Actualizează tabela."));  // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Actualizează tabela."));  // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnUpdateTable->pos().x() - 60, ui->btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Actualizeaz\304\203 tabela."));  // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnHideShowColumn){
+    } else if (obj == ui->btnHideShowColumn){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnUpdateTable->pos().x() - 35, btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Ascunde/afișează<br>colonițe."));  // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Ascunde/afișează<br>colonițe."));  // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnUpdateTable->pos().x() - 35, ui->btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Ascunde/afi\310\231eaz\304\203 <br>coloni\310\233e."));  // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnPrint){
+    } else if (obj == ui->btnPrint){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnPrint->pos().x() - 30, btnPrint->pos().y() + 30)); // determinam parametrii globali
+            QPoint p = mapToGlobal(QPoint(ui->btnPrint->pos().x() - 30, ui->btnPrint->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Printare."));       // setam textul
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
@@ -2231,9 +2200,9 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnReport){
+    } else if (obj == ui->btnReport){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnReport->pos().x() - 64, btnReport->pos().y() + 30)); // determinam parametrii globali
+            QPoint p = mapToGlobal(QPoint(ui->btnReport->pos().x() - 64, ui->btnReport->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Crearea/deschiderea<br>"
                                    "documentului 'Raport ecografic'."));       // setam textul
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
@@ -2242,54 +2211,32 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnViewTab){
+    } else if (obj == ui->btnViewTab){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnViewTab->pos().x() - 58, btnViewTab->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Vizualizarea<br>"
-                                   "părții tabelare sau concluziei."));       // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Vizualizarea<br>"
-                                   "părții tabelare sau concluziei."));       // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnViewTab->pos().x() - 58, ui->btnViewTab->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Vizualizarea<br>"
                                    "p\304\203r\310\233ii tabelare sau concluziei."));       // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnPeriodDate){
+    } else if (obj == ui->btnPeriodDate){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnPeriodDate->pos().x() - 60, btnPeriodDate->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Perioada și filtrului."));       // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Perioada și filtrului."));       // setam textul
-#elif defined(Q_OS_WIN)
-            popUp->setPopupText(tr("Perioada \310\231i filtrului."));       // setam textul
-#endif
+            QPoint p = mapToGlobal(QPoint(ui->btnPeriodDate->pos().x() - 60, ui->btnPeriodDate->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Perioada \310\231i filtru."));       // setam textul
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
             popUp->hidePop();                           // ascundem nota
             return true;
         }
-    } else if (obj == btnSearch){
+    } else if (obj == ui->btnSearch){
         if (event->type() == QEvent::Enter){
-            QPoint p = mapToGlobal(QPoint(btnSearch->pos().x() - 104, btnSearch->pos().y() + 30)); // determinam parametrii globali
-#if defined(Q_OS_LINUX)
-            popUp->setPopupText(tr("Căutarea pacientului<br>"
-                                   "după: nume/prenume sau IDNP."));       // setam textul
-#elif defined(Q_OS_MACOS)
-            popUp->setPopupText(tr("Căutarea pacientului<br>"
-                                   "după: nume/prenume sau IDNP."));       // setam textul
-#elif defined(Q_OS_WIN)
+            QPoint p = mapToGlobal(QPoint(ui->btnSearch->pos().x() - 104, ui->btnSearch->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("C\304\203utarea pacientului<br>"
                                    "dup\304\203: nume/prenume sau IDNP."));       // setam textul
-#endif
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){
@@ -2307,13 +2254,7 @@ void ListDocReportOrder::changeEvent(QEvent *event)
         ui->retranslateUi(this);
         switch (m_typeDoc) {
         case orderEcho:
-#if defined(Q_OS_LINUX)
-            setWindowTitle(tr("Lista documentelor: Comanda ecografică"));
-#elif defined(Q_OS_MACOS)
-            setWindowTitle(tr("Lista documentelor: Comanda ecografică"));
-#elif defined(Q_OS_WIN)
             setWindowTitle(tr("Lista documentelor: Comanda ecografic\304\203"));
-#endif
             updateHeaderTableOrderEcho();
             break;
         case reportEcho:

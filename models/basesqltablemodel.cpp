@@ -150,8 +150,8 @@ QVariant BaseSqlTableModel::dataFromCatForTableModel(const QModelIndex &index, i
         if (QSqlTableModel::data(QSqlTableModel::index(index.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
             return QBrush(QColor(255,230,255));
 
-        if (QSqlTableModel::data(QSqlTableModel::index(index.row(), 4), Qt::DisplayRole).toInt() == 0) // column 'use'
-            return QBrush(QColor(224,224,224));
+        // if (QSqlTableModel::data(QSqlTableModel::index(index.row(), 4), Qt::DisplayRole).toInt() == 0) // column 'use'
+        //     return QBrush(QColor(224,224,224));
 
         return value;
 
@@ -166,6 +166,11 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
 {
     QVariant value = QSqlTableModel::data(index, role);
 
+#if defined(Q_OS_WIN)
+    QFont font;
+    font.setPointSize(9);
+#endif
+
     switch (role) {
     case Qt::DisplayRole:
         if (index.column() == col_pricing_Price){
@@ -179,8 +184,6 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
 #if defined(Q_OS_LINUX)
         return value;
 #elif defined(Q_OS_WIN)
-        QFont font;
-        font.setPointSize(9);
         return font;
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului
@@ -204,6 +207,11 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
 {
     QVariant value = QSqlTableModel::data(index, role);
 
+#if defined(Q_OS_WIN)
+    QFont font;
+    font.setPointSize(9);
+#endif
+
     switch (role) {
     case Qt::DisplayRole:
         if (index.column() == col_pricing_Price){
@@ -217,8 +225,6 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
 #if defined(Q_OS_LINUX)
         return value;
 #elif defined(Q_OS_WIN)
-        QFont font;
-        font.setPointSize(9);
         return font;
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului

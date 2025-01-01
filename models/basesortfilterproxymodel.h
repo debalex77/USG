@@ -17,6 +17,9 @@ public:
     enum ListFormType{ListCatalog, ListDocuments};
     Q_ENUM(ListFormType)
 
+    bool compareDates(const QVariant &left, const QVariant &right, const QString &format) const;
+    bool compareInts(const QVariant &left, const QVariant &right) const;
+
     void setListFormType(ListFormType listFormType){m_listFormType = listFormType; emit ListFormTypeChanged();}
     ListFormType getListFormType() const {return m_listFormType;}
 
@@ -34,8 +37,8 @@ private:
     {
         column_Id           = 0,
         column_DeletionMark = 1,
-        column_numberDoc    = 2,
-        column_dateDoc      = 3
+        column_numberDoc    = 4,
+        column_dateDoc      = 5
     };
     ListFormType m_listFormType;
 };

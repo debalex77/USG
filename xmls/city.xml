@@ -1,0 +1,1686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cities>
+    <city>s.Abaclia</city>
+    <city>s.Acui</city>
+    <city>s.Afanasievca</city>
+    <city>s.Agronomovca</city>
+    <city>s.Alava</city>
+    <city>s.Albina</city>
+    <city>s.Albineţul Nou</city>
+    <city>s.Albineţul Vechi</city>
+    <city>s.Albiniţa</city>
+    <city>s.Albota de Jos</city>
+    <city>s.Albota de Sus</city>
+    <city>s.Alcedar</city>
+    <city>s.Alexanderfeld*</city>
+    <city>s.Alexandrovca (r-l Cantemir)</city>
+    <city>s.Alexandrovca (r-l Floreşti )</city>
+    <city>s.Alexandrovca (r-l Ialoveni)</city>
+    <city>s.Alexandrovca (UATSN)</city>
+    <city>s.Alexandrovca Nouă</city>
+    <city>s.Alexandru cel Bun</city>
+    <city>s.Alexandru Ioan Cuza</city>
+    <city>s.Alexăndreni (r-l Edineţ)</city>
+    <city>s.Alexăndreni (r-l Sîngerei)</city>
+    <city>s.Alexăndreşti</city>
+    <city>s.Alexeevca (r-l Edineţ)</city>
+    <city>s.Alexeevca (r-l Floreşti)</city>
+    <city>s.Alexeevca (r-l Ungheni)</city>
+    <city>s.Alexeevca (UTA Găgăuzia)</city>
+    <city>s.Alexeuca</city>
+    <city>s.Aluatu</city>
+    <city>s.Aluniş</city>
+    <city>s.Andreevca (r-l Orhei)</city>
+    <city>s.Andreevca (UATSN)</city>
+    <city>s.Andriaşevca Nouă</city>
+    <city>s.Andriaşevca Veche</city>
+    <city>s.Andruşul de Jos</city>
+    <city>s.Andruşul de Sus</city>
+    <city>or.Anenii Noi</city>
+    <city>s.Anini</city>
+    <city>s.Antoneşti (r-l Cantemir)</city>
+    <city>s.Antoneşti (r-l Ştefan Vodă)</city>
+    <city>s.Antoneuca</city>
+    <city>s.Antonovca (r-l Floreşti)</city>
+    <city>s.Antonovca (r-l Sîngerei)</city>
+    <city>s.Arioneşti</city>
+    <city>s.Armanca</city>
+    <city>s.Artimonovca</city>
+    <city>s.Avdarma</city>
+    <city>s.Avrămeni</city>
+    <city>s.Baccealia</city>
+    <city>s.Badicul Moldovenesc</city>
+    <city>s.Bahmut</city>
+    <city>s.Bahmut, loc. st.c. f.</city>
+    <city>s.Bahu</city>
+    <city>s.Baimaclia (r-l Cantemir)</city>
+    <city>s.Baimaclia (r-l Căuşeni)</city>
+    <city>s.Balabanu</city>
+    <city>s.Balanul Nou</city>
+    <city>s.Balasineşti</city>
+    <city>s.Balatina</city>
+    <city>s.Balinţi</city>
+    <city>s.Balinţii Noi</city>
+    <city>s.Balmaz</city>
+    <city>s.Baraboi</city>
+    <city>s.Bardar</city>
+    <city>s.Baroncea</city>
+    <city>s.Baroncea Nouă</city>
+    <city>s.Basarabca</city>
+    <city>or.Basrabeasca</city>
+    <city>s.Başcalia</city>
+    <city>s.Batîc</city>
+    <city>s.Batîr</city>
+    <city>s.Baurci (r-l Căuşeni)</city>
+    <city>s.Baurci (UTA Găgăuzia)</city>
+    <city>s.Baurci-Moldoveni</city>
+    <city>s.Băcioi</city>
+    <city>s.Băcşeni</city>
+    <city>s.Bădiceni</city>
+    <city>s.Bădragii Noi</city>
+    <city>s.Bădragii Vechi </city>
+    <city>s.Băhrineşti</city>
+    <city>s.Băiuş</city>
+    <city>s.Bălăbăneşti</city>
+    <city>s.Bălăneşti</city>
+    <city>s.Bălăşeşti (r-l Criuleni)</city>
+    <city>s.Bălăşeşti (r-l Sîngerei)</city>
+    <city>s.Bălăureşti</city>
+    <city>s.Bălcăuţi</city>
+    <city>s.Bălceana</city>
+    <city>s.Bălţata</city>
+    <city>s.Bălţata de Sus</city>
+    <city>s.Bălţaţi</city>
+    <city>m.Bălți</city>
+    <city>s.Băneşti</city>
+    <city>s.Băneştii Noi</city>
+    <city>s.Bărboieni</city>
+    <city>s.Băxani</city>
+    <city>s.Beleavinţi</city>
+    <city>s.Beleuţi</city>
+    <city>s.Beloci</city>
+    <city>m.Bender</city>
+    <city>s.Berezlogi</city>
+    <city>s.Berezovca</city>
+    <city>s.Beriozchi</city>
+    <city>s.Berlinţi</city>
+    <city>s.Beşalma</city>
+    <city>s.Beşghioz</city>
+    <city>s.Beştemac</city>
+    <city>s.Bezeda</city>
+    <city>s.Bezeni</city>
+    <city>s.Bieşti</city>
+    <city>s.Bilicenii Noi</city>
+    <city>s.Bilicenii Vechi</city>
+    <city>or.Biruinţa</city>
+    <city>s.Bisericani</city>
+    <city>s.Bîc</city>
+    <city>s.Bîcioc</city>
+    <city>s.Bîrlădeni</city>
+    <city>s.Bîrnova</city>
+    <city>s.Bleşteni</city>
+    <city>s.Blijnii Hutor</city>
+    <city>s.Blindeşti</city>
+    <city>s.Bobeica</city>
+    <city>s.Bobletici</city>
+    <city>s.Bobocica</city>
+    <city>s.Bobuleşti</city>
+    <city>s.Bocancea-Schit</city>
+    <city>s.Bocani</city>
+    <city>s.Bocicăuţi</city>
+    <city>s.Bocşa</city>
+    <city>s.Bodeni</city>
+    <city>s.Bogdanovca</city>
+    <city>s.Bogdanovca Nouă</city>
+    <city>s.Bogdanovca Veche</city>
+    <city>s.Bogdăneşti</city>
+    <city>s.Boghenii Noi</city>
+    <city>s.Boghenii Vechi</city>
+    <city>s.Boghiceni</city>
+    <city>s.Bogzeşti</city>
+    <city>s.Boldureşti</city>
+    <city>s.Bolohan</city>
+    <city>s.Bolţun</city>
+    <city>s.Bondareuca</city>
+    <city>s.Borceag</city>
+    <city>s.Borogani</city>
+    <city>s.Boroseni</city>
+    <city>s.Borosenii Noi</city>
+    <city>s.Bosca</city>
+    <city>s.Boşcana</city>
+    <city>s.Boşerniţa</city>
+    <city>s.Botnăreşti</city>
+    <city>s.Botnăreştii Noi</city>
+    <city>s.Bozieni</city>
+    <city>s.Braicău</city>
+    <city>s.Branişte</city>
+    <city>s.Bravicea</city>
+    <city>s.Brăila</city>
+    <city>s.Brăneşti</city>
+    <city>s.Brătianovca</city>
+    <city>s.Brătuleni</city>
+    <city>s.Brătuşeni</city>
+    <city>s.Brătuşenii Noi</city>
+    <city>s.Brăviceni</city>
+    <city>s.Breanova</city>
+    <city>s.Brejeni</city>
+    <city>s.Brezoaia</city>
+    <city>or.Briceni (r-l Briceni)</city>
+    <city>s.Briceni (r-l Donduşeni)</city>
+    <city>s.Briceva</city>
+    <city>s.Brînza</city>
+    <city>s.Brînzeni (r-l Edineţ)</city>
+    <city>s.Brînzeni (r-l Glodeni)</city>
+    <city>s.Brînzenii Noi</city>
+    <city>s.Brînzenii Vechi</city>
+    <city>s.Broşteni</city>
+    <city>s.Bruslachi</city>
+    <city>s.Bubuieci</city>
+    <city>s.Buciumeni</city>
+    <city>s.Buciumeni, loc.st.c.f.</city>
+    <city>s.Buciuşca</city>
+    <city>or.Bucovăţ</city>
+    <city>s.Bucuria</city>
+    <city>s.Buda</city>
+    <city>s.Budăi (r-l Ialoveni)</city>
+    <city>s.Budăi (r-l Orhei)</city>
+    <city>s.Budăi (r-l Taraclia)</city>
+    <city>s.Budăi (r-l Teleneşti)</city>
+    <city>s.Budeşti</city>
+    <city>s.Bugeac</city>
+    <city>s.Bujor</city>
+    <city>s.Bularda</city>
+    <city>s.Bulăieşti</city>
+    <city>s.Bulboaca (r-l Anenii Noi)</city>
+    <city>s.Bulboaca (r-l Briceni)</city>
+    <city>s.Bulboci</city>
+    <city>s.Bulbocii Noi</city>
+    <city>s.Bulgărica</city>
+    <city>s.Bulhac (r-l Rîşcani)</city>
+    <city>s.Bulhac (r-l Ungheni)</city>
+    <city>s.Bumbăta</city>
+    <city>s.Buneţi</city>
+    <city>s.Burghelea</city>
+    <city>s.Burlacu</city>
+    <city>s.Burlăceni</city>
+    <city>s.Burlăneşti</city>
+    <city>s.Bursuc (r-l Floreşti)</city>
+    <city>s.Bursuc (r- l Nisporeni)</city>
+    <city>s.Bursuceni</city>
+    <city>s.Buschi</city>
+    <city>s.Buşăuca</city>
+    <city>s.Buşila</city>
+    <city>s.Buteşti</city>
+    <city>s.Butor</city>
+    <city>s.Butuceni (r-l Orhei)</city>
+    <city>s.Butuceni (UATSN)</city>
+    <city>s.Buţeni</city>
+    <city>s.Buzduganii de Jos</city>
+    <city>s.Buzduganii de Sus</city>
+    <city>s.Buzdugeni</city>
+    <city>m.Cahul</city>
+    <city>s.Cairaclia</city>
+    <city>s.Cajba</city>
+    <city>s.Calaraşovca</city>
+    <city>s.Calfa</city>
+    <city>s.Calfa Nouă</city>
+    <city>s.Calinovca</city>
+    <city>s.Camenca (r-l Glodeni)</city>
+    <city>or.Camenca (UATSN)</city>
+    <city>s.Camencea</city>
+    <city>s.Camencuţa</city>
+    <city>s.Cania</city>
+    <city>or.Cantemir</city>
+    <city>s.Capaclia</city>
+    <city>s.Carabetovca</city>
+    <city>s.Carabiber</city>
+    <city>s.Caracui</city>
+    <city>s.Caracuşenii Noi</city>
+    <city>s.Caracuşenii Vechi</city>
+    <city>s.Caragaş</city>
+    <city>s.Carahasani</city>
+    <city>s.Caraiman</city>
+    <city>s.Carbalia</city>
+    <city>s.Carmanova</city>
+    <city>s.Caşunca</city>
+    <city>s.Caterinovca</city>
+    <city>s.Catranîc</city>
+    <city>s.Catranîc, loc.st.c.f.</city>
+    <city>s.Cazaclia</city>
+    <city>s.Cazangic</city>
+    <city>s.Căbăieşti</city>
+    <city>or.Căinari</city>
+    <city>s.Căinari, loc.st.c.f.</city>
+    <city>s.Căinarii Vechi</city>
+    <city>or.Călăraşi</city>
+    <city>s.Călimăneşti</city>
+    <city>s.Călineşti</city>
+    <city>s.Călmăţui</city>
+    <city>s.Călugăr</city>
+    <city>s.Căplani</city>
+    <city>s.Căpreşti</city>
+    <city>s.Căpriana</city>
+    <city>s.Cărbuna</city>
+    <city>s.Cărpineanca</city>
+    <city>s.Cărpineni</city>
+    <city>s.Căţeleni</city>
+    <city>or.Căuşeni</city>
+    <city>s.Căzăneşti</city>
+    <city>s.Ceadîr</city>
+    <city>m.Ceadîr-Lunga</city>
+    <city>s.Cealîc</city>
+    <city>s.Ceapaevca</city>
+    <city>s.Cenac</city>
+    <city>s.Cenuşa</city>
+    <city>s.Cepăria</city>
+    <city>s.Cepeleuţi</city>
+    <city>s.Cerlina</city>
+    <city>s.Cerniţa (r-l Floreşti)</city>
+    <city>s.Cerniţa (UATSN)</city>
+    <city>s.Cernoleuca</city>
+    <city>s.Ceroborta</city>
+    <city>s.Cetireni</city>
+    <city>s.Cheltuitori</city>
+    <city>s.Chersac</city>
+    <city>s.Chetriş</city>
+    <city>s.Chetrişul Nou</city>
+    <city>s.Chetroasa</city>
+    <city>s.Chetrosu (r-l Anenii Noi)</city>
+    <city>s.Chetrosu (r-l Drochia)</city>
+    <city>s.Chetroşeni</city>
+    <city>s.Chetroşica Nouă</city>
+    <city>s.Chetroşica Veche</city>
+    <city>s.Chilişoaia</city>
+    <city>s.Chioselia</city>
+    <city>s.Chioselia Mare</city>
+    <city>s.Chioselia Rusă</city>
+    <city>s.Chiperceni</city>
+    <city>s.Chipeşca</city>
+    <city>s.Chirca</city>
+    <city>s.Chircani</city>
+    <city>s.Chircăieşti</city>
+    <city>s.Chircăieştii Noi</city>
+    <city>s.Chirianca</city>
+    <city>s.Chiriet-Lunga</city>
+    <city>s.Chirileni (r-l Sîngerei)</city>
+    <city>s.Chirileni (r-l Ungheni)</city>
+    <city>s.Chirilovca (r-l Briceni)</city>
+    <city>s.Chirilovca (r-l Floreşti)</city>
+    <city>s.Chirilovca (r-l Taraclia)</city>
+    <city>s.Chirov</city>
+    <city>s.Chirsova</city>
+    <city>s.Chişcăreni</city>
+    <city>m.Chişinău </city>
+    <city>s.Chiştelniţa</city>
+    <city>s.Chiţcani</city>
+    <city>s.Chiţcanii Noi</city>
+    <city>s.Chiţcanii Vechi</city>
+    <city>s.Chiurt</city>
+    <city>s.Cigîrleni</city>
+    <city>s.Cihoreni</city>
+    <city>s.Cimişeni</city>
+    <city>or.Cimişlia</city>
+    <city>s.Cinişeuţi</city>
+    <city>s.Cioara</city>
+    <city>s.Ciobalaccia</city>
+    <city>s.Ciobanca</city>
+    <city>s.Ciobanovca (r-l Anenii Noi)</city>
+    <city>s.Ciobanovca (r-l Rîşcani)</city>
+    <city>s.Cioburciu (r-l Ştefan Vodă)</city>
+    <city>s.Cioburciu (UATSN)</city>
+    <city>s.Ciocîlteni</city>
+    <city>s.Cioc-Maidan</city>
+    <city>s.Ciofu</city>
+    <city>s.Ciolacu Nou</city>
+    <city>s.Ciolacu Vechi</city>
+    <city>s.Ciopleni</city>
+    <city>s.Ciorescu</city>
+    <city>s.Cioreşti</city>
+    <city>s.Ciorna</city>
+    <city>s.Cioropcani</city>
+    <city>s.Ciripcău</city>
+    <city>s.Cişmea</city>
+    <city>s.Cişmichioi</city>
+    <city>s.Ciubara</city>
+    <city>s.Ciuciuieni</city>
+    <city>s.Ciuciulea</city>
+    <city>s.Ciuciuleni</city>
+    <city>s.Ciucur-Mingir</city>
+    <city>s.Ciufleşti</city>
+    <city>s.Ciuluc</city>
+    <city>s.Ciulucani</city>
+    <city>s.Ciumai</city>
+    <city>s.Ciuteşti</city>
+    <city>s.Ciutuleşti</city>
+    <city>s.Cîietu</city>
+    <city>s.Cîmpul Drept</city>
+    <city>s.Cîrnăţeni</city>
+    <city>s.Cîrnăţenii Noi</city>
+    <city>s.Cîrneşti</city>
+    <city>s.Cîrpeşti</city>
+    <city>s.Cîşla (r-l Cantemir)</city>
+    <city>s.Cîşla (r-l Teleneşti)</city>
+    <city>s.Cîşliţa-Prut</city>
+    <city>s.Cîzlar</city>
+    <city>s.Climăuţi</city>
+    <city>s.Climăuţii de Jos</city>
+    <city>s.Clişcăuţi (r-l Edineţ)</city>
+    <city>s.Clişcăuţi (r-l Sîngerei)</city>
+    <city>s.Clişova</city>
+    <city>s.Clişova Nouă</city>
+    <city>s.Clococenii Vechi</city>
+    <city>s.Clocuşna</city>
+    <city>s.Cneazevca</city>
+    <city>s.Coada Iazului</city>
+    <city>s.Cobani</city>
+    <city>s.Cobasna</city>
+    <city>s.Cobasna, loc.st.c.f.</city>
+    <city>s.Cobîlea</city>
+    <city>s.Cobîlea, loc.st.c.f.</city>
+    <city>s.Cobusca Nouă</city>
+    <city>s.Cobusca Veche</city>
+    <city>s.Cocieri</city>
+    <city>s.Cociulia</city>
+    <city>s.Cociulia Nouă</city>
+    <city>s.Codreanca</city>
+    <city>s.Codreni (r-l Cimişlia)</city>
+    <city>s.Codreni (r-l Ocniţa)</city>
+    <city>s.Codrenii Noi</city>
+    <city>or.Codru (mun. Chişinău)</city>
+    <city>s.Codru (r-l Teleneşti)</city>
+    <city>s.Codrul Nou</city>
+    <city>s.Cogîlniceni</city>
+    <city>s.Coicova</city>
+    <city>s.Cojuşna</city>
+    <city>s.Colibabovca</city>
+    <city>s.Colibaşi</city>
+    <city>s.Colicăuţi</city>
+    <city>s.Coloniţa</city>
+    <city>s.Colosova</city>
+    <city>s.Comarovca</city>
+    <city>s.Comis.ovca Nouă</city>
+    <city>m.Comrat</city>
+    <city>s.Condrăteşti</city>
+    <city>s.Condriţa</city>
+    <city>s.Congaz</city>
+    <city>s.Congazcicul de Jos</city>
+    <city>s.Congazcicul de Sus</city>
+    <city>s.Constantineşti</city>
+    <city>s.Constantinovca (r-l Căuşeni)</city>
+    <city>s.Constantinovca (r-l Edineţ)</city>
+    <city>s.Constantinovca (UATSN)</city>
+    <city>s.Constantinovca (UATSN)</city>
+    <city>s.Copanca</city>
+    <city>s.Copăceni</city>
+    <city>s.Copceac (r-l Ştefan Vodă)</city>
+    <city>s.Copceac (UTA Găgăuzia)</city>
+    <city>s.Corbu</city>
+    <city>s.Corestăuţi</city>
+    <city>s.Corjeuţi</city>
+    <city>s.Corjova (r-l Criuleni)</city>
+    <city>s.Corjova (r-l Dubăs.i)</city>
+    <city>s.Corlăteni</city>
+    <city>s.Corneşti (r-l Hînceşti)</city>
+    <city>or.Corneşti (r-l Ungheni)</city>
+    <city>s.Corneşti (r-l Ungheni)</city>
+    <city>s.Cornova</city>
+    <city>s.Coroliovca</city>
+    <city>s.Coropceni</city>
+    <city>s.Corotna</city>
+    <city>s.Corpaci</city>
+    <city>s.Corten</city>
+    <city>s.Cortenul Nou</city>
+    <city>s.Cosăuţi</city>
+    <city>s.Costeşti (r-l Hînceşti)</city>
+    <city>s.Costeşti (r-l Ialoveni)</city>
+    <city>or.Costeşti (r-l Rîşcani)</city>
+    <city>s.Costuleni</city>
+    <city>s.Coşcalia</city>
+    <city>s.Coşcodeni</city>
+    <city>s.Coşeni</city>
+    <city>s.Coşerniţa (r-l Criuleni)</city>
+    <city>s.Coşerniţa (r-l Floreşti)</city>
+    <city>s.Coşniţa</city>
+    <city>s.Coşniţa Nouă</city>
+    <city>s.Coştangalia (r-l Cantemir)</city>
+    <city>s.Coştangalia (r-l Cimişlia)</city>
+    <city>s.Cot (r-l Glodeni)</city>
+    <city>s.Cot (r-l Şoldăneşti)</city>
+    <city>s.Coteala</city>
+    <city>s.Cotihana</city>
+    <city>s.Cotiujeni</city>
+    <city>s.Cotiujenii Mari</city>
+    <city>s.Cotiujenii Mici</city>
+    <city>s.Cotova</city>
+    <city>s.Cotovca (r-l Sîngerei)</city>
+    <city>s.Cotovca (UATSN)</city>
+    <city>s.Cotovscoe</city>
+    <city>s.Cotul Morii</city>
+    <city>s.Covurlui</city>
+    <city>s.Cozeşti</city>
+    <city>s.Crasnaia Bes.abia</city>
+    <city>s.Crasnaia Gorca</city>
+    <city>s.Crasnencoe</city>
+    <city>s.Crasnîi Octeabri</city>
+    <city>s.Crasnîi Vinogradari</city>
+    <city>s.Crasnoarmeiscoe</city>
+    <city>or.Crasnoe (UATSN)</city>
+    <city>s.Crasnoe (UATSN)</city>
+    <city>s.Crasnogorca</city>
+    <city>s.Crăciun</city>
+    <city>s.Crăsnăşeni</city>
+    <city>s.Cremenciug (r-l Căuşeni)</city>
+    <city>s.Cremenciug (r-l Soroca)</city>
+    <city>s.Creţoaia</city>
+    <city>or.Cricova</city>
+    <city>s.Crihana</city>
+    <city>s.Crihana Veche</city>
+    <city>s.Cristeşti</city>
+    <city>s.Crişcăuţi</city>
+    <city>or.Criuleni</city>
+    <city>s.Criva</city>
+    <city>s.Crocmaz</city>
+    <city>s.Cruglic</city>
+    <city>s.Cruzeşti</city>
+    <city>s.Cubolta</city>
+    <city>s.Cucioaia</city>
+    <city>s.Cucioaia Nouă</city>
+    <city>s.Cucoara</city>
+    <city>s.Cuconeştii Noi</city>
+    <city>s.Cuconeştii Vechi</city>
+    <city>s.Cucuieţii Noi</city>
+    <city>s.Cucuieţii Vechi</city>
+    <city>s.Cucuruzeni</city>
+    <city>s.Cucuruzenii de Sus</city>
+    <city>s.Cuhneşti</city>
+    <city>s.Cuhureştii de Jos</city>
+    <city>s.Cuhureştii de Sus</city>
+    <city>s.Cuizăuca</city>
+    <city>s.Cunicea</city>
+    <city>or.Cupcini</city>
+    <city>s.Cupcui</city>
+    <city>s.Cuporani</city>
+    <city>s.Curătura</city>
+    <city>s.Curchi</city>
+    <city>s.Cureşniţa</city>
+    <city>s.Cureşniţa Nouă</city>
+    <city>s.Curtoaia</city>
+    <city>s.Cuşelăuca</city>
+    <city>s.Cuşmirca</city>
+    <city>s.Cuzmenii Vechi</city>
+    <city>s.Cuzmin</city>
+    <city>s.Dahnovici</city>
+    <city>s.Dancu</city>
+    <city>s.Danu</city>
+    <city>s.Dămăşcani</city>
+    <city>s.Dănceni</city>
+    <city>s.Dărcăuţi</city>
+    <city>s.Dărcăuţii Noi</city>
+    <city>s.Decebal</city>
+    <city>s.Delacău (r-l Anenii Noi)</city>
+    <city>s.Delacău (UATSN)</city>
+    <city>s.Dereneu</city>
+    <city>s.Dermengi</city>
+    <city>s.Dezghingea</city>
+    <city>s.Dimitrova (r-l Cantemir)</city>
+    <city>s.Dimitrova (UATSN)</city>
+    <city>s.Dimitrovca</city>
+    <city>s.Dişcova</city>
+    <city>s.Dîngeni</city>
+    <city>or.Dnestrovsc</city>
+    <city>s.Dobrogea</city>
+    <city>s.Dobrogea Nouă</city>
+    <city>s.Dobrogea Veche</city>
+    <city>s.Dobruşa (r-l Şoldăneşti)</city>
+    <city>s.Dobruşa (r-l Teleneşti)</city>
+    <city>s.Doibani I</city>
+    <city>s.Doibani II</city>
+    <city>s.Doina</city>
+    <city>s.Dolinnoe</city>
+    <city>s.Dolna</city>
+    <city>s.Doltu</city>
+    <city>s.Dominteni</city>
+    <city>s.Domulgeni</city>
+    <city>or.Donduşeni (r-l Donduşeni)</city>
+    <city>s.Donduşeni (r-l Donduşeni)</city>
+    <city>s.Donici</city>
+    <city>s.Doroţcaia</city>
+    <city>s.Drăgăneşti</city>
+    <city>s.Drăguşeni (r-l Hînceşti)</city>
+    <city>s.Drăguşeni (r-l Străşeni)</city>
+    <city>s.Drăguşenii Noi</city>
+    <city>s.Drăsliceni</city>
+    <city>s.Drepcăuţi</city>
+    <city>or.Drochia (r-l Drochia)</city>
+    <city>s.Drochia (r-l Drochia)</city>
+    <city>s.Drojdieni</city>
+    <city>s.Drujba</city>
+    <city>s.Drujineni</city>
+    <city>s.Druţa</city>
+    <city>or.Dubăsari</city>
+    <city>s.Dubăs.ii Vechi</city>
+    <city>s.Dubău</city>
+    <city>s.Dubna</city>
+    <city>s.Dubovca</city>
+    <city>s.Duduleşti</city>
+    <city>s.Duma</city>
+    <city>s.Dumbrava</city>
+    <city>s.Dumbrăveni</city>
+    <city>s.Dumbrăviţa</city>
+    <city>s.Dumeni</city>
+    <city>s.Dumitreni</city>
+    <city>or.Durleşti</city>
+    <city>s.Duruitoarea</city>
+    <city>s.Duruitoarea Nouă</city>
+    <city>s.Duşmani</city>
+    <city>s.Dzerjinscoe</city>
+    <city>s.Ecaterinovca</city>
+    <city>s.Echimăuţi</city>
+    <city>m.Edineţ</city>
+    <city>s.Egoreni</city>
+    <city>s.Egorovca</city>
+    <city>s.Elenovca</city>
+    <city>s.Elizaveta</city>
+    <city>s.Elizavetovca (r-l Donduşeni)</city>
+    <city>s.Elizavetovca (r-l Ungheni)</city>
+    <city>s.Enichioi</city>
+    <city>s.Ermoclia</city>
+    <city>s.Etulia</city>
+    <city>s.Etulia, loc.st.c.f.</city>
+    <city>s.Etulia Nouă</city>
+    <city>s.Evghenievca</city>
+    <city>s.Fabrica de Zahăr</city>
+    <city>s.Făgădău (r-l Făleşti)</city>
+    <city>s.Făgădău (r-l Floreşti)</city>
+    <city>s.Făgureni</city>
+    <city>or.Făleşti</city>
+    <city>s.Făleştii Noi</city>
+    <city>s.Făureşti</city>
+    <city>s.Fedoreuca</city>
+    <city>s.Fedoseevca</city>
+    <city>s.Ferapontievca</city>
+    <city>s.Feşteliţa</city>
+    <city>s.Feteasca</city>
+    <city>s.Feteşti</city>
+    <city>s.Fetiţa</city>
+    <city>s.Filipeni</city>
+    <city>s.Fîntîna Albă</city>
+    <city>s.Fîntîniţa</city>
+    <city>s.Fîrlădeni (r-l Căuşeni)</city>
+    <city>s.Fîrlădeni (r-l Hînceşti)</city>
+    <city>s.Fîrlădenii Noi</city>
+    <city>s.Flămînzeni</city>
+    <city>s.Flocoasa</city>
+    <city>s.Floreni (r-l Anenii Noi)</city>
+    <city>s.Floreni (r-l Ungheni)</city>
+    <city>s.Floreşti (r-l Anenii Noi)</city>
+    <city>or.Floreşti (r-l Floreşti)</city>
+    <city>s.Floreşti (r-l Ungheni)</city>
+    <city>s.Florica</city>
+    <city>s.Floriceni</city>
+    <city>s.Floricica</city>
+    <city>s.Floriţoaia Nouă</city>
+    <city>s.Floriţoaia Veche</city>
+    <city>s.Flutura</city>
+    <city>s.Frasin (r-l Donduşeni)</city>
+    <city>s.Frasin (r-l Hînceşti)</city>
+    <city>s.Frăsineşti</city>
+    <city>s.Frumoasa</city>
+    <city>s.Frumuşica (mun. Chişinău)</city>
+    <city>s.Frumuşica (r-l Cahul)</city>
+    <city>s.Frumuşica (r-l Făleşti)</city>
+    <city>s.Frumuşica (r-l Floreşti)</city>
+    <city>s.Frumuşica (r-l Leova)</city>
+    <city>s.Frumuşica Nouă</city>
+    <city>or.Frunză (r-l Ocniţa)</city>
+    <city>s.Frunză (UATSN)</city>
+    <city>s.Frunzăuca</city>
+    <city>s.Frunzeşti</city>
+    <city>s.Fundul Galbenei</city>
+    <city>s.Fundurii Noi</city>
+    <city>s.Fundurii Vechi</city>
+    <city>s.Furceni</city>
+    <city>s.Fuzăuca</city>
+    <city>s.Gaidar</city>
+    <city>s.Gangura</city>
+    <city>s.Gaşpar</city>
+    <city>s.Gavrilovca</city>
+    <city>s.Gălăşeni</city>
+    <city>s.Găleşti</city>
+    <city>s.Găleştii Noi</city>
+    <city>s.Găureni (r-l Ialoveni)</city>
+    <city>s.Găureni (r-l Nisporeni)</city>
+    <city>s.Găuzeni</city>
+    <city>s.Găvănoasa</city>
+    <city>s.Geamăna</city>
+    <city>s.Ghelăuza</city>
+    <city>s.Gherman</city>
+    <city>s.Ghermăneşti</city>
+    <city>s.Gherşunovca</city>
+    <city>s.Ghetlova</city>
+    <city>s.Ghidighici</city>
+    <city>s.Ghidirim</city>
+    <city>s.Ghiduleni</city>
+    <city>s.Ghiliceni</city>
+    <city>or.Ghindeşti (r-l Floreşti)</city>
+    <city>s.Ghindeşti (r-l Floreşti)</city>
+    <city>s.Ghioltosu</city>
+    <city>s.Ghizdita, loc.st.c.f.</city>
+    <city>s.Giurgiuleşti</city>
+    <city>s.Gîrbova</city>
+    <city>s.Gîsca</city>
+    <city>s.Glinjeni (r-l Fălești)</city>
+    <city>s.Glinjeni (r-l Șoldănești)</city>
+    <city>or.Glodeni</city>
+    <city>s.Goian (mun. Chişinău)</city>
+    <city>s.Goian (UATSN)</city>
+    <city>s.Goianul Nou (mun. Chişinău)</city>
+    <city>s.Goianul Nou (UATSN)</city>
+    <city>s.Goleni</city>
+    <city>s.Gordineşti (r-l Edineţ)</city>
+    <city>s.Gordineşti (r-l Rezina)</city>
+    <city>s.Gordineştii Noi</city>
+    <city>s.Gornoe</city>
+    <city>s.Goteşti</city>
+    <city>s.Gradişte</city>
+    <city>s.Grădiniţa</city>
+    <city>s.Grăseni</city>
+    <city>s.Grătieşti</city>
+    <city>s.Grebleşti</city>
+    <city>s.Greceni </city>
+    <city>s.Gribova</city>
+    <city>s.Grigorăuca (r-l Sîngerei)</city>
+    <city>s.Grigorăuca (r-l Soroca)</city>
+    <city>s.Grigoreşti</city>
+    <city>s.Grigorievca</city>
+    <city>or.Grigoriopol</city>
+    <city>s.Grimăncăuţi</city>
+    <city>s.Grimeşti</city>
+    <city>s.Grinăuţi (r-l Ocniţa)</city>
+    <city>s.Grinăuţi (r-l Ocniţa)</city>
+    <city>s.Grinăuţi (r-l Rîşcani)</city>
+    <city>s.Grinăuţi-Moldova</city>
+    <city>s.Grinăuţi-Raia</city>
+    <city>s.Grozasca</city>
+    <city>s.Grozeşti</city>
+    <city>s.Grozniţa</city>
+    <city>s.Gura Bîcului</city>
+    <city>s.Gura Camencii</city>
+    <city>s.Gura Căinarului</city>
+    <city>s.Gura Galbenei</city>
+    <city>s.Gura-Oituz</city>
+    <city>s.Gvozdova</city>
+    <city>s.Hagichioi</city>
+    <city>s.Hagimus</city>
+    <city>s.Halahora de Jos</city>
+    <city>s.Halahora de Sus</city>
+    <city>s.Hancăuţi</city>
+    <city>s.Hansca</city>
+    <city>s.Haraba</city>
+    <city>s.Haragîş</city>
+    <city>s.Harmaţca</city>
+    <city>s.Hădărăuţi</city>
+    <city>s.Hănăseni</city>
+    <city>s.Hănăsenii Noi</city>
+    <city>s.Hăsnăşenii Mari</city>
+    <city>s.Hăsnăşenii Noi</city>
+    <city>s.Heciul Nou</city>
+    <city>s.Heciul Vechi</city>
+    <city>s.Heleşteni</city>
+    <city>s.Hiliuţi (r-l Făleşti)</city>
+    <city>s.Hiliuţi (r-l Rîşcani)</city>
+    <city>s.Hincăuţi</city>
+    <city>s.Hirişeni</city>
+    <city>s.Hirova</city>
+    <city>s.Hitreşti</city>
+    <city>s.Hîjdieni (r-l Glodeni)</city>
+    <city>s.Hîjdieni (r-l Orhei)</city>
+    <city>s.Hînceşti (r-l Făleşti)</city>
+    <city>m.Hînceşti</city>
+    <city>s.Hîrbovăţ (r-l Anenii Noi)</city>
+    <city>s.Hîrbovăţ (r-l Călăraşi)</city>
+    <city>s.Hîrbovăţul Nou</city>
+    <city>s.Hîrceşti</city>
+    <city>s.Hîrjauca</city>
+    <city>s.Hîrjău</city>
+    <city>s.Hîrtop (r-l Cantemir)</city>
+    <city>s.Hîrtop (r-l Cimişlia)</city>
+    <city>s.Hîrtop (r-l Făleşti)</city>
+    <city>s.Hîrtop (r-l Floreşti)</city>
+    <city>s.Hîrtop (r-l Leova)</city>
+    <city>s.Hîrtop (r-l Taraclia)</city>
+    <city>s.Hîrtop (r-l Teleneşti)</city>
+    <city>s.Hîrtop (UATSN)</city>
+    <city>s.Hîrtopul Mare</city>
+    <city>s.Hîrtopul Mic</city>
+    <city>s.Hlina</city>
+    <city>s.Hlinaia (r-l Edineţ)</city>
+    <city>s.Hlinaia (UATSN)</city>
+    <city>s.Hlinaia (UATSN)</city>
+    <city>s.Hlinaia Mică</city>
+    <city>s.Hogineşti</city>
+    <city>s.Holercani</city>
+    <city>s.Holoşniţa</city>
+    <city>s.Holoşniţa Nouă</city>
+    <city>s.Homuteanovca</city>
+    <city>s.Horeşti (r-l Făleşti)</city>
+    <city>s.Horeşti (r-l Ialoveni)</city>
+    <city>s.Horjeşti</city>
+    <city>s.Horodca (r-l Hînceşti)</city>
+    <city>s.Horodca (r-l Ialoveni)</city>
+    <city>s.Horodişte (r-l Călăraşi)</city>
+    <city>s.Horodişte (r-l Donduşeni)</city>
+    <city>s.Horodişte (r-l Rezina)</city>
+    <city>s.Horodişte (r-l Rîşcani)</city>
+    <city>s.Hristici</city>
+    <city>s.Hristoforovca</city>
+    <city>s.Hristovaia</city>
+    <city>s.Hrubna Nouă</city>
+    <city>s.Hruşca</city>
+    <city>s.Hruşova</city>
+    <city>s.Hulboaca (mun. Chişinău)</city>
+    <city>s.Hulboaca (r-l Orhei)</city>
+    <city>s.Huluboaia</city>
+    <city>s.Humuleşti</city>
+    <city>s.Hutulu</city>
+    <city>s.Huzun</city>
+    <city>s.Iabloana</city>
+    <city>s.Iachimeni</city>
+    <city>s.Iagorlîc</city>
+    <city>or.Ialoveni</city>
+    <city>s.Ialpug</city>
+    <city>s.Ialpujeni</city>
+    <city>s.Iantarnoe</city>
+    <city>or.Iargara</city>
+    <city>s.Iarova</city>
+    <city>s.Iasnaia Poleana</city>
+    <city>s.Iepureni</city>
+    <city>s.Iezărenii Noi</city>
+    <city>s.Iezărenii Vechi</city>
+    <city>s.Ignăţei</city>
+    <city>s.Ilenuţa</city>
+    <city>s.Iliciovca (r-l Drochia)</city>
+    <city>s.Iliciovca (r-l Floreşti)</city>
+    <city>s.Inculeţ</city>
+    <city>s.India</city>
+    <city>s.Ineşti</city>
+    <city>s.Inundeni</city>
+    <city>s.Ion Vodă</city>
+    <city>s.Iordanovca</city>
+    <city>s.Iorjniţa</city>
+    <city>s.Isacova</city>
+    <city>s.Isăicani</city>
+    <city>s.Iserlia</city>
+    <city>s.Işcălău</city>
+    <city>s.Işnovăţ</city>
+    <city>s.Iujnoe</city>
+    <city>s.Iurceni</city>
+    <city>s.Iurievca</city>
+    <city>s.Ivancea</city>
+    <city>s.Ivanovca (r-l Bas.abeasca)</city>
+    <city>s.Ivanovca (r-l Făleşti)</city>
+    <city>s.Ivanovca (r-l Floreşti)</city>
+    <city>s.Ivanovca (r-l Hînceşti)</city>
+    <city>s.Ivanovca (UATSN)</city>
+    <city>s.Ivanovca Nouă</city>
+    <city>s.Ivăneşti</city>
+    <city>s.Izbişte</city>
+    <city>s.Izvoare (r-l Făleşti)</city>
+    <city>s.Izvoare (r-l Floreşti)</city>
+    <city>s.Izvoare (r-l Orhei)</city>
+    <city>s.Izvoare (r-l Sîngerei)</city>
+    <city>s.Izvoreni</city>
+    <city>s.Japca</city>
+    <city>s.Javgur</city>
+    <city>s.Jeloboc</city>
+    <city>s.Jevreni</city>
+    <city>s.Joltai</city>
+    <city>s.Jora de Jos</city>
+    <city>s.Jora de Mijloc</city>
+    <city>s.Jora de Sus</city>
+    <city>s.Jura</city>
+    <city>s.Lalova</city>
+    <city>s.Larga (r-l Anenii Noi)</city>
+    <city>s.Larga (r-l Briceni)</city>
+    <city>s.Larga Nouă</city>
+    <city>s.Larga Veche</city>
+    <city>s.Lazo (r-l Drochia)</city>
+    <city>s.Lazo (r-l Ştefan Vodă)</city>
+    <city>s.Lăpuşna</city>
+    <city>s.Lărguţa</city>
+    <city>s.Lebedenco</city>
+    <city>s.Leca</city>
+    <city>s.Lelina</city>
+    <city>s.Lencăuţi</city>
+    <city>s.Lenin</city>
+    <city>s.Leordoaia (r-l Călăraşi)</city>
+    <city>s.Leordoaia (r-l Ungheni)</city>
+    <city>or.Leova</city>
+    <city>s.Leuntea</city>
+    <city>s.Leuşeni (r-l Hînceşti)</city>
+    <city>s.Leuşeni (r-l Teleneşti)</city>
+    <city>s.Lidovca</city>
+    <city>s.Limbenii Noi</city>
+    <city>s.Limbenii Vechi</city>
+    <city>s.Lingura</city>
+    <city>or.Lipcani</city>
+    <city>s.Lipceni</city>
+    <city>s.Lipnic</city>
+    <city>s.Lipovanca</city>
+    <city>s.Lipovăţ </city>
+    <city>s.Lipoveni</city>
+    <city>s.Livezi</city>
+    <city>s.Lîsaia Gora</city>
+    <city>s.Logăneşti (r-l Criuleni)</city>
+    <city>s.Logăneşti (r-l Hînceşti)</city>
+    <city>s.Logofteni</city>
+    <city>s.Lopatna</city>
+    <city>s.Lopatnic</city>
+    <city>s.Lopăţica</city>
+    <city>s.Lozova</city>
+    <city>s.Lucăceni</city>
+    <city>s.Lucăşeuca</city>
+    <city>s.Luceşti</city>
+    <city>s.Lugovoe</city>
+    <city>s.Luminiţa</city>
+    <city>s.Lunga (r-l Floreşti)</city>
+    <city>s.Lunga (UATSN)</city>
+    <city>s.Lunga Nouă</city>
+    <city>s.Lupa-Recea</city>
+    <city>s.Lupăria</city>
+    <city>s.Mahala</city>
+    <city>or.Maiac</city>
+    <city>s.Maiovca</city>
+    <city>s.Maiscoe</city>
+    <city>s.Malcoci</city>
+    <city>s.Malinovscoe</city>
+    <city>s.Mana</city>
+    <city>s.Manta</city>
+    <city>s.Maramonovca</city>
+    <city>s.Marcăuţi</city>
+    <city>s.Marchet</city>
+    <city>s.Marian</city>
+    <city>s.Marianca de Jos</city>
+    <city>s.Marianca de Sus</city>
+    <city>s.Marienfeld</city>
+    <city>s.Marinici</city>
+    <city>s.Maşcăuţi</city>
+    <city>s.Mateuţi</city>
+    <city>s.Maximeni</city>
+    <city>s.Maximovca</city>
+    <city>s.Măcăreşti</city>
+    <city>s.Măcăreuca</city>
+    <city>s.Măgdăceşti</city>
+    <city>s.Măgura</city>
+    <city>s.Măgura Nouă</city>
+    <city>s.Măgureanca</city>
+    <city>s.Măgurele</city>
+    <city>s.Mălăieşti (r-l Criuleni)</city>
+    <city>s.Mălăieşti (r-l Orhei)</city>
+    <city>s.Mălăieşti (r-l Rîşcani)</city>
+    <city>s.Mălăieşti (UATSN)</city>
+    <city>s.Mălăieştii Noi</city>
+    <city>s.Mălcăuţi</city>
+    <city>s.Mănoileşti</city>
+    <city>s.Mărăndeni</city>
+    <city>s.Mărăşeşti</city>
+    <city>s.Mărcăuţi</city>
+    <city>s.Mărcăuţii Noi</city>
+    <city>or.Mărculeşti (r-l Floreşti)</city>
+    <city>s.Mărculeşti (r-l Floreşti)</city>
+    <city>s.Mărdăreuca</city>
+    <city>s.Mărineşti (r-l Floreşti)</city>
+    <city>s.Mărineşti (r-l Sîngerei)</city>
+    <city>s.Mărtineşti</city>
+    <city>s.Medeleni</city>
+    <city>s.Medveja</city>
+    <city>s.Meleşeni</city>
+    <city>s.Mereneşti</city>
+    <city>s.Mereni (r-l Anenii Noi)</city>
+    <city>s.Mereni (r-l Cimişlia)</city>
+    <city>s.Merenii Noi</city>
+    <city>s.Mereşeni</city>
+    <city>s.Mereşeuca</city>
+    <city>s.Meşeni (r-l Leova)</city>
+    <city>s.Meşeni (r-l Rezina)</city>
+    <city>s.Micăuţi</city>
+    <city>s.Miciurin</city>
+    <city>s.Micleşti</city>
+    <city>s.Micleuşeni</city>
+    <city>s.Mihailovca (r-l Cimişlia)</city>
+    <city>s.Mihailovca (r-l Floreşti)</city>
+    <city>s.Mihailovca (r-l Sîngerei)</city>
+    <city>s.Mihailovca (UATSN)</city>
+    <city>s.Mihailovca Nouă</city>
+    <city>s.Mihăileni (r-l Briceni)</city>
+    <city>s.Mihăileni (r-l Rîşcani)</city>
+    <city>s.Mihăilenii Noi</city>
+    <city>s.Mihălaşa</city>
+    <city>s.Mihălaşa Nouă</city>
+    <city>s.Mihălăşeni</city>
+    <city>s.Mihuleni</city>
+    <city>s.Mileşti</city>
+    <city>s.Mileştii Mici</city>
+    <city>s.Mileştii Noi</city>
+    <city>s.Mincenii de Jos</city>
+    <city>s.Mincenii de Sus</city>
+    <city>s.Mingir</city>
+    <city>s.Mirceşti</city>
+    <city>s.Mireşti</city>
+    <city>s.Mirnoe (r-l Anenii Noi)</city>
+    <city>s.Mirnoe (r-l Taraclia)</city>
+    <city>s.Misovca</city>
+    <city>s.Mitoc</city>
+    <city>s.Mîndîc</city>
+    <city>s.Mîndra (r-l Călăraşi)</city>
+    <city>s.Mîndra (r-l Teleneşti)</city>
+    <city>s.Mîndreşti</city>
+    <city>s.Mîndreştii Noi</city>
+    <city>s.Mînzăteşti</city>
+    <city>s.Mîrzaci</city>
+    <city>s.Mîrzeşti</city>
+    <city>s.Mîrzoaia</city>
+    <city>s.Moara de Piatră</city>
+    <city>s.Moara Domnească</city>
+    <city>s.Mocearovca</city>
+    <city>s.Mocra</city>
+    <city>s.Mocreachi</city>
+    <city>s.Moldoveanca</city>
+    <city>s.Moleşti (r-l Glodeni)</city>
+    <city>s.Moleşti (r-l Ialoveni)</city>
+    <city>s.Molochişul Mare</city>
+    <city>s.Molochişul Mic</city>
+    <city>s.Molovata</city>
+    <city>s.Molovata Nouă</city>
+    <city>s.Morenii Noi</city>
+    <city>s.Morenii Vechi</city>
+    <city>s.Morovaia</city>
+    <city>s.Morozeni</city>
+    <city>s.Moscovei</city>
+    <city>s.Moşana</city>
+    <city>s.Moşeni</city>
+    <city>s.Movileni</city>
+    <city>s.Munteni</city>
+    <city>s.Musaitu</city>
+    <city>s.Musteaţa</city>
+    <city>s.Naslavcea</city>
+    <city>s.Natalievca</city>
+    <city>s.Năpadova</city>
+    <city>s.Năpădeni</city>
+    <city>s.Năvîrneţ</city>
+    <city>s.Neculăieuca</city>
+    <city>s.Negrea</city>
+    <city>s.Negreşti</city>
+    <city>s.Negureni</city>
+    <city>s.Negurenii Noi</city>
+    <city>s.Negurenii Vechi</city>
+    <city>s.Nemţeni</city>
+    <city>s.Nezavertailovca</city>
+    <city>s.Nicolaevca (r-l Anenii Noi)</city>
+    <city>s.Nicolaevca (r-l Cahul)</city>
+    <city>s.Nicolaevca (r-l Făleşti)</city>
+    <city>s.Nicolaevca (r-l Floreşti)</city>
+    <city>s.Nicolaevca (r-l Floreşti)</city>
+    <city>s.Nicolaevca (r-l Glodeni)</city>
+    <city>s.Nicolaevca (r-l Leova)</city>
+    <city>s.Nicolaevca (r-l Sîngerei)</city>
+    <city>s.Nicolscoe</city>
+    <city>s.Nicoreni</city>
+    <city>s.Nihoreni</city>
+    <city>s.Nimereuca</city>
+    <city>s.Nimoreni</city>
+    <city>s.Niorcani</city>
+    <city>or.Nisporeni</city>
+    <city>s.Nistreni</city>
+    <city>s.Nişcani</city>
+    <city>s.Noroceni</city>
+    <city>s.Novaci</city>
+    <city>s.Novaia Jizni</city>
+    <city>s.Novaia Nicolaevca</city>
+    <city>s.Novocotovsc</city>
+    <city>s.Novosaviţcaia, loc.st.c.f.</city>
+    <city>s.Novosiolovca</city>
+    <city>s.Novovladimirovca</city>
+    <city>s.Nucăreni</city>
+    <city>s.Obileni</city>
+    <city>s.Obreja Nouă</city>
+    <city>s.Obreja Veche</city>
+    <city>s.Ochiul Alb</city>
+    <city>s.Ochiul Roş</city>
+    <city>s.Oclanda</city>
+    <city>or.Ocniţa (r-l Ocniţa)</city>
+    <city>s.Ocniţa (r-l Ocniţa)</city>
+    <city>s.Ocniţa (UATSN)</city>
+    <city>s.Ocniţa-Răzeşi</city>
+    <city>s.Ocniţa-Ţărani</city>
+    <city>s.Ocolina</city>
+    <city>s.Octeabriscoe (r-l Donduşeni)</city>
+    <city>s.Octeabriscoe (r-l Floreşti)</city>
+    <city>s.Octeabriscoe (r-l Sîngerei)</city>
+    <city>s.Odaia (r-l Nisporeni)</city>
+    <city>s.Odaia (r-l Şoldăneşti)</city>
+    <city>s.Odobeşti</city>
+    <city>s.Ofatinţi</city>
+    <city>s.Ohrincea</city>
+    <city>s.Olăneşti</city>
+    <city>s.Olişcani</city>
+    <city>s.Oneşti (r-l Edineţ)</city>
+    <city>s.Oneşti (r-l Hînceşti)</city>
+    <city>s.Oneşti (r-l Străşeni)</city>
+    <city>s.Onişcani</city>
+    <city>s.Oniţcani</city>
+    <city>s.Opaci</city>
+    <city>s.Orac</city>
+    <city>s.Ordăşei</city>
+    <city>s.Orehovca</city>
+    <city>m.Orhei</city>
+    <city>s.Oricova</city>
+    <city>s.Otac</city>
+    <city>or.Otaci</city>
+    <city>s.Oxentea</city>
+    <city>s.Paicu</city>
+    <city>s.Paladea</city>
+    <city>s.Palanca (r-l Călăraşi)</city>
+    <city>s.Palanca (r-l Drochia)</city>
+    <city>s.Palanca (r-l Ştefan Vodă)</city>
+    <city>s.Parcani (r-l Călăraşi)</city>
+    <city>s.Parcani (r-l Soroca)</city>
+    <city>s.Parcani (r-l Şoldăneşti)</city>
+    <city>s.Parcani (UATSN)</city>
+    <city>s.Parcova</city>
+    <city>s.Paşcani (r-l Cahul)</city>
+    <city>s.Paşcani (r-l Criuleni)</city>
+    <city>s.Paşcani (r-l Hînceşti)</city>
+    <city>s.Paustova</city>
+    <city>s.Pavlovca</city>
+    <city>s.Pălăria</city>
+    <city>s.Pănăşeşti</city>
+    <city>s.Păpăuţi</city>
+    <city>s.Păruceni</city>
+    <city>s.Păscăuţi</city>
+    <city>s.Păuleşti</city>
+    <city>s.Pecişte</city>
+    <city>s.Pelinei</city>
+    <city>s.Pеlinia</city>
+    <city>s.Pеlinia, loc.st.c.f.</city>
+    <city>s.Pelivan</city>
+    <city>s.Pepeni</city>
+    <city>s.Pepenii Noi</city>
+    <city>s.Pereni (r-l Hînceşti)</city>
+    <city>s.Pereni (r-l Rezina)</city>
+    <city>s.Pererita</city>
+    <city>s.Peresecina</city>
+    <city>s.Pervomaisc (r-l Căuşeni)</city>
+    <city>s.Pervomaisc (r-l Făleşti)</city>
+    <city>s.Pervomaisc (UATSN)</city>
+    <city>s.Pervomaisc (UATSN)</city>
+    <city>s.Pervomaiscoe (r-l Drochia)</city>
+    <city>s.Pervomaiscoe (r-l Hînceşti)</city>
+    <city>s.Peticeni</city>
+    <city>s.Petreni</city>
+    <city>s.Petreşti</city>
+    <city>s.Petreşti, loc.st.c.f.</city>
+    <city>s.Petropavlovca</city>
+    <city>s.Petrovca </city>
+    <city>s.Petrunea</city>
+    <city>s.Petruşeni</city>
+    <city>s.Piatra</city>
+    <city>s.Piatra Albă</city>
+    <city>s.Picus</city>
+    <city>s.Pietrosu</city>
+    <city>s.Pietrosul Nou</city>
+    <city>s.Piscăreşti</city>
+    <city>s.Pistruieni</city>
+    <city>s.Pistruienii Noi</city>
+    <city>s.Piteşti</city>
+    <city>s.Pituşca</city>
+    <city>s.Pivniceni</city>
+    <city>s.Pîcalova</city>
+    <city>s.Pînzăreni</city>
+    <city>s.Pînzărenii Noi</city>
+    <city>s.Pîrîta</city>
+    <city>s.Pîrjolteni</city>
+    <city>s.Pîrjota</city>
+    <city>s.Pîrliţa (r-l Făleşti)</city>
+    <city>s.Pîrliţa (r-l Soroca)</city>
+    <city>s.Pîrliţa (r-l Ungheni)</city>
+    <city>s.Pleşeni</city>
+    <city>s.Plop (r-l Căuşeni)</city>
+    <city>s.Plop (r-l Donduşeni)</city>
+    <city>s.Plopi (r-l Cantemir)</city>
+    <city>s.Plopi (UATSN)</city>
+    <city>s.Plop-Ştiubei</city>
+    <city>s.Pobeda (UATSN)</city>
+    <city>s.Pobeda (UATSN)</city>
+    <city>s.Pociumbăuţi</city>
+    <city>s.Pociumbeni</city>
+    <city>s.Pocrovca (r-l Donduşeni)</city>
+    <city>s.Pocrovca (r-l Făleşti)</city>
+    <city>s.Pocşeşti</city>
+    <city>s.Podgoreni</city>
+    <city>s.Podoima</city>
+    <city>s.Podoimiţa</city>
+    <city>s.Podul Lung</city>
+    <city>s.Pogăneşti</city>
+    <city>s.Pohoarna</city>
+    <city>s.Pohorniceni</city>
+    <city>s.Pohrebea</city>
+    <city>s.Pohrebea Nouă</city>
+    <city>s.Pohrebeni</city>
+    <city>s.Poiana (r-l Edineţ)</city>
+    <city>s.Poiana (r-l Şoldăneşti)</city>
+    <city>s.Poiana (r-l Ungheni)</city>
+    <city>s.Pojarna</city>
+    <city>s.Pojăreni</city>
+    <city>s.Pompa</city>
+    <city>s.Popeasca</city>
+    <city>s.Popencu</city>
+    <city>s.Popeştii de Jos</city>
+    <city>s.Popeştii de Sus</city>
+    <city>s.Popeştii Noi</city>
+    <city>s.Popovca (r-l Cantemir)</city>
+    <city>s.Popovca (r-l Făleşti)</city>
+    <city>s.Porumbeni</city>
+    <city>s.Porumbeşti</city>
+    <city>s.Porumbrei</city>
+    <city>s.Prajila</city>
+    <city>s.Prepeliţa</city>
+    <city>s.Prioziornoe</city>
+    <city>s.Pripiceni-Curchi</city>
+    <city>s.Pripiceni-Răzeşi</city>
+    <city>s.Prisaca</city>
+    <city>s.Prodăneşti</city>
+    <city>s.Prodăneştii Vechi</city>
+    <city>s.Proscureni</city>
+    <city>s.Proteagailovca</city>
+    <city>s.Pruteni </city>
+    <city>s.Puhăceni</city>
+    <city>s.Puhoi</city>
+    <city>s.Purcari</city>
+    <city>s.Putineşti</city>
+    <city>s.Puţintei</city>
+    <city>s.Racovăţ</city>
+    <city>s.Rassvet</city>
+    <city>s.Raşcov</city>
+    <city>s.Ratuş (r-l Criuleni)</city>
+    <city>s.Ratuş (r-l Teleneşti)</city>
+    <city>s.Răcăria</city>
+    <city>s.Răciula</city>
+    <city>s.Răculeşti</city>
+    <city>s.Rădeni (r-l Călăraşi)</city>
+    <city>s.Rădeni (r-l Străşeni)</city>
+    <city>s.Rădenii Vechi</city>
+    <city>s.Rădoaia</city>
+    <city>s.Rădulenii Noi</city>
+    <city>s.Rădulenii Vechi</city>
+    <city>s.Rămăzan</city>
+    <city>s.Răscăieţi</city>
+    <city>s.Răscăieţii Noi</city>
+    <city>s.Răspopeni</city>
+    <city>s.Răuţel</city>
+    <city>s.Răuţelul Nou</city>
+    <city>s.Răzălăi</city>
+    <city>s.Răzeni</city>
+    <city>s.Recea (r-l Rîşcani)</city>
+    <city>s.Recea (r-l Străşeni)</city>
+    <city>s.Receşti</city>
+    <city>s.Redi-Cereşnovăţ</city>
+    <city>s.Rediul de Jos</city>
+    <city>s.Rediul de Sus</city>
+    <city>s.Rediul Mare (r-l Donduşeni)</city>
+    <city>s.Rediul Mare (r-l Ocniţa)</city>
+    <city>s.Regina Maria</city>
+    <city>s.Reteni</city>
+    <city>s.Reteni-Vasileuţi</city>
+    <city>s.Revaca</city>
+    <city>or.Rezina (r-l Rezina)</city>
+    <city>s.Rezina (r-l Ungheni)</city>
+    <city>s.Risipeni</city>
+    <city>or.Rîbniţa</city>
+    <city>s.Rîngaci</city>
+    <city>or.Rîşcani</city>
+    <city>s.Rîşcova</city>
+    <city>s.Roghi</city>
+    <city>s.Rogojeni</city>
+    <city>s.Rogojeni, loc.st.c.f.</city>
+    <city>s.Romanovca (r-l Leova)</city>
+    <city>s.Romanovca (r-l Sîngerei)</city>
+    <city>s.Romanovca (r-l Ungheni)</city>
+    <city>s.Romăneşti</city>
+    <city>s.Roşcani (r-l Anenii Noi)</city>
+    <city>s.Roşcani (r-l Rezina)</city>
+    <city>s.Roşcani (r-l Străşeni)</city>
+    <city>s.Roşcanii de Jos</city>
+    <city>s.Roşcanii de Sus</city>
+    <city>s.Roşietici</city>
+    <city>s.Roşieticii Vechi</city>
+    <city>s.Roşiţa</city>
+    <city>s.Roşu</city>
+    <city>s.Rotari</city>
+    <city>s.Rotunda</city>
+    <city>s.Rubleniţa</city>
+    <city>s.Rubleniţa Nouă</city>
+    <city>s.Rudi</city>
+    <city>s.Rujniţa</city>
+    <city>s.Rumeanţev</city>
+    <city>s.Rusca</city>
+    <city>s.Ruseni (r-l Anenii Noi)</city>
+    <city>s.Ruseni (r-l Edineţ)</city>
+    <city>s.Ruseştii Noi</city>
+    <city>s.Ruseştii Vechi</city>
+    <city>s.Ruslanovca</city>
+    <city>s.Saca</city>
+    <city>s.Sacarovca</city>
+    <city>s.Sadaclia</city>
+    <city>s.Sadchi</city>
+    <city>s.Sadîc</city>
+    <city>s.Sadova</city>
+    <city>s.Sadovoe</city>
+    <city>s.Sagaidac (r-l Cimişlia)</city>
+    <city>s.Sagaidac (r-l Criuleni)</city>
+    <city>s.Sagaidacul de Sus</city>
+    <city>s.Sagaidacul Nou</city>
+    <city>s.Saharna</city>
+    <city>s.Saharna Nouă</city>
+    <city>s.Salcia (r-l Anenii Noi)</city>
+    <city>s.Salcia (r-l Şoldăneşti)</city>
+    <city>s.Salcia (r-l Taraclia)</city>
+    <city>s.Samurza</city>
+    <city>s.Satul Nou</city>
+    <city>s.Sauca</city>
+    <city>s.Săghieni</city>
+    <city>s.Săiţi</city>
+    <city>s.Sălcuţa</city>
+    <city>s.Sălcuţa Nouă</city>
+    <city>s.Sămănanca</city>
+    <city>s.Sămăşcani</city>
+    <city>s.Sănătăuca</city>
+    <city>s.Sărata-Galbenă</city>
+    <city>s.Sărata-Mereşeni</city>
+    <city>s.Sărata Nouă (r-l Făleşti)</city>
+    <city>s.Sărata Nouă (r-l Leova)</city>
+    <city>s.Sărata-Răzeşi</city>
+    <city>s.Sărata Veche</city>
+    <city>s.Sărăteni (r-l Hînceşti)</city>
+    <city>s.Sărăteni (r-l Leova)</city>
+    <city>s.Sărătenii Noi</city>
+    <city>s.Sărătenii Vechi</city>
+    <city>s.Sărăţei</city>
+    <city>s.Sărăţica Nouă</city>
+    <city>s.Sărăţica Veche</city>
+    <city>s.Săseni</city>
+    <city>s.Sătuc</city>
+    <city>s.Scăieni (r-l Donduşeni)</city>
+    <city>s.Scăieni (r-l Floreşti)</city>
+    <city>s.Schineni</city>
+    <city>s.Schinenii Noi</city>
+    <city>s.Schinoasa</city>
+    <city>s.Schinoşica</city>
+    <city>s.Scoreni</city>
+    <city>s.Scorţeni</city>
+    <city>s.Sculeni</city>
+    <city>s.Scumpia</city>
+    <city>s.Secăreni</city>
+    <city>s.Secărenii Noi</city>
+    <city>s.Selemet</city>
+    <city>s.Selişte (r-l Leova)</city>
+    <city>s.Selişte (r-l Nisporeni)</city>
+    <city>s.Selişte (r-l Orhei)</city>
+    <city>s.Seliştea Nouă</city>
+    <city>s.Selişteni</city>
+    <city>s.Semeni</city>
+    <city>s.Semionovca (r-l Hînceşti)</city>
+    <city>s.Semionovca (r-l Ştefan Vodă)</city>
+    <city>s.Sergheuca</city>
+    <city>s.Serghieni</city>
+    <city>s.Severinovca</city>
+    <city>s.Sevirova</city>
+    <city>s.Sineşti</city>
+    <city>s.Singureni</city>
+    <city>s.Sipoteni</city>
+    <city>s.Sireţi</city>
+    <city>s.Sirota</city>
+    <city>or.Sîngera</city>
+    <city>or.Sîngerei</city>
+    <city>s.Sîngereii Noi</city>
+    <city>s.Sîrbeşti</city>
+    <city>s.Sîrcova</city>
+    <city>s.Sîrma</city>
+    <city>s.Slobodca</city>
+    <city>s.Slobozia (r-l Ştefan Vodă)</city>
+    <city>or.Slobozia (UATSN)</city>
+    <city>s.Slobozia-Chişcăreni</city>
+    <city>s.Slobozia-Cremene</city>
+    <city>s.Slobozia-Duşca</city>
+    <city>s.Slobozia-Hodorogea</city>
+    <city>s.Slobozia-Horodişte</city>
+    <city>s.Slobozia Mare</city>
+    <city>s.Slobozia-Măgura</city>
+    <city>s.Slobozia-Medveja</city>
+    <city>s.Slobozia Nouă</city>
+    <city>s.Slobozia-Raşcov</city>
+    <city>s.Slobozia-Recea</city>
+    <city>s.Slobozia-Şirăuţi</city>
+    <city>s.Slobozia-Vărăncău</city>
+    <city>s.Sloveanca</city>
+    <city>s.Sobari</city>
+    <city>s.Socii Noi</city>
+    <city>s.Socii Vechi</city>
+    <city>s.Sociteni</city>
+    <city>s.Socola</city>
+    <city>s.Socoleni</city>
+    <city>s.Socolovca</city>
+    <city>s.Sofia (r-l Drochia)</city>
+    <city>s.Sofia (r-l Hînceşti)</city>
+    <city>s.Sofievca</city>
+    <city>s.Solnecinoe</city>
+    <city>s.Solonceni</city>
+    <city>s.Soloneţ</city>
+    <city>s.Soltăneşti</city>
+    <city>s.Soroca (r-l Glodeni)</city>
+    <city>m.Soroca (r-l Soroca)</city>
+    <city>s.Sovietscoe</city>
+    <city>s.Speia (r-l Anenii Noi)</city>
+    <city>s.Speia (UATSN)</city>
+    <city>s.Spicoasa</city>
+    <city>s.Stanislavca</city>
+    <city>s.Stălineşti</city>
+    <city>or.Stăuceni</city>
+    <city>s.Stejăreni</city>
+    <city>s.Step-Soci</city>
+    <city>s.Steţcani</city>
+    <city>s.Stîrcea</city>
+    <city>s.Stîrceni</city>
+    <city>s.Stohnaia</city>
+    <city>s.Stoianovca</city>
+    <city>s.Stoicani</city>
+    <city>s.Stolniceni (r-l Edineţ)</city>
+    <city>s.Stolniceni (r-l Hînceşti)</city>
+    <city>s.Stolniceni (r-l Ungheni)</city>
+    <city>s.Străisteni</city>
+    <city>m.Străşeni</city>
+    <city>s.Strîmbeni</city>
+    <city>s.Stroieşti</city>
+    <city>s.Sturzeni</city>
+    <city>s.Sturzovca</city>
+    <city>s.Sucleia</city>
+    <city>s.Sudarca</city>
+    <city>s.Suhaia Rîbniţa</city>
+    <city>s.Suhat</city>
+    <city>s.Suhuluceni</city>
+    <city>s.Surchiceni</city>
+    <city>s.Suric</city>
+    <city>s.Suruceni</city>
+    <city>s.Susleni</city>
+    <city>s.Suvorovca</city>
+    <city>s.Sverdiac</city>
+    <city>s.Sverida</city>
+    <city>s.Svetlîi</city>
+    <city>s.Șalvirii Noi</city>
+    <city>s.Șalvirii Vechi</city>
+    <city>s.Șamalia</city>
+    <city>s.Șaptebani</city>
+    <city>s.Șendreni</city>
+    <city>s.Șeptelici</city>
+    <city>s.Șercani</city>
+    <city>s.Șerpeni</city>
+    <city>s.Șestaci (r-l Sîngerei)</city>
+    <city>s.Șestaci (r-l Șoldănești)</city>
+    <city>s.Șevcenco</city>
+    <city>s.Șicovăţ</city>
+    <city>s.Șipca (r-l Șoldăneşti)</city>
+    <city>s.Șipca (UATSN)</city>
+    <city>s.Șipoteni</city>
+    <city>s.Șirăuţi</city>
+    <city>s.Șişcani</city>
+    <city>s.Șmalena</city>
+    <city>s.Șofranovca</city>
+    <city>s.Șofrîncani</city>
+    <city>s.Șolcani</city>
+    <city>or.Șoldăneşti</city>
+    <city>s.Șoltoaia</city>
+    <city>or.Ștefan Vodă</city>
+    <city>s.Ștefăneşti (r-l Căuşeni)</city>
+    <city>s.Ștefăneşti (r-l Floreşti)</city>
+    <city>s.Ștefăneşti (r-l Ștefan Vodă)</city>
+    <city>s.Știubeieni</city>
+    <city>s.Șumna</city>
+    <city>s.Șuri</city>
+    <city>s.Șurii Noi</city>
+    <city>s.Tabani</city>
+    <city>s.Tabăra</city>
+    <city>s.Talmaza</city>
+    <city>s.Taraclia (r-l Cantemir)</city>
+    <city>s.Taraclia (r-l Cantemir)</city>
+    <city>s.Taraclia (r-l Căuşeni)</city>
+    <city>or.Taraclia (r-l Taraclia)</city>
+    <city>s.Taraclia de Salcie</city>
+    <city>s.Tarasova</city>
+    <city>s.Tartaul</city>
+    <city>s.Tartaul de Salcie</city>
+    <city>s.Taşlîc</city>
+    <city>s.Taxobeni</city>
+    <city>s.Tălăieşti</city>
+    <city>s.Tănătari</city>
+    <city>s.Tănătarii Noi</city>
+    <city>s.Tătărăşeni</city>
+    <city>s.Tătărăuca Nouă</city>
+    <city>s.Tătărăuca Veche</city>
+    <city>s.Tătăreşti (r-l Cahul)</city>
+    <city>s.Tătăreşti (r-l Străşeni)</city>
+    <city>s.Tăura Nouă</city>
+    <city>s.Tăura Veche</city>
+    <city>s.Teiu</city>
+    <city>or.Teleneşti</city>
+    <city>s.Teleşeu</city>
+    <city>s.Teleşeuca</city>
+    <city>s.Teleşeuca Nouă</city>
+    <city>s.Teliţa</city>
+    <city>s.Teliţa Nouă</city>
+    <city>s.Temeleuţi (r-l Călăraşi)</city>
+    <city>s.Temeleuţi (r-l Floreşti)</city>
+    <city>s.Terebna</city>
+    <city>s.Teşcureni</city>
+    <city>s.Teţcani</city>
+    <city>s.Tigheci</city>
+    <city>m.Tiraspol</city>
+    <city>or.Tiraspolul Nou</city>
+    <city>s.Tîrgul-Vertiujeni</city>
+    <city>s.Tîrnauca</city>
+    <city>s.Tîrnova (r-l Donduşeni)</city>
+    <city>s.Tîrnova (r-l Edineţ)</city>
+    <city>s.Tîrşiţei</city>
+    <city>s.Tîrzieni</city>
+    <city>s.Toceni</city>
+    <city>s.Tochile-Răducani</city>
+    <city>s.Tocmagiu</city>
+    <city>s.Tocuz</city>
+    <city>s.Todireşti (r-l Anenii Noi)</city>
+    <city>s.Todireşti (r-l Ungheni)</city>
+    <city>s.Tohatin</city>
+    <city>s.Tolocăneşti</city>
+    <city>s.Tomai (r-l Leova)</city>
+    <city>s.Tomai (UTA Găgăuzia)</city>
+    <city>s.Tomaiul Nou</city>
+    <city>s.Tomeştii Noi</city>
+    <city>s.Tomeştii Vechi</city>
+    <city>s.Topala</city>
+    <city>s.Trebisăuţi</city>
+    <city>s.Trebujeni</city>
+    <city>s.Trestieni</city>
+    <city>s.Treteşti</city>
+    <city>s.Tricolici</city>
+    <city>s.Trifăneşti (r-l Floreşti)</city>
+    <city>s.Trifăneşti (r-l Sîngerei)</city>
+    <city>s.Trifăuţi</city>
+    <city>s.Trifeşti</city>
+    <city>s.Trifeştii Noi</city>
+    <city>s.Trinca</city>
+    <city>s.Troian</city>
+    <city>s.Troiţa</city>
+    <city>s.Troiţa Nouă</city>
+    <city>s.Troiţcoe</city>
+    <city>s.Truşeni</city>
+    <city>s.Tudora</city>
+    <city>s.Tudoreşti</city>
+    <city>s.Tuzara</city>
+    <city>or.Tvardiţa</city>
+    <city>s.Țahnăuţi</city>
+    <city>s.Țambula</city>
+    <city>s.Țapoc</city>
+    <city>s.Țareuca</city>
+    <city>s.Țarigrad</city>
+    <city>s.Țaul</city>
+    <city>s.Țărăncuţa</city>
+    <city>s.Țepilova</city>
+    <city>s.Țibirica</city>
+    <city>s.Țiganca</city>
+    <city>s.Țiganca Nouă</city>
+    <city>s.Țigăneşti</city>
+    <city>s.Țipala</city>
+    <city>s.Țipleşti</city>
+    <city>s.Țipleteşti</city>
+    <city>s.Țipordei</city>
+    <city>s.Țipova</city>
+    <city>s.Țîbuleuca</city>
+    <city>s.Țîghira</city>
+    <city>s.Țînţăreni (r-l Anenii Noi)</city>
+    <city>s.Țînţăreni (r-l Teleneşti)</city>
+    <city>s.Ţîra</city>
+    <city>s.Țîra, loc.st.c.f.</city>
+    <city>s.Ţolica</city>
+    <city>s.Ucrainca</city>
+    <city>s.Uiutnoe</city>
+    <city>s.Ulmu (r-l Ialoveni)</city>
+    <city>s.Ulmu (UATSN)</city>
+    <city>s.Ulmul Mic</city>
+    <city>s.Unchiteşti</city>
+    <city>s.Unchiteşti, loc.st.c.f.</city>
+    <city>m.Ungheni</city>
+    <city>s.Unguri</city>
+    <city>s.Unteni</city>
+    <city>s.Unţeşti</city>
+    <city>s.Urs.i</city>
+    <city>s.Ursoaia (r-l Cahul)</city>
+    <city>s.Ursoaia (r-l Căuşeni)</city>
+    <city>s.Ursoaia Nouă</city>
+    <city>s.Ustia (r-l Dubăs.i)</city>
+    <city>s.Ustia (r-l Glodeni)</city>
+    <city>s.Uşurei</city>
+    <city>s.Vadul-Leca</city>
+    <city>s.Vadul-Leca Nou</city>
+    <city>s.Vadul lui Isac</city>
+    <city>or.Vadul lui Vodă</city>
+    <city>s.Văduleni</city>
+    <city>s.Vadul-Raşcov</city>
+    <city>s.Vadul Turcului</city>
+    <city>s.Valea</city>
+    <city>s.Valea Adîncă</city>
+    <city>s.Valea Coloniţei</city>
+    <city>s.Valea Florii</city>
+    <city>s.Valea lui Vlad</city>
+    <city>s.Valea Mare</city>
+    <city>s.Valea Nîrnovei</city>
+    <city>s.Valea Norocului</city>
+    <city>s.Valea Perjei (r-l Cimişlia)</city>
+    <city>s.Valea Perjei (r-l Taraclia)</city>
+    <city>s.Valea Rădoaiei</city>
+    <city>s.Valea Rusului</city>
+    <city>s.Valea Satului</city>
+    <city>s.Valea-Trestieni</city>
+    <city>s.Valea Verde</city>
+    <city>s.Vancicăuţi</city>
+    <city>s.Vanţina</city>
+    <city>s.Vanţina Mică</city>
+    <city>s.Varniţa</city>
+    <city>s.Vasilcău</city>
+    <city>s.Vasileuţi</city>
+    <city>s.Vasilievca (r-l Dubăs.i)</city>
+    <city>s.Vasilievca (UATSN)</city>
+    <city>s.Vatici</city>
+    <city>or.Vatra</city>
+    <city>s.Vădeni</city>
+    <city>s.Văduleni</city>
+    <city>s.Vălcineţ (r-l Călăraşi)</city>
+    <city>s.Vălcineţ (r-l Ocniţa)</city>
+    <city>s.Văleni</city>
+    <city>s.Văratic (r-l Ialoveni)</city>
+    <city>s.Văratic (r-l Rîşcani)</city>
+    <city>s.Vărăncău (r-l Soroca)</city>
+    <city>s.Vărăncău (UATSN)</city>
+    <city>s.Vărvăreuca</city>
+    <city>s.Vărzăreşti</city>
+    <city>s.Vărzăreştii Noi</city>
+    <city>s.Văscăuţi</city>
+    <city>s.Văsieni (r-l Ialoveni)</city>
+    <city>s.Văsieni (r-l Teleneşti)</city>
+    <city>s.Verejeni (r-l Ocniţa)</city>
+    <city>s.Verejeni (r-l Teleneşti)</city>
+    <city>s.Vertiujeni</city>
+    <city>s.Vesioloe</city>
+    <city>s.Veveriţa</city>
+    <city>s.Victoria</city>
+    <city>s.Victorovca</city>
+    <city>s.Viişoara (r-l Edineţ)</city>
+    <city>s.Viişoara (r-l Glodeni)</city>
+    <city>s.Viişoara (r-l Ştefan Vodă)</city>
+    <city>s.Vinogradnoe</city>
+    <city>s.Vinogradovca</city>
+    <city>s.Visoca</city>
+    <city>s.Vişniovca</city>
+    <city>s.Vîlcele</city>
+    <city>s.Vînători</city>
+    <city>s.Vîprova</city>
+    <city>s.Vîşcăuţi</city>
+    <city>s.Vladimireuca</city>
+    <city>s.Vladimirovca (r-l Cahul)</city>
+    <city>s.Vladimirovca (UATSN)</city>
+    <city>s.Vladimirovca (UATSN)</city>
+    <city>s.Voinescu</city>
+    <city>s.Voinova</city>
+    <city>s.Voitovca</city>
+    <city>s.Volintiri</city>
+    <city>s.Voloave</city>
+    <city>s.Volodeni</city>
+    <city>s.Voloviţa</city>
+    <city>s.Vorniceni</city>
+    <city>s.Voroteţ</city>
+    <city>s.Vozneseni</city>
+    <city>s.Vrăneşti (r-l Făleşti)</city>
+    <city>s.Vrăneşti (r-l Sîngerei)</city>
+    <city>s.Vulcăneşti (r-l Nisporeni)</city>
+    <city>or.Vulcăneşti (UTA Găgăuzia)</city>
+    <city>s.Vulcăneşti, loc.st.c.f.</city>
+    <city>s.Vulpeşti</city>
+    <city>s.Zagarancea</city>
+    <city>s.Zahareuca</city>
+    <city>s.Zahoreni</city>
+    <city>s.Zahorna (r-l Căuşeni)</city>
+    <city>s.Zahorna (r-l Şoldăneşti)</city>
+    <city>s.Zaim</city>
+    <city>s.Zaim, loc.st.c.f.</city>
+    <city>s.Zamcioji</city>
+    <city>s.Zaporojeţ</city>
+    <city>s.Zarojeni</city>
+    <city>s.Zastînca</city>
+    <city>s.Zăbriceni</city>
+    <city>s.Zăicana</city>
+    <city>s.Zăicani (r-l Rîşcani)</city>
+    <city>s.Zăicani (r-l Teleneşti)</city>
+    <city>s.Zăicanii Noi</city>
+    <city>s.Zăluceni</city>
+    <city>s.Zăzuleni</city>
+    <city>s.Zăzulenii Noi</city>
+    <city>s.Zăzulenii Vechi</city>
+    <city>s.Zberoaia</city>
+    <city>s.Zgărdeşti</city>
+    <city>s.Zguriţa</city>
+    <city>s.Zîmbreni</city>
+    <city>s.Zîrneşti</city>
+    <city>s.Zloţi, loc.st.c.f.</city>
+    <city>s.Zolonceni</city>
+    <city>s.Zolotievca</city>
+    <city>s.Zorile</city>
+    <city>s.Zubreşti</city>
+    <city>s.Zviozdocica</city>
+</cities>

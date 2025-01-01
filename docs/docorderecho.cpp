@@ -25,7 +25,7 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     completer     = new QCompleter(this);
     modelPacients = new QStandardItemModel(completer);
 
-    setStyieSheetButtoms(); // setam stilul butoanelor
+    initCompleterAddressPatients();
 
     ui->dateTimeDoc->setDisplayFormat("dd.MM.yyyy hh:mm:ss");
     ui->dateTimeDoc->setCalendarPopup(true);
@@ -81,27 +81,41 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     ui->comboDoctor->setModel(modelDoctors);
     ui->comboDoctorExecute->setModel(modelDoctorsExecute);
 
+    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
+    ui->comboContract->setStyleSheet("combobox-popup: 0;");
+    ui->comboTypesPricing->setStyleSheet("combobox-popup: 0;");
+    ui->comboNurse->setStyleSheet("combobox-popup: 0;");
+    ui->comboDoctor->setStyleSheet("combobox-popup: 0;");
+    ui->comboDoctorExecute->setStyleSheet("combobox-popup: 0;");
+    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
+
+    if (modelOrganizations->rowCount() > 20) {
+        ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboOrganization->setMaxVisibleItems(15);
+    }
+
+    if (modelContracts->rowCount() > 20) {
+        ui->comboContract->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboContract->setMaxVisibleItems(15);
+    }
+
     if (modelNurses->rowCount() > 20){
-        ui->comboNurse->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboNurse->setStyleSheet("combobox-popup: 0;");
+        ui->comboNurse->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); 
         ui->comboNurse->setMaxVisibleItems(15);
     }
 
     if (modelDoctors->rowCount() > 20){
         ui->comboDoctor->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboDoctor->setStyleSheet("combobox-popup: 0;");
         ui->comboDoctor->setMaxVisibleItems(15);
     }
 
     if (modelDoctorsExecute->rowCount() > 20){
         ui->comboDoctorExecute->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboDoctorExecute->setStyleSheet("combobox-popup: 0;");
         ui->comboDoctorExecute->setMaxVisibleItems(15);
     }
 
     if (modelOrganizations->rowCount() > 20){
         ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
         ui->comboOrganization->setMaxVisibleItems(15);
     }
 
@@ -137,6 +151,7 @@ DocOrderEcho::~DocOrderEcho()
     delete modelDoctors;
     delete modelDoctorsExecute;
     delete completer;
+    delete city_completer;
     delete modelTableSource;
     delete modelTableOrder;
     delete proxy;
@@ -149,7 +164,7 @@ DocOrderEcho::~DocOrderEcho()
     delete ui;
 }
 
-void DocOrderEcho::onPrintDocument(const int type_print)
+void DocOrderEcho::onPrintDocument(Enums::TYPE_PRINT type_print)
 {
     onPrint(type_print); // pu printarea din forma de lista 'ListDocWebOrder'
 }
@@ -249,7 +264,7 @@ void DocOrderEcho::slot_ItNewChanged()
 
         setWindowTitle(tr("Comanda ecografica (crearea) %1").arg("[*]"));
 
-        if (m_idUser == idx_unknow)
+        if (m_idUser == Enums::Enums::IDX_UNKNOW)
             setIdUser(globals::idUserApp);
 
         connect(timer, &QTimer::timeout, this, &DocOrderEcho::updateTimer); // actualizam ora reala cu secunde
@@ -279,7 +294,7 @@ void DocOrderEcho::slot_ItNewChanged()
 
 void DocOrderEcho::slot_IdChanged()
 {
-    if (m_id == idx_unknow)
+    if (m_id == Enums::Enums::IDX_UNKNOW)
         return;
     disconnectionsToIndexChangedCombobox(); // deconectarea de la modificarea indexului combobox-urilor
                                             // ca sa nu fie activata modificarea formei - dataWasModified()
@@ -296,11 +311,17 @@ void DocOrderEcho::slot_IdChanged()
         ui->editNumberDoc->setDisabled(ui->editNumberDoc->text().isEmpty());
 
         if (globals::thisMySQL){
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            ui->dateTimeDoc->setDateTime(QDateTime::fromString(qry.value(rec.indexOf("dateDoc")).toString().replace(QRegExp("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-#else
-            ui->dateTimeDoc->setDateTime(QDateTime::fromString(qry.value(rec.indexOf("dateDoc")).toString().replace(QRegularExpression("T"), " ").replace(".000",""), "yyyy-MM-dd hh:mm:ss"));
-#endif
+            static const QRegularExpression replaceT("T");
+            static const QRegularExpression removeMilliseconds("\\.000");
+            ui->dateTimeDoc->setDateTime(
+                QDateTime::fromString(
+                    qry.value(rec.indexOf("dateDoc"))
+                        .toString()
+                        .replace(replaceT, " ")
+                        .replace(removeMilliseconds, ""),
+                    "yyyy-MM-dd hh:mm:ss"
+                    )
+                );
         } else {
             ui->dateTimeDoc->setDateTime(QDateTime::fromString(qry.value(rec.indexOf("dateDoc")).toString(), "yyyy-MM-dd hh:mm:ss"));
         }
@@ -321,7 +342,7 @@ void DocOrderEcho::slot_IdChanged()
 
         // setam achitarea cu card
         disconnect(ui->cardPayment, &QCheckBox::stateChanged, this, &DocOrderEcho::dataWasModified);
-        if (qry.value(rec.indexOf("cardPayment")).toInt() == payment_card)
+        if (qry.value(rec.indexOf("cardPayment")).toInt() == Enums::PAYMENT_CARD)
             ui->cardPayment->setCheckState(Qt::Checked);
         else
             ui->cardPayment->setCheckState(Qt::Unchecked);
@@ -333,7 +354,8 @@ void DocOrderEcho::slot_IdChanged()
         else
             m_attachedImages = 1;
 
-        setWindowTitle(tr("Comanda ecografica (validat) %1 %2").arg(" nr." + ui->editNumberDoc->text() + " din " + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"),"[*]"));
+        setWindowTitle(tr("Comanda ecografica (validat) %1 %2")
+                           .arg(" nr." + ui->editNumberDoc->text() + " din " + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"),"[*]"));
     }
     connectionsToIndexChangedCombobox(); // activarea conectarii la modificarea indexului combobox-urilor
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::dataWasModified);
@@ -342,7 +364,7 @@ void DocOrderEcho::slot_IdChanged()
 
 void DocOrderEcho::slot_IdOrganizationChanged()
 {
-    if (m_idOrganization == idx_unknow)
+    if (m_idOrganization == Enums::IDX_UNKNOW)
         return;
     auto startOrganization = modelOrganizations->index(0, 0);
     auto indexOrganization = modelOrganizations->match(startOrganization, Qt::UserRole, m_idOrganization, 1, Qt::MatchExactly);
@@ -352,7 +374,7 @@ void DocOrderEcho::slot_IdOrganizationChanged()
 
 void DocOrderEcho::slot_IdContractChanged()
 {
-    if (m_idContract == idx_unknow)
+    if (m_idContract == Enums::IDX_UNKNOW)
         return;
     auto indexContract = modelContracts->match(modelContracts->index(0,0), Qt::UserRole, m_idContract, 1, Qt::MatchExactly);
     if (!indexContract.isEmpty())
@@ -361,14 +383,14 @@ void DocOrderEcho::slot_IdContractChanged()
 
 void DocOrderEcho::slot_IdTypePriceChanged()
 {
-    if (m_idTypePrice == idx_unknow)
+    if (m_idTypePrice == Enums::IDX_UNKNOW)
         return;
 
     auto indexTypePrice = modelTypesPrices->match(modelTypesPrices->index(0,0), Qt::UserRole, m_idTypePrice, 1, Qt::MatchExactly);
     if (!indexTypePrice.isEmpty())
         ui->comboTypesPricing->setCurrentIndex(indexTypePrice.first().row());
 
-    if (m_idOrganization == idx_unknow || m_idContract == idx_unknow)
+    if (m_idOrganization == Enums::IDX_UNKNOW || m_idContract == Enums::IDX_UNKNOW)
         return;
 
     QString strQry;
@@ -387,7 +409,7 @@ void DocOrderEcho::slot_IdTypePriceChanged()
 
 void DocOrderEcho::slot_IdPacientChanged()
 {
-    if (m_idPacient == idx_unknow)
+    if (m_idPacient == Enums::IDX_UNKNOW)
         return;
 
     auto indexPacient = modelPacients->match(modelPacients->index(0,0), Qt::UserRole, m_idPacient, 1, Qt::MatchExactly);
@@ -412,7 +434,7 @@ void DocOrderEcho::slot_IdPacientChanged()
 
 void DocOrderEcho::slot_IdNurseChanged()
 {
-    if (m_idNurse == idx_unknow)
+    if (m_idNurse == Enums::IDX_UNKNOW)
         return;
     auto index_nurse = modelNurses->match(modelNurses->index(0,0), Qt::UserRole, m_idNurse, 1, Qt::MatchExactly);
     if (! index_nurse.isEmpty())
@@ -421,7 +443,7 @@ void DocOrderEcho::slot_IdNurseChanged()
 
 void DocOrderEcho::slot_IdDoctorChanged()
 {
-    if (m_idDoctor == idx_unknow)
+    if (m_idDoctor == Enums::IDX_UNKNOW)
         return;
     auto indexDoctor = modelDoctors->match(modelDoctors->index(0, 0), Qt::UserRole, m_idDoctor, 1, Qt::MatchExactly);
     if (!indexDoctor.isEmpty())
@@ -430,7 +452,7 @@ void DocOrderEcho::slot_IdDoctorChanged()
 
 void DocOrderEcho::slot_IdDoctorExecuteChanged()
 {
-    if (m_idDoctor_execute == idx_unknow)
+    if (m_idDoctor_execute == Enums::IDX_UNKNOW)
         return;
     auto index_doctore_execute = modelDoctorsExecute->match(modelDoctorsExecute->index(0,0), Qt::UserRole, m_idDoctor_execute, 1, Qt::MatchExactly);
     if (! index_doctore_execute.isEmpty())
@@ -439,7 +461,7 @@ void DocOrderEcho::slot_IdDoctorExecuteChanged()
 
 void DocOrderEcho::slot_IdUserChanged()
 {
-    if (m_idUser == idx_unknow)
+    if (m_idUser == Enums::IDX_UNKNOW)
         return;
 }
 
@@ -464,12 +486,12 @@ void DocOrderEcho::activatedItemCompleter(const QModelIndex &index)
 
 
     int _id = index.data(Qt::UserRole).toInt();    // determinam 'id'
-    if (_id == idx_unknow || _id == idx_write)     // verificarea id
+    if (_id == Enums::IDX_UNKNOW || _id == Enums::IDX_WRITE)     // verificarea id
         return;
 
     setIdPacient(index.data(Qt::UserRole).toInt()); // setam 'id' pacientului
 
-    if (_id > idx_write && ! ui->checkBox->isChecked()) // daca nu este nou
+    if (_id > Enums::IDX_WRITE && ! ui->checkBox->isChecked()) // daca nu este nou
         ui->editFilterPattern->setFocus();              // setam focusul
 }
 
@@ -701,7 +723,7 @@ void DocOrderEcho::onClikEditPacient()
 void DocOrderEcho::onClickClearPacient()
 {
     ui->comboPacient->clear();
-    setIdPacient(idx_unknow);
+    setIdPacient(Enums::IDX_UNKNOW);
     ui->comboPacient->clearEditText();
     ui->frameDataPacient->setVisible(true);
     ui->dateEditBirthday->setDate(QDate::fromString("1970-01-01", "yyyy-MM-dd"));
@@ -717,7 +739,7 @@ void DocOrderEcho::onClickClearPacient()
 
 void DocOrderEcho::onClickOpenHistoryPatient()
 {
-    if (m_idPacient == idx_unknow || m_idPacient == 0){
+    if (m_idPacient == Enums::IDX_UNKNOW || m_idPacient == 0){
         QMessageBox::warning(this,
                              tr("Verificarea datelor"),
                              tr("Nu este determinat pacientul !!!"),
@@ -736,41 +758,6 @@ void DocOrderEcho::onClickOpenHistoryPatient()
 
 // **********************************************************************************
 // --- procesarea actiunilor cu tabela
-
-void DocOrderEcho::onExportExcel()
-{
-//    QXlsx::Document xlsx;
-
-//    QXlsx::Format header;
-//    header.setFontColor(QColor(204,255,209));
-//    header.setBorderColor(QColor(204,255,209));
-//    header.setFontBold(true);
-//    header.setFontSize(20);
-//    header.setHorizontalAlignment(QXlsx::Format::AlignHCenter);
-//    header.setVerticalAlignment(QXlsx::Format::AlignVCenter);
-//    header.setBorderStyle(QXlsx::Format::BorderDashed);
-
-//    const int rowCount    = ui->tableViewOrder->model()->rowCount();
-//    const int columnCount = ui->tableViewOrder->model()->columnCount();
-
-//    xlsx.write(1, 1, "Cod", header);
-//    xlsx.write(1, 2, "Denumirea investigațiilor", header);
-//    xlsx.write(1, 3, "Costul", header);
-
-//    for (int row = 0; row < rowCount; row++) {
-//        for (int column = 0; column < columnCount; column++){
-//            if (! ui->tableViewOrder->isColumnHidden(column)){
-//                xlsx.write(row + 2, 1, ui->tableViewOrder->model()->data(ui->tableViewOrder->model()->index(row, 3)).toString().simplified());
-//                xlsx.write(row + 2, 2, ui->tableViewOrder->model()->data(ui->tableViewOrder->model()->index(row, 4)).toString().simplified());
-//                xlsx.write(row + 2, 3, ui->tableViewOrder->model()->data(ui->tableViewOrder->model()->index(row, 5)).toString().simplified());
-//            }
-//        }
-//    }
-//    xlsx.mergeCells(QXlsx::CellRange(3,1,3,2));
-//    xlsx.setColumnWidth(1,3,48);
-
-//    xlsx.saveAs("/home/alex/Test.xlsx");
-}
 
 void DocOrderEcho::updateTextSumOrder()
 {
@@ -809,7 +796,7 @@ void DocOrderEcho::onDoubleClickedTableSource(const QModelIndex &index)
 
     modelTableOrder->insertRow(_rowCount);
     modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Id), nextId);
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_DeletionMark), idx_write);
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_DeletionMark), Enums::IDX_WRITE);
     modelTableOrder->setData(modelTableOrder->index(_rowCount, 2), lastIdOrder);   // id_orderEcho
     modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Cod), _cod);
     modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Name), _name);
@@ -832,27 +819,15 @@ void DocOrderEcho::onClickedRowTableOrder(const QModelIndex &index)
 void DocOrderEcho::filterRegExpChanged()
 {
     proxy->setFilterKeyColumn(column_Name);
-
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRegExp::PatternSyntax syntax = QRegExp::FixedString;
-    QRegExp regExp(ui->editFilterPattern->text(), Qt::CaseInsensitive, syntax);
-    proxy->setFilterRegExp(regExp);
-#else
     QRegularExpression regExp(ui->editFilterPattern->text(), QRegularExpression::CaseInsensitiveOption);
     proxy->setFilterRegularExpression(regExp);
-#endif
 }
 
 void DocOrderEcho::filterRegExpChangedPacient()
 {
     proxyPacient->setFilterKeyColumn(1);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRegExp regExp(ui->comboPacient->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
-    proxyPacient->setFilterRegExp(regExp);
-#else
     QRegularExpression regExp(ui->comboPacient->currentText(), QRegularExpression::CaseInsensitiveOption);
     proxyPacient->setFilterRegularExpression(regExp);
-#endif
 }
 
 void DocOrderEcho::slotContextMenuRequested(QPoint pos)
@@ -871,9 +846,6 @@ void DocOrderEcho::slotContextMenuRequested(QPoint pos)
 
 void DocOrderEcho::removeRowTableOrder()
 {
-//    int _row = ui->tableViewOrder->currentIndex().row();
-//    modelTableOrder->removeRow(_row);
-//    updateTextSumOrder();
     QModelIndexList selectedRows = ui->tableViewOrder->selectionModel()->selectedRows();
 
     for (int n = 0; n < selectedRows.count(); n++) {
@@ -894,39 +866,39 @@ void DocOrderEcho::editRowTableOrder()
 
 bool DocOrderEcho::controlRequiredObjects()
 {
-    if (ui->comboOrganization->currentIndex() <= idx_write){
+    if (ui->comboOrganization->currentIndex() <= Enums::IDX_WRITE){
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este selectată <b>'Organizația'</b> !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-        setPost(idx_unknow); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
+        setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
         return false;
     }
-    if (ui->comboContract->currentIndex() <= idx_write){
+    if (ui->comboContract->currentIndex() <= Enums::IDX_WRITE){
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este selectat <b>'Contractul'</b> !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-        setPost(idx_unknow); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
+        setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
         return false;
     }
-    if (ui->comboTypesPricing->currentIndex() <= idx_write){
+    if (ui->comboTypesPricing->currentIndex() <= Enums::IDX_WRITE){
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este selectat <b>'Tipul prețului'</b> !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-        setPost(idx_unknow); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
+        setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
         return false;
     }
-    if (ui->comboPacient->currentText().isEmpty() || m_idPacient == idx_unknow){
+    if (ui->comboPacient->currentText().isEmpty() || m_idPacient == Enums::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este selectat <b>'Pacientul'</b> !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-        setPost(idx_unknow); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
+        setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
         return false;
     }
     if (ui->tableViewOrder->model()->rowCount() == 0){
         QMessageBox::warning(this, tr("Controlul completării obiectelor"),
                              tr("Nu este aleasa nici o investigatie !!!"),
                              QMessageBox::Ok, QMessageBox::Ok);
-        setPost(idx_unknow); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
+        setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala -> vezi: onWritingData() & onWritingDataClose()
         return false;
     }
     return true;
@@ -943,7 +915,7 @@ void DocOrderEcho::onOpenReport()
     }
 
     // verificam daca este documentul subaltern
-    int m_id_reportEcho = idx_unknow;
+    int m_id_reportEcho = Enums::IDX_UNKNOW;
     if (db->existSubalternDocument("reportEcho", "id_orderEcho", QString::number(m_id), m_id_reportEcho)){
         if (m_id_reportEcho > 0){
             DocReportEcho* doc_report = new DocReportEcho(this);
@@ -1008,7 +980,7 @@ void DocOrderEcho::onOpenReport()
     this->close();
 }
 
-void DocOrderEcho::onPrint(const int type_print)
+void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
 {
     // *************************************************************************************
     // verificam daca este validat documentul
@@ -1028,7 +1000,7 @@ void DocOrderEcho::onPrint(const int type_print)
 
     // *************************************************************************************
     // verificam daca este complectata variabila 'noncomercial_price'
-    if (noncomercial_price == idx_unknow){
+    if (noncomercial_price == Enums::IDX_UNKNOW){
         QString strQry = QString("SELECT noncomercial FROM typesPrices WHERE id = '%1' AND deletionMark = '0';")
                 .arg(m_idTypePrice);
         QMap<QString, QString> dataPrice;
@@ -1078,7 +1050,7 @@ void DocOrderEcho::onPrint(const int type_print)
         msgBox.setText(tr("Documentul nu poate fi printat."));
         msgBox.setDetailedText(tr("Nu a fost gasit fisierul sablon formei de tipar:\n%1").arg(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Order.lrxml")));
         msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setStyleSheet("QPushButton{width:120px;}");
+        msgBox.setStyleSheet(db->getStyleForButtonMessageBox());
         msgBox.exec();
 
         delete print_model_organization;
@@ -1092,11 +1064,11 @@ void DocOrderEcho::onPrint(const int type_print)
 
     // *************************************************************************************
     // prezentam forma de tipar
-    if (type_print == TypePrint::openDesigner){
+    if (type_print == Enums::TYPE_PRINT::OPEN_DESIGNER){
         qInfo(logInfo()) << tr("Printare (designer): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                 .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
         m_report->designReport();
-    } else if (type_print == TypePrint::openPreview){
+    } else if (type_print == Enums::TYPE_PRINT::OPEN_PREVIEW){
         qInfo(logInfo()) << tr("Printare (preview): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                 .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
         m_report->previewReport();
@@ -1104,20 +1076,20 @@ void DocOrderEcho::onPrint(const int type_print)
 
     // *************************************************************************************
     // elibiram memoria
-    delete print_model_organization;
-    delete print_model_patient;
-    delete print_model_table;
-    delete m_report;
+    print_model_organization->deleteLater();
+    print_model_patient->deleteLater();
+    print_model_table->deleteLater();
+    m_report->deleteLater();
 }
 
 void DocOrderEcho::openDesignerPrintDoc()
 {
-    onPrint(TypePrint::openDesigner);
+    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER);
 }
 
 void DocOrderEcho::openPreviewPrintDoc()
 {
-    onPrint(TypePrint::openPreview);
+    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
 }
 
 bool DocOrderEcho::onWritingData()
@@ -1125,14 +1097,14 @@ bool DocOrderEcho::onWritingData()
     if (! controlRequiredObjects())
         return false;
 
-    if (m_post == idx_unknow)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
-        setPost(idx_write);    // setam post = idx_write
+    if (m_post == Enums::IDX_UNKNOW)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
+        setPost(Enums::IDX_WRITE);    // setam post = idx_write
 
     QString details_error;
 
     if (m_itNew){
 
-        if (m_attachedImages == idx_unknow)
+        if (m_attachedImages == Enums::IDX_UNKNOW)
             m_attachedImages = 0;
 
         m_id = db->getLastIdForTable("orderEcho") + 1; // incercare de a seta 'id' documentului
@@ -1146,8 +1118,8 @@ bool DocOrderEcho::onWritingData()
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
-            m_id = idx_unknow;   // setam la valoarea initiala
-            setPost(idx_unknow); // setam m_post la valoarea initiala
+            m_id = Enums::IDX_UNKNOW;   // setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala
             return false;
         }
 
@@ -1158,14 +1130,14 @@ bool DocOrderEcho::onWritingData()
 
         if (! modelTableOrder->submitAll()){           // daca nu a fost salvata tabela:
             db->removeObjectById("orderEcho", m_id);   // 1.eliminam datele salvate mai sus din sqlite
-            m_id = idx_unknow;                         // 2.setam la valoarea initiala
-            setPost(idx_unknow);                       // 3.setam m_post la valoarea initiala
+            m_id = Enums::IDX_UNKNOW;                         // 2.setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW);                       // 3.setam m_post la valoarea initiala
             qCritical(logCritical()) << modelTableOrder->lastError().text();
             return false;
         }
 
-        if (m_post == idx_write || m_post == idx_post){
-            popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.").arg((m_post == idx_write) ? tr("salvat") : tr("validat")));
+        if (m_post == Enums::IDX_WRITE || m_post == Enums::IDX_POST){
+            popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.").arg((m_post == Enums::IDX_WRITE) ? tr("salvat") : tr("validat")));
             popUp->show();
             setItNew(false);
             qInfo(logInfo()) << tr("Crearea: documentul 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
@@ -1182,8 +1154,8 @@ bool DocOrderEcho::onWritingData()
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
-            m_id = idx_unknow;   // setam la valoarea initiala
-            setPost(idx_unknow); // setam m_post la valoarea initiala
+            m_id = Enums::IDX_UNKNOW;   // setam la valoarea initiala
+            setPost(Enums::IDX_UNKNOW); // setam m_post la valoarea initiala
             return false;
         }
 
@@ -1192,7 +1164,7 @@ bool DocOrderEcho::onWritingData()
             return false;
         }
 
-        if (m_post == idx_write || m_post == idx_post){
+        if (m_post == Enums::IDX_WRITE || m_post == Enums::IDX_POST){
             popUp->setPopupText(tr("Datele documentului au fost actualizate<br> cu succes."));
             popUp->show();
 
@@ -1207,32 +1179,29 @@ bool DocOrderEcho::onWritingData()
 
 void DocOrderEcho::onWritingDataClose()
 {
-    setPost(idx_post); // setam proprietatea 'post'
+    setPost(Enums::IDX_POST); // setam proprietatea 'post'
 
     if (onWritingData()){
+
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Printarea documentului"),
+                                 tr("Dori\310\233i s\304\203 printa\310\233i documentul ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
+            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        } else if (messange_box.clickedButton() == noButton) {
+
+        }
+
         QDialog::accept();
         emit mCloseThisForm();
 
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Printarea documentului"));
-        msgBox.setIcon(QMessageBox::Question);
-#if defined(Q_OS_LINUX)
-        msgBox.setText(tr("Doriți să printați documentul ?"));
-#elif defined(Q_OS_MACOS)
-        msgBox.setText(tr("Doriți să printați documentul ?"));
-#elif defined(Q_OS_WIN)
-        msgBox.setText(tr("Dori\310\233i s\304\203 printa\310\233i documentul ?"));
-#endif
-        msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        msgBox.setButtonText(QMessageBox::Yes, tr("Da"));
-        msgBox.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//        msgBox.addButton(tr("Da"), QMessageBox::YesRole);
-//        msgBox.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-        if (msgBox.exec() == QMessageBox::Yes)
-            onPrint(openPreview);
     }
 }
 
@@ -1242,51 +1211,24 @@ void DocOrderEcho::onClose()
     emit mCloseThisForm();    
 }
 
-void DocOrderEcho::setTitleDoc()
+void DocOrderEcho::handleCompleterAddressPatients(const QString &text)
 {
-    setWindowTitle(tr("Comanda ecografica %1").arg("[*]"));
+    if (text.startsWith("m.", Qt::CaseInsensitive) ||
+        text.startsWith("s.", Qt::CaseInsensitive) ||
+        text.startsWith("or.", Qt::CaseInsensitive)) {
+
+        ui->editAddress->setCompleter(city_completer);
+
+    } else {
+
+        ui->editAddress->setCompleter(nullptr);
+
+    }
 }
 
-void DocOrderEcho::setStyieSheetButtoms()
+void DocOrderEcho::setTitleDoc()
 {
-    ui->btnCreateCatDoctor->setStyleSheet("QToolButton {border: 1px solid #8f8f91;"
-                                          "border-radius: 4px;}"
-                                          "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                          "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-    ui->btnOpenCatDoctor->setStyleSheet("QToolButton {border: 1px solid #8f8f91; "
-                                        "border-radius: 4px;}"
-                                        "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                        "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-    ui->btnNewPacient->setStyleSheet("QToolButton {padding-left: 4px;"
-                                     "border: 1px solid #8f8f91; "
-                                     "border-radius: 4px;"
-                                     "width: 90px;}"
-                                     "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                     "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-    ui->btnPatientHistory->setStyleSheet("QToolButton {padding-left: 4px;"
-                                         "border: 1px solid #8f8f91; "
-                                         "border-radius: 4px;"
-                                         "width: 90px;}"
-                                         "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                         "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-    ui->btnClearPacient->setStyleSheet("QToolButton {padding-left: 4px;"
-                                       "border: 1px solid #8f8f91; "
-                                       "border-radius: 4px;"
-                                       "width: 90px;}"
-                                       "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                       "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-    ui->btnEditPacient->setStyleSheet("QToolButton {padding-left: 4px;"
-                                      "border: 1px solid #8f8f91; "
-                                      "border-radius: 4px;"
-                                      "width: 90px;}"
-                                      "QToolButton:hover {background-color: rgb(234,243,250);}"
-                                      "QToolButton:pressed {background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #dadbde, stop: 1 #f6f7fa);}");
-
-    ui->btnReport->setStyleSheet("padding-left: 4px; padding-right: 4px; height: 20px; width: 14px;");
-    ui->btnPrint->setStyleSheet("padding-left: 4px; padding-right: 4px; height: 20px; width: 14px;");
-    ui->btnOk->setStyleSheet("padding-left: 4px; padding-right: 4px; height: 20px; width: 14px;");
-    ui->btnClose->setStyleSheet("padding-left: 4px; padding-right: 4px; height: 20px; width: 14px;");
-    ui->btnWrite->setStyleSheet("padding-left: 4px; padding-right: 4px; height: 20px; width: 14px;");
+    setWindowTitle(tr("Comanda ecografic\304\203 %1").arg("[*]"));
 }
 
 // **********************************************************************************
@@ -1329,8 +1271,6 @@ void DocOrderEcho::initConnections()
 
     connect(ui->editFilterPattern, &QLineEdit::textChanged, this, &DocOrderEcho::filterRegExpChanged);
     connect(ui->comboPacient, &QComboBox::currentTextChanged, this, &DocOrderEcho::filterRegExpChangedPacient);
-
-    connect(ui->btn_export_xlsx, &QPushButton::clicked, this, &DocOrderEcho::onExportExcel);
 
     connect(ui->btnReport, &QAbstractButton::clicked, this, &DocOrderEcho::onOpenReport);
     connect(ui->btnOk, &QAbstractButton::clicked, this, &DocOrderEcho::onWritingDataClose);
@@ -1494,8 +1434,7 @@ bool DocOrderEcho::existPatientByNameFName(const QString &_name, const QString &
     QSqlQuery qry;
     qry.prepare("SELECT birthday FROM pacients "
                 "WHERE name   = :name AND "
-                "fName        = :fName AND "
-                "deletionMark = 0;");
+                "fName        = :fName;");
     qry.bindValue(":name",  _name);
     qry.bindValue(":fName", _fName);
     if (qry.exec() && qry.next()){
@@ -1512,8 +1451,7 @@ bool DocOrderEcho::existPatientByIDNP(const QString &_name, const QString &_fNam
     qry.prepare("SELECT birthday FROM pacients "
                 "WHERE name   = :name AND "
                 "fName        = :fName AND "
-                "IDNP         = :IDNP AND "
-                "deletionMark = 0;");
+                "IDNP         = :IDNP;");
     qry.bindValue(":name",  _name);
     qry.bindValue(":fName", _fName);
     qry.bindValue(":IDNP", ui->editIDNP->text());
@@ -1574,21 +1512,21 @@ bool DocOrderEcho::splitFullNamePacient(QString &_name, QString &_fName)
 int DocOrderEcho::getValuePaymentOrder()
 {
     if (ui->cardPayment->checkState() == Qt::Checked)
-        return payment_card;
+        return Enums::PAYMENT_CARD;
 
     QSqlQuery qry;
     qry.prepare("SELECT noncomercial FROM typesPrices WHERE id = :id AND deletionMark = 0;");
     qry.bindValue(":id", m_idTypePrice);
     if (qry.exec() && qry.next()){
         if (qry.value(0).toInt() == 0)
-            return payment_cash;
+            return Enums::PAYMENT_CASH;
         else
-            return payment_transfer;
+            return Enums::PAYMENT_TRANSFER;
     }
 
     qCritical(logCritical()) << tr("Nu a fost determinat statutul achitarii documentului.");
 
-    return idx_unknow;
+    return Enums::IDX_UNKNOW;
 }
 
 bool DocOrderEcho::insertDataTablePacients(int &last_id, const QString &_name, const QString &_fName, QString &details_error)
@@ -1609,7 +1547,7 @@ bool DocOrderEcho::insertDataTablePacients(int &last_id, const QString &_name, c
                 "email,"
                 "comment) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
     qry.addBindValue(last_id + 1);
-    qry.addBindValue(idx_write);
+    qry.addBindValue(Enums::IDX_WRITE);
     qry.addBindValue(ui->editIDNP->text());
     qry.addBindValue(_name);
     qry.addBindValue(_fName);
@@ -1648,7 +1586,7 @@ bool DocOrderEcho::updateDataTablePacients(const QString _name, const QString _f
                 "comment       = :comment "
                 "WHERE id = :id;");
     qry.bindValue(":id",           m_idPacient);
-    qry.bindValue(":deletionMark", idx_write);
+    qry.bindValue(":deletionMark", Enums::IDX_WRITE);
     qry.bindValue(":IDNP",         ui->editIDNP->text());
     qry.bindValue(":name",         _name);
     qry.bindValue(":fName",        _fName);
@@ -1672,7 +1610,7 @@ bool DocOrderEcho::updateDataTablePacients(const QString _name, const QString _f
 bool DocOrderEcho::insertDataTableOrderEcho(QString details_error)
 {
     int m_payment = getValuePaymentOrder();
-    if (m_payment == idx_unknow){
+    if (m_payment == Enums::IDX_UNKNOW){
         details_error = tr("Nu a fost determinat statutul achitarii documentului.");
         return false;
     }
@@ -1703,9 +1641,9 @@ bool DocOrderEcho::insertDataTableOrderEcho(QString details_error)
     qry.addBindValue(m_idOrganization);
     qry.addBindValue(m_idContract);
     qry.addBindValue(m_idTypePrice);
-    qry.addBindValue((m_idDoctor == idx_unknow || m_idDoctor == 0) ? QVariant() : m_idDoctor);
-    qry.addBindValue((m_idDoctor_execute == idx_unknow || m_idDoctor_execute == 0) ? QVariant() : m_idDoctor_execute);
-    qry.addBindValue((m_idNurse == idx_unknow || m_idNurse == 0) ? QVariant() : m_idNurse);
+    qry.addBindValue((m_idDoctor == Enums::IDX_UNKNOW || m_idDoctor == 0) ? QVariant() : m_idDoctor);
+    qry.addBindValue((m_idDoctor_execute == Enums::IDX_UNKNOW || m_idDoctor_execute == 0) ? QVariant() : m_idDoctor_execute);
+    qry.addBindValue((m_idNurse == Enums::IDX_UNKNOW || m_idNurse == 0) ? QVariant() : m_idNurse);
     qry.addBindValue(m_idPacient);
     qry.addBindValue(m_idUser);
     qry.addBindValue(sumOrder);
@@ -1725,7 +1663,7 @@ bool DocOrderEcho::insertDataTableOrderEcho(QString details_error)
 bool DocOrderEcho::updateDataTableOrderEcho(QString details_error)
 {
     int m_payment = getValuePaymentOrder();
-    if (m_payment == idx_unknow){
+    if (m_payment == Enums::IDX_UNKNOW){
         details_error = tr("Nu a fost determinat statutul achitarii documentului.");
         return false;
     }
@@ -1757,9 +1695,9 @@ bool DocOrderEcho::updateDataTableOrderEcho(QString details_error)
     qry.bindValue(":id_organizations",   m_idOrganization);
     qry.bindValue(":id_contracts",       m_idContract);
     qry.bindValue(":id_typesPrices",     m_idTypePrice);
-    qry.bindValue(":id_doctors",         (m_idDoctor == idx_unknow || m_idDoctor == 0) ? QVariant() : m_idDoctor);
-    qry.bindValue(":id_doctors_execute", (m_idDoctor_execute == idx_unknow || m_idDoctor_execute == 0) ? QVariant() : m_idDoctor_execute);
-    qry.bindValue(":id_nurses",          (m_idNurse == idx_unknow || m_idNurse == 0) ? QVariant() : m_idNurse);
+    qry.bindValue(":id_doctors",         (m_idDoctor == Enums::IDX_UNKNOW || m_idDoctor == 0) ? QVariant() : m_idDoctor);
+    qry.bindValue(":id_doctors_execute", (m_idDoctor_execute == Enums::IDX_UNKNOW || m_idDoctor_execute == 0) ? QVariant() : m_idDoctor_execute);
+    qry.bindValue(":id_nurses",          (m_idNurse == Enums::IDX_UNKNOW || m_idNurse == 0) ? QVariant() : m_idNurse);
     qry.bindValue(":id_pacients",        m_idPacient);
     qry.bindValue(":id_users",           m_idUser);
     qry.bindValue(":sum",                sumOrder);
@@ -1818,7 +1756,7 @@ void DocOrderEcho::updateTableSources()
     ui->tableView->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);                            // initializam meniu contextual
     ui->tableView->horizontalHeader()->setSortIndicator(3, Qt::SortOrder::AscendingOrder); // sortarea dupa 3 sectie(Cod)
-    ui->tableView->verticalHeader()->setDefaultSectionSize(16);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     ui->tableView->setColumnWidth(column_Cod, 70);   // codul
     ui->tableView->setColumnWidth(column_Name, 500); // denuimirea investigatiei
     updateHeaderTableSource();
@@ -1927,7 +1865,7 @@ void DocOrderEcho::setImageForDocPrint()
     QMap<QString, QString> items;
     if (db->getObjectDataByMainId("constants", "id_users", globals::idUserApp, items)){
          id_organization = items.constFind("id_organizations").value().toInt();
-         if (m_idDoctor_execute == idx_unknow)
+         if (m_idDoctor_execute == Enums::IDX_UNKNOW)
             id_doctor = items.constFind("id_doctors").value().toInt();
          else
             id_doctor = m_idDoctor_execute;
@@ -2002,20 +1940,68 @@ void DocOrderEcho::setImageForDocPrint()
     model_img->appendRow(items_img);
 }
 
+QStringList DocOrderEcho::loadDataFromXml(const QString &filePath, const QString &tagName)
+{
+    QStringList dataList;
+    QFile file(filePath);
+    if (! file.open(QIODevice::ReadOnly)) {
+        qCritical(logCritical()) << "Nu se poate deschide fișierul:" << filePath;
+        return dataList;
+    }
+
+    QDomDocument doc;
+    if (! doc.setContent(&file)) {
+        qCritical(logCritical()) << "Eroare la parsarea fișierului XML:" << filePath;
+        return dataList;
+    }
+
+    QDomNodeList elements = doc.elementsByTagName(tagName);
+    for (int i = 0; i < elements.count(); ++i) {
+        QDomNode node = elements.at(i);
+        if (node.isElement()) {
+            dataList << node.toElement().text();
+        }
+    }
+
+    return dataList;
+}
+
+void DocOrderEcho::initCompleterAddressPatients()
+{
+    cityList = loadDataFromXml(":/xmls/city.xml", "city");
+
+    city_completer = new QCompleter(cityList, this);
+    city_completer->setCaseSensitivity(Qt::CaseInsensitive);
+    city_completer->setCompletionMode(QCompleter::PopupCompletion);
+
+    connect(ui->editAddress, &QLineEdit::textChanged, this, &DocOrderEcho::handleCompleterAddressPatients);
+}
+
 // **********************************************************************************
 // --- evenimente formei
 
 void DocOrderEcho::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
-        const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
-                                                                        tr("Datele au fost modificate.\n"
-                                                                           "Doriți să salvați aceste modificări ?"),
-                                                                        QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
-        if (answer == QMessageBox::Yes){
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Modificarea datelor"),
+                                 tr("Datele au fost modificate.\n"
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        QPushButton *cancelButton = messange_box.addButton(tr("Anulare"), QMessageBox::RejectRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        cancelButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             onWritingDataClose();
             event->accept();
-        } else if (answer == QMessageBox::Cancel){
+        } else if (messange_box.clickedButton() == noButton) {
+            event->accept();
+        } else if (messange_box.clickedButton() == cancelButton) {
             event->ignore();
         }
     } else {

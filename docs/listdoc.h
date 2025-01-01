@@ -16,6 +16,8 @@
 #include "models/basesortfilterproxymodel.h"
 #include "docs/docpricing.h"
 
+#include <catalogs/customperiod.h>
+
 namespace Ui {
 class ListDoc;
 }
@@ -92,6 +94,7 @@ signals:
 private:
     void initBtnToolBar();
     void initBtnFilter();
+    void updateTextPeriod();
 
     void loadSizeSectionPeriodTable(bool only_period = false);
     void saveSizeSectionTable();
@@ -115,6 +118,9 @@ private:
     };
 
 private slots:
+    void onClickChoicePeriod();
+    void onChangeCustomPeriod();
+
     void selectDocPricing();
     void createNewDocPricing();
     void editDocPricing();
@@ -126,8 +132,6 @@ private slots:
     void removeFilterByIdOrganization();
 
     bool controlRequiredObjects();
-    void postDoc();
-    void unpostDoc();
     void onPrintDoc();
 
     void openFilterPeriod();
@@ -161,20 +165,6 @@ private:
     PopUp    *popUp;
     QMenu    *menu;
 
-    QToolBar    *toolBar;
-    QToolButton *btnSelect;
-    QToolButton *btnAdd;
-    QToolButton *btnEdit;
-    QToolButton *btnDeletion;
-    QToolButton *btnFilter;
-    QToolButton *btnAddFilter;
-    QToolButton *btnUpdateTable;
-    QToolButton *btnFilterRemove;
-    QToolButton *btnPost;
-    QToolButton *btnUnpost;
-    QToolButton *btnPrint;
-    QToolButton *btnPeriodDate;
-
     static const int sz_id              = 5;    // size section default
     static const int sz_deletionMark    = 5;
     static const int sz_numberDoc       = 100;
@@ -194,6 +184,7 @@ private:
     BaseSortFilterProxyModel *proxy;       // model pu sortare
 
     DocPricing *docPricing;
+    CustomPeriod *customPeriod;
 
     bool m_itFilter       = false;       // proprietatile pu filtru
     bool m_itFilterPeriod = false;
@@ -207,8 +198,6 @@ private:
     QString m_numberDoc;
     QMap<QString, QVariant> itemsFilter;
     QMap<QString, QDateTime> itemsFilterPeriod;
-
-    QLabel *lablePeriodDate;
 
 protected:
     void closeEvent(QCloseEvent *event);

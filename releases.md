@@ -1,3 +1,23 @@
+## USG v3.0.1
+* migrarea aplicatiei de la versiunea Qt:5.15.2 la versiunea Qt:6.5.3
+* integrarea compatibilității aplicației cu sistemul de operare MacOS (începând cu MacOS Ventura și ulterioare)
+* revizuirea radicală a stilului aplicației
+* adaugate imaginile de pornire (splash) a aplicației noi 
+* în forma lista documentelor <b><u>'Comanda ecografica'</u></b> a fost adaugată colonița '<u>Trimis de ...</u>'
+* în documentul 'Raport ecografic' modificate următoarele compartimente:
+    * <b><u>organele interne</u></b> - adaugată descrierea <u>anselor intestinale</u>
+    * <b><u>sistemul urinar</u></b> - adaugata descrierea <u>glandelor suprarenale</u>
+* actualizat <u>generatorul de rapoarte</u> [LimeReport](https://github.com/fralx/LimeReport) până la <U>versiunea 1.7.7</U>
+* actualizat driverul [OpenSSL](https://openssl.org/) până la <u>versiunea 3.0.7</u> (este o biblioteca de software pentru criptografie de uz general 
+și comunicare sigură ce ţine cont de securitate și confidențialitate a datelor)
+* optimizat codul solicitărilor de validarea și completare a documentului 'Raport ecografic'.
+* pentru a micșora durata de execuție a interogărilor solicitărilor cu baza de date au fost create indexurile specifice.
+* a fost realizata paginarea prezentarii listei de documente <b><u>'Comanda ecografica'</u></b>.
+* adaugata posibilitatea pastrarii in sablon a descrierii formatiunilor
+* optimizat fontul sabloanelor de tipar 
+* a fost adaugat clasificator localităților Republicii Moldova (pentru autocompletarea la întroducerea adresei pacienților).
+* adaugată forma de tipar a documentului 'Formarea prețurilor'.
+
 ## USG v2.0.9
 * realizată descărcarea versiunii noi a aplicației cu prezentarea progress bar-ului în status bar
 * adăugată opțiunea de a lansa documente (Formarea prețurilor, Comanda ecografică și Raport ecografic) în fereastra aparte de aplicația (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)

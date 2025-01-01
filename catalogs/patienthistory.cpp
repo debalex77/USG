@@ -71,13 +71,8 @@ void PatientHistory::slot_IdPatientChanged()
 void PatientHistory::filterRegExpChangedPacient()
 {
     proxy->setFilterKeyColumn(1);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    QRegExp regExp(ui->comboPatient->currentText(), Qt::CaseInsensitive, QRegExp::RegExp);
-    proxy->setFilterRegExp(regExp);
-#else
     QRegularExpression regExp(ui->comboPatient->currentText(), QRegularExpression::CaseInsensitiveOption);
     proxy->setFilterRegularExpression(regExp);
-#endif
 }
 
 void PatientHistory::activatedItemCompleter(const QModelIndex &index)
@@ -202,7 +197,7 @@ void PatientHistory::updateTableDoc()
     ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
     ui->tableView->setSortingEnabled(true);                              // setam posibilitatea sortarii
     ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
-    ui->tableView->verticalHeader()->setDefaultSectionSize(14);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);  // extinderea ultimei sectiei
     ui->tableView->selectRow(0);
     model_table->setHeaderData(1, Qt::Horizontal, tr("Documente"));

@@ -10,15 +10,23 @@ About::About(QWidget *parent) :
     ui->setupUi(this);
     db = new DataBase(this);
 
-    QString str = tr("<br>"
-                     "<p align=center><b> %1 v%2</b> <br>"
-                     "Aplicația pentru evidența pacienților care au trecut investigații ecografice, "
-                     "cu memorarea datelor de contact și a documentelor de identitate. <br>"
-                     "<p align=center><b>Informații suplimentare:</b> <br>"
-                     "Free, open-source, cross-platform,<br>database SQLite3/MySQL/MariaDB"
-                     "<br>"
-                     "<p align=center><b> Autorul aplicației:</b> <br>"
-                     "alovada.med@gmail.com, Alovada-Med SRL").arg(APPLICATION_NAME, APPLICATION_VERSION);
+    QString str = tr("<p align=center><h3><b> %1 v%2</b> </h3>"
+                     "Aplicația <b>USG</b> este o soluție modernă și eficientă destinată gestionării pacienților "
+                     "supuși investigațiilor ecografice. Oferă funcționalități avansate pentru evidența completă "
+                     "a datelor pacienților, incluzând: </p>"
+                     "<ul style=\"margin-left: 40px;\">"
+                     "  <li>Memorarea informațiilor personale și a datelor de contact;</li>"
+                     "  <li>Atașarea imaginilor și fișierelor video rezultate în urma investigațiilor;</li>"
+                     "  <li>Gestionarea centralizată a istoricului medical etc.</li>"
+                     "</ul>"
+                     "<p align=center><h3><b>Caracteristici principale:</b> </h3></p>"
+                     "<ul>"
+                     "  <li><b>Free și open-source</b> – aplicația este gratuită și codul sursă este disponibil public pentru personalizare și contribuții din partea comunității.</li>"
+                     "  <li><b>Cross-platform</b> – funcționează pe principalele sisteme de operare: Linux, MacOS și Windows.</li>"
+                     "  <li><b>Suport pentru baze de date</b> – compatibilă cu SQLite3, MySQL și MariaDB, oferind flexibilitate în funcție de nevoile utilizatorilor.</li>"
+                     "</ul>"
+                     "<p align=center><h3><b> Autorul aplicației:</b> </h3>"
+                     "%3, Alovada-Med SRL</p>").arg(APPLICATION_NAME, USG_VERSION_FULL, USG_COMPANY_EMAIL);
     ui->textBrowser_about->setText(str);
 
     QString str_licenses = tr("<br>"
@@ -29,6 +37,9 @@ About::About(QWidget *parent) :
     ui->textBrowser_licenses->setText(str_licenses);
 
 #if defined(Q_OS_WIN)
+    ui->textBrowser_about->setStyleSheet("font-size: 15px;");
+    ui->textBrowser_licenses->setStyleSheet("font-size: 15px;");
+#elif defined(Q_OS_LINUX)
     ui->textBrowser_about->setStyleSheet("font-size: 15px;");
     ui->textBrowser_licenses->setStyleSheet("font-size: 15px;");
 #endif
@@ -56,9 +67,6 @@ About::About(QWidget *parent) :
 
     connect(ui->pushButton, &QAbstractButton::clicked, this, &About::close);
 
-#if defined(Q_OS_WIN)
-    ui->frame->setStyle(style_fusion);
-#endif
 }
 
 About::~About()

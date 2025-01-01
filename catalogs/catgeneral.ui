@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>600</width>
-    <height>394</height>
+    <height>413</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -130,6 +135,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnOK">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>OK</string>
        </property>
@@ -144,6 +155,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnWrite">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>Salvează</string>
        </property>
@@ -155,6 +172,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnCancel">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>Închide</string>
        </property>
@@ -230,6 +253,7 @@
         <widget class="QGroupBox" name="groupBox_2">
          <property name="font">
           <font>
+           <family>Segoe UI</family>
            <bold>true</bold>
           </font>
          </property>
@@ -265,6 +289,7 @@
            <widget class="QLabel" name="imageSignature">
             <property name="font">
              <font>
+              <family>.AppleSystemUIFont</family>
               <pointsize>9</pointsize>
               <bold>false</bold>
              </font>
@@ -290,6 +315,7 @@
         <widget class="QGroupBox" name="groupBox">
          <property name="font">
           <font>
+           <family>Segoe UI</family>
            <bold>true</bold>
           </font>
          </property>
@@ -325,6 +351,7 @@
            <widget class="QLabel" name="imageStamp">
             <property name="font">
              <font>
+              <family>.AppleSystemUIFont</family>
               <pointsize>9</pointsize>
               <bold>false</bold>
              </font>

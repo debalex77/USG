@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list_investigation>
+  <entry cod="1027.4.1." name="Examen ecografic la 11-14 săptămâni gestație, morfologie fetală și screening pentru aberații cromozomiale, cu evaluarea uterului și anexelor gestantei (abdominal)" owner="Screening" cost="428"/>
+  <entry cod="1027.5.1." name="Examen ecografic la 11-14 săptămâni, morfologie fetală și screening pentru aberații cromozomiale, cu evaluarea uterului și anexelor gestantei (transvaginal)" owner="Screening" cost="342"/>
+  <entry cod="1028.4.1." name="Examen ecografic la 11-14 săptămâni gestație, morfologie fetală și screening pentru aberații cromozomiale, cu evaluarea uterului și anexelor gestantei, sarcină multiplă (abdominal)" owner="Screening" cost="335"/>
+  <entry cod="1028.5.1." name="Examen ecografic la 11-14 săptămâni gestație, morfologie fetală și screening pentru aberații cromozomiale, cu evaluarea uterului și anexelor gestantei, sarcină multiplă (transvaginal)" owner="Screening" cost="409"/>
+  <entry cod="1029.1.1." name="Examenul ecografic al morfologiei fetale și anexelor fetale în trimestrul II de sarcină" owner="Screening" cost="373"/>
+  <entry cod="1029.1.2." name="Examenul ecografic al morfologiei fetale și anexelor fetale în trimestrul II de sarcină, sarcină multiplă" owner="Screening" cost="618"/>
+  <entry cod="1029.2." name="Examen ecografic în trimestrul III de sarcină" owner="Screening" cost="203"/>
+  <entry cod="1029.3." name="Examen ecografic în trimestrul III de sarcină, sarcină multiplă" owner="Screening" cost="293"/>
+  <entry cod="1029.4." name="Evaluarea viabilității și evoluției sarcinii" owner="Screening" cost="208"/>
+  <entry cod="1030.1." name="Reconstrucție de volum (3D-4D) al cordului fetal (STIC)" owner="Screening" cost="253"/>
+  <entry cod="1038." name="Examen ecografic al prostatei (transrectal), sondă simplă" owner="Prostata, scrot" cost="127"/>
+  <entry cod="1039." name="Examen ecografic al prostatei (transrectal) sondă biplană" owner="Prostata, scrot" cost="152"/>
+  <entry cod="1041." name="Aprecierea colecțiilor libere în una din cavități (pleurală, abdominală) sau în spațiul retroperitonial" owner="Alte" cost="115"/>
+  <entry cod="1041.1." name="Ecografia pulmonară" owner="Alte" cost="160"/>
+  <entry cod="1044." name="Examen ecografic al encefalului prin fontanelă sau orificiu trepanat" owner="Alte" cost="52"/>
+  <entry cod="1045." name="Examen ecografic al encefalului prin fontanelă sau orificiu trepanat + Doppler" owner="Alte" cost="103"/>
+  <entry cod="1046." name="Examen ecografic al globilor oculari" owner="Alte" cost="52"/>
+  <entry cod="1047." name="Examen ecografic musculoscheletal al unei zone – articulații anatomice" owner="Alte" cost="43"/>
+  <entry cod="1048." name="Examen ecografic al țesuturilor moi și ganglionilor limfatici ai unei zone anatomice" owner="Alte" cost="115"/>
+  <entry cod="1049." name="Examen ecografic al unui organ (în dinamică)" owner="Alte" cost="90"/>
+  <entry cod="1049.1." name="Control în dinamică al unui organ sau sistem de organe fetale, lungimii colului uterin sau a anexelor fetale" owner="Screening" cost="113"/>
+  <entry cod="1049.2." name="Ultrasonografia în perioada postpartum și postoperatorie" owner="Ginecologia" cost="128"/>
+  <entry cod="1050." name="Examen ecografic în determinarea chineticii unui sistem excretor (căile biliare, urinare etc.)" owner="Org.interne" cost="87"/>
+  <entry cod="1050.2." name="Puncție ecoghidată randomizată a prostatei" owner="Prostata, scrot" cost="1285"/>
+  <entry cod="1050.3." name="Biopsia percutană randomizată ecoghidată renală" owner="Sist.urinar" cost="1205"/>
+  <entry cod="1050.4." name="Nefrostomie ecoghidată „a minima”" owner="Sist.urinar" cost="2209"/>
+  <entry cod="1050.5." name="Puncție – drenarea chistului renal" owner="Sist.urinar" cost="877"/>
+  <entry cod="1050.6." name="Farmacodopplerografia peniană" owner="Sist.urinar" cost="862"/>
+  <entry cod="1050.8." name="Instalarea sondei ureterale JJ" owner="Sist.urinar" cost="834"/>
+  <entry cod="1050.10." name="Ecografia hepatobiliară (2D)" owner="Org.interne" cost="228"/>
+  <entry cod="1050.11." name="Ecografia hepatobiliară (2D) + Doppler" owner="Org.interne" cost="359"/>
+  <entry cod="1050.12." name="Elastografia ficatului pentru aprecierea gradului de fibroză (Shear Waves Elastograrhy)" owner="Org.interne" cost="480"/>
+  <entry cod="1050.14." name="Ecografia pancreasului cu 2 D în scară gri + Doppler" owner="Org.interne" cost="240"/>
+  <entry cod="1050.15." name="Ecografia pancreasului (2D) + Doppler + Elastografie" owner="Org.interne" cost="352"/>
+  <entry cod="1050.17." name="Ecografia splinei (2D) + Doppler" owner="Org.interne" cost="240"/>
+  <entry cod="1050.18." name="Ecografia splinei (2D) + Doppler + Elastografie" owner="Org.interne" cost="352"/>
+  <entry cod="1050.19." name="Ecografia sistemului urinar (2D)" owner="Sist.urinar" cost="240"/>
+  <entry cod="1050.20." name="Ecografia sistemului urinar (2D) + Doppler" owner="Sist.urinar" cost="360"/>
+  <entry cod="1050.21." name="Ecografia rinichilor cu (2D) + Doppler + Elastografie" owner="Sist.urinar" cost="477"/>
+  <entry cod="1050.22." name="Examen ecografic ginecologic transabdominal (2D)" owner="Ginecologia" cost="240"/>
+  <entry cod="1050.23." name="Examen ecografic ginecologic transabdominal (2D) + Doppler" owner="Ginecologia" cost="300"/>
+  <entry cod="1050.24." name="Ecografia uterului (2D) + Doppler + Elastografie" owner="Ginecologia" cost="420"/>
+  <entry cod="1050.25." name="Examen ecografic ginecologic transvaginal (2D)" owner="Ginecologia" cost="285"/>
+  <entry cod="1050.26." name="Examen ecografic ginecologic transvaginal (2D) + Doppler" owner="Ginecologia" cost="345"/>
+  <entry cod="1050.27." name="Ecografia ovarelor (2D) + Doppler + Elastografie" owner="Ginecologia" cost="397"/>
+  <entry cod="1050.29." name="Ecografia vezicii urinare (2D) + Doppler" owner="Sist.urinar" cost="278"/>
+  <entry cod="1050.30." name="Ecografia vezicii urinare (2D) + Doppler + Elastografie" owner="Sist.urinar" cost="405"/>
+  <entry cod="1050.31." name="Examen ecografic al glandei tiroide (2D)" owner="Gl.tiroida" cost="240"/>
+  <entry cod="1050.32." name="Examen ecografic al glandei tiroide (2D) + Doppler" owner="Gl.tiroida" cost="311"/>
+  <entry cod="1050.33." name="Examen ecografic al glandei tiroide (2D) + Doppler + Elastografie" owner="Gl.tiroida" cost="420"/>
+  <entry cod="1050.34." name="Examen ecografic al glandelor mamare (2D)" owner="Gl.mamare" cost="240"/>
+  <entry cod="1050.35." name="Examen ecografic al glandelor mamare (2D) + Doppler" owner="Gl.mamare" cost="360"/>
+  <entry cod="1050.36." name="Examen ecografic al glandei mamare (2D) + Doppler + Elastografie" owner="Gl.mamare" cost="420"/>
+  <entry cod="1050.37." name="Examen ecografic al prostatei (transrectal) (2D)" owner="Prostata, scrot" cost="240"/>
+  <entry cod="1050.38." name="Examen ecografic al prostatei (transrectal) (2D) + Doppler" owner="Prostata, scrot" cost="360"/>
+  <entry cod="1050.39." name="Examen ecografic al prostatei (transrectal) (2D) + Doppler + Elastografie" owner="Prostata, scrot" cost="494"/>
+  <entry cod="1050.40." name="Aprecierea colecțiilor libere în una din cavități (spațiul pleural) (2D)" owner="Alte" cost="135"/>
+  <entry cod="1050.41." name="Aprecierea colecțiilor libere în una din cavități (spațiul pleural) cu 2D în scară gri + Doppler" owner="Alte" cost="416"/>
+  <entry cod="1050.43." name="Examen ecografic al scrotului (2D)" owner="Prostata, scrot" cost="180"/>
+  <entry cod="1050.44." name="Examen ecografic al scrotului (2D) + Doppler" owner="Prostata, scrot" cost="240"/>
+  <entry cod="1050.45." name="Examen ecografic al scrotului (2D) + Doppler + Elastografie" owner="Prostata, scrot" cost="352"/>
+  <entry cod="1050.46." name="Examen ecografic al penisului (2D)" owner="Prostata, scrot" cost="180"/>
+  <entry cod="1050.47." name="Examen ecografic al penisului (2D) + Doppler" owner="Prostata, scrot" cost="240"/>
+  <entry cod="1050.49." name="Examen ecografic musculosheletal al unei zone – articulații anatomice (2D)" owner="Alte" cost="303"/>
+  <entry cod="1050.50." name="Examen ecografic musculosheletal al unei zone – articulații anatomice (2D) + Doppler" owner="Alte" cost="430"/>
+  <entry cod="1050.51." name="Examen ecografic musculosheletal al unei zone – articulații anatomice (2D) + Doppler + Elastografie" owner="Alte" cost="557"/>
+  <entry cod="1050.52." name="Examen ecografic al țesuturilor moi și ganglionilor limfatici ai unei zone anatomice (2D)" owner="Alte" cost="181"/>
+  <entry cod="1050.53." name="Examen ecografic al țesuturilor moi și ganglionilor limfatici ai unei zone anatomice (2D) + Doppler" owner="Alte" cost="300"/>
+  <entry cod="1050.54." name="Examen ecografic al țesuturilor moi și ganglionilor limfatici ai unei zone anatomice (2D) + Doppler + Elastografie" owner="Alte" cost="409"/>
+  <entry cod="1050.55." name="Examen ecografic transabdominal al prostatei" owner="Prostata, scrot" cost="155"/>
+  <entry cod="1050.56." name="Determinarea urinei reziduale" owner="Sist.urinar" cost="96"/>
+  <entry cod="1050.59." name="Evaluarea neinvazivă a gradului de afectare a ficatului (gradul de fibroză și gradul de steatoză) – test FibroScan cu aparatul FibroScan-502 TOUCH CAP (sonda M și XL)" owner="Org.interne" cost="830"/>
+  <entry cod="1050.60." name="Ecografia organelor abdominale (ficatul, pancreasul, splina) (2D)" owner="Org.interne" cost="300"/>
+  <entry cod="1050.61." name="Ecografia organelor abdominale (ficatul, pancreasul, splina) + sistemul urinar (2D)" owner="Complex" cost="405"/>
+  <entry cod="1050.62." name="Ecografia organelor abdominale (ficatul, pancreasul, splina) + sistemul urinar + ginecologie transabdominală (2D)" owner="Complex" cost="525"/>
+  <entry cod="1050.63." name="Ecografia organelor abdominale + sistemul urinar + ginecologie transvaginală (2D)" owner="Complex" cost="585"/>
+  <entry cod="1050.66." name="Ecografia sarcinii în trimestrul I (până la 11 săptămâni), transabdominal" owner="Screening" cost="370"/>
+  <entry cod="1050.67." name="Ecografia sarcinii în trimestrul I (până la 11 săptămâni), transvaginală" owner="Screening" cost="285"/>
+  <entry cod="1050.68." name="Foliculometria transabdominală (o investigație)" owner="Ginecologia" cost="160"/>
+  <entry cod="1050.69." name="Foliculometria transvaginală (o investigație)" owner="Ginecologia" cost="169"/>
+  <entry cod="1050.70." name="Osteodensitometrie computerizată" owner="Alte" cost="178"/>
+  <entry cod="1050.71." name="Osteodensitometrie cu ultrasunet" owner="Alte" cost="296"/>
+</list_investigation>

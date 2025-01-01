@@ -12,16 +12,17 @@
 #include <QSqlQueryModel>
 #include <LimeReport>
 #include <QStyleFactory>
+#include <QDomDocument>
 
 #include "data/popup.h"
 #include <data/globals.h>
+#include <data/enums.h>
 #include "data/database.h"
 #include "catalogs/catgeneral.h"
 #include "models/basesqlquerymodel.h"
 #include "models/basesqltablemodel.h"
 #include "models/basesortfilterproxymodel.h"
 #include <data/customdialoginvestig.h>
-
 #include <catalogs/patienthistory.h>
 
 // https://qtexcel.github.io/QXlsx/Example.html
@@ -90,13 +91,7 @@ public:
     void setNamePatient(QString NamePatient) {m_name_patient = NamePatient; emit NamePatientChanged();}
     QString getNamePatient() const {return m_name_patient;}
 
-    enum TypePrint
-    {
-        openDesigner = 0,
-        openPreview = 1
-    };
-
-    void onPrintDocument(const int type_print); // functiile exportate pu solicitarea din alte clase
+    void onPrintDocument(Enums::TYPE_PRINT type_print); // functiile exportate pu solicitarea din alte clase
     void m_OnOpenReport();  // ex.: 'ListDocWebOrder'
     void m_onWritingData();
 
@@ -153,7 +148,6 @@ private slots:
     void onClikEditPacient();   // pacientului
     void onClickClearPacient(); // golirea datelor pacientului + 'comboPacient'
     void onClickOpenHistoryPatient();
-    void onExportExcel();
 
     void updateTextSumOrder();                                  // actualizarea sumei documentului
     void onDoubleClickedTableSource(const QModelIndex &index);  // dublu click 'tableSource' - alegerea investigatiilor
@@ -166,22 +160,21 @@ private slots:
 
     bool controlRequiredObjects();      // controlul completarii obiectelor obligatorii
     void onOpenReport();                // 'btnReport'
-    void onPrint(const int type_print); // printare
+    void onPrint(Enums::TYPE_PRINT type_print); // printare
     void openDesignerPrintDoc();
     void openPreviewPrintDoc();
     bool onWritingData();               // 'btnWrite'
     void onWritingDataClose();          // 'btnOk'
     void onClose();                     // 'btnClose'
 
+    void handleCompleterAddressPatients(const QString &text);
+
 private:
 
-    enum idx {idx_unknow = -1, idx_write = 0, idx_deletion = 1, idx_post = 2}; // index statutului documentului
     enum Columns {column_Id = 0, column_DeletionMark = 1, column_IdPricings = 2, column_Cod = 3, column_Name = 4, column_Price = 5};
     enum IndexToolBox {box_organization = 0,box_patient = 1,box_commnet = 2};
-    enum Value_Payment {payment_cash = 0, payment_card = 1, payment_transfer = 2};
 
     void setTitleDoc();                           // setarea titlului documentului
-    void setStyieSheetButtoms();
     void initConnections();                       // initierea conectarilor
     void connectionsToIndexChangedCombobox();     // conectarea la modificarea indexului comboboxurlor
     void disconnectionsToIndexChangedCombobox();  // conectarea la modificarea indexului comboboxurlor -> modificarea formei
@@ -213,21 +206,24 @@ private:
 
     void setImageForDocPrint();
 
+    QStringList loadDataFromXml(const QString &filePath, const QString &tagName);
+    void initCompleterAddressPatients();
+
 private:
     Ui::DocOrderEcho *ui;
 
     bool m_itNew           = false;
-    int m_id               = idx_unknow;
-    int m_idOrganization   = idx_unknow;
-    int m_idContract       = idx_unknow;
-    int m_idTypePrice      = idx_unknow;
-    int m_idPacient        = idx_unknow;
-    int m_idNurse          = idx_unknow;
-    int m_idDoctor         = idx_unknow;
-    int m_idDoctor_execute = idx_unknow;
-    int m_idUser           = idx_unknow;
-    int m_post             = idx_unknow;
-    int m_attachedImages   = idx_unknow;
+    int m_id               = Enums::IDX_UNKNOW;
+    int m_idOrganization   = Enums::IDX_UNKNOW;
+    int m_idContract       = Enums::IDX_UNKNOW;
+    int m_idTypePrice      = Enums::IDX_UNKNOW;
+    int m_idPacient        = Enums::IDX_UNKNOW;
+    int m_idNurse          = Enums::IDX_UNKNOW;
+    int m_idDoctor         = Enums::IDX_UNKNOW;
+    int m_idDoctor_execute = Enums::IDX_UNKNOW;
+    int m_idUser           = Enums::IDX_UNKNOW;
+    int m_post             = Enums::IDX_UNKNOW;
+    int m_attachedImages   = Enums::IDX_UNKNOW;
 
     int exist_logo      = 0; // variabile pu forma de tipar
     int exist_stamp     = 0;
@@ -235,9 +231,9 @@ private:
 
     QString m_name_patient;
 
-    int lastIdPricings     = idx_unknow; // pu determinarea ultimului 'id' docum. 'pricing'
+    int lastIdPricings     = Enums::IDX_UNKNOW; // pu determinarea ultimului 'id' docum. 'pricing'
     int sumOrder           = 0;          // suma totala a comenzii
-    int noncomercial_price = idx_unknow;
+    int noncomercial_price = Enums::IDX_UNKNOW;
 
     QLabel* labelAuthor;
 
@@ -247,6 +243,13 @@ private:
     DataBase   *db;
     QTimer     *timer;  // pu data si ora actuala
     QCompleter *completer;
+
+    //---------------------------------
+
+    QCompleter *city_completer;
+    QStringList cityList;
+
+    //---------------------------------
 
     BaseSqlQueryModel  *modelOrganizations;
     BaseSqlQueryModel  *modelContracts;

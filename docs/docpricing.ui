@@ -6,9 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>745</width>
-    <height>698</height>
+    <width>839</width>
+    <height>726</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -33,6 +38,7 @@
       <widget class="QLabel" name="labelTitleDoc">
        <property name="font">
         <font>
+         <family>Segoe UI</family>
          <bold>true</bold>
         </font>
        </property>
@@ -48,6 +54,7 @@
       <widget class="QLabel" name="labelFrom">
        <property name="font">
         <font>
+         <family>Segoe UI</family>
          <bold>true</bold>
         </font>
        </property>
@@ -78,6 +85,7 @@
     <widget class="QGroupBox" name="groupBox">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -85,31 +93,20 @@
       <string>Date generale</string>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="2">
-       <widget class="QComboBox" name="comboOrganization">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
+      <item row="0" column="0">
+       <widget class="QLabel" name="label">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
-       </widget>
-      </item>
-      <item row="1" column="2">
-       <widget class="QComboBox" name="comboContract">
-        <property name="font">
-         <font>
-          <bold>false</bold>
-         </font>
+        <property name="text">
+         <string>Organizația</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="3">
+      <item row="0" column="4">
        <spacer name="horizontalSpacer_3">
         <property name="orientation">
          <enum>Qt::Horizontal</enum>
@@ -122,10 +119,27 @@
         </property>
        </spacer>
       </item>
+      <item row="0" column="2">
+       <widget class="QComboBox" name="comboOrganization">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <bold>false</bold>
+         </font>
+        </property>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_2">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -134,22 +148,11 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QLabel" name="label">
-        <property name="font">
-         <font>
-          <bold>false</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Organizația</string>
-        </property>
-       </widget>
-      </item>
       <item row="2" column="0">
        <widget class="QLabel" name="label_3">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -158,12 +161,83 @@
         </property>
        </widget>
       </item>
+      <item row="1" column="2">
+       <widget class="QComboBox" name="comboContract">
+        <property name="font">
+         <font>
+          <family>Segoe UI</family>
+          <bold>false</bold>
+         </font>
+        </property>
+       </widget>
+      </item>
       <item row="2" column="2">
        <widget class="QComboBox" name="comboTypesPricing">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QToolButton" name="btnOpenCatOrganization">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QToolButton" name="btnOpenCatContract">
+        <property name="styleSheet">
+         <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+        </property>
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
         </property>
        </widget>
       </item>
@@ -180,7 +254,169 @@
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
-       <layout class="QHBoxLayout" name="layoutToolBar"/>
+       <layout class="QHBoxLayout" name="layoutToolBar">
+        <item>
+         <widget class="QToolButton" name="btnAdd">
+          <property name="styleSheet">
+           <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnEdit">
+          <property name="styleSheet">
+           <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnDeletion">
+          <property name="styleSheet">
+           <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+          </property>
+          <property name="text">
+           <string>...</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="btnFormsTable">
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+          </property>
+          <property name="text">
+           <string>Formeaza</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
+          </property>
+          <property name="toolButtonStyle">
+           <enum>Qt::ToolButtonTextBesideIcon</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="Line" name="line_2">
+          <property name="orientation">
+           <enum>Qt::Vertical</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>Cautare</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="SearchLineEdit" name="editSearch">
+          <property name="clearButtonEnabled">
+           <bool>true</bool>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <spacer name="horizontalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+          <property name="sizeType">
+           <enum>QSizePolicy::Preferred</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>60</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+       </layout>
       </item>
       <item row="1" column="0">
        <widget class="QTableView" name="tableView"/>
@@ -197,31 +433,80 @@
       <enum>QFrame::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_4">
+      <property name="leftMargin">
+       <number>9</number>
+      </property>
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item row="0" column="6">
        <widget class="QPushButton" name="btnClose">
+        <property name="minimumSize">
+         <size>
+          <width>106</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Închide</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
         </property>
        </widget>
       </item>
       <item row="0" column="3">
        <widget class="QPushButton" name="btnPrint">
+        <property name="minimumSize">
+         <size>
+          <width>106</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Printează</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/print_x32.png</normaloff>:/img/print_x32.png</iconset>
         </property>
        </widget>
       </item>
       <item row="0" column="5">
        <widget class="QPushButton" name="btnWrite">
+        <property name="minimumSize">
+         <size>
+          <width>106</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Salvează</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
         </property>
        </widget>
       </item>
       <item row="0" column="4">
        <widget class="QPushButton" name="btnOK">
+        <property name="minimumSize">
+         <size>
+          <width>106</width>
+          <height>0</height>
+         </size>
+        </property>
         <property name="text">
          <string>Validează</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
         </property>
        </widget>
       </item>
@@ -248,6 +533,7 @@
     <widget class="QGroupBox" name="groupBox_2">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -255,10 +541,17 @@
       <string>Comentariu</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_3">
+      <property name="topMargin">
+       <number>4</number>
+      </property>
+      <property name="bottomMargin">
+       <number>4</number>
+      </property>
       <item row="0" column="0">
        <widget class="QLineEdit" name="editComment">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -269,6 +562,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>SearchLineEdit</class>
+   <extends>QLineEdit</extends>
+   <header>customs/searchlineedit.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>editNumberDoc</tabstop>
   <tabstop>dateTimeDoc</tabstop>
@@ -282,6 +582,8 @@
   <tabstop>btnWrite</tabstop>
   <tabstop>btnClose</tabstop>
  </tabstops>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

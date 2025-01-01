@@ -7,8 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>504</width>
-    <height>333</height>
+    <height>345</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
@@ -91,6 +96,7 @@
     <widget class="QGroupBox" name="groupBox">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -102,6 +108,7 @@
        <widget class="QPlainTextEdit" name="editComment">
         <property name="font">
          <font>
+          <family>Segoe UI</family>
           <bold>false</bold>
          </font>
         </property>
@@ -127,6 +134,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnOK">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>OK</string>
        </property>
@@ -138,6 +151,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnWrite">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>Salvează</string>
        </property>
@@ -149,6 +168,12 @@
      </item>
      <item>
       <widget class="QPushButton" name="btnClose">
+       <property name="minimumSize">
+        <size>
+         <width>104</width>
+         <height>0</height>
+        </size>
+       </property>
        <property name="text">
         <string>Închide</string>
        </property>

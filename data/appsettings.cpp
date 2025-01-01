@@ -28,7 +28,7 @@ AppSettings::AppSettings(QWidget *parent) :
 
     if (! QFile(dirLogPath).exists()){
         QMessageBox::information(this, tr("Crearea directoriului de logare"),
-                                 tr("Pentru crearea directoriului de logare a aplicației este necesar accesul administrativ."),
+                                 tr("Pentru crearea directoriului de logare a aplica\310\233iei este necesar accesul administrativ."),
                                  QMessageBox::Ok);
         QString str_cmd = "pkexec mkdir /" NAME_DIR_LOG_PATH " && pkexec chmod 777 /" NAME_DIR_LOG_PATH " && touch " + fileLogPath;
         system(str_cmd.toStdString().c_str()); // pkexec mkdir /var/log/usg && pkexec chmod 777 /var/log/usg && touch /var/log/usg/usg.log
@@ -43,14 +43,16 @@ AppSettings::AppSettings(QWidget *parent) :
 
 #elif defined(Q_OS_MACOS)
 
-    if (! QFile(fileLogPath).exists()){
-        QString str_cmd = "touch " + fileLogPath;
-        system(str_cmd.toStdString().c_str());
-        globals::pathLogAppSettings = fileLogPath;
-    } else {
-        processingLoggingFiles();
-        globals::pathLogAppSettings = fileLogPath;
-    }
+    if (! QFile(dirLogPath).exists())
+        QDir().mkpath(dirLogPath);
+
+    QFileInfo info_file_config(globals::pathAppSettings);
+    const QString baseName_file_config = info_file_config.baseName();
+    const QString nameMatches = baseName_file_config + ".log";
+    fileLogPath = dirLogPath + "/" + nameMatches;
+
+    processingLoggingFiles(fileLogPath);
+    globals::pathLogAppSettings = fileLogPath;
 
     if (! QFile(globals::pathAppSettings).exists())
         globals::unknowModeLaunch = true; // globals::numSavedFilesLog
@@ -69,8 +71,8 @@ AppSettings::AppSettings(QWidget *parent) :
     if (! QDir(dir.toNativeSeparators(dirLogPath)).exists()){
         if (! QDir().mkdir(dir.toNativeSeparators(dirLogPath))){
             QMessageBox::warning(this, tr("Crearea directoriului de logare"),
-                                 tr("Directoria 'config' pentru păstrarea fișierelor de logare a aplicației nu a fost creată !!!<br>"
-                                    "Adresați-vă administratorului aplicației."),
+                                 tr("Directoria 'config' pentru p\304\203strarea fi\310\231ierelor de logare a aplica\310\233iei nu a fost creat\304\203 !!!<br>"
+                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei."),
                                  QMessageBox::Ok);
             return;
         }
@@ -474,6 +476,7 @@ void AppSettings::setDefaultPath()
 
     if (! ui->txtPathAppSettings->text().isEmpty())
         ui->txtPathAppSettings->setText(globals::pathAppSettings);
+
     ui->txtPathLog->setText(globals::pathLogAppSettings);
 
     //******************************************************************************
@@ -485,10 +488,10 @@ void AppSettings::setDefaultPath()
     lineEditPathReports->setText(dir.toNativeSeparators("/opt/USG/templets/reports"));
     globals::pathReports = lineEditPathReports->text();
 #elif defined(Q_OS_MACOS)
-    lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets"));
+    lineEditPathTemplatesPrint->setText(dir.homePath() + "/USG/templets");
     globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
-    lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets/reports"));
+    lineEditPathReports->setText(dir.homePath() + "/USG/templets/reports");
     globals::pathReports = lineEditPathReports->text();
 #elif defined(Q_OS_WINDOWS)
     lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets"));
@@ -516,9 +519,17 @@ void AppSettings::setDefaultPathSqlite()
 
 #elif defined(Q_OS_MACOS)
 
+    if (! QFile(dir.homePath() + "/USG").exists()) {
+        dir.mkpath(dir.homePath() + "/USG");
+        dir.mkpath(dir.homePath() + "/USG/Database_usg");
+    }
+
+    if (globals::pathLogAppSettings.isEmpty())
+        globals::pathLogAppSettings = ui->txtPathLog->text();
+
     //******************************************************************************
     // crearea fisierelor bazelor de date si setarea
-    QString str_dir_database = dir.toNativeSeparators(dir.homePath() + "/Database_usg");
+    QString str_dir_database = dir.toNativeSeparators(dir.homePath() + "/USG/Database_usg");
     QString str_file_database = str_dir_database + "/base.sqlite3";
     QString str_file_database_image = str_dir_database + "/base_image.sqlite3";
 
@@ -543,30 +554,32 @@ void AppSettings::setDefaultPathSqlite()
             //---- baza cu imagini
             lineEditPathDBImage->setText(str_file_database_image);         // baza de date cu imagini
             globals::pathImageBaseAppSettings = str_file_database_image;
+
+            setPathAppSettings();
+
         } else {
             QMessageBox::warning(this, tr("Crearea directoriei"),
                                  tr("Directoria <b>'%1'</b><br>"
-                                    "pentru baza de date SQlite nu a fost creată !!! Lansarea aplicației nu este posibilă.<br>"
-                                    "Adresați-vă administratorului aplicației.").arg(str_dir_database),
+                                    "pentru baza de date SQlite nu a fost creat\304\203 !!! Lansarea aplica\310\233iei nu este posibil\304\203.<br>"
+                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.").arg(str_dir_database),
                                 QMessageBox::Ok);
             qCritical(logCritical()) << tr("Directoria '%1' pentru baza de date SQlite nu a fost creată.").arg(str_dir_database);
         }
     } else {
         if (QFile(str_file_database).exists()){
             QMessageBox messange_box(QMessageBox::Question,
-                                     tr("Determinarea existenței bazei de date"),
-                                     tr("Baza de date '<u>%1</u>' există în sistem !!!<br><br>"
-                                        "Pentru crearea bazei de date noi cu nume '<b><u>%2</u></b>' este necesar de eliminat fișierul vechi. "
-                                        "Doriți să eliminați fișierul din sistem ?").arg(str_file_database, (ui->nameBaseSqlite->text().isEmpty()) ? "base" : ui->nameBaseSqlite->text()),
-                                     QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-            messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-            messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//            messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//            messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-            if (messange_box.exec() == QMessageBox::Yes){
+                                     tr("Determinarea existen\310\233ei bazei de date"),
+                                     tr("Baza de date '<u>%1</u>' exist\304\203 \303\256n sistem !!!<br><br>"
+                                        "Pentru crearea bazei de date noi cu nume '<b><u>%2</u></b>' este necesar de eliminat fi\310\231ierul vechi. "
+                                        "Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul din sistem ?").arg(str_file_database, (ui->nameBaseSqlite->text().isEmpty()) ? "base" : ui->nameBaseSqlite->text()),
+                                     QMessageBox::NoButton, this);
+            QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+            QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+            yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+            noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+            messange_box.exec();
+
+            if (messange_box.clickedButton() == yesButton){
 #if defined(Q_OS_LINUX)
                 QString str_cmd = "rm \"" + str_file_database + "\"";
                 system(str_cmd.toStdString().c_str());
@@ -581,7 +594,7 @@ void AppSettings::setDefaultPathSqlite()
                 QString str_cmd = "del " + str_file_database;
                 system(str_cmd.toStdString().c_str());
 #endif
-            } else {
+            } else if (messange_box.clickedButton() == noButton) {
                 return;
             }
         }
@@ -618,7 +631,7 @@ bool AppSettings::checkDataSettings()
         if (ui->mySQLnameBase->text().isEmpty()){ // denumirea bazei de date (MySQL)
             QMessageBox::warning(this,
                                      tr("Verificarea datelor"),
-                                     tr("Nu este indicată \"<b>%1</b>\" !!!.")
+                                     tr("Nu este indicat\304\203 \"<b>%1</b>\" !!!.")
                                      .arg(tr("Denumirea bazei de date")),
                                      QMessageBox::Ok);
             return false;
@@ -647,7 +660,7 @@ bool AppSettings::checkDataSettings()
         if (lineEditPathDBSqlite->text().isEmpty()){ // localizarea bazei de date (sqlite)
             QMessageBox::warning(this,
                                      tr("Verificarea datelor"),
-                                     tr("Nu este indicată \"<b>%1</b>\" !!!")
+                                     tr("Nu este indicat\304\203 \"<b>%1</b>\" !!!")
                                      .arg(tr("Localizarea bazei de date (.sqlite3)")),
                                      QMessageBox::Ok);
             return false;
@@ -751,6 +764,15 @@ void AppSettings::readSettings()
 void AppSettings::saveSettings()
 {
     QDir dir_conf;
+
+#if defined(Q_OS_MACOS)
+    if (! QFile(ui->txtPathLog->text()).exists()) {
+        QString str_cmd = "touch \"" + ui->txtPathLog->text() + "\"";
+        system(str_cmd.toStdString().c_str());
+        qInfo(logInfo()) << "A fost creat fisierul de logare " << ui->txtPathLog->text();
+
+    }
+#endif
 
     globals::pathAppSettings = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
 
@@ -869,7 +891,7 @@ void AppSettings::loadSettings()
         if(! db->connectToDataBase()){
             QMessageBox::warning(this,
                                   tr("Conectarea la baza de date"),
-                                  tr("Conectarea la baza de date <b><u>%1</u></b> lipsește !!! <br><br>Adresați-vă administratorului aplicației.")
+                                  tr("Conectarea la baza de date <b><u>%1</u></b> lipse\310\231te !!! <br><br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
                                          .arg((globals::thisMySQL) ? ("host: " + globals::mySQLhost + ", base: " + globals::mySQLnameBase) : globals::sqliteNameBase),
                                      QMessageBox::Ok);
             qWarning(logWarning()) << tr("%1: loadSettings()<br> Nu a fost efectuata conectarea la BD '%2'")
@@ -959,14 +981,19 @@ void AppSettings::processingLoggingFiles(const QString nameMatches)
 
         // verificam data curenta si ultima modificare a fisierului
         // copierea fisierului si redenumirea cu atribuirea datei
-        if (fileInfo.fileName() == "usg.log"){
+        if (fileInfo.fileName() == nameMatches){
             QString log_file = fileInfo.filePath();
-            QString str_cmd;
             QString renamed_file;
             if (mCurrentDate > fileInfo.lastModified().date()){
-                renamed_file = "/" NAME_DIR_LOG_PATH "/" + fileInfo.baseName() + QString("_%1.log").arg(fileInfo.lastModified().toString("dd.MM.yyyy"));
-                str_cmd = "mv \"" + log_file + "\" \"" + renamed_file + "\"";
-                system(str_cmd.toStdString().c_str());
+                renamed_file = QDir::cleanPath(dirLogPath + "/" + fileInfo.baseName() +
+                                               QString("_%1.log").arg(fileInfo.lastModified().toString("dd.MM.yyyy")));
+                // Renumirea fișierului folosind QFile
+                QFile file(log_file);
+                if (file.rename(renamed_file)) {
+                    qInfo() << "Fișierul de logare a fost redenumit: " << renamed_file;
+                } else {
+                    qWarning() << "Nu s-a putut redenumi fișierul de logare: " << log_file;
+                }
             }
         }
 
@@ -1008,9 +1035,8 @@ void AppSettings::removeFilesLogOnStartApp()
     dir.setSorting(QDir::Time);
     QFileInfoList listFiles = dir.entryInfoList();
 
-    QRegExp regx(globals::sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
+    QRegularExpression regx(globals::sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
 
-    QDir dir_file;
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
 
@@ -1023,6 +1049,7 @@ void AppSettings::removeFilesLogOnStartApp()
 #elif defined(Q_OS_MACOS)
                 system(QString("rm -f " + fileInfo.filePath()).toStdString().c_str());
 #elif defined(Q_OS_WIN)
+                QDir dir_file;
                 system(QString("del /f " + dir_file.toNativeSeparators(fileInfo.filePath())).toStdString().c_str());
 #endif
             }
@@ -1046,8 +1073,8 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
 
     model_logs->clear();
 
-    QRegExp regx((ui->comboBoxTypeSQL->currentIndex() == idx_Sqlite) ?
-                     globals::sqliteNameBase : globals::mySQLnameBase );
+    QRegularExpression regx((ui->comboBoxTypeSQL->currentIndex() == idx_Sqlite) ?
+                     globals::sqliteNameBase : globals::mySQLnameBase, QRegularExpression::CaseInsensitiveOption);
 
     QDir dir(dirLogPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
@@ -1255,16 +1282,24 @@ void AppSettings::openFileSettingsApp()
 {
     if (! QFile(ui->txtPathAppSettings->text()).exists()){
         QMessageBox::warning(this,
-                             tr("Verificarea fișierului"),
-                             tr("Fișierul cu setările aplicației nu a fost găsit !!!."),
+                             tr("Verificarea fi\310\231ierului"),
+                             tr("Fi\310\231ierul cu set\304\203rile aplica\310\233iei nu a fost g\304\203sit !!!."),
                              QMessageBox::Ok);
         return ;
     }
 #if defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(ui->txtPathAppSettings->text()));
 #elif defined(Q_OS_MACOS)
-    QString str_cmd = "open -a \"TextEdit\" " + ui->txtPathAppSettings->text();
-    system(str_cmd.toStdString().c_str());
+    QProcess process;
+    QStringList arguments;
+    arguments << "-a" << "TextEdit" << ui->txtPathAppSettings->text();
+
+    if (!process.startDetached("open", arguments)) {
+        QMessageBox::warning(nullptr,
+                             QObject::tr("Eroare"),
+                             QObject::tr("Nu s-a putut deschide fișierul cu TextEdit."),
+                             QMessageBox::Ok);
+    }
 #elif defined(Q_OS_WIN)
     QProcess* proc = new QProcess(this);
     QStringList arguments;
@@ -1280,9 +1315,9 @@ void AppSettings::openFileCurrentLogApp()
 {
     if (! QFile(fileLogPath).exists()){
         QMessageBox::warning(this,
-                             tr("Verificarea fișierului de logare"),
-                             tr("Fișierul de logare nu a fost găsit !!!<br>"
-                                "Creați fișierul nou sau restartați aplicația."),
+                             tr("Verificarea fi\310\231ierului de logare"),
+                             tr("Fi\310\231ierul de logare nu a fost g\304\203sit !!!<br>"
+                                "Crea\310\233i fi\310\231ierul nou sau restarta\310\233i aplica\310\233ia."),
                              QMessageBox::Ok);
         return ;
     }
@@ -1290,8 +1325,12 @@ void AppSettings::openFileCurrentLogApp()
 #if defined(Q_OS_LINUX)
     QDesktopServices::openUrl(QUrl(ui->txtPathLog->text()));
 #elif defined(Q_OS_MACOS)
-    QString str_cmd = "open -a \"TextEdit\" " + ui->txtPathLog->text();
-    system(str_cmd.toStdString().c_str());
+    if (! QDesktopServices::openUrl(QUrl::fromLocalFile(ui->txtPathLog->text()))) {
+        QMessageBox::warning(this,
+                             tr("Eroare"),
+                             tr("Nu s-a putut deschide fișierul de logare a aplicației."),
+                             QMessageBox::Ok);
+    }
 #elif defined(Q_OS_WIN)
     QProcess* proc = new QProcess(this);
     QStringList arguments;
@@ -1311,7 +1350,7 @@ void AppSettings::openDirTemplets()
     else
         pathTemplets = dir.toNativeSeparators(lineEditPathTemplatesPrint->text());
 
-    QString dir_templates = QFileDialog::getExistingDirectory(this, tr("Alegeti directoriu"),
+    QString dir_templates = QFileDialog::getExistingDirectory(this, tr("Alege\310\233i directoriu"),
                                                     pathTemplets,
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
@@ -1329,7 +1368,7 @@ void AppSettings::openDirReports()
     else
         pathReports = dir.toNativeSeparators(lineEditPathReports->text());
 
-    QString dir_reports = QFileDialog::getExistingDirectory(this, tr("Alegeti directoriu"),
+    QString dir_reports = QFileDialog::getExistingDirectory(this, tr("Alege\310\233i directoriu"),
                                                     pathReports,
                                                     QFileDialog::ShowDirsOnly
                                                     | QFileDialog::DontResolveSymlinks);
@@ -1347,7 +1386,7 @@ void AppSettings::openDirVideo()
     else
         pathVideo = dir.toNativeSeparators(lineEditPathVideo->text());
 
-    QString dir_video = QFileDialog::getExistingDirectory(this, tr("Alegeti directoriu"),
+    QString dir_video = QFileDialog::getExistingDirectory(this, tr("Alege\310\233i directoriu"),
                                                           pathVideo,
                                                           QFileDialog::ShowDirsOnly
                                                               | QFileDialog::DontResolveSymlinks);
@@ -1402,9 +1441,9 @@ void AppSettings::changeIndexLangApp(const int _index)
     emit changeLanguage();
 
     QMessageBox::StandardButton YesNo;
-    YesNo = QMessageBox::question(this, tr("Traducerea aplicației."),
-                                  tr("Pentru traducerea completă este necesar de relansat aplicația.<br><br>"
-                                     "Doriți relansarea ?"),
+    YesNo = QMessageBox::question(this, tr("Traducerea aplica\310\233iei."),
+                                  tr("Pentru traducerea complet\304\203 este necesar de relansat aplica\310\233ia.<br><br>"
+                                     "Dori\310\233i relansarea ?"),
                                   QMessageBox::Yes | QMessageBox::No);
     if (YesNo == QMessageBox::Yes){
         saveSettings();
@@ -1420,6 +1459,7 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 
         globals::indexTypeSQL   = _index;
         globals::thisMySQL      = true;
+        globals::thisSqlite     = false;
         globals::connectionMade = "MySQL";
 
         ui->tabLogs->setEnabled(true);
@@ -1443,6 +1483,7 @@ void AppSettings::changeIndexTypeSQL(const int _index)
     } else if (_index == idx_Sqlite){ //sqlite
 
         globals::indexTypeSQL   = _index;
+        globals::thisSqlite     = true;
         globals::thisMySQL      = false;
         globals::connectionMade = "Sqlite";
 
@@ -1527,13 +1568,13 @@ void AppSettings::onTestConnectionMySQL()
     db.setPassword(globals::mySQLpasswdUser);
     if (db.open()){
         QMessageBox::information(this,
-                                 tr("Testarea conectării"),
-                                 tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> este realizată cu succes.").arg(globals::mySQLnameBase),
+                                 tr("Testarea conect\304\203rii"),
+                                 tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> este realizat\304\203 cu succes.").arg(globals::mySQLnameBase),
                                  QMessageBox::Ok);
     } else {
         QMessageBox::warning(this,
-                             tr("Testarea conectării"),
-                             tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> lipsește.").arg(globals::mySQLnameBase),
+                             tr("Testarea conect\304\203rii"),
+                             tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> lipse\310\231te.").arg(globals::mySQLnameBase),
                              QMessageBox::Ok);
     }
 }
@@ -1562,8 +1603,8 @@ void AppSettings::closeEvent(QCloseEvent *event)
 {
     if (isWindowModified()){
         const QMessageBox::StandardButton answer = QMessageBox::warning(this, tr("Modificarea datelor"),
-                                                                        tr("Setările au fost modificate.\n"
-                                                                           "Doriți să salvați aceste modificări ?"),
+                                                                        tr("Set\304\203rile au fost modificate.\n"
+                                                                           "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
                                                                         QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (answer == QMessageBox::Yes){
             onBtnOKSettings();

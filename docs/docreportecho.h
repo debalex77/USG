@@ -10,9 +10,12 @@
 #include <LimeReport>
 #include <QFileDialog>
 #include <QMediaPlayer>
-#include <QMediaPlaylist>
+#include <QMediaFormat>
 #include <QVideoWidget>
 #include <infowindow.h>
+#include <QGraphicsScene>
+#include <QGraphicsVideoItem>
+#include <QGraphicsView>
 
 #include "data/popup.h"
 #include "data/database.h"
@@ -74,6 +77,7 @@ public:
         setDefaultDataTableCholecist();
         setDefaultDataTablePancreas();
         setDefaultDataTableSpleen();
+        setDefaultDataTableIntestinalLoop();
         emit t_organs_internalChanged();
     }
     bool get_t_organs_internal() const {return m_organs_internal;}
@@ -175,6 +179,10 @@ private slots:
     void openHistoryPatient();
     void openDocOrderEcho();
 
+    void openTempletsBySystem(const QString name_system);
+    void openCatalogWithSystemTamplets(const QString name_system);
+    void addDescriptionFormation(const QString name_system);
+
     void clickBtnOrgansInternal();
     void clickBtnUrinarySystem();
     void clickBtnProstate();
@@ -204,12 +212,12 @@ private slots:
     void setUrl(const QUrl &url);
     void clickPlayVideo();
     void setPositionSlider(int seconds);
-    void mediaStateChanged(QMediaPlayer::State state);
+    void mediaStateChanged(QMediaPlayer::PlaybackState state);
     void positionChanged(qint64 progress);
     void durationChanged(qint64 duration);
     void updateDurationInfo(qint64 currentInfo);
     void handleError();
-    void changedCurrentRowPlayList(const int row);
+    void changedCurrentRowPlayList(int row);
 
     void connections_tags();               // conexiunea la tag
     void disconnections_tags();
@@ -293,6 +301,7 @@ private:
     void setDefaultDataTableCholecist();  // in dependenta de bloc + tag ale documentului
     void setDefaultDataTablePancreas();
     void setDefaultDataTableSpleen();
+    void setDefaultDataTableIntestinalLoop();
     void setDefaultDataKidney();
     void setDefaultDataBladder();
     void setDefaultDataProstate();
@@ -315,12 +324,8 @@ private:
 
     QString getStringTablesBySystems();
     void processingRequest();
-    void setDataFromTableLiver();          // inserarea datelor in forma din tabele
-    void setDataFromTableCholecist();
-    void setDataFromTablePancreas();
-    void setDataFromTableSpleen();
-    void setDataFromTableKidney();
-    void setDataFromTableBladder();
+    void setDataFromSystemOrgansInternal(); // inserarea datelor in forma din tabele
+    void setDataFromSystemUrinary();
     void setDataFromTableProstate();
     void setDataFromTableGynecology();
     void setDataFromTableBreast();
@@ -399,7 +404,13 @@ private:
     QListWidget    *list_play        = nullptr;
     QLabel         *txt_title_player = nullptr;
     QSlider        *m_positionSlider = nullptr;
+#if defined(Q_OS_LINUX) || defined (Q_OS_WIN)
     QVideoWidget   *videoWidget      = nullptr;
+#elif defined(Q_OS_MACOS)
+    QGraphicsScene *scene;
+    QGraphicsVideoItem *videoItem;
+    QGraphicsView *view;
+#endif
     QLabel         *m_labelDuration  = nullptr;
     QLabel         *m_errorLabel     = nullptr;
     qint64         m_duration;

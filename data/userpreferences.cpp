@@ -25,7 +25,7 @@ UserPreferences::UserPreferences(QWidget *parent) :
     ui->tableWidget->verticalHeader()->setDefaultSectionSize(9);
 
     ui->brandUSG->setMaxLength(200);
-    ui->versionApp->setText(VER);
+    ui->versionApp->setText(USG_VERSION_FULL);
     ui->versionApp->setEnabled(false);
 
     ui->dockWidget->close(); // ascundem panel pu informatii
@@ -367,10 +367,7 @@ void UserPreferences::clearImageLogo()
                              tr("Eliminarea logotipului"),
                              tr("Doriți să eliminați logotipul din baza de date ?"),
                              QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-    messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-#endif
+
     if (messange_box.exec() == QMessageBox::No)
         return;
 
@@ -515,6 +512,17 @@ void UserPreferences::setListWidget()
             listItem->setIcon(QIcon(":/img/info_x32.png"));
         else if (n == page_notedit)
             listItem->setIcon(QIcon::fromTheme("emblem-important"));
+#elif defined(Q_OS_MACOS)
+        if (n == page_general)
+            listItem->setIcon(QIcon(":/img/settings_x32.png"));
+        else if (n == page_launch)
+            listItem->setIcon(QIcon(":/img/update_app.png"));
+        else if (n == page_document)
+            listItem->setIcon(QIcon(":/img/orderEcho_x32.png"));
+        else if (n == page_message)
+            listItem->setIcon(QIcon(":/img/info_x32.png"));
+        else if (n == page_notedit)
+            listItem->setIcon(QIcon(":/img/not-editable.png"));
 #elif defined(Q_OS_WIN)
         if (n == page_general)
             listItem->setIcon(QIcon(":/img/settings_x32.png"));
@@ -873,7 +881,7 @@ bool UserPreferences::updateDataIntoTable()
                 "WHERE id = :id;");
     qry.bindValue(":id",                    m_Id);
     qry.bindValue(":id_users",              m_Id);
-    qry.bindValue(":versionApp",            VER);
+    qry.bindValue(":versionApp",            USG_VERSION_FULL);
     if(globals::thisMySQL){
         qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? true : false));
         qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? true : false));
@@ -927,17 +935,21 @@ void UserPreferences::closeEvent(QCloseEvent *event)
         QMessageBox messange_box(QMessageBox::Question,
                                  tr("Modificarea datelor"),
                                  tr("Datele au fost modificate.\n"
-                                    "Doriți să salvați aceste modificări ?"),
-                                 QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-#endif
-        if (messange_box.exec() == QMessageBox::Yes){
+                                    "Dori\310\233i s\304\203 salva\310\233i aceste modific\304\203ri ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton) {
             if (onWritingData())
                 event->accept();
             else
                 event->ignore();
+        } else if (messange_box.clickedButton() == noButton) {
+
         }
     } else {
         event->accept();

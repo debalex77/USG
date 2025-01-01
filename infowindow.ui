@@ -18,6 +18,7 @@
   </property>
   <property name="font">
    <font>
+    <family>Segoe UI</family>
     <pointsize>8</pointsize>
    </font>
   </property>
@@ -29,8 +30,8 @@
     <widget class="QCheckBox" name="notShow">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <pointsize>11</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
        <underline>true</underline>
       </font>
@@ -79,8 +80,8 @@
     <widget class="QLabel" name="txt_title">
      <property name="font">
       <font>
+       <family>Segoe UI</family>
        <pointsize>16</pointsize>
-       <weight>75</weight>
        <bold>true</bold>
       </font>
      </property>

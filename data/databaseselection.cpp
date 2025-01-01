@@ -27,15 +27,6 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
         }
     }
 
-#if defined(Q_OS_MAC)
-    QDir dir_logs;
-    QString txt_dir_log_path = dir_logs.toNativeSeparators(dirLogPath);
-    if (! QFile(txt_dir_log_path).exists()){
-        QString str_cmd = "mkdir -p " + txt_dir_log_path;
-        system(str_cmd.toStdString().c_str());
-    }
-#endif
-
     QDir dir(txt_path_config);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     QFileInfoList listFiles = dir.entryInfoList();
@@ -122,16 +113,17 @@ void DatabaseSelection::onRemoveRowListWidget()
     if (ui->listWidget->currentRow() == -1)
         return;
 
-    QMessageBox messange_box(QMessageBox::Question, tr("Eliminarea setărilor"), tr("Doriți să eliminați fișierul:<br>%1 ?").arg(ui->txtPath->text()),
-                             QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-    messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//    messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//    messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-    if (messange_box.exec() == QMessageBox::Yes){
+    QMessageBox messange_box(QMessageBox::Question,
+                             tr("Eliminarea set\304\203rilor"),
+                             tr("Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul:<br>%1 ?").arg(ui->txtPath->text()),
+                             QMessageBox::NoButton, this);
+    QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    messange_box.exec();
+
+    if (messange_box.clickedButton() == yesButton) {
         QDir file_remove;
         QString file_name = dirConfigPath + "/" + ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString() + ".conf";
 #if defined(Q_OS_LINUX)
@@ -145,7 +137,10 @@ void DatabaseSelection::onRemoveRowListWidget()
         qDebug() << str_cmd;
         system(str_cmd.toStdString().c_str());
 #endif
+    } else if (messange_box.clickedButton() == noButton) {
+
     }
+
     const int row = ui->listWidget->currentRow();
     ui->listWidget->removeItemWidget(ui->listWidget->takeItem(row));
 }
@@ -156,17 +151,20 @@ void DatabaseSelection::updateTimer()
         timer->stop();
     else
         return;
+
     QMessageBox messange_box(QMessageBox::Question,
                              tr("Crearea bazei de date"),
-                             tr("Adaugarea/crearea baza de date ?"),
-                             QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-    messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-    messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//    messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//    messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-    if (messange_box.exec() == QMessageBox::Yes)
+                             tr("Adaugarea/crearea bazei de date ?"),
+                             QMessageBox::NoButton, this);
+    QPushButton *yesButton    = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton     = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    messange_box.exec();
+
+    if (messange_box.clickedButton() == yesButton)
         onAddDatabase();
+    else if (messange_box.clickedButton() == noButton)
+        return;
+
 }

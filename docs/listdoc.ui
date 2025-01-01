@@ -6,16 +6,353 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>835</width>
-    <height>556</height>
+    <width>985</width>
+    <height>621</height>
    </rect>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
   </property>
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
    <item row="0" column="0">
-    <layout class="QHBoxLayout" name="layoutToolBar"/>
+    <layout class="QHBoxLayout" name="layoutToolBar">
+     <item>
+      <widget class="QToolButton" name="btnSelect">
+       <property name="styleSheet">
+        <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 10px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+       </property>
+       <property name="text">
+        <string>Selectează</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
+       </property>
+       <property name="toolButtonStyle">
+        <enum>Qt::ToolButtonTextBesideIcon</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnAdd">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnEdit">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnDeletion">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_2">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnAddFilter">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-add-icon.png</normaloff>:/img/filter-add-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnFilter">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-icon.png</normaloff>:/img/filter-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnFilterRemove">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/filter-delete-icon.png</normaloff>:/img/filter-delete-icon.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_3">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnUpdateTable">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/update_x32.png</normaloff>:/img/update_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_4">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPrint">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="Line" name="line_5">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QToolButton" name="btnPeriodDate">
+       <property name="styleSheet">
+        <string notr="true">QToolButton {
+    border: none;
+    background-color: transparent;
+    color: #4a4a4a;
+    font-size: 14px;
+}
+QToolButton:hover {
+    background-color: #f0f0f0;
+    color: #000000;
+}
+QToolButton:pressed {
+    background-color: #dcdcdc;
+}</string>
+       </property>
+       <property name="text">
+        <string>...</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/date_period.png</normaloff>:/img/date_period.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_2">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QLabel" name="lablePeriodDate">
+       <property name="font">
+        <font>
+         <family>Segoe UI</family>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="styleSheet">
+        <string notr="true">color: rgb(28, 113, 216);</string>
+       </property>
+       <property name="text">
+        <string>Period</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="0" column="1" rowspan="2">
     <widget class="QGroupBox" name="groupBoxFilterComplex">
@@ -27,7 +364,7 @@
      </property>
      <property name="font">
       <font>
-       <weight>75</weight>
+       <family>Segoe UI</family>
        <bold>true</bold>
       </font>
      </property>
@@ -45,7 +382,7 @@
           <widget class="QLabel" name="label_2">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -54,26 +391,23 @@
            </property>
           </widget>
          </item>
-         <item row="0" column="1">
-          <widget class="QDateTimeEdit" name="filterStartDateTime">
-           <property name="font">
-            <font>
-             <weight>50</weight>
-             <bold>false</bold>
-            </font>
-           </property>
-           <property name="calendarPopup">
-            <bool>true</bool>
-           </property>
-          </widget>
-         </item>
          <item row="1" column="1">
           <widget class="QDateTimeEdit" name="filterEndDateTime">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
+           </property>
+           <property name="dateTime">
+            <datetime>
+             <hour>23</hour>
+             <minute>59</minute>
+             <second>59</second>
+             <year>1970</year>
+             <month>1</month>
+             <day>1</day>
+            </datetime>
            </property>
            <property name="calendarPopup">
             <bool>true</bool>
@@ -84,12 +418,61 @@
           <widget class="QLabel" name="label">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
            <property name="text">
             <string>Lansarea perioadei</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QDateTimeEdit" name="filterStartDateTime">
+           <property name="font">
+            <font>
+             <family>Segoe UI</family>
+             <bold>false</bold>
+            </font>
+           </property>
+           <property name="dateTime">
+            <datetime>
+             <hour>12</hour>
+             <minute>0</minute>
+             <second>0</second>
+             <year>1970</year>
+             <month>1</month>
+             <day>1</day>
+            </datetime>
+           </property>
+           <property name="calendarPopup">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="2">
+          <widget class="QToolButton" name="btnChoicePeriod">
+           <property name="styleSheet">
+            <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+           </property>
+           <property name="text">
+            <string>...</string>
            </property>
           </widget>
          </item>
@@ -100,7 +483,7 @@
        <widget class="QGroupBox" name="groupBoxFilter">
         <property name="font">
          <font>
-          <weight>75</weight>
+          <family>Segoe UI</family>
           <bold>true</bold>
          </font>
         </property>
@@ -112,7 +495,7 @@
           <widget class="QLabel" name="label_5">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -125,7 +508,7 @@
           <widget class="QComboBox" name="FilterComboOrganization">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -135,7 +518,7 @@
           <widget class="QComboBox" name="filterComboUser">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -145,7 +528,7 @@
           <widget class="QLabel" name="label_3">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -158,7 +541,7 @@
           <widget class="QLabel" name="label_6">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -171,7 +554,7 @@
           <widget class="QComboBox" name="filterComboContract">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -181,7 +564,7 @@
           <widget class="QLabel" name="label_4">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -194,7 +577,7 @@
           <widget class="QLineEdit" name="filterEditNumberDoc">
            <property name="font">
             <font>
-             <weight>50</weight>
+             <family>Segoe UI</family>
              <bold>false</bold>
             </font>
            </property>
@@ -229,14 +612,24 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
-            <weight>50</weight>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
           <property name="text">
            <string>Aplică</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
           </property>
          </widget>
         </item>
@@ -248,14 +641,24 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
-            <weight>50</weight>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
           <property name="text">
            <string>Golește</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
           </property>
          </widget>
         </item>
@@ -267,14 +670,24 @@
             <verstretch>0</verstretch>
            </sizepolicy>
           </property>
+          <property name="minimumSize">
+           <size>
+            <width>94</width>
+            <height>0</height>
+           </size>
+          </property>
           <property name="font">
            <font>
-            <weight>50</weight>
+            <family>Segoe UI</family>
             <bold>false</bold>
            </font>
           </property>
           <property name="text">
            <string>Închide</string>
+          </property>
+          <property name="icon">
+           <iconset resource="../resource.qrc">
+            <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
           </property>
          </widget>
         </item>
@@ -301,6 +714,8 @@
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
  <connections/>
 </ui>

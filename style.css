@@ -26,17 +26,48 @@ QLineEdit:!enabled {
 
 QTextEdit
 {
-  border: 1px inset blue;
+  border: 1px inset gray;
   border-radius: 4px;
   background-color: palette(base);
 }
 
 QTextEdit::focus
 {
-  border: 1px solid;
+  border: 1px inset blue;
   border-radius:4px;
   background-color: palette(base);
+}
+
+QTextEdit:!enabled {
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: palette(base);
+  min-height: 18px;
+  color: #646464;
+}
+
+/* --------------------- QPlainTextEdit ---------------- */
+
+QPlainTextEdit
+{
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: palette(base);
+}
+
+QPlainTextEdit::focus
+{
   border: 1px inset blue;
+  border-radius:4px;
+  background-color: palette(base);
+}
+
+QPlainTextEdit:!enabled {
+  border: 1px inset gray;
+  border-radius: 4px;
+  background-color: palette(base);
+  min-height: 18px;
+  color: #646464;
 }
 
 /* --------------------- QDateEdit --------------------- */

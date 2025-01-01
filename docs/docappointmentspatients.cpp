@@ -139,7 +139,7 @@ void DocAppointmentsPatients::update_model()
     ui->tableView->setColumnWidth(section_doctor - 1, 200);
     ui->tableView->setColumnWidth(section_comment - 1, 400);
     ui->tableView->verticalHeader()->setStretchLastSection(true);
-    ui->tableView->verticalHeader()->setDefaultSectionSize(14);
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
 }
 
 bool DocAppointmentsPatients::removeData_Doc()

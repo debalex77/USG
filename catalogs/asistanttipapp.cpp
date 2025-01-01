@@ -8,7 +8,7 @@ AsistantTipApp::AsistantTipApp(QWidget *parent)
 {
     ui->setupUi(this);
 
-    setWindowTitle(tr("Asistentul sfaturilor aplicației."));
+    setWindowTitle(tr("Asistentul aplicației."));
     setWindowFlags(windowFlags() | Qt::WindowStaysOnTopHint);
 
     db = new DataBase(this);
@@ -73,7 +73,8 @@ void AsistantTipApp::onClose()
         qry.bindValue(":showAsistantHelper", ui->show_launch->isChecked());
         qry.bindValue(":id_users",           globals::idUserApp);
         if (! qry.exec())
-            qWarning(logWarning()) << tr("Nu a fost actualizate date de prezentare a asistentului de sfaturi %1")
+            qWarning(logWarning()) << this->metaObject()->className()
+                                   << tr(": nu au fost actualizate date de prezentare a asistentului de sfaturi %1")
                                           .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
         globals::showAsistantHelper = ui->show_launch->isChecked();
     }

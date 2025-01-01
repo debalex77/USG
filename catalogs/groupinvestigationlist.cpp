@@ -47,13 +47,13 @@ void GroupInvestigationList::updateTable()
     db = new DataBase(this);
     QSqlQuery qry;
     QSqlQuery qry_items;
-    qry.prepare("SELECT owner FROM tmp_investigations WHERE owner NOT NULL OR owner <> '' GROUP BY owner;");
+    qry.prepare("SELECT owner FROM investigations WHERE owner NOT NULL OR owner <> '' GROUP BY owner ORDER BY cod;");
     if (qry.exec()){
         while (qry.next()) {
 
             result = result + "gr_" + qry.value(0).toString() + "\n";
 
-            qry_items.prepare(QString("SELECT cod, name FROM tmp_investigations WHERE `use` = 1 AND owner = '%1' ORDER BY cod;").arg(qry.value(0).toString()));
+            qry_items.prepare(QString("SELECT cod, name FROM investigations WHERE `use` = 1 AND owner = '%1' ORDER BY cod;").arg(qry.value(0).toString()));
             if (qry_items.exec()){
                 while (qry_items.next()) {
                     result = result + " it_" + qry_items.value(0).toString() + " - " + qry_items.value(1).toString() + "\n";
@@ -63,7 +63,7 @@ void GroupInvestigationList::updateTable()
     }
 
     if (! ui->hideNotGroup->isChecked()){
-        qry_items.prepare("SELECT cod, name FROM tmp_investigations WHERE `use` = 0 ORDER BY cod;");
+        qry_items.prepare("SELECT cod, name FROM investigations WHERE `use` = 0 ORDER BY cod;");
         if (qry_items.exec()){
             while (qry_items.next()) {
                 result = result + "it_" + qry_items.value(0).toString() + " - " + qry_items.value(1).toString() + "\n";
@@ -82,18 +82,30 @@ void GroupInvestigationList::onPrint()
 
     QDir dir;
     print_model = new QSqlQueryModel(this);
-    print_model->setQuery("SELECT owner FROM tmp_investigations WHERE owner NOT NULL AND owner <> '' GROUP BY owner;");
+    print_model->setQuery("SELECT owner FROM investigations WHERE owner NOT NULL AND owner <> '' GROUP BY owner;");
 
     m_report = new LimeReport::ReportEngine(this);
+    m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
     m_report->dataManager()->addModel("list_group", print_model, true);
 
     LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("test");
 
+#if defined(Q_OS_LINUX)
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
             this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData));
 
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
             this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos));
+#elif defined(Q_OS_MACOS)
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData));
+
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos));
+#elif defined(Q_OS_WIN)
+    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackChildData()));
+    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangeChildPos()));
+#endif
 
     m_report->dataManager()->clearUserVariables();
     m_report->setShowProgressDialog(true);
@@ -109,16 +121,16 @@ void GroupInvestigationList::onPrint()
 
 void GroupInvestigationList::slotGetCallbackChildData(LimeReport::CallbackInfo info, QVariant &data)
 {
-    QSqlQuery *qry = new QSqlQuery(db->getDatabase());
-    qry->prepare("SELECT * FROM tmp_investigations WHERE owner = 'Screening';");
+    QSqlQuery *qry = new QSqlQuery();
+    qry->prepare("SELECT * FROM investigations WHERE owner = 'Screening';");
     qry->exec();
     prepareData(qry, info, data);
 }
 
 void GroupInvestigationList::slotChangeChildPos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
 {
-    QSqlQuery *ds = new QSqlQuery(db->getDatabase());
-    ds->prepare("SELECT * FROM tmp_investigations WHERE owner = 'Screening';");
+    QSqlQuery *ds = new QSqlQuery();
+    ds->prepare("SELECT * FROM investigations WHERE owner = 'Screening';");
     ds->exec();
     if (! ds)
         return;

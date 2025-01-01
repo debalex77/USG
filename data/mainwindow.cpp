@@ -5,13 +5,14 @@
 #include "userpreferences.h"
 #include <QDirIterator>
 #include <QDockWidget>
+#include <QFontDatabase>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    QSettings settings(ORGANIZATION_NAME, APPLICATION_NAME); // denumirea organizatiei si aplicatiei
+    QSettings settings(ORGANIZATION_NAME, USG_VERSION_FULL); // denumirea organizatiei si aplicatiei
 
     if (globals::minimizeAppToTray)
         initMinimizeAppToTray();
@@ -22,6 +23,8 @@ MainWindow::MainWindow(QWidget *parent)
     setCentralWidget(mdiArea);                         // instalam ca widgetul central
     mdiAreaCont = new MdiAreaContainer(mdiArea, this); // initierea container-lui MdiArea
     downloader_version = new DownloaderVersion(this);  // verificarea versiunei
+
+    db = new DataBase(this);
 
     update_app = new UpdateReleasesApp(this);
 
@@ -77,6 +80,9 @@ void MainWindow::initButton()
 {
     // alocam memoria
     toolBar                 = new QToolBar(tr("Bara cu instrumente"));
+#if defined (Q_OS_LINUX) || (Q_OS_WIN)
+    toolBar->setStyleSheet("font-family: 'Segoe UI';");
+#endif
     btnDoctors              = new QToolButton(toolBar);
     btnNurses               = new QToolButton(toolBar);
     btnPacients             = new QToolButton(toolBar);
@@ -95,58 +101,128 @@ void MainWindow::initButton()
     btnDoctors->setIcon(QIcon(":/img/doctor_x32.png"));
     btnDoctors->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnDoctors->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnDoctors->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnDoctors->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnNurses->setIcon(QIcon(":/img/nurse_x32.png"));
     btnNurses->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnNurses->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnNurses->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnNurses->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnPacients->setIcon(QIcon(":/img/pacient_x32.png"));
     btnPacients->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnPacients->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnPacients->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnPacients->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnHistoryPatient->setIcon(QIcon(":/img/medical-history.png"));
     btnHistoryPatient->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnHistoryPatient->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnHistoryPatient->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnHistoryPatient->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnUsers->setIcon(QIcon(":/img/user_x32.png"));
     btnUsers->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnUsers->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnUsers->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnUsers->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnPatientAppointments->setIcon(QIcon(":/img/registration_patients.png"));
     btnPatientAppointments->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnPatientAppointments->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnPatientAppointments->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnPatientAppointments->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnOrderEcho->setIcon(QIcon(":/img/orderEcho_x32.png"));
     btnOrderEcho->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnOrderEcho->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnOrderEcho->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnOrderEcho->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnDocExamen->setIcon(QIcon(":/img/examenEcho.png"));
     btnDocExamen->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnDocExamen->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnDocExamen->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnDocExamen->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnOrganizations->setIcon(QIcon(":/img/company_x32.png"));
     btnOrganizations->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnOrganizations->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnOrganizations->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnOrganizations->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnInvestigations->setIcon(QIcon(":/img/investigations_x32.png"));
     btnInvestigations->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnInvestigations->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnInvestigations->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnInvestigations->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnReports->setIcon(QIcon(":/img/reports.png"));
     btnReports->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnReports->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnReports->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnReports->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnPricing->setIcon(QIcon(":/img/price_x32.png"));
     btnPricing->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnPricing->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnPricing->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnPricing->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnSettings->setIcon(QIcon(":/img/settings_x32.png"));
     btnSettings->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnSettings->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnSettings->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnSettings->setStyleSheet("font-size: 13pt;");
+#endif
 
     btnAbout->setIcon(QIcon(":/img/info_x32.png"));
     btnAbout->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
     btnAbout->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnAbout->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnAbout->setStyleSheet("font-size: 13pt;");
+#endif
 
     //adaugam widget-uri in toolBar
     toolBar->addWidget(btnDoctors);
@@ -432,7 +508,7 @@ void MainWindow::setVersionAppInTableSettingsUsers()
         qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp IS NOT Null;");
     else
         qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp NOT NULL;");
-    qry.bindValue(":versionApp", APPLICATION_VERSION);
+    qry.bindValue(":versionApp", USG_VERSION_FULL);
     qry.bindValue(":id_users", globals::idUserApp);
     if (! qry.exec() && qry.next())
         qCritical(logCritical()) << tr("%1 - setVersionAppInTableSettingsUsers()").arg(metaObject()->className())
@@ -460,12 +536,12 @@ void MainWindow::updateTimer()
         timer->stop(); // oprim timerul
 
         if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
                            globals::nameUserApp + ")");
         else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (.sqlite3): utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): utilizator (") + globals::nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
 
         if (globals::firstLaunch){
             textEdit_dockWidget->setHtml(tr("%1   %2: Se completează catalogul <b><u>'Investigații'</u></b>.")
@@ -478,15 +554,15 @@ void MainWindow::updateTimer()
         // Verificam daca este schimbata versiunea aplicatiei
         QString version_app = getVersionAppInTableSettingsUsers();
 
-        if (version_app != APPLICATION_VERSION){
-            // prezentam informatia de actualizarea in panoul informativ
-            textEdit_dockWidget->clear();
-            textEdit_dockWidget->setHtml(tr("%1   Aplicația a fost actualizată până la versiunea: USG v" APPLICATION_VERSION).arg(db->getHTMLImageInfo()));
-            textEdit_dockWidget->setFixedHeight(70);
-            dock_widget->show();
-            if (update_app->execUpdateCurrentRelease(APPLICATION_VERSION)){
+        if (version_app != USG_VERSION_FULL){
+            if (update_app->execUpdateCurrentRelease(version_app)){
                 setVersionAppInTableSettingsUsers();
                 openDescriptionRealease();
+                // prezentam informatia de actualizarea in panoul informativ
+                textEdit_dockWidget->clear();
+                textEdit_dockWidget->setHtml(tr("%1   Aplicația a fost actualizată până la versiunea: USG v" USG_VERSION_FULL).arg(db->getHTMLImageInfo()));
+                textEdit_dockWidget->setFixedHeight(100);
+                dock_widget->show();
             }
         }
 
@@ -495,7 +571,7 @@ void MainWindow::updateTimer()
             checkUpdateApp();
 
         // prezentarea istoriei versiunilor
-        if (globals::showHistoryVersion && version_app == APPLICATION_VERSION)
+        if (globals::showHistoryVersion && version_app == USG_VERSION_FULL)
             openDescriptionRealease();
 
         // prezentarea manualului online
@@ -516,12 +592,25 @@ void MainWindow::updateTimerDocWidget()
         globals::thisMySQL = (globals::sqlitePathBase.isEmpty());
         globals::thisSqlite = (globals::mySQLhost.isEmpty());
         if (globals::thisMySQL & globals::thisSqlite || !globals::thisMySQL & !globals::thisSqlite)
-            QMessageBox::critical(this, "Atentie", "Nu sunt determinate variabile globale !!!", QMessageBox::Ok);
+            QMessageBox::critical(this, "Atenție", "Nu sunt determinate variabile globale !!!", QMessageBox::Ok);
 
-        db->loadInvestigationFromXml();
+        txt_title_bar->setText(tr("Se incarca clasificatorul \"Investigații\" ... "));
+
+        progress = new QProgressBar(ui->statusbar);
+        progress->setAlignment(Qt::AlignRight);
+        progress->setMaximumSize(120, 15);
+        progress->hide(); // Ascunde inițial bara de progres
+        txt_title_bar->hide();
+        ui->statusbar->addWidget(txt_title_bar);
+        ui->statusbar->addWidget(progress);
+
+        db->updateInvestigationFromXML_2024();
+        connect(db, &DataBase::updateProgress, this, &MainWindow::handleUpdateProgress);
+        connect(db, &DataBase::finishedProgress, this, &MainWindow::handleFinishedProgress);
+
         db->insertDataForTabletypesPrices(); //completarea preturilor
 
-        textEdit_dockWidget->setHtml(tr("%1<br>%2 %3 Finisarea completării catalogului <b><u>'Investigații'</u></b> sursa - <b>Catalogul tarifelor unice (anexa nr.3)</b>.<br>"
+        textEdit_dockWidget->setHtml(tr("%1<br>%2 %3 Completat clasificatorul <b><u>'Investigații'</u></b> sursa - <b>Catalogul tarifelor unice (anexa nr.3)</b>.<br>"
                                         "     <b>Vezi:</b> <em>Meniu principal al aplicației -> Cataloage -> Clasificatori -> Investigații<em>")
                                      .arg(textEdit_dockWidget->toHtml(), db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
         QDir dir;
@@ -653,6 +742,19 @@ void MainWindow::openOrderEcho()
     list_order->setProperty("typeDoc", list_order->orderEcho);
     mdiAreaCont->addWidget(list_order);
     list_order->show();
+
+    txt_title_bar->setText(tr("Se incarca documente ... "));
+
+    progress = new QProgressBar(ui->statusbar);
+    progress->setAlignment(Qt::AlignRight);
+    progress->setMaximumSize(120, 15);
+    progress->hide(); // Ascunde inițial bara de progres
+    txt_title_bar->hide();
+    ui->statusbar->addWidget(txt_title_bar);
+    ui->statusbar->addWidget(progress);
+
+    connect(list_order, &ListDocReportOrder::updateProgress, this, &MainWindow::handleUpdateProgress);
+    connect(list_order, &ListDocReportOrder::finishedProgress, this, &MainWindow::handleFinishedProgress);
 }
 
 void MainWindow::openHistoryPatient()
@@ -702,6 +804,7 @@ void MainWindow::openPricing()
 {
     listDoc = new ListDoc(this);
     listDoc->setAttribute(Qt::WA_DeleteOnClose);
+    listDoc->setProperty("ModeSelection", false);
     listDoc->setWindowIcon(QIcon(":/img/price_x32.png"));
     mdiAreaCont->addWidget(listDoc);
     listDoc->show();
@@ -709,7 +812,11 @@ void MainWindow::openPricing()
 
 void MainWindow::removeSubWindow()
 {
-    mdiAreaCont->remove(mdiAreaCont->currentIndex());
+    // mdiAreaCont->remove(mdiAreaCont->currentIndex());
+    auto activeSubWindow = mdiAreaCont->currentSubWindow();
+    if (activeSubWindow) {
+        activeSubWindow->close(); // Închide subfereastra activă
+    }
 }
 
 void MainWindow::onOpenLMDesigner()
@@ -733,31 +840,33 @@ void MainWindow::onReadyVersion()
     str_version_online.replace(2,1,"");
     const int num_version_online = str_version_online.toInt();
 
-    QString version_app = QString(APPLICATION_VERSION);
+    QString version_app = QString(USG_VERSION_FULL);
     version_app.replace(1,1,"");
     version_app.replace(2,1,"");
     const int num_version_app = version_app.toInt();
 
-    if (APPLICATION_VERSION != version_online && num_version_app < num_version_online){
-        textEdit_dockWidget->setHtml(tr("%1   %2: Există o versiune nouă a aplicației <b><u>%3</u></b>.")
+    if (USG_VERSION_FULL != version_online && num_version_app < num_version_online){
+        textEdit_dockWidget->setHtml(tr("%1   %2: Exist\304\203 o versiune nou\304\203 a aplica\310\233iei <b><u>%3</u></b>.")
                                          .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss"), version_online));
         textEdit_dockWidget->setFixedHeight(70);
         dock_widget->show();
 
         QMessageBox messange_box(QMessageBox::Question,
-                                 tr("Verificarea actualizării"),
-                                 tr("Doriți să descarcați versiunea nouă ?"),
-                                 QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-#endif
-        if (messange_box.exec() == QMessageBox::Yes) {
+                                 tr("Verificarea actualiz\304\203rii"),
+                                 tr("Dori\310\233i s\304\203 desc\304\203rca\310\233i versiunea nou\304\203 ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton){
             downloadNewVersionApp(version_online);
+        } else if (messange_box.clickedButton() == noButton) {
+
         }
 
     } else {
-        txt_title_bar->setText(tr("Folosiți cea mai recentă versiune \"%1\".").arg(APPLICATION_VERSION));
+        txt_title_bar->setText(tr("Folosiți cea mai recentă versiune \"%1\".").arg(USG_VERSION_FULL));
     }
 
 #if defined(Q_OS_LINUX)
@@ -782,11 +891,7 @@ void MainWindow::onShowAsistantTip()
 
 void MainWindow::downloadNewVersionApp(const QString str_new_version)
 {
-#if defined(Q_OS_LINUX)
-    txt_title_bar->setText(tr("Se descarcă fișierul ... "));
-#elif defined(Q_OS_WIN)
     txt_title_bar->setText(tr("Se descarc\304\203 fi\310\231ierul ... "));
-#endif
 
     progress = new QProgressBar(ui->statusbar);
     progress->setAlignment(Qt::AlignRight);
@@ -810,13 +915,7 @@ void MainWindow::onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal)
 void MainWindow::onNewAppFinishedDownload()
 {
     delete progress;
-
-#if defined(Q_OS_LINUX)
-    txt_title_bar->setText(tr("Fișierul este descărcat cu succes."));
-#elif defined(Q_OS_WIN)
     txt_title_bar->setText(tr("Fi\310\231ierul este desc\304\203rcat cu succes."));
-#endif
-
 }
 
 // **********************************************************************************
@@ -827,17 +926,12 @@ void MainWindow::initMinimizeAppToTray()
     /* initierea iconitei in tray */
     trayIcon = new QSystemTrayIcon(this);
     trayIcon->setIcon(QIcon(":/img/eco_systemTray.png"));
-    trayIcon->setToolTip(APPLICATION_NAME + " v" + APPLICATION_VERSION);
+    trayIcon->setToolTip(APPLICATION_NAME + " v" + USG_VERSION_FULL);
 
     /* meniu */
-    QMenu * menu = new QMenu(this);
-#if defined(Q_OS_WIN)
-    QAction * viewWindow = new QAction(tr("Maximiza\310\233i fereastra"), this);
-    QAction * quitAction = new QAction(tr("Ie\310\231ire"), this);
-#elif defined(Q_OS_LINUX)
-    QAction * viewWindow = new QAction(tr("Maximizați fereastra"), this);
-    QAction * quitAction = new QAction(tr("Ieșire"), this);
-#endif
+    QMenu   *menu = new QMenu(this);
+    QAction *viewWindow = new QAction(tr("Maximiza\310\233i fereastra"), this);
+    QAction *quitAction = new QAction(tr("Ie\310\231ire"), this);
 
     connect(viewWindow, &QAction::triggered, this, &MainWindow::show);
     connect(quitAction, &QAction::triggered, this, &MainWindow::close);
@@ -871,6 +965,29 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
     }
 }
 
+void MainWindow::handleUpdateProgress(int num_records, int value)
+{
+    if (num_records <= 0)
+        return;
+
+    if (! txt_title_bar->isVisible())
+        txt_title_bar->show();
+
+    // Calculează progresul
+    int value_progress = (value * 100) / num_records;
+
+    if (! progress->isVisible())
+        progress->show();
+
+    progress->setValue(value_progress);
+}
+
+void MainWindow::handleFinishedProgress(const QString textTitle)
+{
+    delete progress;
+    txt_title_bar->setText(textTitle);
+}
+
 // **********************************************************************************
 // --- evenimentele formei
 
@@ -882,41 +999,38 @@ void MainWindow::closeEvent(QCloseEvent *event)
         this->hide();
         QSystemTrayIcon::MessageIcon icon = QSystemTrayIcon::MessageIcon(QSystemTrayIcon::Information);
 
-#if defined(Q_OS_WIN)
         trayIcon->showMessage(APPLICATION_NAME,
-                              tr("Aplica\310\233ia este minimizat\304\203 în tray. Pentru a maximiza fereastra aplica\310\233iei, face\310\233i clic pe pictograma aplica\310\233iei din tray."),
+                              tr("Aplica\310\233ia este minimizat\304\203 în tray. "
+                                 "Pentru a maximiza fereastra aplica\310\233iei, "
+                                 "face\310\233i clic pe pictograma aplica\310\233iei din tray."),
                               icon,
                               2000);
-#elif defined(Q_OS_LINUX)
-        trayIcon->showMessage(APPLICATION_NAME,
-                              tr("Aplicația este minimizată în tray. Pentru a maximiza fereastra aplicației, faceți clic pe pictograma aplicației din tray."),
-                              icon,
-                              2000);
-#endif
 
     } else {
 
         if (! globals::showQuestionCloseApp){
             closeDatabases();
-            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.").arg(globals::nameUserApp);
+            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.")
+                                    .arg(globals::nameUserApp);
             event->accept();
             return;
         }
 
-        QMessageBox messange_box(QMessageBox::Question, tr("Finisarea lucrului"), tr("Doriți să inchideți aplicația ?"),
-                                 QMessageBox::Yes | QMessageBox::No, this);
-#if (QT_VERSION < QT_VERSION_CHECK(6, 0, 0))
-        messange_box.setButtonText(QMessageBox::Yes, tr("Da"));
-        messange_box.setButtonText(QMessageBox::No, tr("Nu"));
-//#else
-//    messange_box.addButton(tr("Da"), QMessageBox::Yes);
-//    messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-#endif
-        if (messange_box.exec() == QMessageBox::Yes){
+        QMessageBox messange_box(QMessageBox::Question,
+                                 tr("Finisarea lucrului"),
+                                 tr("Dori\310\233i s\304\203 \303\256nchide\310\233i aplica\310\233ia ?"),
+                                 QMessageBox::NoButton, this);
+        QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+        messange_box.exec();
+
+        if (messange_box.clickedButton() == yesButton){
             closeDatabases();
             qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals::nameUserApp);
             event->accept();
-        } else {
+        } else if (messange_box.clickedButton() == noButton) {
             event->ignore();
         }
 
@@ -1079,21 +1193,21 @@ void MainWindow::changeEvent(QEvent *event)
     if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);    // traducem
         if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
                            globals::nameUserApp + ")");
         else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
         updateTextBtn();
     } else if (event->type() == QEvent::WindowTitleChange){
         if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
                            globals::nameUserApp + ")");
         else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + APPLICATION_VERSION + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
     }
 }
 

@@ -4,15 +4,16 @@
 #include <QDialog>
 #include <QKeyEvent>
 #include <QMessageBox>
-#include <QToolBar>
 #include <QToolButton>
 #include <QAction>
 #include <QMenu>
 #include <QLineEdit>
 #include <QStatusBar>
+#include <QScrollBar>
 
 #include "data/popup.h"
 #include "data/database.h"
+#include <data/enums.h>
 #include <data/appsettings.h>
 #include <catalogs/catorganizations.h>
 #include <catalogs/catcontracts.h>
@@ -24,6 +25,9 @@
 #include "models/basesqlquerymodel.h"
 #include <models/basesqltablemodel.h>
 #include "models/basesortfilterproxymodel.h"
+
+#include <models/documenttablemodel.h>
+#include <models/paginatedsqlmodel.h>
 
 namespace Ui {
 class ListDocReportOrder;
@@ -83,8 +87,12 @@ signals:
     void IdPacientChanged();
     void IdUserChanged();
     void NumberDocChanged();
+    void updateProgress(const int num_records, const int value);
+    void finishedProgress(const QString txt);
 
 private slots:
+    void onScroll(int value);
+
     void updateMainTableByTimer();
     void enableLineEditSearch();
     void onClosePeriodFilter();
@@ -150,10 +158,11 @@ private:
         section_searchPacient  = 11,
         section_pacient        = 12,
         section_IDNP           = 13,
-        section_idUser         = 14,
-        section_user           = 15,
-        section_sum            = 16,
-        section_comment        = 17
+        section_doctor         = 14,
+        section_idUser         = 15,
+        section_user           = 16,
+        section_sum            = 17,
+        section_comment        = 18
     };
 
     enum report_sections
@@ -189,6 +198,7 @@ private:
 
     void updateTableView();
     void updateTableViewOrderEcho();
+    void updateTableViewOrderEchoFull();
     void updateTableViewReportEcho();
     void updateHeaderTableOrderEcho();
     void updateHeaderTableReportEcho();
@@ -223,6 +233,7 @@ private:
     static const int sz_search_pacient  = 400;
     static const int sz_pacient         = 230;
     static const int sz_idnp            = 130;
+    static const int sz_doctor          = 80;
     static const int sz_id_user         = 5;
     static const int sz_user            = 60;
     static const int sz_sum             = 50;
@@ -237,28 +248,10 @@ private:
 
     BaseSqlQueryModel *modelOrganizations;
     BaseSqlQueryModel *modelContracts;
-    BaseSqlQueryModel *modelTable;
+    PaginatedSqlModel *modelTable;//BaseSqlQueryModel *modelTable;
     BaseSqlQueryModel *model_view_table_order;
     BaseSqlQueryModel *model_view_table_report;
     BaseSortFilterProxyModel *proxyTable;
-
-    QToolBar    *toolBar;
-    QToolButton *btnAdd;
-    QToolButton *btnEdit;
-    QToolButton *btnDeletion;
-    QToolButton *btnFilter;
-    QToolButton *btnAddFilter;
-    QToolButton *btnUpdateTable;
-    QToolButton *btnFilterRemove;
-    QToolButton *btnPrint;
-    QToolButton *btnReport;
-    QToolButton *btnViewTab;
-    QToolButton *btnPeriodDate;
-    QToolButton *btnSearch;
-    QToolButton *btnHideShowColumn;
-
-    QLabel    *lablePeriodDate;
-    QLineEdit *editSearch;
 
     int pressed_btn_viewTab = idx_unknow; // pu determinarea apasarii btn
 
@@ -267,6 +260,8 @@ private:
     PatientHistory *patient_history;
 
     QTimer *timer;
+
+    bool loadDocumentsFull = false; // pu incarcarea datelor documetelor de la initierea programei se seteaza la enableLineEditSearch()
 
     ChoiceColumns *columns;
 
