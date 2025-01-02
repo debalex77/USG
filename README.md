@@ -2,7 +2,9 @@
 The application for the records of patients who have passed ultrasound investigations, with the memory of contact   
 details and identity documents. 
 
-![about](https://github.com/debalex77/USG/assets/148941267/6c4969d8-d5b9-4897-9847-90b426d7d4e3)  
+![2025-01-01_22-09](https://github.com/user-attachments/assets/89b3964d-31d1-44ed-bf22-5c2b13642851)
+![2025-01-01_22-06](https://github.com/user-attachments/assets/667abdf9-c456-49e2-91bc-4981ce476da9)
+
 
 ### Purpose:  
 • Creating an independent database of patients (in the field of ultrasound)  
