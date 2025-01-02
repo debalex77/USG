@@ -347,6 +347,9 @@ void DataBase::loadInvestigationFromXml()
 
 void DataBase::updateInvestigationFromXML_2024()
 {
+    int count_num = 82; // vezi resource.qrc - investig.xml
+    int progress = 0;
+
     // Deschidem fișierul XML
     QFile file(":/xmls/investig_2024.xml");
     if (! file.open(QIODevice::ReadOnly | QIODevice::Text)) {
@@ -418,6 +421,9 @@ void DataBase::updateInvestigationFromXML_2024()
                 qInfo(logInfo()) << "A fost inserata investigatia noua cu codul " << cod << ".";
             }
         }
+
+        ++progress;
+        emit updateProgress(count_num, progress);
     }
 
     qInfo(logInfo()) << "Actualizat clasificatorul \"Investigatii\" pe anul 2024.";

@@ -250,7 +250,7 @@ QVariant PaginatedSqlModel::data(const QModelIndex &index, int role) const
         if (col == orderSection_numberDoc ||
             col == orderSection_sum ||
             col == orderSection_user)
-            return Qt::AlignHCenter;
+            return int(Qt::AlignHCenter | Qt::AlignVCenter);
 
     }
 

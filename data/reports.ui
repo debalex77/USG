@@ -10,6 +10,12 @@
     <height>700</height>
    </rect>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>112</width>
+    <height>0</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <family>Segoe UI</family>
@@ -85,7 +91,7 @@ QToolButton:pressed
        <widget class="QToolButton" name="btnOpenDesigner">
         <property name="minimumSize">
          <size>
-          <width>92</width>
+          <width>112</width>
           <height>21</height>
          </size>
         </property>
@@ -161,7 +167,7 @@ QToolButton:pressed
        <widget class="QToolButton" name="btnExportPdf">
         <property name="minimumSize">
          <size>
-          <width>92</width>
+          <width>112</width>
           <height>21</height>
          </size>
         </property>
@@ -200,7 +206,7 @@ QToolButton:pressed
        <widget class="QToolButton" name="btnSettingsReport">
         <property name="minimumSize">
          <size>
-          <width>92</width>
+          <width>112</width>
           <height>21</height>
          </size>
         </property>
@@ -239,7 +245,7 @@ QToolButton:pressed
        <widget class="QToolButton" name="btnPrintReport">
         <property name="minimumSize">
          <size>
-          <width>92</width>
+          <width>112</width>
           <height>21</height>
          </size>
         </property>
@@ -315,7 +321,7 @@ QToolButton:pressed
        <widget class="QToolButton" name="btnGenerateReport">
         <property name="minimumSize">
          <size>
-          <width>92</width>
+          <width>112</width>
           <height>21</height>
          </size>
         </property>
