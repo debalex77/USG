@@ -272,6 +272,7 @@ void UpdateReleasesApp::updateRelease_3_0_1()
     updateTablePacients_release_3_0_1();
     updateTableKidney_release_3_0_1();
     updateTableIntestinalLoops_release_3_0_1();
+    updateTableGynecology_release_3_0_1();
     updateTableformationsSystemTemplates_release_3_0_1();
     createIndex_release_3_0_1();
     createIndexForBaseImage_3_0_1();
@@ -401,6 +402,58 @@ void UpdateReleasesApp::updateTableIntestinalLoops_release_3_0_1()
 {
     if (db->createTableIntestinalLoop())
         qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: a fost creata tabela 'tableIntestinalLoop'";
+}
+
+void UpdateReleasesApp::updateTableGynecology_release_3_0_1()
+{
+    QSqlQuery qry;
+
+    if (globals::thisSqlite){
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN junctional_zone TEXT CHECK(junctional_zone IN ('contur clar', 'contur sters')) DEFAULT 'contur clar';"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'junctional_zone' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'junctional_zone' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN junctional_zone_description TEXT DEFAULT NULL;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'junctional_zone_description' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'junctional_zone_description' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN cervical_canal TEXT CHECK(cervical_canal IN ('nedilatat', 'dilatat')) DEFAULT 'nedilatat';"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'cervical_canal' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'cervical_canal' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN cervical_canal_formations TEXT DEFAULT NULL;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'cervical_canal_formations' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'cervical_canal_formations' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN fallopian_tubes TEXT CHECK(fallopian_tubes IN ('nonvizibile', 'vizibile')) DEFAULT 'nonvizibile';"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'fallopian_tubes' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'fallopian_tubes' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN fallopian_tubes_formations TEXT DEFAULT NULL;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'fallopian_tubes_formations' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' sectia 'fallopian_tubes_formations' (bd sqlite).";
+
+    } else {
+
+        if (qry.exec("ALTER TABLE `tableGynecology` "
+                     "ADD COLUMN `junctional_zone` ENUM('contur clar', 'contur sters') DEFAULT 'contur clar', "
+                     "ADD COLUMN `junctional_zone_description` VARCHAR(256) DEFAULT NULL,"
+                     "ADD COLUMN `cervical_canal` ENUM('nedilatat', 'dilatat') DEFAULT 'nedilatat',"
+                     "ADD COLUMN `cervical_canal_formations` VARCHAR(256) DEFAULT NULL,"
+                     "ADD COLUMN `fallopian_tubes` ENUM('nonvizibile', 'vizibile') DEFAULT 'nonvizibile',"
+                     "ADD COLUMN `fallopian_tubes_formations` VARCHAR(256) DEFAULT NULL ;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectii noi 'junctional_zone', 'junctional_zone_description', 'cervical_canal', 'cervical_canal_formations', "
+                                "'fallopian_tubes', 'fallopian_tubes_formations' in tabela 'tableGynecology'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu s-a efectuat modifcarea tabelei 'tableGynecology' la bd MySQL.";
+    }
 }
 
 void UpdateReleasesApp::updateTableformationsSystemTemplates_release_3_0_1()

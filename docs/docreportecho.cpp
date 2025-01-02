@@ -1854,6 +1854,10 @@ void DocReportEcho::connections_gynecology()
                 if (ui->gynecology_uterus_formations->toPlainText().length() > 500)
                     ui->gynecology_uterus_formations->textCursor().deletePreviousChar();
             });
+    ui->gynecology_jonctional_zone_description->setMaxLength(256);
+    ui->gynecology_jonctional_zone_description->setPlaceholderText(tr("... maximum 256 caractere"));
+    ui->gynecology_canal_cervical_formations->setMaxLength(256);
+    ui->gynecology_canal_cervical_formations->setPlaceholderText(tr("... maximum 256 caractere"));
     ui->gynecology_ecou_dimens->setMaxLength(5);
     ui->gynecology_ecou_ecostructure->setMaxLength(100);
     ui->gynecology_douglas->setMaxLength(100);
@@ -1864,6 +1868,8 @@ void DocReportEcho::connections_gynecology()
     ui->gynecology_ovary_right_volum->setMaxLength(5);
     ui->gynecology_follicule_left->setMaxLength(100);
     ui->gynecology_follicule_right->setMaxLength(100);
+    ui->gynecology_fallopian_tubes_formations->setMaxLength(256);
+    ui->gynecology_fallopian_tubes_formations->setPlaceholderText(tr("... maximum 256 caractere"));
     ui->gynecology_ovary_formations_left->setPlaceholderText(tr("... maximum 300 caractere"));
     connect(ui->gynecology_ovary_formations_left, &QPlainTextEdit::textChanged, this, [=]()
             {
@@ -4294,10 +4300,14 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         "uterus_pozition,"
                         "uterus_ecostructure,"
                         "uterus_formations,"
+                        "junctional_zone,"
+                        "junctional_zone_description,"
                         "ecou_dimens,"
                         "ecou_ecostructure,"
                         "cervix_dimens,"
                         "cervix_ecostructure,"
+                        "cervical_canal,"
+                        "cervical_canal_formations,"
                         "douglas,"
                         "plex_venos,"
                         "ovary_right_dimens,"
@@ -4308,8 +4318,10 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         "ovary_left_follicle,"
                         "ovary_right_formations,"
                         "ovary_left_formations,"
+                        "fallopian_tubes,"
+                        "fallopian_tubes_formations,"
                         "concluzion,"
-                        "recommendation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                        "recommendation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             qry.addBindValue(m_id);
             if (globals::thisMySQL)
                 qry.addBindValue((ui->gynecology_btn_transvaginal->isChecked()) ? true : false);
@@ -4321,10 +4333,14 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
             qry.addBindValue(ui->gynecology_uterus_pozition->text());
             qry.addBindValue(ui->gynecology_uterus_ecostructure->text());
             qry.addBindValue(ui->gynecology_uterus_formations->toPlainText());
+            qry.addBindValue(ui->gynecology_combo_jonctional_zone->currentText());
+            qry.addBindValue((ui->gynecology_jonctional_zone_description->text().isEmpty()) ? QVariant() : ui->gynecology_jonctional_zone_description->text());
             qry.addBindValue(ui->gynecology_ecou_dimens->text());
             qry.addBindValue(ui->gynecology_ecou_ecostructure->text());
             qry.addBindValue(ui->gynecology_cervix_dimens->text());
             qry.addBindValue(ui->gynecology_cervix_ecostructure->text());
+            qry.addBindValue(ui->gynecology_combo_canal_cervical->currentText());
+            qry.addBindValue((ui->gynecology_canal_cervical_formations->text().isEmpty()) ? QVariant() : ui->gynecology_canal_cervical_formations->text());
             qry.addBindValue(ui->gynecology_douglas->text());
             qry.addBindValue(ui->gynecology_plex_venos->text());
             qry.addBindValue(ui->gynecology_ovary_right_dimens->text());
@@ -4335,6 +4351,8 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
             qry.addBindValue(ui->gynecology_follicule_left->text());
             qry.addBindValue(ui->gynecology_ovary_formations_right->toPlainText());
             qry.addBindValue(ui->gynecology_ovary_formations_left->toPlainText());
+            qry.addBindValue(ui->gynecology_combo_fallopian_tubes->currentText());
+            qry.addBindValue((ui->gynecology_fallopian_tubes_formations->text().isEmpty()) ? QVariant() : ui->gynecology_fallopian_tubes_formations->text());
             qry.addBindValue(ui->gynecology_concluzion->toPlainText());
             qry.addBindValue((ui->gynecology_recommendation->text().isEmpty()) ? QVariant() : ui->gynecology_recommendation->text());
             if (! qry.exec())
@@ -5086,10 +5104,14 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
                         "uterus_pozition        = :uterus_pozition,"
                         "uterus_ecostructure    = :uterus_ecostructure,"
                         "uterus_formations      = :uterus_formations,"
+                        "junctional_zone        = :junctional_zone,"
+                        "junctional_zone_description = :junctional_zone_description,"
                         "ecou_dimens            = :ecou_dimens,"
                         "ecou_ecostructure      = :ecou_ecostructure,"
                         "cervix_dimens          = :cervix_dimens,"
                         "cervix_ecostructure    = :cervix_ecostructure,"
+                        "cervical_canal         = :cervical_canal,"
+                        "cervical_canal_formations = :cervical_canal_formations,"
                         "douglas                = :douglas,"
                         "plex_venos             = :plex_venos,"
                         "ovary_right_dimens     = :ovary_right_dimens,"
@@ -5100,6 +5122,8 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
                         "ovary_left_follicle    = :ovary_left_follicle,"
                         "ovary_right_formations = :ovary_right_formations,"
                         "ovary_left_formations  = :ovary_left_formations,"
+                        "fallopian_tubes        = :fallopian_tubes,"
+                        "fallopian_tubes_formations = :fallopian_tubes_formations,"
                         "concluzion             = :concluzion,"
                         "recommendation         = :recommendation WHERE id_reportEcho = :id_reportEcho;");
             qry.bindValue(":id_reportEcho", m_id);
@@ -5113,10 +5137,14 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
             qry.bindValue(":uterus_pozition",        ui->gynecology_uterus_pozition->text());
             qry.bindValue(":uterus_ecostructure",    ui->gynecology_uterus_ecostructure->text());
             qry.bindValue(":uterus_formations",      ui->gynecology_uterus_formations->toPlainText());
+            qry.bindValue(":junctional_zone",        ui->gynecology_combo_jonctional_zone->currentText());
+            qry.bindValue(":junctional_zone_description",  (ui->gynecology_jonctional_zone_description->text().isEmpty()) ? QVariant() : ui->gynecology_jonctional_zone_description->text());
             qry.bindValue(":ecou_dimens",            ui->gynecology_ecou_dimens->text());
             qry.bindValue(":ecou_ecostructure",      ui->gynecology_ecou_ecostructure->text());
             qry.bindValue(":cervix_dimens",          ui->gynecology_cervix_dimens->text());
             qry.bindValue(":cervix_ecostructure",    ui->gynecology_cervix_ecostructure->text());
+            qry.bindValue(":cervical_canal",         ui->gynecology_combo_canal_cervical->currentText());
+            qry.bindValue(":cervical_canal_formations",  (ui->gynecology_canal_cervical_formations->text().isEmpty()) ? QVariant() : ui->gynecology_canal_cervical_formations->text());
             qry.bindValue(":douglas",                ui->gynecology_douglas->text());
             qry.bindValue(":plex_venos",             ui->gynecology_plex_venos->text());
             qry.bindValue(":ovary_right_dimens",     ui->gynecology_ovary_right_dimens->text());
@@ -5127,6 +5155,8 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
             qry.bindValue(":ovary_left_follicle",    ui->gynecology_follicule_left->text());
             qry.bindValue(":ovary_right_formations", ui->gynecology_ovary_formations_right->toPlainText());
             qry.bindValue(":ovary_left_formations",  ui->gynecology_ovary_formations_left->toPlainText());
+            qry.bindValue(":fallopian_tubes",        ui->gynecology_combo_fallopian_tubes->currentText());
+            qry.bindValue(":fallopian_tubes_formations", (ui->gynecology_fallopian_tubes_formations->text().isEmpty()) ? QVariant() : ui->gynecology_fallopian_tubes_formations->text());
             qry.bindValue(":concluzion",             ui->gynecology_concluzion->toPlainText());
             qry.bindValue(":recommendation",         (ui->gynecology_recommendation->text().isEmpty()) ? QVariant() : ui->gynecology_recommendation->text());
             if (! qry.exec())
@@ -6205,10 +6235,14 @@ void DocReportEcho::setDataFromTableGynecology()
             ui->gynecology_uterus_pozition->setText(qry.value(record.indexOf("uterus_pozition")).toString());
             ui->gynecology_uterus_ecostructure->setText(qry.value(record.indexOf("uterus_ecostructure")).toString());
             ui->gynecology_uterus_formations->setPlainText(qry.value(record.indexOf("uterus_formations")).toString());
+            ui->gynecology_combo_jonctional_zone->setCurrentText(qry.value(record.indexOf("junctional_zone")).toString());
+            ui->gynecology_jonctional_zone_description->setText(qry.value(record.indexOf("junctional_zone_description")).toString());
             ui->gynecology_ecou_dimens->setText(qry.value(record.indexOf("ecou_dimens")).toString());
             ui->gynecology_ecou_ecostructure->setText(qry.value(record.indexOf("ecou_ecostructure")).toString());
             ui->gynecology_cervix_dimens->setText(qry.value(record.indexOf("cervix_dimens")).toString());
             ui->gynecology_cervix_ecostructure->setText(qry.value(record.indexOf("cervix_ecostructure")).toString());
+            ui->gynecology_combo_canal_cervical->setCurrentText(qry.value(record.indexOf("cervical_canal")).toString());
+            ui->gynecology_canal_cervical_formations->setText(qry.value(record.indexOf("cervical_canal_formations")).toString());
             ui->gynecology_douglas->setText(qry.value(record.indexOf("douglas")).toString());
             ui->gynecology_plex_venos->setText(qry.value(record.indexOf("plex_venos")).toString());
             ui->gynecology_ovary_right_dimens->setText(qry.value(record.indexOf("ovary_right_dimens")).toString());
@@ -6219,6 +6253,8 @@ void DocReportEcho::setDataFromTableGynecology()
             ui->gynecology_follicule_left->setText(qry.value(record.indexOf("ovary_left_follicle")).toString());
             ui->gynecology_ovary_formations_right->setPlainText(qry.value(record.indexOf("ovary_right_formations")).toString());
             ui->gynecology_ovary_formations_left->setPlainText(qry.value(record.indexOf("ovary_left_formations")).toString());
+            ui->gynecology_combo_fallopian_tubes->setCurrentText(qry.value(record.indexOf("fallopian_tubes")).toString());
+            ui->gynecology_fallopian_tubes_formations->setText(qry.value(record.indexOf("fallopian_tubes_formations")).toString());
             ui->gynecology_concluzion->setPlainText(qry.value(record.indexOf("concluzion")).toString());
             ui->gynecology_recommendation->setText(qry.value(record.indexOf("recommendation")).toString());
         }

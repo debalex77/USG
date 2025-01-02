@@ -27,6 +27,7 @@ private:
     void updateTablePacients_release_3_0_1();
     void updateTableKidney_release_3_0_1();
     void updateTableIntestinalLoops_release_3_0_1();
+    void updateTableGynecology_release_3_0_1();
     void updateTableformationsSystemTemplates_release_3_0_1();
     void createIndex_release_3_0_1();
     void createIndexForBaseImage_3_0_1();
