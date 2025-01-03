@@ -21,10 +21,10 @@ Qt::ItemFlags BaseSqlTableModel::flags(const QModelIndex &index) const
     QString strData = QSqlTableModel::data(index, Qt::DisplayRole).toString();     // daca initial flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled
                                                                                    // nu este posibila completarea programata:
     if (parent()->inherits("DocPricing")){                                         // Procedeul:
-        if ((index.column() >= col_pricing_Id) &&                                  // 1 - verificam daca sunt date
-            (index.column() <= col_pricing_IdPricings)) {                          // 2 - setam flags
+        if ((index.column() >= Enums::PRICING_COLUMN::PRICING_COLUMN_ID) &&                                  // 1 - verificam daca sunt date
+            (index.column() <= Enums::PRICING_COLUMN::PRICING_COLUMN_ID_PRICINGS)) {                          // 2 - setam flags
             flags |= Qt::ItemIsEditable;
-        } else if (index.column() == col_pricing_Price) {
+        } else if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) {
             flags |= Qt::ItemIsEditable;
         } else {
             if (!strData.isEmpty())  // verificam daca sunt date (daca date nu sunt nu setam 'flags')
@@ -35,10 +35,10 @@ Qt::ItemFlags BaseSqlTableModel::flags(const QModelIndex &index) const
         if (m_tableSource == "tableSource"){
             flags = Qt::ItemIsSelectable | Qt::ItemIsEnabled;
         } else {
-            if ((index.column() >= col_pricing_Id) &&                                   // 1 - verificam daca sunt date
-                    (index.column() <= col_pricing_IdPricings)){                        // 2 - setam flags
+            if ((index.column() >= Enums::PRICING_COLUMN::PRICING_COLUMN_ID) &&                                   // 1 - verificam daca sunt date
+                    (index.column() <= Enums::PRICING_COLUMN::PRICING_COLUMN_ID_PRICINGS)){                        // 2 - setam flags
                 flags |= Qt::ItemIsEditable;
-            } else if (index.column() == col_pricing_Price) {
+            } else if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) {
                 flags |= Qt::ItemIsEditable;
             } else {
                 if (!strData.isEmpty())  // verificam daca sunt date (daca date nu sunt nu setam 'flags')
@@ -173,7 +173,7 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
 
     switch (role) {
     case Qt::DisplayRole:
-        if (index.column() == col_pricing_Price){
+        if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE){
             double _num = value.toDouble();
             return QVariant(QString("%1").arg(_num, 0, 'f', 2));
         }
@@ -187,15 +187,15 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
         return font;
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului
-        if (QSqlTableModel::data(QSqlTableModel::index(index.row(), col_pricing_Price), Qt::DisplayRole).toInt() == 0)
+        if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0)
             return QBrush(QColor(191,198,188));
         else                                      // toate sectiile in afara
             return QBrush(QColor(217,255,210));   // de sectia nr.5 - 'pretul'
         return value;
     case Qt::TextAlignmentRole:
-        if (index.column() == col_pricing_Cod) // sectia 'Cod'
+        if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_COD) // sectia 'Cod'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
-        else if (index.column() == col_pricing_Price) // sectia 'Pret'
+        else if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) // sectia 'Pret'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
         return value;
     default:
@@ -214,7 +214,7 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
 
     switch (role) {
     case Qt::DisplayRole:
-        if (index.column() == col_pricing_Price){
+        if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE){
             double _num = value.toDouble();
             return QVariant(QString("%1").arg(_num, 0, 'f', 2));
         }
@@ -231,24 +231,24 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
 //        if (m_tableSource == "tableSource" && index.column() == col_pricing_Price && QSqlTableModel::data(index, Qt::DisplayRole).toInt() == 0)
 //            return QBrush(QColor(165,172,162));
         if (m_tableSource == "tableSource"){
-            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), col_pricing_Price), Qt::DisplayRole).toInt() == 0)
+            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0)
                 return QBrush(QColor(191,198,188));
             else
                 return QBrush(QColor(214,235,206));
         }
-        if (index.column() != col_pricing_Price)  // toate sectiile in afara
+        if (index.column() != Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE)  // toate sectiile in afara
             return QBrush(QColor(217,255,210));   // de sectia nr.5 - 'pretul'
         return value;
     case Qt::ForegroundRole:
         if (m_tableSource == "tableSource"){
-            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), col_pricing_Price), Qt::DisplayRole).toInt() == 0)
+            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0)
                 return QBrush(QColor(88,94,86));
         }
         return value;
     case Qt::TextAlignmentRole:
-        if (index.column() == col_pricing_Cod) // sectia 'Cod'
+        if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_COD) // sectia 'Cod'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
-        else if (index.column() == col_pricing_Price) // sectia 'Pret'
+        else if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) // sectia 'Pret'
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
         return value;
     default:

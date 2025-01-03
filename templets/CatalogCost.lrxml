@@ -41,7 +41,7 @@
                   <alignment Type="enumAndFlags" Value="132"/>
                   <autoWidth Type="enumAndFlags" Value="0"/>
                   <autoHeight Type="bool" Value="0"/>
-                  <font Type="QFont" family="Times New Roman" italic="0" pointSize="24" underline="0" weight="400"/>
+                  <font Type="QFont" family="Times New Roman" italic="0" pointSize="20" underline="0" weight="400"/>
                   <backgroundOpacity Type="int" Value="100"/>
                   <backgroundMode Type="enumAndFlags" Value="1"/>
                   <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -120,10 +120,10 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="700"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="700"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
-                      <backgroundColor Type="QColor" Value="#ffffff"/>
+                      <backgroundColor Type="QColor" Value="#f6f7d6"/>
                       <fontColor Type="QColor" Value="#000000"/>
                       <angle Type="enumAndFlags" Value="0"/>
                       <foregroundOpacity Type="int" Value="100"/>
@@ -167,10 +167,10 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="700"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="700"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
-                      <backgroundColor Type="QColor" Value="#ffffff"/>
+                      <backgroundColor Type="QColor" Value="#f6f7d6"/>
                       <fontColor Type="QColor" Value="#000000"/>
                       <angle Type="enumAndFlags" Value="0"/>
                       <foregroundOpacity Type="int" Value="100"/>
@@ -214,10 +214,10 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="700"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="700"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
-                      <backgroundColor Type="QColor" Value="#ffffff"/>
+                      <backgroundColor Type="QColor" Value="#f6f7d6"/>
                       <fontColor Type="QColor" Value="#000000"/>
                       <angle Type="enumAndFlags" Value="0"/>
                       <foregroundOpacity Type="int" Value="100"/>
@@ -319,7 +319,7 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="400"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="400"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
                       <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -366,7 +366,7 @@
                       <alignment Type="enumAndFlags" Value="33"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="1"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="400"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="400"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
                       <backgroundColor Type="QColor" Value="#ffffff"/>
@@ -413,7 +413,7 @@
                       <alignment Type="enumAndFlags" Value="132"/>
                       <autoWidth Type="enumAndFlags" Value="0"/>
                       <autoHeight Type="bool" Value="0"/>
-                      <font Type="QFont" family="Arial" italic="0" pointSize="10" underline="0" weight="400"/>
+                      <font Type="QFont" family="Times New Roman" italic="0" pointSize="10" underline="0" weight="400"/>
                       <backgroundOpacity Type="int" Value="100"/>
                       <backgroundMode Type="enumAndFlags" Value="1"/>
                       <backgroundColor Type="QColor" Value="#ffffff"/>

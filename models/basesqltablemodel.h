@@ -8,6 +8,7 @@
 #include <QIcon>
 #include <QFont>
 #include <QBrush>
+#include <data/enums.h>
 
 class BaseSqlTableModel : public QSqlTableModel
 {
@@ -33,17 +34,6 @@ private:
     QVariant dataFromDocOrderEcho(const QModelIndex &index, int role) const;
 
 private:
-
-    enum col_DocPricings
-    {
-        col_pricing_Id           = 0,
-        col_pricing_DeletionMark = 1,
-        col_pricing_IdPricings   = 2,
-        col_pricing_Cod          = 3,
-        col_pricing_Name         = 4,
-        col_pricing_Price        = 5
-    };
-
     Qt::ItemFlags m_flag = Qt::NoItemFlags;
     QString m_tableSource; // pu clasa 'DocOrderEcho' - vezi setTableSource(const QString tableSource)
 

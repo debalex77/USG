@@ -19,6 +19,7 @@
 
 #include "data/popup.h"
 #include "data/database.h"
+#include <data/enums.h>
 #include <data/customdialoginvestig.h>
 #include <catalogs/catgeneral.h>
 #include <catalogs/chooseformprint.h>
@@ -124,13 +125,7 @@ public:
     void setCountVideo(int CountVideo) {m_count_video = CountVideo; emit CountVideoChanged();}
     int getCountVideo() const {return m_count_video;}
 
-    void onPrintDocument(const int _typeReport); // functiile exportate pu solicitarea din alte clase
-
-    enum MethodOpenReport
-    {
-        openDesigner = 0,
-        openPreview  = 2
-    };
+    void onPrintDocument(Enums::TYPE_PRINT _typeReport); // functiile exportate pu solicitarea din alte clase
 
     void m_onWritingData();
 
@@ -255,7 +250,7 @@ private slots:
     void activatedItemCompleter(const QModelIndex &index); // activarea 'completer'
 
     bool controlRequiredObjects();       // controlul completarii obiectelor obligatorii
-    void onPrint(const int _typeReport); // printare -> _typeReport = variabila pu determinarea lansarii designer ori preview din list...
+    void onPrint(Enums::TYPE_PRINT _typeReport); // printare -> _typeReport = variabila pu determinarea lansarii designer ori preview din list...
     bool onWritingData();                // 'btnWrite'
     void onWritingDataClose();           // 'btnOk'
     void onClose();                      // 'btnClose'
@@ -275,14 +270,6 @@ private:
         page_gestation2      = 8,
         page_images          = 9,
         page_video           = 10
-    };
-
-    enum IndexStatus
-    {
-        idx_unknow       = -1,
-        idx_write        = 0,
-        idx_deletionMark = 1,
-        idx_post         = 2
     };
 
     enum IndexNumImage
@@ -338,11 +325,11 @@ private:
     Ui::DocReportEcho *ui;
 
     bool m_itNew          = false;
-    int m_id              = idx_unknow;
-    int m_idPacient       = idx_unknow;
-    int m_id_docOrderEcho = idx_unknow;
-    int m_idUser          = idx_unknow;
-    int m_post            = idx_unknow;
+    int m_id              = Enums::IDX::IDX_UNKNOW;
+    int m_idPacient       = Enums::IDX::IDX_UNKNOW;
+    int m_id_docOrderEcho = Enums::IDX::IDX_UNKNOW;
+    int m_idUser          = Enums::IDX::IDX_UNKNOW;
+    int m_post            = Enums::IDX::IDX_UNKNOW;
 
     bool m_organs_internal = false;
     bool m_urinary_system  = false;
@@ -417,8 +404,6 @@ private:
     int            m_count_video     = 0;
 
     InfoWindow *info_win;
-
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

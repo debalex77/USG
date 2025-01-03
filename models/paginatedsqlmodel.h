@@ -14,7 +14,6 @@
 #include <data/database.h>
 #include <data/globals.h>
 #include <data/enums.h>
-#include <models/loaddatatask.h>
 
 class PaginatedSqlModel : public QSqlQueryModel
 {

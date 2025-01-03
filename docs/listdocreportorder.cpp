@@ -233,7 +233,7 @@ void ListDocReportOrder::slot_TypeDocChanged()
 
 void ListDocReportOrder::slot_IdOrganizationChanged()
 {
-    if (m_idOrganization == idx_unknow || m_idOrganization == 0)
+    if (m_idOrganization == Enums::IDX::IDX_UNKNOW || m_idOrganization == 0)
         return;
 
     auto indexOrganization = modelOrganizations->match(modelOrganizations->index(0,0), Qt::UserRole, m_idOrganization, 1, Qt::MatchExactly);
@@ -253,7 +253,7 @@ void ListDocReportOrder::slot_IdOrganizationChanged()
 
 void ListDocReportOrder::slot_IdContractChanged()
 {
-    if (m_idContract == idx_unknow || m_idContract == 0)
+    if (m_idContract == Enums::IDX::IDX_UNKNOW || m_idContract == 0)
         return;
     auto indexContract = modelContracts->match(modelContracts->index(0,0), Qt::UserRole, m_idContract, 1, Qt::MatchExactly);
     if (!indexContract.isEmpty())
@@ -278,8 +278,8 @@ void ListDocReportOrder::onClickBtnFilterClear()
     ui->filterComboOrganization->setCurrentIndex(0);
     ui->filterComboContract->setCurrentIndex(0);
 
-    m_idOrganization = idx_unknow;
-    m_idContract     = idx_unknow;
+    m_idOrganization = Enums::IDX::IDX_UNKNOW;
+    m_idContract     = Enums::IDX::IDX_UNKNOW;
     updateTableView();
     updateTextPeriod();
 }
@@ -325,7 +325,7 @@ void ListDocReportOrder::onClickBtnAdd()
 
 void ListDocReportOrder::onClickBtnEdit()
 {
-    if (ui->tableView->currentIndex().row() == idx_unknow){
+    if (ui->tableView->currentIndex().row() == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this,
                              tr("Informa\310\233ie"),
                              tr("Nu este marcat randul !!!."), QMessageBox::Ok);
@@ -355,7 +355,7 @@ void ListDocReportOrder::onClickBtnEdit()
 void ListDocReportOrder::onClickBtnDeletion()
 {
     const int _row = ui->tableView->currentIndex().row();
-    if (_row == idx_unknow){
+    if (_row == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat r\303\242ndul !!!."), QMessageBox::Ok);
         return;
     }
@@ -454,8 +454,8 @@ void ListDocReportOrder::onClickBtnFilterRemove()
     ui->filterComboOrganization->setCurrentIndex(0);
     ui->filterComboContract->setCurrentIndex(0);
 
-    m_idOrganization = idx_unknow;
-    m_idContract     = idx_unknow;
+    m_idOrganization = Enums::IDX::IDX_UNKNOW;
+    m_idContract     = Enums::IDX::IDX_UNKNOW;
     updateTableView();
     updateTextPeriod();
 }
@@ -490,7 +490,7 @@ void ListDocReportOrder::onClickBtnHideShowColumn()
 
 void ListDocReportOrder::onClickBtnPrint()
 {
-    if (ui->tableView->currentIndex().row() == idx_unknow){
+    if (ui->tableView->currentIndex().row() == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
         return;
     }
@@ -508,19 +508,19 @@ void ListDocReportOrder::onClickBtnPrint()
         docReport->setAttribute(Qt::WA_DeleteOnClose);
         docReport->setProperty("ItNew", false);
         docReport->setProperty("Id", _id);
-        docReport->onPrintDocument(docReport->openPreview);
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
         docReport->close();
     }
 }
 
 void ListDocReportOrder::onClickBtnReport()
 {
-    if (ui->tableView->currentIndex().row() == idx_unknow){
+    if (ui->tableView->currentIndex().row() == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
         return;
     }
 
-    int _id = idx_unknow;
+    int _id = Enums::IDX::IDX_UNKNOW;
     if (m_typeDoc == TypeDoc::orderEcho)
         _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
     else if (m_typeDoc == TypeDoc::reportEcho)
@@ -529,7 +529,7 @@ void ListDocReportOrder::onClickBtnReport()
         qInfo(logWarning()) << tr("%1 - onClickBtnReport()").arg(metaObject()->className())
                             << tr("Nu a fost setata(sau setata incorect) variabila 'm_typeDoc'.");
 
-    if (_id == idx_unknow || _id == idx_write){
+    if (_id == Enums::IDX::IDX_UNKNOW || _id == Enums::IDX::IDX_WRITE){
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
                             << tr("Nu a fost identificat 'id' documentului pentru printare.");
         return;
@@ -675,7 +675,7 @@ void ListDocReportOrder::onClickedTable(const QModelIndex &index)
     int _id = proxyTable->data(proxyTable->index(row, section_id), Qt::DisplayRole).toInt();
 
     // verificam 'id'
-    if (_id == idx_unknow || _id == 0)
+    if (_id == Enums::IDX::IDX_UNKNOW || _id == 0)
         return;
 
     if (m_typeDoc == TypeDoc::orderEcho){
@@ -785,7 +785,7 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
     const QString _nameContract     = proxyTable->index(_row, section_Contract).data(Qt::DisplayRole).toString();
     const QString _namePacient      = proxyTable->index(_row, section_pacient).data(Qt::DisplayRole).toString();
     const int _id                   = proxyTable->index(_row, section_id).data(Qt::DisplayRole).toInt();
-    int _id_report                  = idx_unknow;
+    int _id_report                  = Enums::IDX::IDX_UNKNOW;
 
     menu->clear();
 
@@ -845,7 +845,7 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
             qDebug() << qry.lastError().text();
         }
 
-        if (_id_report != idx_unknow && presentationDoc != nullptr){
+        if (_id_report != Enums::IDX::IDX_UNKNOW && presentationDoc != nullptr){
             QMenu* menuDocSubordonat = new QMenu(menu);
             menuDocSubordonat->setTitle(tr("Documente subordonate"));
             QAction* actionOpenDocReport = new QAction(QIcon(":/img/open-search.png"), tr("Editare - %1").arg(presentationDoc), menu);
@@ -857,7 +857,7 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
                         docReport->setAttribute(Qt::WA_DeleteOnClose);
                         docReport->setProperty("ItNew", false);
                         docReport->setProperty("Id",    _id_report);
-                        docReport->onPrintDocument(docReport->openPreview);
+                        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
                     });
             menuDocSubordonat->addAction(actionOpenDocReport);
             menuDocSubordonat->addAction(actionPrintDocReport);
@@ -1270,7 +1270,7 @@ void ListDocReportOrder::updateTextPeriod()
 
 void ListDocReportOrder::openDocOrderEchoByClickBtnTable()
 {
-    int _id = idx_unknow;
+    int _id = Enums::IDX::IDX_UNKNOW;
     if (m_typeDoc == TypeDoc::orderEcho)
         _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
     else if (m_typeDoc == TypeDoc::reportEcho)
@@ -1279,7 +1279,7 @@ void ListDocReportOrder::openDocOrderEchoByClickBtnTable()
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
                             << tr("Nu a fost setata(sau setata incorect) variabila 'm_typeDoc'.");
 
-    if (_id == idx_unknow || _id == idx_write){
+    if (_id == Enums::IDX::IDX_UNKNOW || _id == Enums::IDX::IDX_WRITE){
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
                             << tr("Nu a fost identificat 'id' documentului pentru printare.");
         return;
@@ -1297,7 +1297,7 @@ void ListDocReportOrder::openDocOrderEchoByClickBtnTable()
 
 void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
 {
-    int _id = idx_unknow;
+    int _id = Enums::IDX::IDX_UNKNOW;
     if (m_typeDoc == TypeDoc::orderEcho)
         _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
     else if (m_typeDoc == TypeDoc::reportEcho)
@@ -1306,7 +1306,7 @@ void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
                             << tr("Nu a fost setata(sau setata incorect) variabila 'm_typeDoc'.");
 
-    if (_id == idx_unknow || _id == idx_write){
+    if (_id == Enums::IDX::IDX_UNKNOW || _id == Enums::IDX::IDX_WRITE){
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
                             << tr("Nu a fost identificat 'id' documentului pentru printare.");
         return;
@@ -1323,7 +1323,7 @@ void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
 
 void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
 {
-    int id_doc = idx_unknow;
+    int id_doc = Enums::IDX::IDX_UNKNOW;
     if (m_typeDoc == TypeDoc::orderEcho)
         id_doc = model_view_table_report->data(model_view_table_report->index(0, 0), Qt::DisplayRole).toInt();
     else if (m_typeDoc == TypeDoc::reportEcho)
@@ -1332,7 +1332,7 @@ void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewReport()").arg(metaObject()->className())
                             << tr("Nu a fost setata(sau setata incorect) variabila 'm_typeDoc'.");
 
-    if (id_doc == idx_unknow || id_doc == idx_write){
+    if (id_doc == Enums::IDX::IDX_UNKNOW || id_doc == Enums::IDX::IDX_WRITE){
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewReport()").arg(metaObject()->className())
                             << tr("Nu a fost identificat 'id' documentului pentru printare.");
         return;
@@ -1342,9 +1342,9 @@ void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
     docReport->setProperty("ItNew", false);
     docReport->setProperty("Id",    id_doc);
     if (preview)
-        docReport->onPrintDocument(docReport->openPreview);
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
     else
-        docReport->onPrintDocument(docReport->openDesigner);
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER);
 }
 
 void ListDocReportOrder::formationPrinMenuForOrder()
@@ -1368,12 +1368,27 @@ void ListDocReportOrder::formationPrinMenuForOrder()
         setUpMenu_order->addAction(openPreviewOrder);
         setUpMenu_order->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
         setUpMenu_order->setAttribute(Qt::WA_TranslucentBackground);
-        setUpMenu_order->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-                                       " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+        setUpMenu_order->setStyleSheet("QMenu "
+                                       "{"
+                                       "  border-radius: 6px; "
+                                       "  font-family: 'Segoe UI', 'San Francisco'; "
+                                       "  font-size: 14px;"
+                                       "}"
+                                       "QMenu::item "
+                                       "{"
+                                       "  height: 25px; "
+                                       "  width: 150px; "
+                                       "  border: none;"
+                                       "  padding-left: 4px 8px;" // Adaugă un pic de spațiere internă
+                                       "}"
+                                       "QMenu::item:selected "
+                                       "{"
+                                       "  background-color: #0078d7; " // Fundal albastru
+                                       "  color: white; "              // Text alb
+                                       "  border-radius: 4px;"         // Colțuri rotunjite pentru element
+                                       "}");
 
         ui->btn_print_order->setMenu(setUpMenu_order);
-        ui->btn_open_order->setStyleSheet("width: 110px; height: 20px;");
-        ui->btn_print_order->setStyleSheet("width: 110px; height: 20px;");
 
         connect(openDesignerOrder, &QAction::triggered, this, [this]()
                 {
@@ -1415,12 +1430,27 @@ void ListDocReportOrder::formationPrinMenuForReport()
         setUpMenu_report->addAction(openPreviewReport);
         setUpMenu_report->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
         setUpMenu_report->setAttribute(Qt::WA_TranslucentBackground);
-        setUpMenu_report->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-                                        " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
+        setUpMenu_report->setStyleSheet("QMenu "
+                                        "{"
+                                        "  border-radius: 6px; "
+                                        "  font-family: 'Segoe UI', 'San Francisco'; "
+                                        "  font-size: 14px;"
+                                        "}"
+                                        "QMenu::item "
+                                        "{"
+                                        "  height: 25px; "
+                                        "  width: 150px; "
+                                        "  border: none;"
+                                        "  padding: 4px 8px;" // Adaugă un pic de spațiere internă
+                                        "}"
+                                        "QMenu::item:selected "
+                                        "{"
+                                        "  background-color: #0078d7; " // Fundal albastru
+                                        "  color: white; "              // Text alb
+                                        "  border-radius: 4px;"         // Colțuri rotunjite pentru element
+                                        "}");
 
         ui->btn_print_report->setMenu(setUpMenu_report);
-        ui->btn_print_report->setStyleSheet("width: 110px; height: 20px;");
-        ui->btn_open_report->setStyleSheet("width: 110px; height: 20px;");
 
         connect(openDesignerReport, &QAction::triggered, this, [this]()
                 {
@@ -1590,7 +1620,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
     ui->tableView->horizontalHeader()->setStretchLastSection(true);      // extinderea ultimei sectiei
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu); // initializam meniu contextual
 
-    if (m_currentRow != idx_unknow)
+    if (m_currentRow != Enums::IDX::IDX_UNKNOW)
         ui->tableView->selectRow(m_currentRow);
     else
         ui->tableView->selectRow(0);
@@ -1801,7 +1831,7 @@ void ListDocReportOrder::updateTableViewReportEcho()
     ui->tableView->verticalHeader()->setDefaultSectionSize(30);
     ui->tableView->horizontalHeader()->setStretchLastSection(true);  // extinderea ultimei sectiei
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);      // initializam meniu contextual
-    if (m_currentRow != idx_unknow)
+    if (m_currentRow != Enums::IDX::IDX_UNKNOW)
         ui->tableView->selectRow(m_currentRow);
     else
         ui->tableView->selectRow(0);
@@ -2015,7 +2045,7 @@ void ListDocReportOrder::saveSizeSectionTable()
 int ListDocReportOrder::sizeSectionDefault(const int numberSection)
 {
     if (m_typeDoc == unknowDoc)
-        return idx_unknow;
+        return Enums::IDX::IDX_UNKNOW;
 
     if (m_typeDoc == orderEcho){
 

@@ -58,7 +58,6 @@
         <file>img/pregnant2.png</file>
         <file>img/pregnant1.png</file>
         <file>img/pregnant3.png</file>
-        <file>styles/styleReportEcho.css</file>
         <file>img/open-search.png</file>
         <file>img/trash.png</file>
         <file>img/reports.png</file>
@@ -106,14 +105,10 @@
         <file>img/password_show.png</file>
         <file>img/registration_patients.png</file>
         <file>img/calendar.png</file>
-        <file>html/history_version.html</file>
-        <file>styles/markdown.css</file>
         <file>scripts/history.js</file>
-        <file>styles/history.css</file>
         <file>img/image-files.png</file>
         <file>img/warning.png</file>
         <file>img/user_manual.png</file>
-        <file>styles/user_manual.css</file>
         <file>img/medical-history.png</file>
         <file>img/element.png</file>
         <file>img/folder_yellow.png</file>

@@ -171,7 +171,6 @@ private slots:
 
 private:
 
-    enum Columns {column_Id = 0, column_DeletionMark = 1, column_IdPricings = 2, column_Cod = 3, column_Name = 4, column_Price = 5};
     enum IndexToolBox {box_organization = 0,box_patient = 1,box_commnet = 2};
 
     void setTitleDoc();                           // setarea titlului documentului
@@ -213,17 +212,17 @@ private:
     Ui::DocOrderEcho *ui;
 
     bool m_itNew           = false;
-    int m_id               = Enums::IDX_UNKNOW;
-    int m_idOrganization   = Enums::IDX_UNKNOW;
-    int m_idContract       = Enums::IDX_UNKNOW;
-    int m_idTypePrice      = Enums::IDX_UNKNOW;
-    int m_idPacient        = Enums::IDX_UNKNOW;
-    int m_idNurse          = Enums::IDX_UNKNOW;
-    int m_idDoctor         = Enums::IDX_UNKNOW;
-    int m_idDoctor_execute = Enums::IDX_UNKNOW;
-    int m_idUser           = Enums::IDX_UNKNOW;
-    int m_post             = Enums::IDX_UNKNOW;
-    int m_attachedImages   = Enums::IDX_UNKNOW;
+    int m_id               = Enums::IDX::IDX_UNKNOW;
+    int m_idOrganization   = Enums::IDX::IDX_UNKNOW;
+    int m_idContract       = Enums::IDX::IDX_UNKNOW;
+    int m_idTypePrice      = Enums::IDX::IDX_UNKNOW;
+    int m_idPacient        = Enums::IDX::IDX_UNKNOW;
+    int m_idNurse          = Enums::IDX::IDX_UNKNOW;
+    int m_idDoctor         = Enums::IDX::IDX_UNKNOW;
+    int m_idDoctor_execute = Enums::IDX::IDX_UNKNOW;
+    int m_idUser           = Enums::IDX::IDX_UNKNOW;
+    int m_post             = Enums::IDX::IDX_UNKNOW;
+    int m_attachedImages   = Enums::IDX::IDX_UNKNOW;
 
     int exist_logo      = 0; // variabile pu forma de tipar
     int exist_stamp     = 0;
@@ -231,9 +230,9 @@ private:
 
     QString m_name_patient;
 
-    int lastIdPricings     = Enums::IDX_UNKNOW; // pu determinarea ultimului 'id' docum. 'pricing'
+    int lastIdPricings     = Enums::IDX::IDX_UNKNOW; // pu determinarea ultimului 'id' docum. 'pricing'
     int sumOrder           = 0;          // suma totala a comenzii
-    int noncomercial_price = Enums::IDX_UNKNOW;
+    int noncomercial_price = Enums::IDX::IDX_UNKNOW;
 
     QLabel* labelAuthor;
 

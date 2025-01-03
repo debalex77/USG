@@ -5,6 +5,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlQueryModel>
+#include <data/enums.h>
 
 class BaseSqlQueryModel : public QSqlQueryModel
 {
@@ -65,36 +66,13 @@ private:
     QVariant dataFromCatOrganizations(const QModelIndex &item, int role = Qt::DisplayRole) const;
     QVariant dataFromListDoc(const QModelIndex &item, int role = Qt::DisplayRole) const;
     QVariant dataFromDocPricing(const QModelIndex &item, int role = Qt::DisplayRole) const;
-
-    enum orderSections
-    {
-        orderSection_id             = 0,
-        orderSection_deletionMark   = 1,
-        orderSection_attachedImages = 2,
-        orderSection_cardPayment    = 3,
-        orderSection_numberDoc      = 4,
-        orderSection_dateDoc        = 5,
-        orderSection_idOrganization = 6,
-        orderSection_Organization   = 7,
-        orderSection_idContract     = 8,
-        orderSection_Contract       = 9,
-        orderSection_idPacient      = 10,
-        orderSection_searchPacient  = 11,
-        orderSection_pacient        = 12,
-        orderSection_IDNP           = 13,
-        orderSection_doctor         = 14,
-        orderSection_idUser         = 15,
-        orderSection_user           = 16,
-        orderSection_sum            = 17,
-        orderSection_comment        = 18
-    };
     QVariant dataFromDocOrderEcho(const QModelIndex &item, int role = Qt::DisplayRole) const;
     QVariant dataFrom_view_table_order(const QModelIndex &item, int role = Qt::DisplayRole) const;
 
 private:
     ModelParent m_modelParent;
     TypeCatalogs m_typeCatalogs;
-    int id_contract = -1;
+    int id_contract = Enums::IDX::IDX_UNKNOW;
 };
 
 #endif // BASESQLQUERYMODEL_H

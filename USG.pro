@@ -124,8 +124,6 @@ SOURCES += \
     models/basesortfilterproxymodel.cpp \
     models/basesqlquerymodel.cpp \
     models/basesqltablemodel.cpp \
-    models/documenttablemodel.cpp \
-    models/loaddatatask.cpp \
     models/paginatedsqlmodel.cpp \
     models/registrationtablemodel.cpp \
     models/treeitem.cpp \
@@ -183,8 +181,6 @@ HEADERS += \
     models/basesortfilterproxymodel.h \
     models/basesqlquerymodel.h \
     models/basesqltablemodel.h \
-    models/documenttablemodel.h \
-    models/loaddatatask.h \
     models/paginatedsqlmodel.h \
     models/registrationtablemodel.h \
     models/treeitem.h \
@@ -328,3 +324,12 @@ message($$LIBS)
 unix:!macx: LIBS += -L$$PWD/openssl/ -lssl -lcrypto
 win32: LIBS += -L$$PWD/openssl/ -llibssl -llibcrypto
 INCLUDEPATH += $$PWD/openssl
+
+#----------------------------------------------------------------------------------------
+#------------------------------------- ERROR WINDOWS ------------------------------------
+
+# :-1: error: dependent '..\..\..\..\..\..\Qt\6.5.3\msvc2019_64\include\QtWidgets\QMainWindow' does not exist.
+# corecteaza QMAKE_PROJECT_DEPTH = 0
+win32{
+    QMAKE_PROJECT_DEPTH = 0
+}

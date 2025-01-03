@@ -184,7 +184,7 @@ DocReportEcho::~DocReportEcho()
 // *******************************************************************
 // **************** VALIDAREA SI PRINTAREA DIN ALTE OBIECTE***********
 
-void DocReportEcho::onPrintDocument(const int _typeReport)
+void DocReportEcho::onPrintDocument(Enums::TYPE_PRINT _typeReport)
 {
     onPrint(_typeReport);
     this->close();
@@ -385,7 +385,7 @@ void DocReportEcho::onLinkActivatedForOpenImage1(const QString &link)
     if (link != "#LoadImage")
         return;
 
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea valid\304\203rii"),
@@ -412,7 +412,7 @@ void DocReportEcho::onLinkActivatedForOpenImage2(const QString &link)
     if (link != "#LoadImage")
         return;
 
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea valid\304\203rii"),
@@ -439,7 +439,7 @@ void DocReportEcho::onLinkActivatedForOpenImage3(const QString &link)
     if (link != "#LoadImage")
         return;
 
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea valid\304\203rii"),
@@ -466,7 +466,7 @@ void DocReportEcho::onLinkActivatedForOpenImage4(const QString &link)
     if (link != "#LoadImage")
         return;
 
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea valid\304\203rii"),
@@ -493,7 +493,7 @@ void DocReportEcho::onLinkActivatedForOpenImage5(const QString &link)
     if (link != "#LoadImage")
         return;
 
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
                                      tr("Verificarea valid\304\203rii"),
@@ -657,7 +657,7 @@ void DocReportEcho::updateImageIntoTableimagesReports(const QString &fileName, c
 
 void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
 {
-    if (m_id == idx_unknow)
+    if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
     if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), db->getDatabaseImage()))
@@ -686,7 +686,7 @@ void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
 
 void DocReportEcho::updateCommentIntoTableimagesReports()
 {
-    if (m_id == idx_unknow)
+    if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
     if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), db->getDatabaseImage()))
@@ -904,7 +904,7 @@ void DocReportEcho::openParameters()
 
 void DocReportEcho::openCatPatient()
 {
-    if (m_idPacient == idx_unknow)
+    if (m_idPacient == Enums::IDX::IDX_UNKNOW)
         return;
     CatGeneral* cat_patients = new CatGeneral(this);
     cat_patients->setAttribute(Qt::WA_DeleteOnClose);
@@ -926,7 +926,7 @@ void DocReportEcho::openHistoryPatient()
 
 void DocReportEcho::openDocOrderEcho()
 {
-    if (m_id_docOrderEcho == idx_unknow)
+    if (m_id_docOrderEcho == Enums::IDX::IDX_UNKNOW)
         return;
     DocOrderEcho* docOrder = new DocOrderEcho(this);
     docOrder->setAttribute(Qt::WA_DeleteOnClose);
@@ -1220,12 +1220,12 @@ void DocReportEcho::createMenuPrint()
 
 void DocReportEcho::clickOpenDesignerReport()
 {
-    onPrint(MethodOpenReport::openDesigner);
+    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER);
 }
 
 void DocReportEcho::clickOpenPreviewReport()
 {
-    onPrint(MethodOpenReport::openPreview);
+    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
 }
 
 void DocReportEcho::clickBtnClearImage1()
@@ -2434,7 +2434,7 @@ void DocReportEcho::slot_ItNewChanged()
 
 void DocReportEcho::slot_IdChanged()
 {
-    if (m_id == idx_unknow)
+    if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
     //----------------------------------------------------------------------------
@@ -2574,7 +2574,7 @@ void DocReportEcho::slot_IdChanged()
 
 void DocReportEcho::slot_IdPacientChanged()
 {
-    if (m_idPacient == idx_unknow)
+    if (m_idPacient == Enums::IDX::IDX_UNKNOW)
         return;
 
     auto indexPatient = modelPatients->match(modelPatients->index(0,0), Qt::UserRole, m_idPacient, 1, Qt::MatchExactly);
@@ -2601,7 +2601,7 @@ void DocReportEcho::slot_IdPacientChanged()
 
 void DocReportEcho::slot_IdDocOrderEchoChanged()
 {
-    if (m_id_docOrderEcho == idx_unknow)
+    if (m_id_docOrderEcho == Enums::IDX::IDX_UNKNOW)
         return;
 
     QMap<QString, QString> items;
@@ -2621,14 +2621,14 @@ void DocReportEcho::slot_IdDocOrderEchoChanged()
         }
         ui->editDocNumber->setText(items.constFind("numberDoc").value());     // setam nr.documentului
         ui->editDocNumber->setDisabled(!ui->editDocNumber->text().isEmpty()); // setam editarea nr.
-        if (m_idPacient == idx_unknow)
+        if (m_idPacient == Enums::IDX::IDX_UNKNOW)
             setIdPacient(items.constFind("id_pacients").value().toInt());
     }
 }
 
 void DocReportEcho::slot_IdUserChanged()
 {
-    if (m_idUser == idx_unknow)
+    if (m_idUser == Enums::IDX::IDX_UNKNOW)
         setIdUser(globals::idUserApp);
 }
 
@@ -2684,7 +2684,7 @@ void DocReportEcho::activatedItemCompleter(const QModelIndex &index)
 //             << index.data(Qt::DisplayRole).toString(); // returneaza 'id'
 
     int _id = index.data(Qt::UserRole).toInt();    // determinam 'id'
-    if (_id == idx_unknow || _id == idx_write)     // verificarea id
+    if (_id == Enums::IDX::IDX_UNKNOW || _id == Enums::IDX::IDX_WRITE)     // verificarea id
         return;
 
     setIdPacient(index.data(Qt::UserRole).toInt()); // setam 'id' pacientului
@@ -2695,21 +2695,21 @@ void DocReportEcho::activatedItemCompleter(const QModelIndex &index)
 
 bool DocReportEcho::controlRequiredObjects()
 {
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> documentului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return false;
     }
 
-    if (m_idPacient == idx_unknow || m_idPacient == idx_write){
+    if (m_idPacient == Enums::IDX::IDX_UNKNOW || m_idPacient == Enums::IDX::IDX_WRITE){
         QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> pacientului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
                              QMessageBox::Ok, QMessageBox::Ok);
         return false;
     }
 
-    if (m_idUser == idx_unknow || m_idUser == idx_write){
+    if (m_idUser == Enums::IDX::IDX_UNKNOW || m_idUser == Enums::IDX::IDX_WRITE){
         QMessageBox::warning(this, tr("Controlul complet\304\203rii obiectelor"),
                              tr("Nu este determinat <b>'ID'</b> autorului documentului !!!<br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei"),
                              QMessageBox::Ok, QMessageBox::Ok);
@@ -2829,7 +2829,7 @@ bool DocReportEcho::controlRequiredObjects()
     return true;
 }
 
-void DocReportEcho::onPrint(const int _typeReport)
+void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
 {
     if (globals::pathTemplatesDocs.isEmpty()){
 
@@ -2924,11 +2924,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -2966,11 +2966,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3011,11 +3011,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3054,11 +3054,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3097,11 +3097,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3138,11 +3138,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3180,11 +3180,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3222,11 +3222,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3264,11 +3264,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview){
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
             qInfo(logInfo()) << tr("Printare (preview) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3304,11 +3304,11 @@ void DocReportEcho::onPrint(const int _typeReport)
 
         // prezentam
         m_report->setShowProgressDialog(true);
-        if (_typeReport == openDesigner){
+        if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
             qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->designReport();
-        } else if (_typeReport == openPreview) {
+        } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW) {
             qInfo(logInfo()) << tr("Printare (preview) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
@@ -3331,14 +3331,14 @@ void DocReportEcho::onPrint(const int _typeReport)
 
 bool DocReportEcho::onWritingData()
 {
-    if (m_itNew && m_id == idx_unknow)
+    if (m_itNew && m_id == Enums::IDX::IDX_UNKNOW)
         m_id = db->getLastIdForTable("reportEcho") + 1; // incercare de a seta 'id' documentului
 
     if (! controlRequiredObjects())
         return false;
 
-    if (m_post == idx_unknow)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
-        setPost(idx_write);    // setam post = idx_write
+    if (m_post == Enums::IDX::IDX_UNKNOW)  // daca a fost apasat btnOk = propritatea trebuia sa fie m_post == idx_post
+        setPost(Enums::IDX::IDX_WRITE);    // setam post = idx_write
 
     QString details_error;
 
@@ -3353,9 +3353,9 @@ bool DocReportEcho::onWritingData()
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
         }     
-        if (m_post == idx_write || m_post == idx_post){
+        if (m_post == Enums::IDX::IDX_WRITE || m_post == Enums::IDX::IDX_POST){
             popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.")
-                                .arg((m_post == idx_write) ? tr("salvat") : tr("validat")));
+                                .arg((m_post == Enums::IDX::IDX_WRITE) ? tr("salvat") : tr("validat")));
             popUp->show();
             setItNew(false);
         }
@@ -3374,7 +3374,7 @@ bool DocReportEcho::onWritingData()
             msgBox.exec();
             return false;
         }
-        if (m_post == idx_write || m_post == idx_post){
+        if (m_post == Enums::IDX::IDX_WRITE || m_post == Enums::IDX::IDX_POST){
             popUp->setPopupText(tr("Datele documentului au fost actualizate<br> cu succes."));
             popUp->show();
             setItNew(false);
@@ -3395,7 +3395,7 @@ bool DocReportEcho::onWritingData()
 
 void DocReportEcho::onWritingDataClose()
 {
-    setPost(idx_post); // setam proprietatea 'post'
+    setPost(Enums::IDX::IDX_POST); // setam proprietatea 'post'
 
     if (onWritingData()){
         QMessageBox msgBox;
@@ -3404,7 +3404,7 @@ void DocReportEcho::onWritingDataClose()
         msgBox.setText(tr("Dori\310\233i s\304\203 printa\310\233i documentul ?"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
         if (msgBox.exec() == QMessageBox::Yes)
-            onPrint(openPreview);
+            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
 
         QDialog::accept();
         emit mCloseThisForm();
@@ -3683,7 +3683,7 @@ void DocReportEcho::setDefaultDataProstate()
 
 void DocReportEcho::setDefaultDataGynecology()
 {
-    if (m_id == idx_unknow){
+    if (m_id == Enums::IDX::IDX_UNKNOW){
         ui->gynecology_btn_transvaginal->setChecked(true);
         ui->gynecology_dateMenstruation->setDate(QDate::currentDate());
     }
@@ -3814,7 +3814,7 @@ void DocReportEcho::initEnableBtn()
 {
     int m_current_page = -1;
 
-    if (m_id == idx_unknow &&
+    if (m_id == Enums::IDX::IDX_UNKNOW &&
             ! m_organs_internal &&
             ! m_urinary_system &&
             ! m_prostate &&
@@ -5646,7 +5646,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
 
 void DocReportEcho::updateDataDocOrderEcho()
 {
-    if (m_id_docOrderEcho == idx_unknow || m_id_docOrderEcho == 0)
+    if (m_id_docOrderEcho == Enums::IDX::IDX_UNKNOW || m_id_docOrderEcho == 0)
         return;
 
     QString str;

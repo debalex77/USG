@@ -36,6 +36,14 @@ public:
     };
     Q_ENUM(ORDER_PAYMENT);
 
+    enum ORDER_IMAGE_VIDEO
+    {
+        NOT_ATTACHED,
+        ATTACHED_IMAGE,
+        ATTACHED_VIDEO
+    };
+    Q_ENUM(ORDER_IMAGE_VIDEO);
+
     enum ORDER_COLUMN
     {
         ORDER_ID,

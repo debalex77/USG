@@ -25,8 +25,6 @@
 #include "models/basesqlquerymodel.h"
 #include <models/basesqltablemodel.h>
 #include "models/basesortfilterproxymodel.h"
-
-#include <models/documenttablemodel.h>
 #include <models/paginatedsqlmodel.h>
 
 namespace Ui {
@@ -134,13 +132,6 @@ private slots:
     void showHideColums();
 
 private:
-    enum idx
-    {
-        idx_unknow   = -1,
-        idx_write    = 0,
-        idx_deletion = 1,
-        idx_post     = 2
-    };
 
     enum sections
     {
@@ -212,11 +203,11 @@ private:
     Ui::ListDocReportOrder *ui;
 
     TypeDoc m_typeDoc    = unknowDoc;
-    int m_idOrganization = idx_unknow;
-    int m_idContract     = idx_unknow;
-    int m_idPacient      = idx_unknow;
-    int m_idUser         = idx_unknow;
-    int m_currentRow     = idx_unknow;
+    int m_idOrganization = Enums::IDX::IDX_UNKNOW;
+    int m_idContract     = Enums::IDX::IDX_UNKNOW;
+    int m_idPacient      = Enums::IDX::IDX_UNKNOW;
+    int m_idUser         = Enums::IDX::IDX_UNKNOW;
+    int m_currentRow     = Enums::IDX::IDX_UNKNOW;
     QString m_numberDoc;
 
     static const int sz_id              = 5;    // size section default
@@ -253,7 +244,7 @@ private:
     BaseSqlQueryModel *model_view_table_report;
     BaseSortFilterProxyModel *proxyTable;
 
-    int pressed_btn_viewTab = idx_unknow; // pu determinarea apasarii btn
+    int pressed_btn_viewTab = Enums::IDX::IDX_UNKNOW; // pu determinarea apasarii btn
 
     DocOrderEcho   *docOrderEcho;
     CustomPeriod   *customPeriod;

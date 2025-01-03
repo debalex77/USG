@@ -765,7 +765,7 @@ void DocOrderEcho::updateTextSumOrder()
     for (int n = 0; n < modelTableOrder->rowCount(); n++) {
         if (ui->tableViewOrder->isRowHidden(n))         // verificam daca sunt randuri pu eliminare
             continue;                                   // eliminarea randurilor numai -> submitAll -> btnOk
-        QString m_sum = modelTableOrder->data(modelTableOrder->index(n, column_Price), Qt::DisplayRole).toString();
+        QString m_sum = modelTableOrder->data(modelTableOrder->index(n, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toString();
         sumOrder = sumOrder + m_sum.toDouble();
     }
     double _num = sumOrder;
@@ -776,15 +776,15 @@ void DocOrderEcho::onDoubleClickedTableSource(const QModelIndex &index)
 {
     int _row = index.row();
 //    int _id       = modelTableSource->data(modelTableSource->index(_row, column_Id), Qt::UserRole).toInt();
-    QString _cod  = proxy->data(proxy->index(_row, column_Cod), Qt::DisplayRole).toString();
-    QString _name = proxy->data(proxy->index(_row, column_Name), Qt::DisplayRole).toString();
-    QString _price = proxy->data(proxy->index(_row, column_Price), Qt::DisplayRole).toString();
+    QString _cod  = proxy->data(proxy->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_COD), Qt::DisplayRole).toString();
+    QString _name = proxy->data(proxy->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_NAME), Qt::DisplayRole).toString();
+    QString _price = proxy->data(proxy->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toString();
 
     for (int n = 0; n < modelTableOrder->rowCount(); n++) {
-        if (ui->tableViewOrder->model()->data(modelTableOrder->index(n, column_Cod), Qt::DisplayRole).toString() == _cod){
+        if (ui->tableViewOrder->model()->data(modelTableOrder->index(n, Enums::PRICING_COLUMN::PRICING_COLUMN_COD), Qt::DisplayRole).toString() == _cod){
             QMessageBox::warning(this, tr("Atentie"),
                                  tr("Investigatia <b>'%1 - %2'</b> exista in tabel.").arg(_cod, _name), QMessageBox::Ok);
-            ui->tableViewOrder->setCurrentIndex(modelTableOrder->index(n, column_Name));
+            ui->tableViewOrder->setCurrentIndex(modelTableOrder->index(n, Enums::PRICING_COLUMN::PRICING_COLUMN_NAME));
             return;
         }
     }
@@ -795,13 +795,13 @@ void DocOrderEcho::onDoubleClickedTableSource(const QModelIndex &index)
     int nextId = lastId + _rowCount + 1;
 
     modelTableOrder->insertRow(_rowCount);
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Id), nextId);
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_DeletionMark), Enums::IDX_WRITE);
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_ID), nextId);
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_DEL_MARK), Enums::IDX_WRITE);
     modelTableOrder->setData(modelTableOrder->index(_rowCount, 2), lastIdOrder);   // id_orderEcho
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Cod), _cod);
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Name), _name);
-    modelTableOrder->setData(modelTableOrder->index(_rowCount, column_Price), _price);
-    ui->tableViewOrder->setCurrentIndex(modelTableOrder->index(_rowCount, column_Price));
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_COD), _cod);
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_NAME), _name);
+    modelTableOrder->setData(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), _price);
+    ui->tableViewOrder->setCurrentIndex(modelTableOrder->index(_rowCount, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE));
 
     sumOrder = sumOrder + _price.toDouble();
     updateTextSumOrder();
@@ -810,7 +810,7 @@ void DocOrderEcho::onDoubleClickedTableSource(const QModelIndex &index)
 void DocOrderEcho::onClickedRowTableOrder(const QModelIndex &index)
 {
     int _row = index.row();
-    QModelIndex indexEdit = modelTableOrder->index(_row, column_Price);
+    QModelIndex indexEdit = modelTableOrder->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE);
     ui->tableViewOrder->setCurrentIndex(indexEdit);
     ui->tableViewOrder->edit(indexEdit);
     updateTextSumOrder();
@@ -818,7 +818,7 @@ void DocOrderEcho::onClickedRowTableOrder(const QModelIndex &index)
 
 void DocOrderEcho::filterRegExpChanged()
 {
-    proxy->setFilterKeyColumn(column_Name);
+    proxy->setFilterKeyColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_NAME);
     QRegularExpression regExp(ui->editFilterPattern->text(), QRegularExpression::CaseInsensitiveOption);
     proxy->setFilterRegularExpression(regExp);
 }
@@ -932,7 +932,7 @@ void DocOrderEcho::onOpenReport()
     // daca nu afost gasit documentul subaltern -> deschidem selectarea investigatiilor
     CustomDialogInvestig* dialogInvestig = new CustomDialogInvestig(this);
     for (int n = 0; n < modelTableOrder->rowCount(); n++) {
-        QString _cod = ui->tableViewOrder->model()->data(modelTableOrder->index(n, column_Cod), Qt::DisplayRole).toString();
+        QString _cod = ui->tableViewOrder->model()->data(modelTableOrder->index(n, Enums::PRICING_COLUMN::PRICING_COLUMN_COD), Qt::DisplayRole).toString();
         if (_cod == "1021" || _cod == "1022" || _cod == "1023" || _cod == "1050.61" || _cod == "1050.62" || _cod == "1050.63" ||
             _cod == "1050.62.1" || _cod == "1050.62.2" || _cod == "1050.63.1")
             dialogInvestig->set_t_organs_internal(true);
@@ -1124,8 +1124,8 @@ bool DocOrderEcho::onWritingData()
         }
 
         for (int i = 0; i < modelTableOrder->rowCount(); ++i) {                                // corectam valoarea indexului 'deletionMark'
-            modelTableOrder->setData(modelTableOrder->index(i, column_DeletionMark), m_post);  // si 'id' documentului din tabela
-            modelTableOrder->setData(modelTableOrder->index(i, column_IdPricings), m_id);
+            modelTableOrder->setData(modelTableOrder->index(i, Enums::PRICING_COLUMN::PRICING_COLUMN_DEL_MARK), m_post);  // si 'id' documentului din tabela
+            modelTableOrder->setData(modelTableOrder->index(i, Enums::PRICING_COLUMN::PRICING_COLUMN_ID_PRICINGS), m_id);
         }
 
         if (! modelTableOrder->submitAll()){           // daca nu a fost salvata tabela:
@@ -1738,16 +1738,16 @@ void DocOrderEcho::updateTableSources()
         modelTableSource->clear();
     modelTableSource->setTable("pricingsTable");
     modelTableSource->setFilter(QString("id_pricings=%1").arg(lastIdPricings));
-    modelTableSource->setSort(column_Cod, Qt::AscendingOrder);
+    modelTableSource->setSort(Enums::PRICING_COLUMN::PRICING_COLUMN_COD, Qt::AscendingOrder);
     modelTableSource->setEditStrategy(QSqlTableModel::OnManualSubmit);
     proxy->setSourceModel(modelTableSource);
     ui->tableView->setModel(proxy);
     modelTableSource->select();
     ui->tableView->selectRow(0);
 
-    ui->tableView->hideColumn(column_Id);           // id
-    ui->tableView->hideColumn(column_DeletionMark); // deletionMark
-    ui->tableView->hideColumn(column_IdPricings);   // id_pricings
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_ID);           // id
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_DEL_MARK); // deletionMark
+    ui->tableView->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_ID_PRICINGS);   // id_pricings
     ui->tableView->horizontalHeader()->setStretchLastSection(true);         // extinderea ultimei sectiei
     ui->tableView->setSortingEnabled(true);                                 // setam posibilitatea sortarii
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);     // setam alegerea randului
@@ -1757,8 +1757,8 @@ void DocOrderEcho::updateTableSources()
     ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);                            // initializam meniu contextual
     ui->tableView->horizontalHeader()->setSortIndicator(3, Qt::SortOrder::AscendingOrder); // sortarea dupa 3 sectie(Cod)
     ui->tableView->verticalHeader()->setDefaultSectionSize(30);
-    ui->tableView->setColumnWidth(column_Cod, 70);   // codul
-    ui->tableView->setColumnWidth(column_Name, 500); // denuimirea investigatiei
+    ui->tableView->setColumnWidth(Enums::PRICING_COLUMN::PRICING_COLUMN_COD, 70);   // codul
+    ui->tableView->setColumnWidth(Enums::PRICING_COLUMN::PRICING_COLUMN_NAME, 500); // denuimirea investigatiei
     updateHeaderTableSource();
 }
 
@@ -1768,15 +1768,15 @@ void DocOrderEcho::updateTableOrder()
         modelTableOrder->clear();
     modelTableOrder->setTable("orderEchoTable");
     modelTableOrder->setFilter(QString("id_orderEcho=%1").arg(m_id));
-    modelTableOrder->setSort(column_Cod, Qt::AscendingOrder);
+    modelTableOrder->setSort(Enums::PRICING_COLUMN::PRICING_COLUMN_COD, Qt::AscendingOrder);
     modelTableOrder->setEditStrategy(QSqlTableModel::OnManualSubmit);
     ui->tableViewOrder->setModel(modelTableOrder);
     modelTableOrder->select();
     ui->tableViewOrder->selectRow(0);
 
-    ui->tableViewOrder->hideColumn(column_Id);           // id
-    ui->tableViewOrder->hideColumn(column_DeletionMark); // deletionMark
-    ui->tableViewOrder->hideColumn(column_IdPricings);   // id_pricings
+    ui->tableViewOrder->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_ID);           // id
+    ui->tableViewOrder->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_DEL_MARK); // deletionMark
+    ui->tableViewOrder->hideColumn(Enums::PRICING_COLUMN::PRICING_COLUMN_ID_PRICINGS);   // id_pricings
     ui->tableViewOrder->horizontalHeader()->setStretchLastSection(true);         // extinderea ultimei sectiei
 //    ui->tableViewOrder->setSortingEnabled(true);                                 // setam posibilitatea sortarii
     ui->tableViewOrder->setSelectionBehavior(QAbstractItemView::SelectRows);     // setam alegerea randului
@@ -1785,8 +1785,8 @@ void DocOrderEcho::updateTableOrder()
     ui->tableViewOrder->setContextMenuPolicy(Qt::CustomContextMenu);                            // initializam meniu contextual
     ui->tableViewOrder->horizontalHeader()->setSortIndicator(3, Qt::SortOrder::AscendingOrder); // sortarea dupa 3 sectie(Cod)
     ui->tableViewOrder->verticalHeader()->setDefaultSectionSize(16);
-    ui->tableViewOrder->setColumnWidth(column_Cod, 70);   // codul
-    ui->tableViewOrder->setColumnWidth(column_Name, 500); // denuimirea investigatiei
+    ui->tableViewOrder->setColumnWidth(Enums::PRICING_COLUMN::PRICING_COLUMN_COD, 70);   // codul
+    ui->tableViewOrder->setColumnWidth(Enums::PRICING_COLUMN::PRICING_COLUMN_NAME, 500); // denuimirea investigatiei
     updateHeaderTableOrder();
 }
 
@@ -2024,7 +2024,7 @@ void DocOrderEcho::keyPressEvent(QKeyEvent *event)
     if(event->key()==Qt::Key_Return || event->key() == Qt::Key_Enter){
         if (ui->tableViewOrder->focusWidget()){
             int _row = ui->tableViewOrder->currentIndex().row();
-            QModelIndex indexEdit = modelTableOrder->index(_row, column_Price);
+            QModelIndex indexEdit = modelTableOrder->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE);
             onClickedRowTableOrder(indexEdit);
             ui->tableViewOrder->clearFocus();
         } else {

@@ -228,11 +228,11 @@ QVariant PaginatedSqlModel::data(const QModelIndex &index, int role) const
             return QIcon(":img/document_accept.png");
 
         // attachedImages
-        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 0) // 0
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == Enums::ORDER_IMAGE_VIDEO::NOT_ATTACHED) // 0
             return QVariant();
-        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 1) // 1
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == Enums::ORDER_IMAGE_VIDEO::ATTACHED_IMAGE) // 1
             return QIcon(":img/image-files.png");
-        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 2)
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == Enums::ORDER_IMAGE_VIDEO::ATTACHED_VIDEO)
             return QIcon(":img/video.png");
 
         // card payment

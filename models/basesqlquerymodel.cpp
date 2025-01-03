@@ -149,16 +149,16 @@ QVariant BaseSqlQueryModel::dataFromGeneralListForm(const QModelIndex &item, int
     case Qt::EditRole:
         return value;
     case Qt::DecorationRole:
-        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_WRITE)
             return QIcon(":img/element_x32.png");
-        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION)
             return QIcon(":img/element_delete_x32.png");
         else
             return value;
     case Qt::TextAlignmentRole:
         return value;
     case Qt::FontRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
             font.setItalic(true);
             font.setStrikeOut(true);
@@ -173,7 +173,7 @@ QVariant BaseSqlQueryModel::dataFromGeneralListForm(const QModelIndex &item, int
 #endif
         }
     case Qt::BackgroundRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION) // DeletionMark - marked
             return QBrush(QColor(255,230,255));
         else
             return value;
@@ -198,16 +198,16 @@ QVariant BaseSqlQueryModel::dataFromCatOrganizations(const QModelIndex &item, in
     case Qt::EditRole:
         return value;
     case Qt::DecorationRole:
-        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_WRITE)
             return QIcon(":img/element_x32.png");
-        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION)
             return QIcon(":img/element_delete_x32.png");
         else
             return value;
     case Qt::TextAlignmentRole:
         return value;
     case Qt::FontRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
             font.setItalic(true);
             font.setStrikeOut(true);
@@ -224,7 +224,7 @@ QVariant BaseSqlQueryModel::dataFromCatOrganizations(const QModelIndex &item, in
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 0), Qt::DisplayRole).toInt() == id_contract)
             return QBrush(QColor(194,250,255));
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION) // DeletionMark - marked
             return QBrush(QColor(255,230,255));
         else
             return value;
@@ -249,11 +249,11 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
     case Qt::EditRole:
         return value;
     case Qt::DecorationRole:
-        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+        if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_WRITE)
             return QIcon(":img/document_write.png");
-        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION)
             return QIcon(":img/document_remove.png");
-        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 2)
+        else if (item.column() == 1 && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_POST)
             return QIcon(":img/document_accept.png");
         else
             return value;
@@ -262,7 +262,7 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
         return value;
     case Qt::FontRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1){
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
             font.setItalic(true);
             font.setStrikeOut(true);
@@ -279,7 +279,7 @@ QVariant BaseSqlQueryModel::dataFromListDoc(const QModelIndex &item, int role) c
     case Qt::BackgroundRole:
         if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 0), Qt::DisplayRole).toInt() == id_contract)
             return QBrush(QColor(194,250,255));
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), 1), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION) // DeletionMark - marked
             return QBrush(QColor(255,230,255));
         else
             return value;
@@ -325,15 +325,15 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
 
     switch (role) {
     case Qt::DisplayRole:
-        if (item.column() == orderSection_deletionMark)
+        if (item.column() == Enums::ORDER_COLUMN::ORDER_DEL_MARK)
             return ""; // value;
-        else if (item.column() == orderSection_attachedImages)
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE)
             return "";
-        else if (item.column() == orderSection_cardPayment)
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT)
             return "";
-        else if (item.column() == orderSection_dateDoc)
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_DATE_DOC)
             return value.toDateTime().toString("dd.MM.yyyy hh:mm:ss");
-        if (item.column() == orderSection_sum){
+        if (item.column() == Enums::ORDER_COLUMN::ORDER_SUM){
             double _num = value.toDouble();
             return QVariant(QString("%1").arg(_num, 0, 'f', 2));
         }
@@ -343,35 +343,64 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
     case Qt::EditRole:
         return value;
     case Qt::DecorationRole:
-        if (item.column() == orderSection_deletionMark && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+        if (item.column() == Enums::ORDER_COLUMN::ORDER_DEL_MARK &&
+            QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_WRITE)
+
             return QIcon(":img/document_write.png");
-        else if (item.column() == orderSection_deletionMark && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_DEL_MARK &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION)
+
             return QIcon(":img/document_remove.png");
-        else if (item.column() == orderSection_deletionMark && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 2)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_DEL_MARK &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::IDX::IDX_POST)
+
             return QIcon(":img/document_accept.png");
-        else if (item.column() == orderSection_attachedImages && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_IMAGE_VIDEO::NOT_ATTACHED)
+
             return QIcon();
-        else if (item.column() == orderSection_attachedImages && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_IMAGE_VIDEO::ATTACHED_IMAGE)
+
             return QIcon(":img/image-files.png");
-        else if (item.column() == orderSection_attachedImages && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 2)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_IMAGE_VIDEO::ATTACHED_VIDEO)
+
             return QIcon(":img/video.png");
-        else if (item.column() == orderSection_cardPayment && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 0)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_PAYMENT::PAYMENT_CASH)
+
             return QIcon(":img/payment_cash.png");
-        else if (item.column() == orderSection_cardPayment && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 1)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_PAYMENT::PAYMENT_CARD)
+
             return QIcon(":img/master_card.png");
-        else if (item.column() == orderSection_cardPayment && QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == 2)
+
+        else if (item.column() == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT &&
+                 QSqlQueryModel::data(item, Qt::DisplayRole).toInt() == Enums::ORDER_PAYMENT::PAYMENT_TRANSFER)
+
             return QIcon(":img/payment_bank.png");
+
         else
+
             return value;
+
     case Qt::TextAlignmentRole:
-        if(item.column() == orderSection_numberDoc ||
-                item.column() == orderSection_sum ||
-                item.column() == orderSection_user){
+        if(item.column() == Enums::ORDER_COLUMN::ORDER_NUMBER_DOC ||
+                item.column() == Enums::ORDER_COLUMN::ORDER_SUM ||
+                item.column() == Enums::ORDER_COLUMN::ORDER_USER){
             return Qt::AlignHCenter;
         }
         return value;
     case Qt::FontRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), orderSection_deletionMark), Qt::DisplayRole).toInt() == 1){
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), Enums::ORDER_COLUMN::ORDER_DEL_MARK), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION){
             QFont font = QSqlQueryModel::data(item, Qt::FontRole).value<QFont>();  // traversarea textului
             font.setItalic(true);
             font.setStrikeOut(true);
@@ -386,7 +415,7 @@ QVariant BaseSqlQueryModel::dataFromDocOrderEcho(const QModelIndex &item, int ro
 #endif
         }
     case Qt::BackgroundRole:
-        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), orderSection_deletionMark), Qt::DisplayRole).toInt() == 1) // DeletionMark - marked
+        if (QSqlQueryModel::data(QSqlQueryModel::index(item.row(), Enums::ORDER_COLUMN::ORDER_DEL_MARK), Qt::DisplayRole).toInt() == Enums::IDX::IDX_DELETION) // DeletionMark - marked
             return QBrush(QColor(255,230,255));
         else
             return value;
