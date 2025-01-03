@@ -1,8 +1,8 @@
 [Desktop Entry]
 Name=USG-Evidența investigațiilor ecografice
-Comment[en]=USG Evidence of ultrasound investigations
-Comment[ru]=УЗИ-учёт ультразвуковых исследований
-Comment[ro]=USG-Evidența investigațiilor ecografice
+Comment[en]=USG Evidence of ultrasound investigations v3.0.1
+Comment[ru]=УЗИ-учёт ультразвуковых исследований v3.0.1
+Comment[ro]=USG-Evidența investigațiilor ecografice v3.0.1
 Version=3.0.1
 Exec=/opt/USG/USG.sh
 Icon=/opt/USG/icons/eco_248x248.ico

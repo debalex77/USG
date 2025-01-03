@@ -6,6 +6,7 @@
 #include <QDate>
 #include <QDateTime>
 #include <QSortFilterProxyModel>
+#include <data/enums.h>
 
 class BaseSortFilterProxyModel : public QSortFilterProxyModel
 {
@@ -33,13 +34,6 @@ protected:
     bool dateInRange(const QDate &date) const;
 
 private:
-    enum Columns
-    {
-        column_Id           = 0,
-        column_DeletionMark = 1,
-        column_numberDoc    = 4,
-        column_dateDoc      = 5
-    };
     ListFormType m_listFormType;
 };
 

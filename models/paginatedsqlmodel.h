@@ -13,6 +13,7 @@
 
 #include <data/database.h>
 #include <data/globals.h>
+#include <data/enums.h>
 #include <models/loaddatatask.h>
 
 class PaginatedSqlModel : public QSqlQueryModel
@@ -57,29 +58,6 @@ private:
 
     QProgressDialog *p_dialog;
     QProgressBar p_bar;
-
-    enum orderSections
-    {
-        orderSection_id             = 0,
-        orderSection_deletionMark   = 1,
-        orderSection_attachedImages = 2,
-        orderSection_cardPayment    = 3,
-        orderSection_numberDoc      = 4,
-        orderSection_dateDoc        = 5,
-        orderSection_idOrganization = 6,
-        orderSection_Organization   = 7,
-        orderSection_idContract     = 8,
-        orderSection_Contract       = 9,
-        orderSection_idPacient      = 10,
-        orderSection_searchPacient  = 11,
-        orderSection_pacient        = 12,
-        orderSection_IDNP           = 13,
-        orderSection_doctor         = 14,
-        orderSection_idUser         = 15,
-        orderSection_user           = 16,
-        orderSection_sum            = 17,
-        orderSection_comment        = 18
-    };
 };
 
 #endif // PAGINATEDSQLMODEL_H

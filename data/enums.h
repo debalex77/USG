@@ -36,11 +36,45 @@ public:
     };
     Q_ENUM(ORDER_PAYMENT);
 
+    enum ORDER_COLUMN
+    {
+        ORDER_ID,
+        ORDER_DEL_MARK,
+        ORDER_ATTACHED_IMAGE,
+        ORDER_CARD_PAYMENT,
+        ORDER_NUMBER_DOC,
+        ORDER_DATE_DOC,
+        ORDER_ID_ORGANIZATION,
+        ORDER_ORGANIZATION,
+        ORDER_ID_CONTRACT,
+        ORDER_CONTRACT,
+        ORDER_ID_PACIENT,
+        ORDER_SEARCH_PACIENT,
+        ORDER_PACIENT,
+        ORDER_IDNP,
+        ORDER_DOCTOR,
+        ORDER_ID_USER,
+        ORDER_USER,
+        ORDER_SUM,
+        ORDER_COMMENT
+    };
+    Q_ENUM(ORDER_COLUMN);
+
     enum TYPE_PRINT
     {
         OPEN_DESIGNER,
         OPEN_PREVIEW
     };
+
+    enum PROXY_MODEL
+    {
+        PROXY_COLUMN_ID,
+        PROXY_COLUMN_DEL_MARK,
+        PROXY_NUMBER_DOC,
+        PROXY_DATE_DOC
+    };
+    Q_ENUM(PROXY_MODEL);
+
 };
 
 #endif // ENUMS_H

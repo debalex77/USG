@@ -1,6 +1,6 @@
 #include "infowindow.h"
-#include "ui_infowindow.h"
 #include <QScreen>
+#include "ui_infowindow.h"
 
 InfoWindow::InfoWindow(QWidget *parent)
     : QDialog(parent)
@@ -13,7 +13,8 @@ InfoWindow::InfoWindow(QWidget *parent)
     ui->txt_title->clear();
     ui->textBrowser->clear();
 
-    (globals::show_content_info_video) ? ui->notShow->setChecked(false) : ui->notShow->setChecked(true);
+    (globals::show_content_info_video) ? ui->notShow->setChecked(false)
+                                       : ui->notShow->setChecked(true);
 
     ui->textBrowser->setFocus();
 
@@ -27,8 +28,8 @@ InfoWindow::InfoWindow(QWidget *parent)
     int screenHeight = screen->geometry().height();
 
     this->resize(680, 420);
-    int x = (screenWidth / 2) - (width() / 2);//*0.1;
-    int y = (screenHeight / 2) - (height() / 2);//*0.1;
+    int x = (screenWidth / 2) - (width() / 2);   //*0.1;
+    int y = (screenHeight / 2) - (height() / 2); //*0.1;
     move(x, y);
 }
 
@@ -80,17 +81,20 @@ void InfoWindow::slot_typeInfoChanged()
 
 void InfoWindow::closeEvent(QCloseEvent *event)
 {
-    if (m_typeInfo == INFO_REALEASE){
+    if (m_typeInfo == INFO_REALEASE) {
         appSettings->deleteLater();
         event->accept();
     } else {
-
-        if (m_typeInfo == INFO_VIDEO){
-            globals::show_content_info_video = ! ui->notShow->isChecked();
-            appSettings->setKeyAndValue("show_msg", "showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
-        } else if (m_typeInfo == INFO_REPORT){
-            globals::show_info_reports = ! ui->notShow->isChecked();
-            appSettings->setKeyAndValue("show_msg", "showMsgReports", (globals::show_info_reports) ? 1 : 0);
+        if (m_typeInfo == INFO_VIDEO) {
+            globals::show_content_info_video = !ui->notShow->isChecked();
+            appSettings->setKeyAndValue("show_msg",
+                                        "showMsgVideo",
+                                        (globals::show_content_info_video) ? 1 : 0);
+        } else if (m_typeInfo == INFO_REPORT) {
+            globals::show_info_reports = !ui->notShow->isChecked();
+            appSettings->setKeyAndValue("show_msg",
+                                        "showMsgReports",
+                                        (globals::show_info_reports) ? 1 : 0);
         };
 
         appSettings->deleteLater();

@@ -1,32 +1,32 @@
-#include "data/mainwindow.h"
 #include "data/databaseselection.h"
+#include "data/mainwindow.h"
 
-#include <QGuiApplication>
-#include <QScreen>
 #include <QApplication>
-#include <QMessageBox>
 #include <QDebug>
-#include <QTranslator>
+#include <QGuiApplication>
+#include <QMessageBox>
+#include <QScreen>
 #include <QStyleHints>
+#include <QTranslator>
 
 // includem librarii pentru logare
-#include <QScopedPointer>
-#include <QTextStream>
 #include <QDateTime>
-#include <QLoggingCategory>
-#include <QFile>
 #include <QDir>
-#include <QFontDatabase>
-#include <QSplashScreen>
 #include <QElapsedTimer>
+#include <QFile>
+#include <QFontDatabase>
+#include <QLoggingCategory>
 #include <QPainter>
+#include <QScopedPointer>
+#include <QSplashScreen>
+#include <QTextStream>
 
-#include <data/database.h>
-#include <data/globals.h>
-#include <data/appsettings.h>
-#include <catalogs/catusers.h>
 #include "data/authorizationuser.h"
 #include "data/initlaunch.h"
+#include <catalogs/catusers.h>
+#include <data/appsettings.h>
+#include <data/database.h>
+#include <data/globals.h>
 
 static const int LOAD_TIME_MSEC = 5 * 1000;
 
@@ -39,8 +39,10 @@ extern bool isDarkModeEnabledMacOS();
 
 //******************************************************************************************************************************
 
-QScopedPointer<QFile>   m_logFile;  // indicator pentru logare
-void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg); // declaram procesarea
+QScopedPointer<QFile> m_logFile; // indicator pentru logare
+void messageHandler(QtMsgType type,
+                    const QMessageLogContext &context,
+                    const QString &msg); // declaram procesarea
 
 //******************************************************************************************************************************
 
@@ -54,7 +56,7 @@ int resizeMainWindow(QApplication &a)
 
 #if defined(Q_OS_LINUX) || (Q_OS_WIN)
 
-    int screenWidth  = screen->geometry().width();
+    int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
     w.resize(screenWidth * 0.8, screenHeight * 0.8);
 
@@ -79,7 +81,8 @@ int resizeMainWindow(QApplication &a)
     int current_year = current_date.year();
     if (current_date >= QDate(current_year, 12, 15) || current_date <= QDate(current_year, 01, 15))
         pixmap.load(":/icons/splash_santa.png");
-    else if (current_date >= QDate(current_date.year(), 12, 1) || current_date <= QDate(current_year, 03, 01).addDays(-1))
+    else if (current_date >= QDate(current_date.year(), 12, 1)
+             || current_date <= QDate(current_year, 03, 01).addDays(-1))
         pixmap.load(":/icons/splash_snow.png");
     else
         pixmap.load(":/icons/usg_splash.png");
@@ -89,7 +92,7 @@ int resizeMainWindow(QApplication &a)
         pixmap.load(dir.toNativeSeparators("/usr/share/pixmaps/usg/usg_splash.png"));
 #endif
 
-    if (! pixmap.isNull()){
+    if (!pixmap.isNull()) {
         QPainter painter(&pixmap);
         QFont font = painter.font();
         font.setBold(true);
@@ -112,7 +115,10 @@ int resizeMainWindow(QApplication &a)
         painter.drawText(400, 259, USG_COMPANY_EMAIL);
         font.setPointSize(9);
         painter.setFont(font);
-        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
+        painter.drawText(290,
+                         310,
+                         "2021 - " + QString::number(QDate::currentDate().year())
+                             + QCoreApplication::tr(" a."));
 #elif defined(Q_OS_WIN)
         font.setPointSize(18);
         painter.setFont(font);
@@ -124,7 +130,10 @@ int resizeMainWindow(QApplication &a)
         painter.drawText(400, 259, USG_COMPANY_EMAIL);
         font.setPointSize(9);
         painter.setFont(font);
-        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
+        painter.drawText(290,
+                         310,
+                         "2021 - " + QString::number(QDate::currentDate().year())
+                             + QCoreApplication::tr(" a."));
 #elif defined(Q_OS_MACOS)
         font.setPointSize(22);
         painter.setFont(font);
@@ -136,7 +145,10 @@ int resizeMainWindow(QApplication &a)
         painter.drawText(408, 259, USG_COMPANY_EMAIL);
         font.setPointSize(10);
         painter.setFont(font);
-        painter.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year()) + QCoreApplication::tr(" a."));
+        painter.drawText(290,
+                         310,
+                         "2021 - " + QString::number(QDate::currentDate().year())
+                             + QCoreApplication::tr(" a."));
 #endif
 
         QSplashScreen splash(pixmap, Qt::WindowStaysOnTopHint);
@@ -144,9 +156,10 @@ int resizeMainWindow(QApplication &a)
         QTimer::singleShot(LOAD_TIME_MSEC, &splash, &QWidget::close); // keep displayed for 5 seconds
         QElapsedTimer time;
         time.start();
-        while( time.elapsed() < LOAD_TIME_MSEC ) {
-            const int progress = static_cast< double >( time.elapsed() ) / LOAD_TIME_MSEC * 100.0;
-            splash.showMessage(QCoreApplication::tr( "Încărcat: %1%" ).arg( progress ), Qt::AlignBottom | Qt::AlignRight);
+        while (time.elapsed() < LOAD_TIME_MSEC) {
+            const int progress = static_cast<double>(time.elapsed()) / LOAD_TIME_MSEC * 100.0;
+            splash.showMessage(QCoreApplication::tr("Încărcat: %1%").arg(progress),
+                               Qt::AlignBottom | Qt::AlignRight);
         }
 
         w.show(); // lansam feareastra principala
@@ -168,7 +181,8 @@ int resizeMainWindow(QApplication &a)
 
         splash.finish(&w);
     } else {
-        qWarning(logWarning()) << QCoreApplication::tr("Nu a fost gasit fisierul - 'icons/usg_splash.png'");
+        qWarning(logWarning()) << QCoreApplication::tr(
+            "Nu a fost gasit fisierul - 'icons/usg_splash.png'");
         w.show(); // lansam feareastra principala
     }
 
@@ -177,17 +191,18 @@ int resizeMainWindow(QApplication &a)
 
 int main(int argc, char *argv[])
 {
-
 #if defined(Q_OS_MACOS)
     setupCustomAppDelegate(); // Configurează delegate-ul pentru a elimina eroarea - vezi fisierul AppDelegate.mm
 #endif
 
-    QApplication::setAttribute(Qt::AA_ShareOpenGLContexts); // initializare pluginului Qt WebEngine (specificul LimeReport)
-    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(Qt::HighDpiScaleFactorRoundingPolicy::Floor);
+    QApplication::setAttribute(
+        Qt::AA_ShareOpenGLContexts); // initializare pluginului Qt WebEngine (specificul LimeReport)
+    QGuiApplication::setHighDpiScaleFactorRoundingPolicy(
+        Qt::HighDpiScaleFactorRoundingPolicy::Floor);
 
     QApplication a(argc, argv);
 
-#if defined (Q_OS_LINUX)
+#if defined(Q_OS_LINUX)
     int fontId = QFontDatabase::addApplicationFont(":/Fonts/segoeUI/segoeui.ttf");
     QString family = QFontDatabase::applicationFontFamilies(fontId).at(0);
     QFont font(family); // Setează mărimea dorită
@@ -201,15 +216,18 @@ int main(int argc, char *argv[])
     QApplication::setFont(font); // Setează fontul pentru întreaga aplicație
 #elif defined(Q_OS_MACOS)
     QFont font("San Francisco", 13); // Setează mărimea dorită
-    QApplication::setFont(font); // Setează fontul pentru întreaga aplicație
+    QApplication::setFont(font);     // Setează fontul pentru întreaga aplicație
 #endif
 
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT OPENSSL =~=~=~=~=~=~=~=~=~=~=~=~";
+    qInfo(logInfo())
+        << "=~=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT OPENSSL =~=~=~=~=~=~=~=~=~=~=~=~";
     qInfo(logInfo()) << "Support SSL: " << QSslSocket::supportsSsl();
-    qInfo(logInfo()) << "sslLibraryBuildVersionString: " << QSslSocket::sslLibraryBuildVersionString();
+    qInfo(logInfo()) << "sslLibraryBuildVersionString: "
+                     << QSslSocket::sslLibraryBuildVersionString();
     qInfo(logInfo()) << "sslLibraryVersionString " << QSslSocket::sslLibraryVersionString();
     qInfo(logInfo()) << "";
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT SQL DRIVERS =~=~=~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo())
+        << "=~=~=~=~=~=~=~=~=~=~ VERIFICATION SUPPORT SQL DRIVERS =~=~=~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << QSqlDatabase::drivers();
     qInfo(logInfo()) << "";
 
@@ -218,21 +236,21 @@ int main(int argc, char *argv[])
 
     a.setStyle("Fusion");
 
-#if defined (Q_OS_LINUX)
+#if defined(Q_OS_LINUX)
     QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
-    QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
-    a.setStyleSheet(appStyle);              // setam stilul
+    QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
+    a.setStyleSheet(appStyle);             // setam stilul
 #elif defined(Q_OS_WIN)
     QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
-    QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
-    a.setStyleSheet(appStyle);              // setam stilul
-#elif defined (Q_OS_MACOS)
+    QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
+    a.setStyleSheet(appStyle);             // setam stilul
+#elif defined(Q_OS_MACOS)
     QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
-    QString appStyle(fileStyle.readAll());  // fisierul cu stilul aplicatiei
-    a.setStyleSheet(appStyle);              // setam stilul
+    QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
+    a.setStyleSheet(appStyle);             // setam stilul
 #endif
     qInfo(logInfo()) << "Load style applications.";
 
@@ -247,9 +265,10 @@ int main(int argc, char *argv[])
         QMessageBox::warning(
             &_select, // Pointer către fereastra principală
             QCoreApplication::tr("Verificarea temei OS"),
-            QCoreApplication::tr("Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
-                                 "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
-                                 "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
+            QCoreApplication::tr(
+                "Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
+                "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
+                "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
             QMessageBox::Ok);
     }
 #endif
@@ -260,27 +279,32 @@ int main(int argc, char *argv[])
     //******************************************************************************************************************************
     // initializam setarile aplicatiei
     qInfo(logInfo()) << "Load settings application.";
-    AppSettings* appSettings = new AppSettings();    // alocam memoria p-u setarile aplicatiei
+    AppSettings *appSettings = new AppSettings(); // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
     if (QString(argv[1]) == "" && QString(argv[1]) == "/debug") { // !=
         m_logFile.reset(new QFile(globals::pathLogAppSettings));
-        if (m_logFile.data()->open(QFile::Append | QFile::Text)){
+        if (m_logFile.data()->open(QFile::Append | QFile::Text)) {
             qInstallMessageHandler(messageHandler);
         }
     }
 
     //******************************************************************************************************************************
     // determinam modul de lansare a aplicatiei
-    if (globals::unknowModeLaunch){                       // nu e determinat modul lansarii aplicatiei
-        InitLaunch* initLaunch = new InitLaunch();        // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
-        initLaunch->setAttribute(Qt::WA_DeleteOnClose);   // setam atributul de eliberare a memoriei la inchiderea ferestrei
-        if (initLaunch->exec() != QDialog::Accepted){
+    if (globals::unknowModeLaunch) { // nu e determinat modul lansarii aplicatiei
+        InitLaunch *initLaunch
+            = new InitLaunch(); // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
+        initLaunch->setAttribute(
+            Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
+        if (initLaunch->exec() != QDialog::Accepted) {
             // appSettings->deleteLater();
             return 1;
         }
-        QTranslator* translator = new QTranslator();                                                                          // daca limba a fost schimbata
-        if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) { // setam limba aplicatiei
+        QTranslator *translator = new QTranslator(); // daca limba a fost schimbata
+        if (translator->load(QLocale(globals::langApp),
+                             QLatin1String("USG"),
+                             QLatin1String("_"),
+                             QLatin1String(":/i18n"))) { // setam limba aplicatiei
             qApp->installTranslator(translator);
         }
         appSettings->setLanguageApp(); // setam limba aplicatiei daca a fost schimbata
@@ -290,28 +314,40 @@ int main(int argc, char *argv[])
     // 1. Transferul BD
     // 2. Prima lansare a aplicatiei
     // 3. Exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
-    if (globals::moveApp == 1){                              // 1. daca BD a fost transferata
-        if (appSettings->exec() != QDialog::Accepted)        // deschidem setarile aplicatiei pu a seta drumul spre BD
+    if (globals::moveApp == 1) { // 1. daca BD a fost transferata
+        if (appSettings->exec()
+            != QDialog::Accepted) // deschidem setarile aplicatiei pu a seta drumul spre BD
             return 1;
-        AuthorizationUser* authUser = new AuthorizationUser(); // lansam autorizarea
+        AuthorizationUser *authUser = new AuthorizationUser(); // lansam autorizarea
         authUser->setProperty("Id", globals::idUserApp);       // setam proprietatea 'id'
         if (authUser->exec() != QDialog::Accepted)
             return 1;
-        resizeMainWindow(a);  // resetam dimensiunile ferestrei principale
+        resizeMainWindow(a); // resetam dimensiunile ferestrei principale
     } else {
-        if (globals::firstLaunch){                           // 2. daca prima lansare a aplicatie
-            if (appSettings->exec() != QDialog::Accepted)    // lansam setarile principale ale aplicatiei
+        if (globals::firstLaunch) { // 2. daca prima lansare a aplicatie
+            if (appSettings->exec()
+                != QDialog::Accepted) // lansam setarile principale ale aplicatiei
                 return 1;
-            CatUsers* catUsers = new CatUsers();             // cream utilizator nou
-            catUsers->setAttribute(Qt::WA_DeleteOnClose);    // setam atributul de eliberare a memoriei la inchiderea ferestrei
-            catUsers->setProperty("ItNew",   true);          // setam proprietatea 'itNew'
-            catUsers->setWindowTitle(QCoreApplication::tr("Crearea administratorului aplicației %1").arg("[*]"));
+            CatUsers *catUsers = new CatUsers(); // cream utilizator nou
+            catUsers->setAttribute(
+                Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
+            catUsers->setProperty("ItNew", true); // setam proprietatea 'itNew'
+            catUsers->setWindowTitle(
+                QCoreApplication::tr("Crearea administratorului aplicației %1").arg("[*]"));
             if (catUsers->exec() != QDialog::Accepted)
                 return 1;
             auto db = new DataBase();
-            appSettings->setKeyAndValue("on_start", "idUserApp",   db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
-            appSettings->setKeyAndValue("on_start", "nameUserApp", db->encode_string(globals::nameUserApp));                // ulterioara la logare urmatoare a aplicatiei
-            appSettings->setKeyAndValue("on_start", "memoryUser",  (globals::memoryUser) ? 1 : 0);
+            appSettings
+                ->setKeyAndValue("on_start",
+                                 "idUserApp",
+                                 db->encode_string(QString::number(
+                                     globals::idUserApp))); // in fisierul cu setari pentru extragerea
+            appSettings->setKeyAndValue(
+                "on_start",
+                "nameUserApp",
+                db->encode_string(
+                    globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
+            appSettings->setKeyAndValue("on_start", "memoryUser", (globals::memoryUser) ? 1 : 0);
             qDebug() << "thisSqlite: " << globals::thisSqlite;
             qDebug() << "thisMySQL: " << globals::thisMySQL;
             qDebug() << "user: " << globals::nameUserApp;
@@ -320,22 +356,30 @@ int main(int argc, char *argv[])
             qDebug() << "index type SQL:" << globals::indexTypeSQL;
             resizeMainWindow(a); // resetam dimensiunile ferestrei principale
             db->deleteLater();
-        } else {                                             // 3. exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
-            appSettings->loadSettings();                     // determinam/incarcam setarile principale ale aplicatiei
+        } else { // 3. exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
+            appSettings->loadSettings(); // determinam/incarcam setarile principale ale aplicatiei
             qDebug() << "thisSqlite: " << globals::thisSqlite;
             qDebug() << "thisMySQL: " << globals::thisMySQL;
             qDebug() << "user: " << globals::nameUserApp;
             qDebug() << "id user: " << globals::idUserApp;
             qDebug() << "lang app: " << globals::langApp;
             qDebug() << "index type SQL:" << globals::indexTypeSQL;
-            AuthorizationUser* authUser = new AuthorizationUser();  // lansam autorizarea
+            AuthorizationUser *authUser = new AuthorizationUser(); // lansam autorizarea
             authUser->setProperty("Id", globals::idUserApp);
             if (authUser->exec() != QDialog::Accepted)
                 return 1;
             auto db = new DataBase();
-            appSettings->setKeyAndValue("on_start", "idUserApp",   db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
-            appSettings->setKeyAndValue("on_start", "nameUserApp", db->encode_string(globals::nameUserApp));                // ulterioara la logare urmatoare a aplicatiei
-            appSettings->setKeyAndValue("on_start", "memoryUser",  (globals::memoryUser) ? 1 : 0);
+            appSettings
+                ->setKeyAndValue("on_start",
+                                 "idUserApp",
+                                 db->encode_string(QString::number(
+                                     globals::idUserApp))); // in fisierul cu setari pentru extragerea
+            appSettings->setKeyAndValue(
+                "on_start",
+                "nameUserApp",
+                db->encode_string(
+                    globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
+            appSettings->setKeyAndValue("on_start", "memoryUser", (globals::memoryUser) ? 1 : 0);
             resizeMainWindow(a);
             db->deleteLater();
         }
@@ -346,18 +390,26 @@ int main(int argc, char *argv[])
 // realizarea procesarii
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QTextStream out(m_logFile.data());                                        // Initerea fluxului datelor pu inscriere
+    QTextStream out(m_logFile.data()); // Initerea fluxului datelor pu inscriere
     out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz "); // adaugam data
     // Dupa tipul debug-ului determinam nivelul mesajului
-    switch (type)
-    {
-    case QtInfoMsg:     out << "INF "; break;
-    case QtDebugMsg:    out << "DBG "; break;
-    case QtWarningMsg:  out << "WRN "; break;
-    case QtCriticalMsg: out << "CRT "; break;
-    case QtFatalMsg:    out << "FTL "; break;
+    switch (type) {
+    case QtInfoMsg:
+        out << "INF ";
+        break;
+    case QtDebugMsg:
+        out << "DBG ";
+        break;
+    case QtWarningMsg:
+        out << "WRN ";
+        break;
+    case QtCriticalMsg:
+        out << "CRT ";
+        break;
+    case QtFatalMsg:
+        out << "FTL ";
+        break;
     }
-    out << context.category << ": "
-        << msg << Qt::endl; // Inscrim categoria si mesajul
-    out.flush();            // golim datele din bufer
+    out << context.category << ": " << msg << Qt::endl; // Inscrim categoria si mesajul
+    out.flush();                                        // golim datele din bufer
 }

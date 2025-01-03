@@ -199,19 +199,19 @@ QVariant PaginatedSqlModel::data(const QModelIndex &index, int role) const
 
     if (role == Qt::DisplayRole) {
 
-        if (col == orderSection_deletionMark)
+        if (col == Enums::ORDER_COLUMN::ORDER_DEL_MARK)
             return QVariant(); // Nu afișa nimic
 
-        if (col == orderSection_attachedImages && rows[row][col].toInt() == 0)
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 0)
             return QVariant(); // Nu afișa nimic
 
-        if (col == orderSection_cardPayment)
+        if (col == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT)
             return QVariant(); // Nu afișa nimic
 
-        if (col == orderSection_dateDoc)
+        if (col == Enums::ORDER_COLUMN::ORDER_DATE_DOC)
             return rows[row][col].toDateTime().toString("dd.MM.yyyy hh:mm:ss");
 
-        if (col == orderSection_sum) {
+        if (col == Enums::ORDER_COLUMN::ORDER_SUM) {
             double _num = rows[row][col].toDouble();
             return QVariant(QString("%1").arg(_num, 0, 'f', 2));
         }
@@ -222,34 +222,34 @@ QVariant PaginatedSqlModel::data(const QModelIndex &index, int role) const
     if (role == Qt::DecorationRole) {
 
         // write & valide
-        if (col == orderSection_deletionMark && rows[row][col].toInt() == 0)
+        if (col == Enums::ORDER_COLUMN::ORDER_DEL_MARK && rows[row][col].toInt() == Enums::IDX::IDX_WRITE)
             return QIcon(":img/document_write.png");
-        if (col == orderSection_deletionMark && rows[row][col].toInt() == 2)
+        if (col == Enums::ORDER_COLUMN::ORDER_DEL_MARK && rows[row][col].toInt() == Enums::IDX::IDX_POST)
             return QIcon(":img/document_accept.png");
 
         // attachedImages
-        if (col == orderSection_attachedImages && rows[row][col].toInt() == 0)
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 0) // 0
             return QVariant();
-        if (col == orderSection_attachedImages && rows[row][col].toInt() == 1)
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 1) // 1
             return QIcon(":img/image-files.png");
-        if (col == orderSection_attachedImages && rows[row][col].toInt() == 2)
+        if (col == Enums::ORDER_COLUMN::ORDER_ATTACHED_IMAGE && rows[row][col].toInt() == 2)
             return QIcon(":img/video.png");
 
         // card payment
-        if (col == orderSection_cardPayment && rows[row][col].toInt() == 0)
+        if (col == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT && rows[row][col].toInt() == Enums::ORDER_PAYMENT::PAYMENT_CASH)
             return QIcon(":img/payment_cash.png");
-        if (col == orderSection_cardPayment && rows[row][col].toInt() == 1)
+        if (col == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT && rows[row][col].toInt() == Enums::ORDER_PAYMENT::PAYMENT_CARD)
             return QIcon(":img/master_card.png");
-        if (col == orderSection_cardPayment && rows[row][col].toInt() == 2)
+        if (col == Enums::ORDER_COLUMN::ORDER_CARD_PAYMENT && rows[row][col].toInt() == Enums::ORDER_PAYMENT::PAYMENT_TRANSFER)
             return QIcon(":img/payment_bank.png");
 
     }
 
     if (role == Qt::TextAlignmentRole) {
 
-        if (col == orderSection_numberDoc ||
-            col == orderSection_sum ||
-            col == orderSection_user)
+        if (col == Enums::ORDER_COLUMN::ORDER_NUMBER_DOC ||
+            col == Enums::ORDER_COLUMN::ORDER_SUM ||
+            col == Enums::ORDER_COLUMN::ORDER_USER)
             return int(Qt::AlignHCenter | Qt::AlignVCenter);
 
     }

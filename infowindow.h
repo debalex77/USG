@@ -19,11 +19,7 @@ public:
     explicit InfoWindow(QWidget *parent = nullptr);
     ~InfoWindow();
 
-    enum TypeInfo{
-        INFO_REALEASE,
-        INFO_VIDEO,
-        INFO_REPORT
-    };
+    enum TypeInfo { INFO_REALEASE, INFO_VIDEO, INFO_REPORT };
 
     TypeInfo getTypeInfo();
     void setTypeInfo(TypeInfo typeInfo);
@@ -39,11 +35,11 @@ private slots:
 
 private:
     Ui::InfoWindow *ui;
-    TypeInfo        m_typeInfo;
-    AppSettings    *appSettings;
+    TypeInfo m_typeInfo;
+    AppSettings *appSettings;
 
 protected:
-    void closeEvent(QCloseEvent *event);   // controlam modificarea datelor
+    void closeEvent(QCloseEvent *event); // controlam modificarea datelor
 };
 
 #endif // INFOWINDOW_H

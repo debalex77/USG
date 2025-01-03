@@ -40,12 +40,12 @@ bool BaseSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelInd
     QVariant rightData = sourceModel()->data(right);
 
     // SORTAREA - număr documente (QString reprezentând un int)
-    if (left.column() == column_numberDoc && m_listFormType == ListFormType::ListDocuments) {
+    if (left.column() == Enums::PROXY_MODEL::PROXY_NUMBER_DOC && m_listFormType == ListFormType::ListDocuments) {
         return compareInts(leftData, rightData);
     }
 
     // SORTAREA - QDateTime
-    if (left.column() == column_dateDoc && m_listFormType == ListFormType::ListDocuments) {
+    if (left.column() == Enums::PROXY_MODEL::PROXY_DATE_DOC && m_listFormType == ListFormType::ListDocuments) {
         return compareDates(leftData, rightData, "dd.MM.yyyy hh:mm:ss");
     }
 
