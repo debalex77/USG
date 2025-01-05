@@ -772,7 +772,6 @@ bool UserPreferences::insertDataIntoTable()
     // inserarea datelor in tabela 'userPreferences'
 
     qry.prepare("INSERT INTO userPreferences ("
-                "id,"
                 "id_users,"
                 "versionApp,"
                 "showQuestionCloseApp,"
@@ -785,10 +784,10 @@ bool UserPreferences::insertDataIntoTable()
                 "databasesArchiving,"
                 "showAsistantHelper,"
                 "showDocumentsInSeparatWindow,"
-                "minimizeAppToTray) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+                "minimizeAppToTray) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
     qry.addBindValue(m_Id);
     qry.addBindValue(m_Id);
-    qry.addBindValue(VER);
+    qry.addBindValue(USG_VERSION_FULL);
     if(globals::thisMySQL){
         qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? true : false));
         qry.addBindValue((ui->check_showUserManual->isChecked() ? true : false));
@@ -798,6 +797,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? true : false));
         qry.addBindValue((ui->check_newVersion->isChecked() ? true : false));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? true : false));
+        qry.addBindValue((ui->showAsistantHelper->isChecked() ? true : false));
         qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
         qry.addBindValue((ui->minimizeAppToTray->isChecked() ? true : false));
     } else if (globals::thisSqlite){
@@ -809,6 +809,7 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_newVersion->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_databasesArchiving->isChecked() ? 1 : 0));
+        qry.addBindValue((ui->showAsistantHelper->isChecked() ? 1 : 0));
         qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
         qry.addBindValue((ui->minimizeAppToTray->isChecked() ? 1 : 0));
     } else {
