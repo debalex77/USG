@@ -772,6 +772,19 @@ void MainWindow::openDocExamen()
     list_report->setProperty("typeDoc", list_report->reportEcho);
     mdiAreaCont->addWidget(list_report);
     list_report->show();
+
+    txt_title_bar->setText(tr("Se incarca documente ... "));
+
+    progress = new QProgressBar(ui->statusbar);
+    progress->setAlignment(Qt::AlignRight);
+    progress->setMaximumSize(120, 15);
+    progress->hide(); // Ascunde inițial bara de progres
+    txt_title_bar->hide();
+    ui->statusbar->addWidget(txt_title_bar);
+    ui->statusbar->addWidget(progress);
+
+    connect(list_report, &ListDocReportOrder::updateProgress, this, &MainWindow::handleUpdateProgress);
+    connect(list_report, &ListDocReportOrder::finishedProgress, this, &MainWindow::handleFinishedProgress);
 }
 
 void MainWindow::openReports()

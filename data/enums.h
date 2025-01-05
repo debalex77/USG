@@ -78,6 +78,8 @@ public:
     {
         PROXY_COLUMN_ID,
         PROXY_COLUMN_DEL_MARK,
+        PROXY_ATTACHED_IMAGE,
+        PROXY_CARD_PAYMENT,
         PROXY_NUMBER_DOC,
         PROXY_DATE_DOC
     };

@@ -157,6 +157,14 @@ void ListDocReportOrder::enableLineEditSearch()
                 connect(modelTable, &PaginatedSqlModel::finishedProgress, this, &ListDocReportOrder::finishedProgress);
                 updateTableViewOrderEchoFull();
                 loadDocumentsFull = true;
+            } else if (m_typeDoc == reportEcho) {
+                ui->filterStartDateTime->setDateTime(QDateTime(QDate(2021,01,01), QTime(00,00,00)));
+                ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12,31), QTime(23,59,59)));
+                updateTextPeriod();
+                connect(modelTable, &PaginatedSqlModel::updateProgress, this, &ListDocReportOrder::updateProgress);
+                connect(modelTable, &PaginatedSqlModel::finishedProgress, this, &ListDocReportOrder::finishedProgress);
+                updateTableViewReportEchoFull();
+                loadDocumentsFull = true;
             }
             ui->editSearch->setEnabled(true);
         } else if (messange_box.clickedButton() == noButton) {
@@ -1812,10 +1820,38 @@ void ListDocReportOrder::updateTableViewReportEcho()
     else
         strQry = strQry + QString(" WHERE orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
 
-    modelTable->setQuery(strQry);
+    strQry = strQry + " ORDER BY orderEcho.dateDoc DESC "
+                      " LIMIT :limit OFFSET :offset;";
 
-    while (modelTable->canFetchMore())
-        modelTable->fetchMore();
+#ifdef QT_DEBUG
+    qDebug() << "----------------------------------------------------------------------------------------------------------'";
+    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
+    qDebug() << strQry;
+#else
+    if (QCoreApplication::arguments().count() > 1
+        && QCoreApplication::arguments()[1].contains("/debug")){
+        qDebug() << strQry;
+    }
+#endif
+
+    int scrollPosition = ui->tableView->verticalScrollBar()->value();
+    int maxScroll = ui->tableView->verticalScrollBar()->maximum();
+
+    int rowHeight = ui->tableView->rowHeight(0); // Calculăm înălțimea rândului
+    int startRow = 0;
+    if (rowHeight > 0)
+        startRow = scrollPosition / rowHeight;
+    else
+        Q_UNUSED(startRow)
+
+    if (scrollPosition == 0) {
+        modelTable->resetPagination();    // resetarea
+        modelTable->setPagination(50, 0); // setarea initiala paginarii
+        modelTable->setStrQuery(strQry);  // setarea textului solicitarii
+        modelTable->fetchMoreData();      // prelucrarea solicitarii si prezentarea datelor
+    } else if (scrollPosition < maxScroll) {
+        modelTable->updateVisibleData(scrollPosition, rowHeight);
+    }
 
     proxyTable->setSourceModel(modelTable);
     ui->tableView->setModel(proxyTable);
@@ -1835,6 +1871,108 @@ void ListDocReportOrder::updateTableViewReportEcho()
         ui->tableView->selectRow(m_currentRow);
     else
         ui->tableView->selectRow(0);
+    updateHeaderTableReportEcho();
+}
+
+void ListDocReportOrder::updateTableViewReportEchoFull()
+{
+    m_currentRow = ui->tableView->currentIndex().row();
+
+    QString strQry;
+    if (globals::thisMySQL)
+        strQry = "SELECT reportEcho.id,"
+                 "reportEcho.deletionMark,"
+                 "reportEcho.attachedImages,"
+                 "orderEcho.cardPayment,"
+                 "reportEcho.numberDoc,"
+                 "reportEcho.dateDoc,"
+                 "reportEcho.id_orderEcho,"
+                 "pacients.id AS idPacient,"
+                 "CONCAT(pacients.name,' ', pacients.fName,' ', pacients.mName,', ', "
+                 "SUBSTRING(pacients.birthday, 9, 2),'.', "
+                 "SUBSTRING(pacients.birthday, 6, 2),'.', "
+                 "SUBSTRING(pacients.birthday, 1, 4)) AS searchPacients,"
+                 "CONCAT(pacients.name,' ', pacients.fName) AS pacient,"
+                 "pacients.IDNP,"
+                 "CONCAT('Raport ecografic nr.', orderEcho.numberDoc,' din ',"
+                 "SUBSTRING(orderEcho.dateDoc,9,2),'.', SUBSTRING(orderEcho.dateDoc,6,2),'.', SUBSTRING(orderEcho.dateDoc,1,4),' ',SUBSTRING(orderEcho.dateDoc,12,8)) AS DocOrder,"
+                 "users.id AS idUser,"
+                 "users.name AS user,"
+                 "reportEcho.concluzion,"
+                 "reportEcho.comment "
+                 "FROM reportEcho "
+                 "INNER JOIN pacients ON reportEcho.id_pacients = pacients.id "
+                 "INNER JOIN orderEcho ON reportEcho.id_orderEcho = orderEcho.id "
+                 "INNER JOIN users ON reportEcho.id_users = users.id";
+    else
+        strQry = "SELECT reportEcho.id,"
+                 "reportEcho.deletionMark,"
+                 "reportEcho.attachedImages,"
+                 "orderEcho.cardPayment,"
+                 "reportEcho.numberDoc,"
+                 "reportEcho.dateDoc,"
+                 "reportEcho.id_orderEcho,"
+                 "pacients.id AS idPacient,"
+                 "pacients.name ||' '|| pacients.fName ||' '|| pacients.mName ||', '|| "
+                 "substr(pacients.birthday, 9, 2) ||'.'|| "
+                 "substr(pacients.birthday, 6, 2) ||'.'|| "
+                 "substr(pacients.birthday, 1, 4) AS searchPacients,"
+                 "pacients.name ||' '|| pacients.fName AS pacient,"
+                 "pacients.IDNP,"
+                 "'Raport ecografic nr.' || orderEcho.numberDoc ||' din '"
+                 "|| substr(orderEcho.dateDoc,9,2) ||'.'|| substr(orderEcho.dateDoc,6,2) ||'.'|| substr(orderEcho.dateDoc,1,4) ||' '|| substr(orderEcho.dateDoc,12,8) AS DocOrder,"
+                 "users.id AS idUser,"
+                 "users.name AS user,"
+                 "reportEcho.concluzion,"
+                 "reportEcho.comment "
+                 "FROM reportEcho "
+                 "INNER JOIN pacients ON reportEcho.id_pacients = pacients.id "
+                 "INNER JOIN orderEcho ON reportEcho.id_orderEcho = orderEcho.id "
+                 "INNER JOIN users ON reportEcho.id_users = users.id";
+
+    if (! m_numberDoc.isEmpty())
+        strQry = strQry + QString(" WHERE orderEcho.numberDoc = '%1'").arg(m_numberDoc);
+
+    QString startDate = ui->filterStartDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
+    QString endDate   = ui->filterEndDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+    if (! m_numberDoc.isEmpty())
+        strQry = strQry + QString(" AND orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
+    else
+        strQry = strQry + QString(" WHERE orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
+
+    strQry = strQry + " ORDER BY orderEcho.dateDoc DESC;";
+
+#ifdef QT_DEBUG
+    qDebug() << "----------------------------------------------------------------------------------------------------------'";
+    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
+    qDebug() << strQry;
+#else
+    if (QCoreApplication::arguments().count() > 1
+        && QCoreApplication::arguments()[1].contains("/debug")){
+        qDebug() << strQry;
+    }
+#endif
+
+    modelTable->setStrQuery(strQry);
+    modelTable->fetchMoreDataFull();
+
+    proxyTable->setSourceModel(modelTable);
+    ui->tableView->setModel(proxyTable);
+    ui->tableView->hideColumn(report_id);
+    ui->tableView->hideColumn(report_id_orderEcho);
+    ui->tableView->hideColumn(report_id_patient);
+    ui->tableView->hideColumn(report_search_patient);
+    ui->tableView->hideColumn(report_id_user);
+    ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);  // setam alegerea randului
+    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection); // setam singura alegerea(nu multipla)
+    ui->tableView->setSortingEnabled(true);                              // setam posibilitatea sortarii
+    ui->tableView->horizontalHeader()->setSectionResizeMode(QHeaderView::Interactive); // permitem schimbarea size sectiilor
+    ui->tableView->verticalHeader()->setDefaultSectionSize(30);
+    ui->tableView->horizontalHeader()->setStretchLastSection(true);  // extinderea ultimei sectiei
+    ui->tableView->setContextMenuPolicy(Qt::CustomContextMenu);      // initializam meniu contextual
+
+    ui->tableView->selectRow(0);
     updateHeaderTableReportEcho();
 }
 

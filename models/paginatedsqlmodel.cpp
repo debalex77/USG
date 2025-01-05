@@ -1,5 +1,7 @@
 #include "paginatedsqlmodel.h"
 
+#include <QMutex>
+
 PaginatedSqlModel::PaginatedSqlModel(QObject *parent)
     : QSqlQueryModel{parent}, columnCountValue(0)
 {
@@ -32,12 +34,6 @@ void PaginatedSqlModel::setStrQuery(const QString strQry)
 
 void PaginatedSqlModel::fetchMoreData()
 {
-    // auto *task = new LoadDataTask(limit, offset, this);
-    // task->setQuery(m_strQry);
-    // connect(task, &LoadDataTask::dataReady, this, &PaginatedSqlModel::onDataLoaded);
-    // connect(task, &LoadDataTask::columnCountDetermined, this, &PaginatedSqlModel::updateColumnCount);
-    // QThreadPool::globalInstance()->start(task);
-
     loadDataAsync();
 }
 
@@ -142,25 +138,32 @@ void PaginatedSqlModel::loadDataAsync()
         return;
     }
 
-    // Adaugă rezultatele la lista internă
+    QVector<QVector<QVariant>> newRows;
     while (query.next()) {
         QVector<QVariant> row;
         for (int i = 0; i < query.record().count(); ++i) {
             row.append(query.value(i));
         }
-        rows.append(row);
+        newRows.append(row);
 
-        // Setează numărul de coloane (o singură dată, la prima interogare)
+        // Setează numărul de coloane o singură dată, la prima interogare
         if (columnCountValue == 0) {
             columnCountValue = query.record().count();
         }
     }
 
-    // Actualizează offset-ul pentru următoarea încărcare
-    offset += limit;
+    if (!newRows.isEmpty()) {
+        int startRow = rows.size();
+        int endRow = startRow + newRows.size() - 1;
 
-    // Reîmprospătează modelul
-    updateModel();
+        beginInsertRows(QModelIndex(), startRow, endRow);
+        rows.append(newRows);
+        endInsertRows();
+
+        offset += limit; // Actualizează offset-ul pentru următoarea interogare
+    } else {
+        qInfo(logInfo()) << "No new rows fetched.";
+    }
 }
 
 void PaginatedSqlModel::onDataLoaded(const QVector<QVector<QVariant> > &newRows)
@@ -278,6 +281,10 @@ void PaginatedSqlModel::updateColumnCount(int columnCount)
 
 void PaginatedSqlModel::updateModel()
 {
+    if (rows.isEmpty()) {
+        return;
+    }
+
     beginResetModel();
     endResetModel();
 }

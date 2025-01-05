@@ -191,6 +191,7 @@ private:
     void updateTableViewOrderEcho();
     void updateTableViewOrderEchoFull();
     void updateTableViewReportEcho();
+    void updateTableViewReportEchoFull();
     void updateHeaderTableOrderEcho();
     void updateHeaderTableReportEcho();
 

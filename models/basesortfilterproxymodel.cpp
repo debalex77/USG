@@ -40,18 +40,24 @@ bool BaseSortFilterProxyModel::lessThan(const QModelIndex &left, const QModelInd
     QVariant rightData = sourceModel()->data(right);
 
     // SORTAREA - număr documente (QString reprezentând un int)
-    if (left.column() == Enums::PROXY_MODEL::PROXY_NUMBER_DOC && m_listFormType == ListFormType::ListDocuments) {
-        return compareInts(leftData, rightData);
+    if (leftData.typeId() == QMetaType::QString) {
+        if (left.column() == Enums::PROXY_MODEL::PROXY_NUMBER_DOC && m_listFormType == ListFormType::ListDocuments) {
+            return compareInts(leftData, rightData);
+        }
     }
 
     // SORTAREA - QDateTime
-    if (left.column() == Enums::PROXY_MODEL::PROXY_DATE_DOC && m_listFormType == ListFormType::ListDocuments) {
-        return compareDates(leftData, rightData, "dd.MM.yyyy hh:mm:ss");
+    if (leftData.typeId() == QMetaType::QDateTime) {
+        if (left.column() == Enums::PROXY_MODEL::PROXY_DATE_DOC && m_listFormType == ListFormType::ListDocuments) {
+            return compareDates(leftData, rightData, "dd.MM.yyyy hh:mm:ss");
+        }
     }
 
     // SORTAREA - QDate
-    if (compareDates(leftData, rightData, "dd.MM.yyyy")) {
-        return true;
+    if (leftData.typeId() == QMetaType::QDate) {
+        if (compareDates(leftData, rightData, "dd.MM.yyyy")) {
+            return true;
+        }
     }
 
     // SORTAREA - QDateTime fallback
