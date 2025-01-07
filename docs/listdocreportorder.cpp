@@ -1045,8 +1045,40 @@ void ListDocReportOrder::initBtnToolBar()
 {
 
 #if defined(Q_OS_MACOS)
-    ui->btnReport->setStyleSheet("font-size: 13px;");
-    ui->btnViewTab->setStyleSheet("font-size: 13px;");
+    ui->btnReport->setStyleSheet("QToolButton "
+                                 "{"
+                                 "  border: 1px solid rgba(0, 0, 0, 0.2);"
+                                 "  border-radius: 8px;"
+                                 "  background-color: #f1f1f1;"
+                                 "  color: #000000;"
+                                 "  font-size: 13px;"
+                                 "  padding: 4px 10px;"
+                                 "}"
+                                 "QToolButton:hover"
+                                 "{"
+                                 "  background-color: #e0e0e0;"
+                                 "}"
+                                 " QToolButton:pressed"
+                                 "{"
+                                 "  background-color: #d0d0d0;"
+                                 "}");
+    ui->btnViewTab->setStyleSheet("QToolButton "
+                                  "{"
+                                  "  border: 1px solid rgba(0, 0, 0, 0.2);"
+                                  "  border-radius: 8px;"
+                                  "  background-color: #f1f1f1;"
+                                  "  color: #000000;"
+                                  "  font-size: 13px;"
+                                  "  padding: 4px 10px;"
+                                  "}"
+                                  "QToolButton:hover"
+                                  "{"
+                                  "  background-color: #e0e0e0;"
+                                  "}"
+                                  " QToolButton:pressed"
+                                  "{"
+                                  "  background-color: #d0d0d0;"
+                                  "}");
 #endif
 
     ui->editSearch->setEnabled(false);
@@ -1109,92 +1141,8 @@ void ListDocReportOrder::initBtnToolBar()
     // meniu btn print order
 
     formationPrinMenuForOrder();
-
-    // db->updateVariableFromTableSettingsUser();
-
-    // if (ui->btn_print_order->menu() != nullptr)
-    //     ui->btn_print_order->menu()->clear();
-
-    // if (globals::showDesignerMenuPrint){
-    //     QAction *openDesignerOrder = new QAction(setUpMenu_order);
-    //     openDesignerOrder->setIcon(QIcon(":/images/design.png"));
-    //     openDesignerOrder->setText(tr("Deschide designer"));
-
-    //     QAction *openPreviewOrder  = new QAction(setUpMenu_order);
-    //     openPreviewOrder->setIcon(QIcon(":/images/Print.png"));
-    //     openPreviewOrder->setText(tr("Deschide preview"));
-
-    //     setUpMenu_order->addAction(openDesignerOrder);
-    //     setUpMenu_order->addAction(openPreviewOrder);
-    //     setUpMenu_order->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
-    //     setUpMenu_order->setAttribute(Qt::WA_TranslucentBackground);
-    //     setUpMenu_order->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-    //                                    " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
-
-    //     ui->btn_print_order->setMenu(setUpMenu_order);
-    //     ui->btn_open_order->setStyleSheet("width: 110px; height: 20px;");
-    //     ui->btn_print_order->setStyleSheet("width: 110px; height: 20px;");
-
-    //     connect(openDesignerOrder, &QAction::triggered, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewOrder(false);
-    //     });
-
-    //     connect(openPreviewOrder, &QAction::triggered, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewOrder(true);
-    //     });
-    // } else {
-    //     connect(ui->btn_print_order, &QPushButton::clicked, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewOrder(true);
-    //     });
-    // }
-
-    // connect(ui->btn_open_order, &QPushButton::clicked, this, &ListDocReportOrder::openDocOrderEchoByClickBtnTable);
-
-    // ----------------------------------------------------------------------------
-    // meniu btn print report
-
     formationPrinMenuForReport();
-    // db->updateVariableFromTableSettingsUser();
-    // if (globals::showDesignerMenuPrint){
-    //     QAction *openDesignerReport = new QAction(setUpMenu_report);
-    //     openDesignerReport->setIcon(QIcon(":/images/design.png"));
-    //     openDesignerReport->setText(tr("Deschide designer"));
 
-    //     QAction *openPreviewReport  = new QAction(setUpMenu_report);
-    //     openPreviewReport->setIcon(QIcon(":/images/Print.png"));
-    //     openPreviewReport->setText(tr("Deschide preview"));
-
-    //     setUpMenu_report->addAction(openDesignerReport);
-    //     setUpMenu_report->addAction(openPreviewReport);
-    //     setUpMenu_report->setWindowFlags(setUpMenu_report->windowFlags() | Qt::FramelessWindowHint);
-    //     setUpMenu_report->setAttribute(Qt::WA_TranslucentBackground);
-    //     setUpMenu_report->setStyleSheet(" QMenu {border-radius:5px; font-family:'Arial'; font-size:14px;}"
-    //                                     " QMenu::item {height:25px; width:150px; border: 1px solid none;}");
-
-    //     ui->btn_print_report->setMenu(setUpMenu_report);
-    //     ui->btn_print_report->setStyleSheet("width: 110px; height: 20px;");
-    //     ui->btn_open_report->setStyleSheet("width: 110px; height: 20px;");
-
-    //     connect(openDesignerReport, &QAction::triggered, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewReport(false);
-    //     });
-
-    //     connect(openPreviewReport, &QAction::triggered, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewReport();
-    //     });
-    // } else {
-    //     connect(ui->btn_print_report, &QPushButton::clicked, this, [this]()
-    //     {
-    //         openPrintDesignerPreviewReport();
-    //     });
-    // }
-
-    // connect(ui->btn_open_report, &QPushButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
 }
 
 void ListDocReportOrder::initBtnFilter()

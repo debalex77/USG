@@ -589,11 +589,6 @@ void MainWindow::updateTimerDocWidget()
     if (dock_widget->isVisible()){
         timer_doc_widget->stop();
 
-        globals::thisMySQL = (globals::sqlitePathBase.isEmpty());
-        globals::thisSqlite = (globals::mySQLhost.isEmpty());
-        if (globals::thisMySQL & globals::thisSqlite || !globals::thisMySQL & !globals::thisSqlite)
-            QMessageBox::critical(this, "Atenție", "Nu sunt determinate variabile globale !!!", QMessageBox::Ok);
-
         txt_title_bar->setText(tr("Se incarca clasificatorul \"Investigații\" ... "));
 
         progress = new QProgressBar(ui->statusbar);
@@ -613,9 +608,6 @@ void MainWindow::updateTimerDocWidget()
         textEdit_dockWidget->setHtml(tr("%1<br>%2 %3 Completat clasificatorul <b><u>'Investigații'</u></b> sursa - <b>Catalogul tarifelor unice (anexa nr.3)</b>.<br>"
                                         "     <b>Vezi:</b> <em>Meniu principal al aplicației -> Cataloage -> Clasificatori -> Investigații<em>")
                                      .arg(textEdit_dockWidget->toHtml(), db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
-        QDir dir;
-        QString str = dir.toNativeSeparators(dir.currentPath() + "/UserManual.pdf");
-        QDesktopServices::openUrl(QUrl::fromLocalFile(str));
 
         // Lansarea - User Manual
         globals::firstLaunch = false;
