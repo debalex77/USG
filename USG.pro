@@ -250,6 +250,7 @@ DISTFILES += \
     debian/usr/share/doc/usg/changelog.Debian \
     debian/usr/share/doc/usg/copyright \
     debian/usr/share/metainfo/org.alovada.usg.metainfo.xml \
+    styles/style_dark.qss \
     version.txt
 
 RESOURCES += \

@@ -1,6 +1,3 @@
-#include "data/databaseselection.h"
-#include "data/mainwindow.h"
-
 #include <QApplication>
 #include <QDebug>
 #include <QGuiApplication>
@@ -21,6 +18,8 @@
 #include <QSplashScreen>
 #include <QTextStream>
 
+#include "data/databaseselection.h"
+#include "data/mainwindow.h"
 #include "data/authorizationuser.h"
 #include "data/initlaunch.h"
 #include <catalogs/catusers.h>
@@ -30,12 +29,12 @@
 
 static const int LOAD_TIME_MSEC = 5 * 1000;
 
-#if defined(Q_OS_MACOS)
+// #if defined(Q_OS_MACOS)
 
-extern void setupCustomAppDelegate();
-extern bool isDarkModeEnabledMacOS();
+// extern void setupCustomAppDelegate();
+// extern bool isDarkModeEnabledMacOS();
 
-#endif
+// #endif
 
 //******************************************************************************************************************************
 
@@ -43,6 +42,33 @@ QScopedPointer<QFile> m_logFile; // indicator pentru logare
 void messageHandler(QtMsgType type,
                     const QMessageLogContext &context,
                     const QString &msg); // declaram procesarea
+
+//******************************************************************************************************************************
+
+#if defined(Q_OS_WIN)
+
+bool isDarkThemeOnWindows() {
+    QSettings settings("HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize", QSettings::NativeFormat);
+    return settings.value("AppsUseLightTheme", 1).toInt() == 0; // 0 înseamnă dark theme, 1 înseamnă light theme
+}
+
+#elif definde(Q_OS_MACOS)
+
+extern void setupCustomAppDelegate();
+extern bool isDarkModeEnabledMacOS();
+
+#elif defined(Q_OS_LINUX)
+
+bool isDarkThemeOnLinux() {
+    QProcess process;
+    process.start("gsettings", QStringList() << "get" << "org.gnome.desktop.interface" << "gtk-theme");
+    process.waitForFinished();
+
+    QString theme = process.readAllStandardOutput();
+    return theme.contains("dark", Qt::CaseInsensitive); // Verificăm dacă tema include cuvântul „dark”
+}
+
+#endif
 
 //******************************************************************************************************************************
 
@@ -54,7 +80,13 @@ int resizeMainWindow(QApplication &a)
     // schimbam dimensiunea ferestrei
     QScreen *screen = QGuiApplication::primaryScreen();
 
-#if defined(Q_OS_LINUX) || (Q_OS_WIN)
+#if defined(Q_OS_LINUX)
+
+    int screenWidth = screen->geometry().width();
+    int screenHeight = screen->geometry().height();
+    w.resize(screenWidth * 0.8, screenHeight * 0.8);
+
+#elif defined(Q_OS_WIN)
 
     int screenWidth = screen->geometry().width();
     int screenHeight = screen->geometry().height();
@@ -236,13 +268,39 @@ int main(int argc, char *argv[])
 
     a.setStyle("Fusion");
 
+#if defined(Q_OS_WIN)
+
+
+#elif defined(Q_OS_MACOS)
+
+    // Dacă tema dark este detectată
+    if (isDarkModeEnabledMacOS()) {
+        QMessageBox::warning(
+            &_select, // Pointer către fereastra principală
+            QCoreApplication::tr("Verificarea temei OS"),
+            QCoreApplication::tr(
+                "Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
+                "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
+                "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
+            QMessageBox::Ok);
+    }
+#endif
+
 #if defined(Q_OS_LINUX)
     QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
     a.setStyleSheet(appStyle);             // setam stilul
 #elif defined(Q_OS_WIN)
-    QFile fileStyle(":/styles/style_linux.qss");
+    QFile fileStyle;
+    if (isDarkThemeOnWindows()) {
+        fileStyle.setFileName(":/styles/style_dark.qss");
+        globals::isSystemThemeDark = true;
+    } else {
+        fileStyle.setFileName(":/styles/style_linux.qss");
+        globals::isSystemThemeDark = false;
+    }
+    // QFile fileStyle(":/styles/style_linux.qss");
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
     a.setStyleSheet(appStyle);             // setam stilul
@@ -258,21 +316,6 @@ int main(int argc, char *argv[])
     // alegem fisierul cu setari
     qInfo(logInfo()) << "Open database selection.";
     DatabaseSelection _select;
-
-#if defined(Q_OS_MACOS)
-    // Dacă tema dark este detectată
-    if (isDarkModeEnabledMacOS()) {
-        QMessageBox::warning(
-            &_select, // Pointer către fereastra principală
-            QCoreApplication::tr("Verificarea temei OS"),
-            QCoreApplication::tr(
-                "Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
-                "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
-                "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
-            QMessageBox::Ok);
-    }
-#endif
-
     if (_select.exec() != QDialog::Accepted)
         return 0;
 

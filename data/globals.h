@@ -7,6 +7,7 @@ namespace globals {
 
 extern bool unknowModeLaunch;
 extern int moveApp; // unknow=-1, move=1, not_move=0
+extern bool isSystemThemeDark;
 
 extern QString pathAppSettings;           // drumul spre localizare setarilor aplicatiei
 extern QString pathImageBaseAppSettings;  // drumul spre BD cu imagini

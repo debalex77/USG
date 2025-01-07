@@ -144,12 +144,6 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     int y = (screenHeight / 2) - (height() / 2);//*0.1;
     move(x, y);
 
-#if defined(Q_OS_WIN)
-    ui->frame_btn->setStyle(style_fusion);
-    ui->frame_table->setStyle(style_fusion);
-    ui->frameVideo->setStyle(style_fusion);
-#endif
-
     ui->frame_table->resize(900, ui->frame_btn->height());
 }
 

@@ -128,17 +128,6 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
 
     initFooterDoc();   // setam autorul + imaginea + Ok, Writer, Revocare
     initConnections(); // initierea conectarilor btn
-
-#if defined(Q_OS_WIN)
-
-    ui->frame_total->setStyle(style_fusion);
-    ui->frame_table->setStyle(style_fusion);
-    ui->frame_footer->setStyle(style_fusion);
-    ui->toolBox->setStyle(style_fusion);
-    ui->splitter->setStyle(style_fusion);
-
-#endif
-
 }
 
 DocOrderEcho::~DocOrderEcho()
@@ -208,9 +197,15 @@ void DocOrderEcho::onDateTimeChanged()
 
 void DocOrderEcho::changeIconForItemToolBox(const int _index)
 {
-    ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
-    ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
-    ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
+    if (globals::isSystemThemeDark) {
+        ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
+        ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
+        ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
+    } else {
+        ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
+        ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
+        ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
+    }
 }
 
 void DocOrderEcho::createCatDoctor()
@@ -1236,6 +1231,14 @@ void DocOrderEcho::setTitleDoc()
 
 void DocOrderEcho::initConnections()
 {
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnCreateCatDoctor->setStyleSheet(style_toolButton);
+    ui->btnOpenCatDoctor->setStyleSheet(style_toolButton);
+    ui->btnNewPacient->setStyleSheet(style_toolButton);
+    ui->btnEditPacient->setStyleSheet(style_toolButton);
+    ui->btnClearPacient->setStyleSheet(style_toolButton);
+    ui->btnPatientHistory->setStyleSheet(style_toolButton);
+
     connect(this, &DocOrderEcho::ItNewChanged, this, &DocOrderEcho::slot_ItNewChanged);
     connect(this, &DocOrderEcho::IdChanged, this, &DocOrderEcho::slot_IdChanged);                          // conectarea la modificarea
     connect(this, &DocOrderEcho::IdOrganizationChanged, this, &DocOrderEcho::slot_IdOrganizationChanged);  // proprietatilor clasei
@@ -1293,8 +1296,6 @@ void DocOrderEcho::initConnections()
         setUpMenu->addAction(openPreviewOrder);
         setUpMenu->setWindowFlags(setUpMenu->windowFlags() | Qt::FramelessWindowHint);
         setUpMenu->setAttribute(Qt::WA_TranslucentBackground);
-//        setUpMenu->setStyleSheet("QMenu {border-radius: 5px; padding-left: 2px; padding-right: 2px; height: 20px;}");
-
         ui->btnPrint->setMenu(setUpMenu);
         ui->btnPrint->setStyleSheet("padding-left: 4px; padding-right: 4px; width: 95px; height: 20px;");
 

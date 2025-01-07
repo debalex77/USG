@@ -333,6 +333,7 @@ bool ListForm::onAddObject()
         connect(cat_General, &CatGeneral::createCatGeneral, this, [this]()
         {
             updateTableView();
+            updateHeaderTable();
             popUp->setPopupText(tr("Obiectul <b>'%1'</b> a fost salvat <br>in baza de date cu succes.").arg(cat_General->getFullName()));
             popUp->show();
         });

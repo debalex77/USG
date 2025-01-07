@@ -193,5 +193,9 @@
         <file>templets/Pricing.lrxml</file>
         <file>templets/Tree_investigations.lrxml</file>
         <file>templets/Gestation2.lrxml</file>
+        <file>styles/style_dark.qss</file>
+        <file>img/down-chevron.png</file>
+        <file>img/down-arrow_tool_box_blue.png</file>
+        <file>img/right-arrow_tool_box_blue.png</file>
     </qresource>
 </RCC>

@@ -176,6 +176,7 @@ public:
     QString getHTMLImageWarning();
 
     QString getStyleForButtonMessageBox();
+    QString getStyleForToolButton();
 
 signals:
     void updateProgress(const int num_records, const int value);

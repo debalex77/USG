@@ -5,6 +5,8 @@
 #include <QImageReader>
 #include <QImageWriter>
 
+#include <customs/custommessage.h>
+
 UserPreferences::UserPreferences(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserPreferences)
@@ -69,14 +71,32 @@ void UserPreferences::dataWasModified()
 
 bool UserPreferences::onWritingData()
 {
+
+    if (m_Id == idx_unknow) {
+        CustomMessage * message = new CustomMessage(this);
+        message->setAttribute(Qt::WA_DeleteOnClose);
+        message->setTextTitle(tr("Preferintele utilizatorului nu pot fi salvate !!!"));
+        message->setDetailedText(tr("Nu este determinat ID utilizatorului. Adresati-va administratorului aplicatiei."));
+        message->show();
+        qDebug() << "ID user App: " <<globals::idUserApp;
+    }
+
     if (! controlRequiredObjects())
         return false;
 
-    if (! existRecordInTable()){
-        if (! insertDataIntoTable())
+    if (! existRecordInTableConstants()){
+        if (! insertDataIntoTableConstants())
             return false;
     } else {
-        if (! updateDataIntoTable())
+        if (! updateDataIntoTableConstants())
+            return false;
+    }
+
+    if (! existRecordInTableUserPreferences()) {
+        if (! insertDataIntoTableUserPreferences())
+            return false;
+    } else {
+        if (! updateDataIntoTableUserPreferences())
             return false;
     }
 
@@ -707,40 +727,42 @@ bool UserPreferences::controlRequiredObjects()
         return false;
     }
 
-    if (ui->comboOrganizations->currentIndex() == 0){
-        ui->textBrowser->setHtml(tr("%1 Nu este indicată organizația !!!").arg(db->getHTMLImageWarning()));
-        ui->textBrowser->setFixedHeight(45);
-        ui->dockWidget->setFixedHeight(90);
-        ui->dockWidget->show();
-        return false;
-    }
-
-    if (ui->comboDoctors->currentIndex() == 0){
-        ui->textBrowser->setHtml(tr("%1 Nu este indicat doctorul !!!").arg(db->getHTMLImageWarning()));
-        ui->textBrowser->setFixedHeight(45);
-        ui->dockWidget->setFixedHeight(90);
-        ui->dockWidget->show();
-        return false;
-    }
-
     return true;
 
 }
 
-bool UserPreferences::existRecordInTable()
+bool UserPreferences::existRecordInTableConstants()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT COUNT(id) FROM userPreferences WHERE id_users = :id_users;");
+    qry.prepare("SELECT COUNT(id_users) FROM constants WHERE id_users = :id_users;");
     qry.bindValue(":id_users", m_Id);
-    if (qry.exec() && qry.next())
-        return (qry.value(0).toInt() > 0);
+    if (qry.exec() && qry.next()) {
+        int count = qry.value(0).toInt();
+        return (count > 0);
+    }
 
     return false;
 }
 
-bool UserPreferences::insertDataIntoTable()
+bool UserPreferences::existRecordInTableUserPreferences()
 {
-    db->getDatabase().transaction();
+    QSqlQuery qry;
+    qry.prepare("SELECT COUNT(id) FROM userPreferences WHERE id_users = :id_users;");
+    qry.bindValue(":id_users", m_Id);
+    if (qry.exec() && qry.next()) {
+        int count = qry.value(0).toInt();
+        return (count > 0);
+    }
+
+    return false;
+}
+
+bool UserPreferences::insertDataIntoTableConstants()
+{
+    if (m_Id == 0) {
+        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        return false;
+    }
 
     QSqlQuery qry;
 
@@ -752,12 +774,20 @@ bool UserPreferences::insertDataIntoTable()
                 "id_organizations,"
                 "id_doctors,"
                 "id_nurses,"
-                "brandUSG) VALUES (?,?,?,?,?);");
+                "brandUSG,"
+                "logo) VALUES (?,?,?,?,?,?);");
     qry.addBindValue(m_Id);
     qry.addBindValue((m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization);
     qry.addBindValue((m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor);
     qry.addBindValue((m_idNurse == idx_unknow) ? QVariant() : m_idNurse);
-    qry.addBindValue(ui->brandUSG->text());
+    qry.addBindValue((ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text());
+    qry.addBindValue(QVariant(QMetaType(QMetaType::QByteArray)));
+
+    qDebug(logDebug()) << "Parametri legați: id_users=" << m_Id
+                       << ", id_organizations=" << m_IdOrganization
+                       << ", id_doctors=" << m_idDoctor
+                       << ", id_nurses=" << m_idNurse
+                       << ", brandUSG=" << ui->brandUSG->text();
     if (qry.exec()){
         qInfo(logInfo()) << tr("Au fost inserate date in tabela 'constants' pentru utilizator '%1' cu id=%2.")
                                 .arg(ui->comboUsers->currentText(), QString::number(m_Id));
@@ -768,9 +798,21 @@ bool UserPreferences::insertDataIntoTable()
         return false;
     }
 
+    return true;
+
+}
+
+bool UserPreferences::insertDataIntoTableUserPreferences()
+{
+    if (m_Id == 0) {
+        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        return false;
+    }
+
+    QSqlQuery qry;
+
     //----------------------------------------------
     // inserarea datelor in tabela 'userPreferences'
-
     qry.prepare("INSERT INTO userPreferences ("
                 "id_users,"
                 "versionApp,"
@@ -814,27 +856,27 @@ bool UserPreferences::insertDataIntoTable()
         qry.addBindValue((ui->minimizeAppToTray->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
-        db->getDatabase().rollback();
         return false;
     }
 
     if (qry.exec()){
         qInfo(logInfo()) << tr("Au fost inserate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
-                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+        .arg(ui->comboUsers->currentText(), QString::number(m_Id));
     } else {
         qWarning(logWarning()) << tr("Solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
-        db->getDatabase().rollback();
         return false;
     }
-
-    db->getDatabase().commit();
 
     return true;
 }
 
-bool UserPreferences::updateDataIntoTable()
+bool UserPreferences::updateDataIntoTableConstants()
 {
-    db->getDatabase().transaction();
+
+    if (m_Id == 0) {
+        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        return false;
+    }
 
     QSqlQuery qry;
 
@@ -861,6 +903,19 @@ bool UserPreferences::updateDataIntoTable()
                                              (qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
         return false;
     }
+
+    return true;
+
+}
+
+bool UserPreferences::updateDataIntoTableUserPreferences()
+{
+    if (m_Id == 0) {
+        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        return false;
+    }
+
+    QSqlQuery qry;
 
     //----------------------------------------------
     // actualizarea datelor in tabela 'userPreferences'
@@ -909,24 +964,19 @@ bool UserPreferences::updateDataIntoTable()
         qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? 1 : 0));
     } else {
         qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
-        db->getDatabase().rollback();
         return false;
     }
 
     if (qry.exec()){
         qInfo(logInfo()) << tr("Au fost actualizate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
-                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
+        .arg(ui->comboUsers->currentText(), QString::number(m_Id));
     } else {
         qWarning(logWarning()) << tr("Solicitarea de actualizare a datelor in tabela 'userPreferences' este nereusita !!!");
-        db->getDatabase().rollback();
         return false;
     }
 
-    db->getDatabase().commit();
-
     return true;
 }
-
 // **********************************************************************************
 // --- evenimentele formei
 

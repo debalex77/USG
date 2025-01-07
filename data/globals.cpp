@@ -5,6 +5,7 @@ namespace globals {
 
 bool unknowModeLaunch = false;
 int moveApp = -1; // unknow=-1, move=1, not_move=0
+bool isSystemThemeDark = false;
 
 QString pathAppSettings          = nullptr;
 QString pathImageBaseAppSettings = nullptr;

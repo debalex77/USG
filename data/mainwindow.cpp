@@ -80,7 +80,9 @@ void MainWindow::initButton()
 {
     // alocam memoria
     toolBar                 = new QToolBar(tr("Bara cu instrumente"));
-#if defined (Q_OS_LINUX) || (Q_OS_WIN)
+#if defined (Q_OS_LINUX)
+
+#elif defined(Q_OS_WIN)
     toolBar->setStyleSheet("font-family: 'Segoe UI';");
 #endif
     btnDoctors              = new QToolButton(toolBar);

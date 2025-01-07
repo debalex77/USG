@@ -18,10 +18,6 @@ ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
 
     modelTable = new PaginatedSqlModel(this);
 
-    // QString strQuery;
-    // modelTable       = new BaseSqlQueryModel(strQuery, ui->tableView); // model principal pu solicitarea din BD
-    // modelTable->setProperty("modelParent", BaseSqlQueryModel::ModelParent::ListOrderReport);
-
     QString str_qry_view_table_order;
     model_view_table_order = new BaseSqlQueryModel(str_qry_view_table_order, ui->view_table);
     model_view_table_order->setProperty("modelParent", BaseSqlQueryModel::ModelParent::ViewTableOrder);
@@ -1079,6 +1075,14 @@ void ListDocReportOrder::initBtnToolBar()
                                   "{"
                                   "  background-color: #d0d0d0;"
                                   "}");
+#elif defined(Q_OS_WIN)
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnReport->setStyleSheet(style_toolButton);
+    ui->btnViewTab->setStyleSheet(style_toolButton);
+#elif defined(Q_OS_LINUX)
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnReport->setStyleSheet(style_toolButton);
+    ui->btnViewTab->setStyleSheet(style_toolButton);
 #endif
 
     ui->editSearch->setEnabled(false);
@@ -1147,6 +1151,11 @@ void ListDocReportOrder::initBtnToolBar()
 
 void ListDocReportOrder::initBtnFilter()
 {
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnChoicePeriod->setStyleSheet(style_toolButton);
+    ui->btnOpenCatContract->setStyleSheet(style_toolButton);
+    ui->btnOpenCatOrganization->setStyleSheet(style_toolButton);
+
     connect(ui->btnChoicePeriod, &QPushButton::clicked, this, [this]()
     {
         customPeriod->setDateStart(ui->filterStartDateTime->date());

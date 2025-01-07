@@ -106,9 +106,12 @@ private:
     void disconnectionCheckBox();
 
     bool controlRequiredObjects();
-    bool existRecordInTable();
-    bool insertDataIntoTable();
-    bool updateDataIntoTable();
+    bool existRecordInTableConstants();
+    bool existRecordInTableUserPreferences();
+    bool insertDataIntoTableConstants();
+    bool insertDataIntoTableUserPreferences();
+    bool updateDataIntoTableConstants();
+    bool updateDataIntoTableUserPreferences();
 
 private:
     Ui::UserPreferences *ui;
