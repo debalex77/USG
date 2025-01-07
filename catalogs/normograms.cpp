@@ -38,10 +38,6 @@ Normograms::Normograms(QWidget *parent)
     // ********************************************************
     // style for OS Windows
 
-#if defined(Q_OS_WIN)
-    ui->frame_btn->setStyle(style_fusion);
-    ui->frame_tables->setStyle(style_fusion);
-#endif
 }
 
 Normograms::~Normograms()
@@ -215,12 +211,52 @@ void Normograms::initConnections()
 
 void Normograms::updateStyleBtnPressed()
 {
-    const QString style_pressed = "background: 0px #C2C2C3; "
-                                "border: 1px inset blue; "
-                                "border-color: navy;";
+    QString style_pressed;
+    QString style_unpressed;
 
-    const QString style_unpressed = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                  "border: 0px #8f8f91;";
+    if (globals::isSystemThemeDark) {
+
+        style_pressed = "QCommandLinkButton "
+                        "{"
+                        "  background: #5b5b5b;"
+                        "  border: 1px inset #00baff;"
+                        "  border-color: #007acc;"
+                        "  color: #ffffff;"
+                        "}"
+                        "QCommandLinkButton:hover "
+                        "{"
+                        "  background-color: #4b4b4b;"
+                        "}"
+                        "QCommandLinkButton::icon "
+                        "{"
+                        "  background-color: #ffffff;" // Fundal alb pentru icon
+                        "  border-radius: 4px;"
+                        "  border: 1px solid #cccccc;"
+                        "}";
+
+        style_unpressed = "QCommandLinkButton "
+                          "{"
+                          "  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #4b4b4b, stop: 1 #3c3c3c);"
+                          "  border: 0px;"
+                          "  color: #ffffff;"
+                          "}"
+                          "QCommandLinkButton::icon "
+                          "{"
+                          "  background-color: #e0e0e0;" // Fundal mai deschis pentru pictogramă
+                          "  border-radius: 4px;"
+                          "  border: 1px solid #cccccc;"
+                          "  padding: 2px;"
+                          "}";
+
+    } else {
+
+        style_pressed = "background: 0px #C2C2C3; "
+                        "border: 1px inset blue; "
+                        "border-color: navy;";
+
+        style_unpressed = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
+                          "border: 0px #8f8f91;";
+    }
 
     if (ui->stackedWidget->currentIndex() == page_nt){
         ui->btnNT->setStyleSheet(style_pressed);

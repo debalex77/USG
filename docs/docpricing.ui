@@ -183,25 +183,6 @@
       </item>
       <item row="0" column="3">
        <widget class="QToolButton" name="btnOpenCatOrganization">
-        <property name="styleSheet">
-         <string notr="true">QToolButton
-{
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #f1f1f1;
-    color: #000000;
-    font-size: 13px;
-    padding: 4px 4px;
-}
-QToolButton:hover
-{
-    background-color: #e0e0e0;
-}
-QToolButton:pressed
-{
-    background-color: #d0d0d0;
-}</string>
-        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -213,25 +194,6 @@ QToolButton:pressed
       </item>
       <item row="1" column="3">
        <widget class="QToolButton" name="btnOpenCatContract">
-        <property name="styleSheet">
-         <string notr="true">QToolButton
-{
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #f1f1f1;
-    color: #000000;
-    font-size: 13px;
-    padding: 4px 4px;
-}
-QToolButton:hover
-{
-    background-color: #e0e0e0;
-}
-QToolButton:pressed
-{
-    background-color: #d0d0d0;
-}</string>
-        </property>
         <property name="text">
          <string>...</string>
         </property>
@@ -257,21 +219,6 @@ QToolButton:pressed
        <layout class="QHBoxLayout" name="layoutToolBar">
         <item>
          <widget class="QToolButton" name="btnAdd">
-          <property name="styleSheet">
-           <string notr="true">QToolButton {
-    border: none;
-    background-color: transparent;
-    color: #4a4a4a;
-    font-size: 14px;
-}
-QToolButton:hover {
-    background-color: #f0f0f0;
-    color: #000000;
-}
-QToolButton:pressed {
-    background-color: #dcdcdc;
-}</string>
-          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -283,21 +230,6 @@ QToolButton:pressed {
         </item>
         <item>
          <widget class="QToolButton" name="btnEdit">
-          <property name="styleSheet">
-           <string notr="true">QToolButton {
-    border: none;
-    background-color: transparent;
-    color: #4a4a4a;
-    font-size: 14px;
-}
-QToolButton:hover {
-    background-color: #f0f0f0;
-    color: #000000;
-}
-QToolButton:pressed {
-    background-color: #dcdcdc;
-}</string>
-          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -309,21 +241,6 @@ QToolButton:pressed {
         </item>
         <item>
          <widget class="QToolButton" name="btnDeletion">
-          <property name="styleSheet">
-           <string notr="true">QToolButton {
-    border: none;
-    background-color: transparent;
-    color: #4a4a4a;
-    font-size: 14px;
-}
-QToolButton:hover {
-    background-color: #f0f0f0;
-    color: #000000;
-}
-QToolButton:pressed {
-    background-color: #dcdcdc;
-}</string>
-          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -347,25 +264,6 @@ QToolButton:pressed {
             <width>0</width>
             <height>0</height>
            </size>
-          </property>
-          <property name="styleSheet">
-           <string notr="true">QToolButton
-{
-    border: 1px solid rgba(0, 0, 0, 0.2);
-    border-radius: 8px;
-    background-color: #f1f1f1;
-    color: #000000;
-    font-size: 13px;
-    padding: 4px 10px;
-}
-QToolButton:hover
-{
-    background-color: #e0e0e0;
-}
-QToolButton:pressed
-{
-    background-color: #d0d0d0;
-}</string>
           </property>
           <property name="text">
            <string>Formeaza</string>

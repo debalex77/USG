@@ -177,6 +177,7 @@ public:
 
     QString getStyleForButtonMessageBox();
     QString getStyleForToolButton();
+    QString getStyleForButtonToolBar();
 
 signals:
     void updateProgress(const int num_records, const int value);

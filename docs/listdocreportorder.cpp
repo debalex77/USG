@@ -1040,54 +1040,6 @@ QString ListDocReportOrder::enumToString(TypeDoc typeDoc)
 void ListDocReportOrder::initBtnToolBar()
 {
 
-#if defined(Q_OS_MACOS)
-    ui->btnReport->setStyleSheet("QToolButton "
-                                 "{"
-                                 "  border: 1px solid rgba(0, 0, 0, 0.2);"
-                                 "  border-radius: 8px;"
-                                 "  background-color: #f1f1f1;"
-                                 "  color: #000000;"
-                                 "  font-size: 13px;"
-                                 "  padding: 4px 10px;"
-                                 "}"
-                                 "QToolButton:hover"
-                                 "{"
-                                 "  background-color: #e0e0e0;"
-                                 "}"
-                                 " QToolButton:pressed"
-                                 "{"
-                                 "  background-color: #d0d0d0;"
-                                 "}");
-    ui->btnViewTab->setStyleSheet("QToolButton "
-                                  "{"
-                                  "  border: 1px solid rgba(0, 0, 0, 0.2);"
-                                  "  border-radius: 8px;"
-                                  "  background-color: #f1f1f1;"
-                                  "  color: #000000;"
-                                  "  font-size: 13px;"
-                                  "  padding: 4px 10px;"
-                                  "}"
-                                  "QToolButton:hover"
-                                  "{"
-                                  "  background-color: #e0e0e0;"
-                                  "}"
-                                  " QToolButton:pressed"
-                                  "{"
-                                  "  background-color: #d0d0d0;"
-                                  "}");
-#elif defined(Q_OS_WIN)
-    QString style_toolButton = db->getStyleForToolButton();
-    ui->btnReport->setStyleSheet(style_toolButton);
-    ui->btnViewTab->setStyleSheet(style_toolButton);
-#elif defined(Q_OS_LINUX)
-    QString style_toolButton = db->getStyleForToolButton();
-    ui->btnReport->setStyleSheet(style_toolButton);
-    ui->btnViewTab->setStyleSheet(style_toolButton);
-#endif
-
-    ui->editSearch->setEnabled(false);
-    ui->editSearch->setPlaceholderText(tr("... c\304\203utarea dup\304\203 nume, prenume sau IDNP a pacientului"));
-
     // ----------------------------------------------------------------------------
     // instalam filtrul evenimentelor pu prezentarea indiciilor (подсказки)
 
@@ -1117,6 +1069,26 @@ void ListDocReportOrder::initBtnToolBar()
     ui->btnSearch->installEventFilter(this);
     ui->btnHideShowColumn->setMouseTracking(true);
     ui->btnHideShowColumn->installEventFilter(this);
+
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnReport->setStyleSheet(style_toolButton);
+    ui->btnViewTab->setStyleSheet(style_toolButton);
+
+    QString style_btnToolBar = db->getStyleForButtonToolBar();
+    ui->btnAdd->setStyleSheet(style_btnToolBar);
+    ui->btnEdit->setStyleSheet(style_btnToolBar);
+    ui->btnDeletion->setStyleSheet(style_btnToolBar);
+    ui->btnAddFilter->setStyleSheet(style_btnToolBar);
+    ui->btnFilter->setStyleSheet(style_btnToolBar);
+    ui->btnFilterRemove->setStyleSheet(style_btnToolBar);
+    ui->btnUpdateTable->setStyleSheet(style_btnToolBar);
+    ui->btnPrint->setStyleSheet(style_btnToolBar);
+    ui->btnPeriodDate->setStyleSheet(style_btnToolBar);
+    ui->btnSearch->setStyleSheet(style_btnToolBar);
+    ui->btnHideShowColumn->setStyleSheet(style_btnToolBar);
+
+    ui->editSearch->setEnabled(false);
+    ui->editSearch->setPlaceholderText(tr("... c\304\203utarea dup\304\203 nume, prenume sau IDNP a pacientului"));
 
     updateTextPeriod();
 
@@ -2004,23 +1976,20 @@ void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
     //*****************************************************
     //---------- setarea perioadei
     if (only_period){
-        QString str = QString("SELECT "
-                              "dateStart,"
-                              "dateEnd "
-                              "FROM settingsForms "
-                              "WHERE typeForm LIKE %1 AND dateStart %2 AND dateEnd %2;")
-                          .arg((m_typeDoc == orderEcho) ? "'%orderEcho%'" : "'%reportEcho%'",
-                               (globals::thisMySQL) ? "IS NOT Null" : "NOT NULL");
+        QString str = "SELECT dateStart, dateEnd "
+                      "FROM settingsForms "
+                      "WHERE typeForm = :typeForm AND numberSection = 0;";
         qry.prepare(str);
-        if (qry.exec()){
-            qry.next();
+        qry.bindValue(":typeForm", (m_typeDoc == orderEcho) ? "orderEcho" : "reportEcho");
+        if (qry.exec() && qry.next()){
             QString str_date_start;
             QString str_date_end;
             if (globals::thisMySQL){
                 static const QRegularExpression replaceT("T");
-                static const QRegularExpression removeMilliseconds("\\.000");
-                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(".000","");
-                str_date_end   = qry.value(1).toString().replace(removeMilliseconds, " ").replace(".000","");
+                static const QRegularExpression removeMilliseconds(".000");
+                qDebug() << "dateStart: " << qry.value(0).toString() << ", dateEnd: "<< qry.value(1).toString();
+                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
+                str_date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
             } else {
                 str_date_start = qry.value(0).toString();
                 str_date_end   = qry.value(1).toString();

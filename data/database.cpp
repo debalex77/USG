@@ -5157,7 +5157,7 @@ QString DataBase::getStyleForToolButton()
     if (globals::isSystemThemeDark)
         return QString("QToolButton"
                        "{"
-                       "  border: 1px solid rgba(255, 255, 255, 0.2);"
+                       "  border: 1px solid rgba(255, 255, 255, 0.6);"
                        "  border-radius: 8px;"
                        "  background-color: #2b2b2b;"
                        "  color: #ffffff;"
@@ -5167,6 +5167,7 @@ QString DataBase::getStyleForToolButton()
                        "QToolButton:hover"
                        "{"
                        "  background-color: #3b3b3b;"
+                       "  border: 1px solid rgba(255, 255, 255, 0.8); "
                        "}"
                        "QToolButton:pressed"
                        "{"
@@ -5192,6 +5193,44 @@ QString DataBase::getStyleForToolButton()
                        "}");
 }
 
+QString DataBase::getStyleForButtonToolBar()
+{
+    if (globals::isSystemThemeDark)
+        return QString("QToolButton "
+                       "{ "
+                       "  border: none;"
+                       "  background-color: transparent;"
+                       "  color: #ffffff;"
+                       "  font-size: 14px;"
+                       "}"
+                       "QToolButton:hover "
+                       "{"
+                       "  background-color: #3b3b3b;"
+                       "  color: #000000;"
+                       "}"
+                       "QToolButton:pressed "
+                       "{ "
+                       "  background-color: #4b4b4b;"
+                       "}");
+    else
+        return QString("QToolButton "
+                       "{ "
+                       "  border: none;"
+                       "  background-color: transparent;"
+                       "  color: #4a4a4a;"
+                       "  font-size: 14px;"
+                       "}"
+                       "QToolButton:hover "
+                       "{"
+                       "  background-color: #f0f0f0;"
+                       "  color: #000000;"
+                       "}"
+                       "QToolButton:pressed "
+                       "{ "
+                       "  background-color: #dcdcdc;"
+                       "}");
+}
+
 // *******************************************************************
 // ******** FUNCTIILE PRIVATE DE CONECTARE LA BD *********************
 
@@ -5199,7 +5238,7 @@ bool DataBase::openDataBase()
 {
     if (globals::connectionMade == "MySQL"){
 
-        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", "MainConnection");
+        QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
         db.setHostName(globals::mySQLhost);         // localhost
         db.setDatabaseName(globals::mySQLnameBase); // USGdb
         db.setPort(globals::mySQLport.toInt());

@@ -450,7 +450,7 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
     m_report->setPreviewWindowTitle(tr("Lista pre\310\233urilor nr.") + ui->editNumberDoc->text() +
                                     tr(" din ") + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
-    m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
+    // m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
     m_report->dataManager()->setReportVariable("id_pricing", m_id);
     m_report->dataManager()->setReportVariable("organization", ui->comboOrganization->currentText());
     m_report->dataManager()->setReportVariable("date", ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy"));
@@ -643,6 +643,16 @@ void DocPricing::setTitleDoc()
 
 void DocPricing::initBtnToolBar()
 {
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnOpenCatOrganization->setStyleSheet(style_toolButton);
+    ui->btnOpenCatContract->setStyleSheet(style_toolButton);
+    ui->btnFormsTable->setStyleSheet(style_toolButton);
+
+    QString style_btnToolBar = db->getStyleForButtonToolBar();
+    ui->btnAdd->setStyleSheet(style_btnToolBar);
+    ui->btnEdit->setStyleSheet(style_btnToolBar);
+    ui->btnDeletion->setStyleSheet(style_btnToolBar);
+
     ui->editSearch->setSearchOptionSelected("code");
     connect(ui->btnFormsTable, &QAbstractButton::clicked, this, &DocPricing::completeTableDocPricing);
     connect(ui->btnAdd, &QAbstractButton::clicked, this, &DocPricing::addRowTable);

@@ -9,6 +9,8 @@ CustomPeriod::CustomPeriod(QWidget *parent) :
 
     setWindowTitle(tr("Alege perioada"));
 
+    db = new DataBase(this);
+
     QButtonGroup* groupBtn = new QButtonGroup(this);
     groupBtn->addButton(ui->radioBtnYear);
     groupBtn->addButton(ui->radioBtnMounth);
@@ -41,6 +43,7 @@ CustomPeriod::CustomPeriod(QWidget *parent) :
 
 CustomPeriod::~CustomPeriod()
 {
+    delete db;
     delete ui;
 }
 
@@ -115,6 +118,12 @@ void CustomPeriod::onAccept()
 
 void CustomPeriod::initConnections()
 {
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnBackYear->setStyleSheet(style_toolButton);
+    ui->btnNextYear->setStyleSheet(style_toolButton);
+    ui->btnBackMounth->setStyleSheet(style_toolButton);
+    ui->btnNextMounth->setStyleSheet(style_toolButton);
+
     connect(ui->btnClose, &QPushButton::clicked, this, &CustomPeriod::close);
     connect(ui->radioBtnYear, &QRadioButton::clicked, this, &CustomPeriod::stateEnableObjects);
     connect(ui->radioBtnMounth, &QRadioButton::clicked, this, &CustomPeriod::stateEnableObjects);

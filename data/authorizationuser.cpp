@@ -20,7 +20,7 @@ AuthorizationUser::AuthorizationUser(QWidget *parent) :
     ui->editLogin->setMaxLength(50);
 
     show_hide_password = new QToolButton(this);
-    show_hide_password->setIcon(QIcon(":/img/password_hide.png"));
+    show_hide_password->setIcon(QIcon(":/img/lock.png"));
     show_hide_password->setStyleSheet(appStyleBtn);
     show_hide_password->setCursor(Qt::PointingHandCursor);
     show_hide_password->setSizePolicy (QSizePolicy::Fixed,QSizePolicy::Minimum);
@@ -46,11 +46,11 @@ AuthorizationUser::AuthorizationUser(QWidget *parent) :
     connect(show_hide_password, &QAbstractButton::clicked, this, [this]()
     {
         if (edit_password->echoMode() == QLineEdit::Password || edit_password->echoMode() == QLineEdit::PasswordEchoOnEdit){
-            show_hide_password->setIcon(QIcon(":/img/password_show.png"));
+            show_hide_password->setIcon(QIcon(":/img/unlock.png"));
             edit_password->setEchoMode(QLineEdit::Normal);
             ui->editPasswd->setEchoMode(QLineEdit::Normal);
         } else {
-            show_hide_password->setIcon(QIcon(":/img/password_hide.png"));
+            show_hide_password->setIcon(QIcon(":/img/lock.png"));
             edit_password->setEchoMode(QLineEdit::Password);
             ui->editPasswd->setEchoMode(QLineEdit::Password);
         }

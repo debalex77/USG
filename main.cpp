@@ -29,13 +29,6 @@
 
 static const int LOAD_TIME_MSEC = 5 * 1000;
 
-// #if defined(Q_OS_MACOS)
-
-// extern void setupCustomAppDelegate();
-// extern bool isDarkModeEnabledMacOS();
-
-// #endif
-
 //******************************************************************************************************************************
 
 QScopedPointer<QFile> m_logFile; // indicator pentru logare
@@ -52,7 +45,7 @@ bool isDarkThemeOnWindows() {
     return settings.value("AppsUseLightTheme", 1).toInt() == 0; // 0 înseamnă dark theme, 1 înseamnă light theme
 }
 
-#elif definde(Q_OS_MACOS)
+#elif defined(Q_OS_MACOS)
 
 extern void setupCustomAppDelegate();
 extern bool isDarkModeEnabledMacOS();
@@ -268,48 +261,37 @@ int main(int argc, char *argv[])
 
     a.setStyle("Fusion");
 
-#if defined(Q_OS_WIN)
-
-
-#elif defined(Q_OS_MACOS)
-
-    // Dacă tema dark este detectată
-    if (isDarkModeEnabledMacOS()) {
-        QMessageBox::warning(
-            &_select, // Pointer către fereastra principală
-            QCoreApplication::tr("Verificarea temei OS"),
-            QCoreApplication::tr(
-                "Sistemul de operare macOS foloșeste tema <b>'Dark'</b>, "
-                "unele ferestre ale aplicației nu sunt optimizate pentru tema <b>'Dark'</b>.<br>"
-                "Optimizarea completă pentru tema <b>'Dark'</b> va fi în acualizările ulterioare."),
-            QMessageBox::Ok);
-    }
-#endif
+    QFile fileStyle;
 
 #if defined(Q_OS_LINUX)
-    QFile fileStyle(":/styles/style_linux.qss");
-    fileStyle.open(QFile::ReadOnly);
-    QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
-    a.setStyleSheet(appStyle);             // setam stilul
+    if (isDarkThemeOnLinux()) {
+        fileStyle.setFileName(":/styles/style_dark.qss");
+        globals::isSystemThemeDark = true;
+    } else {
+        fileStyle.setFileName(":/styles/style_main.qss");
+        globals::isSystemThemeDark = false;
+    }
 #elif defined(Q_OS_WIN)
-    QFile fileStyle;
     if (isDarkThemeOnWindows()) {
         fileStyle.setFileName(":/styles/style_dark.qss");
         globals::isSystemThemeDark = true;
     } else {
-        fileStyle.setFileName(":/styles/style_linux.qss");
+        fileStyle.setFileName(":/styles/style_main.qss");
         globals::isSystemThemeDark = false;
     }
-    // QFile fileStyle(":/styles/style_linux.qss");
-    fileStyle.open(QFile::ReadOnly);
-    QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
-    a.setStyleSheet(appStyle);             // setam stilul
 #elif defined(Q_OS_MACOS)
-    QFile fileStyle(":/styles/style_linux.qss");
+    if (isDarkModeEnabledMacOS()) {
+        fileStyle.setFileName(":/styles/style_dark.qss");
+        globals::isSystemThemeDark = true;
+    } else {
+        fileStyle.setFileName(":/styles/style_main.qss");
+        globals::isSystemThemeDark = false;
+    }
+#endif
     fileStyle.open(QFile::ReadOnly);
     QString appStyle(fileStyle.readAll()); // fisierul cu stilul aplicatiei
     a.setStyleSheet(appStyle);             // setam stilul
-#endif
+
     qInfo(logInfo()) << "Load style applications.";
 
     //******************************************************************************************************************************

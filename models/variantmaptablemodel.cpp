@@ -1,4 +1,5 @@
 #include "variantmaptablemodel.h"
+#include "data/globals.h"
 
 #include <QBrush>
 
@@ -120,7 +121,10 @@ QVariant VariantMapTableModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::BackgroundRole:
         if (index.column() == section_crl) {
-            return QBrush(QColor(229,210,153));
+            if (globals::isSystemThemeDark)
+                return QBrush(QColor(120, 100, 50));
+            else
+                return QBrush(QColor(229,210,153));
         }
         return QVariant();
     case Qt::TextAlignmentRole:

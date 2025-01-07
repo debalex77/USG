@@ -66,14 +66,6 @@ Reports::Reports(QWidget *parent) :
     ui->frame_preview->resize(616, ui->frame_preview->height());
     ui->comboTypeReport->resize(260, ui->comboTypeReport->height());
 
-#if defined(Q_OS_MACOS)
-    ui->btnGenerateReport->setStyleSheet("font-size: 13px;");
-    ui->btnOpenDesigner->setStyleSheet("font-size: 13px;");
-    ui->btnPrintReport->setStyleSheet("font-size: 13px;");
-    ui->btnExportPdf->setStyleSheet("font-size: 13px;");
-    ui->btnSettingsReport->setStyleSheet("font-size: 13px;");
-#endif
-
 }
 
 Reports::~Reports()
@@ -163,6 +155,23 @@ void Reports::getNameReportsFromDorectory()
 
 void Reports::initConnections()
 {
+
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnGenerateReport->setStyleSheet(style_toolButton);
+    ui->btnOpenDesigner->setStyleSheet(style_toolButton);
+    ui->btnPrintReport->setStyleSheet(style_toolButton);
+    ui->btnExportPdf->setStyleSheet(style_toolButton);
+    ui->btnSettingsReport->setStyleSheet(style_toolButton);
+    ui->btnChoicePeriod->setStyleSheet(style_toolButton);
+    ui->btnZoomIn->setStyleSheet(style_toolButton);
+    ui->btnZoomOut->setStyleSheet(style_toolButton);
+    ui->btnBackPage->setStyleSheet(style_toolButton);
+    ui->btnNextPage->setStyleSheet(style_toolButton);
+
+    ui->btnEditContract->setStyleSheet(style_toolButton);
+    ui->btnEditDoctor->setStyleSheet(style_toolButton);
+    ui->btnEditOrganization->setStyleSheet(style_toolButton);
+
 #if defined(Q_OS_LINUX)
 
     connect(m_report, &LimeReport::ReportEngine::renderStarted, this, &Reports::renderStarted);

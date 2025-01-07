@@ -1,4 +1,5 @@
 #include "basesqltablemodel.h"
+#include "data/globals.h"
 #include <QDebug>
 BaseSqlTableModel::BaseSqlTableModel(QObject *parent) : QSqlTableModel(parent)
 {
@@ -187,10 +188,17 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
         return font;
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului
-        if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0)
-            return QBrush(QColor(191,198,188));
-        else                                      // toate sectiile in afara
-            return QBrush(QColor(217,255,210));   // de sectia nr.5 - 'pretul'
+        if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0) {
+            if (globals::isSystemThemeDark)
+                return QBrush(QColor(90, 100, 90));
+            else
+                return QBrush(QColor(191,198,188));
+        } else {                                      // toate sectiile in afara
+            if (globals::isSystemThemeDark)
+                return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
+            else
+                return QBrush(QColor(217,255,210));
+        }
         return value;
     case Qt::TextAlignmentRole:
         if (index.column() == Enums::PRICING_COLUMN::PRICING_COLUMN_COD) // sectia 'Cod'
@@ -228,16 +236,22 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
         return font;
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului
-//        if (m_tableSource == "tableSource" && index.column() == col_pricing_Price && QSqlTableModel::data(index, Qt::DisplayRole).toInt() == 0)
-//            return QBrush(QColor(165,172,162));
         if (m_tableSource == "tableSource"){
-            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0)
+            if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0) {
                 return QBrush(QColor(191,198,188));
-            else
-                return QBrush(QColor(214,235,206));
+            } else {
+                if (globals::isSystemThemeDark)
+                    return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
+                else
+                    return QBrush(QColor(214,235,206));
+            }
         }
-        if (index.column() != Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE)  // toate sectiile in afara
-            return QBrush(QColor(217,255,210));   // de sectia nr.5 - 'pretul'
+        if (index.column() != Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) { // toate sectiile in afara
+            if (globals::isSystemThemeDark)
+                return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
+            else
+                return QBrush(QColor(217,255,210));
+        }
         return value;
     case Qt::ForegroundRole:
         if (m_tableSource == "tableSource"){

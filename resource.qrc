@@ -182,7 +182,7 @@
         <file>img/select.png</file>
         <file>xmls/street_cahul.xml</file>
         <file>xmls/city.xml</file>
-        <file>styles/style_linux.qss</file>
+        <file>styles/style_main.qss</file>
         <file>xmls/investig_2024.xml</file>
         <file>templets/reports/Lista pacientilor (filtru - doctori).lrxml</file>
         <file>templets/reports/Lista pacientilor (filtru - organizatii).lrxml</file>
@@ -197,5 +197,7 @@
         <file>img/down-chevron.png</file>
         <file>img/down-arrow_tool_box_blue.png</file>
         <file>img/right-arrow_tool_box_blue.png</file>
+        <file>img/lock.png</file>
+        <file>img/unlock.png</file>
     </qresource>
 </RCC>

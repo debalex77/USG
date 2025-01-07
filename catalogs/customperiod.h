@@ -4,7 +4,8 @@
 #include <QDialog>
 #include <QDateEdit>
 #include <QButtonGroup>
-#include "data/globals.h"
+#include <data/database.h>
+#include <data/globals.h>
 
 namespace Ui {
 class CustomPeriod;
@@ -37,6 +38,7 @@ private:
 
 private:
     Ui::CustomPeriod *ui;
+    DataBase *db;
 };
 
 #endif // CUSTOMPERIOD_H

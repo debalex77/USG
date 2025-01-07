@@ -711,6 +711,8 @@ void DocReportEcho::updateCommentIntoTableimagesReports()
 
 void DocReportEcho::initConnections()
 {
+    QString style_toolButton = db->getStyleForToolButton();
+
     ui->btnParameters->setMouseTracking(true);
     ui->btnParameters->installEventFilter(this);
     ui->btnHistory->setMouseTracking(true);
@@ -719,6 +721,12 @@ void DocReportEcho::initConnections()
     ui->btnOpenCatPatient->installEventFilter(this);
     ui->btnOpenDocErderEcho->setMouseTracking(true);
     ui->btnOpenDocErderEcho->installEventFilter(this);
+
+    // setam stilul
+    ui->btnHistory->setStyleSheet(style_toolButton);
+    ui->btnOpenCatPatient->setStyleSheet(style_toolButton);
+    ui->btnOpenDocErderEcho->setStyleSheet(style_toolButton);
+
 
     connect(ui->btnParameters, &QPushButton::clicked, this, &DocReportEcho::openParameters);
     connect(ui->editDocDate, &QDateTimeEdit::dateTimeChanged, this, &DocReportEcho::onDateTimeChanged);
@@ -742,6 +750,16 @@ void DocReportEcho::initConnections()
     connect(ui->btnVideo, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnVideo);
     connect(ui->btnNormograms, &QAbstractButton::clicked, this, &DocReportEcho::clickBtnNormograms);
 
+    // adaugarea descrierelor formatiunilor
+    ui->btn_add_template_organsInternal->setStyleSheet(style_toolButton);
+    ui->btn_add_template_urinary_system->setStyleSheet(style_toolButton);
+    ui->btn_add_template_prostate->setStyleSheet(style_toolButton);
+    ui->btn_add_template_gynecology->setStyleSheet(style_toolButton);
+    ui->btn_add_template_breast->setStyleSheet(style_toolButton);
+    ui->btn_add_template_thyroid->setStyleSheet(style_toolButton);
+    ui->btn_add_template_gestation0->setStyleSheet(style_toolButton);
+    ui->btn_add_template_gestation1->setStyleSheet(style_toolButton);
+
     connect(ui->btn_add_template_organsInternal, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
     connect(ui->btn_add_template_urinary_system, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
     connect(ui->btn_add_template_prostate, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
@@ -751,6 +769,16 @@ void DocReportEcho::initConnections()
     connect(ui->btn_add_template_gestation0, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
     connect(ui->btn_add_template_gestation1, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnAddConcluzionTemplates);
 
+    // selectia descrierilor formatiunilor
+    ui->btn_template_organsInternal->setStyleSheet(style_toolButton);
+    ui->btn_template_urinary_system->setStyleSheet(style_toolButton);
+    ui->btn_template_prostate->setStyleSheet(style_toolButton);
+    ui->btn_template_gynecology->setStyleSheet(style_toolButton);
+    ui->btn_template_breast->setStyleSheet(style_toolButton);
+    ui->btn_template_thyroid->setStyleSheet(style_toolButton);
+    ui->btn_template_gestation0->setStyleSheet(style_toolButton);
+    ui->btn_template_gestation1->setStyleSheet(style_toolButton);
+
     connect(ui->btn_template_organsInternal, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
     connect(ui->btn_template_urinary_system, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
     connect(ui->btn_template_prostate, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
@@ -759,6 +787,7 @@ void DocReportEcho::initConnections()
     connect(ui->btn_template_thyroid, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
     connect(ui->btn_template_gestation0, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
     connect(ui->btn_template_gestation1, &QAbstractButton::clicked, this , &DocReportEcho::clickBtnSelectConcluzionTemplates);
+
 
     connect(this, &DocReportEcho::CountImagesChanged, this, &DocReportEcho::slot_CountImagesChanged);
     connect(this, &DocReportEcho::CountImagesChanged, this, &DocReportEcho::dataWasModified);
@@ -781,6 +810,7 @@ void DocReportEcho::initConnections()
 
     // ---------------- select tampletes formations by system
     // organs internal
+    ui->btnSelectTemplatesIntestinalFormations->setStyleSheet(style_toolButton);
     connect(ui->liver_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Ficat");});
     connect(ui->cholecist_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Colecist");});
     connect(ui->pancreas_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Pancreas");});
@@ -788,6 +818,7 @@ void DocReportEcho::initConnections()
     connect(ui->btnSelectTemplatesIntestinalFormations, &QToolButton::clicked, this, [this](){openTempletsBySystem("Intestine");});
     connect(ui->organsInternal_recommendation, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Recomandari (org.interne)");});
     // s.urynari
+    ui->btnSelectTempletsAdrenalGlands->setStyleSheet(style_toolButton);
     connect(ui->kidney_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Rinichi");});
     connect(ui->bladder_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("V.urinara");});
     connect(ui->btnSelectTempletsAdrenalGlands, &QToolButton::clicked, this, [this](){openTempletsBySystem("Gl.suprarenale");});
@@ -796,13 +827,19 @@ void DocReportEcho::initConnections()
     connect(ui->prostate_formations, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Prostata");});
     connect(ui->prostate_recommendation, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Recomandari (prostata)");});
     // tiroida
+    ui->btnSelectTempletsThyroid->setStyleSheet(style_toolButton);
     connect(ui->btnSelectTempletsThyroid, &QToolButton::clicked, this, [this](){openTempletsBySystem("Tiroida");});
     connect(ui->thyroid_recommendation, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Recomandari (tiroida)");});
     // breast
+    ui->btnSelectTempletsBreastLeft->setStyleSheet(style_toolButton);
+    ui->btnSelectTempletsBreastRight->setStyleSheet(style_toolButton);
     connect(ui->btnSelectTempletsBreastLeft, &QToolButton::clicked, this, [this](){openTempletsBySystem("Gl.mamara (stanga)");});
     connect(ui->btnSelectTempletsBreastRight, &QToolButton::clicked, this, [this](){openTempletsBySystem("Gl.mamara (dreapta)");});
     connect(ui->breast_recommendation, &LineEditCustom::onClickSelect, this, [this](){openTempletsBySystem("Recomandari (gl.mamare)");});
     // ginecologia
+    ui->btnSelectTempletsUter->setStyleSheet(style_toolButton);
+    ui->btnSelectTempletsOvarLeft->setStyleSheet(style_toolButton);
+    ui->btnSelectTempletsOvarRight->setStyleSheet(style_toolButton);
     connect(ui->btnSelectTempletsUter, &QToolButton::clicked, this, [this](){openTempletsBySystem("Ginecologia (uter)");});
     connect(ui->btnSelectTempletsOvarLeft, &QToolButton::clicked, this, [this](){openTempletsBySystem("Ginecologia (ovar stang)");});
     connect(ui->btnSelectTempletsOvarRight, &QToolButton::clicked, this, [this](){openTempletsBySystem("Ginecologia (ovar drept)");});
@@ -814,6 +851,7 @@ void DocReportEcho::initConnections()
 
     //---------------- add description formation by system
     // organs internal
+    ui->btnAddTemplatesIntestinalFormations->setStyleSheet(style_toolButton);
     connect(ui->liver_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Ficat");});
     connect(ui->cholecist_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Colecist");});
     connect(ui->pancreas_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Pancreas");});
@@ -821,6 +859,7 @@ void DocReportEcho::initConnections()
     connect(ui->btnAddTemplatesIntestinalFormations, &QToolButton::clicked, this, [this](){addDescriptionFormation("Intestine");});
     connect(ui->organsInternal_recommendation, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Recomandari (org.interne)");});
     // s.urynari
+    ui->btnAddTempletsAdrenalGlands->setStyleSheet(style_toolButton);
     connect(ui->kidney_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Rinichi");});
     connect(ui->bladder_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("V.urinara");});
     connect(ui->btnAddTempletsAdrenalGlands, &QToolButton::clicked, this, [this](){addDescriptionFormation("Gl.suprarenale");});
@@ -829,13 +868,19 @@ void DocReportEcho::initConnections()
     connect(ui->prostate_formations, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Prostata");});
     connect(ui->prostate_recommendation, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Recomandari (prostata)");});
     // tiroida
+    ui->btnAddTempletsThyroid->setStyleSheet(style_toolButton);
     connect(ui->btnAddTempletsThyroid, &QToolButton::clicked, this, [this](){addDescriptionFormation("Tiroida");});
     connect(ui->thyroid_recommendation, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Recomandari (tiroida)");});
     // breast
+    ui->btnAddTempletsBreastLeft->setStyleSheet(style_toolButton);
+    ui->btnAddTempletsBreastRight->setStyleSheet(style_toolButton);
     connect(ui->btnAddTempletsBreastLeft, &QToolButton::clicked, this, [this](){addDescriptionFormation("Gl.mamara (stanga)");});
     connect(ui->btnAddTempletsBreastRight, &QToolButton::clicked, this, [this](){addDescriptionFormation("Gl.mamara (dreapta)");});
     connect(ui->breast_recommendation, &LineEditCustom::onClickAddItem, this, [this](){addDescriptionFormation("Recomandari (gl.mamare)");});
     // ginecologia
+    ui->btnAddTempletsUter->setStyleSheet(style_toolButton);
+    ui->btnAddTempletsOvarLeft->setStyleSheet(style_toolButton);
+    ui->btnAddTempletsOvarRight->setStyleSheet(style_toolButton);
     connect(ui->btnAddTempletsUter, &QToolButton::clicked, this, [this](){addDescriptionFormation("Ginecologia (uter)");});
     connect(ui->btnAddTempletsOvarLeft, &QToolButton::clicked, this, [this](){addDescriptionFormation("Ginecologia (ovar stang)");});
     connect(ui->btnAddTempletsOvarRight, &QToolButton::clicked, this, [this](){addDescriptionFormation("Ginecologia (ovar drept)");});
@@ -3902,12 +3947,52 @@ void DocReportEcho::initEnableBtn()
 
 void DocReportEcho::updateStyleBtnInvestigations()
 {
-    const QString style_pressed = "background: 0px #C2C2C3; "
-                                  "border: 1px inset blue; "
-                                  "border-color: navy;";
+    QString style_pressed;
+    QString style_unpressed;
 
-    const QString style_unpressed = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
-                                    "border: 0px #8f8f91;";
+    if (globals::isSystemThemeDark) {
+
+        style_pressed = "QCommandLinkButton "
+                        "{"
+                        "  background: #5b5b5b;"
+                        "  border: 1px inset #00baff;"
+                        "  border-color: #007acc;"
+                        "  color: #ffffff;"
+                        "}"
+                        "QCommandLinkButton:hover "
+                        "{"
+                        "  background-color: #4b4b4b;"
+                        "}"
+                        "QCommandLinkButton::icon "
+                        "{"
+                        "  background-color: #ffffff;" // Fundal alb pentru icon
+                        "  border-radius: 4px;"
+                        "  border: 1px solid #cccccc;"
+                        "}";
+
+        style_unpressed = "QCommandLinkButton "
+                          "{"
+                          "  background: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1, stop: 0 #4b4b4b, stop: 1 #3c3c3c);"
+                          "  border: 0px;"
+                          "  color: #ffffff;"
+                          "}"
+                          "QCommandLinkButton::icon "
+                          "{"
+                          "  background-color: #e0e0e0;" // Fundal mai deschis pentru pictogramă
+                          "  border-radius: 4px;"
+                          "  border: 1px solid #cccccc;"
+                          "  padding: 2px;"
+                          "}";
+
+    } else {
+
+        style_pressed = "background: 0px #C2C2C3; "
+                        "border: 1px inset blue; "
+                        "border-color: navy;";
+
+        style_unpressed = "background-color: qlineargradient(x1: 0, y1: 0, x2: 0, y2: 1,stop: 0 #f6f7fa, stop: 1 #dadbde); "
+                          "border: 0px #8f8f91;";
+    }
 
     if (ui->stackedWidget->currentIndex() == page_organs_internal)
         ui->btnOrgansInternal->setStyleSheet(style_pressed);

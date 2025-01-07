@@ -80,6 +80,22 @@ ListDoc::~ListDoc()
 
 void ListDoc::initBtnToolBar()
 {
+
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnSelect->setStyleSheet(style_toolButton);
+    ui->btnChoicePeriod->setStyleSheet(style_toolButton);
+
+    QString style_btnToolBar = db->getStyleForButtonToolBar();
+    ui->btnAdd->setStyleSheet(style_btnToolBar);
+    ui->btnEdit->setStyleSheet(style_btnToolBar);
+    ui->btnDeletion->setStyleSheet(style_btnToolBar);
+    ui->btnAddFilter->setStyleSheet(style_btnToolBar);
+    ui->btnFilter->setStyleSheet(style_btnToolBar);
+    ui->btnFilterRemove->setStyleSheet(style_btnToolBar);
+    ui->btnUpdateTable->setStyleSheet(style_btnToolBar);
+    ui->btnPrint->setStyleSheet(style_btnToolBar);
+    ui->btnPeriodDate->setStyleSheet(style_btnToolBar);
+
     if (m_modeSelection)
         connect(ui->btnSelect, &QAbstractButton::clicked, this, &ListDoc::selectDocPricing);
 
