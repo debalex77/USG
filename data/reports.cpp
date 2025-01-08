@@ -106,19 +106,13 @@ void Reports::loadSettingsReport()
         if (globals::thisMySQL){
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
-            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2)
-                                                                 .toString()
-                                                                 .replace(replaceT, " ")
-                                                                 .replace(removeMilliseconds,""),
-                                                             "yyyy-MM-dd hh:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3)
-                                                               .toString()
-                                                               .replace(replaceT, " ")
-                                                               .replace(removeMilliseconds,""),
-                                                           "yyyy-MM-dd hh:mm:ss"));
+            QString str_date_start = qry.value(2).toString().replace(replaceT, " ").replace(removeMilliseconds, "");
+            QString str_date_end   = qry.value(3).toString().replace(replaceT, " ").replace(removeMilliseconds, "");
+            ui->dateStart->setDateTime(QDateTime::fromString(str_date_start, "yyyy-MM-dd HH:mm:ss"));
+            ui->dateEnd->setDateTime(QDateTime::fromString(str_date_end, "yyyy-MM-dd HH:mm:ss"));
         } else {
-            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString(), "yyyy-MM-dd hh:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString(), "yyyy-MM-dd hh:mm:ss"));
+            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString(), "yyyy-MM-dd HH:mm:ss"));
+            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString(), "yyyy-MM-dd HH:mm:ss"));
         }
 
         auto indexOrganization = modelOrganizations->match(modelOrganizations->index(0, 0), Qt::UserRole, qry.value(4).toInt(), 1, Qt::MatchExactly);
@@ -137,6 +131,8 @@ void Reports::loadSettingsReport()
         ui->hidePricesTotal->setCheckState((qry.value(13).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
 
         generateReport();
+
+        qDebug() << "Setata data: " << ui->dateStart->dateTime().toString("dd.MM.yyyy HH:mm:ss");
     }
 }
 

@@ -363,6 +363,16 @@
        </item>
        <item row="0" column="1">
         <widget class="QDateEdit" name="dateEnd">
+         <property name="dateTime">
+          <datetime>
+           <hour>17</hour>
+           <minute>59</minute>
+           <second>59</second>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
          <property name="minimumDate">
           <date>
            <year>1900</year>
@@ -464,6 +474,16 @@
        </item>
        <item row="0" column="0">
         <widget class="QDateEdit" name="dateStart">
+         <property name="dateTime">
+          <datetime>
+           <hour>19</hour>
+           <minute>59</minute>
+           <second>59</second>
+           <year>2000</year>
+           <month>1</month>
+           <day>1</day>
+          </datetime>
+         </property>
          <property name="minimumDate">
           <date>
            <year>1900</year>
@@ -473,6 +493,9 @@
          </property>
          <property name="calendarPopup">
           <bool>true</bool>
+         </property>
+         <property name="timeSpec">
+          <enum>Qt::LocalTime</enum>
          </property>
         </widget>
        </item>

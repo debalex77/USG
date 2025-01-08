@@ -1986,8 +1986,7 @@ void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
             QString str_date_end;
             if (globals::thisMySQL){
                 static const QRegularExpression replaceT("T");
-                static const QRegularExpression removeMilliseconds(".000");
-                qDebug() << "dateStart: " << qry.value(0).toString() << ", dateEnd: "<< qry.value(1).toString();
+                static const QRegularExpression removeMilliseconds("\\.000");
                 str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
                 str_date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
             } else {
