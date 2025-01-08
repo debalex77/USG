@@ -522,6 +522,66 @@ void AppSettings::setDefaultPathSqlite()
     if (! QFile(dir.homePath() + "/USG").exists()) {
         dir.mkpath(dir.homePath() + "/USG");
         dir.mkpath(dir.homePath() + "/USG/Database_usg");
+        dir.mkpath(dir.homePath() + "/USG/templets");
+        dir.mkpath(dir.homePath() + "/USG/templets/reports");
+        QStringList sourceFiles =
+            {
+                ":/templets/Breast.lrxml",
+                ":/templets/CatalogCost.lrxml",
+                ":/templets/Complex.lrxml",
+                ":/templets/Gestation0.lrxml",
+                ":/templets/Gestation1.lrxml",
+                ":/templets/Gestation2.lrxml",
+                ":/templets/Gestation3.lrxml",
+                ":/templets/Gynecology.lrxml",
+                ":/templets/Order.lrxml",
+                ":/templets/Organs internal.lrxml",
+                ":/templets/Pricing.lrxml",
+                ":/templets/Prostate.lrxml",
+                ":/templets/Thyroid.lrxml",
+                ":/templets/Tree_investigations.lrxml",
+                ":/templets/Urinary system.lrxml",
+                ":/templets/reports/Lista pacientilor (filtru - doctori).lrxml",
+                ":/templets/reports/Lista pacientilor (filtru - organizatii).lrxml",
+                ":/templets/reports/Structura patologiilor.lrxml",
+                ":/templets/reports/Volumul investigatiilor.lrxml"
+            };
+        QStringList destFiles =
+            {
+                dir.filePath(dir.homePath() + "/USG/templets/Breast.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/CatalogCost.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Complex.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Gestation0.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Gestation1.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Gestation2.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Gestation3.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Gynecology.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Order.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Organs internal.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Pricing.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Prostate.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Thyroid.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Tree_investigations.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/Urinary system.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/reports/Lista pacientilor (filtru - doctori).lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/reports/Lista pacientilor (filtru - organizatii).lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/reports/Structura patologiilor.lrxml"),
+                dir.filePath(dir.homePath() + "/USG/templets/reports/Volumul investigatiilor.lrxml"),
+            };
+
+        for (int i = 0; i < sourceFiles.size(); ++i) {
+            QFile file(sourceFiles[i]);
+            if (file.exists()) {
+                if (!file.copy(destFiles[i])) {
+                    qWarning() << "Eroare la copierea fișierului:" << sourceFiles[i]
+                               << "către" << destFiles[i];
+                } else {
+                    qDebug() << "Fișierul a fost copiat cu succes:" << destFiles[i];
+                }
+            } else {
+                qWarning() << "Fișierul sursă nu există:" << sourceFiles[i];
+            }
+        }
     }
 
     if (globals::pathLogAppSettings.isEmpty())
@@ -1456,6 +1516,18 @@ void AppSettings::changeIndexLangApp(const int _index)
 void AppSettings::changeIndexTypeSQL(const int _index)
 {
     if (_index == idx_MySQL){ // MySQL
+
+#if defined(Q_OS_MACOS)
+
+        QMessageBox::warning(this,
+                             tr("Controlul driverelor"),
+                             tr("Pentru sistemul de operare MacOS nu este inclus driverul MySQL !!! "
+                                "V-a fi inclus in actualizarile ulterioare."),
+                             QMessageBox::Ok);
+        ui->comboBoxTypeSQL->setCurrentIndex(idx_Sqlite);
+        return;
+
+#endif
 
         globals::indexTypeSQL   = _index;
         globals::thisMySQL      = true;

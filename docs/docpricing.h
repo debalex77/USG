@@ -136,6 +136,12 @@ private slots:
     void onWritingDataClose();
     void onClose();
 
+    void slotGetCallbackData(LimeReport::CallbackInfo info, QVariant &data);
+    void slotGetCallbackDataItems(LimeReport::CallbackInfo info, QVariant &data);
+    void prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, QVariant &data);
+    void slotChangePos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
+    void slotChangePosItems(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
+
 private:
 
     void setTitleDoc();
@@ -179,6 +185,8 @@ private:
     CatForSqlTableModel *catInvestigations;
 
     LimeReport::ReportEngine *m_report;
+    QSqlQuery *m_owner;
+    QSqlQuery *m_investigations;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

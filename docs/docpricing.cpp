@@ -450,11 +450,105 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
     m_report->setPreviewWindowTitle(tr("Lista pre\310\233urilor nr.") + ui->editNumberDoc->text() +
                                     tr(" din ") + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
-    // m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
+    // solicitarea pentru grupe
+    m_owner = new QSqlQuery("SELECT "
+                            " investigations.owner, "
+                            " investigationsGroup.cod "
+                            "FROM "
+                            " investigations "
+                            "INNER JOIN "
+                            " investigationsGroup ON investigations.owner = investigationsGroup.name "
+                            "WHERE "
+                            " investigations.owner IS NOT NULL "
+                            "GROUP BY "
+                            " investigationsGroup.cod "
+                            "ORDER BY "
+                            " investigationsGroup.cod ASC;");
+    if (! m_owner->first()) {
+        qCritical() << "Error: Unable to fetch investigationsGroup data:" << m_owner->lastError().text();
+        delete m_report;
+        return;
+    }
+
+    // solicitarea elementelor investigatiilor
+    QMessageBox messange_box(QMessageBox::Question,
+                             tr("Prezentarea listei pre\310\233urilor"),
+                             tr("De prezentat investiga\310\233iile f\304\203r\304\203 pre\310\233 ?"),
+                             QMessageBox::NoButton, this);
+    QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    messange_box.exec();
+
+    QString str_investigations;
+    if (messange_box.clickedButton() == yesButton) {
+
+        str_investigations =
+            QString(
+                "SELECT "
+                " investigations.cod, "
+                " investigations.name,"
+                " %1 AS price "
+                "FROM "
+                " investigations "
+                "INNER JOIN "
+                " pricingsTable ON pricingsTable.cod = investigations.cod "
+                "WHERE "
+                " pricingsTable.id_pricings = ? AND "
+                " investigations.owner = ?;")
+                .arg((globals::thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
+                // .arg((globals::thisMySQL) ?
+                //          "CASE WHEN FORMAT(pricingsTable.price, 2) = '0.00' THEN '' ELSE FORMAT(pricingsTable.price, 2) END" :
+                //          "CASE WHEN printf('%.2f', pricingsTable.price) = '0.00' THEN '' ELSE printf('%.2f', pricingsTable.price) END");
+
+    } else if (messange_box.clickedButton() == noButton) {
+
+        str_investigations =
+            QString(
+                "SELECT "
+                " investigations.cod, "
+                " investigations.name,"
+                " %1 AS price "
+                "FROM "
+                " investigations "
+                "INNER JOIN "
+                " pricingsTable ON pricingsTable.cod = investigations.cod "
+                "WHERE "
+                " pricingsTable.id_pricings = ? AND "
+                " pricingsTable.price > 0 AND "
+                " investigations.owner = ?;").arg((globals::thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
+
+    }
+
+    m_investigations = new QSqlQuery(str_investigations);
+    m_investigations->bindValue(0, m_id);
+    m_investigations->bindValue(1, "Org.interne"); // initial
+    if ( !m_investigations->exec()) {
+        qCritical() << "Error: Unable to execute investigations query:" << m_investigations->lastError().text();
+        delete m_report;
+        return;
+    }
+
+    // conectarile
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&DocPricing::slotGetCallbackData));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&DocPricing::slotChangePos));
+
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&DocPricing::slotGetCallbackDataItems));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&DocPricing::slotChangePosItems));
+
+    // variabile
     m_report->dataManager()->setReportVariable("id_pricing", m_id);
     m_report->dataManager()->setReportVariable("organization", ui->comboOrganization->currentText());
     m_report->dataManager()->setReportVariable("date", ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy"));
 
+    // incarcarea fisierului
     if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Pricing.lrxml")){
         QDir dir;
         CustomMessage *msgBox = new CustomMessage(this);
@@ -469,11 +563,20 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
         return;
     }
 
+#ifdef QT_DEBUG
+    Q_UNUSED(type_print)
+    m_report->designReport();
+#else
     if (type_print == Enums::TYPE_PRINT::OPEN_DESIGNER){
         m_report->designReport();
     } else {
         m_report->previewReport();
     }
+#endif
+
+    // eliberarea memoriei
+    delete m_owner;
+    delete m_investigations;
 
     m_report->deleteLater();
 }
@@ -634,6 +737,77 @@ void DocPricing::onClose()
 {
     emit mCloseThisForm();
     this->close();
+}
+
+void DocPricing::slotGetCallbackData(LimeReport::CallbackInfo info, QVariant &data)
+{
+    if (! m_owner)
+        return;
+    prepareData(m_owner, info, data);
+}
+
+void DocPricing::slotGetCallbackDataItems(LimeReport::CallbackInfo info, QVariant &data)
+{
+    if (! m_investigations)
+        return;
+    prepareData(m_investigations, info, data);
+}
+
+void DocPricing::prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, QVariant &data)
+{
+    switch (info.dataType) {
+    case LimeReport::CallbackInfo::ColumnCount:
+        data = qry->record().count();
+        break;
+    case LimeReport::CallbackInfo::IsEmpty:
+        data = ! qry->first();
+        break;
+    case LimeReport::CallbackInfo::HasNext:
+        data = qry->next();
+        qry->previous();
+        break;
+    case LimeReport::CallbackInfo::ColumnHeaderData:
+        if (info.index < qry->record().count())
+            data = qry->record().fieldName(info.index);
+        break;
+    case LimeReport::CallbackInfo::ColumnData:
+        data = qry->value(qry->record().indexOf(info.columnName));
+        break;
+    default:
+        break;
+    }
+}
+
+void DocPricing::slotChangePos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
+{
+    QSqlQuery *ds = m_owner;
+    if (!ds)
+        return;
+    if (type == LimeReport::CallbackInfo::First)
+        result = ds->first();
+    else
+        result = ds->next();
+
+    if (result){
+        m_investigations->bindValue(0, m_id);
+        m_investigations->bindValue(1, m_owner->value(m_owner->record().indexOf("owner")));
+        if (!m_investigations->exec()) {
+            qCritical() << "Error: Unable to execute investigations query (slotChangePos):" << m_investigations->lastError().text();
+            delete m_report;
+            return;
+        }
+    }
+}
+
+void DocPricing::slotChangePosItems(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
+{
+    QSqlQuery *ds = m_investigations;
+    if (!ds)
+        return;
+    if (type == LimeReport::CallbackInfo::First)
+        result = ds->first();
+    else
+        result = ds->next();
 }
 
 void DocPricing::setTitleDoc()
