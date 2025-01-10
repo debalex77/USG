@@ -143,13 +143,13 @@ QGroupBox
 }
 /* --------------------- QTextEdit ------------------ */
 QTextEdit {
-    background-color: #f8f9fa; /* Culoare de fundal deschisă */
-    border: 1px solid #cccccc; /* Border subțire gri */
-    border-radius: 6px;        /* Colțuri rotunjite */
-    padding: 4px;              /* Spațiere internă */
+    background-color: #f8f9fa;                                   /* Culoare de fundal deschisă */
+    border: 1px solid #cccccc;                                   /* Border subțire gri */
+    border-radius: 6px;                                          /* Colțuri rotunjite */
+    padding: 4px;                                                /* Spațiere internă */
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font specific macOS */
-    font-size: 13px;           /* Dimensiune text */
-    color: #333333;            /* Culoare text */
+    font-size: 13px;                                             /* Dimensiune text */
+    color: #333333;                                              /* Culoare text */
 }
 
 QTextEdit:focus {
@@ -164,13 +164,13 @@ QTextEdit[readOnly="true"] {
 }
 /* --------------------- QPlainTextEdit ------------------ */
 QPlainTextEdit {
-    background-color: #f8f9fa; /* Culoare de fundal deschisă */
-    border: 1px solid #cccccc; /* Border subțire gri */
-    border-radius: 6px;        /* Colțuri rotunjite */
-    padding: 4px;              /* Spațiere internă */
+    background-color: #f8f9fa;                                   /* Culoare de fundal deschisă */
+    border: 1px solid #cccccc;                                   /* Border subțire gri */
+    border-radius: 6px;                                          /* Colțuri rotunjite */
+    padding: 4px;                                                /* Spațiere internă */
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; /* Font specific macOS */
-    font-size: 14px;           /* Dimensiune text */
-    color: #333333;            /* Culoare text */
+    font-size: 14px;                                             /* Dimensiune text */
+    color: #333333;                                              /* Culoare text */
 }
 
 QPlainTextEdit:focus {
@@ -182,5 +182,11 @@ QPlainTextEdit[readOnly="true"] {
     background-color: #e9ecef; /* Fundal gri deschis pentru mod read-only */
     color: #6c757d;            /* Text gri */
     border: 1px solid #bbbbbb; /* Border mai puțin pronunțat */
+}
+/* --------------------- QCheckBox ------------------------ */
+QCheckBox::focus
+{
+  border: 1px inset blue;
+  border-radius: 4px;
 }
 

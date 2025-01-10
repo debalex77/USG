@@ -190,6 +190,9 @@
          <iconset resource="../resource.qrc">
           <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
         </property>
+        <property name="shortcut">
+         <string>Esc</string>
+        </property>
        </widget>
       </item>
       <item row="1" column="3">
@@ -219,6 +222,9 @@
        <layout class="QHBoxLayout" name="layoutToolBar">
         <item>
          <widget class="QToolButton" name="btnAdd">
+          <property name="toolTip">
+           <string>Adauga (Ins.)</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -226,10 +232,16 @@
            <iconset resource="../resource.qrc">
             <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
           </property>
+          <property name="shortcut">
+           <string>Ins</string>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btnEdit">
+          <property name="toolTip">
+           <string>Editeaza (F2)</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
@@ -237,16 +249,25 @@
            <iconset resource="../resource.qrc">
             <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
           </property>
+          <property name="shortcut">
+           <string>F2</string>
+          </property>
          </widget>
         </item>
         <item>
          <widget class="QToolButton" name="btnDeletion">
+          <property name="toolTip">
+           <string>Elimina (Del)</string>
+          </property>
           <property name="text">
            <string>...</string>
           </property>
           <property name="icon">
            <iconset resource="../resource.qrc">
             <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Del</string>
           </property>
          </widget>
         </item>
@@ -265,12 +286,18 @@
             <height>0</height>
            </size>
           </property>
+          <property name="toolTip">
+           <string>Formeaza (Ctrl + Space)</string>
+          </property>
           <property name="text">
            <string>Formeaza</string>
           </property>
           <property name="icon">
            <iconset resource="../resource.qrc">
             <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
+          </property>
+          <property name="shortcut">
+           <string>Ctrl+Space</string>
           </property>
           <property name="toolButtonStyle">
            <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -348,12 +375,18 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Inchidere (Esc)</string>
+        </property>
         <property name="text">
          <string>Închide</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
           <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Esc</string>
         </property>
        </widget>
       </item>
@@ -365,12 +398,18 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Printeaza (Ins)</string>
+        </property>
         <property name="text">
          <string>Printează</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
           <normaloff>:/img/print_x32.png</normaloff>:/img/print_x32.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+P</string>
         </property>
        </widget>
       </item>
@@ -382,12 +421,18 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Salvare (Ctrl + S)</string>
+        </property>
         <property name="text">
          <string>Salvează</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
           <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+S</string>
         </property>
        </widget>
       </item>
@@ -399,12 +444,18 @@
           <height>0</height>
          </size>
         </property>
+        <property name="toolTip">
+         <string>Validare (Ctrl + Enter, Ctrl + Return) </string>
+        </property>
         <property name="text">
          <string>Validează</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
           <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
+        </property>
+        <property name="shortcut">
+         <string>Ctrl+Return, Ctrl+Enter</string>
         </property>
        </widget>
       </item>

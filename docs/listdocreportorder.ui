@@ -568,6 +568,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ins</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -579,6 +582,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>F2</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -589,6 +595,9 @@
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Del</string>
        </property>
       </widget>
      </item>
@@ -608,6 +617,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/filter-add-icon.png</normaloff>:/img/filter-add-icon.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+F1</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -619,6 +631,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/filter-icon.png</normaloff>:/img/filter-icon.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+F2</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -629,6 +644,9 @@
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/filter-delete-icon.png</normaloff>:/img/filter-delete-icon.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+F3</string>
        </property>
       </widget>
      </item>
@@ -648,6 +666,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/update_x32.png</normaloff>:/img/update_x32.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>F5</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -666,6 +687,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/table-cell.png</normaloff>:/img/table-cell.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+H</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -683,6 +707,9 @@
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+P</string>
        </property>
       </widget>
      </item>
@@ -708,6 +735,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/examenEcho.png</normaloff>:/img/examenEcho.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+R</string>
+       </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
        </property>
@@ -727,6 +757,9 @@
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/view_table.png</normaloff>:/img/view_table.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+T</string>
        </property>
        <property name="toolButtonStyle">
         <enum>Qt::ToolButtonTextBesideIcon</enum>
@@ -749,6 +782,9 @@
         <iconset resource="../resource.qrc">
          <normaloff>:/img/date_period.png</normaloff>:/img/date_period.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+Shift+P</string>
+       </property>
       </widget>
      </item>
      <item>
@@ -766,6 +802,9 @@
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/search_pacients.png</normaloff>:/img/search_pacients.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+Shift+S</string>
        </property>
       </widget>
      </item>

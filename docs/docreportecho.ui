@@ -82,6 +82,9 @@ QToolButton:pressed
      </item>
      <item>
       <widget class="QPushButton" name="btnPrint">
+       <property name="toolTip">
+        <string>Printare (Ctrl + P)</string>
+       </property>
        <property name="text">
         <string>Printeaza</string>
        </property>
@@ -89,10 +92,16 @@ QToolButton:pressed
         <iconset resource="../resource.qrc">
          <normaloff>:/img/print_x32.png</normaloff>:/img/print_x32.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+P</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnOk">
+       <property name="toolTip">
+        <string>Validare (Ctrl + Enter)</string>
+       </property>
        <property name="text">
         <string>Valideaza</string>
        </property>
@@ -100,10 +109,16 @@ QToolButton:pressed
         <iconset resource="../resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+Return</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnWrite">
+       <property name="toolTip">
+        <string>Salvare (Ctrl + S)</string>
+       </property>
        <property name="text">
         <string>Salveaza</string>
        </property>
@@ -111,16 +126,25 @@ QToolButton:pressed
         <iconset resource="../resource.qrc">
          <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
        </property>
+       <property name="shortcut">
+        <string>Ctrl+S</string>
+       </property>
       </widget>
      </item>
      <item>
       <widget class="QPushButton" name="btnClose">
+       <property name="toolTip">
+        <string>Inchiderea (Esc)</string>
+       </property>
        <property name="text">
         <string>Inchide</string>
        </property>
        <property name="icon">
         <iconset resource="../resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Esc</string>
        </property>
       </widget>
      </item>
@@ -1505,7 +1529,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>550</width>
                 <height>660</height>
                </rect>
               </property>
@@ -2240,8 +2264,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>417</width>
+                <height>387</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_15">
@@ -2544,8 +2568,8 @@ QToolButton:pressed
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>-275</y>
-                <width>727</width>
+                <y>0</y>
+                <width>584</width>
                 <height>919</height>
                </rect>
               </property>
@@ -3683,7 +3707,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>338</width>
                 <height>622</height>
                </rect>
               </property>
@@ -4257,8 +4281,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>351</width>
+                <height>490</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_35">
@@ -4750,7 +4774,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>519</width>
                 <height>568</height>
                </rect>
               </property>
@@ -5277,7 +5301,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>438</width>
                 <height>876</height>
                </rect>
               </property>
@@ -6149,7 +6173,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>701</width>
                 <height>783</height>
                </rect>
               </property>
@@ -8345,8 +8369,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>545</width>
+                <height>221</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_49">

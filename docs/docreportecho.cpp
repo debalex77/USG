@@ -1086,7 +1086,7 @@ void DocReportEcho::addDescriptionFormation(const QString name_system)
         str = ui->breast_left_formations->toPlainText();
     else if (name_system == "Gl.mamara (dreapta)")
         str = ui->breast_right_formations->toPlainText();
-    else if (name_system == "Recomandari (gl.mamare")
+    else if (name_system == "Recomandari (gl.mamare)")
         str = ui->breast_recommendation->text();
     else if (name_system == "Ginecologia (uter)")
         str = ui->gynecology_uterus_formations->toPlainText();
@@ -6780,21 +6780,29 @@ bool DocReportEcho::eventFilter(QObject *obj, QEvent *event)
 
             // Logica similară din keyPressEvent
             if (ui->stackedWidget->currentIndex() == page_organs_internal) {
-                if (currentWidget == ui->pancreas_formations) {
-                    ui->scrollArea_organs_internal->ensureWidgetVisible(ui->organsInternal_concluzion);
-                }
+                if (currentWidget == ui->cholecist_formations)
+                    ui->scrollArea_organs_internal->ensureWidgetVisible(ui->spleen_formations);
+                else if (currentWidget == ui->spleen_dimens)
+                    ui->scrollArea_organs_internal->ensureWidgetVisible(ui->organsInternal_recommendation);
             }
 
             if (ui->stackedWidget->currentIndex() == page_urinary_system) {
-                if (currentWidget == ui->kidney_formations) {
-                    ui->scrollArea_organs_internal->ensureWidgetVisible(ui->urinary_system_concluzion);
+                if (currentWidget == ui->adrenalGlands) {
+                    ui->scrollArea_urinary_system->ensureWidgetVisible(ui->urinary_system_recommendation);
+                }
+            }
+
+            if (ui->stackedWidget->currentIndex() == page_breast) {
+                if (currentWidget == ui->breast_left_formations) {
+                    ui->scrollArea_breast->ensureWidgetVisible(ui->breast_recommendation);
                 }
             }
 
             if (ui->stackedWidget->currentIndex() == page_gynecology) {
-                if (currentWidget == ui->gynecology_douglas) {
+                if (currentWidget == ui->gynecology_ecou_dimens) {
+                    ui->scrollArea_gynecology->ensureWidgetVisible(ui->gynecology_ovary_formations_right);
+                } else if (currentWidget == ui->gynecology_ovary_formations_right)
                     ui->scrollArea_gynecology->ensureWidgetVisible(ui->gynecology_recommendation);
-                }
             }
 
             if (ui->stackedWidget->currentIndex() == page_gestation0) {
@@ -6880,6 +6888,18 @@ void DocReportEcho::keyPressEvent(QKeyEvent *event)
         if (ui->stackedWidget->currentIndex() == page_organs_internal){
             if (ui->spleen_parenchyma->hasFocus())
                 ui->scrollArea_organs_internal->ensureWidgetVisible(ui->organsInternal_concluzion);
+        }
+
+        if (ui->stackedWidget->currentIndex() == page_urinary_system) {
+            if (ui->adrenalGlands->hasFocus()) {
+                ui->scrollArea_organs_internal->ensureWidgetVisible(ui->urinary_system_concluzion);
+            }
+        }
+
+        if (ui->stackedWidget->currentIndex() == page_breast) {
+            if (ui->breast_left_formations->hasFocus()) {
+                ui->scrollArea_breast->ensureWidgetVisible(ui->breast_concluzion);
+            }
         }
 
         if (ui->stackedWidget->currentIndex() == page_gynecology){

@@ -121,7 +121,9 @@ void CustomDialogInvestig::createOtherWidgets()
     btnOK    = buttonBox->addButton(QDialogButtonBox::Ok);
     btnClose = buttonBox->addButton(QDialogButtonBox::Close);
     btnOK->setMinimumWidth(80);
+    btnOK->setMaximumWidth(80);
     btnClose->setMinimumWidth(80);
+    btnClose->setMaximumWidth(80);
 }
 
 void CustomDialogInvestig::createLayout()

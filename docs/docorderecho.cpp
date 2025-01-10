@@ -471,6 +471,11 @@ void DocOrderEcho::slot_NamePatientChanged()
 
 }
 
+void DocOrderEcho::slot_editingFinishedPhonePatient()
+{
+    ui->btnNewPacient->setFocus(); // dupa ce a fost introdus telefonul setam focusul pe validarea pacientului
+}
+
 // **********************************************************************************
 // --- procesarea combobox-urilor
 
@@ -536,6 +541,9 @@ void DocOrderEcho::indexChangedComboOrganization(const int index)
             ui->comboTypesPricing->setCurrentIndex(0); // setam indexul 0 - selecteaza
         else
             setIdTypePrice(id_typePrice);
+
+        if (ui->comboTypesPricing->currentIndex() > Enums::IDX::IDX_WRITE)
+            ui->comboDoctor->setFocus();
     }
 }
 
@@ -1282,6 +1290,8 @@ void DocOrderEcho::initConnections()
 
     connect(ui->toolBox, QOverload<int>::of(&QToolBox::currentChanged), this, QOverload<int>::of(&DocOrderEcho::changeIconForItemToolBox));
 
+    connect(ui->editPhone, &QLineEdit::editingFinished, this ,&DocOrderEcho::slot_editingFinishedPhonePatient);
+
     db->updateVariableFromTableSettingsUser();
     if (globals::showDesignerMenuPrint) {
         QAction *openDesignerOrder = new QAction(setUpMenu);
@@ -1402,6 +1412,9 @@ void DocOrderEcho::enableDisableDataPacient(bool mEnabled)
     ui->editPolicyMedical->setEnabled(mEnabled);
     ui->editAddress->setEnabled(mEnabled);
     ui->editPhone->setEnabled(mEnabled);
+
+    if (mEnabled)
+        ui->dateEditBirthday->setFocus(); // setam focusul
 }
 
 void DocOrderEcho::initFooterDoc()
@@ -2040,6 +2053,9 @@ void DocOrderEcho::keyPressEvent(QKeyEvent *event)
             ui->comboDoctor->setFocus();
             ui->comboDoctor->showPopup();
         }
+
+        if (ui->comboDoctor->hasFocus())
+            ui->comboDoctor->showPopup();
     }
 
     if (event->key() == Qt::Key_F5){

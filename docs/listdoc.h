@@ -202,6 +202,10 @@ private:
 protected:
     void closeEvent(QCloseEvent *event);
     void changeEvent(QEvent *event);
+    bool eventFilter(QObject *obj, QEvent *event);
+    void keyReleaseEvent(QKeyEvent *event); // pu identificare butoanelor:
+                                            // 'Key_Up', 'Key_Down', 'Key_Home', 'Key_End', 'Key_Prt'
+                                            // se foloseste functia - keyReleaseEvent(), analogica keyPressEvent()
 };
 
 #endif // LISTDOC_H

@@ -133,6 +133,7 @@ private slots:
     void slot_IdDoctorExecuteChanged();
     void slot_IdUserChanged();
     void slot_NamePatientChanged();
+    void slot_editingFinishedPhonePatient();
 
     void activatedItemCompleter(const QModelIndex &index); // activarea 'completer'
 

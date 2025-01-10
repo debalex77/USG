@@ -18,11 +18,11 @@
           <children Type="Collection">
             <item ClassName="Data" Type="Object">
               <objectName Type="QString">DataBand1</objectName>
-              <geometry Type="QRect" height="96" width="2059" x="50" y="150"/>
+              <geometry Type="QRect" height="74" width="2059" x="50" y="150"/>
               <children Type="Collection">
                 <item ClassName="TextItem" Type="Object">
                   <objectName Type="QString">TextItem1</objectName>
-                  <geometry Type="QRect" height="50" width="1496" x="54" y="32"/>
+                  <geometry Type="QRect" height="50" width="1496" x="54" y="12"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>
@@ -36,7 +36,7 @@
                   <itemLocation Type="enumAndFlags" Value="0"/>
                   <stretchToMaxHeight Type="bool" Value="0"/>
                   <itemAlign Type="enumAndFlags" Value="4"/>
-                  <content Type="QString">$D{list_group.owner}</content>
+                  <content Type="QString">$D{list_owner.owner}</content>
                   <margin Type="int" Value="4"/>
                   <alignment Type="enumAndFlags" Value="129"/>
                   <autoWidth Type="enumAndFlags" Value="0"/>
@@ -44,7 +44,7 @@
                   <font Type="QFont" family="Segoe UI" italic="0" pointSize="10" underline="1" weight="75"/>
                   <backgroundOpacity Type="int" Value="100"/>
                   <backgroundMode Type="enumAndFlags" Value="1"/>
-                  <backgroundColor Type="QColor" Value="#ffffff"/>
+                  <backgroundColor Type="QColor" Value="#e6e2a8"/>
                   <fontColor Type="QColor" Value="#000000"/>
                   <angle Type="enumAndFlags" Value="0"/>
                   <foregroundOpacity Type="int" Value="100"/>
@@ -88,7 +88,7 @@
               <backgroundMode Type="enumAndFlags" Value="0"/>
               <backgroundOpacity Type="int" Value="100"/>
               <shiftItems Type="int" Value="0"/>
-              <datasource Type="QString">list_group</datasource>
+              <datasource Type="QString">list_owner</datasource>
               <keepSubdetailTogether Type="bool" Value="0"/>
               <splittable Type="bool" Value="0"/>
               <keepFooterTogether Type="bool" Value="0"/>
@@ -102,11 +102,11 @@
             </item>
             <item ClassName="SubDetail" Type="Object">
               <objectName Type="QString">SubDetailBand1</objectName>
-              <geometry Type="QRect" height="58" width="2059" x="50" y="246"/>
+              <geometry Type="QRect" height="58" width="2059" x="50" y="224"/>
               <children Type="Collection">
                 <item ClassName="HLayout" Type="Object">
                   <objectName Type="QString">HorizontalLayout5</objectName>
-                  <geometry Type="QRect" height="50" width="1522" x="48" y="2"/>
+                  <geometry Type="QRect" height="50" width="1522" x="102" y="4"/>
                   <children Type="Collection">
                     <item ClassName="TextItem" Type="Object">
                       <objectName Type="QString">TextItem5</objectName>
@@ -179,7 +179,7 @@
                               <itemLocation Type="enumAndFlags" Value="0"/>
                               <stretchToMaxHeight Type="bool" Value="0"/>
                               <itemAlign Type="enumAndFlags" Value="4"/>
-                              <content Type="QString">$D{items_investigation.cod}</content>
+                              <content Type="QString">$D{list_items.cod}</content>
                               <margin Type="int" Value="4"/>
                               <alignment Type="enumAndFlags" Value="129"/>
                               <autoWidth Type="enumAndFlags" Value="0"/>
@@ -226,7 +226,7 @@
                               <itemLocation Type="enumAndFlags" Value="0"/>
                               <stretchToMaxHeight Type="bool" Value="0"/>
                               <itemAlign Type="enumAndFlags" Value="4"/>
-                              <content Type="QString">$D{items_investigation.name}</content>
+                              <content Type="QString">$D{list_items.name}</content>
                               <margin Type="int" Value="4"/>
                               <alignment Type="enumAndFlags" Value="129"/>
                               <autoWidth Type="enumAndFlags" Value="0"/>
@@ -329,7 +329,7 @@
               <backgroundMode Type="enumAndFlags" Value="0"/>
               <backgroundOpacity Type="int" Value="100"/>
               <shiftItems Type="int" Value="0"/>
-              <datasource Type="QString">items_investigation</datasource>
+              <datasource Type="QString">list_items</datasource>
               <splittable Type="bool" Value="0"/>
               <columnsCount Type="int" Value="1"/>
               <columnsFillDirection Type="enumAndFlags" Value="0"/>
@@ -474,30 +474,9 @@
     </pages>
     <datasourcesManager ClassName="LimeReport::DataSourceManager" Type="Object">
       <objectName Type="QString">datasources</objectName>
-      <connections Type="Collection">
-        <item ClassName="LimeReport::ConnectionDesc" Type="Object">
-          <objectName Type="QString"></objectName>
-          <name Type="QString">alovada</name>
-          <driver Type="QString">QSQLITE</driver>
-          <databaseName Type="QString">/home/alex/Qt_projects/Database/alovada.sqlite3</databaseName>
-          <userName Type="QString"></userName>
-          <password Type="QString" Value=""/>
-          <host Type="QString"></host>
-          <autoconnect Type="bool" Value="1"/>
-          <keepDBCredentials Type="bool" Value="1"/>
-          <port Type="QString"></port>
-        </item>
-      </connections>
+      <connections Type="Collection"/>
       <queries Type="Collection"/>
-      <subqueries Type="Collection">
-        <item ClassName="LimeReport::SubQueryDesc" Type="Object">
-          <objectName Type="QString"></objectName>
-          <queryName Type="QString">items_investigation</queryName>
-          <queryText Type="QString">SELECT * FROM tmp_investigations WHERE owner = $D{list_group.owner};</queryText>
-          <connectionName Type="QString">alovada</connectionName>
-          <master Type="QString">list_group</master>
-        </item>
-      </subqueries>
+      <subqueries Type="Collection"/>
       <subproxies Type="Collection"/>
       <variables Type="Collection"/>
       <csvs Type="Collection"/>

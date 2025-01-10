@@ -81,60 +81,147 @@ void GroupInvestigationList::onPrint()
     this->hide();
 
     QDir dir;
-    print_model = new QSqlQueryModel(this);
-    print_model->setQuery("SELECT owner FROM investigations WHERE owner NOT NULL AND owner <> '' GROUP BY owner;");
 
     m_report = new LimeReport::ReportEngine(this);
-    m_report->dataManager()->setDefaultDatabasePath(globals::sqlitePathBase);
-    m_report->dataManager()->addModel("list_group", print_model, true);
+    m_report->setPreviewWindowTitle(tr("Arbore investiga\310\233iilor"));
 
-    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("test");
+    // solicitarea pentru grupe
+    m_owner = new QSqlQuery("SELECT "
+                            " investigations.owner, "
+                            " investigationsGroup.cod "
+                            "FROM "
+                            " investigations "
+                            "INNER JOIN "
+                            " investigationsGroup ON investigations.owner = investigationsGroup.name "
+                            "WHERE "
+                            " investigations.owner IS NOT NULL "
+                            "GROUP BY "
+                            " investigationsGroup.cod "
+                            "ORDER BY "
+                            " investigationsGroup.cod ASC;");
+    if (! m_owner->first()) {
+        qCritical() << "Error: Unable to fetch investigationsGroup data:" << m_owner->lastError().text();
+        delete m_report;
+        return;
+    }
+
+    // solicitarea elementelor investigatiilor
+    m_investigations = new QSqlQuery("SELECT "
+                                     " investigations.cod, "
+                                     " investigations.name "
+                                     "FROM "
+                                     " investigations "
+                                     "WHERE "
+                                     " investigations.owner = ?;");
+    m_investigations->bindValue(0, "Org.interne"); // initial
+    if ( !m_investigations->exec()) {
+        qCritical() << "Error: Unable to execute investigations query:" << m_investigations->lastError().text();
+        delete m_report;
+        return;
+    }
 
 #if defined(Q_OS_LINUX)
+
+    // list_owner
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
             this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData));
 
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
             this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos));
+
+    // list_items
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData_items));
+
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos_items));
+
 #elif defined(Q_OS_MACOS)
+
+    // list_owner
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
             this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData));
 
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
             this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos));
+
+    // list_items
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData_items));
+
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos_items));
+
 #elif defined(Q_OS_WIN)
+
+    // list_owner
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
     connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackChildData()));
     connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangeChildPos()));
+
+    // list_items
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackChildData_items()));
+    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangeChildPos_items()));
+
 #endif
 
     m_report->dataManager()->clearUserVariables();
     m_report->setShowProgressDialog(true);
     m_report->setPreviewWindowTitle(tr("Arbore investigațiilor"));
     m_report->loadFromFile(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Tree_investigations.lrxml"));
-    m_report->designReport();
+    m_report->previewReport();
 
-    delete print_model;
-    delete m_report;
+    delete m_owner;
+    delete m_investigations;
+    m_report->deleteLater();
 
     this->show();
 }
 
 void GroupInvestigationList::slotGetCallbackChildData(LimeReport::CallbackInfo info, QVariant &data)
 {
-    QSqlQuery *qry = new QSqlQuery();
-    qry->prepare("SELECT * FROM investigations WHERE owner = 'Screening';");
-    qry->exec();
-    prepareData(qry, info, data);
+    if (! m_owner)
+        return;
+    prepareData(m_owner, info, data);
 }
 
 void GroupInvestigationList::slotChangeChildPos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
 {
-    QSqlQuery *ds = new QSqlQuery();
-    ds->prepare("SELECT * FROM investigations WHERE owner = 'Screening';");
-    ds->exec();
-    if (! ds)
+    QSqlQuery *ds = m_owner;
+    if (!ds)
         return;
+    if (type == LimeReport::CallbackInfo::First)
+        result = ds->first();
+    else
+        result = ds->next();
 
+    if (result){
+        m_investigations->bindValue(0, m_owner->value(m_owner->record().indexOf("owner")));
+        if (! m_investigations->exec()) {
+            qCritical() << "Error: Unable to execute investigations query (slotChangePos):" << m_investigations->lastError().text();
+            delete m_report;
+            return;
+        }
+    }
+}
+
+void GroupInvestigationList::slotGetCallbackChildData_items(LimeReport::CallbackInfo info, QVariant &data)
+{
+    if (! m_investigations)
+        return;
+    prepareData(m_investigations, info, data);
+}
+
+void GroupInvestigationList::slotChangeChildPos_items(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
+{
+    QSqlQuery *ds = m_investigations;
+    if (!ds)
+        return;
     if (type == LimeReport::CallbackInfo::First)
         result = ds->first();
     else

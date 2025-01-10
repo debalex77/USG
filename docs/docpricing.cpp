@@ -530,6 +530,8 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
         return;
     }
 
+#if defined(Q_OS_LINUX)
+
     // conectarile
     LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
@@ -542,6 +544,34 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
             this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&DocPricing::slotGetCallbackDataItems));
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
             this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&DocPricing::slotChangePosItems));
+
+#elif defined(Q_OS_MACOS)
+
+    // conectarile
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&DocPricing::slotGetCallbackData));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&DocPricing::slotChangePos));
+
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&DocPricing::slotGetCallbackDataItems));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&DocPricing::slotChangePosItems));
+
+#elif defined(Q_OS_WIN)
+
+    // conectarile
+    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
+    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackData()));
+    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangePos()));
+
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
+    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackDataItems()));
+    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangePosItems()));
+
+#endif
 
     // variabile
     m_report->dataManager()->setReportVariable("id_pricing", m_id);

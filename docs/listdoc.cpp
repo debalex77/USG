@@ -96,6 +96,25 @@ void ListDoc::initBtnToolBar()
     ui->btnPrint->setStyleSheet(style_btnToolBar);
     ui->btnPeriodDate->setStyleSheet(style_btnToolBar);
 
+    ui->btnAdd->setMouseTracking(true);
+    ui->btnAdd->installEventFilter(this);
+    ui->btnEdit->setMouseTracking(true);
+    ui->btnEdit->installEventFilter(this);
+    ui->btnDeletion->setMouseTracking(true);
+    ui->btnDeletion->installEventFilter(this);
+    ui->btnAddFilter->setMouseTracking(true);
+    ui->btnAddFilter->installEventFilter(this);
+    ui->btnFilter->setMouseTracking(true);
+    ui->btnFilter->installEventFilter(this);
+    ui->btnFilterRemove->setMouseTracking(true);
+    ui->btnFilterRemove->installEventFilter(this);
+    ui->btnUpdateTable->setMouseTracking(true);
+    ui->btnUpdateTable->installEventFilter(this);
+    ui->btnPrint->setMouseTracking(true);
+    ui->btnPrint->installEventFilter(this);
+    ui->btnPeriodDate->setMouseTracking(true);
+    ui->btnPeriodDate->installEventFilter(this);
+
     if (m_modeSelection)
         connect(ui->btnSelect, &QAbstractButton::clicked, this, &ListDoc::selectDocPricing);
 
@@ -737,5 +756,112 @@ void ListDoc::changeEvent(QEvent *event)
         ui->retranslateUi(this);
         setWindowTitle(tr("Lista documentelor: Formarea preturilor"));
         updateHeaderTable();
+    }
+}
+
+bool ListDoc::eventFilter(QObject *obj, QEvent *event)
+{
+    if (obj == ui->btnAdd){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnAdd->pos().x() - 20, ui->btnAdd->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Adaug\304\203 (ins.)"));  // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnEdit){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnEdit->pos().x() - 20, ui->btnEdit->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Editeaz\304\203 (F2)")); // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnDeletion){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnDeletion->pos().x() - 46, ui->btnDeletion->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Eliminare (Del)"));       // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnAddFilter){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnAddFilter->pos().x() - 50, ui->btnAddFilter->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Adaug\304\203 filtru (Ctrl + F1)"));  // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnFilter){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnFilter->pos().x() - 56, ui->btnFilter->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Filtrare dup\304\203<br>%1 (Ctrl + F2)")
+                                    .arg(proxy->data(proxy->index(ui->tabView->currentIndex().row(), section_Organization), Qt::DisplayRole).toString())); // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnFilterRemove){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnFilterRemove->pos().x() - 50, ui->btnFilterRemove->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Gole\310\231te filtru (Ctrl + F3)"));       // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnUpdateTable){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnUpdateTable->pos().x() - 60, ui->btnUpdateTable->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Actualizeaz\304\203 tabela (F5)"));  // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnPrint){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnPrint->pos().x() - 30, ui->btnPrint->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Printare (Ctrl + P)"));       // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnPeriodDate){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnPeriodDate->pos().x() - 60, ui->btnPeriodDate->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Perioada \310\231i filtru (Ctrl + Shift + P)"));       // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    }
+
+    return false;
+}
+
+void ListDoc::keyReleaseEvent(QKeyEvent *event)
+{
+    if (event->key() == Qt::Key_End){
+        ui->tabView->selectRow(model->rowCount() - 1);
+    } else if (event->key() == Qt::Key_Home){
+        ui->tabView->selectRow(0);
     }
 }

@@ -28,6 +28,8 @@ private slots:
     void onPrint();
     void slotGetCallbackChildData(LimeReport::CallbackInfo info, QVariant &data);
     void slotChangeChildPos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
+    void slotGetCallbackChildData_items(LimeReport::CallbackInfo info, QVariant &data);
+    void slotChangeChildPos_items(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
     void prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, QVariant &data);
 
 private:
@@ -37,8 +39,10 @@ private:
     TreeModel *model_tree;
     GroupInvestigation *item_group;
 
-    QSqlQueryModel *print_model;
     QSqlQuery *qry_group;
+
+    QSqlQuery *m_owner;
+    QSqlQuery *m_investigations;
 
     LimeReport::ReportEngine *m_report;
 };
