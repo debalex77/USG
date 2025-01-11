@@ -168,8 +168,7 @@ void Reports::initConnections()
     ui->btnEditDoctor->setStyleSheet(style_toolButton);
     ui->btnEditOrganization->setStyleSheet(style_toolButton);
 
-#if defined(Q_OS_LINUX)
-
+    // butoane principale ale generatorului de rapoarte
     connect(m_report, &LimeReport::ReportEngine::renderStarted, this, &Reports::renderStarted);
     connect(m_report, QOverload<int>::of(&LimeReport::ReportEngine::renderPageFinished), this,
             QOverload<int>::of(&Reports::renderPageFinished));
@@ -197,30 +196,7 @@ void Reports::initConnections()
     connect(ui->btnPrintReport, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::print);
     connect(ui->btnExportPdf, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::printToPDF);
 
-#elif defined(Q_OS_WIN)
-    // render
-    connect(m_report, SIGNAL(renderStarted()), this, SLOT(renderStarted()));
-    connect(m_report, SIGNAL(renderPageFinished(int)), this, SLOT(renderPageFinished(int)));
-    connect(m_report, SIGNAL(renderFinished()), this, SLOT(renderFinished()));
-    // percent
-    connect(ui->comboScalePercent, SIGNAL(currentIndexChanged(int)), this, SLOT(slotScalePercentChanged(int)));
-    connect(m_preview, SIGNAL(scalePercentChanged(int)), this, SLOT(slotSetTextScalePercentChanged(int)));
-    // zoom
-    connect(ui->btnZoomIn, SIGNAL(clicked()), m_preview, SLOT(zoomIn()));
-    connect(ui->btnZoomOut, SIGNAL(clicked()), m_preview, SLOT(zoomOut()));
-
-    connect(ui->pageNavigator, SIGNAL(valueChanged(int)), this, SLOT(slotPageNavigatorChanged(int)));
-    connect(ui->btnBackPage, SIGNAL(clicked()), m_preview, SLOT(priorPage()));
-    connect(ui->btnNextPage, SIGNAL(clicked()), m_preview, SLOT(nextPage()));
-
-    connect(m_preview, SIGNAL(pagesSet(int)), this, SLOT(slotPagesSet(int)));
-
-    connect(m_preview, SIGNAL(pageChanged(int)), this, SLOT(slotPageChanged(int)));
-
-    connect(ui->btnPrintReport, SIGNAL(clicked()), m_preview, SLOT(print()));
-    connect(ui->btnExportPdf, SIGNAL(clicked()), m_preview, SLOT(printToPDF()));
-#endif
-
+    // filter
     connect(ui->btnChoicePeriod, &QToolButton::clicked, this, &Reports::openCustomPeriod);
     connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));

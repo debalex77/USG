@@ -187,6 +187,19 @@ HEADERS += \
     models/treemodel.h \
     models/variantmaptablemodel.h
 
+win32 {
+# pentru eroarea numai pe Windows:
+# - error: LNK2019: unresolved external symbol "public: void __cdecl  LimeReport::ICallbackDatasource::getCallbackData etc."
+# - error: LNK2001: unresolved external symbol "public: static struct QMetaObject const LimeReport::PreviewReportWidget::staticMetaObject etc."
+# - error: LNK2001: unresolved external symbol "public: static struct QMetaObject const LimeReport::ReportEngine::staticMetaObject etc. etc."
+# ... problema in LimeReport cu conectarile:
+#       exemplu - connect(m_report, QOverload<int>::of(&LimeReport::ReportEngine::renderPageFinished), this, QOverload<int>::of(&Reports::renderPageFinished));
+    HEADERS += \
+    LimeReport/include/lrcallbackdatasourceintf.h \
+    LimeReport/include/lrpreviewreportwidget.h \
+    LimeReport/include/lrreportengine.h
+}
+
 FORMS += \
     catalogs/asistanttipapp.ui \
     catalogs/catcontracts.ui \

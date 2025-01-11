@@ -120,8 +120,6 @@ void GroupInvestigationList::onPrint()
         return;
     }
 
-#if defined(Q_OS_LINUX)
-
     // list_owner
     LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
@@ -137,38 +135,6 @@ void GroupInvestigationList::onPrint()
 
     connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
             this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos_items));
-
-#elif defined(Q_OS_MACOS)
-
-    // list_owner
-    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
-    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
-            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData));
-
-    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
-            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos));
-
-    // list_items
-    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
-    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
-            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&GroupInvestigationList::slotGetCallbackChildData_items));
-
-    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
-            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&GroupInvestigationList::slotChangeChildPos_items));
-
-#elif defined(Q_OS_WIN)
-
-    // list_owner
-    LimeReport::ICallbackDatasource *callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_owner");
-    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackChildData()));
-    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangeChildPos()));
-
-    // list_items
-    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_items");
-    connect(callbackDatasource, SIGNAL(getCallbackData()), this, SLOT(slotGetCallbackChildData_items()));
-    connect(callbackDatasource, SIGNAL(changePos()), this, SLOT(slotChangeChildPos_items()));
-
-#endif
 
     m_report->dataManager()->clearUserVariables();
     m_report->setShowProgressDialog(true);
