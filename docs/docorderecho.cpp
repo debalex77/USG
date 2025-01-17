@@ -1570,7 +1570,7 @@ bool DocOrderEcho::insertDataTablePacients(int &last_id, const QString &_name, c
     qry.addBindValue(ui->dateEditBirthday->date().toString("yyyy-MM-dd"));
     qry.addBindValue(ui->editAddress->text());
     qry.addBindValue((ui->editPhone->text().isEmpty()) ? QVariant() : ui->editPhone->text());
-    qry.addBindValue(QVariant());
+    qry.addBindValue((ui->editEmail->text().isEmpty()) ? QVariant() : ui->editEmail->text());
     qry.addBindValue(QVariant());
     if (qry.exec()){
         db->getDatabase().commit();
@@ -1609,7 +1609,7 @@ bool DocOrderEcho::updateDataTablePacients(const QString _name, const QString _f
     qry.bindValue(":birthday",     ui->dateEditBirthday->date().toString("yyyy-MM-dd"));
     qry.bindValue(":address",      ui->editAddress->text());
     qry.bindValue(":telephone",    (ui->editPhone->text().isEmpty()) ? QVariant() : ui->editPhone->text());
-    qry.bindValue(":email",        QVariant());
+    qry.bindValue(":email",        (ui->editEmail->text().isEmpty()) ? QVariant() : ui->editEmail->text());
     qry.bindValue(":comment",      QVariant());
     if (qry.exec()){
         db->getDatabase().commit();
