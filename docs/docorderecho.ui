@@ -185,7 +185,7 @@ QLineEdit:!enabled {
       </font>
      </property>
      <property name="currentIndex">
-      <number>0</number>
+      <number>1</number>
      </property>
      <widget class="QWidget" name="pageDataOrganization">
       <property name="geometry">
@@ -193,7 +193,7 @@ QLineEdit:!enabled {
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>103</height>
+        <height>114</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -412,7 +412,7 @@ QLineEdit:!enabled {
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>125</height>
+        <height>137</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -549,6 +549,19 @@ QLineEdit:!enabled {
               </property>
              </widget>
             </item>
+            <item row="0" column="4">
+             <widget class="QLabel" name="label_10">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>IDNP</string>
+              </property>
+             </widget>
+            </item>
             <item row="1" column="0">
              <widget class="QLabel" name="label_11">
               <property name="font">
@@ -559,22 +572,6 @@ QLineEdit:!enabled {
               </property>
               <property name="text">
                <string>Adresa</string>
-              </property>
-             </widget>
-            </item>
-            <item row="1" column="8">
-             <widget class="QLineEdit" name="editPhone"/>
-            </item>
-            <item row="0" column="3">
-             <widget class="QDateEdit" name="dateEditBirthday">
-              <property name="font">
-               <font>
-                <family>Segoe UI</family>
-                <bold>false</bold>
-               </font>
-              </property>
-              <property name="calendarPopup">
-               <bool>true</bool>
               </property>
              </widget>
             </item>
@@ -591,6 +588,16 @@ QLineEdit:!enabled {
               </property>
              </widget>
             </item>
+            <item row="1" column="3" colspan="3">
+             <widget class="QLineEdit" name="editAddress">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+             </widget>
+            </item>
             <item row="0" column="5">
              <widget class="QLineEdit" name="editIDNP">
               <property name="font">
@@ -601,8 +608,31 @@ QLineEdit:!enabled {
               </property>
              </widget>
             </item>
-            <item row="0" column="4">
-             <widget class="QLabel" name="label_10">
+            <item row="0" column="3">
+             <widget class="QDateEdit" name="dateEditBirthday">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="calendarPopup">
+               <bool>true</bool>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="8">
+             <widget class="QLineEdit" name="editPhone">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+             </widget>
+            </item>
+            <item row="1" column="9">
+             <widget class="QLabel" name="label_15">
               <property name="font">
                <font>
                 <family>Segoe UI</family>
@@ -610,7 +640,7 @@ QLineEdit:!enabled {
                </font>
               </property>
               <property name="text">
-               <string>IDNP</string>
+               <string>e-mail</string>
               </property>
              </widget>
             </item>
@@ -627,8 +657,8 @@ QLineEdit:!enabled {
               </property>
              </widget>
             </item>
-            <item row="1" column="3" colspan="3">
-             <widget class="QLineEdit" name="editAddress">
+            <item row="1" column="10">
+             <widget class="QLineEdit" name="editEmail">
               <property name="font">
                <font>
                 <family>Segoe UI</family>
@@ -637,7 +667,7 @@ QLineEdit:!enabled {
               </property>
              </widget>
             </item>
-            <item row="0" column="8">
+            <item row="0" column="8" colspan="3">
              <widget class="QLineEdit" name="editPolicyMedical">
               <property name="font">
                <font>
@@ -764,7 +794,7 @@ QLineEdit:!enabled {
         <x>0</x>
         <y>0</y>
         <width>992</width>
-        <height>69</height>
+        <height>68</height>
        </rect>
       </property>
       <attribute name="icon">
@@ -969,6 +999,7 @@ QLineEdit:!enabled {
   <tabstop>editPolicyMedical</tabstop>
   <tabstop>editAddress</tabstop>
   <tabstop>editPhone</tabstop>
+  <tabstop>editEmail</tabstop>
   <tabstop>btnNewPacient</tabstop>
   <tabstop>editFilterPattern</tabstop>
   <tabstop>tableView</tabstop>
@@ -985,6 +1016,9 @@ QLineEdit:!enabled {
   <tabstop>btnOpenCatDoctor</tabstop>
   <tabstop>btnPatientHistory</tabstop>
   <tabstop>editComment</tabstop>
+  <tabstop>comboNurse</tabstop>
+  <tabstop>comboDoctorExecute</tabstop>
+  <tabstop>cardPayment</tabstop>
  </tabstops>
  <resources>
   <include location="../resource.qrc"/>
