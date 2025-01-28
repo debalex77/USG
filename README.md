@@ -16,3 +16,4 @@ details and identity documents.
 
 The app is closely linked to the LimeReport library not included in source code (see [releases tag library](https://github.com/debalex77/USG/releases/tag/library)).  
 
+https://youtu.be/f3V-0LYjD1o
