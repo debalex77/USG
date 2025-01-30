@@ -211,6 +211,24 @@ void DocReportEcho::onDateTimeChanged()
     disconnect(timer, &QTimer::timeout, this, &DocReportEcho::updateTimer);
 }
 
+void DocReportEcho::onDateLMPChanged(QDate m_date)
+{
+    QString str_vg = calculateGestationalAge(m_date);
+    if (str_vg == nullptr)
+        return;
+
+    // calculam varsta gestationala si data probabila a nasterii
+    if (m_gestation0) {
+        ui->gestation0_gestation->setText(str_vg);
+        ui->gestation0_probableDateBirth->setDate(calculateDueDate(m_date));
+    } else if (m_gestation1) {
+        ui->gestation1_gestation->setText(str_vg);
+        ui->gestation1_probableDateBirth->setDate(calculateDueDate(m_date));
+    } else if (m_gestation2) {
+        ui->gestation2_gestation_age->setText(str_vg);
+    }
+}
+
 // *******************************************************************
 // **************** ATASAREA IMAGINELOR ******************************
 
@@ -727,6 +745,10 @@ void DocReportEcho::initConnections()
     ui->btnOpenCatPatient->setStyleSheet(style_toolButton);
     ui->btnOpenDocErderEcho->setStyleSheet(style_toolButton);
 
+    connect(ui->gestation0_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
+    connect(ui->gestation1_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
+    connect(ui->gestation2_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
+    connect(ui->gestation2_fetus_age, &QLineEdit::textEdited, this, &DocReportEcho::setDueDateGestation2);
 
     connect(ui->btnParameters, &QPushButton::clicked, this, &DocReportEcho::openParameters);
     connect(ui->editDocDate, &QDateTimeEdit::dateTimeChanged, this, &DocReportEcho::onDateTimeChanged);
@@ -3454,6 +3476,60 @@ void DocReportEcho::onClose()
 {
     this->close();
     emit mCloseThisForm();
+}
+
+// *******************************************************************
+// **************** CALCULAREA VARSTEI GESTATIONLE *******************
+
+QString DocReportEcho::calculateGestationalAge(const QDate &lmp)
+{
+    QDate today = QDate::currentDate();
+    int daysDifference = lmp.daysTo(today);
+
+    if (daysDifference < 0) {
+        return nullptr;
+    }
+
+    int weeks = daysDifference / 7;
+    int remainingDays = daysDifference % 7;
+
+    return QString("%1s. %2z.").arg(weeks).arg(remainingDays);
+}
+
+QDate DocReportEcho::calculateDueDate(const QDate &lmp)
+{
+    return lmp.addDays(280);  // Adăugăm 280 de zile (40 săptămâni)
+}
+
+QDate DocReportEcho::calculateDueDateFromFetalAge(int fetalAgeWeeks, int fetalAgeDays)
+{
+    int fetalAgeTotalDays = (fetalAgeWeeks * 7) + fetalAgeDays;
+    int remainingDaysToDueDate = 280 - fetalAgeTotalDays; // Restul până la 40 săptămâni
+
+    return QDate::currentDate().addDays(remainingDaysToDueDate);
+}
+
+void DocReportEcho::setDueDateGestation2()
+{
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    if (weeks > 0)
+        ui->gestation2_probabilDateBirth->setDate(calculateDueDateFromFetalAge(weeks, days));
+}
+
+void DocReportEcho::extractWeeksAndDays(const QString &str_vg, int &weeks, int &days)
+{
+    static const QRegularExpression regex(R"((\d+)s\.\s*(\d+)z\.)");
+    QRegularExpressionMatch match = regex.match(str_vg);
+
+    if (match.hasMatch()) {
+        weeks = match.captured(1).toInt();  // Prima grupare (\d+) -> săptămâni
+        days = match.captured(2).toInt();   // A doua grupare (\d+) -> zile
+    } else {
+        weeks = 0;
+        days = 0;
+        // qDebug() << "Format invalid!";
+    }
 }
 
 // *******************************************************************

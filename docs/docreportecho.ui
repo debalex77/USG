@@ -1529,7 +1529,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>550</width>
+                <width>727</width>
                 <height>660</height>
                </rect>
               </property>
@@ -2264,8 +2264,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>417</width>
-                <height>387</height>
+                <width>741</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_15">
@@ -2569,7 +2569,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>584</width>
+                <width>727</width>
                 <height>919</height>
                </rect>
               </property>
@@ -3707,7 +3707,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>338</width>
+                <width>727</width>
                 <height>622</height>
                </rect>
               </property>
@@ -4281,8 +4281,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>351</width>
-                <height>490</height>
+                <width>741</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_35">
@@ -4774,15 +4774,15 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>519</width>
-                <height>568</height>
+                <width>727</width>
+                <height>577</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_40">
                <item row="0" column="0">
                 <widget class="QGroupBox" name="groupBox_21">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -4797,6 +4797,125 @@ QToolButton:pressed
                   <string>Varsta gestationala, antecedente</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_36">
+                  <item row="2" column="3" colspan="3">
+                   <widget class="QLineEdit" name="gestation0_gestation">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>28</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_173">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Ziua ultim.menstr.:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="6">
+                   <spacer name="horizontalSpacer_14">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QLabel" name="label_87">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Varsta gest.:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="7">
+                   <widget class="QLabel" name="label_164">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Data prob. a nașterii:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="8">
+                   <widget class="QDateEdit" name="gestation0_probableDateBirth">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDateEdit" name="gestation0_LMP">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_86">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Antec.obstetricale:</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_97">
                     <property name="font">
@@ -4811,32 +4930,6 @@ QToolButton:pressed
                    </widget>
                   </item>
                   <item row="0" column="1">
-                   <widget class="QRadioButton" name="gestation0_view_good">
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>bună</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="2">
-                   <widget class="QRadioButton" name="gestation0_view_medium">
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>medie</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="0" column="3">
                    <widget class="QRadioButton" name="gestation0_view_difficult">
                     <property name="font">
                      <font>
@@ -4849,8 +4942,8 @@ QToolButton:pressed
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_86">
+                  <item row="0" column="2">
+                   <widget class="QRadioButton" name="gestation0_view_good">
                     <property name="font">
                      <font>
                       <family>Segoe UI</family>
@@ -4858,11 +4951,11 @@ QToolButton:pressed
                      </font>
                     </property>
                     <property name="text">
-                     <string>Antecedente obstetricale:</string>
+                     <string>bună</string>
                     </property>
                    </widget>
                   </item>
-                  <item row="1" column="1" colspan="4">
+                  <item row="1" column="1" colspan="8">
                    <widget class="QLineEdit" name="gestation0_antecedent">
                     <property name="minimumSize">
                      <size>
@@ -4878,8 +4971,8 @@ QToolButton:pressed
                     </property>
                    </widget>
                   </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_87">
+                  <item row="0" column="3">
+                   <widget class="QRadioButton" name="gestation0_view_medium">
                     <property name="font">
                      <font>
                       <family>Segoe UI</family>
@@ -4887,38 +4980,9 @@ QToolButton:pressed
                      </font>
                     </property>
                     <property name="text">
-                     <string>Varsta gestationala:</string>
+                     <string>medie</string>
                     </property>
                    </widget>
-                  </item>
-                  <item row="2" column="1" colspan="3">
-                   <widget class="QLineEdit" name="gestation0_gestation">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="4">
-                   <spacer name="horizontalSpacer_14">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
                   </item>
                  </layout>
                 </widget>
@@ -5301,8 +5365,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>438</width>
-                <height>876</height>
+                <width>727</width>
+                <height>885</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_45">
@@ -5522,7 +5586,7 @@ QToolButton:pressed
                <item row="0" column="0">
                 <widget class="QGroupBox" name="groupBox_25">
                  <property name="sizePolicy">
-                  <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
                    <horstretch>0</horstretch>
                    <verstretch>0</verstretch>
                   </sizepolicy>
@@ -5537,6 +5601,138 @@ QToolButton:pressed
                   <string>Varsta gestationala, antecedente</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_41">
+                  <item row="2" column="7">
+                   <widget class="QLabel" name="label_161">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Data probabilă a nașterii:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="1">
+                   <widget class="QDateEdit" name="gestation1_LMP">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="6">
+                   <spacer name="horizontalSpacer_20">
+                    <property name="orientation">
+                     <enum>Qt::Horizontal</enum>
+                    </property>
+                    <property name="sizeHint" stdset="0">
+                     <size>
+                      <width>40</width>
+                      <height>20</height>
+                     </size>
+                    </property>
+                   </spacer>
+                  </item>
+                  <item row="2" column="3" colspan="3">
+                   <widget class="QLineEdit" name="gestation1_gestation">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>0</width>
+                      <height>28</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>16777215</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="1" column="0">
+                   <widget class="QLabel" name="label_104">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Antec.obstetricale:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="8" colspan="2">
+                   <widget class="QDateEdit" name="gestation1_probableDateBirth">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="calendarPopup">
+                     <bool>true</bool>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="2">
+                   <widget class="QLabel" name="label_105">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Vârsta gest.:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="2" column="0">
+                   <widget class="QLabel" name="label_174">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Ziua ultim.menstr.:</string>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="5">
+                   <widget class="QRadioButton" name="gestation1_view_difficult">
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>dificilă</string>
+                    </property>
+                   </widget>
+                  </item>
                   <item row="0" column="0">
                    <widget class="QLabel" name="label_103">
                     <property name="font">
@@ -5576,33 +5772,7 @@ QToolButton:pressed
                     </property>
                    </widget>
                   </item>
-                  <item row="0" column="3">
-                   <widget class="QRadioButton" name="gestation1_view_difficult">
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>dificilă</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="0">
-                   <widget class="QLabel" name="label_104">
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Antecedente obstetricale:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="1" column="1" colspan="4">
+                  <item row="1" column="1" colspan="9">
                    <widget class="QLineEdit" name="gestation1_antecedent">
                     <property name="font">
                      <font>
@@ -5611,48 +5781,6 @@ QToolButton:pressed
                      </font>
                     </property>
                    </widget>
-                  </item>
-                  <item row="2" column="0">
-                   <widget class="QLabel" name="label_105">
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                    <property name="text">
-                     <string>Varsta gestationala:</string>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="1" colspan="3">
-                   <widget class="QLineEdit" name="gestation1_gestation">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                   </widget>
-                  </item>
-                  <item row="2" column="4">
-                   <spacer name="horizontalSpacer_20">
-                    <property name="orientation">
-                     <enum>Qt::Horizontal</enum>
-                    </property>
-                    <property name="sizeHint" stdset="0">
-                     <size>
-                      <width>40</width>
-                      <height>20</height>
-                     </size>
-                    </property>
-                   </spacer>
                   </item>
                  </layout>
                 </widget>
@@ -6173,7 +6301,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>701</width>
+                <width>727</width>
                 <height>783</height>
                </rect>
               </property>
@@ -6427,6 +6555,20 @@ QToolButton:pressed
                        <string>dificil</string>
                       </property>
                      </item>
+                    </widget>
+                   </item>
+                   <item row="5" column="3">
+                    <widget class="QLabel" name="label_178">
+                     <property name="text">
+                      <string>Data probabilă a nașterii :</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="4">
+                    <widget class="QDateEdit" name="gestation2_probabilDateBirth">
+                     <property name="calendarPopup">
+                      <bool>true</bool>
+                     </property>
                     </widget>
                    </item>
                   </layout>
@@ -8369,8 +8511,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>545</width>
-                <height>221</height>
+                <width>741</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_49">
@@ -9135,11 +9277,10 @@ QToolButton:pressed
   <tabstop>thyroid_ganglions</tabstop>
   <tabstop>thyroid_concluzion</tabstop>
   <tabstop>thyroid_recommendation</tabstop>
-  <tabstop>gestation0_view_good</tabstop>
-  <tabstop>gestation0_view_medium</tabstop>
-  <tabstop>gestation0_view_difficult</tabstop>
   <tabstop>gestation0_antecedent</tabstop>
+  <tabstop>gestation0_LMP</tabstop>
   <tabstop>gestation0_gestation</tabstop>
+  <tabstop>gestation0_probableDateBirth</tabstop>
   <tabstop>gestation0_GS_dimens</tabstop>
   <tabstop>gestation0_GS_age</tabstop>
   <tabstop>gestation0_CRL_dimens</tabstop>
@@ -9151,11 +9292,11 @@ QToolButton:pressed
   <tabstop>gestation0_ovary</tabstop>
   <tabstop>gestation0_concluzion</tabstop>
   <tabstop>gestation0_recommendation</tabstop>
-  <tabstop>gestation1_view_good</tabstop>
-  <tabstop>gestation1_view_medium</tabstop>
   <tabstop>gestation1_view_difficult</tabstop>
   <tabstop>gestation1_antecedent</tabstop>
+  <tabstop>gestation1_LMP</tabstop>
   <tabstop>gestation1_gestation</tabstop>
+  <tabstop>gestation1_probableDateBirth</tabstop>
   <tabstop>gestation1_CRL_dimens</tabstop>
   <tabstop>gestation1_CRL_age</tabstop>
   <tabstop>gestation1_BPD_dimens</tabstop>
@@ -9237,6 +9378,7 @@ QToolButton:pressed
   <tabstop>gestation2_fl</tabstop>
   <tabstop>gestation2_fl_age</tabstop>
   <tabstop>gestation2_fetus_age</tabstop>
+  <tabstop>gestation2_probabilDateBirth</tabstop>
   <tabstop>gestation2_fetusMass</tabstop>
   <tabstop>gestation2_fetusSex</tabstop>
   <tabstop>gestation2_calloteCranium</tabstop>
@@ -9375,6 +9517,11 @@ QToolButton:pressed
   <tabstop>btn_add_template_gestation0</tabstop>
   <tabstop>btn_add_template_gestation1</tabstop>
   <tabstop>btn_template_gestation1</tabstop>
+  <tabstop>gestation0_view_good</tabstop>
+  <tabstop>gestation0_view_difficult</tabstop>
+  <tabstop>gestation0_view_medium</tabstop>
+  <tabstop>gestation1_view_medium</tabstop>
+  <tabstop>gestation1_view_good</tabstop>
  </tabstops>
  <resources>
   <include location="../resource.qrc"/>

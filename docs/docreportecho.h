@@ -155,6 +155,8 @@ private slots:
     void updateTimer();        // actualizarea datei si orei in regim real
     void onDateTimeChanged();
 
+    void onDateLMPChanged(QDate m_date);
+
     bool loadFile(const QString &fileName, const int numberImage); // atasarea imaginilor
     void loadImageOpeningDocument();
 
@@ -280,6 +282,12 @@ private:
         n_image4 = 4,
         n_image5 = 5
     };
+
+    QString calculateGestationalAge(const QDate &lmp);
+    QDate calculateDueDate(const QDate &lmp);
+    QDate calculateDueDateFromFetalAge(int fetalAgeWeeks, int fetalAgeDays = 0);
+    void setDueDateGestation2();
+    void extractWeeksAndDays(const QString &str_vg, int &weeks, int &days);
 
     void constructionFormVideo();
     void findVideoFiles();
