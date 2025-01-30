@@ -88,6 +88,7 @@ SOURCES += \
     catalogs/listform.cpp \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
+    common/datapercentage.cpp \
     customs/custommessage.cpp \
     customs/lineeditcustom.cpp \
     customs/searchlineedit.cpp \
@@ -144,6 +145,7 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
+    common/datapercentage.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
     customs/searchlineedit.h \

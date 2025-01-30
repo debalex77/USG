@@ -44,6 +44,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     completer = new QCompleter(this);
     modelPatients = new QStandardItemModel(completer);
     proxyPatient  = new BaseSortFilterProxyModel(this);
+    data_percentage = new DataPercentage(this);
 
     modelOrganization   = new QSqlQueryModel(this);
     modelOrgansInternal = new QSqlQueryModel(this);
@@ -165,6 +166,7 @@ DocReportEcho::~DocReportEcho()
     delete proxyPatient;
     delete completer;
     delete player;
+    delete data_percentage;
 #if defined(Q_OS_LINUX) || defined (Q_OS_WIN)
     delete videoWidget;
 #elif defined(Q_OS_MACOS)
@@ -745,6 +747,7 @@ void DocReportEcho::initConnections()
     ui->btnOpenCatPatient->setStyleSheet(style_toolButton);
     ui->btnOpenDocErderEcho->setStyleSheet(style_toolButton);
 
+    // calculate gestation age
     connect(ui->gestation0_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
     connect(ui->gestation1_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
     connect(ui->gestation2_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged);
@@ -926,7 +929,7 @@ void DocReportEcho::initConnections()
     connect(ui->comment_image4, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
     connect(ui->comment_image5, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
 
-
+    connect(ui->gestation2_ombilic_PI, &QLineEdit::textChanged, this, &DocReportEcho::getPercentageByDoppler);
 
     connect(ui->btnOk, &QPushButton::clicked, this, &DocReportEcho::onWritingDataClose);
     connect(ui->btnWrite, &QPushButton::clicked, this, &DocReportEcho::onWritingData);
@@ -2450,6 +2453,15 @@ void DocReportEcho::clickedGestation2Trimestru(const int id_button)
         ui->label_gestation2_planBicav->setEnabled(false);
         ui->gestation2_planBicav->setEnabled(false);
     }
+}
+
+void DocReportEcho::getPercentageByDoppler()
+{
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    double current_PI = ui->gestation2_ombilic_PI->text().toDouble();
+
+    ui->gestation2_infoDoppler->setPlainText("Doppler a.ombelicale: " + data_percentage->determinePIPercentile_FMF(current_PI, weeks));
 }
 
 // *******************************************************************

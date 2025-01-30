@@ -28,6 +28,8 @@
 
 #include <catalogs/normograms.h>
 
+#include <common/datapercentage.h>
+
 namespace Ui {
 class DocReportEcho;
 }
@@ -238,6 +240,7 @@ private slots:
     void disconnections_gestation2();
 
     void clickedGestation2Trimestru(const int id_button);
+    void getPercentageByDoppler();
 
     void slot_ItNewChanged();
     void slot_IdChanged();
@@ -412,6 +415,8 @@ private:
     int            m_count_video     = 0;
 
     InfoWindow *info_win;
+
+    DataPercentage *data_percentage;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor
