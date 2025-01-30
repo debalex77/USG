@@ -15,4 +15,3 @@ details and identity documents.
 • Generating both statistical and financial (in case of a commercial contract) reports in the field of ultrasound  
 
 The app is closely linked to the LimeReport library not included in source code (see [releases tag library](https://github.com/debalex77/USG/releases/tag/library)).  
-
