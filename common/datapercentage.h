@@ -21,9 +21,11 @@ public:
     explicit DataPercentage(QObject* parent = nullptr);
     ~DataPercentage();
 
-    // doppler a.umbilical
+    // masa fatului
+    QMap<int, PercentileValues> getFetalWeight_FMF();
+    // PI a.umbilical
     QMap<int, PercentileValues> getUmbilicalArteryPIDataset_FMF();
-    // doppler a.uterine
+    // PI a.uterine
     QMap<int, PercentileValues> getUterineArteryPI_FMF();
 
     QString determinePIPercentile_FMF(double measuredPI, int gestationalWeek);
@@ -31,6 +33,7 @@ public:
 private:
     QMap<int, PercentileValues> umbelicalArteryPercentiles;
     QMap<int, PercentileValues> uterineArteryPercentiles;
+    QMap<int, PercentileValues> fetalWeightPercentiles;
 };
 
 #endif // DATAPERCENTAGE_H

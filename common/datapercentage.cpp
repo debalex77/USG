@@ -10,6 +10,20 @@ DataPercentage::~DataPercentage()
 
 }
 
+QMap<int, PercentileValues> DataPercentage::getFetalWeight_FMF()
+{
+    fetalWeightPercentiles[22] = {399, 412, 433, 456, 480, 502, 516};
+    fetalWeightPercentiles[23] = {472, 488, 512, 540, 568, 596, 640};
+    fetalWeightPercentiles[24] = {556, 574, 603, 636, 670, 702, 724};
+    fetalWeightPercentiles[25] = {650, 671, 706, 745, 786, 824, 850};
+    fetalWeightPercentiles[26] = {756, 781, 822, 868, 916, 960, 986};
+    fetalWeightPercentiles[27] = {874, 904, 952, 1006, 1062, 1114, 1150};
+    fetalWeightPercentiles[28] = {1006, 1040, 1096, 1158, 1224, 1286, 1318};
+    fetalWeightPercentiles[29] = {1150, 1190, 1250, 1324, 1400, 1468, 1508};
+
+    return fetalWeightPercentiles;
+}
+
 QMap<int, PercentileValues> DataPercentage::getUmbilicalArteryPIDataset_FMF()
 {
     umbelicalArteryPercentiles[20] = {0.955, 1.010, 1.115, 1.218, 1.320, 1.445, 1.553};
@@ -51,6 +65,18 @@ QMap<int, PercentileValues> DataPercentage::getUterineArteryPI_FMF()
     uterineArteryPercentiles[28] = {0.53, 0.58, 0.68, 0.82, 0.97, 1.13, 1.25};
     uterineArteryPercentiles[29] = {0.51, 0.57, 0.67, 0.79, 0.94, 1.09, 1.21};
     uterineArteryPercentiles[30] = {0.50, 0.55, 0.65, 0.77, 0.91, 1.06, 1.17};
+    uterineArteryPercentiles[31] = {0.49, 0.54, 0.63, 0.75, 0.89, 1.04, 1.14};
+    uterineArteryPercentiles[32] = {0.48, 0.53, 0.59, 0.73, 0.87, 1.01, 1.11};
+    uterineArteryPercentiles[33] = {0.47, 0.52, 0.60, 0.72, 0.85, 0.98, 1.08};
+    uterineArteryPercentiles[34] = {0.46, 0.51, 0.59, 0.71, 0.83, 0.96, 1.06};
+    uterineArteryPercentiles[35] = {0.46, 0.50, 0.58, 0.69, 0.81, 0.94, 1.03};
+    uterineArteryPercentiles[36] = {0.45, 0.49, 0.57, 0.68, 0.80, 0.93, 1.00};
+    uterineArteryPercentiles[37] = {0.45, 0.49, 0.57, 0.67, 0.79, 0.91, 0.99};
+    uterineArteryPercentiles[38] = {0.44, 0.48, 0.56, 0.66, 0.78, 0.90, 0.97};
+    uterineArteryPercentiles[39] = {0.44, 0.48, 0.56, 0.66, 0.77, 0.89, 0.96};
+    uterineArteryPercentiles[40] = {0.44, 0.48, 0.55, 0.65, 0.76, 0.88, 0.95};
+    uterineArteryPercentiles[41] = {0.44, 0.48, 0.55, 0.65, 0.76, 0.87, 0.94};
+    uterineArteryPercentiles[42] = {0.43, 0.47, 0.55, 0.65, 0.76, 0.87, 0.94};
 
     return uterineArteryPercentiles;
 }
