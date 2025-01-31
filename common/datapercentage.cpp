@@ -10,6 +10,11 @@ DataPercentage::~DataPercentage()
 
 }
 
+void DataPercentage::setTypePercentile(TYPE_PERCENTILES typePercentile)
+{
+    m_type_percentiles = typePercentile;
+}
+
 QMap<int, PercentileValues> DataPercentage::getFetalWeight_FMF()
 {
     fetalWeightPercentiles[22] = {399, 412, 433, 456, 480, 502, 516};
@@ -20,6 +25,19 @@ QMap<int, PercentileValues> DataPercentage::getFetalWeight_FMF()
     fetalWeightPercentiles[27] = {874, 904, 952, 1006, 1062, 1114, 1150};
     fetalWeightPercentiles[28] = {1006, 1040, 1096, 1158, 1224, 1286, 1318};
     fetalWeightPercentiles[29] = {1150, 1190, 1250, 1324, 1400, 1468, 1508};
+    fetalWeightPercentiles[30] = {1300, 1350, 1420, 1504, 1590, 1670, 1715};
+    fetalWeightPercentiles[31] = {1470, 1515, 1600, 1696, 1796, 1890, 1950};
+    fetalWeightPercentiles[32] = {1635, 1700, 1792, 1896, 2010, 2120, 2180};
+    fetalWeightPercentiles[33] = {1820, 1880, 1985, 2106, 2236, 2356, 2416};
+    fetalWeightPercentiles[34] = {2010, 2068, 2186, 2320, 2460, 2600, 2684};
+    fetalWeightPercentiles[35] = {2194, 2260, 2390, 2538, 2690, 2840, 2916};
+    fetalWeightPercentiles[36] = {2370, 2450, 2590, 2750, 2920, 3074, 3180};
+    fetalWeightPercentiles[37] = {2540, 2630, 2776, 2950, 3140, 3310, 3410};
+    fetalWeightPercentiles[38] = {2700, 2790, 2950, 3140, 3340, 3520, 3630};
+    fetalWeightPercentiles[39] = {2840, 2940, 3110, 3310, 3520, 3720, 3840};
+    fetalWeightPercentiles[40] = {2960, 3060, 3240, 3456, 3680, 3880, 4000};
+    fetalWeightPercentiles[41] = {3050, 3160, 3350, 3570, 3800, 4030, 4170};
+    fetalWeightPercentiles[42] = {3120, 3230, 3420, 3650, 3890, 4120, 4270};
 
     return fetalWeightPercentiles;
 }
@@ -83,28 +101,83 @@ QMap<int, PercentileValues> DataPercentage::getUterineArteryPI_FMF()
 
 QString DataPercentage::determinePIPercentile_FMF(double measuredPI, int gestationalWeek)
 {
-    QMap<int, PercentileValues> dataset = getUmbilicalArteryPIDataset_FMF();
+    QMap<int, PercentileValues> dataset ;
+    if (m_type_percentiles == TYPE_PERCENTILES::P_FETAL_WEIGHT) {
 
-    if (!dataset.contains(gestationalWeek)) {
-        return "Vârsta gestațională nu este în intervalul valid (20-41 săptămâni).";
+        dataset = getFetalWeight_FMF();
+        if (! dataset.contains(gestationalWeek)) {
+            return "Vârsta gestațională nu este în intervalul valid (20-42 săptămâni).";
+        }
+
+        PercentileValues values = dataset[gestationalWeek];
+
+        if (measuredPI < values.p5)
+            return "sub percentila 5 (risc de restricție de creștere intrauterină)";
+        else if (measuredPI < values.p10)
+            return "între percentila 5 și 10 (Limita inferioară a normalului - sugestie la o potențială restricție de creștere)";
+        else if (measuredPI < values.p25)
+            return "între percentila 10 și 25 (Greutate fetală sub medie, dar normală)";
+        else if (measuredPI < values.p50)
+            return "între percentila 25 și 50 (Normal)";
+        else if (measuredPI < values.p75)
+            return "între percentila 50 și 75 (Normal superior)";
+        else if (measuredPI < values.p90)
+            return "între percentila 75 și 90 (Fetuși cu tendință spre macrosomie)";
+        else if (measuredPI < values.p95)
+            return "între percentila 90 și 95 (Valori crescute, posibil risc de macrosomie)";
+        else
+            return "peste percentila 95 (Macrosomie fetală)";
+
+    } else if (m_type_percentiles == TYPE_PERCENTILES::P_UMBILICAL_ARTERY) {
+
+        dataset = getUmbilicalArteryPIDataset_FMF();
+        if (! dataset.contains(gestationalWeek)) {
+            return "Vârsta gestațională nu este în intervalul valid (20-42 săptămâni).";
+        }
+
+        PercentileValues values = dataset[gestationalWeek];
+
+        if (measuredPI < values.p5)
+            return "sub percentila 5 (Risc crescut, sunt necesare investigații suplimentare)";
+        else if (measuredPI < values.p10)
+            return "între percentila 5 și 10 (Ușor scăzut)";
+        else if (measuredPI < values.p25)
+            return "între percentila 10 și 25 (Limita inferioară a normalului)";
+        else if (measuredPI < values.p50)
+            return "între percentila 25 și 50 (Normal)";
+        else if (measuredPI < values.p75)
+            return "între percentila 50 și 75 (Normal superior)";
+        else if (measuredPI < values.p90)
+            return "între percentila 75 și 90 (Monitorizare recomandată)";
+        else if (measuredPI < values.p95)
+            return "între percentila 90 și 95 (Valori crescute, se recomandă supraveghere atentă)";
+        else
+            return "peste percentila 95 (Risc crescut, sunt necesare investigații suplimentare)";
+
+    } else if (m_type_percentiles == TYPE_PERCENTILES::P_UTERINE_ARTERY) {
+
+        dataset = getUterineArteryPI_FMF();
+        PercentileValues values = dataset[gestationalWeek];
+
+        if (measuredPI < values.p5)
+            return "sub percentila 5 (Flux sanguin scăzut - posibil risc de insuficiență placentară";
+        else if (measuredPI < values.p10)
+            return "între percentila 5 și 10 (Ușor scăzut - sugestie la o insuficiență placentară)";
+        else if (measuredPI < values.p25)
+            return "între percentila 10 și 25 (Limita inferioară a normalului)";
+        else if (measuredPI < values.p50)
+            return "între percentila 25 și 50 (Normal)";
+        else if (measuredPI < values.p75)
+            return "între percentila 50 și 75 (Normal superior)";
+        else if (measuredPI < values.p90)
+            return "între percentila 75 și 90 (Monitorizare recomandată)";
+        else if (measuredPI < values.p95)
+            return "între percentila 90 și 95 (Valori crescute, posibil risc de preeclampsie sau restricție de creștere intrauterină)";
+        else
+            return "peste percentila 95 (Risc crescut de preeclampsie, insuficiență placentară )";
+
     }
 
-    PercentileValues values = dataset[gestationalWeek];
+    return nullptr;
 
-    if (measuredPI < values.p5)
-        return "sub percentila 5 (Risc crescut, sunt necesare investigații suplimentare)";
-    else if (measuredPI < values.p10)
-        return "între percentila 5 și 10 (Ușor scăzut)";
-    else if (measuredPI < values.p25)
-        return "între percentila 10 și 25 (Limita inferioară a normalului)";
-    else if (measuredPI < values.p50)
-        return "între percentila 25 și 50 (Normal)";
-    else if (measuredPI < values.p75)
-        return "între percentila 50 și 75 (Normal superior)";
-    else if (measuredPI < values.p90)
-        return "între percentila 75 și 90 (Monitorizare recomandată)";
-    else if (measuredPI < values.p95)
-        return "între percentila 90 și 95 (Valori crescute, se recomandă supraveghere atentă)";
-    else
-        return "peste percentila 95 (Risc crescut, sunt necesare investigații suplimentare)";
 }

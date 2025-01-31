@@ -1412,6 +1412,7 @@ void DocOrderEcho::enableDisableDataPacient(bool mEnabled)
     ui->editPolicyMedical->setEnabled(mEnabled);
     ui->editAddress->setEnabled(mEnabled);
     ui->editPhone->setEnabled(mEnabled);
+    ui->editEmail->setEnabled(mEnabled);
 
     if (mEnabled)
         ui->dateEditBirthday->setFocus(); // setam focusul

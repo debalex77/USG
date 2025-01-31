@@ -240,7 +240,11 @@ private slots:
     void disconnections_gestation2();
 
     void clickedGestation2Trimestru(const int id_button);
-    void getPercentageByDoppler();
+
+    void updateDescriptionFetusWeight();
+    void getPercentageByDopplerUmbelicalArtery();
+    void getPercentageByDopplerUterineArteryLeft();
+    void getPercentageByDopplerUterineArteryRight();
 
     void slot_ItNewChanged();
     void slot_IdChanged();

@@ -929,7 +929,11 @@ void DocReportEcho::initConnections()
     connect(ui->comment_image4, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
     connect(ui->comment_image5, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
 
-    connect(ui->gestation2_ombilic_PI, &QLineEdit::textChanged, this, &DocReportEcho::getPercentageByDoppler);
+    // descrierea doppler
+    connect(ui->gestation2_fetusMass, &QLineEdit::editingFinished, this, &DocReportEcho::updateDescriptionFetusWeight);
+    connect(ui->gestation2_ombilic_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUmbelicalArtery);
+    connect(ui->gestation2_uterLeft_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUterineArteryLeft);
+    connect(ui->gestation2_uterRight_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUterineArteryRight);
 
     connect(ui->btnOk, &QPushButton::clicked, this, &DocReportEcho::onWritingDataClose);
     connect(ui->btnWrite, &QPushButton::clicked, this, &DocReportEcho::onWritingData);
@@ -2455,13 +2459,65 @@ void DocReportEcho::clickedGestation2Trimestru(const int id_button)
     }
 }
 
-void DocReportEcho::getPercentageByDoppler()
+// *******************************************************************
+// **************** PROCESAREA DOPPLER SI MASA FATULUI ***************
+
+void DocReportEcho::updateDescriptionFetusWeight()
 {
+    if (ui->gestation2_fetusMass->text().isEmpty()) {
+        ui->gestation2_descriptionFetusWeight->setText("");
+        return;
+    }
+
     int weeks, days;
     extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
-    double current_PI = ui->gestation2_ombilic_PI->text().toDouble();
+    double current_weight = ui->gestation2_fetusMass->text().toDouble();
 
-    ui->gestation2_infoDoppler->setPlainText("Doppler a.ombelicale: " + data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+    data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_FETAL_WEIGHT);
+    ui->gestation2_descriptionFetusWeight->setText("Masa fătului: " +
+                                                   data_percentage->determinePIPercentile_FMF(current_weight, weeks));
+}
+
+void DocReportEcho::getPercentageByDopplerUmbelicalArtery()
+{
+    if (ui->gestation2_ombilic_PI->text().isEmpty())
+        return;
+
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    double current_PI = ui->gestation2_ombilic_PI->text().replace(",", ".").toDouble();
+
+    data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UMBILICAL_ARTERY);
+    ui->gestation2_infoDoppler->append("Doppler a.ombelicale: " +
+                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+}
+
+void DocReportEcho::getPercentageByDopplerUterineArteryLeft()
+{
+    if (ui->gestation2_uterLeft_PI->text().isEmpty())
+        return;
+
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    double current_PI = ui->gestation2_uterLeft_PI->text().replace(",", ".").toDouble();
+
+    data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UTERINE_ARTERY);
+    ui->gestation2_infoDoppler->append("Doppler a.uterină stânga: " +
+                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+}
+
+void DocReportEcho::getPercentageByDopplerUterineArteryRight()
+{
+    if (ui->gestation2_uterRight_PI->text().isEmpty())
+        return;
+
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    double current_PI = ui->gestation2_uterRight_PI->text().replace(",", ".").toDouble();
+
+    data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UTERINE_ARTERY);
+    ui->gestation2_infoDoppler->append("Doppler a.uterină dreapta: " +
+                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
 }
 
 // *******************************************************************
@@ -2496,6 +2552,7 @@ void DocReportEcho::slot_ItNewChanged()
             connections_gestation1();
         if (m_gestation2) {
             ui->gestation2_dateMenstruation->setDate(QDate::currentDate());
+            updateDescriptionFetusWeight();
             connections_gestation2();
         }
 
@@ -6710,6 +6767,7 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_fl->setText(qry.value(record.indexOf("FL")).toString());
             ui->gestation2_fl_age->setText(qry.value(record.indexOf("FL_age")).toString());
             ui->gestation2_fetus_age->setText(qry.value(record.indexOf("FetusCorresponds")).toString());
+            setDueDateGestation2();
 
             // tableGestation2_cranium
             ui->gestation2_calloteCranium->setCurrentIndex(qry.value(record.indexOf("calloteCranium")).toInt());
@@ -6798,6 +6856,7 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_cervix_description->setText(qry.value(record.indexOf("cervix_description")).toString());
             ui->gestation2_fetusMass->setText(qry.value(record.indexOf("fetusMass")).toString());
             ui->gestation2_fetusSex->setCurrentIndex(qry.value(record.indexOf("externalGenitalOrgans")).toInt());
+            updateDescriptionFetusWeight();
 
             // tableGestation2_doppler
             ui->gestation2_ombilic_PI->setText(qry.value(record.indexOf("ombilic_PI")).toString());
@@ -6817,6 +6876,9 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_uterLeft_SD->setText(qry.value(record.indexOf("uterLeft_SD")).toString());
             ui->gestation2_uterLeft_flux->setCurrentIndex(qry.value(record.indexOf("uterLeft_flux")).toInt());
             ui->gestation2_ductVenos->setCurrentIndex(qry.value(record.indexOf("ductVenos")).toInt());
+            getPercentageByDopplerUmbelicalArtery();
+            getPercentageByDopplerUterineArteryLeft();
+            getPercentageByDopplerUterineArteryRight();
         }
     }
 }

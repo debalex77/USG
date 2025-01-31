@@ -21,6 +21,15 @@ public:
     explicit DataPercentage(QObject* parent = nullptr);
     ~DataPercentage();
 
+    enum TYPE_PERCENTILES
+    {
+        P_FETAL_WEIGHT,
+        P_UMBILICAL_ARTERY,
+        P_UTERINE_ARTERY
+    };
+
+    void setTypePercentile(TYPE_PERCENTILES typePercentile);
+
     // masa fatului
     QMap<int, PercentileValues> getFetalWeight_FMF();
     // PI a.umbilical
@@ -34,6 +43,7 @@ private:
     QMap<int, PercentileValues> umbelicalArteryPercentiles;
     QMap<int, PercentileValues> uterineArteryPercentiles;
     QMap<int, PercentileValues> fetalWeightPercentiles;
+    TYPE_PERCENTILES m_type_percentiles;
 };
 
 #endif // DATAPERCENTAGE_H

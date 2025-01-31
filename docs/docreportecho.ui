@@ -1529,7 +1529,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>550</width>
+                <width>727</width>
                 <height>660</height>
                </rect>
               </property>
@@ -2264,8 +2264,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>417</width>
-                <height>387</height>
+                <width>741</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_15">
@@ -2569,7 +2569,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>584</width>
+                <width>727</width>
                 <height>919</height>
                </rect>
               </property>
@@ -3707,7 +3707,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>338</width>
+                <width>727</width>
                 <height>622</height>
                </rect>
               </property>
@@ -4281,8 +4281,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>351</width>
-                <height>490</height>
+                <width>741</width>
+                <height>543</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_35">
@@ -4774,7 +4774,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>693</width>
+                <width>727</width>
                 <height>577</height>
                </rect>
               </property>
@@ -5416,7 +5416,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>722</width>
+                <width>727</width>
                 <height>885</height>
                </rect>
               </property>
@@ -6391,6 +6391,27 @@ QToolButton:pressed
                    <string>Biometria fetală</string>
                   </attribute>
                   <layout class="QGridLayout" name="gridLayout_66">
+                   <item row="4" column="2">
+                    <widget class="QLabel" name="label_150">
+                     <property name="text">
+                      <string>corespunde</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="5" column="4">
+                    <widget class="QDateEdit" name="gestation2_probabilDateBirth">
+                     <property name="calendarPopup">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="1" column="2">
+                    <widget class="QLabel" name="label_148">
+                     <property name="text">
+                      <string>corespunde</string>
+                     </property>
+                    </widget>
+                   </item>
                    <item row="0" column="3">
                     <widget class="QLineEdit" name="gestation2_bpd_age">
                      <property name="maximumSize">
@@ -6401,43 +6422,24 @@ QToolButton:pressed
                      </property>
                     </widget>
                    </item>
-                   <item row="3" column="2">
-                    <widget class="QLabel" name="label_149">
+                   <item row="4" column="0">
+                    <widget class="QLabel" name="label_145">
                      <property name="text">
-                      <string>corespunde</string>
+                      <string>FL</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="3" rowspan="2">
-                    <widget class="QLineEdit" name="gestation2_hc_age">
-                     <property name="maximumSize">
-                      <size>
-                       <width>170</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="0" column="2">
-                    <widget class="QLabel" name="label_147">
+                   <item row="5" column="0">
+                    <widget class="QLabel" name="label_146">
                      <property name="text">
-                      <string>corespunde</string>
+                      <string>Fătul corespunde</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="1">
-                    <widget class="QLineEdit" name="gestation2_bpd">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
+                   <item row="1" column="0">
+                    <widget class="QLabel" name="label_143">
+                     <property name="text">
+                      <string>HC</string>
                      </property>
                     </widget>
                    </item>
@@ -6461,92 +6463,6 @@ QToolButton:pressed
                      </property>
                     </widget>
                    </item>
-                   <item row="1" column="2">
-                    <widget class="QLabel" name="label_148">
-                     <property name="text">
-                      <string>corespunde</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="0">
-                    <widget class="QLabel" name="label_146">
-                     <property name="text">
-                      <string>Fătul corespunde</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="1">
-                    <widget class="QLineEdit" name="gestation2_fl">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="5" column="1" colspan="2">
-                    <widget class="QLineEdit" name="gestation2_fetus_age">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>16777215</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="2" column="1" rowspan="2">
-                    <widget class="QLineEdit" name="gestation2_ac">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
-                     </property>
-                     <property name="maximumSize">
-                      <size>
-                       <width>80</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="3" column="3">
-                    <widget class="QLineEdit" name="gestation2_ac_age">
-                     <property name="maximumSize">
-                      <size>
-                       <width>170</width>
-                       <height>16777215</height>
-                      </size>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="1" column="0">
-                    <widget class="QLabel" name="label_143">
-                     <property name="text">
-                      <string>HC</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="4" column="2">
-                    <widget class="QLabel" name="label_150">
-                     <property name="text">
-                      <string>corespunde</string>
-                     </property>
-                    </widget>
-                   </item>
                    <item row="1" column="1">
                     <widget class="QLineEdit" name="gestation2_hc">
                      <property name="sizePolicy">
@@ -6563,40 +6479,20 @@ QToolButton:pressed
                      </property>
                     </widget>
                    </item>
-                   <item row="6" column="0">
-                    <widget class="QLabel" name="label_192">
+                   <item row="5" column="3">
+                    <widget class="QLabel" name="label_178">
                      <property name="text">
-                      <string>Masa fătului</string>
+                      <string>Data probabilă a nașterii :</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="4" column="0">
-                    <widget class="QLabel" name="label_145">
-                     <property name="text">
-                      <string>FL</string>
-                     </property>
-                    </widget>
-                   </item>
-                   <item row="8" column="2">
-                    <spacer name="verticalSpacer_15">
-                     <property name="orientation">
-                      <enum>Qt::Vertical</enum>
-                     </property>
-                     <property name="sizeHint" stdset="0">
+                   <item row="3" column="3">
+                    <widget class="QLineEdit" name="gestation2_ac_age">
+                     <property name="maximumSize">
                       <size>
-                       <width>20</width>
-                       <height>40</height>
+                       <width>170</width>
+                       <height>16777215</height>
                       </size>
-                     </property>
-                    </spacer>
-                   </item>
-                   <item row="6" column="1" colspan="3">
-                    <widget class="QLineEdit" name="gestation2_fetusMass">
-                     <property name="sizePolicy">
-                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-                       <horstretch>0</horstretch>
-                       <verstretch>0</verstretch>
-                      </sizepolicy>
                      </property>
                     </widget>
                    </item>
@@ -6610,17 +6506,53 @@ QToolButton:pressed
                      </property>
                     </widget>
                    </item>
-                   <item row="0" column="0">
-                    <widget class="QLabel" name="label_142">
-                     <property name="text">
-                      <string>BPD</string>
+                   <item row="6" column="1" colspan="3">
+                    <widget class="QLineEdit" name="gestation2_fetusMass">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
                      </property>
                     </widget>
                    </item>
-                   <item row="7" column="0">
-                    <widget class="QLabel" name="label_227">
+                   <item row="1" column="3" rowspan="2">
+                    <widget class="QLineEdit" name="gestation2_hc_age">
+                     <property name="maximumSize">
+                      <size>
+                       <width>170</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="3" column="2">
+                    <widget class="QLabel" name="label_149">
                      <property name="text">
-                      <string>Sex</string>
+                      <string>corespunde</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="2">
+                    <widget class="QLabel" name="label_147">
+                     <property name="text">
+                      <string>corespunde</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="2" column="1" rowspan="2">
+                    <widget class="QLineEdit" name="gestation2_ac">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
                      </property>
                     </widget>
                    </item>
@@ -6643,16 +6575,112 @@ QToolButton:pressed
                      </item>
                     </widget>
                    </item>
-                   <item row="5" column="3">
-                    <widget class="QLabel" name="label_178">
+                   <item row="7" column="0">
+                    <widget class="QLabel" name="label_227">
                      <property name="text">
-                      <string>Data probabilă a nașterii :</string>
+                      <string>Sex</string>
                      </property>
                     </widget>
                    </item>
-                   <item row="5" column="4">
-                    <widget class="QDateEdit" name="gestation2_probabilDateBirth">
-                     <property name="calendarPopup">
+                   <item row="5" column="1" colspan="2">
+                    <widget class="QLineEdit" name="gestation2_fetus_age">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>16777215</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="0">
+                    <widget class="QLabel" name="label_142">
+                     <property name="text">
+                      <string>BPD</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="0" column="1">
+                    <widget class="QLineEdit" name="gestation2_bpd">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="4" column="1">
+                    <widget class="QLineEdit" name="gestation2_fl">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="maximumSize">
+                      <size>
+                       <width>80</width>
+                       <height>16777215</height>
+                      </size>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="6" column="0">
+                    <widget class="QLabel" name="label_192">
+                     <property name="text">
+                      <string>Masa fătului</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item row="9" column="2">
+                    <spacer name="verticalSpacer_15">
+                     <property name="orientation">
+                      <enum>Qt::Vertical</enum>
+                     </property>
+                     <property name="sizeHint" stdset="0">
+                      <size>
+                       <width>20</width>
+                       <height>40</height>
+                      </size>
+                     </property>
+                    </spacer>
+                   </item>
+                   <item row="8" column="0" colspan="6">
+                    <widget class="QLabel" name="gestation2_descriptionFetusWeight">
+                     <property name="sizePolicy">
+                      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                       <horstretch>0</horstretch>
+                       <verstretch>0</verstretch>
+                      </sizepolicy>
+                     </property>
+                     <property name="font">
+                      <font>
+                       <family>Segoe UI</family>
+                       <bold>true</bold>
+                      </font>
+                     </property>
+                     <property name="styleSheet">
+                      <string notr="true">color: rgb(255, 120, 0);</string>
+                     </property>
+                     <property name="lineWidth">
+                      <number>2</number>
+                     </property>
+                     <property name="text">
+                      <string>Masa fătului corespunde percentilei 50</string>
+                     </property>
+                     <property name="wordWrap">
                       <bool>true</bool>
                      </property>
                     </widget>
