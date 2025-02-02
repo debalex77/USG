@@ -20,6 +20,7 @@
 #include "catalogs/asistanttipapp.h"
 #include "catalogs/groupinvestigationlist.h"
 #include "catalogs/normograms.h"
+#include "data/authorizationuser.h"
 #include "docs/listdoc.h"
 #include "docs/listdocreportorder.h"
 #include <catalogs/listform.h>
@@ -92,6 +93,7 @@ private slots:
     void onOpenLMDesigner();
     void onReadyVersion();
     void onShowAsistantTip();
+    void onBlockApp();
 
     void downloadNewVersionApp(const QString str_new_version);
     void onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal);
@@ -137,6 +139,7 @@ private:
     QToolButton *btnPricing;
     QToolButton *btnSettings;
     QToolButton *btnAbout;
+    QToolButton *btnBlock;
 
     AppSettings              *appSett;
     ListDoc                  *listDoc;
@@ -156,6 +159,7 @@ private:
     Downloader               downloader;
     AsistantTipApp           *asistant_tip;
     InfoWindow               *info_window;
+    AuthorizationUser        *autorization;
 
     QLabel *txt_title_bar = nullptr;
 

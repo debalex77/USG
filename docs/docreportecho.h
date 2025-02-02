@@ -157,7 +157,7 @@ private slots:
     void updateTimer();        // actualizarea datei si orei in regim real
     void onDateTimeChanged();
 
-    void onDateLMPChanged(QDate m_date);
+    void onDateLMPChanged(QDate m_date); // pentru calcularea varstei gestationale
 
     bool loadFile(const QString &fileName, const int numberImage); // atasarea imaginilor
     void loadImageOpeningDocument();
@@ -241,10 +241,11 @@ private slots:
 
     void clickedGestation2Trimestru(const int id_button);
 
+    void updateTextDescriptionDoppler();
     void updateDescriptionFetusWeight();
-    void getPercentageByDopplerUmbelicalArtery();
-    void getPercentageByDopplerUterineArteryLeft();
-    void getPercentageByDopplerUterineArteryRight();
+    QString getPercentageByDopplerUmbelicalArtery();
+    QString getPercentageByDopplerUterineArteryLeft();
+    QString getPercentageByDopplerUterineArteryRight();
 
     void slot_ItNewChanged();
     void slot_IdChanged();

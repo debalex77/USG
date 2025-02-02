@@ -99,6 +99,7 @@ void MainWindow::initButton()
     btnPricing              = new QToolButton(toolBar);
     btnSettings             = new QToolButton(toolBar);
     btnAbout                = new QToolButton(toolBar);
+    btnBlock                = new QToolButton(toolBar);
 
     btnDoctors->setIcon(QIcon(":/img/doctor_x32.png"));
     btnDoctors->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
@@ -226,6 +227,15 @@ void MainWindow::initButton()
     btnAbout->setStyleSheet("font-size: 13pt;");
 #endif
 
+    btnBlock->setIcon(QIcon(":/img/lock.png"));
+    btnBlock->setToolButtonStyle(Qt::ToolButtonTextUnderIcon);
+    btnBlock->setCursor(Qt::ArrowCursor);
+#if defined(Q_OS_LINUX)
+    btnBlock->setStyleSheet("font-size: 11pt;");
+#elif defined(Q_OS_MACOS)
+    btnBlock->setStyleSheet("font-size: 13pt;");
+#endif
+
     //adaugam widget-uri in toolBar
     toolBar->addWidget(btnDoctors);
     toolBar->addWidget(btnNurses);
@@ -249,6 +259,8 @@ void MainWindow::initButton()
     toolBar->addWidget(btnSettings);
     toolBar->addSeparator();
     toolBar->addWidget(btnAbout);
+    toolBar->addSeparator();
+    toolBar->addWidget(btnBlock);
     addToolBar(toolBar);
 
     btnDoctors->setMouseTracking(true);
@@ -296,7 +308,7 @@ void MainWindow::initButton()
        openListForm(static_cast<int>(ListForm::TypeListForm::Organizations));
     });
 
-    connect(btnHistoryPatient, &QAbstractButton::clicked, this, &::MainWindow::openHistoryPatient);
+    connect(btnHistoryPatient, &QAbstractButton::clicked, this, &MainWindow::openHistoryPatient);
     connect(btnReports, &QAbstractButton::clicked, this, &MainWindow::openReports);
     connect(btnInvestigations, &QToolButton::clicked, this, &MainWindow::openCatInvestigations);
     connect(btnPricing, &QAbstractButton::clicked, this, &MainWindow::openPricing);
@@ -305,6 +317,7 @@ void MainWindow::initButton()
     connect(btnDocExamen, &QAbstractButton::clicked, this, &MainWindow::openDocExamen);
     connect(btnSettings, &QAbstractButton::clicked, this, &MainWindow::openAppSettings);
     connect(btnAbout, &QAbstractButton::clicked, this, &MainWindow::openAbout);
+    connect(btnBlock, &QAbstractButton::clicked, this, &MainWindow::onBlockApp);
 }
 
 void MainWindow::initActions()
@@ -480,6 +493,7 @@ void MainWindow::updateTextBtn()
     btnPricing->setText(tr("Prețuri"));
     btnSettings->setText(tr("Setări"));
     btnAbout->setText(tr("Despre aplicația"));
+    btnBlock->setText(tr("Blocare"));
 }
 
 // **********************************************************************************
@@ -891,6 +905,14 @@ void MainWindow::onShowAsistantTip()
     asistant_tip->setAttribute(Qt::WA_DeleteOnClose);
     asistant_tip->setStep();
     asistant_tip->show();
+}
+
+void MainWindow::onBlockApp()
+{
+    this->hide();
+    autorization = new AuthorizationUser(this);
+    if (autorization->exec() == QDialog::Accepted)
+        this->show();
 }
 
 // **********************************************************************************

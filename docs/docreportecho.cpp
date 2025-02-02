@@ -931,9 +931,9 @@ void DocReportEcho::initConnections()
 
     // descrierea doppler
     connect(ui->gestation2_fetusMass, &QLineEdit::editingFinished, this, &DocReportEcho::updateDescriptionFetusWeight);
-    connect(ui->gestation2_ombilic_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUmbelicalArtery);
-    connect(ui->gestation2_uterLeft_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUterineArteryLeft);
-    connect(ui->gestation2_uterRight_PI, &QLineEdit::editingFinished, this, &DocReportEcho::getPercentageByDopplerUterineArteryRight);
+    connect(ui->gestation2_ombilic_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
+    connect(ui->gestation2_uterLeft_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
+    connect(ui->gestation2_uterRight_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
 
     connect(ui->btnOk, &QPushButton::clicked, this, &DocReportEcho::onWritingDataClose);
     connect(ui->btnWrite, &QPushButton::clicked, this, &DocReportEcho::onWritingData);
@@ -2462,6 +2462,26 @@ void DocReportEcho::clickedGestation2Trimestru(const int id_button)
 // *******************************************************************
 // **************** PROCESAREA DOPPLER SI MASA FATULUI ***************
 
+void DocReportEcho::updateTextDescriptionDoppler()
+{
+    QString txt_umbelicalArtery    = getPercentageByDopplerUmbelicalArtery();
+    QString txt_uterineArteryLeft  = getPercentageByDopplerUterineArteryLeft();
+    QString txt_uterineArteryRight = getPercentageByDopplerUterineArteryRight();
+
+    ui->gestation2_infoDoppler->clear();
+
+    if (txt_umbelicalArtery != nullptr)
+        ui->gestation2_infoDoppler->append(txt_umbelicalArtery);
+
+    if (txt_uterineArteryLeft != nullptr)
+        ui->gestation2_infoDoppler->append(txt_uterineArteryLeft);
+
+    if (txt_uterineArteryRight != nullptr)
+        ui->gestation2_infoDoppler->append(txt_uterineArteryRight);
+
+    ui->gestation2_infoDoppler->append("\nDevierea de calcul cu 'Fetal Medicine Foundation' este de până la 0.10 percentile.");
+}
+
 void DocReportEcho::updateDescriptionFetusWeight()
 {
     if (ui->gestation2_fetusMass->text().isEmpty()) {
@@ -2478,46 +2498,55 @@ void DocReportEcho::updateDescriptionFetusWeight()
                                                    data_percentage->determinePIPercentile_FMF(current_weight, weeks));
 }
 
-void DocReportEcho::getPercentageByDopplerUmbelicalArtery()
+QString DocReportEcho::getPercentageByDopplerUmbelicalArtery()
 {
     if (ui->gestation2_ombilic_PI->text().isEmpty())
-        return;
+        return nullptr;
 
     int weeks, days;
     extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
     double current_PI = ui->gestation2_ombilic_PI->text().replace(",", ".").toDouble();
 
     data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UMBILICAL_ARTERY);
-    ui->gestation2_infoDoppler->append("Doppler a.ombelicale: " +
-                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+    data_percentage->resetBloodFlow();
+    QString txt = data_percentage->determinePIPercentile_FMF(current_PI, weeks);
+    ui->gestation2_ombilic_flux->setCurrentIndex(data_percentage->getBloodFlow());
+
+    return "Doppler a.ombelicale: " + txt;
 }
 
-void DocReportEcho::getPercentageByDopplerUterineArteryLeft()
+QString DocReportEcho::getPercentageByDopplerUterineArteryLeft()
 {
     if (ui->gestation2_uterLeft_PI->text().isEmpty())
-        return;
+        return nullptr;
 
     int weeks, days;
     extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
     double current_PI = ui->gestation2_uterLeft_PI->text().replace(",", ".").toDouble();
 
     data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UTERINE_ARTERY);
-    ui->gestation2_infoDoppler->append("Doppler a.uterină stânga: " +
-                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+    data_percentage->resetBloodFlow();
+    QString txt = data_percentage->determinePIPercentile_FMF(current_PI, weeks);
+    ui->gestation2_uterLeft_flux->setCurrentIndex(data_percentage->getBloodFlow());
+
+    return "Doppler a.uterină stânga: " + txt;
 }
 
-void DocReportEcho::getPercentageByDopplerUterineArteryRight()
+QString DocReportEcho::getPercentageByDopplerUterineArteryRight()
 {
     if (ui->gestation2_uterRight_PI->text().isEmpty())
-        return;
+        return nullptr;
 
     int weeks, days;
     extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
     double current_PI = ui->gestation2_uterRight_PI->text().replace(",", ".").toDouble();
 
     data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_UTERINE_ARTERY);
-    ui->gestation2_infoDoppler->append("Doppler a.uterină dreapta: " +
-                                       data_percentage->determinePIPercentile_FMF(current_PI, weeks));
+    data_percentage->resetBloodFlow();
+    QString txt = data_percentage->determinePIPercentile_FMF(current_PI, weeks);
+    ui->gestation2_uterRight_flux->setCurrentIndex(data_percentage->getBloodFlow());
+
+    return "Doppler a.uterină dreapta: " + txt;
 }
 
 // *******************************************************************

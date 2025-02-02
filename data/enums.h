@@ -85,6 +85,13 @@ public:
     };
     Q_ENUM(PROXY_MODEL);
 
+    enum BLOOD_FLOW
+    {
+        FLOW_UNKNOW,
+        FLOW_NORMAL,
+        FLOW_ANORMAL
+    };
+    Q_ENUM(BLOOD_FLOW);
 };
 
 #endif // ENUMS_H

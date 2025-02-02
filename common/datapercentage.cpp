@@ -2,7 +2,7 @@
 
 DataPercentage::DataPercentage(QObject *parent) : QObject(parent)
 {
-
+    resetBloodFlow();
 }
 
 DataPercentage::~DataPercentage()
@@ -99,6 +99,14 @@ QMap<int, PercentileValues> DataPercentage::getUterineArteryPI_FMF()
     return uterineArteryPercentiles;
 }
 
+QMap<int, PercentileValues> DataPercentage::getPI_CMA_FMF()
+{
+    CMA_Percentiles[20] = {1.14, 1.21, 1.32, 1.46, 1.61, 1.76, 1.86};
+    CMA_Percentiles[21] = {1.18, 1.25, 1.37, 1.51, 1.67, 1.82, 1.92};
+    CMA_Percentiles[22] = {1.22, 1.30, 1.42, 1.57, 1.73, 1.89, 1.99};
+    return CMA_Percentiles;
+}
+
 QString DataPercentage::determinePIPercentile_FMF(double measuredPI, int gestationalWeek)
 {
     QMap<int, PercentileValues> dataset ;
@@ -137,6 +145,13 @@ QString DataPercentage::determinePIPercentile_FMF(double measuredPI, int gestati
 
         PercentileValues values = dataset[gestationalWeek];
 
+        // determinam flux
+        if (measuredPI <= values.p5 || measuredPI >= values.p95)
+            m_flow = Enums::BLOOD_FLOW::FLOW_ANORMAL;
+        else
+            m_flow = Enums::BLOOD_FLOW::FLOW_NORMAL;
+
+        // descifrarea
         if (measuredPI < values.p5)
             return "sub percentila 5 (Risc crescut, sunt necesare investigații suplimentare)";
         else if (measuredPI < values.p10)
@@ -159,8 +174,15 @@ QString DataPercentage::determinePIPercentile_FMF(double measuredPI, int gestati
         dataset = getUterineArteryPI_FMF();
         PercentileValues values = dataset[gestationalWeek];
 
+        // determinam flux
+        if (measuredPI <= values.p5 || measuredPI >= values.p95)
+            m_flow = Enums::BLOOD_FLOW::FLOW_ANORMAL;
+        else
+            m_flow = Enums::BLOOD_FLOW::FLOW_NORMAL;
+
+        // descifrarea
         if (measuredPI < values.p5)
-            return "sub percentila 5 (Flux sanguin scăzut - posibil risc de insuficiență placentară";
+            return "sub percentila 5 (Flux sanguin scăzut - posibil risc de insuficiență placentară)";
         else if (measuredPI < values.p10)
             return "între percentila 5 și 10 (Ușor scăzut - sugestie la o insuficiență placentară)";
         else if (measuredPI < values.p25)
@@ -176,8 +198,47 @@ QString DataPercentage::determinePIPercentile_FMF(double measuredPI, int gestati
         else
             return "peste percentila 95 (Risc crescut de preeclampsie, insuficiență placentară )";
 
+    } else if (m_type_percentiles == TYPE_PERCENTILES::P_CMA) {
+
+        dataset = getPI_CMA_FMF();
+        PercentileValues values = dataset[gestationalWeek];
+
+        // determinam flux
+        if (measuredPI <= values.p5 || measuredPI >= values.p95)
+            m_flow = Enums::BLOOD_FLOW::FLOW_ANORMAL;
+        else
+            m_flow = Enums::BLOOD_FLOW::FLOW_NORMAL;
+
+        // descifrarea
+        if (measuredPI < values.p5)
+            return "sub percentila 5 (Vasodilatație cerebrală severă → risc crescut de restricție de creștere intrauterină sever)";
+        else if (measuredPI < values.p10)
+            return "între percentila 5 și 10 (risc de hipoxie fetală și stres fetal, sugestie de restricție de creștere intrauterină, se recomandă monitorizare)";
+        else if (measuredPI < values.p25)
+            return "între percentila 10 și 25 (Limita inferioară a normalului)";
+        else if (measuredPI < values.p50)
+            return "între percentila 25 și 50 (Normal)";
+        else if (measuredPI < values.p75)
+            return "între percentila 50 și 75 (Normal superior)";
+        else if (measuredPI < values.p90)
+            return "între percentila 75 și 90 (flux cerebral ușor rezistent, se recomandă monitorizare)";
+        else if (measuredPI < values.p95)
+            return "între percentila 90 și 95 (risc de hipoxie fetală și stres fetal)";
+        else
+            return "peste percentila 95 (rezistența vasculară cerebrală, anemia fetală severă sau hipertensiune fetală)";
+
     }
 
     return nullptr;
 
+}
+
+void DataPercentage::resetBloodFlow()
+{
+    m_flow = Enums::BLOOD_FLOW::FLOW_UNKNOW;
+}
+
+Enums::BLOOD_FLOW DataPercentage::getBloodFlow()
+{
+    return m_flow;
 }
