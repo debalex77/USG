@@ -81,6 +81,7 @@ public:
         setDefaultDataTablePancreas();
         setDefaultDataTableSpleen();
         setDefaultDataTableIntestinalLoop();
+        connections_organs_internal();
         emit t_organs_internalChanged();
     }
     bool get_t_organs_internal() const {return m_organs_internal;}
@@ -90,29 +91,72 @@ public:
         m_urinary_system = t_urinary_system;
         setDefaultDataKidney();
         setDefaultDataBladder();
+        connections_urinary_system();
         emit t_urinary_systemChanged();
     }
     bool get_t_urinary_system() const {return m_urinary_system;}
 
-    void set_t_prostate(bool t_prostate) {m_prostate = t_prostate; setDefaultDataProstate(); emit t_prostateChanged();}
+    void set_t_prostate(bool t_prostate)
+    {
+        m_prostate = t_prostate;
+        setDefaultDataProstate();
+        connections_prostate();
+        emit t_prostateChanged();
+    }
     bool get_t_prostate() const {return m_prostate;}
 
-    void set_t_gynecology(bool t_gynecology) {m_gynecology = t_gynecology; setDefaultDataGynecology(); emit t_gynecologyChanged();}
+    void set_t_gynecology(bool t_gynecology)
+    {
+        m_gynecology = t_gynecology;
+        setDefaultDataGynecology();
+        connections_gynecology();
+        emit t_gynecologyChanged();
+    }
     bool get_t_gynecology() const {return m_gynecology;}
 
-    void set_t_breast(bool t_breast) {m_breast = t_breast; setDefaultDataBreast(); emit t_breastChanged();}
+    void set_t_breast(bool t_breast)
+    {
+        m_breast = t_breast;
+        setDefaultDataBreast();
+        connections_breast();
+        emit t_breastChanged();
+    }
     bool get_t_breast() const {return m_breast;}
 
-    void set_t_thyroide(bool t_thyroide) {m_thyroide = t_thyroide; setDefaultDataThyroid(); emit t_thyroideChanged();}
+    void set_t_thyroide(bool t_thyroide)
+    {
+        m_thyroide = t_thyroide;
+        setDefaultDataThyroid();
+        connections_thyroid();
+        emit t_thyroideChanged();
+    }
     bool get_t_thyroide() const {return m_thyroide;}
 
-    void set_t_gestation0(bool t_gestation0) {m_gestation0 = t_gestation0; setDefaultDataGestation0(); emit t_gestation0Changed();}
+    void set_t_gestation0(bool t_gestation0)
+    {
+        m_gestation0 = t_gestation0;
+        setDefaultDataGestation0();
+        connections_gestation0();
+        emit t_gestation0Changed();
+    }
     bool get_t_gestation0() const {return m_gestation0;}
 
-    void set_t_gestation1(bool t_gestation1) {m_gestation1 = t_gestation1; setDefaultDataGestation1(); emit t_gestation1Changed();}
+    void set_t_gestation1(bool t_gestation1)
+    {
+        m_gestation1 = t_gestation1;
+        setDefaultDataGestation1();
+        connections_gestation1();
+        emit t_gestation1Changed();
+    }
     bool get_t_gestation1() const {return m_gestation1;}
 
-    void set_t_gestation2(bool t_gestation2) {m_gestation2 = t_gestation2; setDefaultDataGestation2();emit t_gestation2Changed();}
+    void set_t_gestation2(bool t_gestation2)
+    {
+        m_gestation2 = t_gestation2;
+        setDefaultDataGestation2();
+        connections_gestation2();
+        emit t_gestation2Changed();
+    }
     bool get_t_gestation2() const {return m_gestation2;}
 
     void setIdUser(int IdUser) {m_idUser = IdUser; emit IdUserChanged();}
@@ -246,6 +290,9 @@ private slots:
     QString getPercentageByDopplerUmbelicalArtery();
     QString getPercentageByDopplerUterineArteryLeft();
     QString getPercentageByDopplerUterineArteryRight();
+    QString getPercentageByDopplerCMA();
+
+    void updateTextConcluzionBySystem();
 
     void slot_ItNewChanged();
     void slot_IdChanged();

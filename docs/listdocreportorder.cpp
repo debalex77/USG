@@ -565,41 +565,16 @@ void ListDocReportOrder::onClickBtnReport()
         if (qry.exec()){
             while (qry.next()) {
                 QString _cod = qry.value(0).toString();
-                if (_cod == "1021" || _cod == "1022" || _cod == "1023" || _cod == "1050.61" || _cod == "1050.62" || _cod == "1050.63" ||
-                    _cod == "1050.62.1" || _cod == "1050.62.2" || _cod == "1050.63.1" ||
-                    _cod == "1021." || _cod == "1022." || _cod == "1023." || _cod == "1050.61." || _cod == "1050.62." || _cod == "1050.63." ||
-                    _cod == "1050.62.1." || _cod == "1050.62.2." || _cod == "1050.63.1.")
-                    dialogInvestig->set_t_organs_internal(true);
-                if (_cod == "1021" || _cod == "1022" || _cod == "1024" || _cod == "1050.19" || _cod == "1050.20" || _cod == "1050.61" || _cod == "1050.62" || _cod == "1050.63" ||
-                    _cod == "1050.62.1" || _cod == "1050.62.2" || _cod == "1050.63.1" ||
-                    _cod == "1021." || _cod == "1022." || _cod == "1024." || _cod == "1050.19." || _cod == "1050.20." || _cod == "1050.61." || _cod == "1050.62." || _cod == "1050.63." ||
-                    _cod == "1050.62.1." || _cod == "1050.62.2." || _cod == "1050.63.1.")
-                    dialogInvestig->set_t_urinary_system(true);
-                if (_cod == "1021" || _cod == "1025" || _cod == "1038" || _cod == "1050.55" || _cod == "1050.62.1" || _cod == "1050.62.2" ||
-                    _cod == "1025." || _cod == "1038." || _cod == "1050.55." || _cod == "1050.62.1." || _cod == "1050.62.2.")
-                    dialogInvestig->set_t_prostate(true);
-                if (_cod == "1026" || _cod == "1033" || _cod == "1050.22" || _cod == "1050.23" || _cod == "1050.25" || _cod == "1050.26" || _cod == "1050.62" || _cod == "1050.63"||
-                    _cod == "1050.63.1" || _cod == "1050.69" ||
-                    _cod == "1026." || _cod == "1033." || _cod == "1050.22." || _cod == "1050.23." || _cod == "1050.25." || _cod == "1050.26." || _cod == "1050.62." || _cod == "1050.63."||
-                    _cod == "1050.63.1." || _cod == "1050.69.")
-                    dialogInvestig->set_t_gynecology(true);
-                if (_cod == "1037" || _cod == "1037.1" || _cod == "1050.34" || _cod == "1050.35" || _cod == "1050.63.1" ||
-                    _cod == "1037." || _cod == "1037.1." || _cod == "1050.34." || _cod == "1050.35." || _cod == "1050.63.1.")
-                    dialogInvestig->set_t_breast(true);
-                if (_cod == "1036" || _cod == "1036.1" || _cod == "1050.31" || _cod == "1050.32" || _cod == "1050.62.2" || _cod == "1050.63.1" ||
-                    _cod == "1036." || _cod == "1036.1." || _cod == "1050.31." || _cod == "1050.32." || _cod == "1050.62.2." || _cod == "1050.63.1.")
-                    dialogInvestig->set_t_thyroide(true);
-                if (_cod == "1027" || _cod == "1027.1" || _cod == "1028" || _cod == "1028.1" || _cod == "1050.66" || _cod == "1050.67" ||
-                    _cod == "1027." || _cod == "1027.1." || _cod == "1028." || _cod == "1028.1." || _cod == "1050.66." || _cod == "1050.67.")
-                    dialogInvestig->set_t_gestation0(true);
-                if (_cod == "1027.4.1" || _cod == "1027.5.1" || _cod == "1028.4.1" || _cod == "1028.4.2" ||
-                    _cod == "1028.4.1." || _cod == "1028.4.2.")
-                    dialogInvestig->set_t_gestation1(true);
-                if (_cod == "1029.1.1" || _cod == "1029.1.2" || _cod == "1029.2" || _cod == "1029.21" || _cod == "1029.3" || _cod == "1029.31" ||
-                    _cod == "1029.1.1." || _cod == "1029.1.2." || _cod == "1029.2." || _cod == "1029.21." || _cod == "1029.3." || _cod == "1029.31.")
-                    dialogInvestig->set_t_gestation2(true);
-                if (_cod == "1029.1.1" || _cod == "1029.1.2" || _cod == "1029.2" || _cod == "1029.3")
-                    dialogInvestig->set_t_gestation2(true);
+
+                dialogInvestig->set_t_organs_internal(code_organs_internal.contains(_cod));
+                dialogInvestig->set_t_urinary_system(code_urynari_system.contains(_cod));
+                dialogInvestig->set_t_prostate(code_prostate.contains(_cod));
+                dialogInvestig->set_t_gynecology(code_gynecologie.contains(_cod));
+                dialogInvestig->set_t_breast(code_breast.contains(_cod));
+                dialogInvestig->set_t_thyroide(code_thyroide.contains(_cod));
+                dialogInvestig->set_t_gestation0(code_gestation0.contains(_cod));
+                dialogInvestig->set_t_gestation1(code_gestation1.contains(_cod));
+                dialogInvestig->set_t_gestation2(code_gestation2.contains(_cod));
             }
         }
         if (dialogInvestig->exec() != QDialog::Accepted)

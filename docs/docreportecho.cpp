@@ -934,6 +934,7 @@ void DocReportEcho::initConnections()
     connect(ui->gestation2_ombilic_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
     connect(ui->gestation2_uterLeft_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
     connect(ui->gestation2_uterRight_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
+    connect(ui->gestation2_cerebral_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler);
 
     connect(ui->btnOk, &QPushButton::clicked, this, &DocReportEcho::onWritingDataClose);
     connect(ui->btnWrite, &QPushButton::clicked, this, &DocReportEcho::onWritingData);
@@ -1758,12 +1759,7 @@ void DocReportEcho::connections_organs_internal()
                 if (ui->organsInternal_concluzion->toPlainText().length() > 500)
                     ui->organsInternal_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->organsInternal_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_organs_internal.isEmpty())
-            str_concluzion_organs_internal = ui->concluzion->toPlainText();
-        ui->concluzion->setPlainText(ui->organsInternal_concluzion->toPlainText());
-    });
+    connect(ui->organsInternal_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->organsInternal_recommendation->setPlaceholderText(tr("...maximum 255 caractere"));
     ui->organsInternal_recommendation->setMaxLength(255);
 }
@@ -1825,18 +1821,7 @@ void DocReportEcho::connections_urinary_system()
                     ui->urinary_system_concluzion->textCursor().deletePreviousChar();
             });
 
-    connect(ui->urinary_system_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_urinary_system.isEmpty()){
-            str_concluzion_urinary_system = ui->concluzion->toPlainText();
-            if (str_concluzion_urinary_system.isEmpty())
-                str_concluzion_urinary_system = "null";
-        }
-        if (str_concluzion_urinary_system == "null")
-            ui->concluzion->setPlainText(ui->urinary_system_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_urinary_system + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->urinary_system_concluzion->toPlainText());
-    });
+    connect(ui->urinary_system_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->urinary_system_recommendation->setPlaceholderText(tr("...maximum 255 caractere"));
     ui->urinary_system_recommendation->setMaxLength(255);
 }
@@ -1882,18 +1867,7 @@ void DocReportEcho::connections_prostate()
                 if (ui->prostate_concluzion->toPlainText().length() > 500)
                     ui->prostate_concluzion->textCursor().deleteChar();
             });
-    connect(ui->prostate_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_prostate.isEmpty()){
-            str_concluzion_prostate = ui->concluzion->toPlainText();
-            if (str_concluzion_prostate.isEmpty())
-                str_concluzion_prostate = "null";
-        }
-        if (str_concluzion_prostate == "null")
-            ui->concluzion->setPlainText(ui->prostate_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_prostate + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->prostate_concluzion->toPlainText());
-    });
+    connect(ui->prostate_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->prostate_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->prostate_recommendation->setMaxLength(255);
 }
@@ -1969,18 +1943,7 @@ void DocReportEcho::connections_gynecology()
                 if (ui->gynecology_concluzion->toPlainText().length() > 500)
                     ui->gynecology_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->gynecology_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_gynecology.isEmpty()){
-            str_concluzion_gynecology = ui->concluzion->toPlainText();
-            if (str_concluzion_gynecology.isEmpty())
-                str_concluzion_gynecology = "null";
-        }
-        if (str_concluzion_gynecology == "null")
-            ui->concluzion->setPlainText(ui->gynecology_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_gynecology + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gynecology_concluzion->toPlainText());
-    });
+    connect(ui->gynecology_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->gynecology_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->gynecology_recommendation->setMaxLength(255);
 }
@@ -2040,18 +2003,7 @@ void DocReportEcho::connections_breast()
                 if (ui->breast_concluzion->toPlainText().length() > 500)
                     ui->breast_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->breast_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_brest.isEmpty()){
-            str_concluzion_brest = ui->concluzion->toPlainText();
-            if (str_concluzion_brest.isEmpty())
-                str_concluzion_brest = "null";
-        }
-        if (str_concluzion_brest == "null")
-            ui->concluzion->setPlainText(ui->breast_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_brest + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->breast_concluzion->toPlainText());
-    });
+    connect(ui->breast_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->breast_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->breast_recommendation->setMaxLength(255);
 }
@@ -2100,18 +2052,7 @@ void DocReportEcho::connections_thyroid()
                 if (ui->thyroid_concluzion->toPlainText().length() > 500)
                     ui->thyroid_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->thyroid_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_thyroid.isEmpty()){
-            str_concluzion_thyroid = ui->concluzion->toPlainText();
-            if (str_concluzion_thyroid.isEmpty())
-                str_concluzion_thyroid = "null";
-        }
-        if (str_concluzion_thyroid == "null")
-            ui->concluzion->setPlainText(ui->thyroid_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_thyroid + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->thyroid_concluzion->toPlainText());
-    });
+    connect(ui->thyroid_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
     ui->thyroid_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->thyroid_recommendation->setMaxLength(255);
 }
@@ -2161,18 +2102,7 @@ void DocReportEcho::connections_gestation0()
                 if (ui->gestation0_concluzion->toPlainText().length() > 500)
                     ui->gestation0_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->gestation0_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_gestation0.isEmpty()){
-            str_concluzion_gestation0 = ui->concluzion->toPlainText();
-            if (str_concluzion_gestation0.isEmpty())
-                str_concluzion_gestation0 = "null";
-        }
-        if (str_concluzion_gestation0 == "null")
-            ui->concluzion->setPlainText(ui->gestation0_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_gestation0 + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gestation0_concluzion->toPlainText());
-    });
+    connect(ui->gestation0_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
 
     ui->gestation0_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->gestation0_recommendation->setMaxLength(255);
@@ -2241,18 +2171,7 @@ void DocReportEcho::connections_gestation1()
                 if (ui->gestation1_concluzion->toPlainText().length() > 500)
                     ui->gestation1_concluzion->textCursor().deletePreviousChar();
             });
-    connect(ui->gestation1_concluzion, &QPlainTextEdit::textChanged, this, [this]()
-    {
-        if (str_concluzion_gestation1.isEmpty()){
-            str_concluzion_gestation1 = ui->concluzion->toPlainText();
-            if (str_concluzion_gestation1.isEmpty())
-                str_concluzion_gestation1 = "null";
-        }
-        if (str_concluzion_gestation1 == "null")
-            ui->concluzion->setPlainText(ui->gestation1_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_gestation1 + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gestation1_concluzion->toPlainText());
-    });
+    connect(ui->gestation1_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
 
     ui->gestation1_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->gestation1_recommendation->setMaxLength(255);
@@ -2363,17 +2282,7 @@ void DocReportEcho::connections_gestation2()
             ui->gestation2_concluzion->textCursor().deletePreviousChar();
     });
 
-    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [this](){
-        if (str_concluzion_gestation2.isEmpty()){
-            str_concluzion_gestation2 = ui->concluzion->toPlainText();
-            if (str_concluzion_gestation2.isEmpty())
-                str_concluzion_gestation2 = "null";
-        }
-        if (str_concluzion_gestation2 == "null")
-            ui->concluzion->setPlainText(ui->gestation2_concluzion->toPlainText());
-        else
-            ui->concluzion->setPlainText(str_concluzion_gestation2 + ((ui->concluzion->toPlainText().isEmpty()) ? "":"\n") + ui->gestation2_concluzion->toPlainText());
-    });
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::updateTextConcluzionBySystem);
 
     connect(group_btn_gestation2, QOverload<int>::of(&QButtonGroup::idClicked),
             this, QOverload<int>::of(&DocReportEcho::clickedGestation2Trimestru));
@@ -2467,6 +2376,7 @@ void DocReportEcho::updateTextDescriptionDoppler()
     QString txt_umbelicalArtery    = getPercentageByDopplerUmbelicalArtery();
     QString txt_uterineArteryLeft  = getPercentageByDopplerUterineArteryLeft();
     QString txt_uterineArteryRight = getPercentageByDopplerUterineArteryRight();
+    QString txt_CMA                = getPercentageByDopplerCMA();
 
     ui->gestation2_infoDoppler->clear();
 
@@ -2478,6 +2388,9 @@ void DocReportEcho::updateTextDescriptionDoppler()
 
     if (txt_uterineArteryRight != nullptr)
         ui->gestation2_infoDoppler->append(txt_uterineArteryRight);
+
+    if (txt_CMA != nullptr)
+        ui->gestation2_infoDoppler->append(txt_CMA);
 
     ui->gestation2_infoDoppler->append("\nDevierea de calcul cu 'Fetal Medicine Foundation' este de până la 0.10 percentile.");
 }
@@ -2547,6 +2460,50 @@ QString DocReportEcho::getPercentageByDopplerUterineArteryRight()
     ui->gestation2_uterRight_flux->setCurrentIndex(data_percentage->getBloodFlow());
 
     return "Doppler a.uterină dreapta: " + txt;
+}
+
+QString DocReportEcho::getPercentageByDopplerCMA()
+{
+    if (ui->gestation2_cerebral_PI->text().isEmpty())
+        return nullptr;
+
+    int weeks, days;
+    extractWeeksAndDays(ui->gestation2_fetus_age->text(), weeks, days);
+    double current_PI = ui->gestation2_cerebral_PI->text().replace(",", ".").toDouble();
+
+    data_percentage->setTypePercentile(DataPercentage::TYPE_PERCENTILES::P_CMA);
+    data_percentage->resetBloodFlow();
+    QString txt = data_percentage->determinePIPercentile_FMF(current_PI, weeks);
+    ui->gestation2_cerebral_flux->setCurrentIndex(data_percentage->getBloodFlow());
+
+    return "Doppler a.cerebrală medie: " + txt;
+}
+
+// *******************************************************************
+// **************** PROCESAREA CONCLUZIILOR **************************
+
+void DocReportEcho::updateTextConcluzionBySystem()
+{
+    ui->concluzion->clear();
+
+    if (m_organs_internal && ! ui->organsInternal_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->organsInternal_concluzion->toPlainText());
+    if (m_urinary_system && ! ui->urinary_system_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->urinary_system_concluzion->toPlainText());
+    if (m_prostate && ! ui->prostate_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->prostate_concluzion->toPlainText());
+    if (m_gynecology && ! ui->gynecology_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->gynecology_concluzion->toPlainText());
+    if (m_breast && ! ui->breast_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->breast_concluzion->toPlainText());
+    if (m_thyroide && ! ui->thyroid_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->thyroid_concluzion->toPlainText());
+    if (m_gestation0 && ! ui->gestation0_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->gestation0_concluzion->toPlainText());
+    if (m_gestation1 && ! ui->gestation1_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->gestation1_concluzion->toPlainText());
+    if (m_gestation2 && ! ui->gestation2_concluzion->toPlainText().isEmpty())
+        ui->concluzion->appendPlainText(ui->gestation2_concluzion->toPlainText());
 }
 
 // *******************************************************************
