@@ -40,7 +40,7 @@ CONFIG  -= qml_debug
 # Definim componentele versiunii
 USG_VERSION_MAJOR   = 3
 USG_VERSION_MINOR   = 0
-USG_VERSION_RELEASE = 1
+USG_VERSION_RELEASE = 2
 USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
 VERSION             = "$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE"
 DEFINES += USG_VERSION_MAJOR=$$USG_VERSION_MAJOR
@@ -256,6 +256,7 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
+    build_project.sh \
     debian/control \
     debian/postinst \
     debian/preinst \

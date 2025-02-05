@@ -26,6 +26,7 @@
 #include <data/appsettings.h>
 #include <data/database.h>
 #include <data/globals.h>
+#include <data/loggingcategories.h>
 
 static const int LOAD_TIME_MSEC = 5 * 1000;
 
@@ -309,20 +310,20 @@ int main(int argc, char *argv[])
     // instalam fisierul de logare
     if (QString(argv[1]) == "" && QString(argv[1]) != "/debug") { // !=
         m_logFile.reset(new QFile(globals::pathLogAppSettings));
-        if (m_logFile.data()->open(QFile::Append | QFile::Text)) {
+        if (m_logFile && m_logFile->open(QFile::Append | QFile::Text)) {
             qInstallMessageHandler(messageHandler);
+        } else {
+            qDebug() << "Eroare la deschiderea fisierului de log!";
         }
     }
 
     //******************************************************************************************************************************
     // determinam modul de lansare a aplicatiei
-    if (globals::unknowModeLaunch) { // nu e determinat modul lansarii aplicatiei
-        InitLaunch *initLaunch
-            = new InitLaunch(); // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
-        initLaunch->setAttribute(
-            Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
+    if (globals::unknowModeLaunch) {                    // nu e determinat modul lansarii aplicatiei
+        InitLaunch *initLaunch = new InitLaunch();      // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
+        initLaunch->setAttribute(Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
         if (initLaunch->exec() != QDialog::Accepted) {
-            // appSettings->deleteLater();
+            appSettings->deleteLater();
             return 1;
         }
         QTranslator *translator = new QTranslator(); // daca limba a fost schimbata
@@ -340,8 +341,7 @@ int main(int argc, char *argv[])
     // 2. Prima lansare a aplicatiei
     // 3. Exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
     if (globals::moveApp == 1) { // 1. daca BD a fost transferata
-        if (appSettings->exec()
-            != QDialog::Accepted) // deschidem setarile aplicatiei pu a seta drumul spre BD
+        if (appSettings->exec() != QDialog::Accepted) // deschidem setarile aplicatiei pu a seta drumul spre BD
             return 1;
         AuthorizationUser *authUser = new AuthorizationUser(); // lansam autorizarea
         authUser->setProperty("Id", globals::idUserApp);       // setam proprietatea 'id'
@@ -350,28 +350,22 @@ int main(int argc, char *argv[])
         resizeMainWindow(a); // resetam dimensiunile ferestrei principale
     } else {
         if (globals::firstLaunch) { // 2. daca prima lansare a aplicatie
-            if (appSettings->exec()
-                != QDialog::Accepted) // lansam setarile principale ale aplicatiei
+            if (appSettings->exec() != QDialog::Accepted) // lansam setarile principale ale aplicatiei
                 return 1;
             CatUsers *catUsers = new CatUsers(); // cream utilizator nou
-            catUsers->setAttribute(
-                Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
+            catUsers->setAttribute(Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
             catUsers->setProperty("ItNew", true); // setam proprietatea 'itNew'
-            catUsers->setWindowTitle(
-                QCoreApplication::tr("Crearea administratorului aplicației %1").arg("[*]"));
+            catUsers->setWindowTitle(QCoreApplication::tr("Crearea administratorului aplicației %1").arg("[*]"));
             if (catUsers->exec() != QDialog::Accepted)
                 return 1;
             auto db = new DataBase();
-            appSettings
-                ->setKeyAndValue("on_start",
-                                 "idUserApp",
-                                 db->encode_string(QString::number(
-                                     globals::idUserApp))); // in fisierul cu setari pentru extragerea
+            appSettings->setKeyAndValue("on_start",
+                                        "idUserApp",
+                                        db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
             appSettings->setKeyAndValue(
                 "on_start",
                 "nameUserApp",
-                db->encode_string(
-                    globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
+                db->encode_string(globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
             appSettings->setKeyAndValue("on_start", "memoryUser", (globals::memoryUser) ? 1 : 0);
             qDebug() << "thisSqlite: " << globals::thisSqlite;
             qDebug() << "thisMySQL: " << globals::thisMySQL;
@@ -415,26 +409,27 @@ int main(int argc, char *argv[])
 // realizarea procesarii
 void messageHandler(QtMsgType type, const QMessageLogContext &context, const QString &msg)
 {
-    QTextStream out(m_logFile.data()); // Initerea fluxului datelor pu inscriere
-    out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz "); // adaugam data
-    // Dupa tipul debug-ului determinam nivelul mesajului
-    switch (type) {
-    case QtInfoMsg:
-        out << "INF ";
-        break;
-    case QtDebugMsg:
-        out << "DBG ";
-        break;
-    case QtWarningMsg:
-        out << "WRN ";
-        break;
-    case QtCriticalMsg:
-        out << "CRT ";
-        break;
-    case QtFatalMsg:
-        out << "FTL ";
-        break;
+    if (! m_logFile) {
+        qDebug() << "m_logFile is null!";
+        return;
     }
-    out << context.category << ": " << msg << Qt::endl; // Inscrim categoria si mesajul
-    out.flush();                                        // golim datele din bufer
+
+    if (! m_logFile->isOpen()) {
+        qDebug() << "m_logFile is not open!";
+        return;
+    }
+
+    QTextStream out(m_logFile.data());
+    out << QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss.zzz ") << " ";
+
+    switch (type) {
+    case QtInfoMsg: out << "INF "; break;
+    case QtDebugMsg: out << "DBG "; break;
+    case QtWarningMsg: out << "WRN "; break;
+    case QtCriticalMsg: out << "CRT "; break;
+    case QtFatalMsg: out << "FTL "; break;
+    }
+
+    out << context.category << ": " << msg << Qt::endl;  // Inscrim categoria si mesajul
+    out.flush();                                         // golim datele din bufer
 }

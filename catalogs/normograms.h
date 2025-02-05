@@ -3,7 +3,6 @@
 
 #include "models/variantmaptablemodel.h"
 #include <QDialog>
-#include <QStyleFactory>
 #include <data/database.h>
 
 namespace Ui {
@@ -48,8 +47,6 @@ private:
     VariantMapTableModel *model_indexAmniotic;
     VariantMapTableModel *model_doppler_uterine;
     VariantMapTableModel *model_doppler_umbelicale;
-
-    QStyle* style_fusion = QStyleFactory::create("Fusion");
 };
 
 #endif // NORMOGRAMS_H

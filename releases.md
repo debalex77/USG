@@ -1,3 +1,15 @@
+## USG v3.0.2
+* normograme - au fost adaugate datele percentilelor(5,10,25,50,75,90,95):
+    * a.uterine 
+    * a.ombelicale
+    * a.cerebrală medie
+    * masa fătului
+* document 'Raport ecografic':
+    * adaugată descifrarea doppler-ului în dependeță de valoarea a percentilei
+    * realizată calcularea automată vârstei gestaționale și a datei probabile a nașterii
+* blocarea programei -  a fost implementat mecanismul de blocare a aplicației de către utilizator în timpul pauzei
+* fixate bug-rile minore
+
 ## USG v3.0.1
 * migrarea aplicatiei de la versiunea Qt:5.15.2 la versiunea Qt:6.5.3
 * integrarea compatibilității aplicației cu sistemul de operare MacOS (începând cu MacOS Ventura și ulterioare)

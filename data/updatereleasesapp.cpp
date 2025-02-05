@@ -49,7 +49,7 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
                     qInfo(logInfo()) << "Se executa actualizare pana la versiunea:" << QString("%1.%2.%3").arg(version_major, version_minor, version_release);
                     updateFunctions[version_major][version_minor][i](); // Apelăm funcția de actualizare
                 } else {
-                    qInfo(logInfo()) << QString("Functia de actualizare pentru versiunea ""%1.%2.%3"" nu este definita !!!").arg(version_major, version_minor, version_release);
+                    qInfo(logInfo()) << QString("Functia de actualizare pentru versiunea ""%1.%2.%3"" nu este definita !!!").arg(version_major).arg(version_minor).arg(version_release);
                 }
             }
         }

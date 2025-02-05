@@ -558,7 +558,7 @@ void ListDocReportOrder::onClickBtnReport()
 
         const int _idPacient = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_idPacient), Qt::DisplayRole).toInt();
 
-        // daca nu afost gasit documentul subaltern -> deschidem selectarea investigatiilor
+        // daca nu afost gasit documentul subaltern -> deschidem selectarea investigatiilor   
         CustomDialogInvestig* dialogInvestig = new CustomDialogInvestig(this);
         qry.prepare("SELECT cod FROM orderEchoTable WHERE id_orderEcho = :idOrderEcho;");
         qry.bindValue(":idOrderEcho", _id);
@@ -566,15 +566,24 @@ void ListDocReportOrder::onClickBtnReport()
             while (qry.next()) {
                 QString _cod = qry.value(0).toString();
 
-                dialogInvestig->set_t_organs_internal(code_organs_internal.contains(_cod));
-                dialogInvestig->set_t_urinary_system(code_urynari_system.contains(_cod));
-                dialogInvestig->set_t_prostate(code_prostate.contains(_cod));
-                dialogInvestig->set_t_gynecology(code_gynecologie.contains(_cod));
-                dialogInvestig->set_t_breast(code_breast.contains(_cod));
-                dialogInvestig->set_t_thyroide(code_thyroide.contains(_cod));
-                dialogInvestig->set_t_gestation0(code_gestation0.contains(_cod));
-                dialogInvestig->set_t_gestation1(code_gestation1.contains(_cod));
-                dialogInvestig->set_t_gestation2(code_gestation2.contains(_cod));
+                if (! dialogInvestig->get_t_organs_internal())
+                    dialogInvestig->set_t_organs_internal(code_organs_internal.contains(_cod));
+                if (! dialogInvestig->get_t_urinary_system())
+                    dialogInvestig->set_t_urinary_system(code_urynari_system.contains(_cod));
+                if (! dialogInvestig->get_t_prostate())
+                    dialogInvestig->set_t_prostate(code_prostate.contains(_cod));
+                if (! dialogInvestig->get_t_gynecology())
+                    dialogInvestig->set_t_gynecology(code_gynecologie.contains(_cod));
+                if (! dialogInvestig->get_t_breast())
+                    dialogInvestig->set_t_breast(code_breast.contains(_cod));
+                if (! dialogInvestig->get_t_thyroide())
+                    dialogInvestig->set_t_thyroide(code_thyroide.contains(_cod));
+                if(! dialogInvestig->get_t_gestation0())
+                    dialogInvestig->set_t_gestation0(code_gestation0.contains(_cod));
+                if (! dialogInvestig->get_t_gestation1())
+                    dialogInvestig->set_t_gestation1(code_gestation1.contains(_cod));
+                if (! dialogInvestig->get_t_gestation2())
+                    dialogInvestig->set_t_gestation2(code_gestation2.contains(_cod));
             }
         }
         if (dialogInvestig->exec() != QDialog::Accepted)

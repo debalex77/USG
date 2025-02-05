@@ -34,10 +34,6 @@ Normograms::Normograms(QWidget *parent)
     // resize frame btn
 
     ui->frame_tables->resize(500, ui->frame_tables->height());
-
-    // ********************************************************
-    // style for OS Windows
-
 }
 
 Normograms::~Normograms()
@@ -54,6 +50,7 @@ Normograms::~Normograms()
 void Normograms::setModels()
 {
     db = new DataBase(this);
+
     QSqlQuery qry;
     QVariantMap norm_data;
 
