@@ -1,0 +1,7 @@
+<RCC>
+    <qresource prefix="/">
+        <file>welcome.html</file>
+        <file>logo.png</file>
+        <file>eco_256x256.png</file>
+    </qresource>
+</RCC>

@@ -266,10 +266,21 @@ DISTFILES += \
     debian/usr/share/doc/usg/changelog.Debian \
     debian/usr/share/doc/usg/copyright \
     debian/usr/share/metainfo/org.alovada.usg.metainfo.xml \
+    installer/linux/config/config.xml \
+    installer/linux/config/eco.png \
+    installer/linux/config/eco_256x256.png \
+    installer/linux/config/logo.png \
+    installer/linux/config/style.qss \
+    installer/linux/config/welcome.html \
+    installer/linux/packages/com.alovada.usg/data/org.alovada.usg.desktop \
+    installer/linux/packages/com.alovada.usg/meta/installscript.qs \
+    installer/linux/packages/com.alovada.usg/meta/license.txt \
+    installer/linux/packages/com.alovada.usg/meta/package.xml \
     styles/style_dark.qss \
     version.txt
 
 RESOURCES += \
+    installer/linux/config/installer.qrc \
     resource.qrc
 
 macx{

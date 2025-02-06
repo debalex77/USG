@@ -1,0 +1,6 @@
+Acest program este software gratuit; 
+îl poți redistribui și/sau modifica în concordanță cu termenii 
+GNU Licență Publică Generală cum sunt publicați de 
+Free Software Foundation; fie versiunea 3 a licenței, 
+sau(după alegerea ta) orice versiune mai actuală.
+

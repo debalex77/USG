@@ -7,6 +7,7 @@ PREBUILD_DIR="build/prebuild_project"
 BUILD_DIR="build/build_project"
 QT_LIB_DIR="$HOME/Qt/6.5.3/gcc_64/lib"
 QT_PLUGINS_DIR="$HOME/Qt/6.5.3/gcc_64/plugins"
+QT_QIF_DIR="$HOME/Qt/Tools/QtInstallerFramework/4.8/bin"
 
 #-----------------------------------------------------
 # 1. Verificam daca sunt directorii
@@ -99,3 +100,34 @@ echo "Sunt copiate alte librarii necesare ..."
 echo "Fisierele proiectului sunt gata pentru formarea pachetului de instalare ..."
 echo "-------------------------------------------------------------------------"
 
+INSTALLER_DIR="build/usg_installer"
+if [ ! -d $INSTALLER_DIR ]; then
+    echo "Se creeaza dosarul 'usg_installer' ..."
+    mkdir $INSTALLER_DIR
+else
+    echo "Se sterg fisierele din dosarul 'usg_installer' ..."
+    rm -r $INSTALLER_DIR
+    echo "Se creeaza dosarul 'usg_installer' ..."
+    mkdir $INSTALLER_DIR
+fi
+
+if [ ! -d "$INSTALLER_DIR"/config ]; then
+    mkdir "$INSTALLER_DIR"/config
+fi
+
+echo "Se copie fisierele pentru formarea pachetului de instalare ..."
+cp -rf "installer/linux/config" "$INSTALLER_DIR"/
+cp -rf "installer/linux/packages" "$INSTALLER_DIR"/
+cp -rf "$BUILD_DIR"/* "$INSTALLER_DIR"/packages/com.alovada.usg/data
+
+VERSION=$(cat version.txt)
+
+rm -f build/USG_v$VERSION.run
+
+echo "Se creeaza pachetul de instalare ..."
+"$QT_QIF_DIR"/binarycreator -c "$INSTALLER_DIR"/config/config.xml -p "$INSTALLER_DIR"/packages build/USG_v$VERSION.run
+echo "Fisierul de instalare creat cu succes !!!"
+
+rm -r $INSTALLER_DIR
+rm -r build/prebuild_project
+rm -r build/build_project

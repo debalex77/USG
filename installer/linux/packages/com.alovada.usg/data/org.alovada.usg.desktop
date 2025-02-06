@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=3.0.2
+Type=Application
+Name=USG-Evidența examinărilor ecografice
+Comment=USG-Evidența examinărilor ecografice
+Exec=@TargetDir@/usg
+Icon=@TargetDir@/icons/eco_248x248.ico
+Terminal=false
+Categories=Utility;Database;MedicalSoftware;Qt;
+StartupWMClass=USG
+Terminal=false
+Encoding=UTF-8
+
