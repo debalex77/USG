@@ -4,7 +4,7 @@ Maintainer: Codreanu Alexandru <alovada.med@gmail.com>
 Architecture: amd64
 Section: misc
 Priority: optional
-Installed-Size: 610611
+Installed-Size: 11111
 Homepage: https://github.com/debalex77/USG
 Description: USG - records of ultrasound examinations
  The application for the records of patients who have passed ultrasound

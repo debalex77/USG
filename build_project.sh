@@ -123,42 +123,39 @@ cp -rf "$BUILD_DIR"/* "$INSTALLER_DIR"/packages/com.alovada.usg/data
 VERSION=$(cat version.txt)
 ARCH="Linux_amd64"
 FILENAME="USG_v${VERSION}_${ARCH}.run"
-FILENAME_SHA256="USG_v${VERSION}_${ARCH}.sha256"
+FILENAME_RUN_SHA256="USG_v${VERSION}_${ARCH}_run.sha256"
 
 rm -f build/$FILENAME
-rm -f build/$FILENAME_SHA256
+rm -f build/$FILENAME_RUN_SHA256
 
 echo "-------------------------------------------------------------------------"
-echo "Se creeaza pachetul de instalare ..."
+echo "Se creeaza pachetul de instalare $FILENAME ..."
 "$QT_QIF_DIR"/binarycreator -c "$INSTALLER_DIR"/config/config.xml -p "$INSTALLER_DIR"/packages build/$FILENAME
 echo "Fisierul de instalare creat cu succes !!!"
 
-echo "Se calculeaza suma SHA256 a fisierului de instalare ..."
+echo "Se calculeaza suma SHA256 a fisierului de instalare $FILENAME ..."
 SHA256_SUM_TXT=$(sha256sum build/$FILENAME | awk '{print $1}')
-echo "$SHA256_SUM_TXT" > build/$FILENAME_SHA256
-
-echo "-------------------------------------------------------------------------"
-read -p "Doriți să lansati fisierul de instalare? (y/n): " response
-if [[ "$response" == "y" || "$response" == "Y" ]]; then
-    echo "Se lanseaza fisierul de instalare..."
-    ./build/USG_v$VERSION.run
-fi
+echo "$SHA256_SUM_TXT" > build/$FILENAME_RUN_SHA256
 
 echo "-------------------------------------------------------------------------"
 
 echo "Initierea crearii pachetului .deb ..."
-BUILD_DEB_DIR="build/build_deb"
+BUILD_DEB_DIR="build/USG_v${VERSION}_${ARCH}"
 FILENAME_DEB="USG_v${VERSION}_${ARCH}.deb"
+FILENAME_DEB_SHA256="USG_v${VERSION}_${ARCH}_deb.sha256"
+
+rm -f build/$FILENAME_DEB
+rm -f build/$FILENAME_DEB_SHA256
 
 if [ ! -d $BUILD_DEB_DIR ]; then
-    echo "Crearea dosarului 'build_deb' ..."
+    echo "Crearea dosarului $BUILD_DEB_DIR ..."
     mkdir $BUILD_DEB_DIR
 else
-    rm -rf $BUILD_DEB_DIR
-    echo "Se sterg fisierele din dosarul 'build_deb' ..."
+    rm -r $BUILD_DEB_DIR
+    echo "Se sterg fisierele din dosarul $BUILD_DEB_DIR ..."
 fi
 
-echo "Se copie fisiere in dosar 'build_deb' ..."
+echo "Se copie fisiere in dosar $BUILD_DEB_DIR ..."
 mkdir $BUILD_DEB_DIR/DEBIAN
 cp -f debian/control $BUILD_DEB_DIR/DEBIAN
 cp -f debian/postinst $BUILD_DEB_DIR/DEBIAN
@@ -166,27 +163,50 @@ cp -f debian/preinst $BUILD_DEB_DIR/DEBIAN
 cp -f debian/prerm $BUILD_DEB_DIR/DEBIAN
 cp -rf debian/usr $BUILD_DEB_DIR
 
+mkdir $BUILD_DEB_DIR/opt
+mkdir $BUILD_DEB_DIR/opt/USG
+cp -rf "$BUILD_DIR"/* $BUILD_DEB_DIR/opt/USG/
+
+# aflam marimea proiectului
+SIZE_PROJECT=$(du -sk $BUILD_DEB_DIR/opt/USG | awk '{print $1}')
+# setam marimrea
+sed -i "s/^Installed-Size: [0-9]\+/Installed-Size: $SIZE_PROJECT/" $BUILD_DEB_DIR/DEBIAN/control
+
 chmod 755 $BUILD_DEB_DIR/DEBIAN
 chmod 644 $BUILD_DEB_DIR/DEBIAN/control
 chmod 775 $BUILD_DEB_DIR/DEBIAN/preinst
 chmod 775 $BUILD_DEB_DIR/DEBIAN/postinst
 chmod 775 $BUILD_DEB_DIR/DEBIAN/prerm
 
-mkdir $BUILD_DEB_DIR/opt
-mkdir $BUILD_DEB_DIR/opt/USG
-cp -rf "$BUILD_DIR"/* $BUILD_DEB_DIR/opt/USG/
+echo "Se calculeaza suma MD5 a fisierelor proiectului ..."
+md5deep -r $BUILD_DEB_DIR/opt >> $BUILD_DEB_DIR/DEBIAN/md5sums
+md5deep -r $BUILD_DEB_DIR/usr >> $BUILD_DEB_DIR/DEBIAN/md5sums
+sed -i "s|$HOME/Qt_projects/USG/$BUILD_DEB_DIR/||g" $BUILD_DEB_DIR/DEBIAN/md5sums
+chmod 775 $BUILD_DEB_DIR/DEBIAN/md5sums
 
-echo "Se creeaza pachetul de instalare .deb ..."
+# arhivam changelog
+gzip -9 $BUILD_DEB_DIR/usr/share/doc/usg/changelog
+gzip -9 $BUILD_DEB_DIR/usr/share/doc/usg/changelog.Debian
+gzip -9 $BUILD_DEB_DIR/usr/share/doc/usg/copyright
+
+echo "Se creeaza pachetul de instalare $FILENAME_DEB ..."
 dpkg-deb --build $BUILD_DEB_DIR
 
-mv build/build_deb.deb build/$FILENAME_DEB
-echo "Se calculeaza suma SHA256 a fisierului .deb ..."
+echo "Se calculeaza suma SHA256 a fisierului $FILENAME_DEB ..."
 SHA256_SUM_DEB=$(sha256sum build/$FILENAME_DEB | awk '{print $1}')
 echo "$SHA256_SUM_DEB" > build/$FILENAME_DEB_SHA256
+echo "Fisierului $FILENAME_DEB creat cu succes !!!"
 
 echo "-------------------------------------------------------------------------"
 echo "Se elimina fisiere si directoriile: prebuild_project, build_project, usg_installer ..."
 rm -r $INSTALLER_DIR
-rm -r build/prebuild_project
-rm -r build/build_project
+rm -r $PREBUILD_DIR
+rm -r $BUILD_DIR
 rm -r $BUILD_DEB_DIR
+
+#echo "-------------------------------------------------------------------------"
+#read -p "Doriți să lansati fisierul de instalare? (y/n): " response
+#if [[ "$response" == "y" || "$response" == "Y" ]]; then
+#    echo "Se lanseaza fisierul de instalare..."
+#    ./build/USG_v$VERSION.run
+#fi
