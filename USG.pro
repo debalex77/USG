@@ -272,7 +272,6 @@ DISTFILES += \
     installer/linux/config/logo.png \
     installer/linux/config/style.qss \
     installer/linux/config/welcome.html \
-    installer/linux/packages/com.alovada.usg/data/org.alovada.usg.desktop \
     installer/linux/packages/com.alovada.usg/meta/installscript.qs \
     installer/linux/packages/com.alovada.usg/meta/license.txt \
     installer/linux/packages/com.alovada.usg/meta/package.xml \

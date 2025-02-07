@@ -1,3 +1,16 @@
+3.0.2 (February 06th, 2025)
+  * Normograms - Percentile data (5, 10, 25, 50, 75, 90, 95) have been added for:
+    * Uterine artery
+    * Umbilical artery
+    * Middle cerebral artery
+    * Fetal weight
+  * Document 'Ultrasound Report':
+    * Added Doppler interpretation depending on the percentile value
+    * Implemented automatic calculation of gestational age and estimated due date
+  * Application Locking:
+    * A mechanism has been implemented to allow the user to lock the application during breaks
+  * Fixed minor bugs
+
 3.0.1 (January 02th, 2025)
   * Migration of the application from Qt version 5.15.2 to version 6.5.3.
   * Added splash screens for the new application.
