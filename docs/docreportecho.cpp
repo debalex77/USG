@@ -3773,6 +3773,9 @@ void DocReportEcho::findVideoFiles()
 
 void DocReportEcho::setDefaultDataTableLiver()
 {
+    if (! m_organs_internal)
+        return;
+
     if (ui->liver_contour->text().isEmpty())
         ui->liver_contour->setText("clar");
     if (ui->liver_parenchyma->text().isEmpty())
@@ -3787,6 +3790,9 @@ void DocReportEcho::setDefaultDataTableLiver()
 
 void DocReportEcho::setDefaultDataTableCholecist()
 {
+    if (! m_organs_internal)
+        return;
+
     if (ui->cholecist_form->text().isEmpty())
         ui->cholecist_form->setText("obisnuita");
     if (ui->cholecist_formations->text().isEmpty())
@@ -3795,6 +3801,9 @@ void DocReportEcho::setDefaultDataTableCholecist()
 
 void DocReportEcho::setDefaultDataTablePancreas()
 {
+    if (! m_organs_internal)
+        return;
+
     if (ui->pancreas_ecogenity->text().isEmpty())
         ui->pancreas_ecogenity->setText("sporita");
     if (ui->pancreas_parenchyma->text().isEmpty())
@@ -3805,6 +3814,9 @@ void DocReportEcho::setDefaultDataTablePancreas()
 
 void DocReportEcho::setDefaultDataTableSpleen()
 {
+    if (! m_organs_internal)
+        return;
+
     if (ui->spleen_contour->text().isEmpty())
         ui->spleen_contour->setText("clar");
     if (ui->spleen_parenchyma->text().isEmpty())
@@ -3815,12 +3827,18 @@ void DocReportEcho::setDefaultDataTableSpleen()
 
 void DocReportEcho::setDefaultDataTableIntestinalLoop()
 {
+    if (! m_organs_internal)
+        return;
+
     if (ui->intestinalHandles->toPlainText().isEmpty())
         ui->intestinalHandles->setPlainText("formațiuni abs., ganglioni limfatici mezenteriali 5-10 mm fără aglomerări");
 }
 
 void DocReportEcho::setDefaultDataKidney()
 {
+    if (! m_urinary_system)
+        return;
+
     if (ui->kidney_formations->text().isEmpty())
         ui->kidney_formations->setText("solide, lichide abs., sectoare hiperecogene 2-3 mm fără umbră acustică");
     if (ui->kidney_pielocaliceal_left->text().isEmpty())
@@ -3833,12 +3851,18 @@ void DocReportEcho::setDefaultDataKidney()
 
 void DocReportEcho::setDefaultDataBladder()
 {
+    if (! m_urinary_system)
+        return;
+
     if (ui->bladder_formations->text().isEmpty())
         ui->bladder_formations->setText("diverticuli, calculi abs.");
 }
 
 void DocReportEcho::setDefaultDataProstate()
 {
+    if (! m_prostate)
+        return;
+
     if (ui->prostate_contur->text().isEmpty())
         ui->prostate_contur->setText("clar");
     if (ui->prostate_ecogency->text().isEmpty())
@@ -3853,6 +3877,9 @@ void DocReportEcho::setDefaultDataProstate()
 
 void DocReportEcho::setDefaultDataGynecology()
 {
+    if (! m_gynecology)
+        return;
+
     if (m_id == Enums::IDX::IDX_UNKNOW){
         ui->gynecology_btn_transvaginal->setChecked(true);
         ui->gynecology_dateMenstruation->setDate(QDate::currentDate());
@@ -3878,11 +3905,14 @@ void DocReportEcho::setDefaultDataGynecology()
     if (ui->gynecology_ovary_formations_left->toPlainText().isEmpty())
         ui->gynecology_ovary_formations_left->setPlainText("abs.");
     if (ui->gynecology_recommendation->text().isEmpty())
-        ui->prostate_recommendation->setText("consulta\310\233ia ginecologului");
+        ui->gynecology_recommendation->setText("consulta\310\233ia ginecologului");
 }
 
 void DocReportEcho::setDefaultDataBreast()
 {
+    if (! m_breast)
+        return;
+
     if (ui->breast_right_ecostructure->text().isEmpty())
         ui->breast_right_ecostructure->setText("omogenă");
     if (ui->breast_right_duct->text().isEmpty())
@@ -3908,6 +3938,9 @@ void DocReportEcho::setDefaultDataBreast()
 
 void DocReportEcho::setDefaultDataThyroid()
 {
+    if (! m_thyroide)
+        return;
+
     if (ui->thyroid_ecostructure->text().isEmpty())
         ui->thyroid_ecostructure->setText("omogenă");
     if (ui->thyroid_formations->toPlainText().isEmpty())
@@ -3915,11 +3948,14 @@ void DocReportEcho::setDefaultDataThyroid()
     if (ui->thyroid_ganglions->text().isEmpty())
         ui->thyroid_ganglions->setText("fara modificări patologice");
     if (ui->thyroid_recommendation->text().isEmpty())
-        ui->prostate_recommendation->setText("consulta\310\233ia endocrinologului");
+        ui->thyroid_recommendation->setText("consulta\310\233ia endocrinologului");
 }
 
 void DocReportEcho::setDefaultDataGestation0()
 {
+    if (! m_gestation0)
+        return;
+
     if (ui->gestation0_antecedent->text().isEmpty())
         ui->gestation0_antecedent->setText("abs.");
     if (ui->gestation0_BCF->text().isEmpty())
@@ -3939,6 +3975,9 @@ void DocReportEcho::setDefaultDataGestation0()
 
 void DocReportEcho::setDefaultDataGestation1()
 {
+    if (! m_gestation1)
+        return;
+
     if (ui->gestation1_antecedent->text().isEmpty())
         ui->gestation1_antecedent->setText("abs.");
     if (ui->gestation1_BCF->text().isEmpty())
@@ -3973,6 +4012,9 @@ void DocReportEcho::setDefaultDataGestation1()
 
 void DocReportEcho::setDefaultDataGestation2()
 {
+    if (! m_gestation2)
+        return;
+
     if (ui->gestation2_recommendation->text().isEmpty())
         ui->gestation2_recommendation->setText("consulta\310\233ia ginecologului");
 }

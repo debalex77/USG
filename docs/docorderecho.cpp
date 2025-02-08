@@ -422,6 +422,7 @@ void DocOrderEcho::slot_IdPacientChanged()
         ui->editPolicyMedical->setText(_items.constFind("medicalPolicy").value());
         ui->editAddress->setText(_items.constFind("address").value());
         ui->editPhone->setText(_items.constFind("telephone").value());
+        ui->editEmail->setText(_items.constFind("email").value());
 
         enableDisableDataPacient(false); // initial nu redactam datele pacientului
     }
@@ -473,7 +474,7 @@ void DocOrderEcho::slot_NamePatientChanged()
 
 void DocOrderEcho::slot_editingFinishedPhonePatient()
 {
-    ui->btnNewPacient->setFocus(); // dupa ce a fost introdus telefonul setam focusul pe validarea pacientului
+    ui->editEmail->setFocus(); // dupa ce a fost introdus telefonul setam focusul pe validarea pacientului
 }
 
 // **********************************************************************************
@@ -2057,6 +2058,7 @@ void DocOrderEcho::keyPressEvent(QKeyEvent *event)
 
         if (ui->comboDoctor->hasFocus())
             ui->comboDoctor->showPopup();
+
     }
 
     if (event->key() == Qt::Key_F5){

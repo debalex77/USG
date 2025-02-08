@@ -76,6 +76,7 @@ public:
     void set_t_organs_internal(bool t_organs_internal)
     {
         m_organs_internal = t_organs_internal;
+        disconnections_organs_internal();
         setDefaultDataTableLiver();
         setDefaultDataTableCholecist();
         setDefaultDataTablePancreas();
@@ -89,6 +90,7 @@ public:
     void set_t_urinary_system(bool t_urinary_system)
     {
         m_urinary_system = t_urinary_system;
+        disconnections_urinary_system();
         setDefaultDataKidney();
         setDefaultDataBladder();
         connections_urinary_system();
@@ -99,6 +101,7 @@ public:
     void set_t_prostate(bool t_prostate)
     {
         m_prostate = t_prostate;
+        disconnections_prostate();
         setDefaultDataProstate();
         connections_prostate();
         emit t_prostateChanged();
@@ -108,6 +111,7 @@ public:
     void set_t_gynecology(bool t_gynecology)
     {
         m_gynecology = t_gynecology;
+        disconnections_gynecology();
         setDefaultDataGynecology();
         connections_gynecology();
         emit t_gynecologyChanged();
@@ -117,6 +121,7 @@ public:
     void set_t_breast(bool t_breast)
     {
         m_breast = t_breast;
+        disconnections_breast();
         setDefaultDataBreast();
         connections_breast();
         emit t_breastChanged();
@@ -126,6 +131,7 @@ public:
     void set_t_thyroide(bool t_thyroide)
     {
         m_thyroide = t_thyroide;
+        disconnections_thyroid();
         setDefaultDataThyroid();
         connections_thyroid();
         emit t_thyroideChanged();
@@ -135,6 +141,7 @@ public:
     void set_t_gestation0(bool t_gestation0)
     {
         m_gestation0 = t_gestation0;
+        disconnections_gestation0();
         setDefaultDataGestation0();
         connections_gestation0();
         emit t_gestation0Changed();
@@ -144,6 +151,7 @@ public:
     void set_t_gestation1(bool t_gestation1)
     {
         m_gestation1 = t_gestation1;
+        disconnections_gestation1();
         setDefaultDataGestation1();
         connections_gestation1();
         emit t_gestation1Changed();
@@ -153,6 +161,7 @@ public:
     void set_t_gestation2(bool t_gestation2)
     {
         m_gestation2 = t_gestation2;
+        disconnections_gestation2();
         setDefaultDataGestation2();
         connections_gestation2();
         emit t_gestation2Changed();
