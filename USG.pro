@@ -256,6 +256,7 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
+    build_maosx.sh \
     build_project.sh \
     debian/control \
     debian/postinst \

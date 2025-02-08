@@ -1,0 +1,129 @@
+#!/bin/bash
+
+#-----------------------------------------------------
+# Determinam variabile dosarelor
+RELEASE_DIR="build/Qt_6_5_3_for_macOS-Release"
+PREBUILD_DIR="build/prebuild_project"
+QT_DEPLOY_DIR="$HOME/Qt/6.5.3/macos/bin"
+QT_LIB_DIR="$HOME/Qt/6.5.3/macos/lib"
+
+#-----------------------------------------------------
+# 1. Verificam daca sunt directorii
+if [ ! -d "$PREBUILD_DIR" ]; then
+    mkdir -p build/prebuild_project
+    echo "A fost creat dosarul 'prebuild_project' ..."
+else
+    rm -rf build/prebuild_project/*
+    echo "Se sterg fisierele din dosarul 'prebuild_project' ..."
+fi
+
+#-----------------------------------------------------
+# 2. Copierea fisierelor
+cp -R "$RELEASE_DIR"/* "$PREBUILD_DIR"
+cp -rf icons "$PREBUILD_DIR"
+cp -rf templets "$PREBUILD_DIR"
+cp -rf LimeReport "$PREBUILD_DIR"
+cp -rf openssl "$PREBUILD_DIR"
+cp -ff version.txt "$PREBUILD_DIR"
+echo "Sunt copiate fisierele pentru 'prebuild' ..."
+
+#-----------------------------------------------------
+# 3. Stergerea fisierelor 'moc_'
+echo "Se sterg fișierele 'moc_' ..."
+find "$PREBUILD_DIR" -type f -name "moc_*" -delete
+
+#-----------------------------------------------------
+# 4. Copiem fisierul de executare
+rm -f build/USG.app
+cp -R "$PREBUILD_DIR"/USG.app build
+
+#-----------------------------------------------------
+# 5. Initializam macdeployqt
+echo "Se lansaeza macdeployqt ..."
+$QT_DEPLOY_DIR/macdeployqt6 build/USG.app -always-overwrite -verbose=2
+
+#-----------------------------------------------------
+# 6. Copiem librariile necesare
+echo "Se copie librariile necesare in fisierul USG.app ..."
+cp -R $QT_LIB_DIR/QtUiTools.framework build/USG.app/Contents/Frameworks/
+cp -R $QT_LIB_DIR/QtDesigner.framework build/USG.app/Contents/Frameworks/
+cp -R $QT_LIB_DIR/QtDesignerComponents.framework build/USG.app/Contents/Frameworks/
+cp -R $QT_LIB_DIR/QtOpenGLWidgets.framework build/USG.app/Contents/Frameworks/
+cp -R $PREBUILD_DIR/LimeReport build/USG.app/Contents/Resources/
+cp -R $PREBUILD_DIR/openssl build/USG.app/Contents/Resources/
+cp -R $PREBUILD_DIR/templets build/USG.app/Contents/Resources/
+cp -f img/eco_512x512.icns build/USG.app/Contents/Resources
+cp -f LimeReport/release/liblimereport.dylib build/USG.app/Contents/Frameworks
+cp -f LimeReport/debug/liblimereportd.dylib build/USG.app/Contents/Frameworks
+cp -f LimeReport/release/libQtZint.dylib build/USG.app/Contents/Frameworks
+cp -f LimeReport/debug/libQtZintd.dylib build/USG.app/Contents/Frameworks
+
+#------------------------------------------------------
+# 7. corectam librariile adaugate
+echo "Corectarea referintelor librariilor ..."
+APP_PATH="build/USG.app"
+EXECUTABLE="$APP_PATH/Contents/MacOS/USG"
+FRAMEWORKS="$APP_PATH/Contents/Frameworks"
+
+# Setare identificatori pentru librării
+install_name_tool -id @rpath/liblimereport.dylib $FRAMEWORKS/liblimereport.dylib
+install_name_tool -id @rpath/liblimereportd.dylib $FRAMEWORKS/liblimereportd.dylib
+install_name_tool -id @rpath/libQtZint.dylib $FRAMEWORKS/libQtZint.dylib
+install_name_tool -id @rpath/libQtZintd.dylib $FRAMEWORKS/libQtZintd.dylib
+
+# Corectare referințe pentru USG executabil
+install_name_tool -change liblimereport.dylib @rpath/liblimereport.dylib $EXECUTABLE
+install_name_tool -change liblimereportd.dylib @rpath/liblimereportd.dylib $EXECUTABLE
+install_name_tool -change libQtZint.dylib @rpath/libQtZint.dylib $EXECUTABLE
+install_name_tool -change libQtZintd.dylib @rpath/libQtZintd.dylib $EXECUTABLE
+
+# Corectare referințe în librării dependente
+install_name_tool -change libQtZint.dylib @rpath/libQtZint.dylib $FRAMEWORKS/liblimereport.dylib
+install_name_tool -change libQtZintd.dylib @rpath/libQtZintd.dylib $FRAMEWORKS/liblimereport.dylib
+install_name_tool -change libQtZint.dylib @rpath/libQtZint.dylib $FRAMEWORKS/liblimereportd.dylib
+install_name_tool -change libQtZintd.dylib @rpath/libQtZintd.dylib $FRAMEWORKS/liblimereportd.dylib
+
+#------------------------------------------------------
+# 8. crearea fisierului .dmg
+mkdir build/build_app
+mv $APP_PATH build/build_app/USG.app
+
+VERSION=$(cat version.txt)
+DMG_NAME="USG_v${VERSION}_macos.dmg"
+echo "Crearea fiserului build/$DMG_NAME ..."
+
+# Verificăm dacă aplicația există
+if [ ! -d "build/build_app/USG.app" ]; then
+    echo "Eroare: Aplicația 'build/build_app/USG.app' nu a fost găsită!"
+    exit 1
+fi
+
+create-dmg --volname "USG-Evidența examinărilor ecografice (v$VERSION)" \
+ --window-pos 200 120 \
+ --window-size 800 400 \
+ --icon-size 100 \
+ --icon "USG.app" 200 190 \
+ --hide-extension "USG.app" \
+ --app-drop-link 600 190 \
+ "build/$DMG_NAME" \
+ "build/build_app/"
+
+# Verificăm dacă fișierul .dmg a fost creat
+if [ -f "build/$DMG_NAME" ]; then
+    echo "Fișierul DMG a fost creat cu succes: build/$DMG_NAME"
+
+    # Calculăm SHA256 și salvăm într-un fișier
+    SHA256_SUM=$(shasum -a 256 "build/$DMG_NAME" | awk '{print $1}')
+    echo "$SHA256_SUM" > "build/$DMG_NAME.sha256"
+
+    echo "SHA256 calculat și salvat în: build/$DMG_NAME.sha256"
+
+else
+    echo "Eroare: Crearea fișierului DMG a eșuat!"
+    exit 1
+fi
+
+echo "-------------------------------------------------------------------------"
+echo "Se elimina fisiere si directoriile"
+rm -rf build/build_app
+rm -rf $PREBUILD_DIR
