@@ -62,7 +62,7 @@ if exist "%INSTALLER_PATH%" rd /s /q "%INSTALLER_PATH%"
 xcopy "%PROJECT_PATH%\installer\linux" "%INSTALLER_PATH%" /S /Y /I
 echo Au fost copiate fisierele installer-lui
 xcopy "%PREBUILD_PATH%\*" "%INSTALLER_PATH%\packages\com.alovada.usg\data\" /S /Y /I
-copy /Y "C:\Qt_projects\lib\vcredist_x64.exe" "%INSTALLER_PATH%\packages\com.alovada.usg\data\vcredist_x64.exe"
+::copy /Y "C:\Qt_projects\lib\vcredist_x64.exe" "%INSTALLER_PATH%\packages\com.alovada.usg\data\vcredist_x64.exe"
 echo Au fost copiate fisierele proiectului in installer
 
 ::------------------------------------------
@@ -84,6 +84,7 @@ echo     component.createOperations^(); >> "%SCRIPT_PATH%"
 echo. >> "%SCRIPT_PATH%"
 echo     // visierul de distribuire >> "%SCRIPT_PATH%"
 echo     var vcRedistFile = "@TargetDir@/vcredist_x64.exe"; >> "%SCRIPT_PATH%"
+echo     var vcRedistURL = "https://aka.ms/vs/17/release/vc_redist.x64.exe"; >> "%SCRIPT_PATH%"
 echo. >> "%SCRIPT_PATH%"
 echo     // Crearea directorului țintă >> "%SCRIPT_PATH%"
 echo     component.addOperation^("Mkdir", "@TargetDir@"); >> "%SCRIPT_PATH%"
@@ -106,6 +107,9 @@ echo         "workingDirectory=@TargetDir@", ^ >> "%SCRIPT_PATH%"
 echo         "iconPath=" + iconPath, ^ >> "%SCRIPT_PATH%"
 echo         "iconId=0", ^ >> "%SCRIPT_PATH%"
 echo         "description=USG - Evidența investigațiilor ecografice"); >> "%SCRIPT_PATH%"
+echo. >> "%SCRIPT_PATH%"
+echo     // Descărcăm fișierul folosind PowerShell >> "%SCRIPT_PATH%"
+echo     component.addOperation("Execute", "powershell", "-Command", "Invoke-WebRequest -Uri " + vcRedistURL + " -OutFile " + vcRedistFile); >> "%SCRIPT_PATH%"
 echo. >> "%SCRIPT_PATH%"
 echo     // Instalăm Visual C++ Redistributable >> "%SCRIPT_PATH%"
 echo     component.addOperation("Execute", vcRedistFile, "/quiet", "/norestart"); >> "%SCRIPT_PATH%"
