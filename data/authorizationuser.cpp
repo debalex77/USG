@@ -70,14 +70,36 @@ AuthorizationUser::~AuthorizationUser()
     delete ui;
 }
 
+void AuthorizationUser::setDataConstants()
+{
+    // 📌 1 Creăm thread-ul pentru trimiterea emailului
+    QThread *thread = new QThread();
+    handler_functionThread = new HandlerFunctionThread();
+    // 📌 2 Mutăm `handler_functionThread` în thread-ul nou
+    handler_functionThread->moveToThread(thread);
+    // 📌 3 setam `handler_functionThread` cu variabile necesrare
+    handler_functionThread->setRequiredVariabile(globals().idUserApp,
+                                                 globals().c_id_organizations,
+                                                 globals().c_id_doctor);
+    // 📌 4 Conectăm semnalele și sloturile
+    connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::setDataConstants);
+    connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, this, &AuthorizationUser::onDataReceived);
+    connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, thread, &QThread::quit);
+    // connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, handler_functionThread, &QObject::deleteLater);
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 📌 5 Pornim thread-ul
+    thread->start();
+}
+
 void AuthorizationUser::slot_IdChanged()
 {
-    if (globals::idUserApp == -1 || globals::idUserApp == 0)
+    if (globals().idUserApp == -1 || globals().idUserApp == 0)
         return;
     QMap<QString, QString> items;
-    if (db->getObjectDataById("users", globals::idUserApp, items)){
+    if (db->getObjectDataById("users", globals().idUserApp, items)){
         ui->editLogin->setText(items.constFind("name").value());
-        ui->checkBoxMemory->setChecked(globals::memoryUser);
+        ui->checkBoxMemory->setChecked(globals().memoryUser);
     } else {
         qWarning(logWarning()) << tr("%1 - slot_IdChanged():").arg(metaObject()->className())
                                << tr("ID utilizatorului nu poate sa fie egal cu '0' !!!");
@@ -88,6 +110,29 @@ void AuthorizationUser::textChangedPasswd()
 {
     if (! edit_password->text().isEmpty())
         edit_password->setPlaceholderText(tr(""));
+}
+
+void AuthorizationUser::onDataReceived(QVector<ConstantsData> data_constants)
+{
+    for (const auto &constant : data_constants) {
+        // constante
+        globals().c_id_organizations = constant.c_id_organizations;
+        globals().c_id_doctor        = constant.c_id_doctor;
+        globals().c_id_nurse         = constant.c_id_nurse;
+        globals().c_brandUSG         = constant.c_brandUSG;
+        globals().c_logo_byteArray   = constant.c_logo;
+        // organizatia
+        globals().main_name_organization   = constant.organization_name;
+        globals().main_addres_organization = constant.organization_address;
+        globals().main_phone_organization  = constant.organization_phone;
+        globals().main_email_organization  = constant.organization_email;
+        globals().main_stamp_organization  = constant.organization_stamp;
+        // doctor
+        globals().signature_main_doctor      = constant.doctor_signatute;
+        globals().stamp_main_doctor          = constant.doctor_stamp;
+        globals().main_name_doctor           = constant.doctor_nameFull;
+        globals().main_name_abbreviat_doctor = constant.doctor_nameAbbreviate;
+    }
 }
 
 bool AuthorizationUser::onControlAccept()
@@ -154,9 +199,9 @@ bool AuthorizationUser::onControlAccept()
 
     //*****************************************************************************************
     // 6. Setam variabile globale
-    globals::idUserApp   = m_Id;
-    globals::nameUserApp = items.constFind("name").value();
-    globals::memoryUser  = ui->checkBoxMemory->isChecked();
+    globals().idUserApp   = m_Id;
+    globals().nameUserApp = items.constFind("name").value();
+    globals().memoryUser  = ui->checkBoxMemory->isChecked();
 
     QSqlQuery qry;
     qry.prepare(QString("UPDATE users SET lastConnection = '%1' WHERE id = '%2' AND deletionMark = '0';")
@@ -168,6 +213,9 @@ bool AuthorizationUser::onControlAccept()
 
     qInfo(logInfo()) << tr("Accesul la aplicatia. Autorizarea reusita a utilizatorului '%1' cu id='%2'.")
                         .arg(ui->editLogin->text(), QString::number(m_Id));
+
+    // setam datele constantelor
+    setDataConstants();
 
     return true;
 }

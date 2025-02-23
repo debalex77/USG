@@ -108,7 +108,7 @@ void ListDocReportOrder::onScroll(int value)
 
         // Pornim un timer temporar pentru a restarta timer-ul principal
         QTimer::singleShot(2 * 60 * 1000, this, [this]() {
-            timer->start(globals::updateIntervalListDoc * 1000);
+            timer->start(globals().updateIntervalListDoc * 1000);
             qInfo(logInfo()) << "Timer principal pentru actualizarea documentelor startat din nou !!!";
         });
     }
@@ -212,8 +212,8 @@ void ListDocReportOrder::indexChangedComboContract(const int index)
 
 void ListDocReportOrder::slot_TypeDocChanged()
 {
-    if (globals::updateIntervalListDoc > 0)
-        timer->start(globals::updateIntervalListDoc * 1000);
+    if (globals().updateIntervalListDoc > 0)
+        timer->start(globals().updateIntervalListDoc * 1000);
 
     if (m_typeDoc == reportEcho){
         ui->btnReport->setDisabled(true);
@@ -504,7 +504,8 @@ void ListDocReportOrder::onClickBtnPrint()
         docOrderEcho->setAttribute(Qt::WA_DeleteOnClose);
         docOrderEcho->setProperty("ItNew", false);
         docOrderEcho->setProperty("Id", _id);
-        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        QString filePDF;
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
         docOrderEcho->close();
     } else {
         int _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), report_id), Qt::DisplayRole).toInt();
@@ -512,9 +513,83 @@ void ListDocReportOrder::onClickBtnPrint()
         docReport->setAttribute(Qt::WA_DeleteOnClose);
         docReport->setProperty("ItNew", false);
         docReport->setProperty("Id", _id);
-        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        QString filePDF;
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
         docReport->close();
     }
+}
+
+void ListDocReportOrder::onClickBtnSendEmail()
+{
+    // 📌 1 Lansam loader-ul
+    loader = new ProcessingAction(this);
+    loader->setAttribute(Qt::WA_DeleteOnClose);
+    loader->setProperty("txtInfo", "Se descarca documentele în formatul PDF ...");
+    loader->show();
+
+    // 📌 2 verificam daca este directoriu tmp/USG
+    if (! QFile(globals().main_path_save_documents).exists()) {
+        QDir().mkpath(globals().main_path_save_documents);
+    }
+
+    // 📌 3 determinam id comenzii ecografice
+    int _id_order = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
+
+    // 📌 4 Creăm thread-ul pentru trimiterea emailului
+    QThread *thread = new QThread();
+    HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
+
+    // 📌 5 Mutăm `handler_functionThread` în thread-ul nou
+    handler_functionThread->moveToThread(thread);
+
+    // 📌 6 setam `handler_functionThread` cu variabile necesrare
+    handler_functionThread->setRequiredVariabile(globals().idUserApp,
+                                                 globals().c_id_organizations,
+                                                 globals().c_id_doctor);
+    handler_functionThread->setRequiredVariableForExportDocuments(globals().thisMySQL,
+                                                                  _id_order,
+                                                                  -1,
+                                                                  globals().unitMeasure,
+                                                                  globals().c_logo_byteArray,
+                                                                  globals().main_stamp_organization,
+                                                                  globals().stamp_main_doctor,
+                                                                  globals().signature_main_doctor,
+                                                                  globals().pathTemplatesDocs,
+                                                                  globals().main_path_save_documents);
+
+    // 📌 7 Conectăm semnalele și sloturile
+    connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::exportDocumentsToPDF);
+    connect(handler_functionThread, &HandlerFunctionThread::setTextInfo, this, [this](QString txtInfo)
+            {
+                loader->setProperty("txtInfo", txtInfo);
+            });
+    connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, this, [this](QVector<ExportData> data_agentEmail)
+            {
+                agent_sendEmail = new AgentSendEmail(this);
+                agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
+                for (const auto &data : data_agentEmail) {
+                    agent_sendEmail->setProperty("NrOrder",     data.nr_order);
+                    agent_sendEmail->setProperty("NrReport",    data.nr_report);
+                    agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);
+                    agent_sendEmail->setProperty("EmailTo",     data.emailTo);
+                    agent_sendEmail->setProperty("NamePatient", data.name_patient);
+                    agent_sendEmail->setProperty("NameDoctor",  data.name_doctor_execute);
+                    QDate _date_investigation = QDate::fromString(data.str_dateInvestigation.left(10), "dd.MM.yyyy");
+                    agent_sendEmail->setProperty("DateInvestigation", _date_investigation);
+                }
+                agent_sendEmail->show();
+
+                if (loader) {
+                    loader->close();
+                }
+            });
+    connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, thread, &QThread::quit);
+    // connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, handler_functionThread, &QObject::deleteLater);
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 📌 8 Pornim thread-ul
+    thread->start();
+
 }
 
 void ListDocReportOrder::onClickBtnReport()
@@ -818,7 +893,7 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
         if (qry.exec()){
             qry.next();
             _id_report = qry.value(0).toInt();
-            if (globals::thisMySQL){
+            if (globals().thisMySQL){
                 static const QRegularExpression replaceT("T");
                 static const QRegularExpression removeMilliseconds("\\.000");
                 presentationDoc = tr("Raport ecografic nr.%1 din %2")
@@ -845,7 +920,8 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
                         docReport->setAttribute(Qt::WA_DeleteOnClose);
                         docReport->setProperty("ItNew", false);
                         docReport->setProperty("Id",    _id_report);
-                        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+                        QString filePDF;
+                        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
                     });
             menuDocSubordonat->addAction(actionOpenDocReport);
             menuDocSubordonat->addAction(actionPrintDocReport);
@@ -1004,7 +1080,7 @@ void ListDocReportOrder::showHideColums()
         ui->tableView->hideColumn(section_comment);
     }
 
-//    timer->start(globals::updateIntervalListDoc * 1000);
+//    timer->start(globals().updateIntervalListDoc * 1000);
 
     columns->close();
 }
@@ -1043,6 +1119,8 @@ void ListDocReportOrder::initBtnToolBar()
     ui->btnUpdateTable->installEventFilter(this);
     ui->btnPrint->setMouseTracking(true);
     ui->btnPrint->installEventFilter(this);
+    ui->btnSendEmail->setMouseTracking(true);
+    ui->btnSendEmail->installEventFilter(this);
     ui->btnReport->setMouseTracking(true);
     ui->btnReport->installEventFilter(this);
     ui->btnViewTab->setMouseTracking(true);
@@ -1067,6 +1145,7 @@ void ListDocReportOrder::initBtnToolBar()
     ui->btnFilterRemove->setStyleSheet(style_btnToolBar);
     ui->btnUpdateTable->setStyleSheet(style_btnToolBar);
     ui->btnPrint->setStyleSheet(style_btnToolBar);
+    ui->btnSendEmail->setStyleSheet(style_btnToolBar);
     ui->btnPeriodDate->setStyleSheet(style_btnToolBar);
     ui->btnSearch->setStyleSheet(style_btnToolBar);
     ui->btnHideShowColumn->setStyleSheet(style_btnToolBar);
@@ -1085,6 +1164,7 @@ void ListDocReportOrder::initBtnToolBar()
     connect(ui->btnUpdateTable, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnUpdateTable);
     connect(ui->btnHideShowColumn, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnHideShowColumn);
     connect(ui->btnPrint, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnPrint);
+    connect(ui->btnSendEmail, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnSendEmail);
     connect(ui->btnReport, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnReport);
 
     connect(ui->btnSearch, &QToolButton::clicked, this, &ListDocReportOrder::enableLineEditSearch);
@@ -1093,7 +1173,7 @@ void ListDocReportOrder::initBtnToolBar()
     connect(ui->editSearch, &QLineEdit::textChanged, this, &ListDocReportOrder::filterRegExpChanged);
     connect(ui->editSearch, &QLineEdit::textEdited, this, [this]()
             {
-                timer->start(globals::updateIntervalListDoc * 1000);
+                timer->start(globals().updateIntervalListDoc * 1000);
             });
     connect(ui->btnViewTab, &QToolButton::clicked, this, &ListDocReportOrder::onClickBtnShowHideViewTab);
 
@@ -1133,7 +1213,7 @@ void ListDocReportOrder::initBtnFilter()
 
             connect(ui->filterStartDateTime, &QDateTimeEdit::dateTimeChanged, this, &ListDocReportOrder::onStartDateTimeChanged);
             connect(ui->filterEndDateTime, &QDateTimeEdit::dateTimeChanged, this, &ListDocReportOrder::onEndDateTimeChanged);
-            timer->start(globals::updateIntervalListDoc * 1000);
+            timer->start(globals().updateIntervalListDoc * 1000);
         });
 
     });
@@ -1236,10 +1316,11 @@ void ListDocReportOrder::openPrintDesignerPreviewOrder(bool preview)
     docOrderEcho->setAttribute(Qt::WA_DeleteOnClose);
     docOrderEcho->setProperty("ItNew", false);
     docOrderEcho->setProperty("Id", _id);
+    QString filePDF;
     if (preview)
-        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
     else
-        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER);
+        docOrderEcho->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER, filePDF);
 }
 
 void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
@@ -1262,10 +1343,11 @@ void ListDocReportOrder::openPrintDesignerPreviewReport(bool preview)
     docReport->setAttribute(Qt::WA_DeleteOnClose);
     docReport->setProperty("ItNew", false);
     docReport->setProperty("Id",    id_doc);
+    QString filePDF;
     if (preview)
-        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
     else
-        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER);
+        docReport->onPrintDocument(Enums::TYPE_PRINT::OPEN_DESIGNER, filePDF);
 }
 
 void ListDocReportOrder::formationPrinMenuForOrder()
@@ -1275,7 +1357,7 @@ void ListDocReportOrder::formationPrinMenuForOrder()
     if (ui->btn_print_order->menu() != nullptr) // daca a fost setat meniu
         ui->btn_print_order->menu()->clear();   // golim
 
-    if (globals::showDesignerMenuPrint){
+    if (globals().showDesignerMenuPrint){
         QAction *openDesignerOrder = new QAction(setUpMenu_order);
         openDesignerOrder->setIcon(QIcon(":/images/design.png"));
         openDesignerOrder->setText(tr("Deschide designer"));
@@ -1337,7 +1419,7 @@ void ListDocReportOrder::formationPrinMenuForReport()
     if (ui->btn_open_report->menu() != nullptr) // daca este setata menii
         ui->btn_open_report->menu()->clear();   // golim
 
-    if (globals::showDesignerMenuPrint){
+    if (globals().showDesignerMenuPrint){
         QAction *openDesignerReport = new QAction(setUpMenu_report);
         openDesignerReport->setIcon(QIcon(":/images/design.png"));
         openDesignerReport->setText(tr("Deschide designer"));
@@ -1413,7 +1495,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
     m_currentRow = ui->tableView->currentIndex().row();
 
     QString strQry;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         strQry = "SELECT orderEcho.id,"
                  "orderEcho.deletionMark,"
                  "orderEcho.attachedImages,"
@@ -1551,7 +1633,7 @@ void ListDocReportOrder::updateTableViewOrderEcho()
 void ListDocReportOrder::updateTableViewOrderEchoFull()
 {
     QString strQry;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         strQry = "SELECT orderEcho.id,"
                  "orderEcho.deletionMark,"
                  "orderEcho.attachedImages,"
@@ -1671,7 +1753,7 @@ void ListDocReportOrder::updateTableViewReportEcho()
     m_currentRow = ui->tableView->currentIndex().row();
 
     QString strQry;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         strQry = "SELECT reportEcho.id,"
                  "reportEcho.deletionMark,"
                  "reportEcho.attachedImages,"
@@ -1792,7 +1874,7 @@ void ListDocReportOrder::updateTableViewReportEchoFull()
     m_currentRow = ui->tableView->currentIndex().row();
 
     QString strQry;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         strQry = "SELECT reportEcho.id,"
                  "reportEcho.deletionMark,"
                  "reportEcho.attachedImages,"
@@ -1968,7 +2050,7 @@ void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
         if (qry.exec() && qry.next()){
             QString str_date_start;
             QString str_date_end;
-            if (globals::thisMySQL){
+            if (globals().thisMySQL){
                 static const QRegularExpression replaceT("T");
                 static const QRegularExpression removeMilliseconds("\\.000");
                 str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
@@ -2271,6 +2353,17 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
         if (event->type() == QEvent::Enter){
             QPoint p = mapToGlobal(QPoint(ui->btnPrint->pos().x() - 30, ui->btnPrint->pos().y() + 30)); // determinam parametrii globali
             popUp->setPopupText(tr("Printare (Ctrl + P)"));       // setam textul
+            popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
+            return true;
+        } else if (event->type() == QEvent::Leave){
+            popUp->hidePop();                           // ascundem nota
+            return true;
+        }
+    } else if (obj == ui->btnSendEmail){
+        if (event->type() == QEvent::Enter){
+            QPoint p = mapToGlobal(QPoint(ui->btnSendEmail->pos().x() - 30, ui->btnSendEmail->pos().y() + 30)); // determinam parametrii globali
+            popUp->setPopupText(tr("Trimite scrisoarea<br>"
+                                   "prin e-mail"));   // setam textul
             popUp->showFromGeometryTimer(p);            // realizam vizualizarea notei timp de 5 sec.
             return true;
         } else if (event->type() == QEvent::Leave){

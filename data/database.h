@@ -33,7 +33,10 @@ public:
     bool createConnectBaseSqlite(QString &txtMessage);
 
     QSqlDatabase getDatabase();
-    QSqlDatabase getDatabaseThread();
+    QSqlDatabase getDatabaseThread(const QString threadConnectionName);
+    QSqlDatabase getDatabaseImageThread(const QString threadConnectionName);
+    void removeDatabaseThread(const QString threadConnectionName);
+    void removeDatabaseImageThread(const QString threadConnectionName);
     QSqlDatabase getDatabaseImage();
 
     bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
@@ -134,6 +137,7 @@ public:
     bool createTableImagesReports();
 
     bool createIndexTables();
+    bool createTableContOnline();
 
     enum REQUIRED_NUMBER
     {
@@ -186,7 +190,6 @@ signals:
 private:
     QSqlDatabase db;
     QSqlDatabase db_image;
-    QSqlDatabase db_thread;
     QString m_connectionName = nullptr;
     quint32 key_encoding = 073; // encode_string & decode_string
 

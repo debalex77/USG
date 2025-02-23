@@ -180,7 +180,9 @@ public:
     void setCountVideo(int CountVideo) {m_count_video = CountVideo; emit CountVideoChanged();}
     int getCountVideo() const {return m_count_video;}
 
-    void onPrintDocument(Enums::TYPE_PRINT _typeReport); // functiile exportate pu solicitarea din alte clase
+    void onPrintDocument(Enums::TYPE_PRINT _typeReport, QString &filePDF); // functiile exportate pu solicitarea din alte clase
+
+    QString getNumberDocReport();
 
     void m_onWritingData();
 
@@ -316,7 +318,7 @@ private slots:
     void activatedItemCompleter(const QModelIndex &index); // activarea 'completer'
 
     bool controlRequiredObjects();       // controlul completarii obiectelor obligatorii
-    void onPrint(Enums::TYPE_PRINT _typeReport); // printare -> _typeReport = variabila pu determinarea lansarii designer ori preview din list...
+    void onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF); // printare -> _typeReport = variabila pu determinarea lansarii designer ori preview din list...
     bool onWritingData();                // 'btnWrite'
     void onWritingDataClose();           // 'btnOk'
     void onClose();                      // 'btnClose'
@@ -426,7 +428,7 @@ private:
 
     PatientHistory *history_patient;
 
-    QStandardItemModel *model_logo;
+    QStandardItemModel *model_img;
     QSqlQueryModel     *modelOrganization;      // modele pu instalarea datelor
     QSqlQueryModel     *modelPatient_print;
     QSqlQueryModel     *modelOrgansInternal;

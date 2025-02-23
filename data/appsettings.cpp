@@ -21,7 +21,7 @@ AppSettings::AppSettings(QWidget *parent) :
 
 #if defined(Q_OS_LINUX)
 
-    QFileInfo info_file_config(globals::pathAppSettings);
+    QFileInfo info_file_config(globals().pathAppSettings);
     const QString baseName_file_config = info_file_config.baseName();
     const QString nameMatches = baseName_file_config + ".log";
     fileLogPath = QDir::rootPath() + NAME_DIR_LOG_PATH "/" + nameMatches;
@@ -32,36 +32,36 @@ AppSettings::AppSettings(QWidget *parent) :
                                  QMessageBox::Ok);
         QString str_cmd = "pkexec mkdir /" NAME_DIR_LOG_PATH " && pkexec chmod 777 /" NAME_DIR_LOG_PATH " && touch " + fileLogPath;
         system(str_cmd.toStdString().c_str()); // pkexec mkdir /var/log/usg && pkexec chmod 777 /var/log/usg && touch /var/log/usg/usg.log
-        globals::pathLogAppSettings = fileLogPath;
+        globals().pathLogAppSettings = fileLogPath;
     } else {
         processingLoggingFiles(nameMatches);
-        globals::pathLogAppSettings = fileLogPath;
+        globals().pathLogAppSettings = fileLogPath;
     }
 
-    if (! QFile(globals::pathAppSettings).exists())
-        globals::unknowModeLaunch = true; // globals::numSavedFilesLog
+    if (! QFile(globals().pathAppSettings).exists())
+        globals().unknowModeLaunch = true; // globals().numSavedFilesLog
 
 #elif defined(Q_OS_MACOS)
 
     if (! QFile(dirLogPath).exists())
         QDir().mkpath(dirLogPath);
 
-    QFileInfo info_file_config(globals::pathAppSettings);
+    QFileInfo info_file_config(pathAppSettings);
     const QString baseName_file_config = info_file_config.baseName();
     const QString nameMatches = baseName_file_config + ".log";
     fileLogPath = dirLogPath + "/" + nameMatches;
 
     processingLoggingFiles(fileLogPath);
-    globals::pathLogAppSettings = fileLogPath;
+    pathLogAppSettings = fileLogPath;
 
-    if (! QFile(globals::pathAppSettings).exists())
-        globals::unknowModeLaunch = true; // globals::numSavedFilesLog
+    if (! QFile(pathAppSettings).exists())
+        globals().unknowModeLaunch = true; // globals().numSavedFilesLog
 
 #elif defined(Q_OS_WIN)
 
     QDir dir;
 
-    QFileInfo info_file_config(globals::pathAppSettings);
+    QFileInfo info_file_config(pathAppSettings);
     const QString baseName_file_config = info_file_config.baseName();
     const QString nameMatches = baseName_file_config + ".log";
     fileLogPath = dir.toNativeSeparators(dirLogPath + "/" + nameMatches);
@@ -83,12 +83,12 @@ AppSettings::AppSettings(QWidget *parent) :
     //********************************************
     // setam variabile globale si alocam memoria pu
     // setarile aplicatiei
-    globals::pathLogAppSettings = dir.toNativeSeparators(fileLogPath);
+    pathLogAppSettings = dir.toNativeSeparators(fileLogPath);
 
     //********************************************
     // setam variabile globale
-    if (! QFile(globals::pathAppSettings).exists())
-        globals::unknowModeLaunch = true;
+    if (! QFile(pathAppSettings).exists())
+        globals().unknowModeLaunch = true;
 
 
 #endif
@@ -411,14 +411,14 @@ void AppSettings::initConnections()
 
 void AppSettings::setLanguageApp()
 {
-    if (globals::firstLaunch) {
+    if (globals().firstLaunch) {
 
-        if (globals::langApp == nullptr){
+        if (globals().langApp == nullptr){
             // determinam locale
             QString nameLocale = QLocale::system().name();
             nameLocale.replace(QString("_"), QString("-")); // schimbam simbolul
 
-            globals::langApp = nameLocale;
+            globals().langApp = nameLocale;
             int indexLangApp = (nameLocale == "ru_RU" || nameLocale == "ru-RU") ? 0 : 1;
             disconnect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
@@ -428,17 +428,17 @@ void AppSettings::setLanguageApp()
         } else {
             disconnect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
-            ui->comboBoxLangApp->setCurrentIndex((globals::langApp == "ro_RO" || globals::langApp == "ro-RO") ? 1 : 0);
+            ui->comboBoxLangApp->setCurrentIndex((globals().langApp == "ro_RO" || globals().langApp == "ro-RO") ? 1 : 0);
             connect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                     this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
         }
         // traducem aplicatia
-        if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+        if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
             qApp->installTranslator(translator);
         }
-    } else if (globals::unknowModeLaunch){
-        if (globals::langApp == nullptr){
-            QString nameLocale = globals::langApp;
+    } else if (globals().unknowModeLaunch){
+        if (globals().langApp == nullptr){
+            QString nameLocale = globals().langApp;
             int indexLangApp = (nameLocale == "ru_RU" || nameLocale == "ru-RU") ? 0 : 1;
             disconnect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
@@ -447,12 +447,12 @@ void AppSettings::setLanguageApp()
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
         }
         // traducem aplicatia
-        if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+        if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
             qApp->installTranslator(translator);
         }
     } else {
-        if (!globals::langApp.isEmpty() && globals::langApp != nullptr){
-            QString nameLocale = globals::langApp;
+        if (!globals().langApp.isEmpty() && globals().langApp != nullptr){
+            QString nameLocale = globals().langApp;
             int indexLangApp = (nameLocale == "ru_RU" || nameLocale == "ru-RU") ? 0 : 1;
             disconnect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
@@ -460,7 +460,7 @@ void AppSettings::setLanguageApp()
             connect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
                        this, QOverload<int>::of(&AppSettings::changeIndexLangApp));
             // traducem aplicatia
-            if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+            if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
                 qApp->installTranslator(translator);
             }
         }
@@ -469,42 +469,42 @@ void AppSettings::setLanguageApp()
 
 void AppSettings::setDefaultPath()
 {
-    if (! globals::pathTemplatesDocs.isEmpty() && ! globals::pathReports.isEmpty())
+    if (! globals().pathTemplatesDocs.isEmpty() && ! globals().pathReports.isEmpty())
         return;
 
     QDir dir;
 
     if (! ui->txtPathAppSettings->text().isEmpty())
-        ui->txtPathAppSettings->setText(globals::pathAppSettings);
+        ui->txtPathAppSettings->setText(globals().pathAppSettings);
 
-    ui->txtPathLog->setText(globals::pathLogAppSettings);
+    ui->txtPathLog->setText(globals().pathLogAppSettings);
 
     //******************************************************************************
     // setam localizarea sabloanelor de tipar si a rapoartelor
 #if defined(Q_OS_LINUX)
     lineEditPathTemplatesPrint->setText(dir.toNativeSeparators("/opt/USG/templets"));
-    globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
+    globals().pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
     lineEditPathReports->setText(dir.toNativeSeparators("/opt/USG/templets/reports"));
-    globals::pathReports = lineEditPathReports->text();
+    globals().pathReports = lineEditPathReports->text();
 #elif defined(Q_OS_MACOS)
     lineEditPathTemplatesPrint->setText(dir.homePath() + "/USG/templets");
-    globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
+    globals().pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
     lineEditPathReports->setText(dir.homePath() + "/USG/templets/reports");
-    globals::pathReports = lineEditPathReports->text();
+    globals().pathReports = lineEditPathReports->text();
 #elif defined(Q_OS_WINDOWS)
     lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir.currentPath() + "/templets"));
-    globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
+    globals().pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 
     lineEditPathReports->setText(dir.toNativeSeparators(dir.currentPath() + "/templets/reports"));
-    globals::pathReports = lineEditPathReports->text();
+    globals().pathReports = lineEditPathReports->text();
 #endif
 }
 
 void AppSettings::setDefaultPathSqlite()
 {
-    if (! globals::firstLaunch)
+    if (! globals().firstLaunch)
         return;
 
     QDir dir;
@@ -584,8 +584,8 @@ void AppSettings::setDefaultPathSqlite()
         }
     }
 
-    if (globals::pathLogAppSettings.isEmpty())
-        globals::pathLogAppSettings = ui->txtPathLog->text();
+    if (globals().pathLogAppSettings.isEmpty())
+        pathLogAppSettings = ui->txtPathLog->text();
 
     //******************************************************************************
     // crearea fisierelor bazelor de date si setarea
@@ -608,12 +608,12 @@ void AppSettings::setDefaultPathSqlite()
             //---- baza principale
             lineEditPathDBSqlite->setText(str_file_database);                     // baza principala
             ui->nameBaseSqlite->setText("base");                                  // denumirea bazei de date
-            globals::sqlitePathBase = dir.toNativeSeparators(str_file_database);  // variabile globale
-            globals::sqliteNameBase = ui->nameBaseSqlite->text();
+            globals().sqlitePathBase = dir.toNativeSeparators(str_file_database);  // variabile globale
+            globals().sqliteNameBase = ui->nameBaseSqlite->text();
 
             //---- baza cu imagini
             lineEditPathDBImage->setText(str_file_database_image);         // baza de date cu imagini
-            globals::pathImageBaseAppSettings = str_file_database_image;
+            globals().pathImageBaseAppSettings = str_file_database_image;
 
             setPathAppSettings();
 
@@ -660,11 +660,11 @@ void AppSettings::setDefaultPathSqlite()
         }
         ui->nameBaseSqlite->setText("base");
         lineEditPathDBSqlite->setText(str_file_database);
-        globals::sqlitePathBase = dir.toNativeSeparators(str_file_database);  // variabile globale
-        globals::sqliteNameBase = ui->nameBaseSqlite->text();
+        globals().sqlitePathBase = dir.toNativeSeparators(str_file_database);  // variabile globale
+        globals().sqliteNameBase = ui->nameBaseSqlite->text();
 
         lineEditPathDBImage->setText(str_file_database_image);
-        globals::pathImageBaseAppSettings = str_file_database_image;
+        globals().pathImageBaseAppSettings = str_file_database_image;
     }
 }
 
@@ -756,50 +756,50 @@ void AppSettings::readSettings()
     disconnect(ui->nameBaseSqlite, &QLineEdit::editingFinished, this, &AppSettings::changeNameBaseSqlite);
     disconnect(lineEditPathDBSqlite, &QLineEdit::editingFinished, this, &AppSettings::changePathBaseSqlite);
 
-    ui->comboBoxLangApp->setCurrentIndex((globals::langApp == "ru-RU") ? 0 : 1);
-    ui->comboBoxTypeSQL->setCurrentIndex(globals::indexTypeSQL);
-    changeIndexTypeSQL(globals::indexTypeSQL);
-    ui->comboBoxUnitMeasure->setCurrentText(globals::unitMeasure);
+    ui->comboBoxLangApp->setCurrentIndex((globals().langApp == "ru-RU") ? 0 : 1);
+    ui->comboBoxTypeSQL->setCurrentIndex(globals().indexTypeSQL);
+    changeIndexTypeSQL(globals().indexTypeSQL);
+    ui->comboBoxUnitMeasure->setCurrentText(globals().unitMeasure);
 
-    if (ui->txtPathAppSettings->text().isEmpty() && ! globals::pathAppSettings.isEmpty()) // setam din variabila globala
-        ui->txtPathAppSettings->setText(globals::pathAppSettings);
+    if (ui->txtPathAppSettings->text().isEmpty() && ! globals().pathAppSettings.isEmpty()) // setam din variabila globala
+        ui->txtPathAppSettings->setText(globals().pathAppSettings);
 
-    if (globals::connectionMade == "MySQL"){
+    if (globals().connectionMade == "MySQL"){
 
         ui->tabSqlite->setEnabled(false);  // accesarea tabului
         ui->tabMySQL->setEnabled(true);
 
-        ui->mySQLhost->setText(globals::mySQLhost);
+        ui->mySQLhost->setText(globals().mySQLhost);
 
         disconnect(ui->mySQLnameBase, &QLineEdit::textChanged, this, &AppSettings::setPathAppSettings); // deconectam la setarea programata
-        ui->mySQLnameBase->setText(globals::mySQLnameBase);
+        ui->mySQLnameBase->setText(globals().mySQLnameBase);
         connect(ui->mySQLnameBase, &QLineEdit::textChanged, this, &AppSettings::setPathAppSettings);    // conectarea la modificarea textului
 
-        ui->mySQLport->setText(globals::mySQLport);
-        ui->mySQLoptionConnect->setText(globals::mySQLoptionConnect);
-        ui->mySQLuser->setText(globals::mySQLuser);
-        ui->mySQLpasswdUser->setText(globals::mySQLpasswdUser);
+        ui->mySQLport->setText(globals().mySQLport);
+        ui->mySQLoptionConnect->setText(globals().mySQLoptionConnect);
+        ui->mySQLuser->setText(globals().mySQLuser);
+        ui->mySQLpasswdUser->setText(globals().mySQLpasswdUser);
 
-    } else if (globals::connectionMade == "Sqlite"){
+    } else if (globals().connectionMade == "Sqlite"){
 
         ui->tabSqlite->setEnabled(true);
         ui->tabMySQL->setEnabled(false);
 
         disconnect(ui->nameBaseSqlite, &QLineEdit::textChanged, this, &AppSettings::setPathAppSettings); // deconectam la setarea programata
-        ui->nameBaseSqlite->setText(globals::sqliteNameBase);
+        ui->nameBaseSqlite->setText(globals().sqliteNameBase);
         connect(ui->nameBaseSqlite, &QLineEdit::textChanged, this, &AppSettings::setPathAppSettings);    // conectarea la modificarea textului
 
-        lineEditPathDBSqlite->setText(globals::sqlitePathBase);
-        lineEditPathDBImage->setText(globals::pathImageBaseAppSettings);
+        lineEditPathDBSqlite->setText(globals().sqlitePathBase);
+        lineEditPathDBImage->setText(globals().pathImageBaseAppSettings);
 
     }
 
-    ui->txtPathLog->setText(globals::pathLogAppSettings);
-    lineEditPathTemplatesPrint->setText(globals::pathTemplatesDocs);
-    lineEditPathReports->setText(globals::pathReports);
-    lineEditPathVideo->setText(globals::pathDirectoryVideo);
+    ui->txtPathLog->setText(globals().pathLogAppSettings);
+    lineEditPathTemplatesPrint->setText(globals().pathTemplatesDocs);
+    lineEditPathReports->setText(globals().pathReports);
+    lineEditPathVideo->setText(globals().pathDirectoryVideo);
 
-    ui->numberLogFile->setValue(globals::numSavedFilesLog);
+    ui->numberLogFile->setValue(globals().numSavedFilesLog);
 
     // conectari combo...
     connect(ui->comboBoxLangApp, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -834,9 +834,9 @@ void AppSettings::saveSettings()
     }
 #endif
 
-    globals::pathAppSettings = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
+    globals().pathAppSettings = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
 
-    settApp = new QSettings(globals::pathAppSettings, QSettings::IniFormat, this);
+    settApp = new QSettings(globals().pathAppSettings, QSettings::IniFormat, this);
 
     settApp->beginGroup("index_init");
     settApp->setValue("indexLangApp",     ui->comboBoxLangApp->currentIndex());
@@ -851,14 +851,14 @@ void AppSettings::saveSettings()
     settApp->endGroup();
 
     settApp->beginGroup("connect");
-    if (globals::connectionMade == "MySQL"){
+    if (globals().connectionMade == "MySQL"){
         settApp->setValue("MySQL_host",           db->encode_string(ui->mySQLhost->text()));
         settApp->setValue("MySQL_name_base",      db->encode_string(ui->mySQLnameBase->text()));
         settApp->setValue("MySQL_port",           ui->mySQLport->text());
         settApp->setValue("MySQL_user",           db->encode_string(ui->mySQLuser->text()));
         settApp->setValue("MySQL_passwd_user",    db->encode_string(ui->mySQLpasswdUser->text()));
         settApp->setValue("MySQL_option_connect", ui->mySQLoptionConnect->text());
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
         settApp->setValue("sqliteNameBase", ui->nameBaseSqlite->text());
         settApp->setValue("sqlitePathBase", lineEditPathDBSqlite->text());
         settApp->setValue("pathDBImage",    lineEditPathDBImage->text());
@@ -871,11 +871,11 @@ void AppSettings::saveSettings()
     settApp->endGroup();
 
     settApp->beginGroup("show_msg");
-    settApp->setValue("showMsgVideo",   (globals::show_content_info_video) ? 1 : 0);
-    settApp->setValue("showMsgReports", (globals::show_info_reports) ? 1 : 0);
+    settApp->setValue("showMsgVideo",   (globals().show_content_info_video) ? 1 : 0);
+    settApp->setValue("showMsgReports", (globals().show_info_reports) ? 1 : 0);
     settApp->endGroup();
 
-    qInfo(logInfo()) << tr("Setarile aplicatiei sunt salvate/modificate in fisierul - %1.").arg(globals::pathAppSettings);
+    qInfo(logInfo()) << tr("Setarile aplicatiei sunt salvate/modificate in fisierul - %1.").arg(globals().pathAppSettings);
 }
 
 void AppSettings::loadDataFromTableSettingsUsers()
@@ -885,65 +885,65 @@ void AppSettings::loadDataFromTableSettingsUsers()
 
 void AppSettings::loadSettings()
 {
-    settApp = new QSettings(globals::pathAppSettings, QSettings::IniFormat, this);
+    settApp = new QSettings(globals().pathAppSettings, QSettings::IniFormat, this);
 
     settApp->beginGroup("index_init");
-    globals::langApp      = (settApp->value("indexLangApp", 1).toInt() == 0) ? "ru-RU" : "ro-RO";
-    globals::indexTypeSQL = settApp->value("indexTypeSQL", idx_Unknow).toInt();
-    globals::unitMeasure  = (settApp->value("indexUnitMeasure", 0).toInt() == 0) ? "mm" : "cm";
+    globals().langApp      = (settApp->value("indexLangApp", 1).toInt() == 0) ? "ru-RU" : "ro-RO";
+    globals().indexTypeSQL = settApp->value("indexTypeSQL", idx_Unknow).toInt();
+    globals().unitMeasure  = (settApp->value("indexUnitMeasure", 0).toInt() == 0) ? "mm" : "cm";
     settApp->endGroup();
 
     settApp->beginGroup("path_app");
-    globals::pathTemplatesDocs  = settApp->value("pathTemplatesDocs", "").toString();
-    globals::pathReports        = settApp->value("pathReports", "").toString();
-    globals::pathDirectoryVideo = settApp->value("pathVideo", "").toString();
+    globals().pathTemplatesDocs  = settApp->value("pathTemplatesDocs", "").toString();
+    globals().pathReports        = settApp->value("pathReports", "").toString();
+    globals().pathDirectoryVideo = settApp->value("pathVideo", "").toString();
     settApp->endGroup();
 
     settApp->beginGroup("connect");
-    if (globals::indexTypeSQL == idx_MySQL){
-        globals::thisMySQL  = true;
-        globals::thisSqlite = false;
-        globals::connectionMade = "MySQL";
+    if (globals().indexTypeSQL == idx_MySQL){
+        globals().thisMySQL  = true;
+        globals().thisSqlite = false;
+        globals().connectionMade = "MySQL";
 
-        globals::mySQLhost          = db->decode_string(settApp->value("MySQL_host", "").toString());
-        globals::mySQLnameBase      = db->decode_string(settApp->value("MySQL_name_base", "").toString());
-        globals::mySQLport          = settApp->value("MySQL_port", "3306").toString();
-        globals::mySQLoptionConnect = settApp->value("MySQL_option_connect", "").toString();
-        globals::mySQLuser          = db->decode_string(settApp->value("MySQL_user", "").toString());
-        globals::mySQLpasswdUser    = db->decode_string(settApp->value("MySQL_passwd_user", "").toString());
-    } else if (globals::indexTypeSQL == idx_Sqlite){
-        globals::thisMySQL  = false;
-        globals::thisSqlite = true;
-        globals::connectionMade = "Sqlite";
+        globals().mySQLhost          = db->decode_string(settApp->value("MySQL_host", "").toString());
+        globals().mySQLnameBase      = db->decode_string(settApp->value("MySQL_name_base", "").toString());
+        globals().mySQLport          = settApp->value("MySQL_port", "3306").toString();
+        globals().mySQLoptionConnect = settApp->value("MySQL_option_connect", "").toString();
+        globals().mySQLuser          = db->decode_string(settApp->value("MySQL_user", "").toString());
+        globals().mySQLpasswdUser    = db->decode_string(settApp->value("MySQL_passwd_user", "").toString());
+    } else if (globals().indexTypeSQL == idx_Sqlite){
+        globals().thisMySQL  = false;
+        globals().thisSqlite = true;
+        globals().connectionMade = "Sqlite";
 
-        globals::pathImageBaseAppSettings = settApp->value("pathDBImage", "").toString();
-        globals::pathLogAppSettings       = settApp->value("pathLogApp", fileLogPath).toString();
-        globals::sqliteNameBase           = settApp->value("sqliteNameBase", "").toString();
-        globals::sqlitePathBase           = settApp->value("sqlitePathBase", "").toString();
+        globals().pathImageBaseAppSettings = settApp->value("pathDBImage", "").toString();
+        globals().pathLogAppSettings       = settApp->value("pathLogApp", fileLogPath).toString();
+        globals().sqliteNameBase           = settApp->value("sqliteNameBase", "").toString();
+        globals().sqlitePathBase           = settApp->value("sqlitePathBase", "").toString();
     } else {
-        globals::thisMySQL  = false;
-        globals::thisSqlite = false;
-        globals::connectionMade = nullptr;
+        globals().thisMySQL  = false;
+        globals().thisSqlite = false;
+        globals().connectionMade = nullptr;
     }
     settApp->endGroup();
 
     settApp->beginGroup("on_start");
-    globals::idUserApp        = db->decode_string(settApp->value("idUserApp", "").toString()).toInt();
-    globals::nameUserApp      = db->decode_string(settApp->value("nameUserApp", "").toString());
-    globals::memoryUser       = settApp->value("memoryUser", false).toBool();
-    globals::numSavedFilesLog = settApp->value("numSavedFilesLog", 10).toInt();  // determinam nr.fisierelor pu pastrare
+    globals().idUserApp        = db->decode_string(settApp->value("idUserApp", "").toString()).toInt();
+    globals().nameUserApp      = db->decode_string(settApp->value("nameUserApp", "").toString());
+    globals().memoryUser       = settApp->value("memoryUser", false).toBool();
+    globals().numSavedFilesLog = settApp->value("numSavedFilesLog", 10).toInt();  // determinam nr.fisierelor pu pastrare
     removeFilesLogOnStartApp();                                                  // eliminarea din sistem
     settApp->endGroup();
 
     settApp->beginGroup("show_msg");
-    globals::show_content_info_video = settApp->value("showMsgVideo", true).toBool();
-    globals::show_info_reports       = settApp->value("showMsgReports", true).toBool();
+    globals().show_content_info_video = settApp->value("showMsgVideo", true).toBool();
+    globals().show_info_reports       = settApp->value("showMsgReports", true).toBool();
     settApp->endGroup();
 
-    globals::firstLaunch = false;
+    globals().firstLaunch = false;
 
     // traducem aplicatia
-    if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+    if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
         qApp->installTranslator(translator);
     }
 
@@ -952,10 +952,10 @@ void AppSettings::loadSettings()
             QMessageBox::warning(this,
                                   tr("Conectarea la baza de date"),
                                   tr("Conectarea la baza de date <b><u>%1</u></b> lipse\310\231te !!! <br><br>Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
-                                         .arg((globals::thisMySQL) ? ("host: " + globals::mySQLhost + ", base: " + globals::mySQLnameBase) : globals::sqliteNameBase),
+                                         .arg((globals().thisMySQL) ? ("host: " + globals().mySQLhost + ", base: " + globals().mySQLnameBase) : globals().sqliteNameBase),
                                      QMessageBox::Ok);
             qWarning(logWarning()) << tr("%1: loadSettings()<br> Nu a fost efectuata conectarea la BD '%2'")
-                                      .arg(metaObject()->className(), globals::sqliteNameBase);
+                                      .arg(metaObject()->className(), globals().sqliteNameBase);
             qApp->quit();
         }
     }
@@ -978,7 +978,7 @@ void AppSettings::setEndGroup()
 
 void AppSettings::setKeyAndValue(const QString nameGroup, const QString &_key, const QVariant &_value)
 {
-    settApp = new QSettings(globals::pathAppSettings, QSettings::IniFormat, this);
+    settApp = new QSettings(globals().pathAppSettings, QSettings::IniFormat, this);
 
     if (_key.isEmpty())
         return;
@@ -1095,7 +1095,7 @@ void AppSettings::removeFilesLogOnStartApp()
     dir.setSorting(QDir::Time);
     QFileInfoList listFiles = dir.entryInfoList();
 
-    QRegularExpression regx(globals::sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
+    QRegularExpression regx(globals().sqliteNameBase + "_[0-9]{1,2}\\.[0-9]{1,2}\\.[0-9]{1,4}");
 
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
@@ -1103,7 +1103,7 @@ void AppSettings::removeFilesLogOnStartApp()
         // verificam fisiere si eliminam din sistem
         if (fileInfo.fileName().contains(regx)){             // fisierul curent = usg.log
             count_file += 1;
-            if (count_file > globals::numSavedFilesLog){  // valoarea in SpinBox - numberLogFile
+            if (count_file > globals().numSavedFilesLog){  // valoarea in SpinBox - numberLogFile
 #if defined(Q_OS_LINUX)
                 system(QString("rm -f " + fileInfo.filePath()).toStdString().c_str());
 #elif defined(Q_OS_MACOS)
@@ -1134,7 +1134,7 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
     model_logs->clear();
 
     QRegularExpression regx((ui->comboBoxTypeSQL->currentIndex() == idx_Sqlite) ?
-                     globals::sqliteNameBase : globals::mySQLnameBase, QRegularExpression::CaseInsensitiveOption);
+                     globals().sqliteNameBase : globals().mySQLnameBase, QRegularExpression::CaseInsensitiveOption);
 
     QDir dir(dirLogPath);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
@@ -1187,7 +1187,7 @@ void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
 void AppSettings::changeNameBaseSqlite()
 {
     if (!ui->nameBaseSqlite->text().isEmpty()){
-        globals::sqliteNameBase = ui->nameBaseSqlite->text();
+        globals().sqliteNameBase = ui->nameBaseSqlite->text();
         dataWasModified();
     }
 }
@@ -1195,7 +1195,7 @@ void AppSettings::changeNameBaseSqlite()
 void AppSettings::changePathBaseSqlite()
 {
     if (!lineEditPathDBSqlite->text().isEmpty()){
-        globals::sqlitePathBase = lineEditPathDBSqlite->text();
+        globals().sqlitePathBase = lineEditPathDBSqlite->text();
         dataWasModified();
     }
 }
@@ -1205,37 +1205,37 @@ void AppSettings::changePathBaseSqlite()
 
 void AppSettings::changeNameHostMySQL()
 {
-    globals::mySQLhost = ui->mySQLhost->text();
+    globals().mySQLhost = ui->mySQLhost->text();
     dataWasModified();
 }
 
 void AppSettings::changeNameBaseMySQL()
 {
-    globals::mySQLnameBase = ui->mySQLnameBase->text();
+    globals().mySQLnameBase = ui->mySQLnameBase->text();
     dataWasModified();
 }
 
 void AppSettings::changePortConectionMySQL()
 {
-    globals::mySQLport = ui->mySQLport->text();
+    globals().mySQLport = ui->mySQLport->text();
     dataWasModified();
 }
 
 void AppSettings::changeConnectOptionsMySQL()
 {
-    globals::mySQLoptionConnect = ui->mySQLoptionConnect->text();
+    globals().mySQLoptionConnect = ui->mySQLoptionConnect->text();
     dataWasModified();
 }
 
 void AppSettings::changeUserNameMySQL()
 {
-    globals::mySQLuser = ui->mySQLuser->text();
+    globals().mySQLuser = ui->mySQLuser->text();
     dataWasModified();
 }
 
 void AppSettings::changePasswdMySQL()
 {
-    globals::mySQLpasswdUser = ui->mySQLpasswdUser->text();
+    globals().mySQLpasswdUser = ui->mySQLpasswdUser->text();
     dataWasModified();
 }
 
@@ -1253,8 +1253,8 @@ void AppSettings::onAddPathSqlite()
     if (!fileName.isEmpty()){
         QDir file_database;
         lineEditPathDBSqlite->setText(file_database.toNativeSeparators(fileName));
-        globals::sqlitePathBase = file_database.toNativeSeparators(fileName);
-        globals::sqliteNameBase = ui->nameBaseSqlite->text();
+        globals().sqlitePathBase = file_database.toNativeSeparators(fileName);
+        globals().sqliteNameBase = ui->nameBaseSqlite->text();
 
         if (ui->nameBaseSqlite->text().isEmpty()){
             QFileInfo fileInfo(dir.toNativeSeparators(fileName));
@@ -1276,8 +1276,8 @@ void AppSettings::onEditPathSqlite()
     if (!fileName.isEmpty()){
         QDir file_database;
         lineEditPathDBSqlite->setText(file_database.toNativeSeparators(fileName));
-        globals::sqlitePathBase = file_database.toNativeSeparators(fileName);
-        globals::sqliteNameBase = ui->nameBaseSqlite->text();
+        globals().sqlitePathBase = file_database.toNativeSeparators(fileName);
+        globals().sqliteNameBase = ui->nameBaseSqlite->text();
 
         if (ui->nameBaseSqlite->text().isEmpty()){
             QFileInfo fileInfo(dir.toNativeSeparators(fileName));
@@ -1308,8 +1308,8 @@ void AppSettings::onAddPathDBImage()
     if (!fileName.isEmpty()){
         QDir file_img;
         lineEditPathDBImage->setText(file_img.toNativeSeparators(fileName));
-        globals::pathImageBaseAppSettings = lineEditPathDBImage->text();
-        globals::pathImageBaseAppSettings = lineEditPathDBImage->text();
+        globals().pathImageBaseAppSettings = lineEditPathDBImage->text();
+        globals().pathImageBaseAppSettings = lineEditPathDBImage->text();
         dataWasModified();
     }
 }
@@ -1323,8 +1323,8 @@ void AppSettings::onEditPathDBImage()
     if (!fileName.isEmpty()){
         QDir file_img;
         lineEditPathDBImage->setText(file_img.toNativeSeparators(fileName));
-        globals::pathImageBaseAppSettings = lineEditPathDBImage->text();
-        globals::pathImageBaseAppSettings = lineEditPathDBImage->text();
+        globals().pathImageBaseAppSettings = lineEditPathDBImage->text();
+        globals().pathImageBaseAppSettings = lineEditPathDBImage->text();
         dataWasModified();
     }
 }
@@ -1416,7 +1416,7 @@ void AppSettings::openDirTemplets()
                                                     | QFileDialog::DontResolveSymlinks);
 
     lineEditPathTemplatesPrint->setText(dir.toNativeSeparators(dir_templates));
-    globals::pathTemplatesDocs = lineEditPathTemplatesPrint->text();
+    globals().pathTemplatesDocs = lineEditPathTemplatesPrint->text();
 }
 
 void AppSettings::openDirReports()
@@ -1434,7 +1434,7 @@ void AppSettings::openDirReports()
                                                     | QFileDialog::DontResolveSymlinks);
 
     lineEditPathReports->setText(dir.toNativeSeparators(dir_reports));
-    globals::pathReports = lineEditPathReports->text();
+    globals().pathReports = lineEditPathReports->text();
 }
 
 void AppSettings::openDirVideo()
@@ -1452,7 +1452,7 @@ void AppSettings::openDirVideo()
                                                               | QFileDialog::DontResolveSymlinks);
 
     lineEditPathVideo->setText(dir.toNativeSeparators(dir_video));
-    globals::pathDirectoryVideo = lineEditPathVideo->text();
+    globals().pathDirectoryVideo = lineEditPathVideo->text();
 }
 
 // *******************************************************************
@@ -1489,11 +1489,11 @@ void AppSettings::changeIndexLangApp(const int _index)
     ui->comboBoxLangApp->setCurrentIndex(_index);
 
     if (_index == 0)
-        globals::langApp = "ru_RU";
+        globals().langApp = "ru_RU";
     else if (_index == 1)
-        globals::langApp = "ro_RO";
+        globals().langApp = "ro_RO";
 
-    if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+    if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
         qApp->installTranslator(translator);
     }
 
@@ -1529,10 +1529,10 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 
 #endif
 
-        globals::indexTypeSQL   = _index;
-        globals::thisMySQL      = true;
-        globals::thisSqlite     = false;
-        globals::connectionMade = "MySQL";
+        globals().indexTypeSQL   = _index;
+        globals().thisMySQL      = true;
+        globals().thisSqlite     = false;
+        globals().connectionMade = "MySQL";
 
         ui->tabLogs->setEnabled(true);
         ui->tabSqlite->setEnabled(false);
@@ -1554,10 +1554,10 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 
     } else if (_index == idx_Sqlite){ //sqlite
 
-        globals::indexTypeSQL   = _index;
-        globals::thisSqlite     = true;
-        globals::thisMySQL      = false;
-        globals::connectionMade = "Sqlite";
+        globals().indexTypeSQL   = _index;
+        globals().thisSqlite     = true;
+        globals().thisMySQL      = false;
+        globals().connectionMade = "Sqlite";
 
         ui->tabLogs->setEnabled(true);
         ui->tabSqlite->setEnabled(true);
@@ -1579,9 +1579,9 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 
     } else {
 
-        globals::indexTypeSQL   = _index;
-        globals::thisMySQL      = false;
-        globals::connectionMade = nullptr;
+        globals().indexTypeSQL   = _index;
+        globals().thisMySQL      = false;
+        globals().connectionMade = nullptr;
 
         ui->tabLogs->setEnabled(false);
         ui->tabSqlite->setEnabled(false);
@@ -1606,9 +1606,9 @@ void AppSettings::changeIndexTypeSQL(const int _index)
 void AppSettings::changeIndexUnitMeasure(const int _index)
 {
     if (_index == 0) {
-        globals::unitMeasure = "milimetru";
+        globals().unitMeasure = "milimetru";
     } else {
-        globals::unitMeasure = "centimetru";
+        globals().unitMeasure = "centimetru";
     }
 }
 
@@ -1632,21 +1632,21 @@ void AppSettings::onTestConnectionMySQL()
         return;
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-    db.setHostName(globals::mySQLhost);         // localhost
-    db.setDatabaseName(globals::mySQLnameBase); // USGdb
-    db.setPort(globals::mySQLport.toInt());
-    db.setConnectOptions(globals::mySQLoptionConnect);
-    db.setUserName(globals::mySQLuser);
-    db.setPassword(globals::mySQLpasswdUser);
+    db.setHostName(globals().mySQLhost);         // localhost
+    db.setDatabaseName(globals().mySQLnameBase); // USGdb
+    db.setPort(globals().mySQLport.toInt());
+    db.setConnectOptions(globals().mySQLoptionConnect);
+    db.setUserName(globals().mySQLuser);
+    db.setPassword(globals().mySQLpasswdUser);
     if (db.open()){
         QMessageBox::information(this,
                                  tr("Testarea conect\304\203rii"),
-                                 tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> este realizat\304\203 cu succes.").arg(globals::mySQLnameBase),
+                                 tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> este realizat\304\203 cu succes.").arg(globals().mySQLnameBase),
                                  QMessageBox::Ok);
     } else {
         QMessageBox::warning(this,
                              tr("Testarea conect\304\203rii"),
-                             tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> lipse\310\231te.").arg(globals::mySQLnameBase),
+                             tr("Conectarea cu baza de date <b>'%1'(MySQL)</b> lipse\310\231te.").arg(globals().mySQLnameBase),
                              QMessageBox::Ok);
     }
 }
@@ -1654,7 +1654,7 @@ void AppSettings::onTestConnectionMySQL()
 void AppSettings::setPathAppSettings()
 {
     QDir file_path;
-    if (globals::thisMySQL){
+    if (globals().thisMySQL){
         ui->txtPathAppSettings->setText(file_path.toNativeSeparators(dirConfigPath + "/" + ui->mySQLnameBase->text() + ".conf"));
         ui->txtPathLog->setText(file_path.toNativeSeparators(dirLogPath + "/" + ui->nameBaseSqlite->text() + ".log"));
     } else {
@@ -1665,7 +1665,7 @@ void AppSettings::setPathAppSettings()
 
 void AppSettings::setPathGlobalVariableAppSettings()
 {
-    globals::pathAppSettings = ui->txtPathAppSettings->text();
+    globals().pathAppSettings = ui->txtPathAppSettings->text();
 }
 
 // *******************************************************************

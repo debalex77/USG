@@ -16,7 +16,7 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     QString txt_path_config = file_path.toNativeSeparators(dirConfigPath);
     if (! QFile(txt_path_config).exists()){
         if (QDir().mkpath(txt_path_config)){
-            globals::pathAppSettings = file_path.toNativeSeparators(fileConfigPath);
+            globals().pathAppSettings = file_path.toNativeSeparators(fileConfigPath);
             connect(timer, &QTimer::timeout, this, &DatabaseSelection::updateTimer);
             timer->start(1000);
         } else {
@@ -97,14 +97,14 @@ void DatabaseSelection::onConnectToBase()
 {
     QDir file_conf;
     QString file_name = dirConfigPath + "/" + ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString() + ".conf";
-    globals::pathAppSettings = file_conf.toNativeSeparators(file_name);
+    globals().pathAppSettings = file_conf.toNativeSeparators(file_name);
     qInfo(logInfo()) << "Selection of connection to base - " + ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString();
     QDialog::accept();
 }
 
 void DatabaseSelection::onAddDatabase()
 {
-    globals::firstLaunch = true;
+    globals().firstLaunch = true;
     QDialog::accept();
 }
 

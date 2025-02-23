@@ -7,8 +7,10 @@
 #include <QCryptographicHash>
 #include <QLineEdit>
 #include <QToolButton>
+#include <QThread>
 
-#include "database.h"
+#include <common/handlerfunctionthread.h>
+#include <data/database.h>
 
 namespace Ui {
 class AuthorizationUser;
@@ -30,9 +32,14 @@ signals:
     void IdChanged();
     void PwdHashChanged();
 
+private:
+    void setDataConstants();
+
 private slots:
     void slot_IdChanged();
     void textChangedPasswd();
+
+    void onDataReceived(QVector<ConstantsData> data_constants);
 
     bool onControlAccept();
     void onAccepted();
@@ -45,6 +52,7 @@ private:
 
     QLineEdit   *edit_password;
     QToolButton *show_hide_password;
+    HandlerFunctionThread *handler_functionThread;
 
 protected:
     void changeEvent(QEvent *event);       // contolam traducerea aplicatiei

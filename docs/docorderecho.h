@@ -91,7 +91,10 @@ public:
     void setNamePatient(QString NamePatient) {m_name_patient = NamePatient; emit NamePatientChanged();}
     QString getNamePatient() const {return m_name_patient;}
 
-    void onPrintDocument(Enums::TYPE_PRINT type_print); // functiile exportate pu solicitarea din alte clase
+    QString getNameDoctorExecute();
+
+    void onPrintDocument(Enums::TYPE_PRINT type_print, QString &filePDF); // functiile exportate pu solicitarea din alte clase
+
     void m_OnOpenReport();  // ex.: 'ListDocWebOrder'
     void m_onWritingData();
 
@@ -161,7 +164,7 @@ private slots:
 
     bool controlRequiredObjects();      // controlul completarii obiectelor obligatorii
     void onOpenReport();                // 'btnReport'
-    void onPrint(Enums::TYPE_PRINT type_print); // printare
+    void onPrint(Enums::TYPE_PRINT type_print, QString &filePDF); // printare
     void openDesignerPrintDoc();
     void openPreviewPrintDoc();
     bool onWritingData();               // 'btnWrite'
@@ -225,9 +228,10 @@ private:
     int m_post             = Enums::IDX::IDX_UNKNOW;
     int m_attachedImages   = Enums::IDX::IDX_UNKNOW;
 
-    int exist_logo      = 0; // variabile pu forma de tipar
-    int exist_stamp     = 0;
-    int exist_signature = 0;
+    int exist_logo         = 0; // variabile pu forma de tipar
+    int exist_stamp        = 0;
+    int exist_stamp_doctor = 0;
+    int exist_signature    = 0;
 
     QString m_name_patient;
 

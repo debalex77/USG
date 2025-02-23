@@ -167,13 +167,13 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
                               "dateEnd "
                               "FROM settingsForms "
                               "WHERE typeForm LIKE %1 AND dateStart %2 AND dateEnd %2;")
-                          .arg("'%DocPricing%'", (globals::thisMySQL) ? "IS NOT Null" : "NOT NULL");
+                          .arg("'%DocPricing%'", (globals().thisMySQL) ? "IS NOT Null" : "NOT NULL");
         qry.prepare(str);
         if (qry.exec()){
             qry.next();
             QString str_date_start;
             QString str_date_end;
-            if (globals::thisMySQL){
+            if (globals().thisMySQL){
                 static const QRegularExpression replaceT("T");
                 static const QRegularExpression removeMilliseconds("\\.000");
                 str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");

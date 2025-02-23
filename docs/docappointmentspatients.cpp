@@ -33,7 +33,7 @@ DocAppointmentsPatients::DocAppointmentsPatients(QWidget *parent) :
     ui->tableView->setItemDelegateForColumn(section_organization - 1, delegate_organizations);
 
     QString qry_doctors;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         qry_doctors = "SELECT doctors.id, CONCAT(doctors.name,' ', SUBSTRING(doctors.fName, 1, 1) ,'.') AS fullName FROM doctors WHERE deletionMark = 0 ORDER BY doctors.name;";
     else
         qry_doctors = "SELECT doctors.id, doctors.name ||' '|| substr(doctors.fName, 1, 1) ||'.' AS fullName FROM doctors WHERE deletionMark = 0 ORDER BY doctors.name;";
@@ -402,7 +402,7 @@ int DocAppointmentsPatients::getIdDoctorByFullName(const QString _name) const
 
     QSqlQuery qry;
     QString str_qry;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         str_qry = QString("SELECT doctors.id FROM doctors "
                           "WHERE CONCAT(doctors.name, ' ' , SUBSTRING(doctors.fName, 1, 1) ,'.') = '%1' AND deletionMark = 0 ORDER BY doctors.name;").arg(_name);
     else

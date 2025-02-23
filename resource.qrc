@@ -199,5 +199,9 @@
         <file>img/right-arrow_tool_box_blue.png</file>
         <file>img/lock.png</file>
         <file>img/unlock.png</file>
+        <file>img/email.png</file>
+        <file>img/send_email.png</file>
+        <file>img/Spinner200px-200px.gif</file>
+        <file>img/check-mark.png</file>
     </qresource>
 </RCC>

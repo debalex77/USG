@@ -9,7 +9,7 @@ DocPricing::DocPricing(QWidget *parent) :
 
     setTitleDoc(); // setam titlu documentului
 
-    if (globals::showDocumentsInSeparatWindow)
+    if (globals().showDocumentsInSeparatWindow)
         setWindowFlags(Qt::Window);
 
     db    = new DataBase(this); // conectarea la BD
@@ -105,7 +105,7 @@ void DocPricing::slot_ItNewChanged()
         setWindowTitle(tr("Formarea prețurilor (crearea) %1").arg("[*]"));
 
         if (m_idUser == -1)
-            setIdUser(globals::idUserApp);
+            setIdUser(globals().idUserApp);
 
         connect(timer, &QTimer::timeout, this, &DocPricing::updateTimer);
         timer->start(1000);
@@ -132,6 +132,9 @@ void DocPricing::onDateTimeChanged()
     disconnect(timer, &QTimer::timeout, this, &DocPricing::updateTimer);
 }
 
+// **********************************************************************************
+// --- procesarea slot-lor
+
 void DocPricing::slot_IdChanged()
 {
     if (m_id == -1)
@@ -147,7 +150,7 @@ void DocPricing::slot_IdChanged()
     if (db->getObjectDataById("pricings", m_id, items)){
         ui->editNumberDoc->setText(items.constFind("numberDoc").value());
         ui->editNumberDoc->setDisabled(!ui->editNumberDoc->text().isEmpty());
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             QString str_date = items.constFind("dateDoc").value();
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
@@ -208,6 +211,9 @@ void DocPricing::slot_IdUserChanged()
     if (m_idUser == -1)
         return;
 }
+
+// **********************************************************************************
+// --- procesarea actiunilor
 
 void DocPricing::indexChangedComboOrganization(const int arg1)
 {
@@ -441,6 +447,9 @@ void DocPricing::getDataObject()
     itemsData.insert("comment",          ui->editComment->text());
 }
 
+// **********************************************************************************
+// --- printasre, validare, inchidere
+
 void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
 {
     // *************************************************************************************
@@ -497,8 +506,8 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
                 "WHERE "
                 " pricingsTable.id_pricings = ? AND "
                 " investigations.owner = ?;")
-                .arg((globals::thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
-                // .arg((globals::thisMySQL) ?
+                .arg((globals().thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
+                // .arg((globals().thisMySQL) ?
                 //          "CASE WHEN FORMAT(pricingsTable.price, 2) = '0.00' THEN '' ELSE FORMAT(pricingsTable.price, 2) END" :
                 //          "CASE WHEN printf('%.2f', pricingsTable.price) = '0.00' THEN '' ELSE printf('%.2f', pricingsTable.price) END");
 
@@ -517,7 +526,7 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
                 "WHERE "
                 " pricingsTable.id_pricings = ? AND "
                 " pricingsTable.price > 0 AND "
-                " investigations.owner = ?;").arg((globals::thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
+                " investigations.owner = ?;").arg((globals().thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
 
     }
 
@@ -549,12 +558,12 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
     m_report->dataManager()->setReportVariable("date", ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy"));
 
     // incarcarea fisierului
-    if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Pricing.lrxml")){
+    if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Pricing.lrxml")){
         QDir dir;
         CustomMessage *msgBox = new CustomMessage(this);
         msgBox->setWindowTitle(tr("Printarea documentului"));
         msgBox->setTextTitle(tr("Documentul nu poate fi printat."));
-        msgBox->setDetailedText(tr("Nu a fost gasit fi\310\231ierul formei de tipar:\n%1").arg(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Pricing.lrxml")));
+        msgBox->setDetailedText(tr("Nu a fost gasit fi\310\231ierul formei de tipar:\n%1").arg(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Pricing.lrxml")));
         msgBox->exec();
         msgBox->deleteLater();
 
@@ -739,6 +748,9 @@ void DocPricing::onClose()
     this->close();
 }
 
+// **********************************************************************************
+// --- procesarea slot-lor
+
 void DocPricing::slotGetCallbackData(LimeReport::CallbackInfo info, QVariant &data)
 {
     if (! m_owner)
@@ -810,6 +822,9 @@ void DocPricing::slotChangePosItems(const LimeReport::CallbackInfo::ChangePosTyp
         result = ds->next();
 }
 
+// **********************************************************************************
+// --- functii de initiere
+
 void DocPricing::setTitleDoc()
 {
     setWindowTitle(tr("Formarea prețurilor %1").arg("[*]"));
@@ -845,7 +860,7 @@ void DocPricing::initFooterDoc()
     labelPix->setMinimumHeight(2);
 
     labelAuthor = new QLabel(this);
-    labelAuthor->setText(globals::nameUserApp);
+    labelAuthor->setText(globals().nameUserApp);
     labelAuthor->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     labelAuthor->setStyleSheet("padding-left: 3px; color: rgb(49, 151, 116);");
 
@@ -853,6 +868,9 @@ void DocPricing::initFooterDoc()
     ui->layoutAuthor->addWidget(labelAuthor);
     ui->layoutAuthor->addSpacerItem(new QSpacerItem(1,1, QSizePolicy::Expanding, QSizePolicy::Fixed));
 }
+
+// **********************************************************************************
+// --- actualizarea tabelei
 
 void DocPricing::updateTableView()
 {
@@ -908,6 +926,9 @@ void DocPricing::updateHeaderTable()
     }
 }
 
+// **********************************************************************************
+// --- inserarea si actualizarea datelor
+
 QString DocPricing::insertDataTablePricings()
 {
     return QString("INSERT INTO pricings ("
@@ -954,6 +975,9 @@ QString DocPricing::updateDataTablePricings()
                  ui->editComment->text());
 }
 
+// **********************************************************************************
+// --- conexiunilie
+
 void DocPricing::connectionsToIndexChangedCombobox()
 {
     connect(ui->comboOrganization, QOverload<int>::of(&QComboBox::currentIndexChanged),
@@ -977,6 +1001,9 @@ void DocPricing::disconnectionsToIndexChangedCombobox()
     disconnect(ui->comboTypesPricing, QOverload<int>::of(&QComboBox::currentIndexChanged),
             this, QOverload<int>::of(&DocPricing::indexChangedComboTypePrice));
 }
+
+// **********************************************************************************
+// --- evenimente formei
 
 void DocPricing::closeEvent(QCloseEvent *event)
 {

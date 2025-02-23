@@ -114,7 +114,7 @@ bool CatContracts::insertIntoTableContracts()
     qry.addBindValue(m_id_types_prices);
     qry.addBindValue(ui->editName->text());
     qry.addBindValue(ui->dateInit->date().toString("yyyy-MM-dd"));
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         qry.addBindValue((ui->checkBoxNotValid->isChecked()) ? true : false);
     else
         qry.addBindValue((ui->checkBoxNotValid->isChecked()) ? 1 : 0);
@@ -146,7 +146,7 @@ bool CatContracts::updateDataTableContracts()
     qry.bindValue(":id_typesPrices",   m_id_types_prices);
     qry.bindValue(":name",             ui->editName->text());
     qry.bindValue(":dateInit",         ui->dateInit->date().toString("yyyy-MM-dd"));
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         qry.bindValue(":notValid", (ui->checkBoxNotValid->isChecked()) ? true : false);
     else
         qry.bindValue(":notValid", (ui->checkBoxNotValid->isChecked()) ? 1 : 0);

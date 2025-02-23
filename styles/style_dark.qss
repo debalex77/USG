@@ -222,3 +222,39 @@ QCommandLinkButton:pressed {
     background-color: #4b4b4b;
     color: #ffffff;
 }
+
+/* -------------------------- QCheckBox ---------------------- */
+QCheckBox {
+    color: white;
+    spacing: 5px;
+}
+QCheckBox::focus {
+    border: 1px solid #00baff;
+    border-radius: 4px;
+}
+QCheckBox::indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background-color: #2b2b2b; /* Fundal gri-închis */
+    border: 1px solid #666;
+}
+
+QCheckBox::indicator:hover {
+    background-color: #3b3b3b; /* Gri mediu la hover */
+    border: 1px solid #888;
+}
+
+QCheckBox::indicator:checked {
+    background-color: #2b2b2b; /* Fundal rămâne gri-închis */
+    border: 1px solid #aaa;
+    image: url(:/img/check-mark.png); /* Imagine albă pentru bifă */
+}
+
+QCheckBox::indicator:checked:hover {
+    background-color: #3b3b3b; /* Gri puțin mai deschis la hover */
+}
+
+QCheckBox::indicator:unchecked:hover {
+    background-color: #3b3b3b;
+}

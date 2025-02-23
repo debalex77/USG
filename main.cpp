@@ -55,11 +55,11 @@ extern bool isDarkModeEnabledMacOS();
 
 bool isDarkThemeOnLinux() {
     QProcess process;
-    process.start("gsettings", QStringList() << "get" << "org.gnome.desktop.interface" << "gtk-theme");
+    process.start("gsettings", QStringList() << "get" << "org.gnome.desktop.interface" << "color-scheme");
     process.waitForFinished();
 
     QString theme = process.readAllStandardOutput();
-    return theme.contains("dark", Qt::CaseInsensitive); // Verificăm dacă tema include cuvântul „dark”
+    return theme.contains("prefer-dark", Qt::CaseInsensitive); // Verificăm dacă tema include cuvântul „dark”
 }
 
 #endif
@@ -267,26 +267,26 @@ int main(int argc, char *argv[])
 #if defined(Q_OS_LINUX)
     if (isDarkThemeOnLinux()) {
         fileStyle.setFileName(":/styles/style_dark.qss");
-        globals::isSystemThemeDark = true;
+        globals().isSystemThemeDark = true;
     } else {
         fileStyle.setFileName(":/styles/style_main.qss");
-        globals::isSystemThemeDark = false;
+        globals().isSystemThemeDark = false;
     }
 #elif defined(Q_OS_WIN)
     if (isDarkThemeOnWindows()) {
         fileStyle.setFileName(":/styles/style_dark.qss");
-        globals::isSystemThemeDark = true;
+        globals().isSystemThemeDark = true;
     } else {
         fileStyle.setFileName(":/styles/style_main.qss");
-        globals::isSystemThemeDark = false;
+        globals().isSystemThemeDark = false;
     }
 #elif defined(Q_OS_MACOS)
     if (isDarkModeEnabledMacOS()) {
         fileStyle.setFileName(":/styles/style_dark.qss");
-        globals::isSystemThemeDark = true;
+        globals().isSystemThemeDark = true;
     } else {
         fileStyle.setFileName(":/styles/style_main.qss");
-        globals::isSystemThemeDark = false;
+        globals().isSystemThemeDark = false;
     }
 #endif
     fileStyle.open(QFile::ReadOnly);
@@ -308,8 +308,8 @@ int main(int argc, char *argv[])
     AppSettings *appSettings = new AppSettings(); // alocam memoria p-u setarile aplicatiei
 
     // instalam fisierul de logare
-    if (QString(argv[1]) == "" && QString(argv[1]) != "/debug") { // !=
-        m_logFile.reset(new QFile(globals::pathLogAppSettings));
+    if (QString(argv[1]) == "" && QString(argv[1]) == "/debug") { // !=
+        m_logFile.reset(new QFile(globals().pathLogAppSettings));
         if (m_logFile && m_logFile->open(QFile::Append | QFile::Text)) {
             qInstallMessageHandler(messageHandler);
         } else {
@@ -319,7 +319,7 @@ int main(int argc, char *argv[])
 
     //******************************************************************************************************************************
     // determinam modul de lansare a aplicatiei
-    if (globals::unknowModeLaunch) {                    // nu e determinat modul lansarii aplicatiei
+    if (globals().unknowModeLaunch) {                    // nu e determinat modul lansarii aplicatiei
         InitLaunch *initLaunch = new InitLaunch();      // initializam forma interogarii lansarii aplicatiei: 'prima lansare' sau 'baza de date a fost transferata'
         initLaunch->setAttribute(Qt::WA_DeleteOnClose); // setam atributul de eliberare a memoriei la inchiderea ferestrei
         if (initLaunch->exec() != QDialog::Accepted) {
@@ -327,7 +327,7 @@ int main(int argc, char *argv[])
             return 1;
         }
         QTranslator *translator = new QTranslator(); // daca limba a fost schimbata
-        if (translator->load(QLocale(globals::langApp),
+        if (translator->load(QLocale(globals().langApp),
                              QLatin1String("USG"),
                              QLatin1String("_"),
                              QLatin1String(":/i18n"))) { // setam limba aplicatiei
@@ -340,16 +340,16 @@ int main(int argc, char *argv[])
     // 1. Transferul BD
     // 2. Prima lansare a aplicatiei
     // 3. Exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
-    if (globals::moveApp == 1) { // 1. daca BD a fost transferata
+    if (globals().moveApp == 1) { // 1. daca BD a fost transferata
         if (appSettings->exec() != QDialog::Accepted) // deschidem setarile aplicatiei pu a seta drumul spre BD
             return 1;
         AuthorizationUser *authUser = new AuthorizationUser(); // lansam autorizarea
-        authUser->setProperty("Id", globals::idUserApp);       // setam proprietatea 'id'
+        authUser->setProperty("Id", globals().idUserApp);       // setam proprietatea 'id'
         if (authUser->exec() != QDialog::Accepted)
             return 1;
         resizeMainWindow(a); // resetam dimensiunile ferestrei principale
     } else {
-        if (globals::firstLaunch) { // 2. daca prima lansare a aplicatie
+        if (globals().firstLaunch) { // 2. daca prima lansare a aplicatie
             if (appSettings->exec() != QDialog::Accepted) // lansam setarile principale ale aplicatiei
                 return 1;
             CatUsers *catUsers = new CatUsers(); // cream utilizator nou
@@ -361,30 +361,30 @@ int main(int argc, char *argv[])
             auto db = new DataBase();
             appSettings->setKeyAndValue("on_start",
                                         "idUserApp",
-                                        db->encode_string(QString::number(globals::idUserApp))); // in fisierul cu setari pentru extragerea
+                                        db->encode_string(QString::number(globals().idUserApp))); // in fisierul cu setari pentru extragerea
             appSettings->setKeyAndValue(
                 "on_start",
                 "nameUserApp",
-                db->encode_string(globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
-            appSettings->setKeyAndValue("on_start", "memoryUser", (globals::memoryUser) ? 1 : 0);
-            qDebug() << "thisSqlite: " << globals::thisSqlite;
-            qDebug() << "thisMySQL: " << globals::thisMySQL;
-            qDebug() << "user: " << globals::nameUserApp;
-            qDebug() << "id user: " << globals::idUserApp;
-            qDebug() << "lang app: " << globals::langApp;
-            qDebug() << "index type SQL:" << globals::indexTypeSQL;
+                db->encode_string(globals().nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
+            appSettings->setKeyAndValue("on_start", "memoryUser", (globals().memoryUser) ? 1 : 0);
+            qDebug() << "thisSqlite: " << globals().thisSqlite;
+            qDebug() << "thisMySQL: " << globals().thisMySQL;
+            qDebug() << "user: " << globals().nameUserApp;
+            qDebug() << "id user: " << globals().idUserApp;
+            qDebug() << "lang app: " << globals().langApp;
+            qDebug() << "index type SQL:" << globals().indexTypeSQL;
             resizeMainWindow(a); // resetam dimensiunile ferestrei principale
             db->deleteLater();
         } else { // 3. exista fisierul cu BD + fisierul cu setarile principale ale aplicatiei
             appSettings->loadSettings(); // determinam/incarcam setarile principale ale aplicatiei
-            qDebug() << "thisSqlite: " << globals::thisSqlite;
-            qDebug() << "thisMySQL: " << globals::thisMySQL;
-            qDebug() << "user: " << globals::nameUserApp;
-            qDebug() << "id user: " << globals::idUserApp;
-            qDebug() << "lang app: " << globals::langApp;
-            qDebug() << "index type SQL:" << globals::indexTypeSQL;
+            qDebug() << "thisSqlite: " << globals().thisSqlite;
+            qDebug() << "thisMySQL: " << globals().thisMySQL;
+            qDebug() << "user: " << globals().nameUserApp;
+            qDebug() << "id user: " << globals().idUserApp;
+            qDebug() << "lang app: " << globals().langApp;
+            qDebug() << "index type SQL:" << globals().indexTypeSQL;
             AuthorizationUser *authUser = new AuthorizationUser(); // lansam autorizarea
-            authUser->setProperty("Id", globals::idUserApp);
+            authUser->setProperty("Id", globals().idUserApp);
             if (authUser->exec() != QDialog::Accepted)
                 return 1;
             auto db = new DataBase();
@@ -392,13 +392,13 @@ int main(int argc, char *argv[])
                 ->setKeyAndValue("on_start",
                                  "idUserApp",
                                  db->encode_string(QString::number(
-                                     globals::idUserApp))); // in fisierul cu setari pentru extragerea
+                                     globals().idUserApp))); // in fisierul cu setari pentru extragerea
             appSettings->setKeyAndValue(
                 "on_start",
                 "nameUserApp",
                 db->encode_string(
-                    globals::nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
-            appSettings->setKeyAndValue("on_start", "memoryUser", (globals::memoryUser) ? 1 : 0);
+                    globals().nameUserApp)); // ulterioara la logare urmatoare a aplicatiei
+            appSettings->setKeyAndValue("on_start", "memoryUser", (globals().memoryUser) ? 1 : 0);
             resizeMainWindow(a);
             db->deleteLater();
         }

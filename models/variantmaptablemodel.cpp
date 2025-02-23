@@ -121,7 +121,7 @@ QVariant VariantMapTableModel::data(const QModelIndex &index, int role) const
     switch (role) {
     case Qt::BackgroundRole:
         if (index.column() == section_crl) {
-            if (globals::isSystemThemeDark)
+            if (globals().isSystemThemeDark)
                 return QBrush(QColor(120, 100, 50));
             else
                 return QBrush(QColor(229,210,153));

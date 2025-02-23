@@ -34,7 +34,7 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
 
     setWindowTitle(tr("Raport ecografic %1").arg("[*]"));
 
-    if (globals::showDocumentsInSeparatWindow)
+    if (globals().showDocumentsInSeparatWindow)
         setWindowFlags(Qt::Window);
 
     // ******************************************************************
@@ -180,10 +180,15 @@ DocReportEcho::~DocReportEcho()
 // *******************************************************************
 // **************** VALIDAREA SI PRINTAREA DIN ALTE OBIECTE***********
 
-void DocReportEcho::onPrintDocument(Enums::TYPE_PRINT _typeReport)
+void DocReportEcho::onPrintDocument(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 {
-    onPrint(_typeReport);
+    onPrint(_typeReport, filePDF);
     this->close();
+}
+
+QString DocReportEcho::getNumberDocReport()
+{
+    return ui->editDocNumber->text();
 }
 
 void DocReportEcho::m_onWritingData()
@@ -268,7 +273,7 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
         setCountImages(m_count_images + 1);
     }
 
-    if (! QFile(globals::pathImageBaseAppSettings).exists() && globals::thisSqlite){
+    if (! QFile(globals().pathImageBaseAppSettings).exists() && globals().thisSqlite){
         QMessageBox::information(this,
                                  tr("Verificarea set\304\203rilor"),
                                  tr("Imaginea nu este salvat\304\203 \303\256n baza de date !!!<br>"
@@ -281,7 +286,7 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
 
     if (db->existIdDocument("imagesReports", "id_reportEcho",
                             QString::number(m_id),
-                            (globals::thisMySQL) ? db->getDatabase() : db->getDatabaseImage()))
+                            (globals().thisMySQL) ? db->getDatabase() : db->getDatabaseImage()))
         updateImageIntoTableimagesReports(converted_file_name, numberImage);
     else
         insertImageIntoTableimagesReports(converted_file_name, numberImage);
@@ -318,7 +323,7 @@ void DocReportEcho::loadImageOpeningDocument()
     disconnect(ui->comment_image5, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
 
     // de modificat solicitarea -> solicitarea unica pu toate imaginile + comentarii
-    QSqlQuery qry((globals::thisMySQL) ? db->getDatabase() : db->getDatabaseImage());
+    QSqlQuery qry((globals().thisMySQL) ? db->getDatabase() : db->getDatabaseImage());
     qry.prepare(QString("SELECT * FROM imagesReports WHERE id_reportEcho = :id;"));
     qry.bindValue(":id", m_id);
     if (! qry.exec()){
@@ -1262,7 +1267,7 @@ void DocReportEcho::clickBtnNormograms()
 
 void DocReportEcho::createMenuPrint()
 {
-    if (globals::showDesignerMenuPrint) {
+    if (globals().showDesignerMenuPrint) {
         QMenu *setUpMenu = new QMenu(this);
         QAction *openDesignerReport = new QAction(setUpMenu);
         openDesignerReport->setIcon(QIcon(":/images/design.png"));
@@ -1289,12 +1294,14 @@ void DocReportEcho::createMenuPrint()
 
 void DocReportEcho::clickOpenDesignerReport()
 {
-    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER);
+    QString filePDF;
+    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER, filePDF);
 }
 
 void DocReportEcho::clickOpenPreviewReport()
 {
-    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+        QString filePDF;
+    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
 }
 
 void DocReportEcho::clickBtnClearImage1()
@@ -1418,7 +1425,7 @@ void DocReportEcho::clickBtnAddConcluzionTemplates()
                         "deletionMark, "
                         "cod, "
                         "name, "
-                        "%1) VALUES (?, ?, ?, ?, ?);").arg((globals::thisMySQL) ? "`system`" : "system"));
+                        "%1) VALUES (?, ?, ?, ?, ?);").arg((globals().thisMySQL) ? "`system`" : "system"));
     qry.addBindValue(db->getLastIdForTable("conclusionTemplates") + 1);
     qry.addBindValue(0);
     qry.addBindValue(db->getLastIdForTable("conclusionTemplates") + 1);
@@ -1500,11 +1507,11 @@ void DocReportEcho::clickBtnSelectConcluzionTemplates()
 
 void DocReportEcho::clickAddVideo()
 {
-    if (globals::show_content_info_video){
+    if (globals().show_content_info_video){
         info_win = new InfoWindow(this);
         info_win->setTypeInfo(InfoWindow::TypeInfo::INFO_VIDEO);
         info_win->setTitle(tr("Lucru cu fi\310\231ierele video."));
-        info_win->setTex(globals::str_content_message_video);
+        info_win->setTex(globals().str_content_message_video);
         info_win->exec();
     }
 
@@ -1538,11 +1545,11 @@ void DocReportEcho::clickRemoveVideo()
     YesNo = QMessageBox::question(this,
                                   tr("Eliminarea fi\310\231ierului."),
                                   tr("Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul:<br><u>%1</u> ?")
-                                  .arg(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text())),
+                                  .arg(dir.toNativeSeparators(globals().pathDirectoryVideo + "/" + list_play->currentItem()->text())),
                                   QMessageBox::Yes | QMessageBox::No);
 
     if (YesNo == QMessageBox::Yes){
-        QFile file_video(dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + list_play->currentItem()->text()));
+        QFile file_video(dir.toNativeSeparators(globals().pathDirectoryVideo + "/" + list_play->currentItem()->text()));
         if (file_video.remove()) {
             popUp->setPopupText(tr("Fișierul eliminat cu succes."));
             popUp->show();
@@ -1573,7 +1580,7 @@ void DocReportEcho::setUrl(const QUrl &url)
     str = dir.toNativeSeparators(str);
     qDebug() << str;
 #endif
-    QFile::copy(str, dir.toNativeSeparators(globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4"));
+    QFile::copy(str, dir.toNativeSeparators(globals().pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4"));
 
     list_play->addItem(QString::number(m_id) + "_" + QString::number(list_play->count()) + ".mp4");
     setCountVideo(m_count_video + 1);
@@ -1666,7 +1673,7 @@ void DocReportEcho::changedCurrentRowPlayList(int row)
 
     if (! m_playButton->isEnabled())
         m_playButton->setEnabled(true);
-    player->setSource(QUrl("file:///" + globals::pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(row) + ".mp4"));
+    player->setSource(QUrl("file:///" + globals().pathDirectoryVideo + "/" + QString::number(m_id) + "_" + QString::number(row) + ".mp4"));
     txt_title_player->setText("Se rulează - " + list_play->currentItem()->text());
 }
 
@@ -2518,7 +2525,7 @@ void DocReportEcho::slot_ItNewChanged()
         connect(timer, &QTimer::timeout, this, &DocReportEcho::updateTimer);
         timer->start(1000);                    // inițierea timerului pu data docum.
 
-        setIdUser(globals::idUserApp);
+        setIdUser(globals().idUserApp);
 
         if (m_organs_internal)
             connections_organs_internal();
@@ -2567,7 +2574,7 @@ void DocReportEcho::slot_IdChanged()
 
         ui->editDocNumber->setText(items.constFind("numberDoc").value());
         ui->editDocNumber->setDisabled(!ui->editDocNumber->text().isEmpty());
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             QString str_date = items.constFind("dateDoc").value();
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
@@ -2666,7 +2673,7 @@ void DocReportEcho::slot_IdChanged()
       ** Daca directoriu nu este indicat deschiderea documentului
       ** poate dura foarte mult din cauza cautarii prin tot
       ** hard discul a fisierelor video */
-    if (globals::pathDirectoryVideo != nullptr) {
+    if (globals().pathDirectoryVideo != nullptr) {
         findVideoFiles();
     };
 
@@ -2722,7 +2729,7 @@ void DocReportEcho::slot_IdDocOrderEchoChanged()
 
     QMap<QString, QString> items;
     if (db->getObjectDataById("orderEcho", m_id_docOrderEcho, items)){
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             QString str_date = items.constFind("dateDoc").value();
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
@@ -2745,7 +2752,7 @@ void DocReportEcho::slot_IdDocOrderEchoChanged()
 void DocReportEcho::slot_IdUserChanged()
 {
     if (m_idUser == Enums::IDX::IDX_UNKNOW)
-        setIdUser(globals::idUserApp);
+        setIdUser(globals().idUserApp);
 }
 
 void DocReportEcho::slot_CountImagesChanged()
@@ -2945,9 +2952,9 @@ bool DocReportEcho::controlRequiredObjects()
     return true;
 }
 
-void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
+void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 {
-    if (globals::pathTemplatesDocs.isEmpty()){
+    if (globals().pathTemplatesDocs.isEmpty()){
 
         QMessageBox::warning(this,
                              tr("Verificarea set\304\203rilor"),
@@ -2958,12 +2965,13 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
     }
 
     static int exist_logo = 0;
+    static int exist_stamp_doctor = 0;
+    static int exist_signature_doctor = 0;
 
     // *************************************************************************************
     // alocam memoria
     m_report = new LimeReport::ReportEngine(this);
-    model_logo = new QStandardItemModel(1,1);
-    modelPatient_print  = new QSqlQueryModel(this);
+    modelPatient_print = new QSqlQueryModel(this);
 
     // *************************************************************************************
     // titlu raportului
@@ -2972,30 +2980,78 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
     // *************************************************************************************
     // logotipul
     QPixmap pix_logo = QPixmap();
-    QStandardItem* img_item = new QStandardItem();
-    QString name_key_logo = "logo_" + globals::nameUserApp;
-    if (globals::cache_img.find(name_key_logo, &pix_logo)){
-        QImage m_logo = pix_logo.toImage();
-        img_item->setData(m_logo.scaled(300,50), Qt::DisplayRole);
-        model_logo->setItem(0, 0, img_item);
-        exist_logo = 1;
-    } else {
-        QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", m_idUser);
-        if (! outByteArray.isEmpty() && pix_logo.loadFromData(outByteArray)){
-            globals::cache_img.insert(name_key_logo, pix_logo);
-            QImage m_logo = pix_logo.toImage();
-            img_item->setData(m_logo.scaled(300,50), Qt::DisplayRole);
-            model_logo->setItem(0, 0, img_item);
-            exist_logo = 1;
+    QStandardItem *img_item_logo = new QStandardItem();
+    QString name_key_logo = "logo_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_logo, &pix_logo)){
+        if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
+            globals().cache_img.insert(name_key_logo, pix_logo);
         }
     }
-    m_report->dataManager()->addModel("table_logo", model_logo, true);
+
+    // --- setam logotipul
+    if (! pix_logo.isNull()) {
+        img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_logo = 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------
+    // ----- stampila doctorului
+    QPixmap pix_stamp_doctor = QPixmap();
+    QStandardItem* img_item_stamp_doctor = new QStandardItem();
+    QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_stamp_doctor, &pix_stamp_doctor)) {
+        if (! globals().stamp_main_doctor.isEmpty() && pix_stamp_doctor.loadFromData(globals().stamp_main_doctor)){
+            globals().cache_img.insert(name_key_stamp_doctor, pix_stamp_doctor);
+        }
+    }
+
+    // --- setam stampila
+    if (! pix_stamp_doctor.isNull()) {
+        img_item_stamp_doctor->setData(pix_stamp_doctor.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_stamp_doctor = 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------
+    // ----- semnatura doctorului
+    QPixmap pix_signature = QPixmap();
+    QStandardItem* img_item_signature = new QStandardItem();
+    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+
+    // --- verificam cache
+    if (! globals().cache_img.find(name_key_signature, &pix_signature)) {
+        if(! globals().signature_main_doctor.isEmpty() && pix_signature.loadFromData(globals().signature_main_doctor)) {
+            globals().cache_img.insert(name_key_signature, pix_signature);
+        }
+    }
+
+    // --- setam semnatura
+    if (! pix_signature.isNull()) {
+        img_item_signature->setData(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_signature_doctor = 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------
+    // setam imaginile in model
+    QList<QStandardItem *> items_img;
+    items_img.append(img_item_logo);
+    items_img.append(img_item_stamp_doctor);
+    items_img.append(img_item_signature);
+
+    model_img = new QStandardItemModel(this);
+    model_img->setColumnCount(4);
+    model_img->appendRow(items_img);
+
+    m_report->dataManager()->addModel("table_logo", model_img, true);
 
     // ************************************************************************************
     // setam datele organizatiei, pacientului in model
     if (modelOrganization->rowCount() > 0)
         modelOrganization->clear();
-    modelOrganization->setQuery(db->getQryFromTableConstantById(globals::idUserApp));
+    modelOrganization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     m_report->dataManager()->addModel("main_organization", modelOrganization, false);
 
     if (modelPatient_print->rowCount() > 0)
@@ -3005,7 +3061,9 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
 
     m_report->dataManager()->clearUserVariables();
     m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
-    m_report->dataManager()->setReportVariable("unitMeasure", (globals::unitMeasure == "milimetru") ? "mm" : "cm");
+    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
+    m_report->dataManager()->setReportVariable("v_exist_signature_doctor", exist_signature_doctor);
+    m_report->dataManager()->setReportVariable("unitMeasure", (globals().unitMeasure == "milimetru") ? "mm" : "cm");
 
     this->hide();
 
@@ -3021,17 +3079,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Complex.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Complex.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Complex.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Complex.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3048,6 +3111,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_complex.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3063,17 +3130,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_organs_internal", modelOrgansInternal, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Organs internal.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Organs internal.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Organs internal.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Organs internal.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3090,6 +3162,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "organs_internal.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3108,17 +3184,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_urinary_system", modelUrinarySystem, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Urinary system.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Urinary system.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Urinary system.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Urinary system.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3135,6 +3216,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_urinary_sistem.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3151,17 +3236,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_prostate", modelProstate, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Prostate.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Prostate.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Prostate.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Prostate.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3178,6 +3268,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_prostate.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3194,17 +3288,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_gynecology", modelGynecology, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Gynecology.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Gynecology.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Gynecology.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Gynecology.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3221,6 +3320,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_gynecology.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3235,17 +3338,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_breast", modelBreast, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Breast.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Breast.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Breast.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Breast.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3262,6 +3370,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_breast.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3277,17 +3389,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_thyroid", modelThyroid, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Thyroid.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Thyroid.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Thyroid.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Thyroid.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3304,6 +3421,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_thyroid.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3319,17 +3440,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_gestation0", modelGestationO, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Gestation0.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Gestation0.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Gestation0.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Gestation0.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3346,6 +3472,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_gestation0.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3361,17 +3491,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
         m_report->dataManager()->addModel("table_gestation1", modelGestation1, false);
 
         // completam sablonul
-        if (! m_report->loadFromFile(globals::pathTemplatesDocs + "/Gestation1.lrxml")){
+        if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Gestation1.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Gestation1.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Gestation1.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3388,6 +3523,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_gestation1.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3401,17 +3540,22 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
 
         // sablonul
         if (! m_report->loadFromFile((ui->gestation2_trimestru2->isChecked()) ?
-                                     globals::pathTemplatesDocs + "/Gestation2.lrxml" : globals::pathTemplatesDocs + "/Gestation3.lrxml")){
+                                     globals().pathTemplatesDocs + "/Gestation2.lrxml" : globals().pathTemplatesDocs + "/Gestation3.lrxml")){
             QMessageBox msgBox;
             msgBox.setWindowTitle(tr("Printarea documentului"));
             msgBox.setIcon(QMessageBox::Warning);
             msgBox.setText(tr("Printarea documentului nu este posibila."));
-            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals::pathTemplatesDocs + "/Gestation2.lrxml"));
+            msgBox.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(globals().pathTemplatesDocs + "/Gestation2.lrxml"));
             msgBox.setStandardButtons(QMessageBox::Ok);
             msgBox.setStyleSheet("QPushButton{width:120px;}");
             msgBox.exec();
 
-            delete img_item;
+            delete img_item_logo;
+            delete img_item_signature;
+            delete img_item_stamp_doctor;
+            delete model_img;
+            delete modelPatient_print;
+            m_report->deleteLater();
 
             this->show();
 
@@ -3428,6 +3572,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
             qInfo(logInfo()) << tr("Printare (preview) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
             m_report->previewReport();
+        } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
+            qInfo(logInfo()) << tr("Printare (PDF) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            m_report->printToPDF(filePDF + "_gestation2.pdf");
         } else {
             qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                     .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
@@ -3439,8 +3587,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport)
 
     // *************************************************************************************
     // elibiram memoria
-    delete img_item;
-    delete model_logo;
+    delete img_item_logo;
+    delete img_item_signature;
+    delete img_item_stamp_doctor;
+    delete model_img;
     delete modelPatient_print;
     m_report->deleteLater();
 }
@@ -3519,8 +3669,9 @@ void DocReportEcho::onWritingDataClose()
         msgBox.setIcon(QMessageBox::Question);
         msgBox.setText(tr("Dori\310\233i s\304\203 printa\310\233i documentul ?"));
         msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+        QString filePDF;
         if (msgBox.exec() == QMessageBox::Yes)
-            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW, filePDF);
 
         QDialog::accept();
         emit mCloseThisForm();
@@ -3742,7 +3893,7 @@ void DocReportEcho::constructionFormVideo()
 
 void DocReportEcho::findVideoFiles()
 {
-    if (globals::pathDirectoryVideo.isEmpty()) {
+    if (globals().pathDirectoryVideo.isEmpty()) {
         QMessageBox::warning(this,
                              tr("Verificarea set\304\203rilor"),
                              tr("Nu este setat directoriul pentru p\304\203strarea fi\310\231ierelor video !!!"),
@@ -3750,7 +3901,7 @@ void DocReportEcho::findVideoFiles()
         return;
     }
 
-    QDirIterator it(globals::pathDirectoryVideo + "/",
+    QDirIterator it(globals().pathDirectoryVideo + "/",
                     QStringList()
                     << QString::number(m_id) + "_0.mp4"
                     << QString::number(m_id) + "_1.mp4"
@@ -4123,7 +4274,7 @@ void DocReportEcho::updateStyleBtnInvestigations()
     QString style_pressed;
     QString style_unpressed;
 
-    if (globals::isSystemThemeDark) {
+    if (globals().isSystemThemeDark) {
 
         style_pressed = "QCommandLinkButton "
                         "{"
@@ -4284,7 +4435,7 @@ void DocReportEcho::initFooterDoc()
     labelPix->setMinimumHeight(2);
 
     auto labelAuthor = new QLabel(this);
-    labelAuthor->setText(globals::nameUserApp);
+    labelAuthor->setText(globals().nameUserApp);
     labelAuthor->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     labelAuthor->setStyleSheet("padding-left: 3px; color: rgb(49, 151, 116);");
 
@@ -4330,7 +4481,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
         qry.addBindValue(ui->editDocDate->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
         qry.addBindValue(m_idPacient);
         qry.addBindValue(m_id_docOrderEcho);
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             qry.addBindValue((m_organs_internal) ? true : false);
             qry.addBindValue((m_urinary_system) ? true : false);
             qry.addBindValue((m_prostate) ? true : false);
@@ -4532,7 +4683,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
             qry.addBindValue(ui->prostate_contur->text());
             qry.addBindValue(ui->prostate_ecogency->text());
             qry.addBindValue(ui->prostate_formations->text());
-            if (globals::thisMySQL)
+            if (globals().thisMySQL)
                 qry.addBindValue((ui->prostate_radioBtn_transrectal->isChecked()) ? true : false);
             else
                 qry.addBindValue((ui->prostate_radioBtn_transrectal->isChecked()) ? 1 : 0);
@@ -4575,7 +4726,7 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
                         "concluzion,"
                         "recommendation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
             qry.addBindValue(m_id);
-            if (globals::thisMySQL)
+            if (globals().thisMySQL)
                 qry.addBindValue((ui->gynecology_btn_transvaginal->isChecked()) ? true : false);
             else
                 qry.addBindValue((ui->gynecology_btn_transvaginal->isChecked()) ? 1 : 0);
@@ -5136,7 +5287,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
         qry.bindValue(":dateDoc",      ui->editDocDate->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
         qry.bindValue(":id_pacients",  m_idPacient);
         qry.bindValue(":id_orderEcho", m_id_docOrderEcho);
-        if (globals::thisMySQL) {
+        if (globals().thisMySQL) {
             qry.bindValue(":t_organs_internal", (m_organs_internal) ? true : false);
             qry.bindValue(":t_urinary_system",  (m_urinary_system) ? true : false);
             qry.bindValue(":t_prostate",        (m_prostate) ? true : false);
@@ -5336,7 +5487,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
             qry.bindValue(":contour",       ui->prostate_contur->text());
             qry.bindValue(":ecogency",      ui->prostate_ecogency->text());
             qry.bindValue(":formations",    ui->prostate_formations->text());
-            if (globals::thisMySQL)
+            if (globals().thisMySQL)
                 qry.bindValue(":transrectal", (ui->prostate_radioBtn_transrectal->isChecked()) ? true : false);
             else
                 qry.bindValue(":transrectal", (ui->prostate_radioBtn_transrectal->isChecked()) ? 1 : 0);
@@ -5379,7 +5530,7 @@ bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)
                         "concluzion             = :concluzion,"
                         "recommendation         = :recommendation WHERE id_reportEcho = :id_reportEcho;");
             qry.bindValue(":id_reportEcho", m_id);
-            if (globals::thisMySQL)
+            if (globals().thisMySQL)
                 qry.bindValue(":transvaginal", (ui->gynecology_btn_transvaginal->isChecked()) ? true : false);
             else
                 qry.bindValue(":transvaginal", (ui->gynecology_btn_transvaginal->isChecked()) ? 1 : 0);
@@ -6098,7 +6249,7 @@ void DocReportEcho::processingRequest()
 
             ui->editDocNumber->setText(qry.value(rec.indexOf("numberDoc")).toString());
             ui->editDocNumber->setDisabled(! ui->editDocNumber->text().isEmpty());
-            if (globals::thisMySQL){
+            if (globals().thisMySQL){
                 QString str_date = qry.value(rec.indexOf("dateDoc")).toString();
                 static const QRegularExpression replaceT("T");
                 static const QRegularExpression removeMilliseconds("\\.000");
@@ -6332,7 +6483,7 @@ void DocReportEcho::setDataFromSystemOrgansInternal()
                   " LEFT JOIN tableIntestinalLoop AS i ON l.id_reportEcho = i.id_reportEcho "
                   "WHERE l.id_reportEcho = '%id%';";
     str = str.replace("%id%", QString::number(m_id));
-    if (globals::thisMySQL) {
+    if (globals().thisMySQL) {
         str = str.replace("[", "`");
         str = str.replace("]", "`");
     }
@@ -6848,7 +6999,7 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_diaphragm->setCurrentIndex(qry.value(record.indexOf("diaphragm")).toInt());
 
             // tableGestation2_abdomen
-            ui->gestation1_abdominal_wall->setText(qry.value(record.indexOf("abdominalWall")).toString());
+            ui->gestation2_abdominalWall->setCurrentIndex(qry.value(record.indexOf("abdominalWall")).toInt());
             ui->gestation2_abdominalCollections->setCurrentIndex(qry.value(record.indexOf("abdominalCollections")).toInt());
             ui->gestation2_stomach->setCurrentIndex(qry.value(record.indexOf("stomach")).toInt());
             ui->gestation2_stomach_description->setText(qry.value(record.indexOf("stomach_description")).toString());
@@ -6904,9 +7055,7 @@ void DocReportEcho::setDataFromTableGestation2()
             ui->gestation2_uterLeft_SD->setText(qry.value(record.indexOf("uterLeft_SD")).toString());
             ui->gestation2_uterLeft_flux->setCurrentIndex(qry.value(record.indexOf("uterLeft_flux")).toInt());
             ui->gestation2_ductVenos->setCurrentIndex(qry.value(record.indexOf("ductVenos")).toInt());
-            getPercentageByDopplerUmbelicalArtery();
-            getPercentageByDopplerUterineArteryLeft();
-            getPercentageByDopplerUterineArteryRight();
+            updateTextDescriptionDoppler();
         }
     }
 }

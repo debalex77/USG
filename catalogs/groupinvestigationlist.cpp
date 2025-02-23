@@ -139,7 +139,7 @@ void GroupInvestigationList::onPrint()
     m_report->dataManager()->clearUserVariables();
     m_report->setShowProgressDialog(true);
     m_report->setPreviewWindowTitle(tr("Arbore investigațiilor"));
-    m_report->loadFromFile(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Tree_investigations.lrxml"));
+    m_report->loadFromFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Tree_investigations.lrxml"));
     m_report->previewReport();
 
     delete m_owner;

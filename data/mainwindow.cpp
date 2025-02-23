@@ -14,7 +14,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QSettings settings(ORGANIZATION_NAME, USG_VERSION_FULL); // denumirea organizatiei si aplicatiei
 
-    if (globals::minimizeAppToTray)
+    if (globals().minimizeAppToTray)
         initMinimizeAppToTray();
 
     mdiArea = new QMdiArea(this);                      // alocam memoria p/u MdiArea
@@ -327,8 +327,11 @@ void MainWindow::initActions()
     QAction* actionPacients         = new QAction(QIcon(":img/pacient_x32.png"), tr("Pacienți"), this);
     QAction* actionOrganizations    = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
     QAction* actionUsers            = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
+
     QAction* actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
     QAction* actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
+    QAction* actionAgentEmail       = new QAction(QIcon(":/img/email.png"), tr("Cont online"), this);
+
     QAction* actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
     QAction* actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
     QAction* actionOpenOrderEcho    = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
@@ -358,6 +361,8 @@ void MainWindow::initActions()
 
     connect(actionAppSettings, &QAction::triggered, this, &MainWindow::openAppSettings);
     connect(actionUserSettings, &QAction::triggered, this, &MainWindow::openUserSettings);
+    connect(actionAgentEmail, &QAction::triggered, this, &MainWindow::openAgentContOnline);
+
     connect(actionOpenPricing, &QAction::triggered, this, &MainWindow::openPricing);
     connect(actionOpenAppointments, &QAction::triggered, this, &MainWindow::openPatientAppointments);
     connect(actionOpenOrderEcho, &QAction::triggered, this, &MainWindow::openOrderEcho);
@@ -407,6 +412,8 @@ void MainWindow::initActions()
 
     ui->menuService->addAction(actionAppSettings);
     ui->menuService->addAction(actionUserSettings);
+    ui->menuService->addSeparator();
+    ui->menuService->addAction(actionAgentEmail);
 
     QAction *actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
     ui->menuAssistance->addAction(actionSourceCode);
@@ -503,11 +510,11 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 {
     QString version_app;
     QSqlQuery qry;
-    if (! globals::mySQLhost.isEmpty())
+    if (! globals().mySQLhost.isEmpty())
         qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp IS NOT Null;");
     else
         qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp NOT NULL;");
-    qry.bindValue(":id_users", globals::idUserApp);
+    qry.bindValue(":id_users", globals().idUserApp);
     if (qry.exec() && qry.next())
         version_app = qry.value(0).toString();
     else
@@ -520,12 +527,12 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 void MainWindow::setVersionAppInTableSettingsUsers()
 {
     QSqlQuery qry;
-    if (! globals::mySQLhost.isEmpty())
+    if (! globals().mySQLhost.isEmpty())
         qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp IS NOT Null;");
     else
         qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp NOT NULL;");
     qry.bindValue(":versionApp", USG_VERSION_FULL);
-    qry.bindValue(":id_users", globals::idUserApp);
+    qry.bindValue(":id_users", globals().idUserApp);
     if (! qry.exec() && qry.next())
         qCritical(logCritical()) << tr("%1 - setVersionAppInTableSettingsUsers()").arg(metaObject()->className())
                                  << tr("Eroare de actualizare a veriunei aplicatiei din tabela 'settingsUsers'.");
@@ -551,15 +558,15 @@ void MainWindow::updateTimer()
         }
         timer->stop(); // oprim timerul
 
-        if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
-                           globals::nameUserApp + ")");
-        else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): utilizator (") + globals::nameUserApp + ")");
+        if (globals().thisMySQL)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
+                           globals().nameUserApp + ")");
+        else if (globals().thisSqlite)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): utilizator (") + globals().nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals().nameUserApp + ")");
 
-        if (globals::firstLaunch){
+        if (globals().firstLaunch){
             textEdit_dockWidget->setHtml(tr("%1   %2: Se completează catalogul <b><u>'Investigații'</u></b>.")
                                          .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
             textEdit_dockWidget->setFixedHeight(70);
@@ -583,19 +590,19 @@ void MainWindow::updateTimer()
         }
 
         // verificam versiunea noua
-        if (globals::checkNewVersionApp)
+        if (globals().checkNewVersionApp)
             checkUpdateApp();
 
         // prezentarea istoriei versiunilor
-        if (globals::showHistoryVersion && version_app == USG_VERSION_FULL)
+        if (globals().showHistoryVersion && version_app == USG_VERSION_FULL)
             openDescriptionRealease();
 
         // prezentarea manualului online
-        if (globals::showUserManual)
+        if (globals().showUserManual)
             openUserManual();
 
         // prezentarea sfaturilor
-        if (globals::showAsistantHelper)
+        if (globals().showAsistantHelper)
             onShowAsistantTip();
     }
 }
@@ -626,7 +633,7 @@ void MainWindow::updateTimerDocWidget()
                                      .arg(textEdit_dockWidget->toHtml(), db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
 
         // Lansarea - User Manual
-        globals::firstLaunch = false;
+        globals().firstLaunch = false;
     }
 }
 
@@ -816,7 +823,7 @@ void MainWindow::openAppSettings()
 void MainWindow::openUserSettings()
 {
     auto preference = new UserPreferences(this);
-    preference->setProperty("Id", globals::idUserApp);
+    preference->setProperty("Id", globals().idUserApp);
     if (preference->exec() == QDialog::Accepted)
         db->updateVariableFromTableSettingsUser();
 }
@@ -915,6 +922,14 @@ void MainWindow::onBlockApp()
         this->show();
 }
 
+void MainWindow::openAgentContOnline()
+{
+    ContOnline *agent_email = new ContOnline(this);
+    agent_email->setAttribute(Qt::WA_DeleteOnClose);
+    agent_email->setProperty("Id_Organization", globals().c_id_organizations);
+    agent_email->show();
+}
+
 // **********************************************************************************
 // --- descarcarea fisierului cu aplicatia noua si prezentarea progress bar
 
@@ -981,7 +996,7 @@ void MainWindow::iconActivated(QSystemTrayIcon::ActivationReason reason)
 {
     switch (reason){
     case QSystemTrayIcon::Trigger:
-        if(globals::minimizeAppToTray){
+        if(globals().minimizeAppToTray){
             if(!this->isVisible()){
                 this->show();
             } else {
@@ -1022,7 +1037,7 @@ void MainWindow::handleFinishedProgress(const QString textTitle)
 
 void MainWindow::closeEvent(QCloseEvent *event)
 {
-    if (globals::minimizeAppToTray && this->isVisible()) {
+    if (globals().minimizeAppToTray && this->isVisible()) {
 
         event->ignore();
         this->hide();
@@ -1037,10 +1052,10 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
     } else {
 
-        if (! globals::showQuestionCloseApp){
+        if (! globals().showQuestionCloseApp){
             closeDatabases();
             qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.")
-                                    .arg(globals::nameUserApp);
+                                    .arg(globals().nameUserApp);
             event->accept();
             return;
         }
@@ -1057,7 +1072,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
         if (messange_box.clickedButton() == yesButton){
             closeDatabases();
-            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals::nameUserApp);
+            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
             event->accept();
         } else if (messange_box.clickedButton() == noButton) {
             event->ignore();
@@ -1221,22 +1236,22 @@ void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);    // traducem
-        if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
-                           globals::nameUserApp + ")");
-        else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
+        if (globals().thisMySQL)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
+                           globals().nameUserApp + ")");
+        else if (globals().thisSqlite)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals().sqliteNameBase) + globals().nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals().nameUserApp + ")");
         updateTextBtn();
     } else if (event->type() == QEvent::WindowTitleChange){
-        if (globals::thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals::mySQLnameBase, globals::mySQLhost) +
-                           globals::nameUserApp + ")");
-        else if (globals::thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals::sqliteNameBase) + globals::nameUserApp + ")");
+        if (globals().thisMySQL)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
+                           globals().nameUserApp + ")");
+        else if (globals().thisSqlite)
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): base - '%1', utilizator (").arg(globals().sqliteNameBase) + globals().nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals::nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals().nameUserApp + ")");
     }
 }
 

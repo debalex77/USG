@@ -189,12 +189,12 @@ QVariant BaseSqlTableModel::dataFromDocPricing(const QModelIndex &index, int rol
 #endif
     case Qt::BackgroundRole:  // culoarea fondalului
         if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0) {
-            if (globals::isSystemThemeDark)
+            if (globals().isSystemThemeDark)
                 return QBrush(QColor(90, 100, 90));
             else
                 return QBrush(QColor(191,198,188));
         } else {                                      // toate sectiile in afara
-            if (globals::isSystemThemeDark)
+            if (globals().isSystemThemeDark)
                 return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
             else
                 return QBrush(QColor(217,255,210));
@@ -240,14 +240,14 @@ QVariant BaseSqlTableModel::dataFromDocOrderEcho(const QModelIndex &index, int r
             if (QSqlTableModel::data(QSqlTableModel::index(index.row(), Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE), Qt::DisplayRole).toInt() == 0) {
                 return QBrush(QColor(191,198,188));
             } else {
-                if (globals::isSystemThemeDark)
+                if (globals().isSystemThemeDark)
                     return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
                 else
                     return QBrush(QColor(214,235,206));
             }
         }
         if (index.column() != Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE) { // toate sectiile in afara
-            if (globals::isSystemThemeDark)
+            if (globals().isSystemThemeDark)
                 return QBrush(QColor(52, 112, 93));   // de sectia nr.5 - 'pretul'
             else
                 return QBrush(QColor(217,255,210));

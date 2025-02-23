@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>AgentSendEmail</class>
+ <widget class="QDialog" name="AgentSendEmail">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>571</width>
+    <height>656</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="1" column="0">
+    <widget class="QLabel" name="label_2">
+     <property name="text">
+      <string>Către ...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0">
+    <widget class="QLabel" name="label_3">
+     <property name="text">
+      <string>Subiect:</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLineEdit" name="txt_subiect"/>
+   </item>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="txt_from"/>
+   </item>
+   <item row="3" column="0" colspan="2">
+    <widget class="QTextEdit" name="txt_body"/>
+   </item>
+   <item row="4" column="0" colspan="2">
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabFilesAttached">
+      <attribute name="title">
+       <string>Fișierele atașate</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_3">
+       <item row="0" column="0">
+        <widget class="QLineEdit" name="attached_file1"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="attached_file2"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLineEdit" name="attached_file3"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLineEdit" name="attached_file4"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="attached_file5"/>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabImgAttached">
+      <attribute name="title">
+       <string>Imaginile atașate</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLineEdit" name="attached_img1"/>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLineEdit" name="attached_img2"/>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLineEdit" name="attached_img3"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLineEdit" name="attached_img4"/>
+       </item>
+       <item row="4" column="0">
+        <widget class="QLineEdit" name="attached_img5"/>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="5" column="0" colspan="2">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <spacer name="horizontalSpacer">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnSend">
+       <property name="text">
+        <string>Trimite</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/send_email.png</normaloff>:/img/send_email.png</iconset>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClose">
+       <property name="text">
+        <string>Închide</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../resource.qrc">
+         <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="txt_to"/>
+   </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>De la ...</string>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

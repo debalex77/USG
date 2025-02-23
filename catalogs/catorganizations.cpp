@@ -136,10 +136,9 @@ void CatOrganizations::textChangedNameOrganization()
 
 void CatOrganizations::loadImageOpeningCatalog()
 {
-    QByteArray outByteArray = db->getOutByteArrayImage("organizations", "stamp", "id", m_Id);
     QPixmap outPixmap;
-    if (! outByteArray.isEmpty() && outPixmap.loadFromData(outByteArray))
-        ui->img_stamp->setPixmap(outPixmap.scaled(200,200));
+    if (! globals().main_stamp_organization.isEmpty() && outPixmap.loadFromData(globals().main_stamp_organization))
+        ui->img_stamp->setPixmap(outPixmap.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
 }
 
 void CatOrganizations::clearImageStamp()
@@ -154,6 +153,7 @@ void CatOrganizations::clearImageStamp()
         ui->img_stamp->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
         popUp->setPopupText(tr("Imaginea este eliminată din baza de date."));
         popUp->show();
+        globals().main_stamp_organization = nullptr;
     } else {
         qCritical(logCritical()) << tr("Eroare la eliminarea imaginei din baza de date:\n") << qry.lastError();
     }
@@ -184,6 +184,7 @@ bool CatOrganizations::loadFile(const QString &fileName)
     if (qry.exec()){
         popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
         popUp->show();
+        globals().main_stamp_organization = QByteArray::fromBase64(inByteArray.toBase64());
     } else {
         qCritical(logCritical()) << tr("Eroare de inserare a imaginei in baza de date:\n") << qry.lastError();
     }

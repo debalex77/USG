@@ -139,29 +139,6 @@
           <verstretch>0</verstretch>
          </sizepolicy>
         </property>
-        <property name="styleSheet">
-         <string notr="true">QLineEdit {
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    background-color: #f5f5f5;
-    color: #000000;
-    font-size: 13px;
-    padding: 4px 10px;
-}
-QLineEdit::focus
-{
-  border: 1px inset blue;
-  border-radius: 4px;
-  min-height: 18px;
-}
-QLineEdit:!enabled {
-  border: 1px inset gray;
-  border-radius: 4px;
-  background-color: LightGray;
-  min-height: 18px;
-  color: #646464;
-}</string>
-        </property>
         <property name="clearButtonEnabled">
          <bool>true</bool>
         </property>
@@ -804,28 +781,30 @@ QLineEdit:!enabled {
       <attribute name="label">
        <string>Comentariu</string>
       </attribute>
-      <widget class="QPlainTextEdit" name="editComment">
-       <property name="geometry">
-        <rect>
-         <x>13</x>
-         <y>0</y>
-         <width>971</width>
-         <height>51</height>
-        </rect>
-       </property>
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
-       </property>
-       <property name="font">
-        <font>
-         <family>Segoe UI</family>
-         <bold>false</bold>
-        </font>
-       </property>
-      </widget>
+      <layout class="QGridLayout" name="gridLayout_8">
+       <item row="0" column="0">
+        <widget class="QPlainTextEdit" name="editComment">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>50</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>false</bold>
+          </font>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </widget>
     </widget>
    </item>

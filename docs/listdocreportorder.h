@@ -27,6 +27,10 @@
 #include "models/basesortfilterproxymodel.h"
 #include <models/paginatedsqlmodel.h>
 
+#include <common/agentsendemail.h>
+#include <common/processingaction.h>
+#include <common/handlerfunctionthread.h>
+
 namespace Ui {
 class ListDocReportOrder;
 }
@@ -117,6 +121,7 @@ private slots:
     void onClickBtnUpdateTable();
     void onClickBtnHideShowColumn();
     void onClickBtnPrint();
+    void onClickBtnSendEmail();
     void onClickBtnReport();
     void onClickBtnShowHideViewTab();
     void openHistoryPatients();
@@ -298,6 +303,8 @@ private:
     DocOrderEcho   *docOrderEcho;
     CustomPeriod   *customPeriod;
     PatientHistory *patient_history;
+    AgentSendEmail *agent_sendEmail;
+    ProcessingAction *loader;
 
     QTimer *timer;
 

@@ -71,8 +71,10 @@ public:
     enum TYPE_PRINT
     {
         OPEN_DESIGNER,
-        OPEN_PREVIEW
+        OPEN_PREVIEW,
+        PRINT_TO_PDF
     };
+    Q_ENUM(TYPE_PRINT);
 
     enum PROXY_MODEL
     {

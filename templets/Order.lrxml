@@ -2290,7 +2290,7 @@
                   <image Type="QImage"></image>
                   <opacity Type="int" Value="100"/>
                   <datasource Type="QString">table_img</datasource>
-                  <field Type="QString">3</field>
+                  <field Type="QString">4</field>
                   <format Type="enumAndFlags" Value="0"/>
                   <autoSize Type="bool" Value="0"/>
                   <scale Type="bool" Value="1"/>

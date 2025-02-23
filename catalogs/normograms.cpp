@@ -211,7 +211,7 @@ void Normograms::updateStyleBtnPressed()
     QString style_pressed;
     QString style_unpressed;
 
-    if (globals::isSystemThemeDark) {
+    if (globals().isSystemThemeDark) {
 
         style_pressed = "QCommandLinkButton "
                         "{"

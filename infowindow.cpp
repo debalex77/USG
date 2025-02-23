@@ -13,7 +13,7 @@ InfoWindow::InfoWindow(QWidget *parent)
     ui->txt_title->clear();
     ui->textBrowser->clear();
 
-    (globals::show_content_info_video) ? ui->notShow->setChecked(false)
+    (globals().show_content_info_video) ? ui->notShow->setChecked(false)
                                        : ui->notShow->setChecked(true);
 
     ui->textBrowser->setFocus();
@@ -86,15 +86,15 @@ void InfoWindow::closeEvent(QCloseEvent *event)
         event->accept();
     } else {
         if (m_typeInfo == INFO_VIDEO) {
-            globals::show_content_info_video = !ui->notShow->isChecked();
+            globals().show_content_info_video = !ui->notShow->isChecked();
             appSettings->setKeyAndValue("show_msg",
                                         "showMsgVideo",
-                                        (globals::show_content_info_video) ? 1 : 0);
+                                        (globals().show_content_info_video) ? 1 : 0);
         } else if (m_typeInfo == INFO_REPORT) {
-            globals::show_info_reports = !ui->notShow->isChecked();
+            globals().show_info_reports = !ui->notShow->isChecked();
             appSettings->setKeyAndValue("show_msg",
                                         "showMsgReports",
-                                        (globals::show_info_reports) ? 1 : 0);
+                                        (globals().show_info_reports) ? 1 : 0);
         };
 
         appSettings->deleteLater();

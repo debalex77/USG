@@ -59,11 +59,11 @@ CatUsers::CatUsers(QWidget *parent) :
 
     //******************************************************************************
 
-    if (globals::firstLaunch){
+    if (globals().firstLaunch){
         ui->editNameUser->setText("admin");
         ui->editNameUser->setEnabled(false);
         popUp->setPopupText(tr("Pentru lucru cu baza de date \"<b>%1</b>\" <br>este necesar de creat primul utilizator.")
-                            .arg((globals::thisMySQL == true) ? globals::mySQLnameBase : globals::sqliteNameBase));
+                            .arg((globals().thisMySQL == true) ? globals().mySQLnameBase : globals().sqliteNameBase));
         popUp->show();
     }
 
@@ -98,7 +98,7 @@ void CatUsers::dataWasModified()
 void CatUsers::slot_ItNewChanged()
 {
     if (m_itNew){
-        if (globals::firstLaunch){
+        if (globals().firstLaunch){
             setWindowTitle(tr("Crearea administratorului aplicației %1").arg("[*]"));
         } else {
             setWindowTitle(tr("Utilizator (crearea) %1").arg("[*]"));
@@ -147,7 +147,7 @@ bool CatUsers::onWritingData()
         QString details_error;
         if (insertDataTableUsers(details_error)){
             qInfo(logInfo()) << tr("A fost creat %1")
-                                .arg((globals::firstLaunch) ?
+                                .arg((globals().firstLaunch) ?
                                              "primul utilizator cu nume 'admin'." :
                                              "utilizator cu nume '" + ui->editNameUser->text() + "'.");
         } else {
@@ -160,9 +160,9 @@ bool CatUsers::onWritingData()
             return false;
         }
         // setam variabile globale
-        if (globals::firstLaunch){
-            globals::idUserApp   = m_Id;        // id primului utilizator (fara + 1 = a fost inscris primul users)
-            globals::nameUserApp = "admin";     // nume primului utilizator
+        if (globals().firstLaunch){
+            globals().idUserApp   = m_Id;        // id primului utilizator (fara + 1 = a fost inscris primul users)
+            globals().nameUserApp = "admin";     // nume primului utilizator
             db->insertSetTableSettingsUsers();  // setarile utilizatorului
         } else {
             db->insertSetTableSettingsUsers(); // setarile utilizatorului
@@ -241,25 +241,16 @@ void CatUsers::changedIdObject()
 
 bool CatUsers::insertDataTableUsers(QString &details_error)
 {
-    QString str_qry;
-    if (globals::firstLaunch)
-        str_qry = "INSERT INTO users(id, deletionMark, name, password, hash, lastConnection) "
-                  "VALUES (:id, :deletionMark, :name, :password, :hash, :lastConnection);";
-    else
-        str_qry = "INSERT INTO users(id, deletionMark, name, password, hash) "
-                  "VALUES (:id, :deletionMark, :name, :password, :hash);";
     QSqlQuery qry;
-    qry.prepare(str_qry);
-    qry.bindValue(":id",           m_Id);
-    qry.bindValue(":deletionMark", 0);
-    if (globals::firstLaunch)
-        qry.bindValue(":name", "admin");
-    else
-        qry.bindValue(":name", ui->editNameUser->text());
-    qry.bindValue(":password",     db->encode_string(edit_password->text()));
-    qry.bindValue(":hash",         QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex());
-    if (globals::firstLaunch)
-        qry.bindValue(":lastConnection", QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    qry.prepare("INSERT INTO users("
+                "id, deletionMark, name, password, hash, lastConnection) "
+                "VALUES (?, ?, ?, ?, ?, ?);");
+    qry.addBindValue(m_Id);
+    qry.addBindValue(0);
+    qry.addBindValue((globals().firstLaunch) ? "admin" : ui->editNameUser->text());
+    qry.addBindValue(QVariant());
+    qry.addBindValue(QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex());
+    qry.addBindValue(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
     if (qry.exec()){
         return true;
     } else {
@@ -281,7 +272,7 @@ bool CatUsers::updateDataTableUsers()
     qry.bindValue(":id",           QString::number(m_Id));
     qry.bindValue(":deletionMark", QString::number(0));
     qry.bindValue(":name",         ui->editNameUser->text());
-    qry.bindValue(":password",     db->encode_string(edit_password->text()));
+    qry.bindValue(":password",     QVariant());
     qry.bindValue(":hash",         QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex());
     if (qry.exec()){
         return true;

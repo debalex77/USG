@@ -13,7 +13,7 @@ UpdateReleasesApp::~UpdateReleasesApp()
 
 bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
 {
-    if (globals::firstLaunch)
+    if (globals().firstLaunch)
         return true;
 
     if (current_release.isEmpty())
@@ -71,6 +71,7 @@ void UpdateReleasesApp::initializeUpdateFunctions()
 
     // Inițializarea pentru 3.0.X
     updateFunctions[3][0].insert(1, [this]() { this->updateRelease_3_0_1(); });
+    updateFunctions[3][0].insert(3, [this]() { this->updateRelease_3_0_3(); });
 }
 
 void UpdateReleasesApp::updateRelease_2_0_4()
@@ -79,7 +80,7 @@ void UpdateReleasesApp::updateRelease_2_0_4()
     // crearea tabelei noi
 
     QSqlQuery qry;
-    if (globals::thisSqlite){
+    if (globals().thisSqlite){
         qry.prepare("CREATE TABLE userPreferences ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
@@ -94,7 +95,7 @@ void UpdateReleasesApp::updateRelease_2_0_4()
                     "databasesArchiving    INT,"
                     "showAsistantHelper    INT"
                     ");");
-    } else if (globals::thisMySQL){
+    } else if (globals().thisMySQL){
         qry.prepare("CREATE TABLE userPreferences ("
                     "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_users              INT NOT Null,"
@@ -138,7 +139,7 @@ void UpdateReleasesApp::updateRelease_2_0_4()
                 "databasesArchiving,"
                 "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
     qry.addBindValue(1);
-    qry.addBindValue(globals::idUserApp);
+    qry.addBindValue(globals().idUserApp);
     qry.addBindValue("");
     qry.addBindValue(1);
     qry.addBindValue(0);
@@ -282,7 +283,7 @@ void UpdateReleasesApp::updateTablePacients_release_3_0_1()
 {
     QSqlQuery qry;
 
-    if (globals::thisSqlite){
+    if (globals().thisSqlite){
 
         if (qry.exec("PRAGMA foreign_keys = 0;"))
             qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: foreign_keys = 0";
@@ -368,7 +369,7 @@ void UpdateReleasesApp::updateTableKidney_release_3_0_1()
 {
     QSqlQuery qry;
 
-    if (globals::thisSqlite){
+    if (globals().thisSqlite){
 
         if (qry.exec("ALTER TABLE tableKidney ADD COLUMN contour_right TEXT CHECK(contour_right IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar';"))
             qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'contour_right' in tabela 'tableKidney'.";
@@ -408,7 +409,7 @@ void UpdateReleasesApp::updateTableGynecology_release_3_0_1()
 {
     QSqlQuery qry;
 
-    if (globals::thisSqlite){
+    if (globals().thisSqlite){
 
         if (qry.exec("ALTER TABLE tableGynecology ADD COLUMN junctional_zone TEXT CHECK(junctional_zone IN ('contur clar', 'contur sters')) DEFAULT 'contur clar';"))
             qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: adaugate sectia noua 'junctional_zone' in tabela 'tableGynecology'.";
@@ -742,4 +743,9 @@ void UpdateReleasesApp::createIndexForBaseImage_3_0_1()
         qInfo(logInfo()) << "Actualizarea la versiunea 3.0.1: creat indexul 'idx_id_documents_imagesReports'.";
     else
         qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.1': nu a fost creat indexul 'idx_id_documents_imagesReports'.";
+}
+
+void UpdateReleasesApp::updateRelease_3_0_3()
+{
+    db->createTableContOnline();
 }

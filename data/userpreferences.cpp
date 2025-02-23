@@ -78,7 +78,7 @@ bool UserPreferences::onWritingData()
         message->setTextTitle(tr("Preferintele utilizatorului nu pot fi salvate !!!"));
         message->setDetailedText(tr("Nu este determinat ID utilizatorului. Adresati-va administratorului aplicatiei."));
         message->show();
-        qDebug() << "ID user App: " <<globals::idUserApp;
+        qDebug() << "ID user App: " <<globals().idUserApp;
     }
 
     if (! controlRequiredObjects())
@@ -184,12 +184,10 @@ void UserPreferences::slot_IdChanged()
 
     //--------------------------------------------------------------
     // setam logotipul
-
-    QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", m_Id);
     QPixmap outPixmap = QPixmap();
-    if (outPixmap.loadFromData(outByteArray)){
+    if (! globals().c_logo_byteArray.isEmpty() && outPixmap.loadFromData(globals().c_logo_byteArray)){
         ui->btnClearLogo->setVisible(true);
-        ui->image_logo->setPixmap(outPixmap.scaled(400, 50));
+        ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     } else {
         ui->btnClearLogo->setVisible(false);
     }
@@ -259,42 +257,42 @@ void UserPreferences::activatedComboOrganizations(const int index)
 
 void UserPreferences::changeShowUserManual()
 {
-    globals::showUserManual = ui->check_showUserManual->isChecked();
+    globals().showUserManual = ui->check_showUserManual->isChecked();
 }
 
 void UserPreferences::changeDatabasesArchiving()
 {
-    globals::databasesArchiving = ui->check_databasesArchiving->isChecked();
+    globals().databasesArchiving = ui->check_databasesArchiving->isChecked();
 }
 
 void UserPreferences::changeShowDesignerMenuPrint()
 {
-    globals::showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
+    globals().showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
 }
 
 void UserPreferences::changeMinimizeAppToTray()
 {
-    globals::minimizeAppToTray = ui->minimizeAppToTray->isChecked();
+    globals().minimizeAppToTray = ui->minimizeAppToTray->isChecked();
 }
 
 void UserPreferences::changeShowQuestionClosingApp()
 {
-    globals::showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
+    globals().showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
 }
 
 void UserPreferences::changeShowDocumentsInSeparatWindow()
 {
-    globals::showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
+    globals().showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
 }
 
 void UserPreferences::changeNewVersion()
 {
-    globals::checkNewVersionApp = ui->check_newVersion->isChecked();
+    globals().checkNewVersionApp = ui->check_newVersion->isChecked();
 }
 
 void UserPreferences::changeSplitFullNamePatient()
 {
-    globals::order_splitFullName = ui->check_splitFullNamePatient->isChecked();
+    globals().order_splitFullName = ui->check_splitFullNamePatient->isChecked();
 }
 
 // **********************************************************************************
@@ -311,7 +309,7 @@ bool UserPreferences::loadFile(const QString &fileName)
                                  .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
         return false;
     }
-    ui->image_logo->setPixmap(QPixmap::fromImage(newImage).scaled(400,50));
+    ui->image_logo->setPixmap(QPixmap::fromImage(newImage).scaled(400,50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
     ui->btnClearLogo->setVisible(true);
 
     QFile file(fileName);
@@ -320,11 +318,13 @@ bool UserPreferences::loadFile(const QString &fileName)
     QByteArray inByteArray = file.readAll();
 
     QSqlQuery qry;
-    qry.prepare(QString("UPDATE constants SET logo = '%2' WHERE id_users = '%1';")
-                .arg(QString::number(m_Id), inByteArray.toBase64()));
+    qry.prepare("UPDATE constants SET logo = ? WHERE id_users = ?;");
+    qry.addBindValue(m_Id);
+    qry.addBindValue(inByteArray.toBase64());
     if (qry.exec()){
         popUp->setPopupText(tr("Logotipul este salvat cu succes în baza de date."));
         popUp->show();
+        globals().c_logo_byteArray = QByteArray::fromBase64(inByteArray.toBase64());
     } else {
         qDebug() << tr("Eroare de inserare a logotipului in baza de date:\n") << qry.lastError();
     }
@@ -399,6 +399,7 @@ void UserPreferences::clearImageLogo()
         ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
         popUp->setPopupText(tr("Logotipul este eliminat din baza de date."));
         popUp->show();
+        globals().c_logo_byteArray = nullptr;
     } else {
         qCritical(logCritical()) << tr("Eroare la eliminarea logotipului din baza de date %1").arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
     }
@@ -487,19 +488,19 @@ void UserPreferences::changeDataItemTabelMessege(QTableWidgetItem *item)
     int current_row = item->row();
     if (current_row == row_video){
         if (item->checkState() == Qt::Checked)
-            globals::show_content_info_video = true;
+            globals().show_content_info_video = true;
         else
-            globals::show_content_info_video = false;
+            globals().show_content_info_video = false;
         app_settings = new AppSettings(this);
-        app_settings->setKeyAndValue("show_msg", "showMsgVideo", (globals::show_content_info_video) ? 1 : 0);
+        app_settings->setKeyAndValue("show_msg", "showMsgVideo", (globals().show_content_info_video) ? 1 : 0);
         app_settings->deleteLater();
     } else if (current_row == row_report){
         if (item->checkState() == Qt::Checked)
-            globals::show_info_reports = true;
+            globals().show_info_reports = true;
         else
-            globals::show_info_reports = false;
+            globals().show_info_reports = false;
         app_settings = new AppSettings(this);
-        app_settings->setKeyAndValue("show_msg", "showMsgReports", (globals::show_info_reports) ? 1 : 0);
+        app_settings->setKeyAndValue("show_msg", "showMsgReports", (globals().show_info_reports) ? 1 : 0);
         app_settings->deleteLater();
     }
 }
@@ -569,14 +570,14 @@ void UserPreferences::setValueIntoTableMessage()
 
     //-- info video
     QTableWidgetItem *itm = ui->tableWidget->item(row_video, column_presentation);
-    if (globals::show_content_info_video)
+    if (globals().show_content_info_video)
         itm->setCheckState(Qt::Checked);
     else
         itm->setCheckState(Qt::Unchecked);
 
     //-- info reports
     itm = ui->tableWidget->item(row_report, column_presentation);
-    if (globals::show_info_reports)
+    if (globals().show_info_reports)
         itm->setCheckState(Qt::Checked);
     else
         itm->setCheckState(Qt::Unchecked);
@@ -648,6 +649,11 @@ void UserPreferences::initConnections()
     connect(this, &UserPreferences::IdNurseChanged, this, &UserPreferences::slot_IdNurseChanged);
     connect(this, &UserPreferences::IdChangedOrganization, this, &UserPreferences::slot_IdChangedOrganization);
 
+    QString style_toolButton = db->getStyleForToolButton();
+    ui->btnOpenOrganizations->setStyleSheet(style_toolButton);
+    ui->btnOpenDoctors->setStyleSheet(style_toolButton);
+    ui->btnOpenNurses->setStyleSheet(style_toolButton);
+    ui->btnOpenUsers->setStyleSheet(style_toolButton);
     connect(ui->btnOpenOrganizations, &QToolButton::clicked, this, &UserPreferences::onOpenCatOrganizations);
     connect(ui->btnOpenDoctors, &QToolButton::clicked, this, &UserPreferences::onOpenCatDoctors);
     connect(ui->btnOpenNurses, &QToolButton::clicked, this, &UserPreferences::onOpenCatNurses);
@@ -830,7 +836,7 @@ bool UserPreferences::insertDataIntoTableUserPreferences()
     qry.addBindValue(m_Id);
     qry.addBindValue(m_Id);
     qry.addBindValue(USG_VERSION_FULL);
-    if(globals::thisMySQL){
+    if(globals().thisMySQL){
         qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? true : false));
         qry.addBindValue((ui->check_showUserManual->isChecked() ? true : false));
         qry.addBindValue(0);
@@ -842,7 +848,7 @@ bool UserPreferences::insertDataIntoTableUserPreferences()
         qry.addBindValue((ui->showAsistantHelper->isChecked() ? true : false));
         qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
         qry.addBindValue((ui->minimizeAppToTray->isChecked() ? true : false));
-    } else if (globals::thisSqlite){
+    } else if (globals().thisSqlite){
         qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.addBindValue((ui->check_showUserManual->isChecked() ? 1 : 0));
         qry.addBindValue(0);
@@ -938,7 +944,7 @@ bool UserPreferences::updateDataIntoTableUserPreferences()
     qry.bindValue(":id",                    m_Id);
     qry.bindValue(":id_users",              m_Id);
     qry.bindValue(":versionApp",            USG_VERSION_FULL);
-    if(globals::thisMySQL){
+    if(globals().thisMySQL){
         qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? true : false));
         qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? true : false));
         qry.bindValue(":showHistoryVersion",           0);
@@ -950,7 +956,7 @@ bool UserPreferences::updateDataIntoTableUserPreferences()
         qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? true : false));
         qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
         qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? true : false));
-    } else if(globals::thisSqlite){
+    } else if(globals().thisSqlite){
         qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
         qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? 1 : 0));
         qry.bindValue(":showHistoryVersion",           0);

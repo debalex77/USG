@@ -28,10 +28,10 @@ DataBase::~DataBase()
 
 bool DataBase::connectToDataBase()
 {
-    if (globals::connectionMade == "MySQL"){
+    if (globals().connectionMade == "MySQL"){
         return openDataBase();
     } else {
-        if (QFile(globals::sqlitePathBase).exists()) {
+        if (QFile(globals().sqlitePathBase).exists()) {
             return openDataBase();
         } else {
             return restoreDataDase();
@@ -45,25 +45,25 @@ bool DataBase::createConnectBaseSqlite(QString &txtMessage)
     //verificam daca este creata BD
     QSqlDatabase _newBase = QSqlDatabase::database();
     if (_newBase.open()){
-        txtMessage = tr("Baza de date <b>\"%1\"</b> deja este creata !!! <br>%2").arg(globals::sqliteNameBase, globals::sqlitePathBase);
+        txtMessage = tr("Baza de date <b>\"%1\"</b> deja este creata !!! <br>%2").arg(globals().sqliteNameBase, globals().sqlitePathBase);
         return true;
     }
 
     //crearea BD
     db = QSqlDatabase::addDatabase("QSQLITE");
-    db.setHostName(globals::sqliteNameBase);
-    db.setDatabaseName(globals::sqlitePathBase);
+    db.setHostName(globals().sqliteNameBase);
+    db.setDatabaseName(globals().sqlitePathBase);
     if(db.open()){
-        if (globals::firstLaunch){
+        if (globals().firstLaunch){
             creatingTables();
         }
-        txtMessage = tr("Baza de date \"<b>%1</b>\" este creata cu succes.").arg(globals::sqliteNameBase);
+        txtMessage = tr("Baza de date \"<b>%1</b>\" este creata cu succes.").arg(globals().sqliteNameBase);
         // !!! de adaugat - crearea/inițierea tabelelor in baza sqlite
         return true;
     } else {
         txtMessage = tr("Baza de date \"<b>%1</b>\" nu este creata. <br>"
                         "Verificati corectitudinea localizarii fisierului cu baza de date sau adresati-va administratorului aplicatiei.")
-                .arg(globals::sqliteNameBase);
+                .arg(globals().sqliteNameBase);
         return false;
     }
     return false;
@@ -74,9 +74,74 @@ QSqlDatabase DataBase::getDatabase()
     return db.database();
 }
 
-QSqlDatabase DataBase::getDatabaseThread()
+QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName)
 {
-    return db_thread.database(m_connectionName);
+    qInfo(logInfo()) << "";
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo()) << "Se initiaza 'Thread' connection: " << threadConnectionName;
+    if (! QSqlDatabase::contains(threadConnectionName)) {
+        QSqlDatabase db_thread = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
+        db_thread.setHostName(globals().sqliteNameBase);
+        db_thread.setDatabaseName(globals().sqlitePathBase);
+        if (! db_thread.open()) {
+            qWarning(logWarning()) << "Eroare la deschiderea bazei de date:" << db_thread.lastError().text();
+        }
+        return db_thread;
+    }
+    return QSqlDatabase::database(threadConnectionName);
+}
+
+QSqlDatabase DataBase::getDatabaseImageThread(const QString threadConnectionName)
+{
+    qInfo(logInfo()) << "";
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo()) << "Se initiaza 'Thread' connection 'Image': " << threadConnectionName;
+    if (! QSqlDatabase::contains(threadConnectionName)) {
+
+        QSqlDatabase db_threadImage = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
+        db_threadImage.setHostName("db_image");
+        db_threadImage.setDatabaseName(globals().pathImageBaseAppSettings);
+        if (! db_threadImage.open()) {
+            qWarning(logWarning()) << "Eroare la deschiderea bazei de date în thread:" << db_threadImage.lastError().text();
+        }
+        return db_threadImage;
+    }
+    return QSqlDatabase::database(threadConnectionName);
+}
+
+void DataBase::removeDatabaseThread(const QString threadConnectionName)
+{
+    qInfo(logInfo()) << "Initierea eliminarii 'Thread' connection:" << threadConnectionName;
+
+    if (QSqlDatabase::contains(threadConnectionName)) {
+        {
+            // Preluăm conexiunea cu open = false, pentru a NU o redeschide din greșeală.
+            QSqlDatabase tempDb = QSqlDatabase::database(threadConnectionName, false);
+            // qDebug() << "tempDb.isOpen() =" << tempDb.isOpen();
+            if (tempDb.isValid() && tempDb.isOpen()) {
+                tempDb.close();
+            }
+        }
+
+        if (QSqlDatabase::contains(threadConnectionName)) {
+            qInfo(logInfo()) << "Lista conexiuni inainte de eliminare:" << QSqlDatabase::connectionNames();
+
+            // Observă, și aici dacă vrei doar să verifici starea, folosești tot open=false
+            qInfo(logInfo()) << "Se inchide conexiunea" << threadConnectionName
+                             << "isOpen?"
+                             << QSqlDatabase::database(threadConnectionName, false).isOpen();
+
+            QSqlDatabase::removeDatabase(threadConnectionName);
+
+            qInfo(logInfo()) << "Lista conexiuni dupa eliminare 'Thread' connection:" << QSqlDatabase::connectionNames();
+        }
+    }
+
+    if (! QSqlDatabase::contains(threadConnectionName))
+        qInfo(logInfo()) << "Connection 'Thread' -" << threadConnectionName << " a fost eliminata cu succes.";
+
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=~~=~=~=~~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo()) << "";
 }
 
 QSqlDatabase DataBase::getDatabaseImage()
@@ -489,7 +554,7 @@ void DataBase::insertDataForTabletypesPrices()
     qry.addBindValue(0);
     qry.addBindValue(tr("Pre\310\233uri comerciale"));
     qry.addBindValue(0);
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         qry.addBindValue(false);
     else
         qry.addBindValue(0);
@@ -504,7 +569,7 @@ void DataBase::insertDataForTabletypesPrices()
     qry.addBindValue(0);
     qry.addBindValue(tr("Pre\310\233uri CNAM"));
     qry.addBindValue(0);
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         qry.addBindValue(true);
     else
         qry.addBindValue(1);
@@ -530,8 +595,8 @@ void DataBase::insertSetTableSettingsUsers()
                 "checkNewVersionApp,"
                 "databasesArchiving,"
                 "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-    qry.addBindValue(globals::idUserApp);
-    qry.addBindValue(globals::idUserApp);
+    qry.addBindValue(globals().idUserApp);
+    qry.addBindValue(globals().idUserApp);
     qry.addBindValue("");
     qry.addBindValue(1);
     qry.addBindValue(0);
@@ -558,7 +623,7 @@ int DataBase::findIdFromTableSettingsForm(const QString typeForm, const int numb
     qry.prepare(str);
     qry.bindValue(":typeForm",      typeForm);
     qry.bindValue(":numberSection", numberSection);
-    qry.bindValue(":id_users",      globals::idUserApp);
+    qry.bindValue(":id_users",      globals().idUserApp);
     if (! qry.exec()){
         qWarning(logWarning()) << tr("Eroare de executare a solicitarii de determinare 'id' din tabela 'settingsForms': %1").arg(qry.lastError().text());
         return -1;
@@ -578,7 +643,7 @@ bool DataBase::insertUpdateDataTableSettingsForm(const bool insertData,  const Q
         QSqlQuery qry;
         qry.prepare(str);
         qry.bindValue(":id",               getLastIdForTable("settingsForms") + 1);
-        qry.bindValue(":id_users",         globals::idUserApp);
+        qry.bindValue(":id_users",         globals().idUserApp);
         qry.bindValue(":typeForm",         typeForm);
         qry.bindValue(":numberSection",    numberSection);
         qry.bindValue(":sizeSection",      sectionSize);
@@ -598,7 +663,7 @@ bool DataBase::insertUpdateDataTableSettingsForm(const bool insertData,  const Q
         QSqlQuery qry;
         qry.prepare(str);
         qry.bindValue(":id",               id_data);
-        qry.bindValue(":id_users",         globals::idUserApp);
+        qry.bindValue(":id_users",         globals().idUserApp);
         qry.bindValue(":typeForm",         typeForm);
         qry.bindValue(":numberSection",    numberSection);
         qry.bindValue(":sizeSection",      sectionSize);
@@ -622,7 +687,7 @@ int DataBase::getSizeSectionFromTableSettingsForm(const int numberSection, const
     QSqlQuery qry;
     qry.prepare(str);
     qry.bindValue(":id",            id_data);
-    qry.bindValue(":id_users",      globals::idUserApp);
+    qry.bindValue(":id_users",      globals().idUserApp);
     qry.bindValue(":typeForm",      typeForm);
     qry.bindValue(":numberSection", numberSection);
     if (qry.exec() && qry.next() && qry.value(0).toInt() > 0)
@@ -634,7 +699,7 @@ int DataBase::getSizeSectionFromTableSettingsForm(const int numberSection, const
 int DataBase::getDirectionSortingFromTableSettingsForm(const int numberSection, const QString typeForm) const
 {
     QString str;
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         str = QString("SELECT directionSorting FROM settingsForms WHERE "
                       "directionSorting IS NOT Null AND "
                       "typeForm      = :typeForm AND "
@@ -648,7 +713,7 @@ int DataBase::getDirectionSortingFromTableSettingsForm(const int numberSection, 
                       "id_users      = :id_users;");
     QSqlQuery qry;
     qry.prepare(str);
-    qry.bindValue(":id_users",      globals::idUserApp);
+    qry.bindValue(":id_users",      globals().idUserApp);
     qry.bindValue(":typeForm",      typeForm);
     qry.bindValue(":numberSection", numberSection);
     if (qry.exec() && qry.next() && qry.value(0).toInt() >= 0)
@@ -667,7 +732,7 @@ bool DataBase::updatePeriodInTableSettingsForm(const int id_data, const QString 
     QSqlQuery qry;
     qry.prepare(str);
     qry.bindValue(":id",        id_data);
-    qry.bindValue(":id_users",  globals::idUserApp);
+    qry.bindValue(":id_users",  globals().idUserApp);
     qry.bindValue(":dateStart", date_start);
     qry.bindValue(":dateEnd",   date_end);
     if (! qry.exec()){
@@ -680,7 +745,7 @@ bool DataBase::updatePeriodInTableSettingsForm(const int id_data, const QString 
 void DataBase::getPeiodFromTableSettingsForm(const int id_data, const QString typeForm, QString &date_start, QString &date_end)
 {
     QString str;
-    if (globals::thisMySQL) // globals::mySQLhost
+    if (globals().thisMySQL) // globals().mySQLhost
         str = QString("SELECT dateStart, dateEnd FROM settingsForms WHERE "
                       "dateStart       IS NOT Null AND "
                       "dateEnd         IS NOT Null AND "
@@ -699,10 +764,10 @@ void DataBase::getPeiodFromTableSettingsForm(const int id_data, const QString ty
     QSqlQuery qry;
     qry.prepare(str);
     qry.bindValue(":id",       QString::number(id_data));
-    qry.bindValue(":id_users", QString::number(globals::idUserApp));
+    qry.bindValue(":id_users", QString::number(globals().idUserApp));
     qry.bindValue(":typeForm", typeForm);
     if (qry.exec() && qry.next()){
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
             date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
@@ -1032,7 +1097,7 @@ bool DataBase::postDocument(const QString nameTable, QMap<QString, QString> &ite
 bool DataBase::createTableUsers()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists users ("
                     "id             INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark   INT NOT Null,"
@@ -1040,14 +1105,14 @@ bool DataBase::createTableUsers()
                     "password       VARCHAR (50),"
                     "hash           CHAR (64),"
                     "lastConnection DATETIME);");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE users ("
                     "id             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark   INTEGER NOT NULL,"
-                    "name           TEXT (50) NOT NULL,"
-                    "password       TEXT (50),"
-                    "hash           TEXT (64),"
-                    "lastConnection TEXT (19));");
+                    "name           TEXT NOT NULL,"
+                    "password       TEXT,"
+                    "hash           TEXT,"
+                    "lastConnection TEXT);");
     else
         return false;
 
@@ -1063,7 +1128,7 @@ bool DataBase::createTableUsers()
 bool DataBase::createTableDoctors()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists doctors ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -1075,7 +1140,7 @@ bool DataBase::createTableDoctors()
                     "comment      VARCHAR (255),"
                     "signature    LONGBLOB,"
                     "stamp        LONGBLOB);");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE doctors ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1102,7 +1167,7 @@ bool DataBase::createTableDoctors()
 bool DataBase::createTableFullNameDoctors()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
         qry.prepare("CREATE TABLE `fullNameDoctors` ("
                     "`id` int NOT Null AUTO_INCREMENT,"
                     "`id_doctors`      int NOT Null,"
@@ -1139,7 +1204,7 @@ bool DataBase::createTableFullNameDoctors()
                                    << tr("Nu a fost creata tabela \"fullNameDoctors\".") + qry.lastError().text();
             return false;
         }
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
 
@@ -1197,7 +1262,7 @@ bool DataBase::createTableFullNameDoctors()
 bool DataBase::createTableNurses()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists nurses ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -1207,7 +1272,7 @@ bool DataBase::createTableNurses()
                     "telephone    VARCHAR (100),"
                     "email        VARCHAR (100),"
                     "comment      VARCHAR (255));");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE nurses ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1232,7 +1297,7 @@ bool DataBase::createTableNurses()
 bool DataBase::createTableFullNameNurses()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
 
         qry.prepare("CREATE TABLE `fullNameNurses` ("
                     "`id` int NOT Null AUTO_INCREMENT,"
@@ -1271,7 +1336,7 @@ bool DataBase::createTableFullNameNurses()
             return false;
         }
 
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
         try {
@@ -1322,7 +1387,7 @@ bool DataBase::createTableFullNameNurses()
 bool DataBase::createTablePacients()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists pacients ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark  INT NOT Null,"
@@ -1336,7 +1401,7 @@ bool DataBase::createTablePacients()
                     "telephone     VARCHAR (100),"
                     "email         VARCHAR (100),"
                     "comment       VARCHAR (255));");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE pacients ("
                     "id            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark  INTEGER NOT NULL,"
@@ -1365,7 +1430,7 @@ bool DataBase::createTablePacients()
 bool DataBase::createTableFullNamePacients()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
 
         qry.prepare("CREATE TABLE `fullNamePacients` ("
                     "`id`               int NOT Null AUTO_INCREMENT,"
@@ -1411,7 +1476,7 @@ bool DataBase::createTableFullNamePacients()
             return false;
         }
 
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
         try {
@@ -1472,14 +1537,14 @@ bool DataBase::createTableFullNamePacients()
 bool DataBase::createTableTypesPrices()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists typesPrices ("
                     "id	          INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
                     "name	      VARCHAR (50) NOT Null,"
                     "discount	  DECIMAL (15,3) DEFAULT Null,"
                     "noncomercial BOOLEAN);");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE typesPrices ("
                     "id	          INTEGER PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1501,7 +1566,7 @@ bool DataBase::createTableTypesPrices()
 bool DataBase::createTableOrganizations()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists organizations ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -1514,7 +1579,7 @@ bool DataBase::createTableOrganizations()
                     "comment      VARCHAR (255),"
                     "id_contracts INTEGER,"
                     "stamp        LONGBLOB);");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE organizations ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1542,7 +1607,7 @@ bool DataBase::createTableOrganizations()
 bool DataBase::createTableContracts()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists contracts ("
                     "id               INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark     INT NOT Null,"
@@ -1559,7 +1624,7 @@ bool DataBase::createTableContracts()
                     "ALTER TABLE `organizations` ADD INDEX `organizations_contracts_id_idx` (`id_contracts` ASC) VISIBLE;"
                     "ALTER TABLE `organizations` ADD CONSTRAINT `organizations_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT"
                     ";");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE contracts ("
                     "id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark     INTEGER NOT NULL,"
@@ -1584,7 +1649,7 @@ bool DataBase::createTableContracts()
 bool DataBase::createTableInvestigations()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists investigations ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT,"
@@ -1594,7 +1659,7 @@ bool DataBase::createTableInvestigations()
                     "owner        VARCHAR (150),"
                     "KEY `idx_investigations_cod` (`cod`),"
                     "KEY `idx_investigations_name` (`name`));");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE investigations ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1617,7 +1682,7 @@ bool DataBase::createTableInvestigations()
 bool DataBase::createTableInvestigationsGroup()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists investigationsGroup ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT,"
@@ -1625,7 +1690,7 @@ bool DataBase::createTableInvestigationsGroup()
                     "name         VARCHAR (50),"
                     "nameForPrint VARCHAR (250)"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE if not exists investigationsGroup ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1656,7 +1721,7 @@ bool DataBase::createTableInvestigationsGroup()
 bool DataBase::createTablePricings()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists pricings ("
                     "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark       INT NOT Null,"
@@ -1675,7 +1740,7 @@ bool DataBase::createTablePricings()
                     "CONSTRAINT `pricings_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`),"
                     "CONSTRAINT `pricings_typesProces_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),"
                     "CONSTRAINT `pricings_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`));");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE pricings ("
                     "id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark       INTEGER NOT NULL,"
@@ -1701,7 +1766,7 @@ bool DataBase::createTablePricings()
 bool DataBase::createTable_PricingsTable()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists pricingsTable ("
                     "id	          INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -1712,7 +1777,7 @@ bool DataBase::createTable_PricingsTable()
                     "KEY `pricingsTable_pricing_id_idx` (`id_pricings`),"
                     "CONSTRAINT `pricingsTable_pricing_id` FOREIGN KEY (`id_pricings`) REFERENCES `pricings` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE pricingsTable ("
                     "id	          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -1735,7 +1800,7 @@ bool DataBase::createTable_PricingsTable()
 bool DataBase::createTablePricingsPresentation()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
 
 #if defined(Q_OS_LINUX)
         qry.prepare("CREATE TABLE if not exists `pricingsPresentation` ("
@@ -1824,7 +1889,7 @@ bool DataBase::createTablePricingsPresentation()
             return false;
         }
 
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
 
@@ -1918,7 +1983,7 @@ bool DataBase::createTablePricingsPresentation()
 bool DataBase::createTableOrderEcho()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists orderEcho ("
                     "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark       INT NOT Null,"
@@ -1953,7 +2018,7 @@ bool DataBase::createTableOrderEcho()
                     "CONSTRAINT `orderEcho_typesPrices_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),"
                     "CONSTRAINT `orderEcho_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE orderEcho ("
                     "id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark       INTEGER NOT NULL,"
@@ -1987,7 +2052,7 @@ bool DataBase::createTableOrderEcho()
 bool DataBase::createTable_OrderEchoTable()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists orderEchoTable ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -1998,7 +2063,7 @@ bool DataBase::createTable_OrderEchoTable()
                     "KEY `orderEchoTable_orderEcho_id_idx` (`id_orderEcho`),"
                     "CONSTRAINT `orderEchoTable_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE orderEchoTable ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
@@ -2022,7 +2087,7 @@ bool DataBase::createTable_OrderEchoTable()
 bool DataBase::createTableOrderEchoPresentation()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
 
 #if defined(Q_OS_LINUX)
         qry.prepare("CREATE TABLE `orderEchoPresentation` ("
@@ -2117,7 +2182,7 @@ bool DataBase::createTableOrderEchoPresentation()
             return false;
         }
 
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
 
@@ -2219,7 +2284,7 @@ bool DataBase::createTableOrderEchoPresentation()
 bool DataBase::createTableConstants()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists constants ("
                     "id_users	        INT NOT Null,"
                     "id_organizations	INT,"
@@ -2236,7 +2301,7 @@ bool DataBase::createTableConstants()
                     "CONSTRAINT `constants_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,"
                     "CONSTRAINT `constants_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE constants ("
                     "id_users	        INTEGER NOT NULL CONSTRAINT constants_users_id REFERENCES users (id) ON DELETE CASCADE,"
                     "id_organizations	INTEGER CONSTRAINT constants_organizations_id REFERENCES organizations (id) ON DELETE SET NULL,"
@@ -2259,7 +2324,7 @@ bool DataBase::createTableConstants()
 bool DataBase::createTableReportEcho()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists reportEcho ("
                     "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark      INT NOT Null,"
@@ -2288,7 +2353,7 @@ bool DataBase::createTableReportEcho()
                     "CONSTRAINT `reportEcho_pacients_id` FOREIGN KEY (`id_pacients`) REFERENCES `pacients` (`id`),"
                     "CONSTRAINT `reportEcho_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE reportEcho ("
                     "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "deletionMark      INTEGER NOT NULL,"
@@ -2326,7 +2391,7 @@ bool DataBase::createTableReportEcho()
 bool DataBase::createTableReportEchoPresentation()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL") {
+    if (globals().connectionMade == "MySQL") {
 
         qry.prepare("CREATE TABLE `reportEchoPresentation` ("
                     "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
@@ -2363,7 +2428,7 @@ bool DataBase::createTableReportEchoPresentation()
             return false;
         }
 
-    } else if (globals::connectionMade == "Sqlite") {
+    } else if (globals().connectionMade == "Sqlite") {
 
         db.transaction();
 
@@ -2415,7 +2480,7 @@ bool DataBase::createTableReportEchoPresentation()
 bool DataBase::createTableLiver()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableLiver ("
                     "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho     INT NOT Null,"
@@ -2433,7 +2498,7 @@ bool DataBase::createTableLiver()
                     "KEY `tableLiver_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableLiver_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableLiver ("
                     "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho     INTEGER NOT NULL CONSTRAINT tableLiver_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2464,7 +2529,7 @@ bool DataBase::createTableLiver()
 bool DataBase::createTableCholecist()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableCholecist ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT Null,"
@@ -2476,7 +2541,7 @@ bool DataBase::createTableCholecist()
                     "KEY `tableCholecist_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableCholecist_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableCholecist ("
                     "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho INTEGER NOT NULL CONSTRAINT tableCholecist_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2501,7 +2566,7 @@ bool DataBase::createTableCholecist()
 bool DataBase::createTablePancreas()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tablePancreas ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT Null,"
@@ -2514,7 +2579,7 @@ bool DataBase::createTablePancreas()
                     "KEY `tablePancreas_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tablePancreas_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tablePancreas ("
                     "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho INTEGER NOT NULL CONSTRAINT tablePancreas_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2540,7 +2605,7 @@ bool DataBase::createTablePancreas()
 bool DataBase::createTableSpleen()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableSpleen ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT Null,"
@@ -2551,7 +2616,7 @@ bool DataBase::createTableSpleen()
                     "KEY `tableSpleen_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableSpleen_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableSpleen ("
                     "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho INTEGER NOT NULL CONSTRAINT tableSpleen_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2575,7 +2640,7 @@ bool DataBase::createTableSpleen()
 bool DataBase::createTableIntestinalLoop()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableIntestinalLoop ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT Null,"
@@ -2583,7 +2648,7 @@ bool DataBase::createTableIntestinalLoop()
                     "KEY `tableIntestinalLoop_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableIntestinalLoop_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableIntestinalLoop ("
                     "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho INTEGER NOT NULL CONSTRAINT tableIntestinalLoop_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2604,7 +2669,7 @@ bool DataBase::createTableIntestinalLoop()
 bool DataBase::createTableKidney()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableKidney ("
                     "id                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho       INT NOT Null,"
@@ -2623,7 +2688,7 @@ bool DataBase::createTableKidney()
                     "KEY `tableKidney_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableKidney_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableKidney ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableKidney_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2655,7 +2720,7 @@ bool DataBase::createTableKidney()
 bool DataBase::createTableBladder()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableBladder ("
                     "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT Null,"
@@ -2665,7 +2730,7 @@ bool DataBase::createTableBladder()
                     "KEY `tableBladder_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableBladder_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableBladder ("
                     "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho INTEGER NOT NULL CONSTRAINT tableBladder_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2688,7 +2753,7 @@ bool DataBase::createTableBladder()
 bool DataBase::createTableProstate()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableProstate ("
                     "id             INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho  INT NOT Null,"
@@ -2704,7 +2769,7 @@ bool DataBase::createTableProstate()
                     "KEY `tableProstate_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableProstate_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableProstate ("
                     "id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho  INTEGER NOT NULL CONSTRAINT tableProstate_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2733,7 +2798,7 @@ bool DataBase::createTableProstate()
 bool DataBase::createTableGynecology()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableGynecology ("
                     "id                     INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho          INT NOT Null,"
@@ -2769,7 +2834,7 @@ bool DataBase::createTableGynecology()
                     "KEY `tableGynecology_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGynecology_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGynecology ("
                     "id                          INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho               INTEGER NOT NULL CONSTRAINT tableGynecology_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2817,7 +2882,7 @@ bool DataBase::createTableGynecology()
 bool DataBase::createTableBreast()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableBreast ("
                     "id                       INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho            INT NOT Null,"
@@ -2836,7 +2901,7 @@ bool DataBase::createTableBreast()
                     "KEY `tableBreast_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableBreast_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableBreast ("
                     "id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho            INTEGER NOT NULL CONSTRAINT tableBreast_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2867,7 +2932,7 @@ bool DataBase::createTableBreast()
 bool DataBase::createTableThyroid()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableThyroid ("
                     "id                   INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho        INT NOT Null,"
@@ -2884,7 +2949,7 @@ bool DataBase::createTableThyroid()
                     "KEY `tableThyroid_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableThyroid_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableThyroid ("
                     "id                   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho        INTEGER NOT NULL CONSTRAINT tableThyroid_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2913,7 +2978,7 @@ bool DataBase::createTableThyroid()
 bool DataBase::createTableGestation0()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableGestation0 ("
                     "id               INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho    INT NOT Null,"
@@ -2934,7 +2999,7 @@ bool DataBase::createTableGestation0()
                     "KEY `tableGestation0_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation0_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation0 ("
                     "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho    INTEGER NOT NULL CONSTRAINT tableGestation0_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -2967,7 +3032,7 @@ bool DataBase::createTableGestation0()
 bool DataBase::createTableGestation1()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists tableGestation1 ("
                     "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho     INT NOT Null,"
@@ -3003,7 +3068,7 @@ bool DataBase::createTableGestation1()
                     "KEY `tableGestation1_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation1_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation1 ("
                     "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho     INTEGER NOT NULL CONSTRAINT tableGestation1_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3051,7 +3116,7 @@ bool DataBase::createTableGestation1()
 bool DataBase::createTableGestation2()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE tableGestation2 ("
                     "`id`                                    int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`                         int NOT NULL,"
@@ -3069,7 +3134,7 @@ bool DataBase::createTableGestation2()
                     "KEY `tableGestation2_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2 ("
                     "id                                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho                         INTEGER NOT NULL CONSTRAINT tableGestation2_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3099,7 +3164,7 @@ bool DataBase::createTableGestation2()
 bool DataBase::createTableGestation2_biometry()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_biometry` ("
                     "`id`               int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`    int NOT NULL,"
@@ -3116,7 +3181,7 @@ bool DataBase::createTableGestation2_biometry()
                     "KEY `tableGestation2_biometry_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_biometry_reportEcho_id_idx` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_biometry ("
                     "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho    INTEGER NOT NULL CONSTRAINT tableGestation2_biometry_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3145,7 +3210,7 @@ bool DataBase::createTableGestation2_biometry()
 bool DataBase::createTableGestation2_cranium()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_cranium` ("
                     "`id`                             int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`                  int NOT NULL,"
@@ -3162,7 +3227,7 @@ bool DataBase::createTableGestation2_cranium()
                     "KEY `tableGestation2_cranium_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_cranium_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_cranium ("
                     "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2Cranium_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3191,7 +3256,7 @@ bool DataBase::createTableGestation2_cranium()
 bool DataBase::createTableGestation2_snc()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_SNC` ("
                     "`id`                            int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`                 int NOT NULL,"
@@ -3211,7 +3276,7 @@ bool DataBase::createTableGestation2_snc()
                     "KEY `tableGestation2_SNC_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_SNC_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_SNC ("
                     "id                            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "id_reportEcho                 INTEGER NOT NULL CONSTRAINT tableGestation2_SNC_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3243,7 +3308,7 @@ bool DataBase::createTableGestation2_snc()
 bool DataBase::createTableGestation2_heart()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_heart` ("
                     "`id`                                       int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`                            int NOT NULL,"
@@ -3268,7 +3333,7 @@ bool DataBase::createTableGestation2_heart()
                     "KEY `tableGestation2_heart_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_heart_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_heart ("
                     "id                                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho                            INTEGER NOT NULL CONSTRAINT tableGestation2_heart_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3305,7 +3370,7 @@ bool DataBase::createTableGestation2_heart()
 bool DataBase::createTableGestation2_thorax()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_thorax` ("
                     "`id`                         int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`              int NOT NULL,"
@@ -3317,7 +3382,7 @@ bool DataBase::createTableGestation2_thorax()
                     "KEY `tableGestation2_thorax_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_thorax_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_thorax ("
                     "id                         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho              INTEGER NOT NULL CONSTRAINT tableGestation2_thorax_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3341,7 +3406,7 @@ bool DataBase::createTableGestation2_thorax()
 bool DataBase::createTableGestation2_abdomen()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_abdomen` ("
                     "`id`                    int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`         int NOT NULL,"
@@ -3358,7 +3423,7 @@ bool DataBase::createTableGestation2_abdomen()
                     "KEY `tableGestation2_abdomen_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_abdomen_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_abdomen ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableGestation2_abdomen_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3387,7 +3452,7 @@ bool DataBase::createTableGestation2_abdomen()
 bool DataBase::createTableGestation2_urinarySystem()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_urinarySystem` ("
                     "`id`                   int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`        int NOT NULL,"
@@ -3400,7 +3465,7 @@ bool DataBase::createTableGestation2_urinarySystem()
                     "KEY `tableGestation2_urinarySystem_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_urinarySystem_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_urinarySystem ("
                     "id                   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "id_reportEcho        INTEGER NOT NULL CONSTRAINT tableGestation2_urinarySystem_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3425,7 +3490,7 @@ bool DataBase::createTableGestation2_urinarySystem()
 bool DataBase::createTableGestation2_other()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_other` ("
                     "`id`                             int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`                  int NOT NULL,"
@@ -3452,7 +3517,7 @@ bool DataBase::createTableGestation2_other()
                     "KEY `tableGestation2_other_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_other_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_other ("
                     "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2_other_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3491,7 +3556,7 @@ bool DataBase::createTableGestation2_other()
 bool DataBase::createTableGestation2_doppler()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE `tableGestation2_doppler` ("
                     "`id`             int NOT NULL AUTO_INCREMENT,"
                     "`id_reportEcho`  int NOT NULL,"
@@ -3516,7 +3581,7 @@ bool DataBase::createTableGestation2_doppler()
                     "KEY `tableGestation2_doppler_reportEcho_id_idx` (`id_reportEcho`),"
                     "CONSTRAINT `tableGestation2_doppler_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE tableGestation2_doppler ("
                     "id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_reportEcho  INTEGER NOT NULL CONSTRAINT tableGestation2_doppler_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
@@ -3553,7 +3618,7 @@ bool DataBase::createTableGestation2_doppler()
 bool DataBase::createTableNormograms()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists normograms ("
                     "`id`         int NOT NULL AUTO_INCREMENT,"
                     "`name`       varchar (30) NOT NULL,"
@@ -3563,7 +3628,7 @@ bool DataBase::createTableNormograms()
                     "`95_centile` DOUBLE NOT NULL,"
                     "PRIMARY KEY (`id`)"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE if not exists normograms ("
                     "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "name         TEXT (30) NOT NULL,"
@@ -3587,7 +3652,7 @@ bool DataBase::createTableNormograms()
 bool DataBase::createTableRegistrationPatients()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists registrationPatients ("
                     "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "dateDoc            DATE NOT NULL,"
@@ -3605,7 +3670,7 @@ bool DataBase::createTableRegistrationPatients()
                     "CONSTRAINT `registrationPatients_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
                     "CONSTRAINT `registrationPatients_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE if not exists registrationPatients ("
                     "id                 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "dateDoc            TEXT (10) NOT NULL,"
@@ -3633,7 +3698,7 @@ bool DataBase::createTableRegistrationPatients()
 bool DataBase::createTableSettingsForm()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists settingsForms ("
                     "id               INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_users         INT NOT Null,"
@@ -3658,7 +3723,7 @@ bool DataBase::createTableSettingsForm()
                     "CONSTRAINT `settingsForms_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE SET NULL,"
                     "CONSTRAINT `settingsForms_nurses_id` FOREIGN KEY (`id_nurses`) REFERENCES `nurses` (`id`) ON DELETE SET NULL"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE settingsForms ("
                     "id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "id_users         INT     NOT NULL CONSTRAINT settingsForms_users_id REFERENCES users (id) ON DELETE CASCADE,"
@@ -3688,7 +3753,7 @@ bool DataBase::createTableSettingsForm()
 bool DataBase::createTableSettingsReports()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists settingsReports ("
                     "id                   INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "nameReport           VARCHAR (150) NOT Null,"
@@ -3711,7 +3776,7 @@ bool DataBase::createTableSettingsReports()
                     "CONSTRAINT `settingsReports_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
                     "CONSTRAINT `settingsReports_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE settingsReports ("
                     "id                   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "nameReport           TEXT (150) NOT NULL,"
@@ -3742,7 +3807,7 @@ bool DataBase::createTableSettingsReports()
 bool DataBase::createTableSettingsUsers()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists settingsUsers ("
                     "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_users              INT NOT Null,"
@@ -3758,7 +3823,7 @@ bool DataBase::createTableSettingsUsers()
                     "KEY `settingsUsers_users_id_idx` (`id_users`),"
                     "CONSTRAINT `settingsUsers_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE settingsUsers ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_users              INT NOT NULL CONSTRAINT settingsUsers_users_id REFERENCES users (id) ON DELETE CASCADE,"
@@ -3787,7 +3852,7 @@ bool DataBase::createTableSettingsUsers()
 bool DataBase::createTableUserPreferences()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE userPreferences ("
                     "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_users              INT NOT Null,"
@@ -3806,7 +3871,7 @@ bool DataBase::createTableUserPreferences()
                     "KEY `userPreferences_users_id_idx` (`id_users`),"
                     "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE userPreferences ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
@@ -3838,7 +3903,7 @@ bool DataBase::createTableUserPreferences()
 bool DataBase::createTableConclusionTemplates()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE conclusionTemplates ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -3846,7 +3911,7 @@ bool DataBase::createTableConclusionTemplates()
                     "name         VARCHAR (500) NOT Null,"
                     "`system`     VARCHAR (150)"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE conclusionTemplates ("
                     "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "deletionMark INT NOT NULL,"
@@ -3869,7 +3934,7 @@ bool DataBase::createTableConclusionTemplates()
 bool DataBase::createTableFormationsSystemTemplates()
 {
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
@@ -3882,7 +3947,7 @@ bool DataBase::createTableFormationsSystemTemplates()
                     "                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)', "
                     "                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)') DEFAULT 'Unknow'"
                     ");");
-    else if (globals::connectionMade == "Sqlite")
+    else if (globals().connectionMade == "Sqlite")
         qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
                     "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "deletionMark INT NOT NULL,"
@@ -3909,11 +3974,11 @@ bool DataBase::createTableFormationsSystemTemplates()
 
 bool DataBase::createTableImagesReports()
 {
-    if (globals::connectionMade == "Sqlite" || globals::connectionMade == nullptr)
+    if (globals().connectionMade == "Sqlite" || globals().connectionMade == nullptr)
         return false;
 
     QSqlQuery qry;
-    if (globals::connectionMade == "MySQL")
+    if (globals().connectionMade == "MySQL")
         qry.prepare("CREATE TABLE imagesReports ("
                     "id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,"
                     "id_reportEcho INT NOT NULL,"
@@ -4225,7 +4290,7 @@ bool DataBase::createIndexTables()
     //---------------------------------------------------------------
     //----------------- db_image
 
-    if (globals::thisSqlite) {
+    if (globals().thisSqlite) {
 
         QSqlQuery qry_image(QSqlDatabase::database("db_image"));
 
@@ -4246,6 +4311,48 @@ bool DataBase::createIndexTables()
     return true;
 }
 
+bool DataBase::createTableContOnline()
+{
+    QSqlQuery qry;
+    if (globals().connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE if not exists contsOnline ("
+                    "id               int NOT NULL AUTO_INCREMENT, "
+                    "id_organizations INT NOT Null, "
+                    "id_users         INT NOT Null, "
+                    "smtp_server      VARCHAR(30) NOT Null, "
+                    "port             VARCHAR(5) NOT Null, "
+                    "username         VARCHAR(50) NOT Null, "
+                    "password         VARCHAR(255) NOT Null,"
+                    "iv               VARCHAR(24) NOT Null," // pu criptare vezi clasa CryptoManager
+                    "PRIMARY KEY (`id`),"
+                    "KEY `contsOnline_organizations_id_idx` (`id_organizations`),"
+                    "KEY `contsOnline_users_id_idx` (`id_users`),"
+                    "CONSTRAINT `contsOnline_organizations_id_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,"
+                    "CONSTRAINT `contsOnline_users_id_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE;");
+    else if (globals().connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE if not exists contsOnline ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                    "id_organizations INTEGER NOT NULL, "
+                    "id_users         INTEGER NOT NULL, "
+                    "smtp_server      TEXT NOT NULL, "
+                    "port             TEXT NOT NULL, "
+                    "username         TEXT NOT NULL, "
+                    "password         TEXT NOT NULL, "
+                    "iv               TEXT NOT NULL, " // pu criptare vezi clasa CryptoManager
+                    "FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,"
+                    "FOREIGN KEY (id_users) REFERENCES users (id) ON DELETE CASCADE);");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableContOnline()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'contsOnline'.") + qry.lastError().text();
+        return false;
+    }
+}
+
 void DataBase::updateVariableFromTableSettingsUser()
 {
     QSqlQuery qry;
@@ -4261,20 +4368,20 @@ void DataBase::updateVariableFromTableSettingsUser()
                 "showAsistantHelper,"
                 "showDocumentsInSeparatWindow,"
                 "minimizeAppToTray FROM userPreferences WHERE id_users = :id_users;");
-    qry.bindValue(":id_users", globals::idUserApp);
+    qry.bindValue(":id_users", globals().idUserApp);
     if (qry.exec() && qry.next()){
         QSqlRecord rec = qry.record();
-        globals::showQuestionCloseApp         = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
-        globals::showUserManual               = qry.value(rec.indexOf("showUserManual")).toBool();
-        globals::showHistoryVersion           = qry.value(rec.indexOf("showHistoryVersion")).toBool();
-        globals::order_splitFullName          = qry.value(rec.indexOf("order_splitFullName")).toBool();
-        globals::updateIntervalListDoc        = qry.value(rec.indexOf("updateListDoc")).toInt();
-        globals::showDesignerMenuPrint        = qry.value(rec.indexOf("showDesignerMenuPrint")).toBool();
-        globals::checkNewVersionApp           = qry.value(rec.indexOf("checkNewVersionApp")).toBool();
-        globals::databasesArchiving           = qry.value(rec.indexOf("databasesArchiving")).toBool();
-        globals::showAsistantHelper           = qry.value(rec.indexOf("showAsistantHelper")).toBool();
-        globals::showDocumentsInSeparatWindow = qry.value(rec.indexOf("showDocumentsInSeparatWindow")).toBool();
-        globals::minimizeAppToTray            = qry.value(rec.indexOf("minimizeAppToTray")).toBool();
+        globals().showQuestionCloseApp         = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
+        globals().showUserManual               = qry.value(rec.indexOf("showUserManual")).toBool();
+        globals().showHistoryVersion           = qry.value(rec.indexOf("showHistoryVersion")).toBool();
+        globals().order_splitFullName          = qry.value(rec.indexOf("order_splitFullName")).toBool();
+        globals().updateIntervalListDoc        = qry.value(rec.indexOf("updateListDoc")).toInt();
+        globals().showDesignerMenuPrint        = qry.value(rec.indexOf("showDesignerMenuPrint")).toBool();
+        globals().checkNewVersionApp           = qry.value(rec.indexOf("checkNewVersionApp")).toBool();
+        globals().databasesArchiving           = qry.value(rec.indexOf("databasesArchiving")).toBool();
+        globals().showAsistantHelper           = qry.value(rec.indexOf("showAsistantHelper")).toBool();
+        globals().showDocumentsInSeparatWindow = qry.value(rec.indexOf("showDocumentsInSeparatWindow")).toBool();
+        globals().minimizeAppToTray            = qry.value(rec.indexOf("minimizeAppToTray")).toBool();
     }
 }
 
@@ -4386,7 +4493,7 @@ QString DataBase::getQryFromTableConstantById(const int id_user) const
 
 QString DataBase::getQryFromTablePatientById(const int id_patient) const
 {
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         return QString("SELECT CONCAT(pacients.name,' ', pacients.fName) AS FullName,"
                        "  CONCAT(SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS birthday,"
                        "  pacients.IDNP,"
@@ -4457,8 +4564,8 @@ QString DataBase::getQryForTableOrgansInternalById(const int id_doc) const
                    "WHERE "
                    "  reportEcho.deletionMark = '2' AND "
                    "  reportEcho.id = '%3';")
-        .arg((globals::thisMySQL) ? "tableLiver.left" : "tableLiver.[left]",
-             (globals::thisMySQL) ? "tableLiver.right" : "tableLiver.[right]",
+        .arg((globals().thisMySQL) ? "tableLiver.left" : "tableLiver.[left]",
+             (globals().thisMySQL) ? "tableLiver.right" : "tableLiver.[right]",
              QString::number(id_doc));
 }
 
@@ -4546,7 +4653,7 @@ QString DataBase::getQryForTableGynecologyById(const int id_doc) const
                    "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
                    "  INNER JOIN tableGynecology ON reportEcho.id = tableGynecology.id_reportEcho "
                    "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = " + QString::number(id_doc) + ";")
-        .arg((globals::thisMySQL) ?
+        .arg((globals().thisMySQL) ?
                  "CONCAT(SUBSTRING(tableGynecology.dateMenstruation, 9, 2) , '.' , SUBSTRING(tableGynecology.dateMenstruation, 6, 2) , '.' , SUBSTRING(tableGynecology.dateMenstruation, 1, 4))" :
                  "substr(tableGynecology.dateMenstruation, 9, 2) || '.' || substr(tableGynecology.dateMenstruation, 6, 2) || '.' || substr(tableGynecology.dateMenstruation, 1, 4)");
 }
@@ -5061,7 +5168,7 @@ QByteArray DataBase::getOutByteArrayImageByDatabase(const QString nameTable, con
 QString DataBase::encode_string(const QString &str)
 {
     QByteArray arr(str.toUtf8());
-    for(int i =0; i<arr.size(); i++)
+    for(int i =0; i < arr.size(); i++)
         arr[i] = arr[i] ^ key_encoding;
 
     return QString::fromLatin1(arr.toBase64());
@@ -5070,7 +5177,7 @@ QString DataBase::encode_string(const QString &str)
 QString DataBase::decode_string(const QString &str)
 {
     QByteArray arr = QByteArray::fromBase64(str.toLatin1());
-    for(int i =0; i<arr.size(); i++)
+    for(int i =0; i < arr.size(); i++)
         arr[i] =arr[i] ^ key_encoding;
 
     return QString::fromUtf8(arr);
@@ -5110,7 +5217,7 @@ QString DataBase::getHTMLImageWarning()
 
 QString DataBase::getStyleForButtonMessageBox()
 {
-    if (globals::isSystemThemeDark)
+    if (globals().isSystemThemeDark)
         return QString("QPushButton "
                        "{"
                        "  min-width: 60px;"
@@ -5154,7 +5261,7 @@ QString DataBase::getStyleForButtonMessageBox()
 
 QString DataBase::getStyleForToolButton()
 {
-    if (globals::isSystemThemeDark)
+    if (globals().isSystemThemeDark)
         return QString("QToolButton"
                        "{"
                        "  border: 1px solid rgba(255, 255, 255, 0.6);"
@@ -5195,7 +5302,7 @@ QString DataBase::getStyleForToolButton()
 
 QString DataBase::getStyleForButtonToolBar()
 {
-    if (globals::isSystemThemeDark)
+    if (globals().isSystemThemeDark)
         return QString("QToolButton "
                        "{ "
                        "  border: none;"
@@ -5236,18 +5343,18 @@ QString DataBase::getStyleForButtonToolBar()
 
 bool DataBase::openDataBase()
 {
-    if (globals::connectionMade == "MySQL"){
+    if (globals().connectionMade == "MySQL"){
 
         QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL");
-        db.setHostName(globals::mySQLhost);         // localhost
-        db.setDatabaseName(globals::mySQLnameBase); // USGdb
-        db.setPort(globals::mySQLport.toInt());
-        db.setConnectOptions(globals::mySQLoptionConnect);
-        db.setUserName(globals::mySQLuser);
-        db.setPassword(globals::mySQLpasswdUser);
+        db.setHostName(globals().mySQLhost);         // localhost
+        db.setDatabaseName(globals().mySQLnameBase); // USGdb
+        db.setPort(globals().mySQLport.toInt());
+        db.setConnectOptions(globals().mySQLoptionConnect);
+        db.setUserName(globals().mySQLuser);
+        db.setPassword(globals().mySQLpasswdUser);
         if (db.open()){
             qInfo(logInfo()) << "Conectarea cu baza de date MYSQL instalata cu succes";
-            if (globals::firstLaunch) {
+            if (globals().firstLaunch) {
                 creatingTables();
                 loadNormogramsFromXml();
                 createIndexTables();
@@ -5261,41 +5368,55 @@ bool DataBase::openDataBase()
 
         //----------------------------------------------------------------------------------------------------
         // baza de date implicita
-        if (globals::sqlitePathBase.isEmpty() || globals::sqlitePathBase.isNull()){
+        if (globals().sqlitePathBase.isEmpty() || globals().sqlitePathBase.isNull()){
             qCritical(logCritical()) << tr("Nu este indicata variabila globala 'sqlitePathBase'.");
             return false;
         }
         db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setHostName(globals::sqliteNameBase);
-        db.setDatabaseName(globals::sqlitePathBase);
+        db.setHostName(globals().sqliteNameBase);
+        db.setDatabaseName(globals().sqlitePathBase);
         if(db.open()){
             qInfo(logInfo()) << "";
             qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~= LANSARE NOUA =~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
-            qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals::sqliteNameBase);
+            qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals().sqliteNameBase);
             if (! enableForeignKeys())
                 qWarning(logWarning()) << "Nu a fost activata suportul cheii externe";
-            if (globals::firstLaunch) {
+            if (globals().firstLaunch) {
                 creatingTables();
                 loadNormogramsFromXml();
                 // create index se afla dupa crearea db_image, vezi crearea db_image
             }
         } else {
-            qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals::sqliteNameBase)
+            qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals().sqliteNameBase)
                                    << db.lastError().text();
             return false;
         }
 
         //----------------------------------------------------------------------------------------------------
+        // baza de date implicita db_thread
+        // m_connectionName = "db_thread";
+        // db_thread = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
+        // db_thread.setHostName(globals().sqliteNameBase);
+        // db_thread.setDatabaseName(globals().sqlitePathBase);
+        // if(db_thread.open()){
+        //     qInfo(logInfo()) << tr("Conectarea la baza de date '%1' prin conectarea 'db_thread' este instalata cu succes.").arg(globals().sqliteNameBase);
+        // } else {
+        //     qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nameConnection 'db_thread' nu a fost instalata.").arg(globals().sqliteNameBase)
+        //                            << db_thread.lastError().text();
+        //     return false;
+        // }
+
+        //----------------------------------------------------------------------------------------------------
         // baza de date image
-        if (globals::pathImageBaseAppSettings.isEmpty() || globals::pathImageBaseAppSettings.isNull()){
+        if (globals().pathImageBaseAppSettings.isEmpty() || globals().pathImageBaseAppSettings.isNull()){
             qWarning(logWarning()) << tr("Nu este indicata variabila globala 'pathImageBaseAppSettings'.");
         } else {
             db_image = QSqlDatabase::addDatabase("QSQLITE", "db_image");
             db_image.setHostName("db_image");
-            db_image.setDatabaseName(globals::pathImageBaseAppSettings);
+            db_image.setDatabaseName(globals().pathImageBaseAppSettings);
             if (db_image.open()){
                 qInfo(logInfo()) << tr("Conectarea la baza de date 'db_image' este instalata cu succes.");
-                if (globals::firstLaunch){
+                if (globals().firstLaunch){
                     creatingTables_DbImage();
                     createIndexTables();
                 }

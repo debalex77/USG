@@ -32,6 +32,8 @@ private:
     void createIndex_release_3_0_1();
     void createIndexForBaseImage_3_0_1();
 
+    void updateRelease_3_0_3();
+
 private:
     DataBase* db;
     QMap<int, QMap<int, QMap<int, std::function<void()>>>> updateFunctions;

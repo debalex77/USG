@@ -14,7 +14,7 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
 
     setTitleDoc(); // setam titlu documentului
 
-    if (globals::showDocumentsInSeparatWindow)
+    if (globals().showDocumentsInSeparatWindow)
         setWindowFlags(Qt::Window);
 
     db            = new DataBase(this);
@@ -153,9 +153,14 @@ DocOrderEcho::~DocOrderEcho()
     delete ui;
 }
 
-void DocOrderEcho::onPrintDocument(Enums::TYPE_PRINT type_print)
+QString DocOrderEcho::getNameDoctorExecute()
 {
-    onPrint(type_print); // pu printarea din forma de lista 'ListDocWebOrder'
+    return ui->comboDoctorExecute->currentText();
+}
+
+void DocOrderEcho::onPrintDocument(Enums::TYPE_PRINT type_print, QString &filePDF)
+{
+    onPrint(type_print, filePDF); // pu printarea din forma de lista 'ListDocWebOrder'
 }
 
 void DocOrderEcho::m_OnOpenReport()
@@ -197,7 +202,7 @@ void DocOrderEcho::onDateTimeChanged()
 
 void DocOrderEcho::changeIconForItemToolBox(const int _index)
 {
-    if (globals::isSystemThemeDark) {
+    if (globals().isSystemThemeDark) {
         ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
         ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
         ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
@@ -260,7 +265,7 @@ void DocOrderEcho::slot_ItNewChanged()
         setWindowTitle(tr("Comanda ecografica (crearea) %1").arg("[*]"));
 
         if (m_idUser == Enums::Enums::IDX_UNKNOW)
-            setIdUser(globals::idUserApp);
+            setIdUser(globals().idUserApp);
 
         connect(timer, &QTimer::timeout, this, &DocOrderEcho::updateTimer); // actualizam ora reala cu secunde
         timer->start(1000);
@@ -277,7 +282,7 @@ void DocOrderEcho::slot_ItNewChanged()
 
         QSqlQuery qry;
         qry.prepare("SELECT id_doctors, id_nurses FROM constants WHERE id_users = :id_users;");
-        qry.bindValue(":id_users", globals::idUserApp);
+        qry.bindValue(":id_users", globals().idUserApp);
         if (qry.exec() && qry.next()){
             setIdDoctorExecute(qry.value(0).toInt());
             setIdNurse(qry.value(1).toInt());
@@ -305,7 +310,7 @@ void DocOrderEcho::slot_IdChanged()
         ui->editNumberDoc->setText(qry.value(rec.indexOf("numberDoc")).toString());
         ui->editNumberDoc->setDisabled(ui->editNumberDoc->text().isEmpty());
 
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
             ui->dateTimeDoc->setDateTime(
@@ -708,6 +713,7 @@ void DocOrderEcho::onClickNewPacient()
         }
 
     }
+
 }
 
 void DocOrderEcho::onClikEditPacient()
@@ -984,7 +990,7 @@ void DocOrderEcho::onOpenReport()
     this->close();
 }
 
-void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
+void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print, QString &filePDF)
 {
     // *************************************************************************************
     // verificam daca este validat documentul
@@ -1019,9 +1025,9 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
 
     // *************************************************************************************
     // setam solicitarile in model
-    print_model_organization->setQuery(db->getQryFromTableConstantById(globals::idUserApp));
+    print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     print_model_patient->setQuery(db->getQryFromTablePatientById(m_idPacient));
-    if (globals::thisMySQL)
+    if (globals().thisMySQL)
         print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "orderEchoTable.price"));
     else
         print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "orderEchoTable.price ||'0'"));
@@ -1035,6 +1041,7 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
     m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(_num, 0, 'f', 2));
     m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
     m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp);
+    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
     m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
 
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
@@ -1047,12 +1054,12 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
     // *************************************************************************************
     // verificam drumul spre forme de tipar
     QDir dir;
-    if (! QFile(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Order.lrxml")).exists()){
+    if (! QFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml")).exists()){
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Printarea documentului"));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Documentul nu poate fi printat."));
-        msgBox.setDetailedText(tr("Nu a fost gasit fisierul sablon formei de tipar:\n%1").arg(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Order.lrxml")));
+        msgBox.setDetailedText(tr("Nu a fost gasit fisierul sablon formei de tipar:\n%1").arg(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml")));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setStyleSheet(db->getStyleForButtonMessageBox());
         msgBox.exec();
@@ -1064,7 +1071,7 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
 
         return;
     }
-    m_report->loadFromFile(dir.toNativeSeparators(globals::pathTemplatesDocs + "/Order.lrxml"));
+    m_report->loadFromFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml"));
 
     // *************************************************************************************
     // prezentam forma de tipar
@@ -1076,6 +1083,10 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
         qInfo(logInfo()) << tr("Printare (preview): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
                                 .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
         m_report->previewReport();
+    } else if (type_print == Enums::TYPE_PRINT::PRINT_TO_PDF){
+        qInfo(logInfo()) << tr("Printare (pdf): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+        .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+        m_report->printToPDF(filePDF);
     }
 
     // *************************************************************************************
@@ -1088,12 +1099,14 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print)
 
 void DocOrderEcho::openDesignerPrintDoc()
 {
-    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER);
+    QString str;
+    onPrint(Enums::TYPE_PRINT::OPEN_DESIGNER, str);
 }
 
 void DocOrderEcho::openPreviewPrintDoc()
 {
-    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+    QString str;
+    onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW, str);
 }
 
 bool DocOrderEcho::onWritingData()
@@ -1198,7 +1211,8 @@ void DocOrderEcho::onWritingDataClose()
         messange_box.exec();
 
         if (messange_box.clickedButton() == yesButton) {
-            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW);
+            QString str;
+            onPrint(Enums::TYPE_PRINT::OPEN_PREVIEW, str);
         } else if (messange_box.clickedButton() == noButton) {
 
         }
@@ -1294,7 +1308,7 @@ void DocOrderEcho::initConnections()
     connect(ui->editPhone, &QLineEdit::editingFinished, this ,&DocOrderEcho::slot_editingFinishedPhonePatient);
 
     db->updateVariableFromTableSettingsUser();
-    if (globals::showDesignerMenuPrint) {
+    if (globals().showDesignerMenuPrint) {
         QAction *openDesignerOrder = new QAction(setUpMenu);
         openDesignerOrder->setIcon(QIcon(":/images/design.png"));
         openDesignerOrder->setText(tr("Deschide designer"));
@@ -1428,7 +1442,7 @@ void DocOrderEcho::initFooterDoc()
     labelPix->setMinimumHeight(2);
 
     labelAuthor = new QLabel(this);
-    labelAuthor->setText(globals::nameUserApp);
+    labelAuthor->setText(globals().nameUserApp);
     labelAuthor->setAlignment(Qt::AlignLeft | Qt::AlignVCenter);
     labelAuthor->setStyleSheet("padding-left: 3px; color: rgb(49, 151, 116);");
 
@@ -1494,7 +1508,7 @@ bool DocOrderEcho::splitFullNamePacient(QString &_name, QString &_fName)
 
     //***********************************************************
     // presentation name & fName
-    if (! globals::order_splitFullName)
+    if (! globals().order_splitFullName)
         return true;
 
     QMessageBox msgBox;
@@ -1514,7 +1528,7 @@ bool DocOrderEcho::splitFullNamePacient(QString &_name, QString &_fName)
         QSqlQuery qry;
         qry.prepare("UPDATE settingsUsers SET order_splitFullName = 0 WHERE order_splitFullName NOT NULL;");
         if (qry.exec())
-            globals::order_splitFullName = false;
+            globals().order_splitFullName = false;
     }
 
     if (msgBox.clickedButton() == correct)
@@ -1874,85 +1888,91 @@ QMap<QString, QString> DocOrderEcho::getItemsByTablePacient()
 void DocOrderEcho::setImageForDocPrint()
 {
     //------------------------------------------------------------------------------------------------------
-    // determinam id organizatiei principale
-    int id_organization = 0;
-    int id_doctor = 0;
-
-    QMap<QString, QString> items;
-    if (db->getObjectDataByMainId("constants", "id_users", globals::idUserApp, items)){
-         id_organization = items.constFind("id_organizations").value().toInt();
-         if (m_idDoctor_execute == Enums::IDX_UNKNOW)
-            id_doctor = items.constFind("id_doctors").value().toInt();
-         else
-            id_doctor = m_idDoctor_execute;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    // logotipul
+    // ----- logotipul
     QPixmap pix_logo = QPixmap();
     QStandardItem* img_item_logo = new QStandardItem();
-    QString name_key_logo = "logo_" + globals::nameUserApp;
-    if (globals::cache_img.find(name_key_logo, &pix_logo)){
-         QImage m_logo = pix_logo.toImage();
-         img_item_logo->setData(m_logo.scaled(300,50), Qt::DisplayRole);
-         exist_logo = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-    } else {
-         QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", globals::idUserApp);
-         if (! outByteArray.isEmpty() && pix_logo.loadFromData(outByteArray)){
-            globals::cache_img.insert(name_key_logo, pix_logo);
-            QImage m_logo = pix_logo.toImage();
-            img_item_logo->setData(m_logo.scaled(300,50), Qt::DisplayRole);
-            exist_logo = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-         }
+    QString name_key_logo = "logo_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_logo, &pix_logo)){
+        if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
+            globals().cache_img.insert(name_key_logo, pix_logo);
+        }
+    }
+
+    // --- setam logotipul
+    if (! pix_logo.isNull()) {
+        img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_logo = 1;
     }
 
     //------------------------------------------------------------------------------------------------------
-    // stampila organizatiei
-    QPixmap pix_stamp = QPixmap();
-    QStandardItem* img_item_stamp = new QStandardItem();
-    QString name_key_stamp = "stamp_organization_id-" + QString::number(id_organization) + "_" + globals::nameUserApp;
-    if (globals::cache_img.find(name_key_stamp, &pix_stamp)){
-         QImage m_stamp = pix_stamp.toImage();
-         img_item_stamp->setData(m_stamp.scaled(200,200), Qt::DisplayRole);
-         exist_stamp = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-    } else {
-         QByteArray outByteArray = db->getOutByteArrayImage("organizations", "stamp", "id", id_organization);
-         if (! outByteArray.isEmpty() && pix_stamp.loadFromData(outByteArray)){
-            globals::cache_img.insert(name_key_stamp, pix_stamp);
-            QImage m_stamp = pix_stamp.toImage();
-            img_item_stamp->setData(m_stamp.scaled(200,200), Qt::DisplayRole);
-            exist_stamp = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-         }
+    // ----- stampila organizatiei
+    QPixmap pix_stamp_organization = QPixmap();
+    QStandardItem* img_item_stamp_organization = new QStandardItem();
+    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_stamp_organization, &pix_stamp_organization)) {
+        if (! globals().main_stamp_organization.isEmpty() && pix_stamp_organization.loadFromData(globals().main_stamp_organization)){
+            globals().cache_img.insert(name_key_stamp_organization, pix_stamp_organization);
+        }
+    }
+
+    // --- setam stampila
+    if (! pix_stamp_organization.isNull()) {
+        img_item_stamp_organization->setData(pix_stamp_organization.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_stamp = 1;
     }
 
     //------------------------------------------------------------------------------------------------------
-    // semnatura doctorului
+    // ----- stampila doctorului
+    QPixmap pix_stamp_doctor = QPixmap();
+    QStandardItem* img_item_stamp_doctor = new QStandardItem();
+    QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_stamp_doctor, &pix_stamp_doctor)) {
+        if (! globals().stamp_main_doctor.isEmpty() && pix_stamp_doctor.loadFromData(globals().stamp_main_doctor)){
+            globals().cache_img.insert(name_key_stamp_doctor, pix_stamp_doctor);
+        }
+    }
+
+    // --- setam stampila
+    if (! pix_stamp_doctor.isNull()) {
+        img_item_stamp_doctor->setData(pix_stamp_doctor.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_stamp_doctor = 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------
+    // ----- semnatura doctorului
     QPixmap pix_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
-    QString name_key_signature = "signature_doctor_id-" + QString::number(id_doctor) + "_" + globals::nameUserApp;
-    if (globals::cache_img.find(name_key_signature, &pix_signature)){
-         QImage m_signature = pix_signature.toImage();
-         img_item_signature->setData(m_signature.scaled(200,200), Qt::DisplayRole);
-         exist_signature = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-    } else {
-         QByteArray outByteArray = db->getOutByteArrayImage("doctors", "signature", "id", id_doctor);
-         if (! outByteArray.isEmpty() && pix_signature.loadFromData(outByteArray)){
-            globals::cache_img.insert(name_key_signature, pix_signature);
-            QImage m_signature = pix_signature.toImage();
-            img_item_signature->setData(m_signature.scaled(200,200), Qt::DisplayRole);
-            exist_signature = 1; // setam variabila pu prezentare in forma de tipar (0-hide, 1-show)
-         }
+    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+
+    // --- verificam cache
+    if (! globals().cache_img.find(name_key_signature, &pix_signature)) {
+        if(! globals().signature_main_doctor.isEmpty() && pix_signature.loadFromData(globals().signature_main_doctor)) {
+            globals().cache_img.insert(name_key_signature, pix_signature);
+        }
+    }
+
+    // --- setam semnatura
+    if (! pix_signature.isNull()) {
+        img_item_signature->setData(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_signature = 1;
     }
 
     //------------------------------------------------------------------------------------------------------
     // setam imaginile in model
     QList<QStandardItem *> items_img;
     items_img.append(img_item_logo);
-    items_img.append(img_item_stamp);
+    items_img.append(img_item_stamp_organization);
     items_img.append(img_item_signature);
+    items_img.append(img_item_stamp_doctor);
 
     model_img = new QStandardItemModel(this);
-    model_img->setColumnCount(3);
+    model_img->setColumnCount(4);
     model_img->appendRow(items_img);
 }
 

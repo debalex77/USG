@@ -21,7 +21,7 @@ AsistantTipApp::AsistantTipApp(QWidget *parent)
     ui->btnNext->setStyleSheet("width: 95px;");
     ui->btnClose->setStyleSheet("width: 95px;");
 
-    ui->show_launch->setChecked(globals::showAsistantHelper);
+    ui->show_launch->setChecked(globals().showAsistantHelper);
 
 #if defined(Q_OS_WIN)
     ui->tip_text->setStyleSheet("font: 14px 'Cantarell';");
@@ -67,16 +67,16 @@ void AsistantTipApp::onClose()
 {
     bool m_show_launch = (ui->show_launch->checkState() == Qt::Checked) ? true : false;
 
-    if (m_show_launch != globals::showAsistantHelper){
+    if (m_show_launch != globals().showAsistantHelper){
         QSqlQuery qry;
         qry.prepare("UPDATE userPreferences SET showAsistantHelper = :showAsistantHelper WHERE id_users = :id_users;");
         qry.bindValue(":showAsistantHelper", ui->show_launch->isChecked());
-        qry.bindValue(":id_users",           globals::idUserApp);
+        qry.bindValue(":id_users",           globals().idUserApp);
         if (! qry.exec())
             qWarning(logWarning()) << this->metaObject()->className()
                                    << tr(": nu au fost actualizate date de prezentare a asistentului de sfaturi %1")
                                           .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
-        globals::showAsistantHelper = ui->show_launch->isChecked();
+        globals().showAsistantHelper = ui->show_launch->isChecked();
     }
     this->close();
 }

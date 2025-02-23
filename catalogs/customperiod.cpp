@@ -20,7 +20,7 @@ CustomPeriod::CustomPeriod(QWidget *parent) :
 
     QDate cDate = QDate::currentDate();
 
-    ui->date_mounth->setLocale(QLocale(globals::langApp));
+    ui->date_mounth->setLocale(QLocale(globals().langApp));
 
     ui->date_year->setDate(cDate);
     ui->date_year->setMinimumDate(QDate(1910, 01, 01));

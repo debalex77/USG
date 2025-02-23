@@ -88,9 +88,16 @@ SOURCES += \
     catalogs/listform.cpp \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
+    common/agentsendemail.cpp \
+    common/contonline.cpp \
+    common/cryptomanager.cpp \
     common/datapercentage.cpp \
+    common/emailcore.cpp \
+    common/handlerfunctionthread.cpp \
+    common/processingaction.cpp \
     customs/custommessage.cpp \
     customs/lineeditcustom.cpp \
+    customs/lineeditpassword.cpp \
     customs/searchlineedit.cpp \
     data/about.cpp \
     data/appsettings.cpp \
@@ -145,9 +152,17 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
+    common/StructVariable.h \
+    common/agentsendemail.h \
+    common/contonline.h \
+    common/cryptomanager.h \
     common/datapercentage.h \
+    common/emailcore.h \
+    common/handlerfunctionthread.h \
+    common/processingaction.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
+    customs/lineeditpassword.h \
     customs/searchlineedit.h \
     data/about.h \
     data/appsettings.h \
@@ -216,6 +231,9 @@ FORMS += \
     catalogs/listform.ui \
     catalogs/normograms.ui \
     catalogs/patienthistory.ui \
+    common/agentsendemail.ui \
+    common/contonline.ui \
+    common/processingaction.ui \
     customs/custommessage.ui \
     data/about.ui \
     data/appsettings.ui \

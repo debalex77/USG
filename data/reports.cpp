@@ -103,7 +103,7 @@ void Reports::loadSettingsReport()
         connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
                 this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
 
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             static const QRegularExpression replaceT("T");
             static const QRegularExpression removeMilliseconds("\\.000");
             QString str_date_start = qry.value(2).toString().replace(replaceT, " ").replace(removeMilliseconds, "");
@@ -140,7 +140,7 @@ void Reports::getNameReportsFromDorectory()
 {
     ui->comboTypeReport->addItem(tr("<<- selectează raport ->>"));
 
-    QDir dir(globals::pathReports);
+    QDir dir(globals().pathReports);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     QFileInfoList listFiles = dir.entryInfoList();
     for (int n = 0; n < listFiles.size(); n++) {
@@ -238,7 +238,7 @@ QString Reports::getMainQry()
     if (name_report == "Lista pacientilor (filtru - organizatii)"){
 
         QString str_qry;
-        if (globals::thisMySQL)
+        if (globals().thisMySQL)
             str_qry = "SELECT orderEcho.id,"
                       "   orderEcho.numberDoc,"
                       "   CONCAT(SUBSTRING(orderEcho.dateDoc,9,2), '.' ,SUBSTRING(orderEcho.dateDoc,6,2), '.' ,SUBSTRING(orderEcho.dateDoc,1,4)) AS dateDoc,"
@@ -261,7 +261,7 @@ QString Reports::getMainQry()
         str_qry = str_qry + "   contracts.name AS contract,";
 
         if (ui->comboDoctors->currentIndex() > 0){
-            if (globals::thisMySQL)
+            if (globals().thisMySQL)
                 str_qry = str_qry + "  CONCAT(doctors.name ,' ', SUBSTRING(doctors.fName, 1, 1) ,'.') AS doctor,";
             else
                 str_qry = str_qry + "  doctors.name ||' '|| substr(doctors.fName, 1, 1) ||'.' AS doctor,";
@@ -452,48 +452,60 @@ QString Reports::getQuerySystem(const QString str_sytem)
 void Reports::setImageForReports()
 {
     //------------------------------------------------------------------------------------------------------
-    // determinam id organizatiei principale
-    int id_organization = 0;
-    int id_doctor = 0;
-    QMap<QString, QString> items;
-    if (db->getObjectDataByMainId("constants", "id_users", globals::idUserApp, items)){
-        id_organization = items.constFind("id_organizations").value().toInt();
-        id_doctor = items.constFind("id_doctors").value().toInt();
+    // ----- logotipul
+
+    QPixmap pix_logo = QPixmap();
+    QStandardItem *img_item_logo = new QStandardItem();
+    QString name_key_logo = "logo_" + globals().nameUserApp;
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_logo, &pix_logo)){
+        if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
+            globals().cache_img.insert(name_key_logo, pix_logo);
+        }
+    }
+    // --- setam logotipul
+    if (! pix_logo.isNull()) {
+        if (ui->hideLogo->isChecked()) {
+            img_item_logo->setData("", Qt::DisplayRole);
+        } else {
+            img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        }
     }
 
     //------------------------------------------------------------------------------------------------------
-    // logotipul
-    QByteArray outByteArray = db->getOutByteArrayImage("constants", "logo", "id_users", globals::idUserApp);
-    QPixmap outPixmap = QPixmap();
-    if (outPixmap.loadFromData(outByteArray))
-        exist_logo = 1;
-    QImage m_logo = outPixmap.toImage();
-    QStandardItem* img_item_logo = new QStandardItem("");
-    if (ui->hideLogo->isChecked())
-        img_item_logo->setData("", Qt::DisplayRole);
-    else
-        img_item_logo->setData(m_logo.scaled(300,50), Qt::DisplayRole);
-
-    //------------------------------------------------------------------------------------------------------
-    // stampila organizatiei
-    QByteArray outByteArray_stamp = db->getOutByteArrayImage("organizations", "stamp", "id", id_organization);
+    // ----- stampila organizatiei
     QPixmap outPixmap_stamp = QPixmap();
-    outPixmap_stamp.loadFromData(outByteArray_stamp);
-    QImage m_stamp = outPixmap_stamp.toImage();
-    QStandardItem* img_item_stamp = new QStandardItem("");
-    img_item_stamp->setData(m_stamp.scaled(200,200), Qt::DisplayRole);
+    QStandardItem *img_item_stamp = new QStandardItem();
+    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_stamp_organization, &outPixmap_stamp)) {
+        if (! globals().main_stamp_organization.isEmpty() && outPixmap_stamp.loadFromData(globals().main_stamp_organization)){
+            globals().cache_img.insert(name_key_stamp_organization, outPixmap_stamp);
+        }
+    }
+    // --- setam stampila
+    if (! outPixmap_stamp.isNull()) {
+        img_item_stamp->setData(outPixmap_stamp.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+    }
 
     //------------------------------------------------------------------------------------------------------
-    // semnatura doctorului
-    QByteArray outByteArray_signature = db->getOutByteArrayImage("doctors", "signature", "id", id_doctor);
+    // ----- semnatura doctorului
     QPixmap outPixmap_signature = QPixmap();
-    outPixmap_signature.loadFromData(outByteArray_signature);
-    QImage m_signature = outPixmap_signature.toImage();
-    QStandardItem* img_item_signature = new QStandardItem("");
-    img_item_signature->setData(m_signature.scaled(200,200), Qt::DisplayRole);
+    QStandardItem* img_item_signature = new QStandardItem();
+    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+    // --- verificam cache
+    if (! globals().cache_img.find(name_key_signature, &outPixmap_signature)) {
+        if(! globals().signature_main_doctor.isEmpty() && outPixmap_signature.loadFromData(globals().signature_main_doctor)) {
+            globals().cache_img.insert(name_key_signature, outPixmap_signature);
+        }
+    }
+    // --- setam semnatura
+    if (! outPixmap_signature.isNull()) {
+        img_item_signature->setData(outPixmap_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+    }
 
     //------------------------------------------------------------------------------------------------------
-    // setam imaginile in model
+    // ----- setam imaginile in model
     QList<QStandardItem *> items_img;
     items_img.append(img_item_logo);
     items_img.append(img_item_stamp);
@@ -567,7 +579,7 @@ void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData
         qry.bindValue(":id_organizations",     (id_organization > 0) ? id_organization : QVariant());
         qry.bindValue(":id_contracts",         (id_contract > 0) ? id_contract : QVariant());
         qry.bindValue(":id_doctors",           (id_doctor > 0) ? id_doctor : QVariant());
-        if (globals::thisMySQL) {
+        if (globals().thisMySQL) {
             qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? true : false);
             qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? true : false);
             qry.bindValue(":hideTitle",            0);
@@ -625,7 +637,7 @@ void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData
         qry.bindValue(":id_organizations",     (id_organization > 0) ? id_organization : QVariant());
         qry.bindValue(":id_contracts",         (id_contract > 0) ? id_contract : QVariant());
         qry.bindValue(":id_doctors",           (id_doctor > 0) ? id_doctor : QVariant());
-        if (globals::thisMySQL){
+        if (globals().thisMySQL){
             qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? true : false);
             qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? true : false);
             qry.bindValue(":hideTitle",            0);
@@ -757,7 +769,7 @@ void Reports::generateReport()
     // *************************************************************************************
     // organizatia
     QSqlQueryModel* print_model_organization = new QSqlQueryModel(this);
-    print_model_organization->setQuery(db->getQryFromTableConstantById(globals::idUserApp));
+    print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
 
     // *************************************************************************************
@@ -788,7 +800,7 @@ void Reports::generateReport()
     m_report->setShowProgressDialog(true);
     m_report->isShowProgressDialog();
 
-    m_report->loadFromFile(globals::pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
+    m_report->loadFromFile(globals().pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
     m_preview->refreshPages();
 
     // *************************************************************************************
@@ -811,7 +823,7 @@ void Reports::openDesignerReport()
     // *************************************************************************************
     // organizatia
     QSqlQueryModel* print_model_organization = new QSqlQueryModel(this);
-    print_model_organization->setQuery(db->getQryFromTableConstantById(globals::idUserApp));
+    print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
 
     // *************************************************************************************
@@ -844,7 +856,7 @@ void Reports::openDesignerReport()
     if (ui->comboTypeReport->currentText() == tr("<<- selectează raport ->>"))
         m_report->loadFromFile("");
     else
-        m_report->loadFromFile(globals::pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
+        m_report->loadFromFile(globals().pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
 
     m_report->designReport();
     m_preview->refreshPages();
@@ -889,11 +901,11 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
     if (index == 0) // <<- selecteaza raportul->>
         return;
 
-    if (globals::show_info_reports){
+    if (globals().show_info_reports){
         info_window = new InfoWindow(this);
         info_window->setTypeInfo(InfoWindow::TypeInfo::INFO_REPORT);
         info_window->setTitle(tr("Descrierea rapoartelor"));
-        info_window->setTex(globals::str_content_message_report);
+        info_window->setTex(globals().str_content_message_report);
         info_window->exec();
     }
 

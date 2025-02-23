@@ -77,30 +77,30 @@ QString InitLaunch::getStyleForButtonMessageBox()
 void InitLaunch::changeIndexComboLangApp(const int _index)
 {
     nameLocale = (_index == 0) ? "ro_RO" : "ru_RU"; // setam nameLocal dupa index alex
-    globals::langApp = nameLocale;                  // setam variabila globala
-    if (translator->load(QLocale(globals::langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
+    globals().langApp = nameLocale;                  // setam variabila globala
+    if (translator->load(QLocale(globals().langApp), QLatin1String("USG"), QLatin1String("_"), QLatin1String(":/i18n"))) {
         QCoreApplication::installTranslator(translator);
     }
 }
 
 void InitLaunch::onClickedRadBtnFirstLaunch()
 {
-    globals::firstLaunch = true;
-    globals::moveApp = 0;
+    globals().firstLaunch = true;
+    globals().moveApp = 0;
 }
 
 void InitLaunch::onClickedRadBtnAppMove()
 {
-    globals::firstLaunch = false;
-    globals::moveApp = 1;
+    globals().firstLaunch = false;
+    globals().moveApp = 1;
 }
 
 void InitLaunch::onWritingData()
 {
-    globals::unknowModeLaunch = false;
-    globals::firstLaunch = ui->radBtnFirstLaunch->isChecked();
-    globals::moveApp     = (ui->radBtnAppMove->isChecked()) ? 1 : 0;
-    if (globals::moveApp == 1)
+    globals().unknowModeLaunch = false;
+    globals().firstLaunch = ui->radBtnFirstLaunch->isChecked();
+    globals().moveApp     = (ui->radBtnAppMove->isChecked()) ? 1 : 0;
+    if (globals().moveApp == 1)
         qInfo(logInfo()) << tr("Aplicatia a fost transferata.");
     else
         qInfo(logInfo()) << tr("Prima lansare a aplicatiei.");
