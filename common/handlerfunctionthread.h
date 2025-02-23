@@ -72,6 +72,7 @@ public:
 
 public slots:
     void setDataConstants();
+    void saveDataPatient();
     void exportDocumentsToPDF();
 
 signals:

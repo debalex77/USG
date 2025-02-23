@@ -13,6 +13,9 @@ HandlerFunctionThread::~HandlerFunctionThread()
     delete db;
 }
 
+// **********************************************************************************
+// --- functiile pentru setarea variabilelor locale
+
 void HandlerFunctionThread::setRequiredVariabile(const int id_mainUser,
                                                  const int id_mainOrganization,
                                                  const int id_mainDoctor)
@@ -67,6 +70,9 @@ void HandlerFunctionThread::setTagsDocumentReport(const bool organs_internal,
     m_gestation2 = gestation2;
     m_gestation3 = gestation3;
 }
+
+// **********************************************************************************
+// --- procesarea SLOT-lor publice
 
 void HandlerFunctionThread::setDataConstants()
 {
@@ -155,24 +161,84 @@ void HandlerFunctionThread::setDataConstants()
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
 
-void HandlerFunctionThread::exportDocumentsToPDF()
+void HandlerFunctionThread::saveDataPatient()
 {
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
-    QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
 
+    { // -- bloc pentru dbConnection
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+
+        { // -- bloc pentru QSqlQuery
+
+            // 1. daca este idnp - (principal)
+            QSqlQuery qry(dbConnection);
+            qry.prepare("SELECT birthday FROM pacients "
+                        "WHERE name = ? AND fName = ? AND IDNP = ?;");
+            qry.addBindValue("");
+            qry.addBindValue("");
+            qry.addBindValue("");
+            if (! qry.exec()) {
+
+            } else {
+
+            }
+
+            // 2. daca nu este idnp (cautarea dupa: nume, prenume, data nasterii)
+            QSqlQuery qry_no_idnp(dbConnection);
+            qry_no_idnp.prepare("SELECT telephone FROM pacients "
+                                "WHERE name = ? AND fName = ? AND birthday = ?;");
+            qry_no_idnp.addBindValue("");
+            qry_no_idnp.addBindValue("");
+            qry_no_idnp.addBindValue("");
+            if (! qry_no_idnp.exec()) {
+
+            } else {
+
+            }
+
+        } // -- distrugerea QSqlQuery
+
+        if (dbConnection.isOpen()) {
+            dbConnection.close();
+        }
+    } // -- distrugerea obiectului dbConnection
+
+    db->removeDatabaseThread(threadConnectionName);
+
+    emit finishSetDataConstants(data_constants);
+
+    QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
+}
+
+void HandlerFunctionThread::exportDocumentsToPDF()
+{
+    // 📌 1 Generam denumirile conexiunilor in afara blocului
+    const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
     const QString threadImageConnectionName = QString("connection_image_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
-    QSqlDatabase dbImageConnection = db->getDatabaseImageThread(threadImageConnectionName);
 
-    exportDocumentOrder(dbConnection);
-    exportDocumentReport(dbConnection);
-    exportDocumentImages(dbImageConnection);
+    /*--------------------------------------------------------
+     * cream un bloc pentru distrugerea obectelor:
+     *  - dbConnection
+     *  - dbImageConnection
+     * ... QSqlDatabase::database(name) returnează un obiect
+     * pentru distrugerea folosim blocuri {}
+     *-------------------------------------------------------*/
+    {
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+        QSqlDatabase dbImageConnection = db->getDatabaseImageThread(threadImageConnectionName);
 
-    if (dbConnection.isOpen()) {
-        dbConnection.close();
-    }
-    if (dbImageConnection.isOpen()) {
-        dbImageConnection.close();
-    }
+        exportDocumentOrder(dbConnection);
+        exportDocumentReport(dbConnection);
+        exportDocumentImages(dbImageConnection);
+
+        if (dbConnection.isOpen()) {
+            dbConnection.close();
+        }
+
+        if (dbImageConnection.isOpen()) {
+            dbImageConnection.close();
+        }
+    } // la nivel acesta se distruge: dbConnection & dbImageConnection
 
     db->removeDatabaseThread(threadConnectionName);
     db->removeDatabaseThread(threadImageConnectionName);
@@ -182,6 +248,9 @@ void HandlerFunctionThread::exportDocumentsToPDF()
 
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
+
+// **********************************************************************************
+// --- procesarea exportului fisierelor
 
 void HandlerFunctionThread::setModelImgForPrint()
 {
@@ -241,194 +310,198 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
     bool noncomercial_price = false;
     int sum_order = 0;
 
-    //-----------------------------------------------------------------------------
-    // 📌 1 setam variabila 'noncomercial_price'
-    QSqlQuery qry(dbConnection);
-    qry.prepare("SELECT "
-                "  orderEcho.id_typesPrices, "
-                "  orderEcho.id_pacients, "
-                "  orderEcho.sum, "
-                "  orderEcho.numberDoc  AS nr_order, "
-                "  orderEcho.dateDoc    AS dateInvestigation, "
-                "  reportEcho.id        AS id_report, "
-                "  reportEcho.numberDoc AS nr_report, "
-                "  typesPrices.noncomercial,"
-                "  fullNamePacients.name AS name_patient, "
-                "  fullNameDoctors.nameAbbreviated AS doctore_execute, "
-                "  pacients.email AS emailTo "
-                "FROM "
-                "  orderEcho "
-                "INNER JOIN "
-                "  typesPrices ON typesPrices.id = orderEcho.id_typesPrices "
-                "INNER JOIN "
-                "  reportEcho ON reportEcho.id_orderEcho = orderEcho.id "
-                "INNER JOIN "
-                "  fullNamePacients ON fullNamePacients.id_pacients = orderEcho.id_pacients "
-                "INNER JOIN "
-                "  fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors_execute "
-                "INNER JOIN "
-                "  pacients ON pacients.id = orderEcho.id_pacients "
-                "WHERE "
-                "  orderEcho.id = ?;");
-    qry.addBindValue(m_id_order);
-    if (! qry.exec()) {
-        emit errorExportDocs("SQL Error: " + qry.lastError().text());
-        return;
-    } else {
-        while (qry.next()) {
-            QSqlRecord rec = qry.record();
-            noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
-            m_id_patient = qry.value(rec.indexOf("id_pacients")).toInt();
-            sum_order    = qry.value(rec.indexOf("sum")).toInt();
-            m_id_report  = qry.value(rec.indexOf("id_report")).toInt();
-            m_nr_order   = qry.value(rec.indexOf("nr_order")).toInt();
-            m_nr_report  = qry.value(rec.indexOf("nr_report")).toInt();
+    {
+        //-----------------------------------------------------------------------------
+        // 📌 1 setam variabila 'noncomercial_price'
+        QSqlQuery qry(dbConnection);
+        qry.prepare("SELECT "
+                    "  orderEcho.id_typesPrices, "
+                    "  orderEcho.id_pacients, "
+                    "  orderEcho.sum, "
+                    "  orderEcho.numberDoc  AS nr_order, "
+                    "  orderEcho.dateDoc    AS dateInvestigation, "
+                    "  reportEcho.id        AS id_report, "
+                    "  reportEcho.numberDoc AS nr_report, "
+                    "  typesPrices.noncomercial,"
+                    "  fullNamePacients.name AS name_patient, "
+                    "  fullNameDoctors.nameAbbreviated AS doctore_execute, "
+                    "  pacients.email AS emailTo "
+                    "FROM "
+                    "  orderEcho "
+                    "INNER JOIN "
+                    "  typesPrices ON typesPrices.id = orderEcho.id_typesPrices "
+                    "INNER JOIN "
+                    "  reportEcho ON reportEcho.id_orderEcho = orderEcho.id "
+                    "INNER JOIN "
+                    "  fullNamePacients ON fullNamePacients.id_pacients = orderEcho.id_pacients "
+                    "INNER JOIN "
+                    "  fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors_execute "
+                    "INNER JOIN "
+                    "  pacients ON pacients.id = orderEcho.id_pacients "
+                    "WHERE "
+                    "  orderEcho.id = ?;");
+        qry.addBindValue(m_id_order);
+        if (! qry.exec()) {
+            emit errorExportDocs("SQL Error: " + qry.lastError().text());
+            return;
+        } else {
+            while (qry.next()) {
+                QSqlRecord rec = qry.record();
+                noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
+                m_id_patient = qry.value(rec.indexOf("id_pacients")).toInt();
+                sum_order    = qry.value(rec.indexOf("sum")).toInt();
+                m_id_report  = qry.value(rec.indexOf("id_report")).toInt();
+                m_nr_order   = qry.value(rec.indexOf("nr_order")).toInt();
+                m_nr_report  = qry.value(rec.indexOf("nr_report")).toInt();
 
-            // introducem date in structura pentru transmiterea
-            data.nr_order     = qry.value(rec.indexOf("nr_order")).toString();
-            data.nr_report    = qry.value(rec.indexOf("nr_report")).toString();
-            data.emailTo      = qry.value(rec.indexOf("emailTo")).toString();
-            data.name_patient = qry.value(rec.indexOf("name_patient")).toString();
-            data.name_doctor_execute   = qry.value(rec.indexOf("doctore_execute")).toString();
-            data.str_dateInvestigation = qry.value(rec.indexOf("dateInvestigation")).toString();
+                // introducem date in structura pentru transmiterea
+                data.nr_order     = qry.value(rec.indexOf("nr_order")).toString();
+                data.nr_report    = qry.value(rec.indexOf("nr_report")).toString();
+                data.emailTo      = qry.value(rec.indexOf("emailTo")).toString();
+                data.name_patient = qry.value(rec.indexOf("name_patient")).toString();
+                data.name_doctor_execute   = qry.value(rec.indexOf("doctore_execute")).toString();
+                data.str_dateInvestigation = qry.value(rec.indexOf("dateInvestigation")).toString();
+            }
         }
-    }
 
-    // introducem structura in vector
-    data_agentEmail.append(data);
+        // introducem structura in vector
+        data_agentEmail.append(data);
 
-    //-----------------------------------------------------------------------------
-    // 📌 2 setam modelul 'model_img' - logotipul, stampila organizatiei,
-    // semnatura doctorului si stampila doctorului
-    setModelImgForPrint();
+        //-----------------------------------------------------------------------------
+        // 📌 2 setam modelul 'model_img' - logotipul, stampila organizatiei,
+        // semnatura doctorului si stampila doctorului
+        setModelImgForPrint();
 
-    //-----------------------------------------------------------------------------
-    // 📌 3 alocam memoria
-    m_report = new LimeReport::ReportEngine(this);
-    m_report->dataManager()->addModel("table_img", model_img, true);
+        //-----------------------------------------------------------------------------
+        // 📌 3 alocam memoria
+        m_report = new LimeReport::ReportEngine(this);
+        m_report->dataManager()->addModel("table_img", model_img, true);
 
-    //-----------------------------------------------------------------------------
-    // 📌 4 setam model pentru organizatia
-    model_organization = new QSqlQueryModel(this);
-    QSqlQuery qry_organiation(dbConnection);
-    qry_organiation.prepare("SELECT constants.id_organizations, "
-                            "  organizations.IDNP, "
-                            "  organizations.name, "
-                            "  organizations.address, "
-                            "  organizations.telephone, "
-                            "  fullNameDoctors.nameAbbreviated AS doctor,"
-                            "  organizations.email FROM constants "
-                            "INNER JOIN "
-                            "  organizations ON constants.id_organizations = organizations.id "
-                            "INNER JOIN "
-                            "  fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors "
-                            "WHERE "
-                            "  constants.id_users = ?;");
-    qry_organiation.addBindValue(m_id_user);
-    if (! qry_organiation.exec()) {
-        model_organization->deleteLater();
-        m_report->deleteLater();
-        emit errorExportDocs("SQL Error: " + qry_organiation.lastError().text());
-        return;
-    }
-    model_organization->setQuery(std::move(qry_organiation));
+        //-----------------------------------------------------------------------------
+        // 📌 4 setam model pentru organizatia
+        model_organization = new QSqlQueryModel(this);
+        QSqlQuery qry_organiation(dbConnection);
+        qry_organiation.prepare("SELECT constants.id_organizations, "
+                                "  organizations.IDNP, "
+                                "  organizations.name, "
+                                "  organizations.address, "
+                                "  organizations.telephone, "
+                                "  fullNameDoctors.nameAbbreviated AS doctor,"
+                                "  organizations.email FROM constants "
+                                "INNER JOIN "
+                                "  organizations ON constants.id_organizations = organizations.id "
+                                "INNER JOIN "
+                                "  fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors "
+                                "WHERE "
+                                "  constants.id_users = ?;");
+        qry_organiation.addBindValue(m_id_user);
+        if (! qry_organiation.exec()) {
+            model_organization->deleteLater();
+            m_report->deleteLater();
+            emit errorExportDocs("SQL Error: " + qry_organiation.lastError().text());
+            return;
+        }
+        model_organization->setQuery(std::move(qry_organiation));
 
-    //-----------------------------------------------------------------------------
-    // 📌 5 setam model pentru pacient
-    model_patient = new QSqlQueryModel(this);
-    QSqlQuery qry_patient(dbConnection);
-    if (m_thisMySQL)
-        qry_patient.prepare("SELECT CONCAT(pacients.name,' ', pacients.fName) AS FullName,"
-                            "  CONCAT(SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS birthday,"
-                            "  pacients.IDNP,"
-                            "  pacients.medicalPolicy,"
-                            "  pacients.address "
-                            "FROM "
-                            "  pacients "
-                            "WHERE "
-                            "  id = ?;");
-    else
-        qry_patient.prepare("SELECT pacients.name ||' '|| pacients.fName AS FullName,"
-                            "  substr(pacients.birthday, 9, 2) ||'.'|| substr(pacients.birthday, 6, 2) ||'.'|| substr(pacients.birthday, 1, 4) AS birthday,"
-                            "  pacients.IDNP,"
-                            "  pacients.medicalPolicy,"
-                            "  pacients.address "
-                            "FROM "
-                            "  pacients "
-                            "WHERE "
-                            "  id = ?;");
-    qry_patient.addBindValue(m_id_patient);
-    if (! qry_patient.exec()) {
-        model_organization->deleteLater();
-        model_patient->deleteLater();
-        m_report->deleteLater();
-        emit errorExportDocs("SQL Error: " + qry_patient.lastError().text());
-        return;
-    }
-    model_patient->setQuery(std::move(qry_patient));
+        //-----------------------------------------------------------------------------
+        // 📌 5 setam model pentru pacient
+        model_patient = new QSqlQueryModel(this);
+        QSqlQuery qry_patient(dbConnection);
+        if (m_thisMySQL)
+            qry_patient.prepare("SELECT CONCAT(pacients.name,' ', pacients.fName) AS FullName,"
+                                "  CONCAT(SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS birthday,"
+                                "  pacients.IDNP,"
+                                "  pacients.medicalPolicy,"
+                                "  pacients.address "
+                                "FROM "
+                                "  pacients "
+                                "WHERE "
+                                "  id = ?;");
+        else
+            qry_patient.prepare("SELECT pacients.name ||' '|| pacients.fName AS FullName,"
+                                "  substr(pacients.birthday, 9, 2) ||'.'|| substr(pacients.birthday, 6, 2) ||'.'|| substr(pacients.birthday, 1, 4) AS birthday,"
+                                "  pacients.IDNP,"
+                                "  pacients.medicalPolicy,"
+                                "  pacients.address "
+                                "FROM "
+                                "  pacients "
+                                "WHERE "
+                                "  id = ?;");
+        qry_patient.addBindValue(m_id_patient);
+        if (! qry_patient.exec()) {
+            model_organization->deleteLater();
+            model_patient->deleteLater();
+            m_report->deleteLater();
+            emit errorExportDocs("SQL Error: " + qry_patient.lastError().text());
+            return;
+        }
+        model_patient->setQuery(std::move(qry_patient));
 
-    //-----------------------------------------------------------------------------
-    // 📌 6 setam model pentru tabela documentului
-    model_table = new QSqlQueryModel(this);
-    QSqlQuery qry_table(dbConnection);
-    QString str_price;
-    if (m_thisMySQL)
-        str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price";
-    else
-        str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price ||'0'";
-    qry_table.prepare(db->getQryForTableOrderById(m_id_order, (noncomercial_price) ? "'0-00'" : str_price));
-    if (! qry_table.exec()) {
-        model_organization->deleteLater();
-        model_patient->deleteLater();
+        //-----------------------------------------------------------------------------
+        // 📌 6 setam model pentru tabela documentului
+        model_table = new QSqlQueryModel(this);
+        QSqlQuery qry_table(dbConnection);
+        QString str_price;
+        if (m_thisMySQL)
+            str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price";
+        else
+            str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price ||'0'";
+        qry_table.prepare(db->getQryForTableOrderById(m_id_order, (noncomercial_price) ? "'0-00'" : str_price));
+        if (! qry_table.exec()) {
+            model_organization->deleteLater();
+            model_patient->deleteLater();
+            model_table->deleteLater();
+            m_report->deleteLater();
+            emit errorExportDocs("SQL Error: " + qry_table.lastError().text());
+            return;
+        }
+        model_table->setQuery(std::move(qry_table));
+
+        double _num = 0;
+        _num = (noncomercial_price) ? 0 : sum_order; // daca 'noncomercial_price' -> nu aratam suma
+
+        // *************************************************************************************
+        // 📌 7 transmitem variabile si modelurile generatorului de rapoarte
+        m_report->dataManager()->clearUserVariables();
+        m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(_num, 0, 'f', 2));
+        m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
+        m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp_organization);
+        m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
+        m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
+
+        m_report->dataManager()->addModel("main_organization", model_organization, false);
+        m_report->dataManager()->addModel("table_pacient", model_patient, false);
+        m_report->dataManager()->addModel("table_table", model_table, false);
+        m_report->setShowProgressDialog(true);
+
+        // *************************************************************************************
+        // 📌 8 verificam daca este fisierul de tipar
+        QDir dir;
+        if (! QFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml")).exists()){
+            model_img->deleteLater();
+            model_organization->deleteLater();
+            model_patient->deleteLater();
+            model_table->deleteLater();
+            m_report->deleteLater();
+            emit errorExportDocs("Nu a fost gasit fisierul formai de tipar !!!");
+            return;
+        }
+
+        // *************************************************************************************
+        // 📌 9 exportam fgisierul in formatul PDF
+        m_report->loadFromFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml"));
+        m_report->printToPDF(m_filePDF + "/Comanda_ecografica_nr_" + QString::number(m_nr_order) + ".pdf");
+        emit setTextInfo("S-a descarcat documentul 'Comanda ecografica'...");
+
         model_table->deleteLater();
-        m_report->deleteLater();
-        emit errorExportDocs("SQL Error: " + qry_table.lastError().text());
-        return;
     }
-    model_table->setQuery(std::move(qry_table));
-
-    double _num = 0;
-    _num = (noncomercial_price) ? 0 : sum_order; // daca 'noncomercial_price' -> nu aratam suma
-
-    // *************************************************************************************
-    // 📌 7 transmitem variabile si modelurile generatorului de rapoarte
-    m_report->dataManager()->clearUserVariables();
-    m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(_num, 0, 'f', 2));
-    m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
-    m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp_organization);
-    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
-    m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
-
-    m_report->dataManager()->addModel("main_organization", model_organization, false);
-    m_report->dataManager()->addModel("table_pacient", model_patient, false);
-    m_report->dataManager()->addModel("table_table", model_table, false);
-    m_report->setShowProgressDialog(true);
-
-    // *************************************************************************************
-    // 📌 8 verificam daca este fisierul de tipar
-    QDir dir;
-    if (! QFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml")).exists()){
-        model_img->deleteLater();
-        model_organization->deleteLater();
-        model_patient->deleteLater();
-        model_table->deleteLater();
-        m_report->deleteLater();
-        emit errorExportDocs("Nu a fost gasit fisierul formai de tipar !!!");
-        return;
-    }
-
-    // *************************************************************************************
-    // 📌 9 exportam fgisierul in formatul PDF
-    m_report->loadFromFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml"));
-    m_report->printToPDF(m_filePDF + "/Comanda_ecografica_nr_" + QString::number(m_nr_order) + ".pdf");
-    emit setTextInfo("S-a descarcat documentul 'Comanda ecografica'...");
 
     // *************************************************************************************
     // 📌 10 elibiram memoria
     // model_img->deleteLater();
     // model_organization->deleteLater();
     // model_patient->deleteLater();
-    model_table->deleteLater();
+
     m_report->deleteLater();
 
 }
@@ -440,99 +513,37 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
         return;
     }
 
-    m_report = new LimeReport::ReportEngine(this);
-    QSqlQueryModel *modelOrgansInternal = new QSqlQueryModel();
-    QSqlQueryModel *modelUrinarySystem  = new QSqlQueryModel();
-    QSqlQueryModel *modelProstate       = new QSqlQueryModel();
-    QSqlQueryModel *modelGynecology     = new QSqlQueryModel();
-    QSqlQueryModel *modelBreast         = new QSqlQueryModel();
-    QSqlQueryModel *modelThyroid        = new QSqlQueryModel();
-    QSqlQueryModel *modelGestationO     = new QSqlQueryModel();
-    QSqlQueryModel *modelGestation1     = new QSqlQueryModel();
-    QSqlQueryModel *modelGestation2     = new QSqlQueryModel();
-
-    QSqlQuery qry(dbConnection);
     {
-        qry.prepare("SELECT "
-                    "  t_organs_internal,"
-                    "  t_urinary_system,"
-                    "  t_prostate,"
-                    "  t_gynecology,"
-                    "  t_breast,"
-                    "  t_thyroid,"
-                    "  t_gestation0,"
-                    "  t_gestation1,"
-                    "  t_gestation2,"
-                    "  t_gestation3 "
-                    " FROM "
-                    "  reportEcho "
-                    "WHERE "
-                    "  id_orderEcho = ?;");
-        qry.addBindValue(m_id_order);
-        if (! qry.exec()) {
-            // eliberam memoria
-            model_img->deleteLater();
-            model_organization->deleteLater();
-            model_patient->deleteLater();
-            model_table->deleteLater();
-            modelOrgansInternal->deleteLater();
-            modelUrinarySystem->deleteLater();
-            modelProstate->deleteLater();
-            modelGynecology->deleteLater();
-            modelBreast->deleteLater();
-            modelThyroid->deleteLater();
-            modelGestationO->deleteLater();
-            modelGestation1->deleteLater();
-            modelGestation2->deleteLater();
-            m_report->deleteLater();
-            emit errorExportDocs("SQL Error: " + qry.lastError().text());
-            return;
-        } else {
-            if (qry.next()) {
-                QSqlRecord rec = qry.record();
-                m_organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
-                m_urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
-                m_prostate   = qry.value(rec.indexOf("t_prostate")).toBool();
-                m_gynecology = qry.value(rec.indexOf("t_gynecology")).toBool();
-                m_breast     = qry.value(rec.indexOf("t_breast")).toBool();
-                m_thyroide   = qry.value(rec.indexOf("t_thyroid")).toBool();
-                m_gestation0 = qry.value(rec.indexOf("t_gestation0")).toBool();
-                m_gestation1 = qry.value(rec.indexOf("t_gestation1")).toBool();
-                m_gestation2 = qry.value(rec.indexOf("t_gestation2")).toBool();
-                m_gestation3 = qry.value(rec.indexOf("t_gestation3")).toBool();
-            }
-        }
+        m_report = new LimeReport::ReportEngine(this);
+        QSqlQueryModel *modelOrgansInternal = new QSqlQueryModel();
+        QSqlQueryModel *modelUrinarySystem  = new QSqlQueryModel();
+        QSqlQueryModel *modelProstate       = new QSqlQueryModel();
+        QSqlQueryModel *modelGynecology     = new QSqlQueryModel();
+        QSqlQueryModel *modelBreast         = new QSqlQueryModel();
+        QSqlQueryModel *modelThyroid        = new QSqlQueryModel();
+        QSqlQueryModel *modelGestationO     = new QSqlQueryModel();
+        QSqlQueryModel *modelGestation1     = new QSqlQueryModel();
+        QSqlQueryModel *modelGestation2     = new QSqlQueryModel();
 
-        m_report->dataManager()->addModel("table_logo", model_img, true);
-        m_report->dataManager()->addModel("main_organization", model_organization, false);
-        m_report->dataManager()->addModel("table_patient", model_patient, false);
-        m_report->dataManager()->clearUserVariables();
-        m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
-        m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
-        m_report->dataManager()->setReportVariable("v_exist_signature_doctor", exist_signature);
-        m_report->dataManager()->setReportVariable("unitMeasure", (m_unitMeasure == "milimetru") ? "mm" : "cm");
-
-        // complex
-        if (m_organs_internal && m_urinary_system){
-
-            QSqlQuery qry_organsInternal(dbConnection);
-            qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
-            if (qry_organsInternal.exec()) {
-                modelOrgansInternal->setQuery(std::move(qry_organsInternal));
-
-            }
-            QSqlQuery qry_urinarySystem(dbConnection);
-            qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
-            if (qry_urinarySystem.exec()){
-                modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
-            }
-            m_report->dataManager()->addModel("table_organs_internal", modelOrgansInternal, false);
-            m_report->dataManager()->addModel("table_urinary_system", modelUrinarySystem, false);
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Complex.lrxml")){
-
+        QSqlQuery qry(dbConnection);
+        {
+            qry.prepare("SELECT "
+                        "  t_organs_internal,"
+                        "  t_urinary_system,"
+                        "  t_prostate,"
+                        "  t_gynecology,"
+                        "  t_breast,"
+                        "  t_thyroid,"
+                        "  t_gestation0,"
+                        "  t_gestation1,"
+                        "  t_gestation2,"
+                        "  t_gestation3 "
+                        " FROM "
+                        "  reportEcho "
+                        "WHERE "
+                        "  id_orderEcho = ?;");
+            qry.addBindValue(m_id_order);
+            if (! qry.exec()) {
                 // eliberam memoria
                 model_img->deleteLater();
                 model_organization->deleteLater();
@@ -548,464 +559,528 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 modelGestation1->deleteLater();
                 modelGestation2->deleteLater();
                 m_report->deleteLater();
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Complex.lrxml' !!!");
-
+                emit errorExportDocs("SQL Error: " + qry.lastError().text());
                 return;
-            }
-
-            // export
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_complex.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - complex ...");
-        }
-
-        // organs internal
-        if (m_organs_internal && !m_urinary_system){
-
-            // extragem datele si introducem in model + setam variabile
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
-            QSqlQuery qry_organsInternal(dbConnection);
-            qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
-            if (qry_organsInternal.exec()) {
-                modelOrgansInternal->setQuery(std::move(qry_organsInternal));
-
-            }
-            m_report->dataManager()->addModel("table_organs_internal", modelOrgansInternal, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Organs internal.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Organs internal.lrxml' !!!");
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // export
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_organe_interne.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - organe interne ...");
-        }
-
-        // urinary system
-        if (m_urinary_system && !m_organs_internal){
-
-            // extragem datele si introducem in model + setam variabile
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
-            QSqlQuery qry_urinarySystem(dbConnection);
-            qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
-            if (qry_urinarySystem.exec()){
-                modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
-            }
-            m_report->dataManager()->addModel("table_urinary_system", modelUrinarySystem, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Urinary system.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Urinary system.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // export
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sistemul_urinar.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - s.urinar ...");
-        }
-
-        // prostate
-        if (m_prostate){
-
-            // extragem datele si introducem in model + setam variabile
-            QSqlQuery qry_supliment(dbConnection);
-            qry_supliment.prepare("SELECT transrectal FROM tableProstate WHERE id_reportEcho = ?;");
-            qry_supliment.addBindValue(m_id_report);
-            if (qry_supliment.exec() && qry_supliment.next()){
-                m_report->dataManager()->setReportVariable("method_examination", (qry_supliment.value(0).toInt() == 1) ? "transrectal" : "transabdominal");
             } else {
-                m_report->dataManager()->setReportVariable("method_examination", "transabdominal");
-            }
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
-
-            QSqlQuery qry_prostate(dbConnection);
-            qry_prostate.prepare(db->getQryForTableProstateById(m_id_report));
-            if (qry_prostate.exec()){
-                modelProstate->setQuery(std::move(qry_prostate));
-            }
-            m_report->dataManager()->addModel("table_prostate", modelProstate, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Prostate.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Prostate.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
+                if (qry.next()) {
+                    QSqlRecord rec = qry.record();
+                    m_organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
+                    m_urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
+                    m_prostate   = qry.value(rec.indexOf("t_prostate")).toBool();
+                    m_gynecology = qry.value(rec.indexOf("t_gynecology")).toBool();
+                    m_breast     = qry.value(rec.indexOf("t_breast")).toBool();
+                    m_thyroide   = qry.value(rec.indexOf("t_thyroid")).toBool();
+                    m_gestation0 = qry.value(rec.indexOf("t_gestation0")).toBool();
+                    m_gestation1 = qry.value(rec.indexOf("t_gestation1")).toBool();
+                    m_gestation2 = qry.value(rec.indexOf("t_gestation2")).toBool();
+                    m_gestation3 = qry.value(rec.indexOf("t_gestation3")).toBool();
+                }
             }
 
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_prostata.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - prostata ...");
+            m_report->dataManager()->addModel("table_logo", model_img, true);
+            m_report->dataManager()->addModel("main_organization", model_organization, false);
+            m_report->dataManager()->addModel("table_patient", model_patient, false);
+            m_report->dataManager()->clearUserVariables();
+            m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
+            m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
+            m_report->dataManager()->setReportVariable("v_exist_signature_doctor", exist_signature);
+            m_report->dataManager()->setReportVariable("unitMeasure", (m_unitMeasure == "milimetru") ? "mm" : "cm");
+
+            // complex
+            if (m_organs_internal && m_urinary_system){
+
+                QSqlQuery qry_organsInternal(dbConnection);
+                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
+                if (qry_organsInternal.exec()) {
+                    modelOrgansInternal->setQuery(std::move(qry_organsInternal));
+
+                }
+                QSqlQuery qry_urinarySystem(dbConnection);
+                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
+                if (qry_urinarySystem.exec()){
+                    modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
+                }
+                m_report->dataManager()->addModel("table_organs_internal", modelOrgansInternal, false);
+                m_report->dataManager()->addModel("table_urinary_system", modelUrinarySystem, false);
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Complex.lrxml")){
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Complex.lrxml' !!!");
+
+                    return;
+                }
+
+                // export
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_complex.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - complex ...");
+            }
+
+            // organs internal
+            if (m_organs_internal && !m_urinary_system){
+
+                // extragem datele si introducem in model + setam variabile
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
+                QSqlQuery qry_organsInternal(dbConnection);
+                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
+                if (qry_organsInternal.exec()) {
+                    modelOrgansInternal->setQuery(std::move(qry_organsInternal));
+
+                }
+                m_report->dataManager()->addModel("table_organs_internal", modelOrgansInternal, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Organs internal.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Organs internal.lrxml' !!!");
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // export
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_organe_interne.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - organe interne ...");
+            }
+
+            // urinary system
+            if (m_urinary_system && !m_organs_internal){
+
+                // extragem datele si introducem in model + setam variabile
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
+                QSqlQuery qry_urinarySystem(dbConnection);
+                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
+                if (qry_urinarySystem.exec()){
+                    modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
+                }
+                m_report->dataManager()->addModel("table_urinary_system", modelUrinarySystem, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Urinary system.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Urinary system.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // export
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sistemul_urinar.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - s.urinar ...");
+            }
+
+            // prostate
+            if (m_prostate){
+
+                // extragem datele si introducem in model + setam variabile
+                QSqlQuery qry_supliment(dbConnection);
+                qry_supliment.prepare("SELECT transrectal FROM tableProstate WHERE id_reportEcho = ?;");
+                qry_supliment.addBindValue(m_id_report);
+                if (qry_supliment.exec() && qry_supliment.next()){
+                    m_report->dataManager()->setReportVariable("method_examination", (qry_supliment.value(0).toInt() == 1) ? "transrectal" : "transabdominal");
+                } else {
+                    m_report->dataManager()->setReportVariable("method_examination", "transabdominal");
+                }
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
+
+                QSqlQuery qry_prostate(dbConnection);
+                qry_prostate.prepare(db->getQryForTableProstateById(m_id_report));
+                if (qry_prostate.exec()){
+                    modelProstate->setQuery(std::move(qry_prostate));
+                }
+                m_report->dataManager()->addModel("table_prostate", modelProstate, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Prostate.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Prostate.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_prostata.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - prostata ...");
+            }
+
+            // gynecology
+            if (m_gynecology){
+
+                // extragem datele si introducem in model + setam variabile
+                QSqlQuery qry_ginecSupliment(dbConnection);
+                qry_ginecSupliment.prepare("SELECT transvaginal FROM tableGynecology WHERE id_reportEcho = ?;");
+                qry_ginecSupliment.addBindValue(m_id_report);
+                if (qry_ginecSupliment.exec() && qry_ginecSupliment.next()){
+                    m_report->dataManager()->setReportVariable("method_examination", (qry_ginecSupliment.value(0).toInt() == 1) ? "transvaginal" : "transabdominal");
+                } else {
+                    m_report->dataManager()->setReportVariable("method_examination", "transabdominal");
+                }
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
+
+                QSqlQuery qry_ginecology(dbConnection);
+                qry_ginecology.prepare(db->getQryForTableGynecologyById(m_id_report));
+                if (qry_ginecology.exec()){
+                    modelGynecology->setQuery(std::move(qry_ginecology));
+                }
+                m_report->dataManager()->addModel("table_gynecology", modelGynecology, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gynecology.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Gynecology.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_ginecologie.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic - ginecologia'...");
+            }
+
+            // breast
+            if (m_breast){
+
+                // extragem datele si introducem in model + setam variabile
+                QSqlQuery qry_breast(dbConnection);
+                qry_breast.prepare(db->getQryForTableBreastById(m_id_report));
+                if (qry_breast.exec()){
+                    modelBreast->setQuery(std::move(qry_breast));
+                }
+                m_report->dataManager()->addModel("table_breast", modelBreast, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Breast.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Breast.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_glandele_mamare.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - gl.mamare ...");
+            }
+
+            // thyroid
+            if (m_thyroide){
+
+                // extragem datele si introducem in model + setam variabile
+                m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
+                QSqlQuery qry_thyroid(dbConnection);
+                qry_thyroid.prepare(db->getQryForTableThyroidById(m_id_report));
+                if (qry_thyroid.exec()){
+                    modelThyroid->setQuery(std::move(qry_thyroid));
+                }
+                m_report->dataManager()->addModel("table_thyroid", modelThyroid, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Thyroid.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Thyroid.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_tiroida.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - tiroida ...");
+            }
+
+            // gestation0
+            if (m_gestation0){
+
+                // extragem datele si introducem in model + setam variabile
+                QSqlQuery qry_supGestation0(dbConnection);
+                qry_supGestation0.prepare("SELECT view_examination FROM tableGestation0 WHERE id_reportEcho = ?;");
+                qry_supGestation0.addBindValue(m_id_report);
+                if (qry_supGestation0.exec() && qry_supGestation0.next()){
+                    m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation0.value(0).toInt() == 1));
+                } else {
+                    m_report->dataManager()->setReportVariable("ivestigation_view", 0);
+                }
+
+                QSqlQuery qry_gestation0(dbConnection);
+                qry_gestation0.prepare(db->getQryForTableGestation0dById(m_id_report));
+                if (qry_gestation0.exec()){
+                    modelGestationO->setQuery(std::move(qry_gestation0));
+                }
+                m_report->dataManager()->addModel("table_gestation0", modelGestationO, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gestation0.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation0.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina0.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina pana la 11 sapt. ...");
+            }
+
+            // gestation1
+            if (m_gestation1){
+
+                // extragem datele si introducem in model + setam variabile
+                QSqlQuery qry_supGestation1(dbConnection);
+                qry_supGestation1.prepare("SELECT view_examination FROM tableGestation1 WHERE id_reportEcho = ?;");
+                qry_supGestation1.addBindValue(m_id_report);
+                if (qry_supGestation1.exec() && qry_supGestation1.next()){
+                    m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation1.value(0).toInt() == 1));
+                } else {
+                    m_report->dataManager()->setReportVariable("ivestigation_view", 0);
+                }
+
+                QSqlQuery qry_gestation1(dbConnection);
+                qry_gestation1.prepare(db->getQryForTableGestation1dById(m_id_report));
+                if (qry_gestation1.exec()){
+                    modelGestation1->setQuery(std::move(qry_gestation1));
+                }
+                m_report->dataManager()->addModel("table_gestation1", modelGestation1, false);
+
+                // completam sablonul
+                if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gestation1.lrxml")){
+
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation1.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentarea preview sau designer
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina1.pdf");
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina trim.I ...");
+            }
+
+            // gestation2
+            if (m_gestation2){
+
+                QSqlQuery qry_gestation2(dbConnection);
+                qry_gestation2.prepare(db->getQryForTableGestation2(m_id_report));
+                if (qry_gestation2.exec()){
+                    modelGestation2->setQuery(std::move(qry_gestation2));
+                }
+                m_report->dataManager()->addModel("table_gestation2", modelGestation2, false);
+
+                int trim = -1;
+                QSqlQuery qry_supGestation2(dbConnection);
+                qry_supGestation2.prepare("SELECT trimestru FROM tableGestation2 WHERE id_reportEcho = ?;");
+                qry_supGestation2.addBindValue(m_id_report);
+                if (qry_supGestation2.exec() && qry_supGestation2.next()){
+                    trim = qry_supGestation2.value(0).toInt();
+                } else {
+                    trim = 2;
+                }
+
+                // sablonul
+                QString pathToFileGestation = (trim == 2) ? m_pathTemplatesDocs + "/Gestation2.lrxml" : m_pathTemplatesDocs + "/Gestation3.lrxml";
+                if (! m_report->loadFromFile(pathToFileGestation)){
+                    // emitem ca este eroarea
+                    emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation2.lrxml' !!!");
+
+                    // eliberam memoria
+                    model_img->deleteLater();
+                    model_organization->deleteLater();
+                    model_patient->deleteLater();
+                    model_table->deleteLater();
+                    modelOrgansInternal->deleteLater();
+                    modelUrinarySystem->deleteLater();
+                    modelProstate->deleteLater();
+                    modelGynecology->deleteLater();
+                    modelBreast->deleteLater();
+                    modelThyroid->deleteLater();
+                    modelGestationO->deleteLater();
+                    modelGestation1->deleteLater();
+                    modelGestation2->deleteLater();
+                    m_report->deleteLater();
+
+                    return;
+                }
+
+                // prezentam
+                m_report->setShowProgressDialog(true);
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina2.pdf");
+                QString str_txt = (trim == 2) ? "trim.II" : "trim.III";
+                emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina " + str_txt);
+            }
         }
 
-        // gynecology
-        if (m_gynecology){
+        // eliberam memoria
+        model_img->deleteLater();
+        model_organization->deleteLater();
+        model_patient->deleteLater();
+        modelOrgansInternal->deleteLater();
+        modelUrinarySystem->deleteLater();
+        modelProstate->deleteLater();
+        modelGynecology->deleteLater();
+        modelBreast->deleteLater();
+        modelThyroid->deleteLater();
+        modelGestationO->deleteLater();
+        modelGestation1->deleteLater();
+        modelGestation2->deleteLater();
+        m_report->deleteLater();
 
-            // extragem datele si introducem in model + setam variabile
-            QSqlQuery qry_ginecSupliment(dbConnection);
-            qry_ginecSupliment.prepare("SELECT transvaginal FROM tableGynecology WHERE id_reportEcho = ?;");
-            qry_ginecSupliment.addBindValue(m_id_report);
-            if (qry_ginecSupliment.exec() && qry_ginecSupliment.next()){
-                m_report->dataManager()->setReportVariable("method_examination", (qry_ginecSupliment.value(0).toInt() == 1) ? "transvaginal" : "transabdominal");
-            } else {
-                m_report->dataManager()->setReportVariable("method_examination", "transabdominal");
-            }
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
-
-            QSqlQuery qry_ginecology(dbConnection);
-            qry_ginecology.prepare(db->getQryForTableGynecologyById(m_id_report));
-            if (qry_ginecology.exec()){
-                modelGynecology->setQuery(std::move(qry_ginecology));
-            }
-            m_report->dataManager()->addModel("table_gynecology", modelGynecology, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gynecology.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Gynecology.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_ginecologie.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic - ginecologia'...");
-        }
-
-        // breast
-        if (m_breast){
-
-            // extragem datele si introducem in model + setam variabile
-            QSqlQuery qry_breast(dbConnection);
-            qry_breast.prepare(db->getQryForTableBreastById(m_id_report));
-            if (qry_breast.exec()){
-                modelBreast->setQuery(std::move(qry_breast));
-            }
-            m_report->dataManager()->addModel("table_breast", modelBreast, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Breast.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Breast.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_glandele_mamare.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - gl.mamare ...");
-        }
-
-        // thyroid
-        if (m_thyroide){
-
-            // extragem datele si introducem in model + setam variabile
-            m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
-            QSqlQuery qry_thyroid(dbConnection);
-            qry_thyroid.prepare(db->getQryForTableThyroidById(m_id_report));
-            if (qry_thyroid.exec()){
-                modelThyroid->setQuery(std::move(qry_thyroid));
-            }
-            m_report->dataManager()->addModel("table_thyroid", modelThyroid, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Thyroid.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Thyroid.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_tiroida.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - tiroida ...");
-        }
-
-        // gestation0
-        if (m_gestation0){
-
-            // extragem datele si introducem in model + setam variabile
-            QSqlQuery qry_supGestation0(dbConnection);
-            qry_supGestation0.prepare("SELECT view_examination FROM tableGestation0 WHERE id_reportEcho = ?;");
-            qry_supGestation0.addBindValue(m_id_report);
-            if (qry_supGestation0.exec() && qry_supGestation0.next()){
-                m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation0.value(0).toInt() == 1));
-            } else {
-                m_report->dataManager()->setReportVariable("ivestigation_view", 0);
-            }
-
-            QSqlQuery qry_gestation0(dbConnection);
-            qry_gestation0.prepare(db->getQryForTableGestation0dById(m_id_report));
-            if (qry_gestation0.exec()){
-                modelGestationO->setQuery(std::move(qry_gestation0));
-            }
-            m_report->dataManager()->addModel("table_gestation0", modelGestationO, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gestation0.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation0.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina0.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina pana la 11 sapt. ...");
-        }
-
-        // gestation1
-        if (m_gestation1){
-
-            // extragem datele si introducem in model + setam variabile
-            QSqlQuery qry_supGestation1(dbConnection);
-            qry_supGestation1.prepare("SELECT view_examination FROM tableGestation1 WHERE id_reportEcho = ?;");
-            qry_supGestation1.addBindValue(m_id_report);
-            if (qry_supGestation1.exec() && qry_supGestation1.next()){
-                m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation1.value(0).toInt() == 1));
-            } else {
-                m_report->dataManager()->setReportVariable("ivestigation_view", 0);
-            }
-
-            QSqlQuery qry_gestation1(dbConnection);
-            qry_gestation1.prepare(db->getQryForTableGestation1dById(m_id_report));
-            if (qry_gestation1.exec()){
-                modelGestation1->setQuery(std::move(qry_gestation1));
-            }
-            m_report->dataManager()->addModel("table_gestation1", modelGestation1, false);
-
-            // completam sablonul
-            if (! m_report->loadFromFile(m_pathTemplatesDocs + "/Gestation1.lrxml")){
-
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation1.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentarea preview sau designer
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina1.pdf");
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina trim.I ...");
-        }
-
-        // gestation2
-        if (m_gestation2){
-
-            QSqlQuery qry_gestation2(dbConnection);
-            qry_gestation2.prepare(db->getQryForTableGestation2(m_id_report));
-            if (qry_gestation2.exec()){
-                modelGestation2->setQuery(std::move(qry_gestation2));
-            }
-            m_report->dataManager()->addModel("table_gestation2", modelGestation2, false);
-
-            int trim = -1;
-            QSqlQuery qry_supGestation2(dbConnection);
-            qry_supGestation2.prepare("SELECT trimestru FROM tableGestation2 WHERE id_reportEcho = ?;");
-            qry_supGestation2.addBindValue(m_id_report);
-            if (qry_supGestation2.exec() && qry_supGestation2.next()){
-                trim = qry_supGestation2.value(0).toInt();
-            } else {
-                trim = 2;
-            }
-
-            // sablonul
-            QString pathToFileGestation = (trim == 2) ? m_pathTemplatesDocs + "/Gestation2.lrxml" : m_pathTemplatesDocs + "/Gestation3.lrxml";
-            if (! m_report->loadFromFile(pathToFileGestation)){
-                // emitem ca este eroarea
-                emit errorExportDocs("Nu a fost gasit forma de tipar 'Gestation2.lrxml' !!!");
-
-                // eliberam memoria
-                model_img->deleteLater();
-                model_organization->deleteLater();
-                model_patient->deleteLater();
-                model_table->deleteLater();
-                modelOrgansInternal->deleteLater();
-                modelUrinarySystem->deleteLater();
-                modelProstate->deleteLater();
-                modelGynecology->deleteLater();
-                modelBreast->deleteLater();
-                modelThyroid->deleteLater();
-                modelGestationO->deleteLater();
-                modelGestation1->deleteLater();
-                modelGestation2->deleteLater();
-                m_report->deleteLater();
-
-                return;
-            }
-
-            // prezentam
-            m_report->setShowProgressDialog(true);
-            m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina2.pdf");
-            QString str_txt = (trim == 2) ? "trim.II" : "trim.III";
-            emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina " + str_txt);
-        }
+        emit setTextInfo("Exportul documentelor s-a finisat cu succes.");
     }
-
-    // eliberam memoria
-    model_img->deleteLater();
-    model_organization->deleteLater();
-    model_patient->deleteLater();
-    modelOrgansInternal->deleteLater();
-    modelUrinarySystem->deleteLater();
-    modelProstate->deleteLater();
-    modelGynecology->deleteLater();
-    modelBreast->deleteLater();
-    modelThyroid->deleteLater();
-    modelGestationO->deleteLater();
-    modelGestation1->deleteLater();
-    modelGestation2->deleteLater();
-    m_report->deleteLater();
-
-    emit setTextInfo("Exportul documentelor s-a finisat cu succes.");
 
 }
 

@@ -368,9 +368,20 @@ message($$LIBS)
 #----------------------------------------------------------------------------------------
 #------------------------------------- OPENSSL ------------------------------------------
 
-unix:!macx: LIBS += -L$$PWD/openssl/ -lssl -lcrypto
-win32: LIBS += -L$$PWD/openssl/ -llibssl -llibcrypto
 INCLUDEPATH += $$PWD/openssl
+
+# Linkare librării OpenSSL specifice platformelor
+win32 {
+    LIBS += -L$$PWD/openssl -llibssl -llibcrypto
+}
+
+unix:!macx {
+    LIBS += -L$$PWD/openssl -lssl -lcrypto
+}
+
+macx {
+    LIBS += -L$$PWD/openssl -lssl -lcrypto
+}
 
 #----------------------------------------------------------------------------------------
 #------------------------------------- ERROR WINDOWS ------------------------------------
