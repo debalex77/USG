@@ -48,6 +48,17 @@ public:
                               const int id_mainOrganization,
                               const int id_mainDoctor);
 
+    void setRequiredVariableForCatPatient(const int patient_id,
+                                          const QString patient_name,
+                                          const QString patient_fname,
+                                          const QString patient_idnp,
+                                          const QString patient_medicalPolicy,
+                                          const QDate patient_birthday,
+                                          const QString patient_address,
+                                          const QString patient_email,
+                                          const QString patient_telephone,
+                                          const QString patient_comment);
+
     void setRequiredVariableForExportDocuments(const bool thisMySQL,
                                                const int id_order,
                                                const int id_report,
@@ -73,16 +84,29 @@ public:
 public slots:
     void setDataConstants();
     void saveDataPatient();
+    void updateDataPatientInDB();
     void exportDocumentsToPDF();
 
 signals:
     void finishSetDataConstants(QVector<ConstantsData> data_constants);
+    void finishExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp);
+    void finishInsertDataCatPatient(const bool succes, const int patient_id);
+    void finishUpdateDataCatPatient(const bool succes);
     void finishExportDocumenstToPDF(QVector<ExportData> data_agentEmail);
     void errorExportDocs(QString textError);
     void setTextInfo(QString txtInfo);
 
 private:
+    // insertia, actualizarea datelor pacientului
+    bool patientExistsInDB(QSqlDatabase dbConnection);
+    bool insertDataPatientInDB(QSqlDatabase dbConnection);
+
+    // formarea modelului:
+    //   - logotip,stampila organizatiei
+    //   - stampila, semnatura doctorului
     void setModelImgForPrint();
+
+    // exportul documentelor
     void exportDocumentOrder(QSqlDatabase dbConnection);
     void exportDocumentReport(QSqlDatabase dbConnection);
     void exportDocumentImages(QSqlDatabase dbImageConnection);
@@ -93,6 +117,18 @@ private:
     int m_id_user = -1;
     int m_id_mainDoctor = -1;
     int m_id_mainOrganization = -1;
+
+    // save data patient
+    int cat_patient_id = -1;
+    QString cat_patient_name = nullptr;
+    QString cat_patient_fname = nullptr;
+    QString cat_patient_idnp = nullptr;
+    QDate   cat_patient_birthday;
+    QString cat_patient_address = nullptr;
+    QString cat_patient_email = nullptr;
+    QString cat_patient_medicalPolicy = nullptr;
+    QString cat_patient_telephone = nullptr;
+    QString cat_patient_comment = nullptr;
 
     // documents
     bool m_thisMySQL = false;

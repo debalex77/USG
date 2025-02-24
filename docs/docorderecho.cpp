@@ -605,6 +605,121 @@ void DocOrderEcho::indexChangedComboNurse(const int index)
 
 void DocOrderEcho::onClickNewPacient()
 {
+    onAddNewPatient();
+    // if (ui->comboPacient->currentText().isEmpty()){
+    //     QMessageBox::warning(this,
+    //                          tr("Verificarea datelor"),
+    //                          tr("Nu sunt determinate datele pacientului !!!"),
+    //                          QMessageBox::Ok);
+    //     return;
+    // }
+
+    // QString _name;
+    // QString _fName;
+    // QString details_error;
+    // if (! splitFullNamePacient(_name, _fName))
+    //     return;
+
+    // if (_name.isEmpty() || _fName.isEmpty())  // verificam daca variabile sunt completate
+    //     return;
+
+    // if (ui->checkBox->isChecked()){  // crearea pacientului nou
+
+    //     // 1. daca nu este IDNP - cautam pacientul dupa nume si prenume
+    //     // 2. daca este IDNP - cautam dupa name, prenume, si IDNP
+    //     // ... daca a fost gasit pacientul interogam
+    //     // ... daca nu a fost gasit introducem in BD
+
+    //     //*********************************************************
+    //     // verificam daca pacientul este in baza de date
+    //     QString _birthday;
+    //     if (ui->editIDNP->text().isEmpty()) {
+    //         if (existPatientByNameFName(_name, _fName, _birthday)){
+    //             QMessageBox msgBox;
+    //             msgBox.setIcon(QMessageBox::Question);
+    //             msgBox.setWindowTitle(tr("Varificarea datelor"));
+    //             msgBox.setText(tr("Pacientul(a) <b>%1, %2</b> exista in baza da date.<br>Doriți să continuați ?")
+    //                                .arg(_name + " " + _fName, QDate::fromString(_birthday, "yyyy-MM-dd").toString("dd.MM.yyyy")));
+    //             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    //             if (msgBox.exec() == QMessageBox::No){
+    //                 return;
+    //             }
+    //         }
+    //     } else {
+    //         if (existPatientByIDNP(_name, _fName, _birthday)){
+    //             QMessageBox msgBox;
+    //             msgBox.setIcon(QMessageBox::Question);
+    //             msgBox.setWindowTitle(tr("Varificarea datelor"));
+    //             msgBox.setText(tr("Pacientul(a) %1 exista in baza da date:"
+    //                               " - nume: %1\n"
+    //                               " - prenume: %2\n"
+    //                               " - anul nasterii: %3\n"
+    //                               " - IDNP: %4")
+    //                                .arg(_name, _fName, QDate::fromString(_birthday, "yyyy-MM-dd").toString("dd.MM.yyyy"), ui->editIDNP->text()));
+    //             msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
+    //             if (msgBox.exec() == QMessageBox::No){
+    //                 return;
+    //             }
+    //         }
+    //     }
+
+    //     //**********************************************************
+    //     // introducem datele pacientului in baza de date
+    //     int last_id = db->getLastIdForTable("pacients");
+    //     if (insertDataTablePacients(last_id, _name, _fName, details_error)){
+    //         popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> au fost introduse in baza de date cu succes.").arg(ui->comboPacient->currentText()));
+    //         popUp->show();
+
+    //         qInfo(logInfo()) << tr("Crearea: pacientul '%1' cu id='%2'.")
+    //                                 .arg(ui->comboPacient->currentText(), QString::number(last_id));
+
+    //         updateModelPacients();             // actualizam 'modelPacients'
+    //         setIdPacient(last_id + 1);         // setam 'id' pacientului
+    //         emit mCreateNewPacient();          // emitem signal pu conectarea din alte clase
+
+    //         if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
+    //             ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
+    //     } else {
+    //         QMessageBox msgBox;
+    //         msgBox.setWindowTitle(tr("Validarea datelor"));
+    //         msgBox.setIcon(QMessageBox::Warning);
+    //         msgBox.setText(tr("Datele pacientului %1 nu au fost salvate in baza de date."));
+    //         msgBox.setDetailedText((details_error.isEmpty()) ? tr("eroare indisponibila") : details_error);
+    //         msgBox.setStandardButtons(QMessageBox::Ok);
+    //         msgBox.setStyleSheet("QPushButton{width:120px;}");
+    //         msgBox.exec();
+    //     }
+
+    // } else {
+
+    //     if (updateDataTablePacients(_name, _fName, details_error)){
+    //         popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> au fost modificate cu succes.").arg(ui->comboPacient->currentText()));
+    //         popUp->show();
+
+    //         qInfo(logInfo()) << tr("Modificare: datele pacientului '%1' cu id='%2'.")
+    //                             .arg(ui->comboPacient->currentText(), QString::number(m_idPacient));
+
+    //         updateModelPacients();     // actualizam 'modelPacients'
+    //         setIdPacient(m_idPacient);
+    //         ui->editFilterPattern->setFocus(); // setam focus
+    //     } else {
+    //         QMessageBox msgBox;
+    //         msgBox.setWindowTitle(tr("Validarea datelor"));
+    //         msgBox.setIcon(QMessageBox::Warning);
+    //         msgBox.setText(tr("Datele pacientului %1 nu au fost modificate."));
+    //         msgBox.setDetailedText((details_error.isEmpty()) ? tr("eroare indisponibila") : details_error);
+    //         msgBox.setStandardButtons(QMessageBox::Ok);
+    //         msgBox.setStyleSheet("QPushButton{width:120px;}");
+    //         msgBox.exec();
+    //     }
+
+    // }
+
+}
+
+void DocOrderEcho::onAddNewPatient()
+{
+    // 📌 1. Verificam daca este completat combo pacientului
     if (ui->comboPacient->currentText().isEmpty()){
         QMessageBox::warning(this,
                              tr("Verificarea datelor"),
@@ -613,107 +728,110 @@ void DocOrderEcho::onClickNewPacient()
         return;
     }
 
-    QString _name;
-    QString _fName;
-    QString details_error;
-    if (! splitFullNamePacient(_name, _fName))
+    // 📌 2. Anuntam variabile necesare
+    QString patient_name;
+    QString patient_fName;
+
+    // 📌 3. Despartim nume, prenume
+    if (! splitFullNamePacient(patient_name, patient_fName))
         return;
 
-    if (_name.isEmpty() || _fName.isEmpty())  // verificam daca variabile sunt completate
+    // 📌 4. Verificam daca sunt completate variabile
+    if (patient_name.isEmpty() || patient_fName.isEmpty())
         return;
 
-    if (ui->checkBox->isChecked()){  // crearea pacientului nou
+    // 📌 5. Creăm thread-ul pentru trimiterea
+    QThread *thread = new QThread();
+    HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
 
-        // 1. daca nu este IDNP - cautam pacientul dupa nume si prenume
-        // 2. daca este IDNP - cautam dupa name, prenume, si IDNP
-        // ... daca a fost gasit pacientul interogam
-        // ... daca nu a fost gasit introducem in BD
+    // 📌 6 Mutăm `handler_functionThread` în thread-ul nou
+    handler_functionThread->moveToThread(thread);
 
-        //*********************************************************
-        // verificam daca pacientul este in baza de date
-        QString _birthday;
-        if (ui->editIDNP->text().isEmpty()) {
-            if (existPatientByNameFName(_name, _fName, _birthday)){
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Question);
-                msgBox.setWindowTitle(tr("Varificarea datelor"));
-                msgBox.setText(tr("Pacientul(a) <b>%1, %2</b> exista in baza da date.<br>Doriți să continuați ?")
-                                   .arg(_name + " " + _fName, QDate::fromString(_birthday, "yyyy-MM-dd").toString("dd.MM.yyyy")));
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                if (msgBox.exec() == QMessageBox::No){
-                    return;
-                }
-            }
-        } else {
-            if (existPatientByIDNP(_name, _fName, _birthday)){
-                QMessageBox msgBox;
-                msgBox.setIcon(QMessageBox::Question);
-                msgBox.setWindowTitle(tr("Varificarea datelor"));
-                msgBox.setText(tr("Pacientul(a) %1 exista in baza da date:"
-                                  " - nume: %1\n"
-                                  " - prenume: %2\n"
-                                  " - anul nasterii: %3\n"
-                                  " - IDNP: %4")
-                                   .arg(_name, _fName, QDate::fromString(_birthday, "yyyy-MM-dd").toString("dd.MM.yyyy"), ui->editIDNP->text()));
-                msgBox.setStandardButtons(QMessageBox::Yes | QMessageBox::No);
-                if (msgBox.exec() == QMessageBox::No){
-                    return;
-                }
-            }
-        }
+    // 📌 7. Setam variabile necesare
+    handler_functionThread->setRequiredVariableForCatPatient((m_idPacient == -1 && ui->checkBox->isChecked())
+                                                                 ? (db->getLastIdForTable("pacients") + 1) : m_idPacient,
+                                                             patient_name,
+                                                             patient_fName,
+                                                             ui->editIDNP->text(),
+                                                             ui->editPolicyMedical->text(),
+                                                             ui->dateEditBirthday->date(),
+                                                             ui->editAddress->text(),
+                                                             ui->editEmail->text(),
+                                                             ui->editPhone->text(),
+                                                             nullptr);
 
-        //**********************************************************
-        // introducem datele pacientului in baza de date
-        int last_id = db->getLastIdForTable("pacients");
-        if (insertDataTablePacients(last_id, _name, _fName, details_error)){
-            popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> au fost introduse in baza de date cu succes.").arg(ui->comboPacient->currentText()));
-            popUp->show();
+    // 📌 8. Inseram sau actualizam date a pacientului
+    if (ui->checkBox->isChecked() && m_idPacient == -1){
 
-            qInfo(logInfo()) << tr("Crearea: pacientul '%1' cu id='%2'.")
-                                    .arg(ui->comboPacient->currentText(), QString::number(last_id));
-
-            updateModelPacients();             // actualizam 'modelPacients'
-            setIdPacient(last_id + 1);         // setam 'id' pacientului
-            emit mCreateNewPacient();          // emitem signal pu conectarea din alte clase
-
-            if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
-                ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
-        } else {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Validarea datelor"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Datele pacientului %1 nu au fost salvate in baza de date."));
-            msgBox.setDetailedText((details_error.isEmpty()) ? tr("eroare indisponibila") : details_error);
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
-        }
+        connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::saveDataPatient);
+        connect(handler_functionThread, &HandlerFunctionThread::finishExistPatientInBD, thread, &QThread::quit);
+        connect(handler_functionThread, &HandlerFunctionThread::finishInsertDataCatPatient, thread, &QThread::quit);
+        connect(handler_functionThread, &HandlerFunctionThread::finishExistPatientInBD, this, &DocOrderEcho::handlerExistPatientInBD);
+        connect(handler_functionThread, &HandlerFunctionThread::finishInsertDataCatPatient, this, &DocOrderEcho::handlerAfterInsertingDataPatient);
+        connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
     } else {
 
-        if (updateDataTablePacients(_name, _fName, details_error)){
-            popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> au fost modificate cu succes.").arg(ui->comboPacient->currentText()));
-            popUp->show();
-
-            qInfo(logInfo()) << tr("Modificare: datele pacientului '%1' cu id='%2'.")
-                                .arg(ui->comboPacient->currentText(), QString::number(m_idPacient));
-
-            updateModelPacients();     // actualizam 'modelPacients'
-            setIdPacient(m_idPacient);
-            ui->editFilterPattern->setFocus(); // setam focus
-        } else {
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Validarea datelor"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Datele pacientului %1 nu au fost modificate."));
-            msgBox.setDetailedText((details_error.isEmpty()) ? tr("eroare indisponibila") : details_error);
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
-        }
-
+        connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::updateDataPatientInDB);
+        connect(handler_functionThread, &HandlerFunctionThread::finishUpdateDataCatPatient, thread, &QThread::quit);
+        connect(handler_functionThread, &HandlerFunctionThread::finishUpdateDataCatPatient, this, &DocOrderEcho::handlerAfterUpdatingDataPatient);
+        connect(thread, &QThread::finished, thread, &QObject::deleteLater);
     }
 
+    // 📌 9. Pornim thread-ul
+    thread->start();
+
+}
+
+void DocOrderEcho::handlerExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp)
+{
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setWindowTitle(tr("Varificarea datelor"));
+    msgBox.setText(tr("Pacientul(a) exista in baza da date:<br>%1")
+                       .arg(" - nume, prenume: " + patient_name + " " + patient_fname + "<br>"
+                       " - anul nasterii: " + patient_birthday.toString("dd.MM.yyyy") + "<br>"
+                       " - idnp: " + patient_idnp)
+                   );
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
+}
+
+void DocOrderEcho::handlerAfterInsertingDataPatient(const bool succes, const int patient_id)
+{
+    if (succes){
+        popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
+                               "au fost introduse in baza de date cu succes.")
+                                .arg(ui->comboPacient->currentText()));
+        popUp->show();
+
+        qInfo(logInfo()) << tr("Crearea: pacientul '%1' cu id='%2'.")
+                                .arg(ui->comboPacient->currentText(), QString::number(patient_id));
+
+        updateModelPacients();             // actualizam 'modelPacients'
+        setIdPacient(patient_id);         // setam 'id' pacientului
+        emit mCreateNewPacient();          // emitem signal pu conectarea din alte clase
+
+        if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
+            ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
+    }
+}
+
+void DocOrderEcho::handlerAfterUpdatingDataPatient(const bool succes)
+{
+    if (succes) {
+        popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
+                               "au fost modificate cu succes.")
+                                .arg(ui->comboPacient->currentText()));
+        popUp->show();
+
+        qInfo(logInfo()) << tr("Modificare: datele pacientului '%1' cu id='%2'.")
+                                .arg(ui->comboPacient->currentText(), QString::number(m_idPacient));
+
+        updateModelPacients();     // actualizam 'modelPacients'
+        setIdPacient(m_idPacient);
+        ui->editFilterPattern->setFocus(); // setam focus
+    }
 }
 
 void DocOrderEcho::onClikEditPacient()

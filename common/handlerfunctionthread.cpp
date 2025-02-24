@@ -25,6 +25,29 @@ void HandlerFunctionThread::setRequiredVariabile(const int id_mainUser,
     m_id_mainOrganization = id_mainOrganization;
 }
 
+void HandlerFunctionThread::setRequiredVariableForCatPatient(const int patient_id,
+                                                             const QString patient_name,
+                                                             const QString patient_fname,
+                                                             const QString patient_idnp,
+                                                             const QString patient_medicalPolicy,
+                                                             const QDate patient_birthday,
+                                                             const QString patient_address,
+                                                             const QString patient_email,
+                                                             const QString patient_telephone,
+                                                             const QString patient_comment)
+{
+    cat_patient_id = patient_id;
+    cat_patient_name = patient_name;
+    cat_patient_fname = patient_fname;
+    cat_patient_idnp = patient_idnp;
+    cat_patient_medicalPolicy = patient_medicalPolicy;
+    cat_patient_birthday = patient_birthday;
+    cat_patient_address = patient_address;
+    cat_patient_email = patient_email;
+    cat_patient_telephone = patient_telephone;
+    cat_patient_comment = patient_comment;
+}
+
 void HandlerFunctionThread::setRequiredVariableForExportDocuments(const bool thisMySQL,
                                                                   const int id_order,
                                                                   const int id_report,
@@ -170,30 +193,17 @@ void HandlerFunctionThread::saveDataPatient()
 
         { // -- bloc pentru QSqlQuery
 
-            // 1. daca este idnp - (principal)
-            QSqlQuery qry(dbConnection);
-            qry.prepare("SELECT birthday FROM pacients "
-                        "WHERE name = ? AND fName = ? AND IDNP = ?;");
-            qry.addBindValue("");
-            qry.addBindValue("");
-            qry.addBindValue("");
-            if (! qry.exec()) {
-
+            if (! patientExistsInDB(dbConnection)){
+                if (insertDataPatientInDB(dbConnection)){
+                    emit finishInsertDataCatPatient(true, cat_patient_id);
+                } else {
+                    emit finishInsertDataCatPatient(false, cat_patient_id);
+                }
             } else {
-
-            }
-
-            // 2. daca nu este idnp (cautarea dupa: nume, prenume, data nasterii)
-            QSqlQuery qry_no_idnp(dbConnection);
-            qry_no_idnp.prepare("SELECT telephone FROM pacients "
-                                "WHERE name = ? AND fName = ? AND birthday = ?;");
-            qry_no_idnp.addBindValue("");
-            qry_no_idnp.addBindValue("");
-            qry_no_idnp.addBindValue("");
-            if (! qry_no_idnp.exec()) {
-
-            } else {
-
+                emit finishExistPatientInBD(cat_patient_name,
+                                            cat_patient_fname,
+                                            cat_patient_birthday,
+                                            cat_patient_idnp);
             }
 
         } // -- distrugerea QSqlQuery
@@ -210,12 +220,64 @@ void HandlerFunctionThread::saveDataPatient()
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
 
+void HandlerFunctionThread::updateDataPatientInDB()
+{
+    const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
+
+    { // -- bloc pentru dbConnection
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+
+        { // -- bloc pentru QSqlQuery
+            QSqlQuery qry(dbConnection);
+            qry.prepare("UPDATE pacients SET "
+                        "  deletionMark  = ?,"
+                        "  IDNP          = ?,"
+                        "  name          = ?,"
+                        "  fName         = ?,"
+                        "  mName         = ?,"
+                        "  medicalPolicy = ?,"
+                        "  birthday      = ?,"
+                        "  address       = ?,"
+                        "  telephone     = ?,"
+                        "  email         = ?,"
+                        "  comment       = ? "
+                        "WHERE id = ?;");
+            qry.addBindValue(0);
+            qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);
+            qry.addBindValue(cat_patient_name);
+            qry.addBindValue(cat_patient_fname);
+            qry.addBindValue(QVariant());
+            qry.addBindValue((cat_patient_medicalPolicy.isEmpty()) ? QVariant() : cat_patient_medicalPolicy);
+            qry.addBindValue(cat_patient_birthday); //???
+            qry.addBindValue((cat_patient_address.isEmpty()) ? QVariant() : cat_patient_address);
+            qry.addBindValue((cat_patient_telephone.isEmpty()) ? QVariant() : cat_patient_telephone);
+            qry.addBindValue((cat_patient_email.isEmpty()) ? QVariant() : cat_patient_email);
+            qry.addBindValue((cat_patient_comment.isEmpty()) ? QVariant() : cat_patient_comment);
+            qry.addBindValue(cat_patient_id);
+            if (qry.exec()){
+                emit finishUpdateDataCatPatient(true);
+            }
+        } // -- distrugerea QSqlQuery
+
+        if (dbConnection.isOpen()) {
+            dbConnection.close();
+        }
+    } // -- distrugerea obiectului dbConnection
+
+    db->removeDatabaseThread(threadConnectionName);
+
+    emit finishUpdateDataCatPatient(true);
+
+    QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
+}
+
 void HandlerFunctionThread::exportDocumentsToPDF()
 {
     // 📌 1 Generam denumirile conexiunilor in afara blocului
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
     const QString threadImageConnectionName = QString("connection_image_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
+    // 💡
     /*--------------------------------------------------------
      * cream un bloc pentru distrugerea obectelor:
      *  - dbConnection
@@ -238,7 +300,7 @@ void HandlerFunctionThread::exportDocumentsToPDF()
         if (dbImageConnection.isOpen()) {
             dbImageConnection.close();
         }
-    } // la nivel acesta se distruge: dbConnection & dbImageConnection
+    } // 💡 la nivel acesta se distruge: dbConnection & dbImageConnection
 
     db->removeDatabaseThread(threadConnectionName);
     db->removeDatabaseThread(threadImageConnectionName);
@@ -247,6 +309,62 @@ void HandlerFunctionThread::exportDocumentsToPDF()
     emit finishExportDocumenstToPDF(data_agentEmail);
 
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
+}
+
+bool HandlerFunctionThread::patientExistsInDB(QSqlDatabase dbConnection)
+{
+    QSqlQuery qry(dbConnection);
+
+    if (! cat_patient_idnp.isEmpty()) {  // 1. daca este idnp - (principal)
+
+        qry.prepare("SELECT 1 FROM pacients "
+                    "WHERE IDNP = ? LIMIT 1;");
+        qry.addBindValue(cat_patient_idnp);
+
+    } else {  // 2. daca nu este idnp (cautarea dupa: nume, prenume, data nasterii)
+
+        QSqlQuery qry_no_idnp(dbConnection);
+        qry_no_idnp.prepare("SELECT 1 FROM pacients "
+                            "WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1;");
+        qry_no_idnp.addBindValue(cat_patient_name);
+        qry_no_idnp.addBindValue(cat_patient_fname);
+        qry_no_idnp.addBindValue(cat_patient_birthday);
+
+    }
+
+    return qry.exec() && qry.next();
+}
+
+bool HandlerFunctionThread::insertDataPatientInDB(QSqlDatabase dbConnection)
+{
+    QSqlQuery qry(dbConnection);
+    qry.prepare("INSERT INTO pacients ("
+                "  id,"
+                "  deletionMark,"
+                "  IDNP,"
+                "  name,"
+                "  fName,"
+                "  mName,"
+                "  medicalPolicy,"
+                "  birthday,"
+                "  address,"
+                "  telephone,"
+                "  email,"
+                "  comment) "
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    qry.addBindValue(cat_patient_id);
+    qry.addBindValue(0);
+    qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);
+    qry.addBindValue(cat_patient_name);
+    qry.addBindValue(cat_patient_fname);
+    qry.addBindValue(QVariant());
+    qry.addBindValue((cat_patient_medicalPolicy.isEmpty()) ? QVariant() : cat_patient_medicalPolicy);
+    qry.addBindValue(cat_patient_birthday); //???
+    qry.addBindValue((cat_patient_address.isEmpty()) ? QVariant() : cat_patient_address);
+    qry.addBindValue((cat_patient_telephone.isEmpty()) ? QVariant() : cat_patient_telephone);
+    qry.addBindValue((cat_patient_email.isEmpty()) ? QVariant() : cat_patient_email);
+    qry.addBindValue((cat_patient_comment.isEmpty()) ? QVariant() : cat_patient_comment);
+    return qry.exec();
 }
 
 // **********************************************************************************
