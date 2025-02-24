@@ -150,7 +150,6 @@ private slots:
     void indexChangedComboNurse(const int index);
 
     void onClickNewPacient();   // slot-urile pu crearea, editarea
-    void onAddNewPatient();
     void handlerExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp);
     void handlerAfterInsertingDataPatient(const bool succes, const int patient_id);
     void handlerAfterUpdatingDataPatient(const bool succes);

@@ -215,8 +215,6 @@ void HandlerFunctionThread::saveDataPatient()
 
     db->removeDatabaseThread(threadConnectionName);
 
-    emit finishSetDataConstants(data_constants);
-
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
 
