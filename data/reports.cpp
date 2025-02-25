@@ -15,8 +15,10 @@ Reports::Reports(QWidget *parent) :
 
     m_report = new LimeReport::ReportEngine(this);
     m_preview = m_report->createPreviewWidget();
-    m_preview->setPreviewPageBackgroundColor(QColor(179, 179, 179));
-
+    if (globals().isSystemThemeDark)
+        m_preview->setPreviewPageBackgroundColor(QColor(179, 179, 179));
+    else
+        m_preview->setPreviewPageBackgroundColor(QColor(30, 30, 30));
     getNameReportsFromDorectory(); // setam denumirea rapoartelor
 
     QString strQryOrganizations = "SELECT id,name FROM organizations WHERE deletionMark = 0;";    // solicitarea
@@ -66,6 +68,10 @@ Reports::Reports(QWidget *parent) :
     ui->frame_preview->resize(616, ui->frame_preview->height());
     ui->comboTypeReport->resize(260, ui->comboTypeReport->height());
 
+    if (globals().isSystemThemeDark) {
+        ui->frame_filter->setObjectName("customFrame");
+        ui->frame_preview->setObjectName("customFrame");
+    }
 }
 
 Reports::~Reports()
@@ -757,6 +763,11 @@ void Reports::generateReport()
         ui->comboTypeReport->showPopup();
         return;
     }
+
+    if (globals().isSystemThemeDark)
+        m_report->setPreviewPageBackgroundColor(QColor(179, 179, 179));
+    else
+        m_report->setPreviewPageBackgroundColor(QColor(30, 30, 30));
 
     if (ui->frame_filter->isVisible())
         ui->frame_filter->setVisible(false);

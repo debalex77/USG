@@ -45,6 +45,9 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     ui->frame->setStyle(style_fusion);
 #endif
 
+    if (globals().isSystemThemeDark)
+        ui->frame->setObjectName("customFrame");
+
 }
 
 DatabaseSelection::~DatabaseSelection()

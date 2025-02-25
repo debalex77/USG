@@ -22,6 +22,9 @@ CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     connect(this, &CatForSqlTableModel::typeCatalogChanged, this, &CatForSqlTableModel::slot_typeCatalogChanged);
     connect(this, &CatForSqlTableModel::typeFormChanged, this, &CatForSqlTableModel::slot_typeFormChanged);
     connect(model, &QAbstractItemModel::dataChanged, this, &CatForSqlTableModel::onDataChangedItemModel, Qt::QueuedConnection);
+
+    if (globals().isSystemThemeDark)
+        ui->frameBtn->setObjectName("customFrame");
 }
 
 CatForSqlTableModel::~CatForSqlTableModel()

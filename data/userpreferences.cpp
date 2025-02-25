@@ -48,6 +48,22 @@ UserPreferences::UserPreferences(QWidget *parent) :
     ui->frame->setStyle(style_fusion);
     ui->frame_2->setStyle(style_fusion);
 #endif
+
+    if (globals().isSystemThemeDark){
+        ui->frame->setStyleSheet(
+            "background-color: #2b2b2b;"
+            "border: 1px solid #555;"
+            "border-radius: 5px;"
+            );
+        ui->frame_2->setObjectName("customFrame");
+        ui->frame_2->setStyleSheet("QFrame#customFrame "
+                                       "{ "
+                                       "  background-color: #2b2b2b; "
+                                       "  border: 1px solid #555; /* Linie subțire gri */ "
+                                       "  border-radius: 5px; "
+                                       "}");
+    }
+
 }
 
 UserPreferences::~UserPreferences()

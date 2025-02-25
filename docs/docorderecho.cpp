@@ -128,6 +128,9 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
 
     initFooterDoc();   // setam autorul + imaginea + Ok, Writer, Revocare
     initConnections(); // initierea conectarilor btn
+
+    if (globals().isSystemThemeDark)
+        ui->frame_table->setObjectName("customFrame");
 }
 
 DocOrderEcho::~DocOrderEcho()

@@ -72,6 +72,8 @@ DocPricing::DocPricing(QWidget *parent) :
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &DocPricing::onWritingData);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &DocPricing::onClose);
 
+    if (globals().isSystemThemeDark)
+        ui->frame_table->setObjectName("customFrame");
 }
 
 DocPricing::~DocPricing()

@@ -146,6 +146,21 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
     move(x, y);
 
     ui->frame_table->resize(900, ui->frame_btn->height());
+
+    if (globals().isSystemThemeDark){
+        ui->frame_btn->setStyleSheet(
+            "background-color: #2b2b2b;"
+            "border: 1px solid #555;"
+            "border-radius: 5px;"
+        );
+        ui->frame_table->setObjectName("customFrame");
+        ui->frame_table->setStyleSheet("QFrame#customFrame "
+                                       "{ "
+                                       "  background-color: #2b2b2b; "
+                                       "  border: 1px solid #555; /* Linie subțire gri */ "
+                                       "  border-radius: 5px; "
+                                       "}");
+    }
 }
 
 DocReportEcho::~DocReportEcho()

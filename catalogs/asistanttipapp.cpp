@@ -27,6 +27,8 @@ AsistantTipApp::AsistantTipApp(QWidget *parent)
     ui->tip_text->setStyleSheet("font: 14px 'Cantarell';");
     ui->frame->setStyle(style_fusion);
 #endif
+    if (globals().isSystemThemeDark)
+        ui->frame->setObjectName("customFrame");
 
 }
 

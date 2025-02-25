@@ -222,7 +222,17 @@ QCommandLinkButton:pressed {
     background-color: #4b4b4b;
     color: #ffffff;
 }
-
+/* -------------------------- QFrame ---------------------- */
+QFrame#customFrame {
+    background-color: #2b2b2b;
+    border: 1px solid #555; /* Linie subțire gri */
+    border-radius: 5px;
+}
+/* -------------------------- QSplitter ---------------------- */
+QSplitter {
+    background-color: #2b2b2b;
+    border: none;
+}
 /* -------------------------- QCheckBox ---------------------- */
 QCheckBox {
     color: white;
@@ -293,4 +303,30 @@ QListWidget::indicator:checked:hover {
 
 QListWidget::indicator:unchecked:hover {
     background-color: #3b3b3b;
+}
+/* -------------------------- QTableView ---------------------- */
+QTableView {
+    background-color: #1e1e1e;
+    gridline-color: #555; /* Culoarea liniilor dintre coloane */
+    alternate-background-color: #2b2b2b; /* Alternanță la rânduri */
+    border: 1px solid #444;
+}
+
+QTableView::item {
+    border-right: 1px solid rgba(255, 255, 255, 0.1); /* Linie subtilă */
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+/* -------------------------- QToolTip ---------------------- */
+QToolTip {
+    background-color: #4b4b4b;
+    color: #ffffff;
+    border: 1px solid #555;
+    padding: 5px;
+    border-radius: 8px;
+}
+/* -------------------------- QRadioButton ---------------------- */
+QRadioButton {
+    color: #ffffff;
+    background-color: transparent;
+    spacing: 5px;
 }

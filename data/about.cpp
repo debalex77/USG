@@ -67,6 +67,8 @@ About::About(QWidget *parent) :
 
     connect(ui->pushButton, &QAbstractButton::clicked, this, &About::close);
 
+    if (globals().isSystemThemeDark)
+        ui->frame->setObjectName("customFrame");
 }
 
 About::~About()
