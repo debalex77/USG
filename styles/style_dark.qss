@@ -258,3 +258,39 @@ QCheckBox::indicator:checked:hover {
 QCheckBox::indicator:unchecked:hover {
     background-color: #3b3b3b;
 }
+
+/* -------------------------- QListWidget ---------------------- */
+QListWidget {
+    color: white;
+    spacing: 5px;
+}
+QListWidget::focus {
+    border: 1px solid #2d5a6b;
+    border-radius: 4px;
+}
+QListWidget::indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 3px;
+    background-color: #2b2b2b; /* Fundal gri-închis */
+    border: 1px solid #666;
+}
+
+QListWidget::indicator:hover {
+    background-color: #3b3b3b; /* Gri mediu la hover */
+    border: 1px solid #888;
+}
+
+QListWidget::indicator:checked {
+    background-color: #2b2b2b; /* Fundal rămâne gri-închis */
+    border: 1px solid #aaa;
+    image: url(:/img/check-mark.png); /* Imagine albă pentru bifă */
+}
+
+QListWidget::indicator:checked:hover {
+    background-color: #3b3b3b; /* Gri puțin mai deschis la hover */
+}
+
+QListWidget::indicator:unchecked:hover {
+    background-color: #3b3b3b;
+}

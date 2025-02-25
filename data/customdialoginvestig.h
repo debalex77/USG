@@ -10,6 +10,7 @@
 #include <QVBoxLayout>
 #include <QGroupBox>
 #include <QDebug>
+#include <data/globals.h>
 
 class CustomDialogInvestig : public QDialog
 {

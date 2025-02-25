@@ -203,5 +203,6 @@
         <file>img/send_email.png</file>
         <file>img/Spinner200px-200px.gif</file>
         <file>img/check-mark.png</file>
+        <file>img/unchecked_dark.png</file>
     </qresource>
 </RCC>

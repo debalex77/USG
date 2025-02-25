@@ -130,9 +130,17 @@ void CustomDialogInvestig::createLayout()
 {
     QToolButton *btnCheck          = new QToolButton(this);
     QToolButton *btnUncheck        = new QToolButton(this);
-    btnCheck->setIcon(QIcon(":/img/checked_checkbox.png"));
+    if (globals().isSystemThemeDark){
+        btnCheck->setIcon(QIcon(":/img/check-mark.png"));
+    } else {
+        btnCheck->setIcon(QIcon(":/img/checked_checkbox.png"));
+    }
     btnCheck->setToolButtonStyle(Qt::ToolButtonIconOnly);
-    btnUncheck->setIcon(QIcon(":/img/unchecked_checkbox.png"));
+    if (globals().isSystemThemeDark){
+        btnUncheck->setIcon(QIcon(":/img/unchecked_dark.png"));
+    } else {
+        btnUncheck->setIcon(QIcon(":/img/unchecked_checkbox.png"));
+    }
     btnUncheck->setToolButtonStyle(Qt::ToolButtonIconOnly);
 
     QSpacerItem *itemSpacer = new QSpacerItem(0,0, QSizePolicy::Expanding, QSizePolicy::Preferred);
