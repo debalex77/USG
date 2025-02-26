@@ -4366,10 +4366,16 @@ QToolButton:pressed
                   <item row="1" column="3">
                    <widget class="QLineEdit" name="thyroid_right_volum">
                     <property name="sizePolicy">
-                     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                     <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>84</width>
+                      <height>0</height>
+                     </size>
                     </property>
                     <property name="maximumSize">
                      <size>
@@ -4447,6 +4453,18 @@ QToolButton:pressed
                       <horstretch>0</horstretch>
                       <verstretch>0</verstretch>
                      </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                     <size>
+                      <width>84</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>84</width>
+                      <height>16777215</height>
+                     </size>
                     </property>
                     <property name="font">
                      <font>

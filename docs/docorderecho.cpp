@@ -129,8 +129,9 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     initFooterDoc();   // setam autorul + imaginea + Ok, Writer, Revocare
     initConnections(); // initierea conectarilor btn
 
-    if (globals().isSystemThemeDark)
+    if (globals().isSystemThemeDark) {
         ui->frame_table->setObjectName("customFrame");
+    }
 }
 
 DocOrderEcho::~DocOrderEcho()
@@ -206,9 +207,9 @@ void DocOrderEcho::onDateTimeChanged()
 void DocOrderEcho::changeIconForItemToolBox(const int _index)
 {
     if (globals().isSystemThemeDark) {
-        ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
-        ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
-        ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/down-arrow_tool_box_blue.png") : QIcon("://img/right-arrow_tool_box_blue.png"));
+        ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/arrow_down_dark.png") : QIcon(":/img/arrow_up_dark.png"));
+        ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/arrow_down_dark.png") : QIcon(":/img/arrow_up_dark.png"));
+        ui->toolBox->setItemIcon(2, (_index == 2) ? QIcon(":/img/arrow_down_dark.png") : QIcon(":/img/arrow_up_dark.png"));
     } else {
         ui->toolBox->setItemIcon(0, (_index == 0) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
         ui->toolBox->setItemIcon(1, (_index == 1) ? QIcon(":/img/down-arrow_tool_box.png") : QIcon("://img/right-arrow_tool_box.png"));
@@ -363,6 +364,8 @@ void DocOrderEcho::slot_IdChanged()
     connectionsToIndexChangedCombobox(); // activarea conectarii la modificarea indexului combobox-urilor
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::dataWasModified);
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::onDateTimeChanged);
+
+    changeIconForItemToolBox(box_patient);
 }
 
 void DocOrderEcho::slot_IdOrganizationChanged()
@@ -1903,7 +1906,7 @@ QMap<QString, QString> DocOrderEcho::getItemsByTablePacient()
 void DocOrderEcho::setImageForDocPrint()
 {
     //------------------------------------------------------------------------------------------------------
-    // ----- logotipul
+    // ----- 1. logotipul
     QPixmap pix_logo = QPixmap();
     QStandardItem* img_item_logo = new QStandardItem();
     QString name_key_logo = "logo_" + globals().nameUserApp;
@@ -1922,7 +1925,7 @@ void DocOrderEcho::setImageForDocPrint()
     }
 
     //------------------------------------------------------------------------------------------------------
-    // ----- stampila organizatiei
+    // ----- 2. stampila organizatiei
     QPixmap pix_stamp_organization = QPixmap();
     QStandardItem* img_item_stamp_organization = new QStandardItem();
     QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
@@ -1941,7 +1944,7 @@ void DocOrderEcho::setImageForDocPrint()
     }
 
     //------------------------------------------------------------------------------------------------------
-    // ----- stampila doctorului
+    // ----- 3. stampila doctorului
     QPixmap pix_stamp_doctor = QPixmap();
     QStandardItem* img_item_stamp_doctor = new QStandardItem();
     QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
@@ -1960,7 +1963,7 @@ void DocOrderEcho::setImageForDocPrint()
     }
 
     //------------------------------------------------------------------------------------------------------
-    // ----- semnatura doctorului
+    // ----- 4. semnatura doctorului
     QPixmap pix_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
     QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;

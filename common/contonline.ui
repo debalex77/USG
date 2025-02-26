@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource.qrc">
+    <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="2" colspan="3">
     <widget class="QComboBox" name="comboOrganizations"/>
@@ -189,6 +193,19 @@
    <header>customs/lineeditpassword.h</header>
   </customwidget>
  </customwidgets>
+ <tabstops>
+  <tabstop>comboOrganizations</tabstop>
+  <tabstop>txt_email</tabstop>
+  <tabstop>txt_smtp_server</tabstop>
+  <tabstop>txt_port</tabstop>
+  <tabstop>txt_user</tabstop>
+  <tabstop>txt_password</tabstop>
+  <tabstop>btnConnection</tabstop>
+  <tabstop>txt_timeAnswerServer</tabstop>
+  <tabstop>btnOK</tabstop>
+  <tabstop>btnWrite</tabstop>
+  <tabstop>btnClose</tabstop>
+ </tabstops>
  <resources>
   <include location="../resource.qrc"/>
  </resources>

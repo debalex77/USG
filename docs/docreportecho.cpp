@@ -160,6 +160,27 @@ DocReportEcho::DocReportEcho(QWidget *parent) :
                                        "  border: 1px solid #555; /* Linie subțire gri */ "
                                        "  border-radius: 5px; "
                                        "}");
+        ui->frame_3->setObjectName("customFrame");
+        ui->frame_3->setStyleSheet("QFrame#customFrame "
+                                       "{ "
+                                       "  background-color: #2b2b2b; "
+                                       "  border: 1px solid #555; /* Linie subțire gri */ "
+                                       "  border-radius: 5px; "
+                                       "}");
+        ui->frame_4->setObjectName("customFrame");
+        ui->frame_4->setStyleSheet("QFrame#customFrame "
+                                       "{ "
+                                       "  background-color: #2b2b2b; "
+                                       "  border: 1px solid #555; /* Linie subțire gri */ "
+                                       "  border-radius: 5px; "
+                                       "}");
+        ui->frameVideo->setObjectName("customFrame");
+        ui->frameVideo->setStyleSheet("QFrame#customFrame "
+                                       "{ "
+                                       "  background-color: #2b2b2b; "
+                                       "  border: 1px solid #555; /* Linie subțire gri */ "
+                                       "  border-radius: 5px; "
+                                       "}");
     }
 }
 
@@ -2982,6 +3003,7 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
     static int exist_logo = 0;
     static int exist_stamp_doctor = 0;
     static int exist_signature_doctor = 0;
+    static int exist_stam_organization = 0;
 
     // *************************************************************************************
     // alocam memoria
@@ -2990,10 +3012,11 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 
     // *************************************************************************************
     // titlu raportului
-    m_report->setPreviewWindowTitle(tr("Raport ecografic nr.") + ui->editDocNumber->text() + tr(" din ") + ui->editDocDate->dateTime().toString("dd.MM.yyyy hh:mm:ss") + tr(" (printare)"));
+    m_report->setPreviewWindowTitle(tr("Raport ecografic nr.") + ui->editDocNumber->text() + tr(" din ") +
+                                    ui->editDocDate->dateTime().toString("dd.MM.yyyy hh:mm:ss") + tr(" (printare)"));
 
-    // *************************************************************************************
-    // logotipul
+    //------------------------------------------------------------------------------------------------------
+    // ----- 1. logotipul
     QPixmap pix_logo = QPixmap();
     QStandardItem *img_item_logo = new QStandardItem();
     QString name_key_logo = "logo_" + globals().nameUserApp;
@@ -3012,7 +3035,26 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
     }
 
     //------------------------------------------------------------------------------------------------------
-    // ----- stampila doctorului
+    // ----- 2. stampila organizatiei
+    QPixmap pix_stamp_organization = QPixmap();
+    QStandardItem* img_item_stamp_organization = new QStandardItem();
+    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
+
+    // --- verifiam cache
+    if (! globals().cache_img.find(name_key_stamp_organization, &pix_stamp_organization)) {
+        if (! globals().main_stamp_organization.isEmpty() && pix_stamp_organization.loadFromData(globals().main_stamp_organization)){
+            globals().cache_img.insert(name_key_stamp_organization, pix_stamp_organization);
+        }
+    }
+
+    // --- setam stampila
+    if (! pix_stamp_organization.isNull()) {
+        img_item_stamp_organization->setData(pix_stamp_organization.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+        exist_stam_organization = 1;
+    }
+
+    //------------------------------------------------------------------------------------------------------
+    // ----- 3. stampila doctorului
     QPixmap pix_stamp_doctor = QPixmap();
     QStandardItem* img_item_stamp_doctor = new QStandardItem();
     QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
@@ -3031,7 +3073,7 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
     }
 
     //------------------------------------------------------------------------------------------------------
-    // ----- semnatura doctorului
+    // ----- 4. semnatura doctorului
     QPixmap pix_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
     QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
@@ -3053,6 +3095,7 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
     // setam imaginile in model
     QList<QStandardItem *> items_img;
     items_img.append(img_item_logo);
+    items_img.append(img_item_stamp_organization);
     items_img.append(img_item_stamp_doctor);
     items_img.append(img_item_signature);
 
@@ -3076,6 +3119,8 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 
     m_report->dataManager()->clearUserVariables();
     m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
+    m_report->dataManager()->setReportVariable("v_export_pdf", (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF) ? 1 : 0);
+    m_report->dataManager()->setReportVariable("v_exist_stam_organization", exist_stam_organization);
     m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
     m_report->dataManager()->setReportVariable("v_exist_signature_doctor", exist_signature_doctor);
     m_report->dataManager()->setReportVariable("unitMeasure", (globals().unitMeasure == "milimetru") ? "mm" : "cm");
@@ -3449,6 +3494,9 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 
     if (m_gestation0){
 
+        m_report->dataManager()->setReportVariable("v_lmp", ui->gestation0_LMP->date().toString("dd.MM.yyyy"));
+        m_report->dataManager()->setReportVariable("v_probable_date_birth", ui->gestation0_probableDateBirth->date().toString("dd.MM.yyyy"));
+
         // extragem datele si introducem in model + setam variabile
         m_report->dataManager()->setReportVariable("ivestigation_view", group_btn_gestation0->checkedId());
         modelGestationO->setQuery(db->getQryForTableGestation0dById(m_id));
@@ -3500,6 +3548,9 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 
     if (m_gestation1){
 
+        m_report->dataManager()->setReportVariable("v_lmp", ui->gestation1_LMP->date().toString("dd.MM.yyyy"));
+        m_report->dataManager()->setReportVariable("v_probable_date_birth", ui->gestation1_probableDateBirth->date().toString("dd.MM.yyyy"));
+
         // extragem datele si introducem in model + setam variabile
         m_report->dataManager()->setReportVariable("ivestigation_view", group_btn_gestation1->checkedId());
         modelGestation1->setQuery(db->getQryForTableGestation1dById(m_id));
@@ -3550,6 +3601,10 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
     }
 
     if (m_gestation2){
+
+        m_report->dataManager()->setReportVariable("v_lmp", ui->gestation2_dateMenstruation->date().toString("dd.MM.yyyy"));
+        m_report->dataManager()->setReportVariable("v_probable_date_birth", ui->gestation2_probabilDateBirth->date().toString("dd.MM.yyyy"));
+
         modelGestation2->setQuery(db->getQryForTableGestation2(m_id));
         m_report->dataManager()->addModel("table_gestation2", modelGestation2, false);
 
@@ -3602,11 +3657,8 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
 
     // *************************************************************************************
     // elibiram memoria
-    delete img_item_logo;
-    delete img_item_signature;
-    delete img_item_stamp_doctor;
-    delete model_img;
-    delete modelPatient_print;
+    model_img->deleteLater();
+    modelPatient_print->deleteLater();
     m_report->deleteLater();
 }
 

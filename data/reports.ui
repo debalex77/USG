@@ -50,26 +50,8 @@
       <property name="bottomMargin">
        <number>4</number>
       </property>
-      <item row="0" column="5">
-       <widget class="Line" name="line_2">
-        <property name="orientation">
-         <enum>Qt::Vertical</enum>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="4">
-       <widget class="QToolButton" name="btnZoomOut">
-        <property name="text">
-         <string>...</string>
-        </property>
-        <property name="icon">
-         <iconset resource="../resource.qrc">
-          <normaloff>:/images/ZoomOut.png</normaloff>:/images/ZoomOut.png</iconset>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="10">
-       <widget class="QToolButton" name="btnOpenDesigner">
+      <item row="0" column="11">
+       <widget class="QToolButton" name="btnPrintReport">
         <property name="minimumSize">
          <size>
           <width>112</width>
@@ -77,34 +59,32 @@
          </size>
         </property>
         <property name="text">
-         <string>Designer</string>
+         <string>Printează</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/images/design.png</normaloff>:/images/design.png</iconset>
+          <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
-      <item row="0" column="9">
-       <widget class="Line" name="line_3">
+      <item row="0" column="15">
+       <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Horizontal</enum>
         </property>
-       </widget>
-      </item>
-      <item row="0" column="6">
-       <widget class="QToolButton" name="btnBackPage">
-        <property name="text">
-         <string>...</string>
+        <property name="sizeType">
+         <enum>QSizePolicy::Expanding</enum>
         </property>
-        <property name="icon">
-         <iconset resource="../resource.qrc">
-          <normaloff>:/images/Prev.png</normaloff>:/images/Prev.png</iconset>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>44</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
+       </spacer>
       </item>
       <item row="0" column="12">
        <widget class="QToolButton" name="btnExportPdf">
@@ -126,7 +106,67 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="13">
+      <item row="0" column="9">
+       <widget class="Line" name="line_3">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="16">
+       <widget class="QLabel" name="label_4">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="font">
+         <font>
+          <family>Cantarell</family>
+          <bold>true</bold>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 255);</string>
+        </property>
+        <property name="text">
+         <string>Tipul raportului</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="4">
+       <widget class="QToolButton" name="btnZoomOut">
+        <property name="text">
+         <string>...</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/images/ZoomOut.png</normaloff>:/images/ZoomOut.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="0">
+       <widget class="QToolButton" name="btnGenerateReport">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Formează</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/right-arrow.png</normaloff>:/img/right-arrow.png</iconset>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="14">
        <widget class="QToolButton" name="btnSettingsReport">
         <property name="minimumSize">
          <size>
@@ -146,25 +186,26 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="11">
-       <widget class="QToolButton" name="btnPrintReport">
-        <property name="minimumSize">
-         <size>
-          <width>112</width>
-          <height>21</height>
-         </size>
+      <item row="0" column="5">
+       <widget class="Line" name="line_2">
+        <property name="orientation">
+         <enum>Qt::Vertical</enum>
         </property>
+       </widget>
+      </item>
+      <item row="0" column="2">
+       <widget class="QToolButton" name="btnZoomIn">
         <property name="text">
-         <string>Printează</string>
+         <string>...</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
-        </property>
-        <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+          <normaloff>:/images/ZoomIn.png</normaloff>:/images/ZoomIn.png</iconset>
         </property>
        </widget>
+      </item>
+      <item row="0" column="7">
+       <widget class="QSpinBox" name="pageNavigator"/>
       </item>
       <item row="0" column="3">
        <widget class="QComboBox" name="comboScalePercent">
@@ -203,8 +244,8 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="0">
-       <widget class="QToolButton" name="btnGenerateReport">
+      <item row="0" column="10">
+       <widget class="QToolButton" name="btnOpenDesigner">
         <property name="minimumSize">
          <size>
           <width>112</width>
@@ -212,70 +253,29 @@
          </size>
         </property>
         <property name="text">
-         <string>Formează</string>
+         <string>Designer</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/img/right-arrow.png</normaloff>:/img/right-arrow.png</iconset>
+          <normaloff>:/images/design.png</normaloff>:/images/design.png</iconset>
         </property>
         <property name="toolButtonStyle">
          <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
-      <item row="0" column="15">
-       <widget class="QLabel" name="label_4">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Fixed" vsizetype="Preferred">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="font">
-         <font>
-          <family>Cantarell</family>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 255);</string>
-        </property>
-        <property name="text">
-         <string>Tipul raportului</string>
-        </property>
-       </widget>
-      </item>
-      <item row="0" column="14">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>44</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="0" column="2">
-       <widget class="QToolButton" name="btnZoomIn">
+      <item row="0" column="8">
+       <widget class="QToolButton" name="btnNextPage">
         <property name="text">
          <string>...</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/images/ZoomIn.png</normaloff>:/images/ZoomIn.png</iconset>
+          <normaloff>:/images/Next.png</normaloff>:/images/Next.png</iconset>
         </property>
        </widget>
       </item>
-      <item row="0" column="7">
-       <widget class="QSpinBox" name="pageNavigator"/>
-      </item>
-      <item row="0" column="16">
+      <item row="0" column="17">
        <widget class="QComboBox" name="comboTypeReport">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
@@ -310,14 +310,34 @@
         </property>
        </widget>
       </item>
-      <item row="0" column="8">
-       <widget class="QToolButton" name="btnNextPage">
+      <item row="0" column="6">
+       <widget class="QToolButton" name="btnBackPage">
         <property name="text">
          <string>...</string>
         </property>
         <property name="icon">
          <iconset resource="../resource.qrc">
-          <normaloff>:/images/Next.png</normaloff>:/images/Next.png</iconset>
+          <normaloff>:/images/Prev.png</normaloff>:/images/Prev.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="13">
+       <widget class="QToolButton" name="btnSendEmail">
+        <property name="minimumSize">
+         <size>
+          <width>112</width>
+          <height>21</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>E-mail</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../resource.qrc">
+          <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
+        </property>
+        <property name="toolButtonStyle">
+         <enum>Qt::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
@@ -365,7 +385,7 @@
         <widget class="QDateEdit" name="dateEnd">
          <property name="dateTime">
           <datetime>
-           <hour>17</hour>
+           <hour>13</hour>
            <minute>59</minute>
            <second>59</second>
            <year>2000</year>

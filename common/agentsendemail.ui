@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>Dialog</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="../resource.qrc">
+    <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
+  </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="1" column="0">
     <widget class="QLabel" name="label_2">
@@ -139,6 +143,25 @@
    </item>
   </layout>
  </widget>
+ <tabstops>
+  <tabstop>txt_from</tabstop>
+  <tabstop>txt_to</tabstop>
+  <tabstop>txt_subiect</tabstop>
+  <tabstop>txt_body</tabstop>
+  <tabstop>tabWidget</tabstop>
+  <tabstop>attached_file1</tabstop>
+  <tabstop>attached_file2</tabstop>
+  <tabstop>attached_file3</tabstop>
+  <tabstop>attached_file4</tabstop>
+  <tabstop>attached_file5</tabstop>
+  <tabstop>btnSend</tabstop>
+  <tabstop>btnClose</tabstop>
+  <tabstop>attached_img1</tabstop>
+  <tabstop>attached_img2</tabstop>
+  <tabstop>attached_img3</tabstop>
+  <tabstop>attached_img4</tabstop>
+  <tabstop>attached_img5</tabstop>
+ </tabstops>
  <resources>
   <include location="../resource.qrc"/>
  </resources>

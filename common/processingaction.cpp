@@ -7,6 +7,7 @@ ProcessingAction::ProcessingAction(QWidget *parent)
 {
     ui->setupUi(this);
 
+    setWindowTitle(tr("Procesarea ..."));
     QMovie *movie = new QMovie(":/img/Spinner200px-200px.gif");
     movie->setScaledSize(ui->loader->size()); // Setează dimensiunea GIF-ului la QLabel
     ui->loader->setMovie(movie);

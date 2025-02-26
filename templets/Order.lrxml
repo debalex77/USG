@@ -2273,7 +2273,7 @@
                 </item>
                 <item ClassName="ImageItem" Type="Object">
                   <objectName Type="QString">ImageItem4</objectName>
-                  <geometry Type="QRect" height="220" width="450" x="838" y="342"/>
+                  <geometry Type="QRect" height="222" width="450" x="838" y="340"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>
@@ -3334,10 +3334,10 @@
     <scriptContext ClassName="LimeReport::ScriptEngineContext" Type="Object">
       <objectName Type="QString"></objectName>
       <dialogs Type="Collection"/>
-      <initScript Type="QString">Reportpage1_DataBand_Logo.isVisible = getVariable("v_exist_logo");
-Reportpage1_DataBand_nameOrganization.isVisible = !getVariable("v_exist_logo");
-Reportpage1_ImageItem3.isVisible = getVariable("v_exist_stamp");
-Reportpage1_ImageItem4.isVisible = getVariable("v_exist_signature");
+      <initScript Type="QString">Reportpage1_DataBand_Logo.isVisible = parseInt(getVariable("v_exist_logo"), 10) === 1;
+Reportpage1_DataBand_nameOrganization.isVisible = parseInt(getVariable("v_exist_logo"), 10) === 0;
+Reportpage1_ImageItem3.isVisible = parseInt(getVariable("v_exist_stamp"), 10) === 1;
+Reportpage1_ImageItem4.isVisible = parseInt(getVariable("v_exist_signature"), 10) === 1;
 true</initScript>
     </scriptContext>
     <suppressFieldAndVarError Type="bool" Value="0"/>

@@ -748,4 +748,31 @@ void UpdateReleasesApp::createIndexForBaseImage_3_0_1()
 void UpdateReleasesApp::updateRelease_3_0_3()
 {
     db->createTableContOnline();
+
+    QSqlQuery qry;
+    if (globals().thisSqlite){
+
+        if (qry.exec("ALTER TABLE tableGestation0 ADD COLUMN lmp TEXT;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.3: adaugate sectia noua 'lmp' in tabela 'tableGestation0'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.3': nu s-a efectuat modifcarea tabelei 'tableGestation0' sectia 'lmp' (bd sqlite).";
+
+        if (qry.exec("ALTER TABLE tableGestation1 ADD COLUMN lmp TEXT;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.3: adaugate sectia noua 'lmp' in tabela 'tableGestation1'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.3': nu s-a efectuat modifcarea tabelei 'tableGestation1' sectia 'lmp' (bd sqlite).";
+
+    } else {
+
+        if (qry.exec("ALTER TABLE `tableGestation0` ADD COLUMN `lmp` VARCHAR(10);"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.3: adaugate sectia noua 'lmp' in tabela 'tableGestation0'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.3': nu s-a efectuat modifcarea tabelei 'tableGestation0' sectia 'lmp' (bd MySQL).";
+
+        if (qry.exec("ALTER TABLE `tableGestation1` ADD COLUMN `lmp` VARCHAR(10);"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.3: adaugate sectia noua 'lmp' in tabela 'tableGestation1'.";
+        else
+            qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.3': nu s-a efectuat modifcarea tabelei 'tableGestation1' sectia 'lmp' (bd MySQL).";
+
+    }
 }

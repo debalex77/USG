@@ -407,8 +407,8 @@ void HandlerFunctionThread::setModelImgForPrint()
     QList<QStandardItem *> items_img;
     items_img.append(img_item_logo);
     items_img.append(img_item_stamp_organization);
-    items_img.append(img_item_signature);
     items_img.append(img_item_stamp_doctor);
+    items_img.append(img_item_signature);
 
     model_img = new QStandardItemModel(this);
     model_img->setColumnCount(4);
@@ -698,6 +698,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
             m_report->dataManager()->addModel("table_patient", model_patient, false);
             m_report->dataManager()->clearUserVariables();
             m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
+            m_report->dataManager()->setReportVariable("v_export_pdf", 1);
             m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
             m_report->dataManager()->setReportVariable("v_exist_signature_doctor", exist_signature);
             m_report->dataManager()->setReportVariable("unitMeasure", (m_unitMeasure == "milimetru") ? "mm" : "cm");

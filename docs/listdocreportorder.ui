@@ -720,7 +720,7 @@
        </property>
        <property name="icon">
         <iconset resource="../resource.qrc">
-         <normaloff>:/img/send_email.png</normaloff>:/img/send_email.png</iconset>
+         <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
        </property>
       </widget>
      </item>

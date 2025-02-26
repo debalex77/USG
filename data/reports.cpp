@@ -169,6 +169,7 @@ void Reports::initConnections()
     ui->btnZoomOut->setStyleSheet(style_toolButton);
     ui->btnBackPage->setStyleSheet(style_toolButton);
     ui->btnNextPage->setStyleSheet(style_toolButton);
+    ui->btnSendEmail->setStyleSheet(style_toolButton);
 
     ui->btnEditContract->setStyleSheet(style_toolButton);
     ui->btnEditDoctor->setStyleSheet(style_toolButton);
