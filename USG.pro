@@ -97,6 +97,7 @@ SOURCES += \
     common/processingaction.cpp \
     customs/custommessage.cpp \
     customs/lineeditcustom.cpp \
+    customs/lineeditopen.cpp \
     customs/lineeditpassword.cpp \
     customs/searchlineedit.cpp \
     data/about.cpp \
@@ -162,6 +163,7 @@ HEADERS += \
     common/processingaction.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
+    customs/lineeditopen.h \
     customs/lineeditpassword.h \
     customs/searchlineedit.h \
     data/about.h \

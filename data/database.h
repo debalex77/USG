@@ -150,6 +150,7 @@ public:
 
     void getNameColumnTable(const QString nameTable/*,QMap<QString, QString> &items*/);
     int getCountSectionTableSQLite(const QString nameTable) const;
+    bool existColumnInTable(const QString nameTable, const QString nameColumn) const;
     QMap<int, QString> getMapDataQuery(const QString strQuery);
 
     bool existIdDocument(const QString nameTable, const QString name_condition, const QString value_condition, QSqlDatabase nameDatabase);

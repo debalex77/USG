@@ -2,6 +2,7 @@
 #include "ui_agentsendemail.h"
 
 #include <QMessageBox>
+#include <QProcess>
 #include <QThread>
 
 AgentSendEmail::AgentSendEmail(QWidget *parent)
@@ -21,6 +22,30 @@ AgentSendEmail::AgentSendEmail(QWidget *parent)
     connect(this, &AgentSendEmail::EmailFromChanged, this, &AgentSendEmail::slot_EmailFromChanged);
     connect(this, &AgentSendEmail::EmailToChanged, this, &AgentSendEmail::slot_EmailToChanged);
     connect(this, &AgentSendEmail::DateInvestigationChanged, this, &AgentSendEmail::slot_DateInvestigationChanged);
+
+    fileInputs["file1"] = ui->attached_file1;
+    fileInputs["file2"] = ui->attached_file2;
+    fileInputs["file3"] = ui->attached_file3;
+    fileInputs["file4"] = ui->attached_file4;
+    fileInputs["file5"] = ui->attached_file5;
+
+    for (auto it = fileInputs.begin(); it != fileInputs.end(); ++it) {
+        connect(it.value(), &LineEditOpen::onClickedButton, this, [this, key = it.key()]() {
+            onOpenFile(key);
+        });
+    }
+
+    imgInputs["img1"] = ui->attached_img1;
+    imgInputs["img2"] = ui->attached_img2;
+    imgInputs["img3"] = ui->attached_img3;
+    imgInputs["img4"] = ui->attached_img4;
+    imgInputs["img5"] = ui->attached_img5;
+
+    for (auto it = imgInputs.begin(); it != imgInputs.end(); ++it) {
+        connect(it.value(), &LineEditOpen::onClickedButton, this, [this, key = it.key()]() {
+            onOpenFile(key);
+        });
+    }
 
     connect(ui->btnSend, &QPushButton::clicked, this, &AgentSendEmail::onSend);
     connect(ui->btnClose, &QPushButton::clicked, this, &AgentSendEmail::onClose);
@@ -269,6 +294,45 @@ void AgentSendEmail::slot_DateInvestigationChanged()
             QByteArray decryptedPassword = crypto_manager->decryptPassword(encryptedPassword, hash_user, iv);
             m_password = QString::fromUtf8(decryptedPassword);
         }
+    }
+}
+
+void AgentSendEmail::onOpenFile(const QString type_file)
+{
+    if (! fileInputs.contains(type_file) && ! imgInputs.contains(type_file)) {
+        qWarning() << "Unknown file type: " << type_file;
+        return;
+    }
+
+    QString filePath;
+    if (type_file.contains("file"))
+        filePath = fileInputs[type_file]->text();
+    else if (type_file.contains("img"))
+        filePath = imgInputs[type_file]->text();
+
+    if (filePath.isEmpty()) {
+        qWarning() << "No file path provided for: " << type_file;
+        return;
+    }
+
+    openFile(filePath);
+}
+
+void AgentSendEmail::openFile(const QString &filePath)
+{
+    QString osType = QSysInfo::productType();
+
+    if (osType == "windows") {
+        QProcess::startDetached("explorer", { QDir::toNativeSeparators(filePath) });
+    }
+    else if (osType == "macos") {
+        QProcess::startDetached("open", { filePath });
+    }
+    else if (osType.contains("linux") || osType.contains("ubuntu") || osType.contains("debian")) {
+        QProcess::startDetached("xdg-open", { filePath });
+    }
+    else {
+        qWarning() << "Unsupported OS: " << osType;
     }
 }
 

@@ -9,6 +9,10 @@
 #include <data/database.h>
 #include <data/globals.h>
 
+#include <QLineEdit>
+
+#include <customs/lineeditopen.h>
+
 namespace Ui {
 class AgentSendEmail;
 }
@@ -64,6 +68,9 @@ private slots:
     void slot_EmailToChanged();
     void slot_DateInvestigationChanged();
 
+    void onOpenFile(const QString type_file);
+    void openFile(const QString &filePath);
+
     void onSend();
     void onEmailSent(bool success);
     void onClose();
@@ -72,6 +79,9 @@ private:
     Ui::AgentSendEmail *ui;
 
     QStringList filesAttachments;
+
+    QMap<QString, LineEditOpen*> fileInputs;
+    QMap<QString, LineEditOpen*> imgInputs;
 
     QString m_subiect   = nullptr;
     QString m_body      = nullptr;

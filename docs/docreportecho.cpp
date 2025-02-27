@@ -6786,6 +6786,11 @@ void DocReportEcho::setDataFromTableGestation0()
             ui->gestation0_view_difficult->setChecked(qry.value(record.indexOf("view_examination")).toInt() == 2);
 
             ui->gestation0_antecedent->setText(qry.value(record.indexOf("antecedent")).toString());
+            if (db->existColumnInTable("gestation0", "lmp")){
+                ui->gestation0_LMP->setDate(QDate::fromString(qry.value(record.indexOf("lmp")).toString(), "yyyy-MM-dd"));
+                calculateGestationalAge(ui->gestation0_LMP->date());
+                calculateDueDate(ui->gestation0_LMP->date());
+            }
             ui->gestation0_gestation->setText(qry.value(record.indexOf("gestation_age")).toString());
             ui->gestation0_GS_dimens->setText(qry.value(record.indexOf("GS")).toString());
             ui->gestation0_GS_age->setText(qry.value(record.indexOf("GS_age")).toString());
@@ -6814,6 +6819,11 @@ void DocReportEcho::setDataFromTableGestation1()
             ui->gestation1_view_difficult->setChecked(qry.value(record.indexOf("view_examination")).toInt() == 2);
 
             ui->gestation1_antecedent->setText(qry.value(record.indexOf("antecedent")).toString());
+            if (db->existColumnInTable("gestation1", "lmp")) {
+                ui->gestation1_LMP->setDate(QDate::fromString(qry.value(record.indexOf("lmp")).toString(), "yyyy-MM-dd"));
+                calculateGestationalAge(ui->gestation1_LMP->date());
+                calculateDueDate(ui->gestation1_LMP->date());
+            }
             ui->gestation1_gestation->setText(qry.value(record.indexOf("gestation_age")).toString());
             ui->gestation1_CRL_dimens->setText(qry.value(record.indexOf("CRL")).toString());
             ui->gestation1_CRL_age->setText(qry.value(record.indexOf("CRL_age")).toString());

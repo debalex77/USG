@@ -4421,6 +4421,27 @@ int DataBase::getCountSectionTableSQLite(const QString nameTable) const
     return result;
 }
 
+bool DataBase::existColumnInTable(const QString nameTable, const QString nameColumn) const
+{
+    QSqlQuery qry;
+    if (globals().thisSqlite) {
+        QString queryStr = QString("PRAGMA table_info(%1);").arg(nameTable);
+        if (qry.exec(queryStr)) {
+            while (qry.next()) {
+                if (qry.value(1).toString() == nameColumn) {
+                    return true;
+                }
+            }
+        }
+    } else {
+        QString queryStr = QString("SHOW COLUMNS FROM `%1` LIKE '%2';").arg(nameTable, nameColumn);
+        if (qry.exec(queryStr) && qry.next()) {
+            return true;  // Coloana există
+        }
+    }
+    return false;
+}
+
 QMap<int, QString> DataBase::getMapDataQuery(const QString strQuery)
 {
     QMap<int, QString> data;

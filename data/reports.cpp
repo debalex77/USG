@@ -217,6 +217,7 @@ void Reports::initConnections()
     connect(ui->btnGenerateReport, &QToolButton::clicked, this, &Reports::generateReport);
     connect(ui->btnOpenDesigner, &QToolButton::clicked, this, &Reports::openDesignerReport);
     connect(ui->btnSettingsReport, &QToolButton::clicked, this, &Reports::openSettingsReport);
+    connect(ui->btnSendEmail, &QToolButton::clicked, this, &Reports::sendReportToEmail);
 }
 
 void Reports::initPercentCombobox()
@@ -1096,6 +1097,11 @@ void Reports::openCatDoctor()
     cat_doctor->setProperty("itNew", false);
     cat_doctor->setProperty("Id", id_doctor);
     cat_doctor->show();
+}
+
+void Reports::sendReportToEmail()
+{
+
 }
 
 // **********************************************************************************

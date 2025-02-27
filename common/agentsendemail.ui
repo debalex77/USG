@@ -52,19 +52,19 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="0" column="0">
-        <widget class="QLineEdit" name="attached_file1"/>
+        <widget class="LineEditOpen" name="attached_file1"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLineEdit" name="attached_file2"/>
+        <widget class="LineEditOpen" name="attached_file2"/>
        </item>
        <item row="2" column="0">
-        <widget class="QLineEdit" name="attached_file3"/>
+        <widget class="LineEditOpen" name="attached_file3"/>
        </item>
        <item row="3" column="0">
-        <widget class="QLineEdit" name="attached_file4"/>
+        <widget class="LineEditOpen" name="attached_file4"/>
        </item>
        <item row="4" column="0">
-        <widget class="QLineEdit" name="attached_file5"/>
+        <widget class="LineEditOpen" name="attached_file5"/>
        </item>
       </layout>
      </widget>
@@ -74,19 +74,19 @@
       </attribute>
       <layout class="QGridLayout" name="gridLayout_2">
        <item row="0" column="0">
-        <widget class="QLineEdit" name="attached_img1"/>
+        <widget class="LineEditOpen" name="attached_img1"/>
        </item>
        <item row="1" column="0">
-        <widget class="QLineEdit" name="attached_img2"/>
+        <widget class="LineEditOpen" name="attached_img2"/>
        </item>
        <item row="2" column="0">
-        <widget class="QLineEdit" name="attached_img3"/>
+        <widget class="LineEditOpen" name="attached_img3"/>
        </item>
        <item row="3" column="0">
-        <widget class="QLineEdit" name="attached_img4"/>
+        <widget class="LineEditOpen" name="attached_img4"/>
        </item>
        <item row="4" column="0">
-        <widget class="QLineEdit" name="attached_img5"/>
+        <widget class="LineEditOpen" name="attached_img5"/>
        </item>
       </layout>
      </widget>
@@ -113,7 +113,7 @@
         <string>Trimite</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset>
          <normaloff>:/img/send_email.png</normaloff>:/img/send_email.png</iconset>
        </property>
       </widget>
@@ -143,6 +143,13 @@
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditOpen</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditopen.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>txt_from</tabstop>
   <tabstop>txt_to</tabstop>

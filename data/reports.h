@@ -63,6 +63,7 @@ private slots:
     void openCatOrganization();
     void openCatContract();
     void openCatDoctor();
+    void sendReportToEmail();
 
 private:
     Ui::Reports *ui;
