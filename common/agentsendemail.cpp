@@ -22,6 +22,7 @@ AgentSendEmail::AgentSendEmail(QWidget *parent)
     connect(this, &AgentSendEmail::EmailFromChanged, this, &AgentSendEmail::slot_EmailFromChanged);
     connect(this, &AgentSendEmail::EmailToChanged, this, &AgentSendEmail::slot_EmailToChanged);
     connect(this, &AgentSendEmail::DateInvestigationChanged, this, &AgentSendEmail::slot_DateInvestigationChanged);
+    connect(this, &AgentSendEmail::NameReportChanged, this, &AgentSendEmail::slot_NameReportChanged);
 
     fileInputs["file1"] = ui->attached_file1;
     fileInputs["file2"] = ui->attached_file2;
@@ -137,6 +138,28 @@ void AgentSendEmail::setDateInvestigation(QDate DateInvestigation)
     emit DateInvestigationChanged();
 }
 
+bool AgentSendEmail::getThisReports()
+{
+    return m_thisReports;
+}
+
+void AgentSendEmail::setThisReports(bool ThisReports)
+{
+    m_thisReports = ThisReports;
+    emit ThisReportsChanged();
+}
+
+QString AgentSendEmail::getNameReport()
+{
+    return m_nameReport;
+}
+
+void AgentSendEmail::setNameReport(QString NameReport)
+{
+    m_nameReport = NameReport;
+    emit NameReportChanged();
+}
+
 // **********************************************************************************
 // --- procesarea slot-lor
 
@@ -239,24 +262,41 @@ void AgentSendEmail::slot_EmailToChanged()
 
 void AgentSendEmail::slot_DateInvestigationChanged()
 {
-    m_subiect = "Rezultatul investigației ecografice";
-    ui->txt_subiect->setText(m_subiect);
+    if (m_thisReports){
+        ui->txt_subiect->setText("Rapoarte investigațiilor ecografice");
+        ui->txt_body->append("Către " + m_namePatient + ".");
+        ui->txt_body->append("Vă transmitem alăturat raportul medical " + m_nameReport + ".");
+        ui->txt_body->append("Rapoarte atașate:");
+        ui->txt_body->append(" - " + m_nameReport + " în format PDF.");
+        ui->txt_body->append("");
+        ui->txt_body->append("Vă rugăm să confirmați primirea acestuia și să ne contactați pentru orice informații suplimentare.");
+        ui->txt_body->append("");
+        ui->txt_body->append("Cu stimă,");
+        ui->txt_body->append("" + m_nameDoctor + " / " + globals().main_name_organization + "");
+        ui->txt_body->append("Telefon: " + globals().main_phone_organization + "");
+        ui->txt_body->append("E-mail: " + globals().main_email_organization + "");
+    } else {
+        m_subiect = "Rezultatul investigației ecografice";
+        ui->txt_subiect->setText(m_subiect);
 
-    ui->txt_body->append("Stimate/Stimată " + m_namePatient + ".");
-    ui->txt_body->append("Vă transmitem raportul ecografic în urma investigației efectuate la " + globals().main_name_organization + " pe data de " + m_dateInvestigation.toString("dd.MM.yyyy") + ".");
-    ui->txt_body->append("Documente atașate:");
-    ui->txt_body->append(" - Comanda ecografică în format PDF.");
-    ui->txt_body->append(" - Rapoarte ecografice în format PDF");
-    ui->txt_body->append("");
-    ui->txt_body->append("Observații importante:");
-    ui->txt_body->append("Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară, ");
-    ui->txt_body->append("vă rugăm să ne contactați la " + globals().main_phone_organization + " sau să ne scrieți la " + globals().main_email_organization + ".");
-    ui->txt_body->append("");
-    ui->txt_body->append("Vă mulțumim pentru încrederea acordată!");
-    ui->txt_body->append("Cu stimă,");
-    ui->txt_body->append("" + m_nameDoctor + " / " + globals().main_name_organization + "");
-    ui->txt_body->append("Telefon: " + globals().main_phone_organization + "");
-    ui->txt_body->append("E-mail: " + globals().main_email_organization + "");
+        ui->txt_body->append("Stimate/Stimată " + m_namePatient + ".");
+        ui->txt_body->append("Vă transmitem raportul ecografic în urma investigației efectuate la " +
+                             globals().main_name_organization + " pe data de " + m_dateInvestigation.toString("dd.MM.yyyy") + ".");
+        ui->txt_body->append("Documente atașate:");
+        ui->txt_body->append(" - Comanda ecografică în format PDF.");
+        ui->txt_body->append(" - Rapoarte ecografice în format PDF");
+        ui->txt_body->append("");
+        ui->txt_body->append("Observații importante:");
+        ui->txt_body->append("Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară, ");
+        ui->txt_body->append("vă rugăm să ne contactați la " + globals().main_phone_organization + " sau să ne scrieți la " + globals().main_email_organization + ".");
+        ui->txt_body->append("");
+        ui->txt_body->append("Vă mulțumim pentru încrederea acordată!");
+        ui->txt_body->append("Cu stimă,");
+        ui->txt_body->append("" + m_nameDoctor + " / " + globals().main_name_organization + "");
+        ui->txt_body->append("Telefon: " + globals().main_phone_organization + "");
+        ui->txt_body->append("E-mail: " + globals().main_email_organization + "");
+    }
+
     m_body = ui->txt_body->toPlainText();
 
     QSqlQuery qry;
@@ -294,6 +334,17 @@ void AgentSendEmail::slot_DateInvestigationChanged()
             QByteArray decryptedPassword = crypto_manager->decryptPassword(encryptedPassword, hash_user, iv);
             m_password = QString::fromUtf8(decryptedPassword);
         }
+    }
+}
+
+void AgentSendEmail::slot_NameReportChanged()
+{
+    if (m_nameReport.isEmpty())
+        return;
+    QString file_report = globals().main_path_save_documents + "/" + m_nameReport + ".pdf";
+    if (QFile(file_report).exists()){
+        ui->attached_file1->setText(file_report);
+        filesAttachments << file_report;
     }
 }
 

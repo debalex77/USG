@@ -5,6 +5,8 @@
 
 #include <customs/custommessage.h>
 
+#include <common/agentsendemail.h>
+
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Reports)
@@ -15,10 +17,12 @@ Reports::Reports(QWidget *parent) :
 
     m_report = new LimeReport::ReportEngine(this);
     m_preview = m_report->createPreviewWidget();
+
     if (globals().isSystemThemeDark)
-        m_preview->setPreviewPageBackgroundColor(QColor(179, 179, 179));
+        m_preview->setPreviewPageBackgroundColor(QColor(75,75,75));
     else
-        m_preview->setPreviewPageBackgroundColor(QColor(30, 30, 30));
+        m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
+
     getNameReportsFromDorectory(); // setam denumirea rapoartelor
 
     QString strQryOrganizations = "SELECT id,name FROM organizations WHERE deletionMark = 0;";    // solicitarea
@@ -79,8 +83,6 @@ Reports::~Reports()
     delete modelDoctors;
     delete modelContracts;
     delete modelOrganizations;
-    delete m_report;
-    delete db;
     delete ui;
 }
 
@@ -469,6 +471,7 @@ void Reports::setImageForReports()
     if (! globals().cache_img.find(name_key_logo, &pix_logo)){
         if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
             globals().cache_img.insert(name_key_logo, pix_logo);
+            exist_logo = 1;
         }
     }
     // --- setam logotipul
@@ -489,6 +492,7 @@ void Reports::setImageForReports()
     if (! globals().cache_img.find(name_key_stamp_organization, &outPixmap_stamp)) {
         if (! globals().main_stamp_organization.isEmpty() && outPixmap_stamp.loadFromData(globals().main_stamp_organization)){
             globals().cache_img.insert(name_key_stamp_organization, outPixmap_stamp);
+            exist_stamp_organization = 1;
         }
     }
     // --- setam stampila
@@ -505,6 +509,7 @@ void Reports::setImageForReports()
     if (! globals().cache_img.find(name_key_signature, &outPixmap_signature)) {
         if(! globals().signature_main_doctor.isEmpty() && outPixmap_signature.loadFromData(globals().signature_main_doctor)) {
             globals().cache_img.insert(name_key_signature, outPixmap_signature);
+            exist_signature_doctore = 1;
         }
     }
     // --- setam semnatura
@@ -518,6 +523,7 @@ void Reports::setImageForReports()
     items_img.append(img_item_logo);
     items_img.append(img_item_stamp);
     items_img.append(img_item_signature);
+
     model_img = new QStandardItemModel(this);
     model_img->setColumnCount(3);
     model_img->appendRow(items_img);
@@ -758,7 +764,9 @@ void Reports::slotPageChanged(const int page)
 // --- procesarea butoanelor
 
 void Reports::generateReport()
-{    
+{
+    //-----------------------------------------------------------------------------
+    // 📌 1 verificam daca e ales raportul
     if (ui->comboTypeReport->currentIndex() == 0){
         QMessageBox::warning(this, tr("Verificarea tipului raportului"), tr("Nu este indicat tipul raportului !!!"), QMessageBox::Ok);
         ui->comboTypeReport->setFocus();
@@ -766,35 +774,33 @@ void Reports::generateReport()
         return;
     }
 
-    if (globals().isSystemThemeDark)
-        m_report->setPreviewPageBackgroundColor(QColor(179, 179, 179));
-    else
-        m_report->setPreviewPageBackgroundColor(QColor(30, 30, 30));
-
+    //-----------------------------------------------------------------------------
+    // 📌 2 inchidem filtru
     if (ui->frame_filter->isVisible())
         ui->frame_filter->setVisible(false);
 
-    // *************************************************************************************
-    // setam imaginile - logotipul, stampila si semnatura
+    //-----------------------------------------------------------------------------
+    // 📌 3 setam imaginile - logotipul, stampila si semnatura
     setImageForReports();
     m_report->dataManager()->addModel("table_img", model_img, true);
 
-    // *************************************************************************************
-    // organizatia
-    QSqlQueryModel* print_model_organization = new QSqlQueryModel(this);
+    //-----------------------------------------------------------------------------
+    // 📌 4 setam datele organizatiei
+    QSqlQueryModel *print_model_organization = new QSqlQueryModel(this);
     print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
 
-    // *************************************************************************************
-    // main table
-    QSqlQueryModel* print_model_main = new QSqlQueryModel(this);
-
+    //-----------------------------------------------------------------------------
+    // 📌 5 main table
+    QSqlQueryModel *print_model_main = new QSqlQueryModel(this);
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
 
-    QSqlQueryModel* print_model_systemUrinary = new QSqlQueryModel(this);
-    QSqlQueryModel* print_model_breast = new QSqlQueryModel(this);
-    QSqlQueryModel* print_model_ginecology = new QSqlQueryModel(this);
+    //-----------------------------------------------------------------------------
+    // 📌 6 table - s.urynary, breast, ginecology
+    QSqlQueryModel *print_model_systemUrinary = new QSqlQueryModel(this);
+    QSqlQueryModel *print_model_breast        = new QSqlQueryModel(this);
+    QSqlQueryModel *print_model_ginecology    = new QSqlQueryModel(this);
     if (ui->comboTypeReport->currentText() == "Structura patologiilor"){
 
         print_model_systemUrinary->setQuery(getQuerySystem("urinary_system_nozology"));
@@ -807,23 +813,45 @@ void Reports::generateReport()
         m_report->dataManager()->addModel("table_ginecology", print_model_ginecology, false);
     }
 
-    // *************************************************************************************
-    // load, show and refresh
+    //-----------------------------------------------------------------------------
+    // 📌 7 setam variabile necesare
     setReportVariabiles();
+
+    //-----------------------------------------------------------------------------
+    // 📌 8 prezentam progres bar
     m_report->setShowProgressDialog(true);
     m_report->isShowProgressDialog();
 
+    //-----------------------------------------------------------------------------
+    // 📌 9 incarcam fisierul si actualizam pagina
     m_report->loadFromFile(globals().pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
     m_preview->refreshPages();
 
+    //-----------------------------------------------------------------------------
+    // 📌 10 verificam daca trebuie de exportat in tmp/USG
+    if (send_email) {
+        QDir dir(globals().main_path_save_documents);
+        if (! dir.exists()) {
+            QDir().mkpath(globals().main_path_save_documents);
+            qInfo(logInfo()) << "A fost creat directorul" << globals().main_path_save_documents;
+        } else {
+            if (dir.removeRecursively()) {
+                qInfo(logInfo()) << "Directorul" << globals().main_path_save_documents << " a fost șters cu succes !";
+            } else {
+                qWarning(logWarning()) << "Eroare: Nu s-a putut șterge directorul - " << globals().main_path_save_documents;
+            }
+        }
+        m_report->printToPDF(QDir::toNativeSeparators(globals().main_path_save_documents + "/" + ui->comboTypeReport->currentText() + ".pdf")); // pu transmiterea prin email
+    }
+
     // *************************************************************************************
-    // delete model
-    delete print_model_organization; // eliberam memoria
-    delete print_model_main;
-    delete print_model_systemUrinary;
-    delete print_model_breast;
-    delete print_model_ginecology;
-    delete model_img;
+    // 📌 11 elibiram memoria
+    print_model_organization->deleteLater(); // eliberam memoria
+    print_model_main->deleteLater();
+    print_model_systemUrinary->deleteLater();
+    print_model_breast->deleteLater();
+    print_model_ginecology->deleteLater();
+    model_img->deleteLater();
 }
 
 void Reports::openDesignerReport()
@@ -1047,6 +1075,7 @@ void Reports::organizationCurrentIndexChanged(const int index)
     QMap<QString, QString> items;
     if (db->getObjectDataById("organizations", id_organization, items)){
         const int id_contract = items.constFind("id_contracts").value().toInt();
+        m_emailTo = items.constFind("email").value();
         if (id_contract > 0){
             auto index_contract = modelContracts->match(modelContracts->index(0,0), Qt::UserRole, id_contract, 1, Qt::MatchExactly);
             if (! index_contract.isEmpty()){
@@ -1101,7 +1130,27 @@ void Reports::openCatDoctor()
 
 void Reports::sendReportToEmail()
 {
+    // ---------------------------------------------------------------------
+    // 📌 1 generam raportul cu export in PDF (tmp/USG)
+    send_email = true;
+    generateReport();
 
+    // ---------------------------------------------------------------------
+    // 📌 2 prezentam agentul
+    AgentSendEmail *agent_sendEmail = new AgentSendEmail(this);
+    agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
+    agent_sendEmail->setProperty("ThisReports", true);
+    agent_sendEmail->setProperty("NameReport",  ui->comboTypeReport->currentText());
+    agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);
+    agent_sendEmail->setProperty("EmailTo",     m_emailTo);
+    agent_sendEmail->setProperty("NamePatient", ui->comboOrganizations->currentText());
+    agent_sendEmail->setProperty("NameDoctor",  globals().main_name_abbreviat_doctor);
+    agent_sendEmail->setProperty("DateInvestigation", QVariant());
+    agent_sendEmail->show();
+
+    // ---------------------------------------------------------------------
+    // 📌 3 schimbam valoarea variabilei
+    send_email = false;
 }
 
 // **********************************************************************************

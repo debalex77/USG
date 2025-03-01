@@ -22,6 +22,8 @@ class AgentSendEmail : public QDialog
     Q_OBJECT
     Q_PROPERTY(QString NrOrder READ getNrOrder WRITE setNrOrder NOTIFY NrOrderChanged FINAL)
     Q_PROPERTY(QString NrReport READ getNrReport WRITE setNrReport NOTIFY NrReportChanged FINAL)
+    Q_PROPERTY(bool ThisReports READ getThisReports WRITE setThisReports NOTIFY ThisReportsChanged FINAL)
+    Q_PROPERTY(QString NameReport READ getNameReport WRITE setNameReport NOTIFY NameReportChanged FINAL)
     Q_PROPERTY(QString EmailFrom READ getEmailFrom WRITE setEmailFrom NOTIFY EmailFromChanged FINAL)
     Q_PROPERTY(QString EmailTo READ getEmailTo WRITE setEmailTo NOTIFY EmailToChanged FINAL)
     Q_PROPERTY(QString NamePatient READ getNamePatient WRITE setNamePatient NOTIFY NamePatientChanged FINAL)
@@ -52,6 +54,12 @@ public:
     QDate getDateInvestigation();
     void setDateInvestigation(QDate DateInvestigation);
 
+    bool getThisReports();
+    void setThisReports(bool ThisReports);
+
+    QString getNameReport();
+    void setNameReport(QString NameReport);
+
 signals:
     void NrOrderChanged();
     void NrReportChanged();
@@ -60,6 +68,8 @@ signals:
     void NamePatientChanged();
     void NameDoctorChanged();
     void DateInvestigationChanged();
+    void ThisReportsChanged();
+    void NameReportChanged();
 
 private slots:
     void slot_NrOrderChanged();
@@ -67,6 +77,7 @@ private slots:
     void slot_EmailFromChanged();
     void slot_EmailToChanged();
     void slot_DateInvestigationChanged();
+    void slot_NameReportChanged();
 
     void onOpenFile(const QString type_file);
     void openFile(const QString &filePath);
@@ -92,6 +103,8 @@ private:
     QString m_namePatient = nullptr;
     QString m_nameDoctor = nullptr;
     QDate m_dateInvestigation = QDate(2000, 01, 01);
+    bool m_thisReports = false;
+    QString m_nameReport = nullptr;
 
     QString m_smtp_server = nullptr;
     int m_port = -1;

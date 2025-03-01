@@ -568,6 +568,8 @@ void ListDocReportOrder::onClickBtnSendEmail()
                 agent_sendEmail = new AgentSendEmail(this);
                 agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
                 for (const auto &data : data_agentEmail) {
+                    agent_sendEmail->setProperty("ThisReports", false);
+                    agent_sendEmail->setProperty("NameReport",  QVariant());
                     agent_sendEmail->setProperty("NrOrder",     data.nr_order);
                     agent_sendEmail->setProperty("NrReport",    data.nr_report);
                     agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);

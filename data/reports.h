@@ -70,8 +70,6 @@ private:
 
     DataBase *db;
 
-    QStandardItemModel *model_img;
-
     BaseSqlQueryModel *modelOrganizations;
     BaseSqlQueryModel *modelContracts;
     BaseSqlQueryModel *modelDoctors;
@@ -85,6 +83,7 @@ private:
     QSpinBox  *m_pageNavigator;
     LimeReport::ReportEngine        *m_report;
     LimeReport::PreviewReportWidget *m_preview;
+    QStandardItemModel *model_img;
 
     QProgressDialog *m_progressDialog;
 
@@ -95,6 +94,10 @@ private:
     int m_id          = -1;
     int m_id_onLaunch = -1;
     int exist_logo    = 0;
+    int exist_stamp_organization = 0;
+    int exist_signature_doctore = 0;
+    QString m_emailTo = nullptr;
+    bool send_email =  false;
     int m_currentPage;
 
 protected:

@@ -128,7 +128,7 @@
          </font>
         </property>
         <property name="styleSheet">
-         <string notr="true">color: rgb(0, 0, 255);</string>
+         <string notr="true">color: rgb(26, 95, 180);</string>
         </property>
         <property name="text">
          <string>Tipul raportului</string>
@@ -385,7 +385,7 @@
         <widget class="QDateEdit" name="dateEnd">
          <property name="dateTime">
           <datetime>
-           <hour>13</hour>
+           <hour>11</hour>
            <minute>59</minute>
            <second>59</second>
            <year>2000</year>
