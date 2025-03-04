@@ -89,6 +89,7 @@ SOURCES += \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
     common/agentsendemail.cpp \
+    common/cloudserverconfig.cpp \
     common/contonline.cpp \
     common/cryptomanager.cpp \
     common/datapercentage.cpp \
@@ -155,6 +156,7 @@ HEADERS += \
     catalogs/patienthistory.h \
     common/StructVariable.h \
     common/agentsendemail.h \
+    common/cloudserverconfig.h \
     common/contonline.h \
     common/cryptomanager.h \
     common/datapercentage.h \
@@ -234,6 +236,7 @@ FORMS += \
     catalogs/normograms.ui \
     catalogs/patienthistory.ui \
     common/agentsendemail.ui \
+    common/cloudserverconfig.ui \
     common/contonline.ui \
     common/processingaction.ui \
     customs/custommessage.ui \

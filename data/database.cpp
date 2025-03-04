@@ -74,19 +74,33 @@ QSqlDatabase DataBase::getDatabase()
     return db.database();
 }
 
-QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName)
+QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, const bool thisMySQL)
 {
     qInfo(logInfo()) << "";
     qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << "Se initiaza 'Thread' connection: " << threadConnectionName;
     if (! QSqlDatabase::contains(threadConnectionName)) {
-        QSqlDatabase db_thread = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
-        db_thread.setHostName(globals().sqliteNameBase);
-        db_thread.setDatabaseName(globals().sqlitePathBase);
-        if (! db_thread.open()) {
-            qWarning(logWarning()) << "Eroare la deschiderea bazei de date:" << db_thread.lastError().text();
+        if (thisMySQL) {
+            QSqlDatabase db_thread = QSqlDatabase::addDatabase("QMYSQL", threadConnectionName);
+            db_thread.setHostName(globals().mySQLhost);
+            db_thread.setDatabaseName(globals().mySQLnameBase);
+            db_thread.setPort(globals().mySQLport.toInt());
+            db_thread.setConnectOptions(globals().mySQLoptionConnect);
+            db_thread.setUserName(globals().mySQLuser);
+            db_thread.setPassword(globals().mySQLpasswdUser);
+            if (! db_thread.open()) {
+                qWarning(logWarning()) << "Eroare <thread> la deschiderea bazei de date(MYSQL):" << db_thread.lastError().text();
+            }
+            return db_thread;
+        } else {
+            QSqlDatabase db_thread = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
+            db_thread.setHostName(globals().sqliteNameBase);
+            db_thread.setDatabaseName(globals().sqlitePathBase);
+            if (! db_thread.open()) {
+                qWarning(logWarning()) << "Eroare <thread> la deschiderea bazei de date(sqlite):" << db_thread.lastError().text();
+            }
+            return db_thread;
         }
-        return db_thread;
     }
     return QSqlDatabase::database(threadConnectionName);
 }

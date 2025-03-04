@@ -46,7 +46,8 @@ public:
 
     void setRequiredVariabile(const int id_mainUser,
                               const int id_mainOrganization,
-                              const int id_mainDoctor);
+                              const int id_mainDoctor,
+                              const bool thisMySQL);
 
     void setRequiredVariableForCatPatient(const int patient_id,
                                           const QString patient_name,
@@ -57,7 +58,8 @@ public:
                                           const QString patient_address,
                                           const QString patient_email,
                                           const QString patient_telephone,
-                                          const QString patient_comment);
+                                          const QString patient_comment,
+                                          const bool thisMySQL);
 
     void setRequiredVariableForExportDocuments(const bool thisMySQL,
                                                const int id_order,

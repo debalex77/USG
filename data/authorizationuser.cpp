@@ -80,7 +80,8 @@ void AuthorizationUser::setDataConstants()
     // 📌 3 setam `handler_functionThread` cu variabile necesrare
     handler_functionThread->setRequiredVariabile(globals().idUserApp,
                                                  globals().c_id_organizations,
-                                                 globals().c_id_doctor);
+                                                 globals().c_id_doctor,
+                                                 globals().thisMySQL);
     // 📌 4 Conectăm semnalele și sloturile
     connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::setDataConstants);
     connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, this, &AuthorizationUser::onDataReceived);

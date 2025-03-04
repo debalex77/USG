@@ -545,7 +545,8 @@ void ListDocReportOrder::onClickBtnSendEmail()
     // 📌 6 setam `handler_functionThread` cu variabile necesrare
     handler_functionThread->setRequiredVariabile(globals().idUserApp,
                                                  globals().c_id_organizations,
-                                                 globals().c_id_doctor);
+                                                 globals().c_id_doctor,
+                                                 globals().thisMySQL);
     handler_functionThread->setRequiredVariableForExportDocuments(globals().thisMySQL,
                                                                   _id_order,
                                                                   -1,

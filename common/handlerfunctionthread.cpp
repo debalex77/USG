@@ -18,11 +18,12 @@ HandlerFunctionThread::~HandlerFunctionThread()
 
 void HandlerFunctionThread::setRequiredVariabile(const int id_mainUser,
                                                  const int id_mainOrganization,
-                                                 const int id_mainDoctor)
+                                                 const int id_mainDoctor, const bool thisMySQL)
 {
     m_id_user = id_mainUser;
     m_id_mainDoctor = id_mainDoctor;
     m_id_mainOrganization = id_mainOrganization;
+    m_thisMySQL = thisMySQL;
 }
 
 void HandlerFunctionThread::setRequiredVariableForCatPatient(const int patient_id,
@@ -34,7 +35,8 @@ void HandlerFunctionThread::setRequiredVariableForCatPatient(const int patient_i
                                                              const QString patient_address,
                                                              const QString patient_email,
                                                              const QString patient_telephone,
-                                                             const QString patient_comment)
+                                                             const QString patient_comment,
+                                                             const bool thisMySQL)
 {
     cat_patient_id = patient_id;
     cat_patient_name = patient_name;
@@ -46,6 +48,7 @@ void HandlerFunctionThread::setRequiredVariableForCatPatient(const int patient_i
     cat_patient_email = patient_email;
     cat_patient_telephone = patient_telephone;
     cat_patient_comment = patient_comment;
+    m_thisMySQL = thisMySQL;
 }
 
 void HandlerFunctionThread::setRequiredVariableForExportDocuments(const bool thisMySQL,
@@ -104,7 +107,7 @@ void HandlerFunctionThread::setDataConstants()
     ConstantsData data;
 
     {
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
         {
             QSqlQuery qry(dbConnection);
             qry.prepare("SELECT * FROM constants WHERE id_users = ?;");
@@ -189,7 +192,7 @@ void HandlerFunctionThread::saveDataPatient()
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     { // -- bloc pentru dbConnection
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
 
         { // -- bloc pentru QSqlQuery
 
@@ -223,7 +226,7 @@ void HandlerFunctionThread::updateDataPatientInDB()
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     { // -- bloc pentru dbConnection
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
 
         { // -- bloc pentru QSqlQuery
             QSqlQuery qry(dbConnection);
@@ -274,6 +277,8 @@ void HandlerFunctionThread::exportDocumentsToPDF()
     // 📌 1 Generam denumirile conexiunilor in afara blocului
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
     const QString threadImageConnectionName = QString("connection_image_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
+    if (m_thisMySQL)
+        Q_UNUSED(threadImageConnectionName);
 
     // 💡
     /*--------------------------------------------------------
@@ -284,24 +289,32 @@ void HandlerFunctionThread::exportDocumentsToPDF()
      * pentru distrugerea folosim blocuri {}
      *-------------------------------------------------------*/
     {
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName);
-        QSqlDatabase dbImageConnection = db->getDatabaseImageThread(threadImageConnectionName);
+        QSqlDatabase dbConnection;
+        QSqlDatabase dbImageConnection;
+        dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
+        if (! m_thisMySQL) {
+            dbImageConnection = db->getDatabaseImageThread(threadImageConnectionName);
+        }
 
         exportDocumentOrder(dbConnection);
         exportDocumentReport(dbConnection);
-        exportDocumentImages(dbImageConnection);
+        if (m_thisMySQL)
+            exportDocumentImages(dbConnection);
+        else
+            exportDocumentImages(dbImageConnection);
 
         if (dbConnection.isOpen()) {
             dbConnection.close();
         }
 
-        if (dbImageConnection.isOpen()) {
+        if (! m_thisMySQL && dbImageConnection.isOpen()) {
             dbImageConnection.close();
         }
     } // 💡 la nivel acesta se distruge: dbConnection & dbImageConnection
 
     db->removeDatabaseThread(threadConnectionName);
-    db->removeDatabaseThread(threadImageConnectionName);
+    if (! m_thisMySQL)
+        db->removeDatabaseThread(threadImageConnectionName);
 
     // emitem signal de exportare cu succes
     emit finishExportDocumenstToPDF(data_agentEmail);

@@ -650,7 +650,8 @@ void DocOrderEcho::onClickNewPacient()
                                                              ui->editAddress->text(),
                                                              ui->editEmail->text(),
                                                              ui->editPhone->text(),
-                                                             nullptr);
+                                                             nullptr,
+                                                             globals().thisMySQL);
 
     // 📌 8. Inseram sau actualizam date a pacientului
     if (ui->checkBox->isChecked() && m_idPacient == -1){

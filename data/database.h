@@ -33,7 +33,7 @@ public:
     bool createConnectBaseSqlite(QString &txtMessage);
 
     QSqlDatabase getDatabase();
-    QSqlDatabase getDatabaseThread(const QString threadConnectionName);
+    QSqlDatabase getDatabaseThread(const QString threadConnectionName, const bool thisMySQL);
     QSqlDatabase getDatabaseImageThread(const QString threadConnectionName);
     void removeDatabaseThread(const QString threadConnectionName);
     void removeDatabaseImageThread(const QString threadConnectionName);
