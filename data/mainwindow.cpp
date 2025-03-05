@@ -331,6 +331,7 @@ void MainWindow::initActions()
     QAction* actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
     QAction* actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
     QAction* actionAgentEmail       = new QAction(QIcon(":/img/email.png"), tr("Cont online"), this);
+    QAction* actionCloudServer      = new QAction(QIcon(":/img/cloud-server.png"), tr("Configurarea cloud server"), this);
 
     QAction* actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
     QAction* actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
@@ -362,6 +363,7 @@ void MainWindow::initActions()
     connect(actionAppSettings, &QAction::triggered, this, &MainWindow::openAppSettings);
     connect(actionUserSettings, &QAction::triggered, this, &MainWindow::openUserSettings);
     connect(actionAgentEmail, &QAction::triggered, this, &MainWindow::openAgentContOnline);
+    connect(actionCloudServer, &QAction::triggered, this, &MainWindow::openCloudServerConfig);
 
     connect(actionOpenPricing, &QAction::triggered, this, &MainWindow::openPricing);
     connect(actionOpenAppointments, &QAction::triggered, this, &MainWindow::openPatientAppointments);
@@ -414,6 +416,8 @@ void MainWindow::initActions()
     ui->menuService->addAction(actionUserSettings);
     ui->menuService->addSeparator();
     ui->menuService->addAction(actionAgentEmail);
+    ui->menuService->addSeparator();
+    ui->menuService->addAction(actionCloudServer);
 
     QAction *actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
     ui->menuAssistance->addAction(actionSourceCode);
@@ -928,6 +932,13 @@ void MainWindow::openAgentContOnline()
     agent_email->setAttribute(Qt::WA_DeleteOnClose);
     agent_email->setProperty("Id_Organization", globals().c_id_organizations);
     agent_email->show();
+}
+
+void MainWindow::openCloudServerConfig()
+{
+    CloudServerConfig *cloud_server = new CloudServerConfig(this);
+    cloud_server->setAttribute(Qt::WA_DeleteOnClose);
+    cloud_server->show();
 }
 
 // **********************************************************************************

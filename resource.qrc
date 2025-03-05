@@ -205,5 +205,6 @@
         <file>img/unchecked_dark.png</file>
         <file>img/arrow_up_dark.png</file>
         <file>img/arrow_down_dark.png</file>
+        <file>img/cloud-server.png</file>
     </qresource>
 </RCC>
