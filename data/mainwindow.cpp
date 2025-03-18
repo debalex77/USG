@@ -938,6 +938,8 @@ void MainWindow::openCloudServerConfig()
 {
     CloudServerConfig *cloud_server = new CloudServerConfig(this);
     cloud_server->setAttribute(Qt::WA_DeleteOnClose);
+    cloud_server->setProperty("ID_user", globals().idUserApp);
+    cloud_server->setProperty("ID_Organization", globals().c_id_organizations);
     cloud_server->show();
 }
 

@@ -105,6 +105,27 @@ QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, con
     return QSqlDatabase::database(threadConnectionName);
 }
 
+QSqlDatabase DataBase::getDatabaseCloudThread(const QString threadConnectionName)
+{
+    qInfo(logInfo()) << "";
+    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION CLOUD THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
+    qInfo(logInfo()) << "Se initiaza 'Cloud Thread' connection: " << threadConnectionName;
+    if (! QSqlDatabase::contains(threadConnectionName)) {
+        QSqlDatabase db_thread = QSqlDatabase::addDatabase("QMYSQL", threadConnectionName);
+        db_thread.setHostName(globals().cloud_host);
+        db_thread.setDatabaseName(globals().cloud_nameBase);
+        db_thread.setPort(globals().cloud_port.toInt());
+        db_thread.setConnectOptions(globals().cloud_optionConnect);
+        db_thread.setUserName(globals().cloud_user);
+        db_thread.setPassword(globals().cloud_passwd);
+        if (! db_thread.open()) {
+            qWarning(logWarning()) << "Eroare <cloud thread> la deschiderea bazei de date(MYSQL):" << db_thread.lastError().text();
+        }
+        return db_thread;
+    }
+    return QSqlDatabase::database(threadConnectionName);
+}
+
 QSqlDatabase DataBase::getDatabaseImageThread(const QString threadConnectionName)
 {
     qInfo(logInfo()) << "";
@@ -345,10 +366,20 @@ void DataBase::creatingTables()
 bool DataBase::checkTable(const QString name_table)
 {
     QSqlQuery qry;
-    qry.prepare("SELECT name FROM sqlite_master WHERE TYPE='table' AND name='" + name_table + "';");
-    if (qry.exec() && qry.next())
-        return (qry.value(0).toString().isEmpty()) ? false : true;
-    return false;
+    if (globals().thisMySQL) {
+        qry.prepare("SHOW TABLES LIKE ?;");
+        qry.addBindValue(name_table);
+    } else {
+        qry.prepare("SELECT name FROM sqlite_master WHERE TYPE='TABLE' AND name=?;");
+        qry.addBindValue(name_table);
+    }
+
+    if (! qry.exec()){
+        qDebug() << "Eroare SQLite:" << qry.lastError().text();
+        return false;
+    }
+
+    return qry.next();
 }
 
 void DataBase::creatingTables_DbImage()
@@ -4371,6 +4402,52 @@ bool DataBase::createTableContOnline()
     }
 }
 
+bool DataBase::createTableCloudServer()
+{
+    QSqlQuery qry;
+    if (globals().connectionMade == "MySQL")
+        qry.prepare("CREATE TABLE if not exists cloudServer ("
+                    "id               int NOT NULL AUTO_INCREMENT, "
+                    "id_organizations INT NOT Null, "
+                    "id_users         INT NOT Null, "
+                    "hostName         VARCHAR(30) NOT Null, "
+                    "databaseName     VARCHAR(30) NOT Null, "
+                    "port             VARCHAR(5), "
+                    "connectionOption VARCHAR(255), "
+                    "username         VARCHAR(50) NOT Null, "
+                    "password         VARCHAR(255) NOT Null,"
+                    "iv               VARCHAR(24) NOT Null," // pu criptare vezi clasa CryptoManager
+                    "PRIMARY KEY (`id`),"
+                    "KEY `contsOnline_organizations_id_idx` (`id_organizations`),"
+                    "KEY `contsOnline_users_id_idx` (`id_users`),"
+                    "CONSTRAINT `cloudServer_organizations_id_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,"
+                    "CONSTRAINT `cloudServer_users_id_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE;");
+    else if (globals().connectionMade == "Sqlite")
+        qry.prepare("CREATE TABLE if not exists cloudServer ("
+                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
+                    "id_organizations INTEGER NOT NULL, "
+                    "id_users         INTEGER NOT NULL, "
+                    "hostName         TEXT NOT NULL, "
+                    "databaseName     TEXT NOT NULL, "
+                    "port             TEXT, "
+                    "connectionOption TEXT, "
+                    "username         TEXT NOT NULL, "
+                    "password         TEXT NOT NULL, "
+                    "iv               TEXT NOT NULL, " // pu criptare vezi clasa CryptoManager
+                    "FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,"
+                    "FOREIGN KEY (id_users) REFERENCES users (id) ON DELETE CASCADE);");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableCloudServer()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'cloudServer'.") + qry.lastError().text();
+        return false;
+    }
+}
+
 void DataBase::updateVariableFromTableSettingsUser()
 {
     QSqlQuery qry;
@@ -5375,6 +5452,18 @@ QString DataBase::getStyleForButtonToolBar()
                        "{ "
                        "  background-color: #dcdcdc;"
                        "}");
+}
+
+QByteArray DataBase::getHashUserApp()
+{
+    QSqlQuery qry;
+    qry.prepare("SELECT hash FROM users WHERE id = ?");
+    qry.addBindValue(globals().idUserApp);
+    if (qry.exec() && qry.next()) {
+        return QByteArray::fromHex(qry.value(0).toString().toUtf8());
+    } else {
+        return QByteArray();
+    }
 }
 
 // *******************************************************************

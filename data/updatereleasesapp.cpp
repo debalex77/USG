@@ -748,6 +748,7 @@ void UpdateReleasesApp::createIndexForBaseImage_3_0_1()
 void UpdateReleasesApp::updateRelease_3_0_3()
 {
     db->createTableContOnline();
+    db->createTableCloudServer();
 
     QSqlQuery qry;
     if (globals().thisSqlite){

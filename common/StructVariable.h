@@ -37,6 +37,13 @@ struct GlobalVariable {
     QString mySQLuser = nullptr;
     QString mySQLpasswdUser = nullptr;
 
+    QString cloud_host = nullptr;
+    QString cloud_nameBase = nullptr;
+    QString cloud_port = nullptr;
+    QString cloud_optionConnect = nullptr;
+    QString cloud_user = nullptr;
+    QString cloud_passwd = nullptr;
+
     QString langApp = nullptr;
     QString unitMeasure = nullptr;
     QString nameUserApp = nullptr;

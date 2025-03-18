@@ -53,6 +53,7 @@ private:
     QLineEdit   *edit_password;
     QToolButton *show_hide_password;
     HandlerFunctionThread *handler_functionThread;
+    CryptoManager *crypto_manager;
 
 protected:
     void changeEvent(QEvent *event);       // contolam traducerea aplicatiei

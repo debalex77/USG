@@ -255,13 +255,13 @@ bool ContOnline::saveData()
     if (existEmail()) {
         if (updateDataIntoTableContsOnline()) {
             popUp->setPopupText(tr("Datele adresei electronice au fost<br>"
-                                   "inserate cu succes in baza de date."));
+                                   "actualizate cu succes in baza de date."));
             popUp->show();
         }
     } else {
         if (insertDataIntoTableContsOnline()) {
             popUp->setPopupText(tr("Datele adresei electronice au fost<br>"
-                                   "actualizate cu succes in baza de date."));
+                                   "inserate cu succes in baza de date."));
             popUp->show();
         }
     }

@@ -26,6 +26,14 @@ struct ConstantsData {
     QByteArray doctor_stamp;
     QString    doctor_nameFull;
     QString    doctor_nameAbbreviate;
+    // cloud server
+    QString cloud_host;
+    QString cloud_databaseName;
+    QString cloud_port;
+    QString cloud_connectionOption;
+    QString cloud_user;
+    QByteArray cloud_password;
+    QByteArray cloud_iv;
 };
 
 struct ExportData {

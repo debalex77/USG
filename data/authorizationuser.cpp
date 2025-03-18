@@ -133,6 +133,15 @@ void AuthorizationUser::onDataReceived(QVector<ConstantsData> data_constants)
         globals().stamp_main_doctor          = constant.doctor_stamp;
         globals().main_name_doctor           = constant.doctor_nameFull;
         globals().main_name_abbreviat_doctor = constant.doctor_nameAbbreviate;
+        // cloud server
+        globals().cloud_host           = constant.cloud_host;
+        globals().cloud_nameBase       = constant.cloud_databaseName;
+        globals().cloud_port           = constant.cloud_port;
+        globals().cloud_optionConnect  = constant.cloud_connectionOption;
+        globals().cloud_user           = constant.cloud_user;
+        globals().cloud_passwd         = QString::fromUtf8(crypto_manager->decryptPassword(constant.cloud_password,
+                                                                                   db->getHashUserApp(),
+                                                                                   constant.cloud_iv));
     }
 }
 

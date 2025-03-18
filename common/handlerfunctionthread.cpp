@@ -170,6 +170,26 @@ void HandlerFunctionThread::setDataConstants()
                     data.doctor_nameAbbreviate = qry.value(rec.indexOf("nameAbbreviated")).toString();
                 }
             }
+
+            QSqlQuery qry_cloud(dbConnection);
+            qry_cloud.prepare("SELECT * FROM cloudServer WHERE id_organizations = ? AND id_users = ?;");
+            qry_cloud.addBindValue(data.c_id_organizations);
+            qry_cloud.addBindValue(m_id_user);
+            if (! qry_cloud.exec()) {
+                qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
+            } else {
+                while (qry_cloud.next()) {
+                    QSqlRecord rec = qry_cloud.record();
+                    data.cloud_host             = qry_cloud.value(rec.indexOf("hostName")).toString();
+                    data.cloud_databaseName     = qry_cloud.value(rec.indexOf("databaseName")).toString();
+                    data.cloud_port             = qry_cloud.value(rec.indexOf("port")).toString();
+                    data.cloud_connectionOption = qry_cloud.value(rec.indexOf("connectionOption")).toString();
+                    data.cloud_user             = qry_cloud.value(rec.indexOf("username")).toString();
+                    data.cloud_password         = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("password")).toString().toUtf8());
+                    data.cloud_iv               = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("iv")).toString().toUtf8());
+                }
+            }
+
         }  // qry se destruge aici
 
         data_constants.append(data);

@@ -21,6 +21,8 @@
 #include <data/globals.h>
 #include <data/loggingcategories.h>
 
+#include <common/cryptomanager.h>
+
 class DataBase : public QObject
 {
     Q_OBJECT
@@ -34,6 +36,7 @@ public:
 
     QSqlDatabase getDatabase();
     QSqlDatabase getDatabaseThread(const QString threadConnectionName, const bool thisMySQL);
+    QSqlDatabase getDatabaseCloudThread(const QString threadConnectionName);
     QSqlDatabase getDatabaseImageThread(const QString threadConnectionName);
     void removeDatabaseThread(const QString threadConnectionName);
     void removeDatabaseImageThread(const QString threadConnectionName);
@@ -138,6 +141,7 @@ public:
 
     bool createIndexTables();
     bool createTableContOnline();
+    bool createTableCloudServer();
 
     enum REQUIRED_NUMBER
     {
@@ -184,11 +188,14 @@ public:
     QString getStyleForToolButton();
     QString getStyleForButtonToolBar();
 
+    QByteArray getHashUserApp();
+
 signals:
     void updateProgress(const int num_records, const int value);
     void finishedProgress(const QString txt);
 
 private:
+    CryptoManager *crypto_manager;
     QSqlDatabase db;
     QSqlDatabase db_image;
     QString m_connectionName = nullptr;
