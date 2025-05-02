@@ -991,7 +991,11 @@ void MainWindow::initMinimizeAppToTray()
     QAction *quitAction = new QAction(tr("Ie\310\231ire"), this);
 
     connect(viewWindow, &QAction::triggered, this, &MainWindow::show);
-    connect(quitAction, &QAction::triggered, this, &MainWindow::close);
+    connect(quitAction, &QAction::triggered, this, [this]() {
+        globals().minimizeAppToTray = false;
+        this->show();
+        this->close();
+    });
 
     menu->addAction(viewWindow);
     menu->addAction(quitAction);
@@ -1000,8 +1004,6 @@ void MainWindow::initMinimizeAppToTray()
     trayIcon->setContextMenu(menu);
     trayIcon->show();
 
-    // connect(trayIcon, SIGNAL(activated(QSystemTrayIcon::ActivationReason)),
-    //         this, SLOT(iconActivated(QSystemTrayIcon::ActivationReason)));
     connect(trayIcon, &QSystemTrayIcon::activated, this, &MainWindow::iconActivated);
 }
 
@@ -1062,36 +1064,36 @@ void MainWindow::closeEvent(QCloseEvent *event)
                                  "face\310\233i clic pe pictograma aplica\310\233iei din tray."),
                               icon,
                               2000);
-
-    } else {
-
-        if (! globals().showQuestionCloseApp){
-            closeDatabases();
-            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.")
-                                    .arg(globals().nameUserApp);
-            event->accept();
-            return;
-        }
-
-        QMessageBox messange_box(QMessageBox::Question,
-                                 tr("Finisarea lucrului"),
-                                 tr("Dori\310\233i s\304\203 \303\256nchide\310\233i aplica\310\233ia ?"),
-                                 QMessageBox::NoButton, this);
-        QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-        QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-        yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-        noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-        messange_box.exec();
-
-        if (messange_box.clickedButton() == yesButton){
-            closeDatabases();
-            qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
-            event->accept();
-        } else if (messange_box.clickedButton() == noButton) {
-            event->ignore();
-        }
+        return;
 
     }
+
+    if (! globals().showQuestionCloseApp){
+        closeDatabases();
+        qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.")
+                                .arg(globals().nameUserApp);
+        event->accept();
+        return;
+    }
+
+    QMessageBox messange_box(QMessageBox::Question,
+                             tr("Finisarea lucrului"),
+                             tr("Dori\310\233i s\304\203 \303\256nchide\310\233i aplica\310\233ia ?"),
+                             QMessageBox::NoButton, this);
+    QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    messange_box.exec();
+
+    if (messange_box.clickedButton() == yesButton){
+        closeDatabases();
+        qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
+        event->accept();
+    } else if (messange_box.clickedButton() == noButton) {
+        event->ignore();
+    }
+
 }
 
 bool MainWindow::eventFilter(QObject *obj, QEvent *event)
