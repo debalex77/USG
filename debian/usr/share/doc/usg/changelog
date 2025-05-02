@@ -1,3 +1,12 @@
+3.0.3 (May 1st, 2025)
+  * Fixed errors in the patient search modules, including improved request performance.
+  * Implemented the <b><u>sendEmail</u></b> agent with the following document attachment functionalities:
+    * Ultrasound Order
+    * Ultrasound Report
+    * Associated Images
+  * Adjusted tables <b><u>tableGestation0</u></b> and <b><u>tableGestation1</u></b>: added the LMP field for setting the date and automatic gestational age calculation.
+  * Fixed minor bugs.
+
 3.0.2 (February 06th, 2025)
   * Normograms - Percentile data (5, 10, 25, 50, 75, 90, 95) have been added for:
     * Uterine artery

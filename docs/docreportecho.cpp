@@ -2575,10 +2575,17 @@ void DocReportEcho::slot_ItNewChanged()
             connections_breast();
         if (m_thyroide)
             connections_thyroid();
-        if (m_gestation0)
+
+        if (m_gestation0) {
+            ui->gestation0_LMP->setDate(QDate::currentDate());
             connections_gestation0();
-        if (m_gestation1)
+        }
+
+        if (m_gestation1) {
+            ui->gestation1_LMP->setDate(QDate::currentDate());
             connections_gestation1();
+        }
+
         if (m_gestation2) {
             ui->gestation2_dateMenstruation->setDate(QDate::currentDate());
             updateDescriptionFetusWeight();

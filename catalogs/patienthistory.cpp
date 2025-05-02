@@ -160,24 +160,56 @@ void PatientHistory::updateModelPatients()
     if (model_patients->rowCount() > 0)
         model_patients->clear();
 
-    QString strQuery;
-    strQuery = QString("SELECT pacients.id, "
-                       "fullNamePacients.nameBirthdayIDNP AS FullName "
-                       "FROM pacients INNER JOIN fullNamePacients ON fullNamePacients.id_pacients = pacients.id WHERE pacients.deletionMark = 0 ORDER BY FullName ASC;");
-    QMap<int, QString> data = db->getMapDataQuery(strQuery);
-
-    QMapIterator<int, QString> it(data);
-    while (it.hasNext()) {
-        it.next();
-        int     _id   = it.key();
-        QString _name = it.value();
-
-        QStandardItem *item = new QStandardItem;
-        item->setData(_id,   Qt::UserRole);
-        item->setData(_name, Qt::DisplayRole);
-
-        model_patients->appendRow(item);  // adaugam datele in model
+    const QString strQuery =
+        globals().thisMySQL ?
+            QStringLiteral(
+                "SELECT "
+                "  pacients.id, "
+                "  CONCAT(pacients.name, ' ', pacients.fName, ', ', "
+                "  DATE_FORMAT(pacients.birthday, '%d.%m.%Y'), ', idnp: ', "
+                "  IFNULL(pacients.IDNP, '')) AS FullName "
+                "FROM "
+                "  pacients "
+                "WHERE "
+                "  pacients.deletionMark = 0 "
+                "ORDER BY "
+                "  FullName ASC;"
+            ) :
+            QStringLiteral(
+                "SELECT "
+                "  pacients.id,"
+                "  pacients.name ||' '|| pacients.fName "
+                "  || ', ' || strftime('%d.%m.%Y', pacients.birthday) || ', idnp: ' || IFNULL(pacients.IDNP, '') AS FullName "
+                "FROM "
+                "  pacients "
+                "WHERE "
+                "  pacients.deletionMark = 0 "
+                "ORDER BY "
+                "  FullName ASC;"
+            );
+    QSqlQuery qry;
+    if (! qry.exec(strQuery)) {
+        qWarning() << "Eroare exec query:" << qry.lastError().text();
+        return;
     }
+
+    // pu performanta cream container
+    QList<QStandardItem*> items;
+
+    // prelucrarea solicitarii si completarea containerului 'items'
+    while (qry.next()) {
+        int     _id   = qry.value(0).toInt();
+        QString _name = qry.value(1).toString();
+
+        auto *item = new QStandardItem;
+        item->setData(_id, Qt::UserRole);       // pentru identificator logic
+        item->setData(_name, Qt::DisplayRole);  // ce se afișează în combobox
+
+        items.append(item); // introducem in container
+    }
+
+    // adaugam toate randurile printr-o tranzactie/simultan (eficient si rapid)
+    model_patients->invisibleRootItem()->appendRows(items);
 }
 
 void PatientHistory::updateTableDoc()

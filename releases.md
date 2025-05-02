@@ -1,3 +1,12 @@
+## USG v3.0.3
+* corectarea erorii din modulele de cautare a pacientilor cu corectarea performantei solicitarilor
+* implementarea agentului <b><u>sendEmail</u></b> cu următoarele functionalități de atașare a documentelor:   
+    * Comanda ecografică
+    * Raport ecografic
+    * Imaginile asociate
+* ajustarea tabelelor <b><u>tableGestation0</u></b> și <b><u>tableGestation1</u></b>: adaugarea câmpului LMP pentru fixarea datei și calculul automat a vârstei.
+* fixarea bag-lor minore
+
 ## USG v3.0.2
 * normograme - au fost adaugate datele percentilelor(5,10,25,50,75,90,95):
     * a.uterine 

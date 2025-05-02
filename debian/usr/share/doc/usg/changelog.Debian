@@ -1,3 +1,14 @@
+usg (3.0.3) UNRELEASED; urgency=medium
+  * Fixed errors in the patient search modules, including improved request performance.
+  * Implemented the <b><u>sendEmail</u></b> agent with the following document attachment functionalities:
+    * Ultrasound Order
+    * Ultrasound Report
+    * Associated Images
+  * Adjusted tables <b><u>tableGestation0</u></b> and <b><u>tableGestation1</u></b>: added the LMP field for setting the date and automatic gestational age calculation.
+  * Fixed minor bugs.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 01 May 2025 20:31:00 +0300
+
 usg (3.0.2) UNRELEASED; urgency=medium
   * Normograms - Percentile data (5, 10, 25, 50, 75, 90, 95) have been added for:
     * Uterine artery

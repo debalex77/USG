@@ -1394,20 +1394,43 @@ void DocOrderEcho::updateModelPacients()
 {
     modelPacients->clear();
 
-    QList<QStandardItem*> items;
-
-    QSqlQuery qry;
-    qry.prepare("SELECT "
+    const QString strQuery =
+        globals().thisMySQL ?
+            QStringLiteral(
+                "SELECT "
                 "  pacients.id, "
-                "  fullNamePacients.nameBirthdayIDNP AS FullName "
+                "  CONCAT(pacients.name, ' ', pacients.fName, ', ', "
+                "  DATE_FORMAT(pacients.birthday, '%d.%m.%Y'), ', idnp: ', "
+                "  IFNULL(pacients.IDNP, '')) AS FullName "
                 "FROM "
                 "  pacients "
-                "INNER JOIN "
-                "  fullNamePacients ON pacients.id = fullNamePacients.id_pacients "
                 "WHERE "
                 "  pacients.deletionMark = 0 "
                 "ORDER BY "
-                "  fullNamePacients.nameBirthdayIDNP;");
+                "  FullName ASC;"
+                ) :
+            QStringLiteral(
+                "SELECT "
+                "  pacients.id,"
+                "  pacients.name ||' '|| pacients.fName "
+                "  || ', ' || strftime('%d.%m.%Y', pacients.birthday) || ', idnp: ' || IFNULL(pacients.IDNP, '') AS FullName "
+                "FROM "
+                "  pacients "
+                "WHERE "
+                "  pacients.deletionMark = 0 "
+                "ORDER BY "
+                "  FullName ASC;"
+                );
+    QSqlQuery qry;
+    if (! qry.exec(strQuery)) {
+        qWarning() << "Eroare exec query:" << qry.lastError().text();
+        return;
+    }
+
+    // pu performanta cream container
+    QList<QStandardItem*> items;
+
+    // prelucrarea solicitarii si completarea containerului 'items'
     if (qry.exec()) {
         while (qry.next()) {
             QStandardItem *item = new QStandardItem;
@@ -1417,7 +1440,7 @@ void DocOrderEcho::updateModelPacients()
         }
     }
 
-    // Adaugă toate elementele simultan (corect și rapid)
+    // adaugam toate randurile printr-o tranzactie/simultan (eficient si rapid)
     modelPacients->invisibleRootItem()->appendRows(items);
 }
 

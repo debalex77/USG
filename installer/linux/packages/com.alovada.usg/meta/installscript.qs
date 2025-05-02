@@ -9,7 +9,7 @@ Component.prototype.createOperations = function() {
     var desktopFile = "@HomeDir@/.local/share/applications/org.alovada.usg.desktop";
     var content = [
         "[Desktop Entry]",
-        "Version=3.0.2",
+        "Version=3.0.3",
         "Type=Application",
         "Name=USG-Evidența investigațiilor ecografice",
         "Comment[en]=USG-Evidence of ultrasound investigations",
