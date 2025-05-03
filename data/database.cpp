@@ -5228,14 +5228,20 @@ QString DataBase::getQryForTableOrderById(const int id_doc, const QString str_pr
 {
     QString str_qry;
     str_qry = QString("SELECT "
-                      "orderEchoPresentation.docPresentationDate AS title_order,"
-                      "orderEchoTable.cod,"
-                      "orderEchoTable.name AS Investigation, "
-                      "%1 AS Price "
-                      "FROM orderEcho "
-                      "  INNER JOIN orderEchoTable ON orderEcho.id = orderEchoTable.id_orderEcho "
-                      "  INNER JOIN orderEchoPresentation ON orderEcho.id = orderEchoPresentation.id_orderEcho "
-                      "WHERE orderEcho.id = '%2' AND orderEcho.deletionMark = '2' GROUP BY orderEchoTable.cod;")
+                      "  orderEchoPresentation.docPresentationDate AS title_order,"
+                      "  orderEchoTable.cod,"
+                      "  orderEchoTable.name AS Investigation, "
+                      "  %1 AS Price "
+                      "FROM "
+                      "  orderEcho "
+                      "INNER JOIN "
+                      "  orderEchoTable ON orderEcho.id = orderEchoTable.id_orderEcho "
+                      "INNER JOIN "
+                      "  orderEchoPresentation ON orderEcho.id = orderEchoPresentation.id_orderEcho "
+                      "WHERE "
+                      "  orderEcho.id = '%2' AND orderEcho.deletionMark = '2' "
+                      "ORDER BY "
+                      "  orderEchoTable.cod;")
                   .arg(str_price, QString::number(id_doc));
     return str_qry;
 }

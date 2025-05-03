@@ -246,7 +246,8 @@ const QString ListForm::qryTableDoctors()
                    "  doctors "
                    "INNER JOIN "
                    "  fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors "
-                   "GROUP BY fullNameDoctors.name;");
+                   "ORDER BY "
+                   "  fullNameDoctors.name;");
 }
 
 const QString ListForm::qryTableNurses()
@@ -257,10 +258,12 @@ const QString ListForm::qryTableNurses()
                    "  nurses.telephone,"
                    "  nurses.email,"
                    "  nurses.comment "
-                   "FROM nurses "
-                   "INNER JOIN"
+                   "FROM "
+                   "  nurses "
+                   "INNER JOIN "
                    "  fullNameNurses ON nurses.id = fullNameNurses.id_nurses "
-                   "GROUP BY fullNameNurses.name;");
+                   "ORDER BY "
+                   "  fullNameNurses.name;");
 }
 
 const QString ListForm::qryTablePacients()
@@ -275,29 +278,39 @@ const QString ListForm::qryTablePacients()
                    "  pacients.comment "
                    "FROM "
                    "  pacients "
-                   "INNER JOIN fullNamePacients ON pacients.id = fullNamePacients.id_pacients "
-                   "GROUP BY fullNamePacients.name;");
+                   "INNER JOIN "
+                   "  fullNamePacients ON pacients.id = fullNamePacients.id_pacients "
+                   "ORDER BY "
+                   "  fullNamePacients.name;");
 }
 
 const QString ListForm::qryTableUsers()
 {
-    return QString("SELECT id,"
-                   "deletionMark,"
-                   "name FROM users "
-                   "ORDER BY name;");
+    return QString("SELECT "
+                   "  id,"
+                   "  deletionMark,"
+                   "  name "
+                   "FROM "
+                   "  users "
+                   "ORDER BY "
+                   "  name;");
 }
 
 const QString ListForm::qryTableOrganizations()
 {
-    return QString("SELECT id,"
-                   "deletionMark,"
-                   "name,"
-                   "IDNP,"
-                   "address,"
-                   "telephone,"
-                   "email,"
-                   "comment FROM organizations "
-                   "ORDER BY name;");
+    return QString("SELECT "
+                   "  id,"
+                   "  deletionMark,"
+                   "  name,"
+                   "  IDNP,"
+                   "  address,"
+                   "  telephone,"
+                   "  email,"
+                   "  comment "
+                   "FROM "
+                   "  organizations "
+                   "ORDER BY "
+                   "  name;");
 }
 
 QString ListForm::enumToString(TypeListForm typeCatalog)
