@@ -47,13 +47,33 @@ void GroupInvestigationList::updateTable()
     db = new DataBase(this);
     QSqlQuery qry;
     QSqlQuery qry_items;
-    qry.prepare("SELECT owner FROM investigations WHERE owner NOT NULL OR owner <> '' GROUP BY owner ORDER BY cod;");
+    qry.prepare("SELECT "
+                " investigations.owner, "
+                " investigationsGroup.cod "
+                "FROM "
+                " investigations "
+                "INNER JOIN "
+                " investigationsGroup ON investigations.owner = investigationsGroup.name "
+                "WHERE "
+                " investigations.owner IS NOT NULL AND investigations.owner <> '' "
+                "GROUP BY "
+                " investigations.owner, investigationsGroup.cod "
+                "ORDER BY "
+                " investigationsGroup.cod ASC;");
     if (qry.exec()){
         while (qry.next()) {
 
             result = result + "gr_" + qry.value(0).toString() + "\n";
 
-            qry_items.prepare(QString("SELECT cod, name FROM investigations WHERE `use` = 1 AND owner = '%1' ORDER BY cod;").arg(qry.value(0).toString()));
+            qry_items.prepare(QString("SELECT "
+                                      "  cod, "
+                                      "  name "
+                                      "FROM "
+                                      "  investigations "
+                                      "WHERE "
+                                      "  `use` = 1 AND owner = '%1' "
+                                      "ORDER BY "
+                                      "  cod;").arg(qry.value(0).toString()));
             if (qry_items.exec()){
                 while (qry_items.next()) {
                     result = result + " it_" + qry_items.value(0).toString() + " - " + qry_items.value(1).toString() + "\n";
@@ -63,7 +83,15 @@ void GroupInvestigationList::updateTable()
     }
 
     if (! ui->hideNotGroup->isChecked()){
-        qry_items.prepare("SELECT cod, name FROM investigations WHERE `use` = 0 ORDER BY cod;");
+        qry_items.prepare("SELECT "
+                          "  cod, "
+                          "  name "
+                          "FROM "
+                          "  investigations "
+                          "WHERE "
+                          "  `use` = 0 "
+                          "ORDER BY "
+                          "  cod;");
         if (qry_items.exec()){
             while (qry_items.next()) {
                 result = result + "it_" + qry_items.value(0).toString() + " - " + qry_items.value(1).toString() + "\n";
@@ -94,9 +122,9 @@ void GroupInvestigationList::onPrint()
                             "INNER JOIN "
                             " investigationsGroup ON investigations.owner = investigationsGroup.name "
                             "WHERE "
-                            " investigations.owner IS NOT NULL "
+                            " investigations.owner IS NOT NULL AND investigations.owner <> '' "
                             "GROUP BY "
-                            " investigationsGroup.cod "
+                            " investigations.owner, investigationsGroup.cod "
                             "ORDER BY "
                             " investigationsGroup.cod ASC;");
     if (! m_owner->first()) {

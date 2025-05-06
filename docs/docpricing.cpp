@@ -368,7 +368,13 @@ void DocPricing::completeTableDocPricing()
      * si tabela 'investigations' din BD sqlite */
     QMap<QString, QString> items;
     modelTable->setFilter(QString("id_pricings=%1").arg(m_id));
-    QString strQry = "SELECT cod,name FROM investigations WHERE deletionMark = 0 AND use = '1';";
+    QString strQry = "SELECT "
+                     "  cod,"
+                     "  name "
+                     "FROM "
+                     "  investigations "
+                     "WHERE "
+                     "  deletionMark = 0 AND `use` = '1';";
     if (db->getDataFromQuery(strQry, items)){
         QMapIterator<QString, QString> it(items);
         while (it.hasNext()) {
@@ -470,9 +476,9 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
                             "INNER JOIN "
                             " investigationsGroup ON investigations.owner = investigationsGroup.name "
                             "WHERE "
-                            " investigations.owner IS NOT NULL "
+                            " investigations.owner IS NOT NULL AND investigations.owner <> '' "
                             "GROUP BY "
-                            " investigationsGroup.cod "
+                            " investigations.owner, investigationsGroup.cod "
                             "ORDER BY "
                             " investigationsGroup.cod ASC;");
     if (! m_owner->first()) {
@@ -498,16 +504,16 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
         str_investigations =
             QString(
                 "SELECT "
-                " investigations.cod, "
-                " investigations.name,"
-                " %1 AS price "
+                "  investigations.cod, "
+                "  investigations.name,"
+                "  %1 AS price "
                 "FROM "
-                " investigations "
+                "  investigations "
                 "INNER JOIN "
-                " pricingsTable ON pricingsTable.cod = investigations.cod "
+                "  pricingsTable ON pricingsTable.cod = investigations.cod "
                 "WHERE "
-                " pricingsTable.id_pricings = ? AND "
-                " investigations.owner = ?;")
+                "  pricingsTable.id_pricings = ? AND "
+                "  investigations.owner = ?;")
                 .arg((globals().thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
                 // .arg((globals().thisMySQL) ?
                 //          "CASE WHEN FORMAT(pricingsTable.price, 2) = '0.00' THEN '' ELSE FORMAT(pricingsTable.price, 2) END" :
@@ -518,17 +524,17 @@ void DocPricing::onPrint(Enums::TYPE_PRINT type_print)
         str_investigations =
             QString(
                 "SELECT "
-                " investigations.cod, "
-                " investigations.name,"
-                " %1 AS price "
+                "  investigations.cod, "
+                "  investigations.name,"
+                "  %1 AS price "
                 "FROM "
-                " investigations "
+                "  investigations "
                 "INNER JOIN "
-                " pricingsTable ON pricingsTable.cod = investigations.cod "
+                "  pricingsTable ON pricingsTable.cod = investigations.cod "
                 "WHERE "
-                " pricingsTable.id_pricings = ? AND "
-                " pricingsTable.price > 0 AND "
-                " investigations.owner = ?;").arg((globals().thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
+                "  pricingsTable.id_pricings = ? AND "
+                "  pricingsTable.price > 0 AND "
+                "  investigations.owner = ?;").arg((globals().thisMySQL) ? "FORMAT(pricingsTable.price, 2)" : "printf('%.2f', pricingsTable.price)");
 
     }
 

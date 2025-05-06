@@ -1044,9 +1044,9 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print, QString &filePDF)
     print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     print_model_patient->setQuery(db->getQryFromTablePatientById(m_idPacient));
     if (globals().thisMySQL)
-        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "orderEchoTable.price"));
+        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "FORMAT(orderEchoTable.price, 2)"));
     else
-        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "orderEchoTable.price ||'0'"));
+        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "printf('%.2f', orderEchoTable.price)"));
 
     double _num;
     _num = (noncomercial_price == 0) ? sumOrder : 0; // daca 'noncomercial_price' -> nu aratam suma

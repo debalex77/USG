@@ -154,6 +154,7 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
+    common/CommonSettingsManager.h \
     common/StructVariable.h \
     common/agentsendemail.h \
     common/cloudserverconfig.h \
@@ -279,8 +280,8 @@ DISTFILES += \
     Fonts/www.freefontsdownload.net.url \
     USG_ro_RO.qm \
     USG_ru_RU.qm \
-    build_maosx \
-    build_project \
+    build_maosx.sh \
+    build_project.sh \
     build_win \
     debian/control \
     debian/postinst \

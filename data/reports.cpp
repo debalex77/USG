@@ -5,6 +5,7 @@
 
 #include <customs/custommessage.h>
 
+// #include <common/CommonSettingsManager.h>
 #include <common/agentsendemail.h>
 
 Reports::Reports(QWidget *parent) :
@@ -404,6 +405,65 @@ QString Reports::getMainQry()
 #endif
 
         return str;
+
+    } else if (name_report == "Volumul investigatiilor per cod si institutie"){
+
+        QString str =
+            "SELECT "
+            "  orderEchoTable.cod,"
+            "  investigations.name AS investigation,";
+
+        if (ui->comboOrganizations->currentIndex() > 0)
+            str = str + " organizations.name AS organization,";
+
+        if (ui->comboDoctors->currentIndex() > 0)
+            str = str + " fullNameDoctors.nameAbbreviated AS doctor,";
+
+        str = str + "  COUNT(*) AS total_count "
+                    "FROM "
+                    "  orderEchoTable "
+                    "JOIN "
+                    "  orderEcho ON orderEchoTable.id_orderEcho = orderEcho.id "
+                    "JOIN "
+                    "  investigations ON investigations.cod = orderEchoTable.cod ";
+
+        if (ui->comboOrganizations->currentIndex() > 0)
+            str = str + "JOIN organizations ON organizations.id = orderEcho.id_organizations ";
+
+        if (ui->comboDoctors->currentIndex() > 0)
+            str = str + "JOIN fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors ";
+
+        str = str + "WHERE orderEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "' "
+                    "AND investigations.use = 1 ";
+
+        if (ui->comboOrganizations->currentIndex() > 0)
+            str = str + " AND organizations.id = " + ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toString();
+
+        if (ui->comboDoctors->currentIndex() > 0)
+            str = str + " AND fullNameDoctors.id_doctors = " + ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toString();
+
+        str = str + " GROUP BY orderEchoTable.cod, investigations.name ";
+
+        if (ui->comboOrganizations->currentIndex() > 0)
+            str = str + ", organizations.name ";
+
+        if (ui->comboDoctors->currentIndex() > 0)
+            str = str + ", fullNameDoctors.nameAbbreviated ";
+
+        str = str + "ORDER BY orderEchoTable.cod;";
+
+#ifdef QT_DEBUG
+        qDebug() << "Raport 'Volumul investigatiilor per cod si institutie' solicitarea: ";
+        qDebug() << str;
+#else
+        if (QCoreApplication::arguments().count() > 1
+            && QCoreApplication::arguments()[1].contains("/debug")){
+            qDebug() << str;
+        }
+#endif
+
+        return str;
+
     }
 
     return "";
@@ -541,7 +601,17 @@ void Reports::setReportVariabiles()
     m_report->dataManager()->setReportVariable("v_date_start",         QDateTime(ui->dateStart->date(), QTime(00,00,00)).toString("yyyy-MM-dd hh:mm:ss"));
     m_report->dataManager()->setReportVariable("v_date_end",           QDateTime(ui->dateEnd->date(), QTime(23,59,59)).toString("yyyy-MM-dd hh:mm:ss"));
     m_report->dataManager()->setReportVariable("v_id_organization",    ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
-    m_report->dataManager()->setReportVariable("v_name_organization",  (ui->comboOrganizations->currentIndex() == 0) ? "" : "îndreptați de " + ui->comboOrganizations->currentText());
+    if (ui->comboTypeReport->currentText() == "Volumul investigatiilor per cod si institutie") {
+        m_report->dataManager()->setReportVariable("v_name_organization",
+                                                   (ui->comboDoctors->currentIndex() == 0) ?
+                                                       "îndreptați de \n" + ui->comboOrganizations->currentText() :
+                                                       "îndreptați de medic \n" + ui->comboDoctors->currentText() + " (" + ui->comboOrganizations->currentText() + ")");
+    } else {
+        m_report->dataManager()->setReportVariable("v_name_organization",
+                                                   (ui->comboOrganizations->currentIndex() == 0) ?
+                                                       "" :
+                                                       "îndreptați de " + ui->comboOrganizations->currentText());
+    }
     m_report->dataManager()->setReportVariable("v_presentation_period", str_presentation_period);
     m_report->dataManager()->setReportVariable("v_hide_logo",           (ui->hideLogo->isChecked()) ? 1 : 0);
     m_report->dataManager()->setReportVariable("v_hide_data_organization", (ui->hideDataOrganization->isChecked()) ? 1 : 0);
@@ -557,6 +627,15 @@ void Reports::saveSettingsReport()
         insertUpdateDataReportInTableSettingsReports(true);
     else
         insertUpdateDataReportInTableSettingsReports(false);
+
+    // CommonSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
+    // QString reportId = ui->comboTypeReport->currentText();
+    // settings.setValue(reportId, "startDate", ui->dateStart->date());
+    // settings.setValue(reportId, "endDate", ui->dateEnd->date());
+    // settings.setValue(reportId, "id_organization", ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
+    // settings.setValue(reportId, "id_contract", ui->comboContracts->itemData(ui->comboContracts->currentIndex(), Qt::UserRole).toInt());
+    // settings.setValue(reportId, "id_doctor", ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toInt());
+    // settings.save();
 }
 
 void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData)
@@ -765,6 +844,21 @@ void Reports::slotPageChanged(const int page)
 
 void Reports::generateReport()
 {
+    // if (m_preview) {
+    //     delete m_preview;
+    //     delete m_report;
+
+    //     m_report = new LimeReport::ReportEngine(this);
+    //     m_preview = m_report->createPreviewWidget();
+
+    //     if (globals().isSystemThemeDark)
+    //         m_preview->setPreviewPageBackgroundColor(QColor(75,75,75));
+    //     else
+    //         m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
+
+    //     ui->frame_preview->layout()->addWidget(m_preview);
+    // }
+
     //-----------------------------------------------------------------------------
     // 📌 1 verificam daca e ales raportul
     if (ui->comboTypeReport->currentIndex() == 0){
@@ -1034,6 +1128,23 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
         ui->comboDoctors->setVisible(false);
         ui->label_doctor->setVisible(false);
         ui->btnEditDoctor->setVisible(false);
+
+        ui->hidePricesTotal->setVisible(false);
+        ui->cashPayment->setVisible(false);
+
+    } else if (ui->comboTypeReport->currentText() == "Volumul investigatiilor per cod si institutie"){
+
+        ui->comboOrganizations->setVisible(true);
+        ui->label_organization->setVisible(true);
+        ui->btnEditOrganization->setVisible(true);
+
+        ui->comboContracts->setVisible(true);
+        ui->label_contract->setVisible(true);
+        ui->btnEditContract->setVisible(true);
+
+        ui->comboDoctors->setVisible(true);
+        ui->label_doctor->setVisible(true);
+        ui->btnEditDoctor->setVisible(true);
 
         ui->hidePricesTotal->setVisible(false);
         ui->cashPayment->setVisible(false);
