@@ -7,6 +7,7 @@
 
 // #include <common/CommonSettingsManager.h>
 #include <common/agentsendemail.h>
+#include <common/reportsettingsmanager.h>
 
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
@@ -92,57 +93,49 @@ Reports::~Reports()
 
 void Reports::loadSettingsReport()
 {
-    QString str_qry;
-    if (m_id == m_id_onLaunch)
-        str_qry = "SELECT * FROM settingsReports WHERE showOnLaunch = 1;";
-    else
-        str_qry = "SELECT * FROM settingsReports WHERE nameReport = :nameReport;";
+    ReportSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
 
-    QSqlQuery qry;
-    qry.prepare(str_qry);
-    if (ui->comboTypeReport->currentIndex() != 0)
-        qry.bindValue(":nameReport", ui->comboTypeReport->currentText());
+    QString reportId;
+    if (ui->comboTypeReport->currentIndex() == 0)
+        reportId = settings.showOnLaunchRaportId();
 
-    if (qry.exec() && qry.next()){
-        m_id = qry.value(0).toInt();
+    // type report
+    disconnect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
+               this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+    ui->comboTypeReport->setCurrentText(reportId);
+    connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
 
-        disconnect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
-                this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
-        ui->comboTypeReport->setCurrentText(qry.value(1).toString());
-        connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
-                this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+    // perioada
+    ui->dateStart->setDate(settings.getValue(reportId, "startDate").toDate());
+    ui->dateEnd->setDate(settings.getValue(reportId, "endDate").toDate());
 
-        if (globals().thisMySQL){
-            static const QRegularExpression replaceT("T");
-            static const QRegularExpression removeMilliseconds("\\.000");
-            QString str_date_start = qry.value(2).toString().replace(replaceT, " ").replace(removeMilliseconds, "");
-            QString str_date_end   = qry.value(3).toString().replace(replaceT, " ").replace(removeMilliseconds, "");
-            ui->dateStart->setDateTime(QDateTime::fromString(str_date_start, "yyyy-MM-dd HH:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(str_date_end, "yyyy-MM-dd HH:mm:ss"));
-        } else {
-            ui->dateStart->setDateTime(QDateTime::fromString(qry.value(2).toString(), "yyyy-MM-dd HH:mm:ss"));
-            ui->dateEnd->setDateTime(QDateTime::fromString(qry.value(3).toString(), "yyyy-MM-dd HH:mm:ss"));
-        }
+    // organizatia
+    auto indexOrganization = modelOrganizations->match(modelOrganizations->index(0, 0), Qt::UserRole,
+                                                       settings.getValue(reportId, "id_organization").toInt(), 1, Qt::MatchExactly);
+    if (! indexOrganization.isEmpty())
+        ui->comboOrganizations->setCurrentIndex(indexOrganization.first().row());
 
-        auto indexOrganization = modelOrganizations->match(modelOrganizations->index(0, 0), Qt::UserRole, qry.value(4).toInt(), 1, Qt::MatchExactly);
-        if (!indexOrganization.isEmpty())
-            ui->comboOrganizations->setCurrentIndex(indexOrganization.first().row());
+    // contract
+    auto indexContract = modelContracts->match(modelContracts->index(0, 0), Qt::UserRole,
+                                               settings.getValue(reportId, "id_contract").toInt(), 1, Qt::MatchExactly);
+    if (! indexContract.isEmpty())
+        ui->comboContracts->setCurrentIndex(indexContract.first().row());
 
-        auto indexDoctor = modelDoctors->match(modelDoctors->index(0, 0), Qt::UserRole, qry.value(6).toInt(), 1, Qt::MatchExactly);
-        if (!indexDoctor.isEmpty())
-            ui->comboDoctors->setCurrentIndex(indexDoctor.first().row());
+    // doctor
+    auto indexDoctor = modelDoctors->match(modelDoctors->index(0,0), Qt::UserRole,
+                                           settings.getValue(reportId, "id_doctor").toInt(), 1, Qt::MatchExactly);
+    if (! indexDoctor.isEmpty())
+        ui->comboDoctors->setCurrentIndex(indexDoctor.first().row());
 
-        ui->showOnLaunch->setCheckState((qry.value(7).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->hideLogo->setCheckState((qry.value(8).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->hideDataOrganization->setCheckState((qry.value(10).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->hideNameDoctor->setCheckState((qry.value(11).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->hideSignatureStamped->setCheckState((qry.value(12).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->hidePricesTotal->setCheckState((qry.value(13).toInt() == 1) ? Qt::Checked : Qt::Unchecked);
+    ui->hideLogo->setChecked(settings.getValue(reportId, "hideLogo").toBool());
+    ui->hideDataOrganization->setChecked(settings.getValue(reportId, "hideDataOrganization").toBool());
+    ui->hideNameDoctor->setChecked(settings.getValue(reportId, "hideNameDoctor").toBool());
+    ui->hideSignatureStamped->setChecked(settings.getValue(reportId, "hideSignatureStamp").toBool());
+    ui->hidePricesTotal->setChecked(settings.getValue(reportId, "hidePriceTotal").toBool());
 
-        generateReport();
+    generateReport();
 
-        qDebug() << "Setata data: " << ui->dateStart->dateTime().toString("dd.MM.yyyy HH:mm:ss");
-    }
 }
 
 void Reports::getNameReportsFromDorectory()
@@ -623,19 +616,25 @@ void Reports::setReportVariabiles()
 
 void Reports::saveSettingsReport()
 {
-    if (m_id == -1)
-        insertUpdateDataReportInTableSettingsReports(true);
-    else
-        insertUpdateDataReportInTableSettingsReports(false);
+    ReportSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
 
-    // CommonSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
-    // QString reportId = ui->comboTypeReport->currentText();
-    // settings.setValue(reportId, "startDate", ui->dateStart->date());
-    // settings.setValue(reportId, "endDate", ui->dateEnd->date());
-    // settings.setValue(reportId, "id_organization", ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
-    // settings.setValue(reportId, "id_contract", ui->comboContracts->itemData(ui->comboContracts->currentIndex(), Qt::UserRole).toInt());
-    // settings.setValue(reportId, "id_doctor", ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toInt());
-    // settings.save();
+    QString reportId = ui->comboTypeReport->currentText();
+
+    if (ui->showOnLaunch->isChecked())
+        settings.setShowOnLaunchRaport(reportId);
+
+    settings.setValue(reportId, "startDate",       ui->dateStart->date());
+    settings.setValue(reportId, "endDate",         ui->dateEnd->date());
+    settings.setValue(reportId, "id_organization", ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(reportId, "id_contract",     ui->comboContracts->itemData(ui->comboContracts->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(reportId, "id_doctor",       ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(reportId, "hideLogo",       (ui->hideLogo->isChecked()) ? 1 : 0);
+    settings.setValue(reportId, "hideDataOrganization", (ui->hideDataOrganization->isChecked()) ? 1 : 0);
+    settings.setValue(reportId, "hideNameDoctor",       (ui->hideNameDoctor->isChecked()) ? 1 : 0);
+    settings.setValue(reportId, "hideSignatureStamp",   (ui->hideSignatureStamped->isChecked()) ? 1 : 0);
+    settings.setValue(reportId, "hidePriceTotal",       (ui->hidePricesTotal->isChecked()) ? 1 : 0);
+    settings.save();
+
 }
 
 void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData)

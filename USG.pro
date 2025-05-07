@@ -154,7 +154,6 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
-    common/CommonSettingsManager.h \
     common/StructVariable.h \
     common/agentsendemail.h \
     common/cloudserverconfig.h \
@@ -164,6 +163,7 @@ HEADERS += \
     common/emailcore.h \
     common/handlerfunctionthread.h \
     common/processingaction.h \
+    common/reportsettingsmanager.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
     customs/lineeditopen.h \
