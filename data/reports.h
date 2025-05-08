@@ -33,6 +33,7 @@ public:
 
 private:
     void initConnections();
+    void initDisconnections();
     void initPercentCombobox();
     QString getMainQry();
     QString getQuerySystem(const QString str_sytem);

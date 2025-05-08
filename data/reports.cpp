@@ -5,6 +5,7 @@
 
 #include <customs/custommessage.h>
 #include <common/agentsendemail.h>
+#include <QPushButton>
 
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
@@ -202,6 +203,53 @@ void Reports::initConnections()
     connect(ui->btnOpenDesigner, &QToolButton::clicked, this, &Reports::openDesignerReport);
     connect(ui->btnSettingsReport, &QToolButton::clicked, this, &Reports::openSettingsReport);
     connect(ui->btnSendEmail, &QToolButton::clicked, this, &Reports::sendReportToEmail);
+}
+
+void Reports::initDisconnections()
+{
+    // butoane principale ale generatorului de rapoarte
+    disconnect(m_report, &LimeReport::ReportEngine::renderStarted, this, &Reports::renderStarted);
+    disconnect(m_report, QOverload<int>::of(&LimeReport::ReportEngine::renderPageFinished), this,
+               QOverload<int>::of(&Reports::renderPageFinished));
+    disconnect(m_report, &LimeReport::ReportEngine::renderFinished, this, &Reports::renderFinished);
+
+    disconnect(ui->comboScalePercent, QOverload<int>::of(&QComboBox::currentIndexChanged),
+               this, QOverload<int>::of(&Reports::slotScalePercentChanged));
+    disconnect(ui->btnZoomIn, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::zoomIn);
+    disconnect(ui->btnZoomOut, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::zoomOut);
+
+    disconnect(m_preview, QOverload<int>::of(&LimeReport::PreviewReportWidget::scalePercentChanged),
+               this, QOverload<int>::of(&Reports::slotSetTextScalePercentChanged));
+
+    disconnect(ui->pageNavigator, QOverload<int>::of(&QSpinBox::valueChanged),
+               this, QOverload<int>::of(&Reports::slotPageNavigatorChanged));
+    disconnect(ui->btnBackPage, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::priorPage);
+    disconnect(ui->btnNextPage, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::nextPage);
+
+    disconnect(m_preview, QOverload<int>::of(&LimeReport::PreviewReportWidget::pagesSet),
+               this, QOverload<int>::of(&Reports::slotPagesSet));
+
+    disconnect(m_preview, QOverload<int>::of(&LimeReport::PreviewReportWidget::pageChanged),
+               this, QOverload<int>::of(&Reports::slotPageChanged));
+
+    disconnect(ui->btnPrintReport, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::print);
+    disconnect(ui->btnExportPdf, &QToolButton::clicked, m_preview, &LimeReport::PreviewReportWidget::printToPDF);
+
+    // filter
+    disconnect(ui->btnChoicePeriod, &QToolButton::clicked, this, &Reports::openCustomPeriod);
+    disconnect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
+               this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+    disconnect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::currentIndexChanged),
+               this, QOverload<int>::of(&Reports::organizationCurrentIndexChanged));
+
+    disconnect(ui->btnEditOrganization, &QToolButton::clicked, this, &Reports::openCatOrganization);
+    disconnect(ui->btnEditContract, &QToolButton::clicked, this, &Reports::openCatContract);
+    disconnect(ui->btnEditDoctor, &QToolButton::clicked, this, &Reports::openCatDoctor);
+
+    disconnect(ui->btnGenerateReport, &QToolButton::clicked, this, &Reports::generateReport);
+    disconnect(ui->btnOpenDesigner, &QToolButton::clicked, this, &Reports::openDesignerReport);
+    disconnect(ui->btnSettingsReport, &QToolButton::clicked, this, &Reports::openSettingsReport);
+    disconnect(ui->btnSendEmail, &QToolButton::clicked, this, &Reports::sendReportToEmail);
 }
 
 void Reports::initPercentCombobox()
@@ -449,7 +497,6 @@ QString Reports::getMainQry()
 
     return "";
 }
-
 
 QString Reports::getQuerySystem(const QString str_sytem)
 {
@@ -783,18 +830,31 @@ void Reports::slotPageChanged(const int page)
 void Reports::generateReport()
 {
     if (m_preview) {
+
+        // deconectam conexiunile ...
+        initDisconnections();
+
+        // eliminam m_report
         delete m_preview;
         delete m_report;
 
+        // alocam memoria
         m_report = new LimeReport::ReportEngine(this);
         m_preview = m_report->createPreviewWidget();
 
+        // stilul
         if (globals().isSystemThemeDark)
             m_preview->setPreviewPageBackgroundColor(QColor(75,75,75));
         else
             m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
 
+        // prezentam in forma
         ui->frame_preview->layout()->addWidget(m_preview);
+        ui->pageNavigator->setPrefix(tr("Pagina: "));
+
+        // restabilim conectarile
+        initConnections();
+
     }
 
     //-----------------------------------------------------------------------------
@@ -828,7 +888,7 @@ void Reports::generateReport()
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
     if (ui->comboTypeReport->currentText() == "Volumul investigatiilor per cod si institutie"){
-        setReportVolumInvestigationsPerCod();
+            setReportVolumInvestigationsPerCod();
     }
 
     //-----------------------------------------------------------------------------
