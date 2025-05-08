@@ -32,7 +32,8 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     QFileInfoList listFiles = dir.entryInfoList();
     for (int n = 0; n < listFiles.size(); n++) {
         QFileInfo fileInfo = listFiles.at(n);
-        ui->listWidget->addItem(fileInfo.baseName());
+        if (fileInfo.baseName() != "report_settings")
+            ui->listWidget->addItem(fileInfo.baseName());
     }
 
     connect(ui->btnConnect, &QAbstractButton::clicked, this, &DatabaseSelection::onConnectToBase);

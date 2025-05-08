@@ -1,10 +1,12 @@
 #ifndef REPORTSETTINGSMANAGER_H
 #define REPORTSETTINGSMANAGER_H
 
+#include "data/globals.h"
 #include <QDir>
 #include <QFile>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantMap>
@@ -12,7 +14,6 @@
 class ReportSettingsManager
 {
 public:
-
 
     ReportSettingsManager(const QString &filePath)
         : m_filePath(filePath)
@@ -50,6 +51,31 @@ public:
         return m_json.value("showOnLaunch").toString();
     }
 
+    void setListReports()
+    {
+        m_json["listReports"] = QJsonValue::fromVariant(getListReportsFromDirectory());
+        if (m_autoSave)
+            save();
+    }
+
+    QStringList getListReports()
+    {
+        return m_json.value("listReports").toVariant().toStringList();
+    }
+
+    QStringList getListReportsFromDirectory()
+    {
+        QStringList list;
+        QDir dir(globals().pathReports);
+        dir.setFilter(QDir::Files | QDir::NoSymLinks);
+        QFileInfoList listFiles = dir.entryInfoList();
+        for (int n = 0; n < listFiles.size(); n++) {
+            QFileInfo fileInfo = listFiles.at(n);
+            list << fileInfo.baseName();
+        }
+        return list;
+    }
+
     void save() const
     {
         QFile file(m_filePath);
@@ -74,6 +100,7 @@ public:
     }
 
 private:
+
     void load()
     {
         QFile file(m_filePath);
@@ -89,6 +116,9 @@ private:
                 m_json = doc.object();
             else
                 qWarning() << "Eroare parsare JSON:" << err.errorString();
+
+            if (m_json.value("listReports").toVariant().toStringList().isEmpty())
+                setListReports();
         }
     }
 

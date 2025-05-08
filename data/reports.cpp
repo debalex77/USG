@@ -4,14 +4,12 @@
 #include "ui_reports.h"
 
 #include <customs/custommessage.h>
-
-// #include <common/CommonSettingsManager.h>
 #include <common/agentsendemail.h>
-#include <common/reportsettingsmanager.h>
 
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::Reports)
+    ui(new Ui::Reports),
+    settings(QDir::homePath() + "/.config/USG/report_settings.json")
 {
     ui->setupUi(this);
 
@@ -25,7 +23,7 @@ Reports::Reports(QWidget *parent) :
     else
         m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
 
-    getNameReportsFromDorectory(); // setam denumirea rapoartelor
+    ui->comboTypeReport->addItems(settings.getListReports()); // setam denumirea rapoartelor
 
     QString strQryOrganizations = "SELECT id,name FROM organizations WHERE deletionMark = 0;";    // solicitarea
     QString strQryContracts     = "SELECT id,name FROM contracts WHERE deletionMark = 0;";
@@ -93,18 +91,21 @@ Reports::~Reports()
 
 void Reports::loadSettingsReport()
 {
-    ReportSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
-
     QString reportId;
-    if (ui->comboTypeReport->currentIndex() == 0)
+    if (ui->comboTypeReport->currentIndex() == 0){
         reportId = settings.showOnLaunchRaportId();
-
-    // type report
-    disconnect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
-               this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
-    ui->comboTypeReport->setCurrentText(reportId);
-    connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
-            this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+        if (! reportId.isEmpty()) {
+            disconnect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                       this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+            ui->comboTypeReport->setCurrentText(reportId);
+            connect(ui->comboTypeReport, QOverload<int>::of(&QComboBox::currentIndexChanged),
+                    this, QOverload<int>::of(&Reports::typeReportsCurrentIndexChanged));
+            ui->showOnLaunch->setChecked(true);
+        }
+    } else {
+        reportId = ui->comboTypeReport->currentText();
+        ui->showOnLaunch->setChecked(reportId == settings.showOnLaunchRaportId());
+    }
 
     // perioada
     ui->dateStart->setDate(settings.getValue(reportId, "startDate").toDate());
@@ -136,19 +137,6 @@ void Reports::loadSettingsReport()
 
     generateReport();
 
-}
-
-void Reports::getNameReportsFromDorectory()
-{
-    ui->comboTypeReport->addItem(tr("<<- selectează raport ->>"));
-
-    QDir dir(globals().pathReports);
-    dir.setFilter(QDir::Files | QDir::NoSymLinks);
-    QFileInfoList listFiles = dir.entryInfoList();
-    for (int n = 0; n < listFiles.size(); n++) {
-        QFileInfo fileInfo = listFiles.at(n);
-        ui->comboTypeReport->addItem(fileInfo.baseName());
-    }
 }
 
 void Reports::initConnections()
@@ -462,6 +450,7 @@ QString Reports::getMainQry()
     return "";
 }
 
+
 QString Reports::getQuerySystem(const QString str_sytem)
 {
     const QDateTime m_dateStart = QDateTime(ui->dateStart->date(), QTime(00,00,00));
@@ -586,9 +575,9 @@ void Reports::setReportVariabiles()
 {
     QString str_presentation_period;
     if (ui->dateStart->date() == ui->dateEnd->date())
-        str_presentation_period = tr("pe perioada: ") + ui->dateStart->date().toString("dd.MM.yyyy");
+        str_presentation_period = tr("perioada: ") + ui->dateStart->date().toString("dd.MM.yyyy");
     else
-        str_presentation_period = tr("pe perioada: ") + ui->dateStart->date().toString("dd.MM.yyyy") + " - " + ui->dateEnd->date().toString("dd.MM.yyyy");
+        str_presentation_period = tr("perioada: ") + ui->dateStart->date().toString("dd.MM.yyyy") + " - " + ui->dateEnd->date().toString("dd.MM.yyyy");
 
     m_report->dataManager()->clearUserVariables();
     m_report->dataManager()->setReportVariable("v_date_start",         QDateTime(ui->dateStart->date(), QTime(00,00,00)).toString("yyyy-MM-dd hh:mm:ss"));
@@ -616,8 +605,6 @@ void Reports::setReportVariabiles()
 
 void Reports::saveSettingsReport()
 {
-    ReportSettingsManager settings(QDir::homePath() + "/.config/USG/report_settings.json");
-
     QString reportId = ui->comboTypeReport->currentText();
 
     if (ui->showOnLaunch->isChecked())
@@ -637,138 +624,90 @@ void Reports::saveSettingsReport()
 
 }
 
-void Reports::insertUpdateDataReportInTableSettingsReports(const bool insertData)
+void Reports::setReportVolumInvestigationsPerCod()
 {
-    const int id_organization = ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt();
-    const int id_contract     = ui->comboContracts->itemData(ui->comboContracts->currentIndex(), Qt::UserRole).toInt();
-    const int id_doctor       = ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toInt();
-
-    if (insertData){
-
-        db->getDatabase().transaction();
-
-        QString str = "INSERT INTO settingsReports ("
-                      "nameReport, "
-                      "dateStart, "
-                      "dateEnd, "
-                      "id_organizations, "
-                      "id_contracts, "
-                      "id_doctors, "
-                      "showOnLaunch, "
-                      "hideLogo, "
-                      "hideTitle, "
-                      "hideDataOrganization, "
-                      "hideFooter, "
-                      "hideSignatureStamped, "
-                      "hidePrice) "
-                      "VALUES (:nameReport, :dateStart, :dateEnd, :id_organizations, :id_contracts, :id_doctors, :showOnLaunch, "
-                      ":hideLogo, :hideTitle, :hideDataOrganization, :hideFooter, :hideSignatureStamped, :hidePrice);";
-        QSqlQuery qry;
-        qry.prepare(str);
-        qry.bindValue(":nameReport",           ui->comboTypeReport->currentText());
-        qry.bindValue(":dateStart",            ui->dateStart->date().toString("yyyy-MM-dd") + " 00:00:00");
-        qry.bindValue(":dateEnd",              ui->dateEnd->date().toString("yyyy-MM-dd") + " 23:59:59");
-        qry.bindValue(":id_organizations",     (id_organization > 0) ? id_organization : QVariant());
-        qry.bindValue(":id_contracts",         (id_contract > 0) ? id_contract : QVariant());
-        qry.bindValue(":id_doctors",           (id_doctor > 0) ? id_doctor : QVariant());
-        if (globals().thisMySQL) {
-            qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? true : false);
-            qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? true : false);
-            qry.bindValue(":hideTitle",            0);
-            qry.bindValue(":hideDataOrganization", (ui->hideDataOrganization->isChecked()) ? true : false);
-            qry.bindValue(":hideFooter",           (ui->hideNameDoctor->isChecked()) ? true : false);
-            qry.bindValue(":hideSignatureStamped", (ui->hideSignatureStamped->isChecked()) ? true : false);
-            qry.bindValue(":hidePrice",            (ui->hidePricesTotal->isChecked()) ? true : false);
-        } else {
-            qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideTitle",            0);
-            qry.bindValue(":hideDataOrganization", (ui->hideDataOrganization->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideFooter",           (ui->hideNameDoctor->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideSignatureStamped", (ui->hideSignatureStamped->isChecked()) ? 1 : 0);
-            qry.bindValue(":hidePrice",            (ui->hidePricesTotal->isChecked()) ? 1 : 0);
-        }
-
-        if (qry.exec()){
-            db->getDatabase().commit();
-        } else {
-            db->getDatabase().rollback();
-            CustomMessage *msgBox = new CustomMessage(this);
-            msgBox->setWindowTitle(tr("Setarile raportului"));
-            msgBox->setTextTitle(tr("Eroare de executarea a solicitarii la inserarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
-            msgBox->setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
-            msgBox->exec();
-            msgBox->deleteLater();
-        }
-
-    } else {
-
-        db->getDatabase().transaction();
-
-        QString str = "UPDATE settingsReports SET "
-                      "nameReport           = :nameReport, "
-                      "dateStart            = :dateStart, "
-                      "dateEnd              = :dateEnd, "
-                      "id_organizations     = :id_organizations, "
-                      "id_contracts         = :id_contracts, "
-                      "id_doctors           = :id_doctors, "
-                      "showOnLaunch         = :showOnLaunch, "
-                      "hideLogo             = :hideLogo, "
-                      "hideTitle            = :hideTitle, "
-                      "hideDataOrganization = :hideDataOrganization, "
-                      "hideFooter           = :hideFooter, "
-                      "hideSignatureStamped = :hideSignatureStamped, "
-                      "hidePrice            = :hidePrice "
-                      "WHERE id = :id;";
-        QSqlQuery qry;
-        qry.prepare(str);
-        qry.bindValue(":id",                   m_id);
-        qry.bindValue(":nameReport",           ui->comboTypeReport->currentText());
-        qry.bindValue(":dateStart",            ui->dateStart->date().toString("yyyy-MM-dd") + " 00:00:00");
-        qry.bindValue(":dateEnd",              ui->dateEnd->date().toString("yyyy-MM-dd") + " 23:59:59");
-        qry.bindValue(":id_organizations",     (id_organization > 0) ? id_organization : QVariant());
-        qry.bindValue(":id_contracts",         (id_contract > 0) ? id_contract : QVariant());
-        qry.bindValue(":id_doctors",           (id_doctor > 0) ? id_doctor : QVariant());
-        if (globals().thisMySQL){
-            qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? true : false);
-            qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? true : false);
-            qry.bindValue(":hideTitle",            0);
-            qry.bindValue(":hideDataOrganization", (ui->hideDataOrganization->isChecked()) ? true : false);
-            qry.bindValue(":hideFooter",           (ui->hideNameDoctor->isChecked()) ? true : false);
-            qry.bindValue(":hideSignatureStamped", (ui->hideSignatureStamped->isChecked()) ? true : false);
-            qry.bindValue(":hidePrice",            (ui->hidePricesTotal->isChecked()) ? true : false);
-        } else {
-            qry.bindValue(":showOnLaunch",         (ui->showOnLaunch->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideLogo",             (ui->hideLogo->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideTitle",            0);
-            qry.bindValue(":hideDataOrganization", (ui->hideDataOrganization->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideFooter",           (ui->hideNameDoctor->isChecked()) ? 1 : 0);
-            qry.bindValue(":hideSignatureStamped", (ui->hideSignatureStamped->isChecked()) ? 1 : 0);
-            qry.bindValue(":hidePrice",            (ui->hidePricesTotal->isChecked()) ? 1 : 0);
-        }
-        if (qry.exec()){
-            db->getDatabase().commit();
-        } else {
-            db->getDatabase().rollback();
-            CustomMessage *msgBox = new CustomMessage(this);
-            msgBox->setWindowTitle(tr("Setarile raportului"));
-            msgBox->setTextTitle(tr("Eroare de executarea a solicitarii la actualizarea setarilor raportului '%1'").arg(ui->comboTypeReport->currentText()));
-            msgBox->setDetailedText((qry.lastError().text().isEmpty()) ? tr("eroarea indisponibila") : qry.lastError().text());
-            msgBox->exec();
-            msgBox->deleteLater();
-        }
+    QString str_doc =
+        QStringLiteral(
+        "SELECT "
+        "  orderEcho.id_doctors AS id,"
+        "  fullNameDoctors.nameAbbreviated "
+        "FROM "
+        "  orderEcho "
+        "INNER JOIN "
+        "  fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors "
+        "WHERE "
+        "  orderEcho.dateDoc BETWEEN ? AND ? "
+        "  AND orderEcho.id_organizations = ? "
+        "GROUP BY "
+        "  orderEcho.id_doctors,"
+        "  fullNameDoctors.nameAbbreviated "
+        "ORDER BY "
+        "  fullNameDoctors.nameAbbreviated;"
+        );
+    list_doctor = new QSqlQuery(str_doc);
+    list_doctor->bindValue(0, QDateTime(ui->dateStart->date(), QTime(00,00,00)));
+    list_doctor->bindValue(1, QDateTime(ui->dateEnd->date(), QTime(23,59,59)));
+    list_doctor->bindValue(2, ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
+    if (! list_doctor->exec()) {
+        qCritical() << "Error: Unable to fetch 'list_doctor' data:" << list_doctor->lastError().text();
+        return;
     }
-}
 
-int Reports::getIdReportShowOnLaunch() const
-{
-    QSqlQuery qry;
-    qry.prepare("SELECT id FROM settingsReports WHERE showOnLaunch = 1;");
-    if (qry.exec() && qry.next()){
-        return qry.value(0).toInt();
-    } else {
-        return 0;
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_doctors");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<LimeReport::CallbackInfo, QVariant &>::of(&Reports::slotGetCallbackDataDoctor));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&Reports::slotChangePosDoctors));
+
+    QString str_investig =
+        QStringLiteral(
+            "SELECT "
+            "  orderEchoTable.cod,"
+            "  investigations.name AS investigation,"
+            "  organizations.name AS organization,"
+            "  fullNameDoctors.nameAbbreviated AS doctor,"
+            "  COUNT(*) AS total_count "
+            "FROM "
+            "  orderEchoTable "
+            "JOIN "
+            "  orderEcho ON orderEchoTable.id_orderEcho = orderEcho.id "
+            "INNER JOIN "
+            "  investigations ON investigations.cod = orderEchoTable.cod "
+            "INNER JOIN "
+            "  organizations ON organizations.id = orderEcho.id_organizations "
+            "INNER JOIN "
+            "  fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors "
+            "WHERE "
+            "  orderEcho.dateDoc BETWEEN ? AND ? "
+            "  AND investigations.use = 1 "
+            "  AND organizations.id = ? "
+            "  AND fullNameDoctors.id_doctors = ? "
+            "GROUP BY "
+            "  orderEchoTable.cod,"
+            "  investigations.name,"
+            "  organizations.name,"
+            "  fullNameDoctors.nameAbbreviated "
+            "ORDER BY "
+            "  orderEchoTable.cod;"
+            );
+
+    list_investigation = new QSqlQuery(str_investig);
+
+    list_investigation->bindValue(0, QDateTime(ui->dateStart->date(), QTime(00,00,00)));
+    list_investigation->bindValue(1, QDateTime(ui->dateEnd->date(), QTime(23,59,59)));
+    list_investigation->bindValue(2, ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
+    list_investigation->bindValue(3, ui->comboDoctors->itemData(ui->comboDoctors->currentIndex(), Qt::UserRole).toInt());
+
+    if (! list_investigation->exec()) {
+        qCritical() << "Error: Unable to fetch 'list_investigation' data:" << list_investigation->lastError().text();
+        return;
     }
+
+    callbackDatasource = m_report->dataManager()->createCallbackDatasource("list_investigations");
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo &, QVariant &>::of(&LimeReport::ICallbackDatasource::getCallbackData),
+            this, QOverload<const LimeReport::CallbackInfo, QVariant &>::of(&Reports::slotGetCallbackDataInvestigation));
+    connect(callbackDatasource, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&LimeReport::ICallbackDatasource::changePos),
+            this, QOverload<const LimeReport::CallbackInfo::ChangePosType &, bool &>::of(&Reports::slotChangePosInvestigation));
 }
 
 void Reports::renderStarted()
@@ -843,20 +782,20 @@ void Reports::slotPageChanged(const int page)
 
 void Reports::generateReport()
 {
-    // if (m_preview) {
-    //     delete m_preview;
-    //     delete m_report;
+    if (m_preview) {
+        delete m_preview;
+        delete m_report;
 
-    //     m_report = new LimeReport::ReportEngine(this);
-    //     m_preview = m_report->createPreviewWidget();
+        m_report = new LimeReport::ReportEngine(this);
+        m_preview = m_report->createPreviewWidget();
 
-    //     if (globals().isSystemThemeDark)
-    //         m_preview->setPreviewPageBackgroundColor(QColor(75,75,75));
-    //     else
-    //         m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
+        if (globals().isSystemThemeDark)
+            m_preview->setPreviewPageBackgroundColor(QColor(75,75,75));
+        else
+            m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
 
-    //     ui->frame_preview->layout()->addWidget(m_preview);
-    // }
+        ui->frame_preview->layout()->addWidget(m_preview);
+    }
 
     //-----------------------------------------------------------------------------
     // 📌 1 verificam daca e ales raportul
@@ -888,6 +827,9 @@ void Reports::generateReport()
     QSqlQueryModel *print_model_main = new QSqlQueryModel(this);
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
+    if (ui->comboTypeReport->currentText() == "Volumul investigatiilor per cod si institutie"){
+        setReportVolumInvestigationsPerCod();
+    }
 
     //-----------------------------------------------------------------------------
     // 📌 6 table - s.urynary, breast, ginecology
@@ -1043,23 +985,6 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
         info_window->exec();
     }
 
-    if (m_id_onLaunch == -1)
-        m_id_onLaunch = getIdReportShowOnLaunch();
-
-    // setam perioada
-    QString last_day(QDate(QDate::currentDate().year(), QDate::currentDate().month(), 01).addDays(-1).toString("dd"));  // determinam ultima zi a lunei
-    ui->dateStart->setDateTime(QDateTime(QDate(QDate::currentDate().year(), QDate::currentDate().month(), 01), QTime(00, 00, 00)));
-    ui->dateEnd->setDateTime(QDateTime(QDate(QDate::currentDate().year(), QDate::currentDate().month(), last_day.toInt()), QTime(23, 59, 59)));
-
-    ui->comboOrganizations->setCurrentIndex(0);  // golim setarile la starea initiala
-    ui->comboContracts->setCurrentIndex(0);
-    ui->comboDoctors->setCurrentIndex(0);
-    ui->hideLogo->setCheckState(Qt::Unchecked);
-    ui->hideDataOrganization->setCheckState(Qt::Unchecked);
-    ui->hidePricesTotal->setCheckState(Qt::Unchecked);
-    ui->hideSignatureStamped->setCheckState(Qt::Unchecked);
-    ui->showOnLaunch->setCheckState(Qt::Unchecked);
-
     if (! ui->frame_filter->isVisible())
         ui->frame_filter->setVisible(true);
 
@@ -1166,7 +1091,6 @@ void Reports::typeReportsCurrentIndexChanged(const int index)
         ui->cashPayment->setVisible(false);
     }
 
-    m_id = -1; // id raportului la starea initiala
     loadSettingsReport();
 }
 
@@ -1261,6 +1185,81 @@ void Reports::sendReportToEmail()
     // ---------------------------------------------------------------------
     // 📌 3 schimbam valoarea variabilei
     send_email = false;
+}
+
+// **********************************************************************************
+// --- procesarea functiilor LimeReport
+
+void Reports::slotGetCallbackDataDoctor(LimeReport::CallbackInfo info, QVariant &data)
+{
+    if (! list_doctor)
+        return;
+    prepareData(list_doctor, info, data);
+}
+
+void Reports::slotGetCallbackDataInvestigation(LimeReport::CallbackInfo info, QVariant &data)
+{
+    if (! list_investigation)
+        return;
+    prepareData(list_investigation, info, data);
+}
+
+void Reports::prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, QVariant &data)
+{
+    switch (info.dataType) {
+    case LimeReport::CallbackInfo::ColumnCount:
+        data = qry->record().count();
+        break;
+    case LimeReport::CallbackInfo::IsEmpty:
+        data = ! qry->first();
+        break;
+    case LimeReport::CallbackInfo::HasNext:
+        data = qry->next();
+        qry->previous();
+        break;
+    case LimeReport::CallbackInfo::ColumnHeaderData:
+        if (info.index < qry->record().count())
+            data = qry->record().fieldName(info.index);
+        break;
+    case LimeReport::CallbackInfo::ColumnData:
+        data = qry->value(qry->record().indexOf(info.columnName));
+        break;
+    default:
+        break;
+    }
+}
+
+void Reports::slotChangePosDoctors(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
+{
+    QSqlQuery *ds = list_doctor;
+    if (!ds)
+        return;
+    if (type == LimeReport::CallbackInfo::First)
+        result = ds->first();
+    else
+        result = ds->next();
+
+    if (result){
+        list_investigation->bindValue(0, QDateTime(ui->dateStart->date(), QTime(00,00,00)));
+        list_investigation->bindValue(1, QDateTime(ui->dateEnd->date(), QTime(23,59,59)));
+        list_investigation->bindValue(2, ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt());
+        list_investigation->bindValue(3, list_doctor->value(list_doctor->record().indexOf("id")));
+        if (! list_investigation->exec()) {
+            qCritical() << "Error: Unable to execute investigations query (slotChangePos):" << list_investigation->lastError().text();
+            return;
+        }
+    }
+}
+
+void Reports::slotChangePosInvestigation(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
+{
+    QSqlQuery *ds = list_investigation;
+    if (!ds)
+        return;
+    if (type == LimeReport::CallbackInfo::First)
+        result = ds->first();
+    else
+        result = ds->next();
 }
 
 // **********************************************************************************

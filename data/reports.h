@@ -15,6 +15,7 @@
 #include <catalogs/catgeneral.h>
 #include <catalogs/catorganizations.h>
 #include <catalogs/customperiod.h>
+#include <common/reportsettingsmanager.h>
 
 namespace Ui {
 class Reports;
@@ -31,7 +32,6 @@ public:
     void loadSettingsReport();
 
 private:
-    void getNameReportsFromDorectory();
     void initConnections();
     void initPercentCombobox();
     QString getMainQry();
@@ -40,8 +40,8 @@ private:
     void setReportVariabiles();
 
     void saveSettingsReport();
-    void insertUpdateDataReportInTableSettingsReports(const bool insertData);
-    int getIdReportShowOnLaunch() const;
+
+    void setReportVolumInvestigationsPerCod();
 
 private slots:
     void renderStarted();
@@ -65,8 +65,15 @@ private slots:
     void openCatDoctor();
     void sendReportToEmail();
 
+    void slotGetCallbackDataDoctor(LimeReport::CallbackInfo info, QVariant &data);
+    void slotGetCallbackDataInvestigation(LimeReport::CallbackInfo info, QVariant &data);
+    void prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, QVariant &data);
+    void slotChangePosDoctors(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
+    void slotChangePosInvestigation(const LimeReport::CallbackInfo::ChangePosType &type, bool &result);
+
 private:
     Ui::Reports *ui;
+    ReportSettingsManager settings;
 
     DataBase *db;
 
@@ -90,6 +97,10 @@ private:
     InfoWindow *info_window;
 
     QStyle *style_fusion = QStyleFactory::create("Fusion");
+
+    LimeReport::ICallbackDatasource *callbackDatasource;
+    QSqlQuery *list_investigation;
+    QSqlQuery *list_doctor;
 
     int m_id          = -1;
     int m_id_onLaunch = -1;
