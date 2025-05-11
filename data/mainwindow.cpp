@@ -942,7 +942,6 @@ void MainWindow::onReadyVersion()
 #endif
 }
 
-
 void MainWindow::onShowAsistantTip()
 {
     asistant_tip =  new AsistantTipApp(this);

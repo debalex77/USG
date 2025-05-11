@@ -999,6 +999,7 @@ bool UserPreferences::updateDataIntoTableUserPreferences()
 
     return true;
 }
+
 // **********************************************************************************
 // --- evenimentele formei
 

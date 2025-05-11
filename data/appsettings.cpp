@@ -113,7 +113,7 @@ AppSettings::AppSettings(QWidget *parent) :
 
     setLanguageApp(); // setam limba aplicatiei
     setDefaultPath(); // setam localizarea fisierelor
-    changeIndexTypeSQL(idx_Unknow);
+    changeIndexTypeSQL((globals().indexTypeSQL == -1) ? idx_Unknow : globals().indexTypeSQL);
 
     initConnections(); // connectari
 
