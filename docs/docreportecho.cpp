@@ -1066,7 +1066,7 @@ void DocReportEcho::openCatalogWithSystemTamplets(const QString name_system)
     template_concluzion->setProperty("typeForm",    CatForSqlTableModel::TypeForm::SelectForm);
     template_concluzion->show();
 
-    connect(template_concluzion, &CatForSqlTableModel::mSelectData, this, [=]()
+    connect(template_concluzion, &CatForSqlTableModel::mSelectData, this, [=, this]()
     {
         if (name_system == "Ficat")
             ui->liver_formations->setText(template_concluzion->getSelectName());
@@ -1507,7 +1507,7 @@ void DocReportEcho::clickBtnSelectConcluzionTemplates()
     template_concluzion->setProperty("typeCatalog", CatForSqlTableModel::TypeCatalog::ConclusionTemplates);
     template_concluzion->setProperty("typeForm", CatForSqlTableModel::TypeForm::SelectForm);
     template_concluzion->show();
-    connect(template_concluzion, &CatForSqlTableModel::mSelectData, this, [=]()
+    connect(template_concluzion, &CatForSqlTableModel::mSelectData, this, [=, this]()
     {
         QString str = template_concluzion->getSelectName();
 
@@ -1779,7 +1779,7 @@ void DocReportEcho::connections_organs_internal()
 
     // table intestinal loop
     ui->intestinalHandles->setPlaceholderText(tr("...maximum 300 caractere"));
-    connect(ui->intestinalHandles, &QTextEdit::textChanged, this, [=]()
+    connect(ui->intestinalHandles, &QTextEdit::textChanged, this, [=, this]()
     {
        if (ui->intestinalHandles->toPlainText().length() > 300)
            ui->intestinalHandles->textCursor().deletePreviousChar();
@@ -1797,7 +1797,7 @@ void DocReportEcho::connections_organs_internal()
 
     ui->organsInternal_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
     connect(ui->organsInternal_concluzion, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
-    connect(ui->organsInternal_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->organsInternal_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->organsInternal_concluzion->toPlainText().length() > 500)
                     ui->organsInternal_concluzion->textCursor().deletePreviousChar();
@@ -1832,7 +1832,7 @@ void DocReportEcho::connections_urinary_system()
     ui->kidney_formations->setMaxLength(500);
 
     ui->adrenalGlands->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->adrenalGlands, &QTextEdit::textChanged, this, [=]()
+    connect(ui->adrenalGlands, &QTextEdit::textChanged, this, [=, this]()
     {
         if (ui->adrenalGlands->toPlainText().length() > 500)
             ui->adrenalGlands->textCursor().deletePreviousChar();
@@ -1858,7 +1858,7 @@ void DocReportEcho::connections_urinary_system()
     }
 
     ui->urinary_system_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->urinary_system_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->urinary_system_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->urinary_system_concluzion->toPlainText().length() > 500)
                     ui->urinary_system_concluzion->textCursor().deletePreviousChar();
@@ -1905,7 +1905,7 @@ void DocReportEcho::connections_prostate()
         connect(list_plain_text[n], &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified);
     }
     ui->prostate_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->prostate_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->prostate_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->prostate_concluzion->toPlainText().length() > 500)
                     ui->prostate_concluzion->textCursor().deleteChar();
@@ -1934,7 +1934,7 @@ void DocReportEcho::connections_gynecology()
     ui->gynecology_uterus_pozition->setMaxLength(30);
     ui->gynecology_uterus_ecostructure->setMaxLength(30);
     ui->gynecology_uterus_formations->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->gynecology_uterus_formations, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gynecology_uterus_formations, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gynecology_uterus_formations->toPlainText().length() > 500)
                     ui->gynecology_uterus_formations->textCursor().deletePreviousChar();
@@ -1956,13 +1956,13 @@ void DocReportEcho::connections_gynecology()
     ui->gynecology_fallopian_tubes_formations->setMaxLength(256);
     ui->gynecology_fallopian_tubes_formations->setPlaceholderText(tr("... maximum 256 caractere"));
     ui->gynecology_ovary_formations_left->setPlaceholderText(tr("... maximum 300 caractere"));
-    connect(ui->gynecology_ovary_formations_left, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gynecology_ovary_formations_left, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gynecology_ovary_formations_left->toPlainText().length() > 300)
                     ui->gynecology_ovary_formations_left->textCursor().deletePreviousChar();
             });
     ui->gynecology_ovary_formations_right->setPlaceholderText(tr("... maximum 300 caractere"));
-    connect(ui->gynecology_ovary_formations_right, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gynecology_ovary_formations_right, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gynecology_ovary_formations_right->toPlainText().length() > 300)
                     ui->gynecology_ovary_formations_right->textCursor().deletePreviousChar();
@@ -1981,7 +1981,7 @@ void DocReportEcho::connections_gynecology()
     connect(ui->gynecology_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::dataWasModified);
     connect(ui->gynecology_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::updateTextDateMenstruation);
     ui->gynecology_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->gynecology_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gynecology_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gynecology_concluzion->toPlainText().length() > 500)
                     ui->gynecology_concluzion->textCursor().deletePreviousChar();
@@ -2013,7 +2013,7 @@ void DocReportEcho::connections_breast()
     ui->breast_left_duct->setMaxLength(20);
     ui->breast_left_ligament->setMaxLength(20);
     ui->breast_left_formations->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->breast_left_formations, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->breast_left_formations, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->breast_left_formations->toPlainText().length() > 500)
                     ui->breast_left_formations->textCursor().deletePreviousChar();
@@ -2025,7 +2025,7 @@ void DocReportEcho::connections_breast()
     ui->breast_right_duct->setMaxLength(20);
     ui->breast_right_ligament->setMaxLength(20);
     ui->breast_right_formations->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->breast_right_formations, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->breast_right_formations, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->breast_right_formations->toPlainText().length() > 500)
                     ui->breast_right_formations->textCursor().deletePreviousChar();
@@ -2072,7 +2072,7 @@ void DocReportEcho::connections_thyroid()
     ui->thyroid_istm->setMaxLength(4);
     ui->thyroid_ecostructure->setMaxLength(20);
     ui->thyroid_formations->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->thyroid_formations, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->thyroid_formations, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->thyroid_formations->toPlainText().length() > 500)
                     ui->thyroid_formations->textCursor().deletePreviousChar();
@@ -2090,7 +2090,7 @@ void DocReportEcho::connections_thyroid()
     }
 
     ui->thyroid_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->thyroid_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->thyroid_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->thyroid_concluzion->toPlainText().length() > 500)
                     ui->thyroid_concluzion->textCursor().deletePreviousChar();
@@ -2140,7 +2140,7 @@ void DocReportEcho::connections_gestation0()
     }
 
     ui->gestation0_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->gestation0_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gestation0_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gestation0_concluzion->toPlainText().length() > 500)
                     ui->gestation0_concluzion->textCursor().deletePreviousChar();
@@ -2209,7 +2209,7 @@ void DocReportEcho::connections_gestation1()
     }
 
     ui->gestation1_concluzion->setPlaceholderText(tr("... maximum 500 caractere"));
-    connect(ui->gestation1_concluzion, &QPlainTextEdit::textChanged, this, [=]()
+    connect(ui->gestation1_concluzion, &QPlainTextEdit::textChanged, this, [=, this]()
             {
                 if (ui->gestation1_concluzion->toPlainText().length() > 500)
                     ui->gestation1_concluzion->textCursor().deletePreviousChar();
@@ -2315,12 +2315,12 @@ void DocReportEcho::connections_gestation2()
     ui->gestation2_recommendation->setPlaceholderText(tr("... maximum 255 caractere"));
     ui->gestation2_recommendation->setMaxLength(255);
 
-    connect(ui->gestation2_comment, &QPlainTextEdit::textChanged, this, [=](){
+    connect(ui->gestation2_comment, &QPlainTextEdit::textChanged, this, [=, this](){
         if (ui->gestation2_comment->toPlainText().length() > 250)
             ui->gestation2_comment->textCursor().deletePreviousChar();
     });
 
-    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [=](){
+    connect(ui->gestation2_concluzion, &QPlainTextEdit::textChanged, this, [=, this](){
         if (ui->gestation2_concluzion->toPlainText().length() > 500)
             ui->gestation2_concluzion->textCursor().deletePreviousChar();
     });
@@ -2330,19 +2330,19 @@ void DocReportEcho::connections_gestation2()
     connect(group_btn_gestation2, QOverload<int>::of(&QButtonGroup::idClicked),
             this, QOverload<int>::of(&DocReportEcho::clickedGestation2Trimestru));
 
-    connect(ui->gestation2_nasalFold, &QLineEdit::editingFinished, this, [=]() {
+    connect(ui->gestation2_nasalFold, &QLineEdit::editingFinished, this, [=, this]() {
         ui->tabWidget_morfology->setCurrentIndex(1); // SNC
     });
 
-    connect(ui->gestation2_vertebralColumn_description, &QLineEdit::editingFinished, this, [=](){
+    connect(ui->gestation2_vertebralColumn_description, &QLineEdit::editingFinished, this, [=, this](){
         ui->tabWidget_morfology->setCurrentIndex(2); // heart
     });
 
-    connect(ui->gestation2_diaphragm_description, &QLineEdit::editingFinished, this, [=](){
+    connect(ui->gestation2_diaphragm_description, &QLineEdit::editingFinished, this, [=, this](){
         ui->tabWidget_morfology->setCurrentIndex(4); // abdomen
     });
 
-    connect(ui->gestation2_intestine_description, &QLineEdit::editingFinished, this, [=](){
+    connect(ui->gestation2_intestine_description, &QLineEdit::editingFinished, this, [=, this](){
         ui->tabWidget_morfology->setCurrentIndex(5); // s.urinar
     });
 }

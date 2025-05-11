@@ -919,7 +919,7 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
             QAction* actionOpenDocReport = new QAction(QIcon(":/img/open-search.png"), tr("Editare - %1").arg(presentationDoc), menu);
             QAction* actionPrintDocReport = new QAction(QIcon(":/img/print.png"), tr("Printare - %1").arg(presentationDoc), menu);
             connect(actionOpenDocReport, &QAction::triggered, this, &ListDocReportOrder::onClickBtnReport);
-            connect(actionPrintDocReport, &QAction::triggered, this, [=]()
+            connect(actionPrintDocReport, &QAction::triggered, this, [=, this]()
                     {
                         DocReportEcho* docReport = new DocReportEcho(this);
                         docReport->setAttribute(Qt::WA_DeleteOnClose);

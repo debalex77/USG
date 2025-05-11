@@ -5,6 +5,7 @@
     * Raport ecografic
     * Imaginile asociate
 * ajustarea tabelelor <b><u>tableGestation0</u></b> și <b><u>tableGestation1</u></b>: adaugarea câmpului LMP pentru fixarea datei și calculul automat a vârstei.
+* trecerea la standard limbajului C++20
 * fixarea bag-lor minore
 
 ## USG v3.0.2

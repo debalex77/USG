@@ -677,7 +677,7 @@ void DocOrderEcho::onClickNewPacient()
 
 void DocOrderEcho::handlerExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp)
 {
-    QMetaObject::invokeMethod(this, [=]() {
+    QMetaObject::invokeMethod(this, [=, this]() {
         QMessageBox msgBox;
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setWindowTitle(tr("Varificarea datelor"));
@@ -693,7 +693,7 @@ void DocOrderEcho::handlerExistPatientInBD(const QString patient_name, const QSt
 
 void DocOrderEcho::handlerAfterInsertingDataPatient(const bool succes, const int patient_id)
 {
-    QMetaObject::invokeMethod(this, [=]() {
+    QMetaObject::invokeMethod(this, [=, this]() {
         if (succes){
             popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
                                    "au fost introduse in baza de date cu succes.")
@@ -715,7 +715,7 @@ void DocOrderEcho::handlerAfterInsertingDataPatient(const bool succes, const int
 
 void DocOrderEcho::handlerAfterUpdatingDataPatient(const bool succes)
 {
-    QMetaObject::invokeMethod(this, [=]() {
+    QMetaObject::invokeMethod(this, [=, this]() {
         if (succes) {
             popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
                                    "au fost modificate cu succes.")
