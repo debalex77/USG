@@ -64,6 +64,7 @@ private:
     QString getVersionAppInTableSettingsUsers();
     void setVersionAppInTableSettingsUsers();
     void closeDatabases();
+    void closeAndSaveSettingsSubwindows();
 
 public slots:
     void mDockWidgetShowTex(const QString txtMsg);

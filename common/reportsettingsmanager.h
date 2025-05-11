@@ -21,10 +21,16 @@ public:
         load();
     }
 
+    bool jsonContainsData(const QString &reportId)
+    {
+        return m_json.contains(reportId);
+    }
+
     QVariant getValue(const QString &raportId, const QString &key, const QVariant &defaultValue = QVariant()) const
     {
-        if (!m_json.contains(raportId))
+        if (! m_json.contains(raportId))
             return defaultValue;
+
         QJsonObject raportObj = m_json.value(raportId).toObject();
         return raportObj.value(key).toVariant();
     }
@@ -115,9 +121,13 @@ private:
             if (err.error == QJsonParseError::NoError && doc.isObject())
                 m_json = doc.object();
             else
-                qWarning() << "Eroare parsare JSON:" << err.errorString();
+                qWarning() << "[ReportSettingsManager] - Eroare parsare JSON:" << err.errorString();
 
-            if (m_json.value("listReports").toVariant().toStringList().isEmpty())
+            // ne conducem dupa continut 'showOnLaunch' care este
+            // doar in fisierul 'report_settings.json', daca nu contine, atunci
+            // fisierul 'table_settings.json'
+            if (m_json.contains("showOnLaunch") &&
+                m_json.value("listReports").toVariant().toStringList().isEmpty())
                 setListReports();
         }
     }

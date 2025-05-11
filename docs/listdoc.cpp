@@ -5,7 +5,8 @@
 
 ListDoc::ListDoc(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ListDoc)
+    ui(new Ui::ListDoc),
+    settings(globals().pathSettingsCommon)
 {
     ui->setupUi(this);
 
@@ -256,18 +257,24 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
 
 QString ListDoc::getStrQuery()
 {
-    QString strQuery = "SELECT pricings.id,"
-                       "pricings.deletionMark,"
-                       "pricings.numberDoc,"
-                       "pricings.dateDoc,"
-                       "organizations.id AS IdOrganization,"
-                       "organizations.name AS Organization,"
-                       "contracts.name AS Contract,"
-                       "users.name AS Author,"
-                       "pricings.comment FROM pricings "
-                       "INNER JOIN organizations ON pricings.id_organizations = organizations.id "
-                       "INNER JOIN contracts ON pricings.id_contracts = contracts.id "
-                       "INNER JOIN users ON pricings.id_users = users.id";
+    QString strQuery = "SELECT "
+                       "  pricings.id,"
+                       "  pricings.deletionMark,"
+                       "  pricings.numberDoc,"
+                       "  pricings.dateDoc,"
+                       "  organizations.id AS IdOrganization,"
+                       "  organizations.name AS Organization,"
+                       "  contracts.name AS Contract,"
+                       "  users.name AS Author,"
+                       "  pricings.comment "
+                       "FROM "
+                       "  pricings "
+                       "INNER JOIN "
+                       "  organizations ON pricings.id_organizations = organizations.id "
+                       "INNER JOIN "
+                       "  contracts ON pricings.id_contracts = contracts.id "
+                       "INNER JOIN "
+                       "  users ON pricings.id_users = users.id";
     if (m_itFilter){
         if(!m_numberDoc.isEmpty() || m_idOrganization > 0 || m_idContract > 0 || m_idUser > 0)
             strQuery = strQuery + " WHERE ";
@@ -292,6 +299,7 @@ QString ListDoc::getStrQuery()
 
     QString startDate = ui->filterStartDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
     QString endDate = ui->filterEndDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss");
+
     if (m_itFilter)
         strQuery = strQuery + " AND ";
     else
@@ -692,31 +700,28 @@ void ListDoc::updatePostDocs()
 
 void ListDoc::saveSizeSectionTable()
 {
-    // salvam dimensiunile setiilor
+    settings.setValue(type_doc, "startDate", ui->filterStartDateTime->dateTime());
+    settings.setValue(type_doc, "endDate",   ui->filterEndDateTime->dateTime());
+
     for (int numSection = 0; numSection < ui->tabView->horizontalHeader()->count(); ++numSection) {
-
-        // determinarea si setarea variabilei directiei de sortare
-        int directionSorting = -1;
-        if (numSection == ui->tabView->horizontalHeader()->sortIndicatorSection())
-            directionSorting = ui->tabView->horizontalHeader()->sortIndicatorOrder();
-
-        // variabile pu inserarea sau actualizarea datelor in tabela
-        const int find_id = db->findIdFromTableSettingsForm(type_doc, numSection);
-        const int size_section = ui->tabView->horizontalHeader()->sectionSize(numSection);
-
-        // inserarea dimensiunilor sectiilor si directia sortarii
-        if (find_id > 0)
-            db->insertUpdateDataTableSettingsForm(false, type_doc, numSection, size_section, find_id, directionSorting);
+        int w = ui->tabView->horizontalHeader()->sectionSize(numSection);
+        settings.setValue(type_doc, QString::number(numSection), w);
+        if (numSection == ui->tabView->horizontalHeader()->sortIndicatorSection()){
+            settings.setValue(type_doc, "sorting_section", numSection);
+            settings.setValue(type_doc, "sorting_direction", ui->tabView->horizontalHeader()->sortIndicatorOrder());
+        }
+        if (ui->tabView->horizontalHeader()->isSectionHidden(numSection))
+            settings.setValue(type_doc + "_hide_section", QString::number(numSection), 1);
         else
-            db->insertUpdateDataTableSettingsForm(true, type_doc, numSection, size_section, -1, directionSorting);
+            settings.setValue(type_doc + "_hide_section", QString::number(numSection), 0);
     }
 
-    // salvam perioada
-    const int find_id_section_zero = db->findIdFromTableSettingsForm(type_doc, section_zero);
-    if (find_id_section_zero > 0)
-        db->updatePeriodInTableSettingsForm(find_id_section_zero,
-                                            ui->filterStartDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss"),
-                                            ui->filterEndDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    settings.setValue(type_doc, "filter_id_organization", ui->FilterComboOrganization->itemData(ui->FilterComboOrganization->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(type_doc, "filter_id_contract", ui->filterComboContract->itemData(ui->filterComboContract->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(type_doc, "filter_id_user", ui->filterComboUser->itemData(ui->filterComboUser->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(type_doc, "filter_nr_doc", (ui->filterEditNumberDoc->text().isEmpty()) ? QVariant() : ui->filterEditNumberDoc->text());
+
+    settings.save();
 }
 
 int ListDoc::sizeSectionDefault(const int numberSection)

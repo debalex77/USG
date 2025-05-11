@@ -21,6 +21,8 @@
 #include "models/basesqlquerymodel.h"
 #include "models/basesortfilterproxymodel.h"
 
+#include <common/reportsettingsmanager.h>
+
 namespace Ui {
 class ListForm;
 }
@@ -88,6 +90,7 @@ private slots:
 
 private:
     Ui::ListForm *ui;
+    ReportSettingsManager settings;
 
     TypeListForm m_typeListForm;
 

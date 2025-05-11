@@ -10,7 +10,7 @@
 Reports::Reports(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::Reports),
-    settings(QDir::homePath() + "/.config/USG/report_settings.json")
+    settings(globals().pathSettingsReport)
 {
     ui->setupUi(this);
 
@@ -273,25 +273,28 @@ QString Reports::getMainQry()
     const QDateTime m_dateStart = QDateTime(ui->dateStart->date(), QTime(00,00,00));
     const QDateTime m_dateEnd   = QDateTime(ui->dateEnd->date(), QTime(23,59,59));
 
-    qInfo(logInfo()) << tr("Generarea raportului '%1' pe perioada %2 - %3").arg(name_report, m_dateStart.toString("dd.MM.yyyy hh:mm:ss"), m_dateEnd.toString("dd.MM.yyyy hh:mm:ss"));
+    qInfo(logInfo()) << tr("Generarea raportului '%1' pe perioada %2 - %3")
+                            .arg(name_report, m_dateStart.toString("dd.MM.yyyy hh:mm:ss"), m_dateEnd.toString("dd.MM.yyyy hh:mm:ss"));
 
     if (name_report == "Lista pacientilor (filtru - organizatii)"){
 
         QString str_qry;
         if (globals().thisMySQL)
-            str_qry = "SELECT orderEcho.id,"
-                      "   orderEcho.numberDoc,"
-                      "   CONCAT(SUBSTRING(orderEcho.dateDoc,9,2), '.' ,SUBSTRING(orderEcho.dateDoc,6,2), '.' ,SUBSTRING(orderEcho.dateDoc,1,4)) AS dateDoc,"
-                      "   CONCAT(pacients.name ,' ', pacients.fName ,', ', SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS Pacients,"
-                      "   pacients.IDNP,"
-                      "   CONCAT(orderEchoTable.cod, ' - ' ,orderEchoTable.name) AS investigation,";
+            str_qry = "SELECT "
+                      "  orderEcho.id,"
+                      "  orderEcho.numberDoc,"
+                      "  DATE_FORMAT(orderEcho.dateDoc, '%d.%m.%Y') AS dateDoc,"
+                      "  CONCAT(pacients.name ,' ', pacients.fName ,', ', DATE_FORMAT(pacients.birthday, '%d.%m.%Y')) AS Pacients,"
+                      "  pacients.IDNP,"
+                      "  CONCAT(orderEchoTable.cod, ' - ' ,orderEchoTable.name) AS investigation,";
         else
-            str_qry = "SELECT orderEcho.id,"
-                      "   orderEcho.numberDoc,"
-                      "   substr(orderEcho.dateDoc,9,2) ||'.'|| substr(orderEcho.dateDoc,6,2) ||'.'|| substr(orderEcho.dateDoc,1,4) AS dateDoc,"
-                      "   pacients.name || ' ' || pacients.fName || ', ' || substr(pacients.birthday, 9, 2) ||'.'|| substr(pacients.birthday, 6, 2) ||'.'|| substr(pacients.birthday, 1, 4) AS Pacients,"
-                      "   pacients.IDNP,"
-                      "   orderEchoTable.cod || ' - ' || orderEchoTable.name AS investigation,";
+            str_qry = "SELECT "
+                      "  orderEcho.id,"
+                      "  orderEcho.numberDoc,"
+                      "  strftime('%d.%m.%Y', orderEcho.dateDoc) AS dateDoc,"
+                      "  pacients.name || ' ' || pacients.fName || ', ' || strftime('%d.%m.%Y', pacients.birthday) AS Pacients,"
+                      "  pacients.IDNP,"
+                      "  orderEchoTable.cod || ' - ' || orderEchoTable.name AS investigation,";
 
         if (ui->hidePricesTotal->isChecked())
             str_qry = str_qry + "'' AS price,";

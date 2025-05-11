@@ -5,7 +5,8 @@
 
 GroupInvestigationList::GroupInvestigationList(QWidget *parent)
     : QDialog(parent)
-    , ui(new Ui::GroupInvestigationList)
+    , ui(new Ui::GroupInvestigationList),
+    settings(globals().pathSettingsCommon)
 {
     ui->setupUi(this);
 
@@ -18,6 +19,8 @@ GroupInvestigationList::GroupInvestigationList(QWidget *parent)
     connect(ui->hideNotGroup, QOverload<int>::of(&QCheckBox::stateChanged), this, QOverload<int>::of(&GroupInvestigationList::onHideNotGroupStateChanged));
     connect(ui->btnAdd, &QAbstractButton::clicked, this, &GroupInvestigationList::onCreateNewGroup);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &GroupInvestigationList::close);
+
+    loadSizeWindows();
 }
 
 GroupInvestigationList::~GroupInvestigationList()
@@ -25,6 +28,24 @@ GroupInvestigationList::~GroupInvestigationList()
     delete model_tree;
     delete db;
     delete ui;
+}
+
+void GroupInvestigationList::saveSizeWindows()
+{
+    settings.setValue(name_class, "width", this->width());
+    settings.setValue(name_class, "height", this->height());
+    settings.setValue(name_class, "hideNotGroup", (ui->hideNotGroup->isChecked()) ? 1 : 0);
+    settings.save();
+}
+
+void GroupInvestigationList::loadSizeWindows()
+{
+    if (! settings.jsonContainsData(name_class))
+        return;
+
+    ui->hideNotGroup->setChecked(settings.getValue(name_class, "hideNotGroup").toBool());
+    this->resize(settings.getValue(name_class, "width").toInt(),
+                 settings.getValue(name_class, "height").toInt());
 }
 
 void GroupInvestigationList::onCreateNewGroup()
@@ -244,5 +265,12 @@ void GroupInvestigationList::prepareData(QSqlQuery *qry, LimeReport::CallbackInf
         break;
     default:
         break;
+    }
+}
+
+void GroupInvestigationList::closeEvent(QCloseEvent *event)
+{
+    if (event->type() == QEvent::Close){
+        saveSizeWindows();
     }
 }

@@ -54,13 +54,6 @@ public:
     void insertDataForTabletypesPrices();
     void insertSetTableSettingsUsers();
 
-    int findIdFromTableSettingsForm(const QString typeForm, const int numberSection) const;
-    bool insertUpdateDataTableSettingsForm(const bool insertData, const QString typeForm, const int numberSection, const int sectionSize, int id_data = -1, int directionSorting = -1) const;
-    int getSizeSectionFromTableSettingsForm(const int numberSection, const QString typeForm, const int id_data) const;
-    int getDirectionSortingFromTableSettingsForm(const int numberSection, const QString typeForm) const;
-    bool updatePeriodInTableSettingsForm(const int id_data, const QString date_start, const QString date_end);
-    void getPeiodFromTableSettingsForm(const int id_data, const QString typeForm, QString &date_start, QString &date_end);
-
     bool existNameObject(const QString nameTable, const QString nameObject);
     bool existNameObjectReturnId(const QString nameTable, const QString nameObject, int &_id);
     bool createNewObject(const QString nameTable, QMap<QString, QString> &items);
@@ -131,8 +124,6 @@ public:
     bool createTableNormograms();
 
     bool createTableRegistrationPatients();
-    bool createTableSettingsForm();
-    bool createTableSettingsReports();
     bool createTableSettingsUsers();
     bool createTableUserPreferences();
     bool createTableConclusionTemplates();

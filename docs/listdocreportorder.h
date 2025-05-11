@@ -30,6 +30,7 @@
 #include <common/agentsendemail.h>
 #include <common/processingaction.h>
 #include <common/handlerfunctionthread.h>
+#include <common/reportsettingsmanager.h>
 
 namespace Ui {
 class ListDocReportOrder;
@@ -201,12 +202,14 @@ private:
     void updateHeaderTableReportEcho();
 
     QString getNameTableForSettings();
-    void loadSizeSectionPeriodTable(bool only_period = false);
+    void loadFilterData();
+    void loadSizeSectionPeriodTable();
     void saveSizeSectionTable();
     int sizeSectionDefault(const int numberSection);
 
 private:
     Ui::ListDocReportOrder *ui;
+    ReportSettingsManager settings;
 
     TypeDoc m_typeDoc    = unknowDoc;
     int m_idOrganization = Enums::IDX::IDX_UNKNOW;

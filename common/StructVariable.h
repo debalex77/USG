@@ -3,6 +3,7 @@
 
 #include <QDir>
 #include <QPixmapCache>
+#include <QStandardPaths>
 #include <QString>
 
 // Structură pentru toate variabilele globale
@@ -29,6 +30,12 @@ struct GlobalVariable {
     QString pathLogAppSettings = nullptr;
     QString sqliteNameBase = nullptr;
     QString sqlitePathBase = nullptr;
+
+    // setarile dimensiunilor ferestrelor, sectiilor tabelelor si setarile rapoartelor
+    QString config_dir = QDir::toNativeSeparators(QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/USG");
+    QString json_dir = QDir::toNativeSeparators(config_dir + "/settings");
+    QString pathSettingsCommon = QDir::toNativeSeparators(json_dir + "/table_settings.json");
+    QString pathSettingsReport = QDir::toNativeSeparators(json_dir + "/report_settings.json");
 
     QString mySQLhost = nullptr;
     QString mySQLnameBase = nullptr;

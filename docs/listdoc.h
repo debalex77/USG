@@ -18,6 +18,8 @@
 
 #include <catalogs/customperiod.h>
 
+#include <common/reportsettingsmanager.h>
+
 namespace Ui {
 class ListDoc;
 }
@@ -160,6 +162,7 @@ private slots:
 
 private:
     Ui::ListDoc *ui;
+    ReportSettingsManager settings;
 
     DataBase *db;
     PopUp    *popUp;

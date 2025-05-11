@@ -514,11 +514,17 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 {
     QString version_app;
     QSqlQuery qry;
-    if (! globals().mySQLhost.isEmpty())
-        qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp IS NOT Null;");
-    else
-        qry.prepare("SELECT versionApp FROM userPreferences WHERE id_users = :id_users AND versionApp NOT NULL;");
-    qry.bindValue(":id_users", globals().idUserApp);
+    qry.prepare(
+        QStringLiteral(
+            "SELECT "
+            "  versionApp "
+            "FROM "
+            "  userPreferences "
+            "WHERE "
+            "  id_users = %1 AND"
+            "  versionApp IS NOT NULL;")
+        .arg(QString::number(globals().idUserApp))
+        );
     if (qry.exec() && qry.next())
         version_app = qry.value(0).toString();
     else
@@ -531,12 +537,16 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 void MainWindow::setVersionAppInTableSettingsUsers()
 {
     QSqlQuery qry;
-    if (! globals().mySQLhost.isEmpty())
-        qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp IS NOT Null;");
-    else
-        qry.prepare("UPDATE userPreferences SET versionApp = :versionApp WHERE id_users = :id_users AND versionApp NOT NULL;");
-    qry.bindValue(":versionApp", USG_VERSION_FULL);
-    qry.bindValue(":id_users", globals().idUserApp);
+    qry.prepare(
+        QStringLiteral(
+            "UPDATE userPreferences SET "
+            "  versionApp = '%1' "
+            "WHERE "
+            "  id_users = %2 AND "
+            "  versionApp IS NOT NULL;")
+        .arg(USG_VERSION_FULL,
+             QString::number(globals().idUserApp))
+        );
     if (! qry.exec() && qry.next())
         qCritical(logCritical()) << tr("%1 - setVersionAppInTableSettingsUsers()").arg(metaObject()->className())
                                  << tr("Eroare de actualizare a veriunei aplicatiei din tabela 'settingsUsers'.");
@@ -548,6 +558,28 @@ void MainWindow::closeDatabases()
         db->getDatabase().close();
     if (db->getDatabaseImage().open())
         db->getDatabaseImage().close();
+}
+
+/*!
+ * \brief Functia de inchidere a subWindows + salvarea automata a setarilor ferestrei,
+ * sectiilor etc.
+ * In clasele ListDoc, ListDocReportOrder, Reports apeleaza la evenimentul closeEvent
+ * in care se petrece salvarea setarilor in fisierul extern .json
+ */
+void MainWindow::closeAndSaveSettingsSubwindows()
+{
+    const auto subWindows = mdiArea->subWindowList();
+    for (QMdiSubWindow *subWindow : subWindows) {
+        QWidget *widget = subWindow->widget();
+        if (auto list_pricing = qobject_cast<ListDoc *>(widget))
+            list_pricing->close();
+        if (auto list_report_order = qobject_cast<ListDocReportOrder *>(widget))
+            list_report_order->close();
+        if (auto report = qobject_cast<Reports *>(widget))
+            report->close();
+        if (auto list_form = qobject_cast<ListForm *>(widget))
+            list_form->close();
+    }
 }
 
 // **********************************************************************************
@@ -910,6 +942,7 @@ void MainWindow::onReadyVersion()
 #endif
 }
 
+
 void MainWindow::onShowAsistantTip()
 {
     asistant_tip =  new AsistantTipApp(this);
@@ -1069,6 +1102,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     }
 
     if (! globals().showQuestionCloseApp){
+        closeAndSaveSettingsSubwindows();
         closeDatabases();
         qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicatia.")
                                 .arg(globals().nameUserApp);
@@ -1087,6 +1121,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
     messange_box.exec();
 
     if (messange_box.clickedButton() == yesButton){
+        closeAndSaveSettingsSubwindows();
         closeDatabases();
         qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
         event->accept();

@@ -5,7 +5,8 @@
 
 ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ListDocReportOrder)
+    ui(new Ui::ListDocReportOrder),
+    settings(globals().pathSettingsCommon)
 {
     ui->setupUi(this);
 
@@ -230,9 +231,10 @@ void ListDocReportOrder::slot_TypeDocChanged()
         setWindowIcon(QIcon(":/img/orderEcho_x32.png"));
         qInfo(logInfo()) << "Deschisa lista documentelor: Comanda ecografică.";
     }
-    loadSizeSectionPeriodTable(true); // only period
+
+    loadFilterData();
     updateTableView();
-    loadSizeSectionPeriodTable(); // without period
+    loadSizeSectionPeriodTable();
 }
 
 void ListDocReportOrder::slot_IdOrganizationChanged()
@@ -1499,61 +1501,73 @@ void ListDocReportOrder::updateTableViewOrderEcho()
 
     QString strQry;
     if (globals().thisMySQL)
-        strQry = "SELECT orderEcho.id,"
-                 "orderEcho.deletionMark,"
-                 "orderEcho.attachedImages,"
-                 "orderEcho.cardPayment,"
-                 "orderEcho.numberDoc,"
-                 "orderEcho.dateDoc,"
-                 "organizations.id AS idOrganization,"
-                 "organizations.name AS organization,"
-                 "contracts.id AS idContract,"
-                 "contracts.name AS Contract,"
-                 "pacients.id AS idPacient,"
-                 "fullNamePacients.nameBirthday AS searchPacients,"
-                 "fullNamePacients.name AS pacient,"
-                 "pacients.IDNP,"
-                 "fullNameDoctors.nameAbbreviated AS doctor,"
-                 "users.id AS idUser,"
-                 "users.name AS user,"
-                 "orderEcho.sum,"
-                 "orderEcho.comment "
-                 "FROM orderEcho "
-                 "INNER JOIN organizations ON orderEcho.id_organizations = organizations.id "
-                 "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
-                 "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
-                 "INNER JOIN fullNamePacients ON orderEcho.id_pacients = fullNamePacients.id_pacients "
-                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
-                 "INNER JOIN users ON orderEcho.id_users = users.id";
+        strQry = "SELECT "
+                 "  orderEcho.id,"
+                 "  orderEcho.deletionMark,"
+                 "  orderEcho.attachedImages,"
+                 "  orderEcho.cardPayment,"
+                 "  orderEcho.numberDoc,"
+                 "  orderEcho.dateDoc,"
+                 "  organizations.id AS idOrganization,"
+                 "  organizations.name AS organization,"
+                 "  contracts.id AS idContract,"
+                 "  contracts.name AS Contract,"
+                 "  pacients.id AS idPacient,"
+                 "  fullNamePacients.nameBirthday AS searchPacients,"
+                 "  IFNULL(fullNamePacients.name, 'Pacient necunoscut') AS pacient,"
+                 "  pacients.IDNP,"
+                 "  fullNameDoctors.nameAbbreviated AS doctor,"
+                 "  users.id AS idUser,"
+                 "  users.name AS user,"
+                 "  orderEcho.sum,"
+                 "  orderEcho.comment "
+                 "FROM "
+                 "  orderEcho "
+                 "INNER JOIN "
+                 "  organizations ON orderEcho.id_organizations = organizations.id "
+                 "INNER JOIN "
+                 "  contracts ON orderEcho.id_contracts = contracts.id "
+                 "INNER JOIN "
+                 "  pacients ON orderEcho.id_pacients = pacients.id "
+                 "LEFT JOIN "
+                 "  fullNamePacients ON orderEcho.id_pacients = fullNamePacients.id_pacients "
+                 "LEFT JOIN "
+                 "  fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
+                 "INNER JOIN "
+                 "  users ON orderEcho.id_users = users.id";
     else
-        strQry = "SELECT orderEcho.id,"
-                 "orderEcho.deletionMark,"
-                 "orderEcho.attachedImages,"
-                 "orderEcho.cardPayment,"
-                 "orderEcho.numberDoc,"
-                 "orderEcho.dateDoc,"
-                 "organizations.id AS idOrganization,"
-                 "organizations.name AS organization,"
-                 "contracts.id AS idContract,"
-                 "contracts.name AS Contract,"
-                 "pacients.id AS idPacient,"
-                 "pacients.name ||' '|| pacients.fName ||' '|| pacients.mName ||', '|| "
-                 "substr(pacients.birthday, 9, 2) ||'.'|| "
-                 "substr(pacients.birthday, 6, 2) ||'.'|| "
-                 "substr(pacients.birthday, 1, 4) AS searchPacients,"
-                 "pacients.name ||' '|| pacients.fName AS pacient,"
-                 "pacients.IDNP,"
-                 "fullNameDoctors.nameAbbreviated AS doctor,"
-                 "users.id AS idUser,"
-                 "users.name AS user,"
-                 "orderEcho.sum,"
-                 "orderEcho.comment "
-                 "FROM orderEcho "
-                 "INNER JOIN organizations ON orderEcho.id_organizations = organizations.id "
-                 "INNER JOIN contracts ON orderEcho.id_contracts = contracts.id "
-                 "INNER JOIN pacients ON orderEcho.id_pacients = pacients.id "
-                 "LEFT JOIN fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
-                 "INNER JOIN users ON orderEcho.id_users = users.id";
+        strQry = "SELECT "
+                 "  orderEcho.id,"
+                 "  orderEcho.deletionMark,"
+                 "  orderEcho.attachedImages,"
+                 "  orderEcho.cardPayment,"
+                 "  orderEcho.numberDoc,"
+                 "  orderEcho.dateDoc,"
+                 "  organizations.id AS idOrganization,"
+                 "  organizations.name AS organization,"
+                 "  contracts.id AS idContract,"
+                 "  contracts.name AS Contract,"
+                 "  pacients.id AS idPacient,"
+                 "  pacients.name ||' '|| pacients.fName ||', '|| strftime('%d.%m.%Y', pacients.birthday) AS searchPacients,"
+                 "  pacients.name ||' '|| pacients.fName AS pacient,"
+                 "  pacients.IDNP,"
+                 "  fullNameDoctors.nameAbbreviated AS doctor,"
+                 "  users.id AS idUser,"
+                 "  users.name AS user,"
+                 "  orderEcho.sum,"
+                 "  orderEcho.comment "
+                 "FROM "
+                 "  orderEcho "
+                 "INNER JOIN "
+                 "  organizations ON orderEcho.id_organizations = organizations.id "
+                 "INNER JOIN "
+                 "  contracts ON orderEcho.id_contracts = contracts.id "
+                 "INNER JOIN "
+                 "  pacients ON orderEcho.id_pacients = pacients.id "
+                 "LEFT JOIN "
+                 "  fullNameDoctors ON orderEcho.id_doctors = fullNameDoctors.id "
+                 "INNER JOIN "
+                 "  users ON orderEcho.id_users = users.id";
     if (! m_numberDoc.isEmpty() || m_idOrganization > 0 || m_idContract > 0)
         strQry = strQry + " WHERE ";
     if (! m_numberDoc.isEmpty())
@@ -2038,139 +2052,117 @@ QString ListDocReportOrder::getNameTableForSettings()
     return nameTable;
 }
 
-void ListDocReportOrder::loadSizeSectionPeriodTable(bool only_period)
+void ListDocReportOrder::loadFilterData()
 {
-    QSqlQuery qry;
+    const QString type_doc = enumToString(m_typeDoc);
 
-    //*****************************************************
-    //---------- setarea perioadei
-    if (only_period){
-        QString str = "SELECT dateStart, dateEnd "
-                      "FROM settingsForms "
-                      "WHERE typeForm = :typeForm AND numberSection = 0;";
-        qry.prepare(str);
-        qry.bindValue(":typeForm", (m_typeDoc == orderEcho) ? "orderEcho" : "reportEcho");
-        if (qry.exec() && qry.next()){
-            QString str_date_start;
-            QString str_date_end;
-            if (globals().thisMySQL){
-                static const QRegularExpression replaceT("T");
-                static const QRegularExpression removeMilliseconds("\\.000");
-                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
-                str_date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
-            } else {
-                str_date_start = qry.value(0).toString();
-                str_date_end   = qry.value(1).toString();
-            }
-            if (str_date_start.isEmpty() && str_date_end.isEmpty()){
-                ui->filterStartDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 01, 01), QTime(00,00,00)));
-                ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12, 31), QTime(23,59,59)));
-            } else {
-                ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_date_start, "yyyy-MM-dd hh:mm:ss"));
-                ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_date_end, "yyyy-MM-dd hh:mm:ss"));
-            }
-        } else {
-            ui->filterStartDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 01, 01), QTime(00,00,00)));
-            ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12, 31), QTime(23,59,59)));
+    //-----------------------------------------------------------
+    // daca in fisier lipsesc date sau lipseste fisierul
+    if (! settings.jsonContainsData(type_doc)) {
 
-            //---------- prezentarea erorii
-            if (! qry.lastError().text().isEmpty()){
-                QMessageBox msgBox;
-                msgBox.setWindowTitle(tr("Determinarea perioadei"));
-                msgBox.setIcon(QMessageBox::Warning);
-                msgBox.setText(tr("Nu a fost extras\304\203 perioada din set\304\203rile formei !!!"));
-                msgBox.setDetailedText(qry.lastError().text());
-                msgBox.setStandardButtons(QMessageBox::Ok);
-                msgBox.exec();
-            }
-        }
-        return;
+        // perioada
+        ui->filterStartDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 01, 01), QTime(00,00,00)));
+        ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12, 31), QTime(23,59,59)));
+
     }
 
-    //******************************************************
-    //---------- setarea dimensiunilor si directiei sortarii
+    //-----------------------------------------------------------
+    // extragem datele din fisier
 
-    qry.prepare(QString("SELECT "
-                          "numberSection,"
-                          "sizeSection,"
-                          "directionSorting,"
-                          "dateStart,"
-                          "dateEnd "
-                          "FROM settingsForms "
-                        "WHERE typeForm LIKE %1;").arg((m_typeDoc == orderEcho) ? "'%orderEcho%'" : "'%reportEcho%'"));
-    if (qry.exec()){
-        int num = -1;
-        while (qry.next()) {
-            num ++;
-            const int current_size = qry.value(1).toInt();
-            const int direction_sorting = qry.value(2).toInt();
+    // perioada
+    static const QRegularExpression replaceT("T");
+    static const QRegularExpression removeMilliseconds("\\.000");
+    QString str_start = settings.getValue(type_doc, "startDate").toString().replace(replaceT, " ").replace(removeMilliseconds, "");
+    QString str_end = settings.getValue(type_doc, "endDate").toString().replace(replaceT, " ").replace(removeMilliseconds, "");
 
-            //---------- setarea dimensiunilor sectiilor
-            if (current_size >= 0)
-                ui->tableView->setColumnWidth(num, qry.value(1).toInt());
-            else
-                ui->tableView->setColumnWidth(num, sizeSectionDefault(num));
+    ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_start,"yyyy-MM-dd hh:mm:ss"));
+    ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_end,"yyyy-MM-dd hh:mm:ss"));
 
-            //---------- setarea directiei sortarii
-            if (direction_sorting > 0)
-                ui->tableView->horizontalHeader()->setSortIndicator(num, (direction_sorting == 0) ? Qt::AscendingOrder : Qt::DescendingOrder);
-        }
-    } else {
+    // filtru
+    const int _id_organization = settings.getValue(type_doc, "filter_id_organization").toInt();
+    const int _id_contract = settings.getValue(type_doc, "filter_id_contract").toInt();
+    QString str_nr_doc = settings.getValue(type_doc, "filter_nr_doc").toString();
 
-        //---------- setarea dimensiunilor sectiilor
+    if (_id_organization > 0) {
+        auto idx_organization = modelOrganizations->match(modelOrganizations->index(0,0), Qt::UserRole, _id_organization, 1, Qt::MatchExactly);
+        if (! idx_organization.isEmpty())
+            ui->filterComboOrganization->setCurrentIndex(idx_organization.first().row());
+    }
+
+    if (_id_contract > 0) {
+        auto idx_contract = modelContracts->match(modelContracts->index(0, 0), Qt::UserRole, _id_contract, 1, Qt::MatchExactly);
+        if (! idx_contract.isEmpty())
+            ui->filterComboContract->setCurrentIndex(idx_contract.first().row());
+    }
+
+    if (! str_nr_doc.isEmpty())
+        ui->filterEditNumberDoc->setText(str_nr_doc);
+
+}
+
+void ListDocReportOrder::loadSizeSectionPeriodTable()
+{
+    const QString type_doc = enumToString(m_typeDoc);
+
+    //-----------------------------------------------------------
+    // daca in fisier lipsesc date sau lipseste fisierul
+    if (! settings.jsonContainsData(type_doc)) {
+
+        // dimensiunile sectiilor
         for (int numSection = 0; numSection < ui->tableView->horizontalHeader()->count(); ++numSection){
             ui->tableView->setColumnWidth(numSection, sizeSectionDefault(numSection));
         }
 
-        //---------- setarea directiei sortarii
+        // directia sortarii
         ui->tableView->horizontalHeader()->setSortIndicator(section_numberDoc, Qt::DescendingOrder);
 
-        //---------- prezentarea erorii
-        if (! qry.lastError().text().isEmpty()){
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Determinarea dimensiunilor coloanelor"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Nu au fost determinate dimensiunile colanelor tabelei si directia sortarii !!!"));
-            msgBox.setDetailedText(qry.lastError().text());
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
-        }
+        return;
     }
 
+    // dimensiunea sectiilor
+    for (int numSection = 0; numSection < ui->tableView->horizontalHeader()->count(); ++numSection) {
+
+        // width column
+        int w = settings.getValue(type_doc, QString::number(numSection)).toInt();
+        if (w > 0)
+            ui->tableView->setColumnWidth(numSection, w);
+
+        // hide column
+        if (settings.getValue(type_doc + "_hide_section", QString::number(numSection)).toInt() > 0)
+            ui->tableView->hideColumn(numSection);
+    }
+
+    // directia sortarii
+    ui->tableView->horizontalHeader()->setSortIndicator(settings.getValue(type_doc, "sorting_section").toInt(),
+                                                        (settings.getValue(type_doc, "sorting_direction").toInt() == 1) ? Qt::DescendingOrder : Qt::AscendingOrder);
+
     // pozitionam cursorul
-        ui->tableView->selectRow(0);
+    ui->tableView->selectRow(0);
 }
 
 void ListDocReportOrder::saveSizeSectionTable()
 {
     const QString type_doc = enumToString(m_typeDoc);
 
-        // salvam dimensiunile setiilor
+    settings.setValue(type_doc, "startDate", ui->filterStartDateTime->dateTime());
+    settings.setValue(type_doc, "endDate",   ui->filterEndDateTime->dateTime());
     for (int numSection = 0; numSection < ui->tableView->horizontalHeader()->count(); ++numSection) {
-
-        // determinarea si setarea variabilei directiei de sortare
-        int directionSorting = -1;
-        if (numSection == ui->tableView->horizontalHeader()->sortIndicatorSection())
-            directionSorting = ui->tableView->horizontalHeader()->sortIndicatorOrder();
-
-        // variabile pu inserarea sau actualizarea datelor in tabela
-        const int find_id = db->findIdFromTableSettingsForm(type_doc, numSection);
-        const int size_section = ui->tableView->horizontalHeader()->sectionSize(numSection);
-
-        // inserarea dimensiunilor sectiilor si directia sortarii
-        if (find_id > 0)
-            db->insertUpdateDataTableSettingsForm(false, type_doc, numSection, size_section, find_id, directionSorting);
+        int w = ui->tableView->horizontalHeader()->sectionSize(numSection);
+        settings.setValue(type_doc, QString::number(numSection), w);
+        if (numSection == ui->tableView->horizontalHeader()->sortIndicatorSection()){
+            settings.setValue(type_doc, "sorting_section", numSection);
+            settings.setValue(type_doc, "sorting_direction", ui->tableView->horizontalHeader()->sortIndicatorOrder());
+        }
+        if (ui->tableView->horizontalHeader()->isSectionHidden(numSection))
+            settings.setValue(type_doc + "_hide_section", QString::number(numSection), 1);
         else
-            db->insertUpdateDataTableSettingsForm(true, type_doc, numSection, size_section, -1, directionSorting);
+            settings.setValue(type_doc + "_hide_section", QString::number(numSection), 0);
     }
+    settings.setValue(type_doc, "filter_id_organization", ui->filterComboOrganization->itemData(ui->filterComboOrganization->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(type_doc, "filter_id_contract", ui->filterComboContract->itemData(ui->filterComboContract->currentIndex(), Qt::UserRole).toInt());
+    settings.setValue(type_doc, "filter_nr_doc", (ui->filterEditNumberDoc->text().isEmpty()) ? QVariant() : ui->filterEditNumberDoc->text());
 
-    // salvam perioada
-    const int find_id_section_zero = db->findIdFromTableSettingsForm(type_doc, section_zero);
-    if (find_id_section_zero > 0)
-        db->updatePeriodInTableSettingsForm(find_id_section_zero,
-                                            ui->filterStartDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss"),
-                                            ui->filterEndDateTime->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    settings.save();
 
 }
 

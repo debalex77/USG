@@ -3,7 +3,8 @@
 
 ListForm::ListForm(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::ListForm)
+    ui(new Ui::ListForm),
+    settings(globals().pathSettingsCommon)
 {
     ui->setupUi(this);
 
@@ -166,28 +167,28 @@ const QString ListForm::getNameTable()
 
 void ListForm::loadSizeSectionTable()
 {
-    for (int numSection = 0; numSection < ui->tabView->horizontalHeader()->count(); ++numSection) {
+    const QString type_form = enumToString(m_typeListForm);
 
-        const QString type_form = enumToString(m_typeListForm);
-        const int find_id = db->findIdFromTableSettingsForm(type_form, numSection);
-        if (find_id > 0){
-
-            //---------- setarea dimensiunilor sectiilor
-            const int section_size = db->getSizeSectionFromTableSettingsForm(numSection, type_form, find_id);
-            if (section_size >= 0)
-                ui->tabView->setColumnWidth(numSection, section_size);
-            else
-                ui->tabView->setColumnWidth(numSection, sizeSectionDefault(numSection));
-
-            //---------- setarea directiei sortarii
-            const int direction_sorting = db->getDirectionSortingFromTableSettingsForm(numSection, type_form);
-            if (direction_sorting >= 0)
-                ui->tabView->horizontalHeader()->setSortIndicator(numSection, (direction_sorting == 0) ? Qt::AscendingOrder : Qt::DescendingOrder);
-
-        } else {
+    //-----------------------------------------------------------
+    // daca in fisier lipsesc date sau lipseste fisierul
+    if (! settings.jsonContainsData(type_form)) {
+        for (int numSection = 0; numSection < ui->tabView->horizontalHeader()->count(); ++numSection) {
             ui->tabView->setColumnWidth(numSection, sizeSectionDefault(numSection));
         }
     }
+
+    // dimensiunea sectiilor
+    for (int numSection = 0; numSection < ui->tabView->horizontalHeader()->count(); ++numSection) {
+
+        // width column
+        const int w = settings.getValue(type_form, QString::number(numSection)).toInt();
+        if (w > 0)
+            ui->tabView->setColumnWidth(numSection, w);
+    }
+
+    // directia sortarii
+    ui->tabView->horizontalHeader()->setSortIndicator(settings.getValue(type_form, "sorting_section").toInt(),
+                                                        (settings.getValue(type_form, "sorting_direction").toInt() == 1) ? Qt::DescendingOrder : Qt::AscendingOrder);
 
     // pozitionam cursorul
     ui->tabView->selectRow(0);
@@ -195,24 +196,17 @@ void ListForm::loadSizeSectionTable()
 
 void ListForm::saveSizeSectionTable()
 {
+    const QString type_form = enumToString(m_typeListForm);
+
     for (int numSection = 0; numSection < ui->tabView->horizontalHeader()->count(); ++numSection) {
-
-        // determinarea si setarea variabilei directiei de sortare
-        int directionSorting = -1;
-        if (numSection == ui->tabView->horizontalHeader()->sortIndicatorSection())
-            directionSorting = ui->tabView->horizontalHeader()->sortIndicatorOrder();
-
-        // variabile pu inserarea sau actualizarea datelor in tabela
-        const QString type_form = enumToString(m_typeListForm);
-        const int find_id = db->findIdFromTableSettingsForm(type_form, numSection);
-        const int size_section = ui->tabView->horizontalHeader()->sectionSize(numSection);
-
-        // inserarea dimensiunilor sectiilor si directia sortarii
-        if (find_id > 0)
-            db->insertUpdateDataTableSettingsForm(false, type_form, numSection, size_section, find_id, directionSorting);
-        else
-            db->insertUpdateDataTableSettingsForm(true, type_form, numSection, size_section, -1, directionSorting);
+        const int w = ui->tabView->horizontalHeader()->sectionSize(numSection);
+        settings.setValue(type_form, QString::number(numSection), w);
+        if (numSection == ui->tabView->horizontalHeader()->sortIndicatorSection()){
+            settings.setValue(type_form, "sorting_section", numSection);
+            settings.setValue(type_form, "sorting_direction", ui->tabView->horizontalHeader()->sortIndicatorOrder());
+        }
     }
+    settings.save();
 }
 
 int ListForm::sizeSectionDefault(const int numberSection)

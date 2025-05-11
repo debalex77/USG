@@ -1,12 +1,16 @@
 #ifndef GROUPINVESTIGATIONLIST_H
 #define GROUPINVESTIGATIONLIST_H
 
+#include <QDialog>
+#include <QKeyEvent>
+#include <LimeReport>
+#include <QSqlQueryModel>
+
+#include <common/reportsettingsmanager.h>
+
 #include "catalogs/groupinvestigation.h"
 #include "data/database.h"
 #include "models/treemodel.h"
-#include <LimeReport>
-#include <QDialog>
-#include <QSqlQueryModel>
 
 namespace Ui {
 class GroupInvestigationList;
@@ -19,6 +23,10 @@ class GroupInvestigationList : public QDialog
 public:
     explicit GroupInvestigationList(QWidget *parent = nullptr);
     ~GroupInvestigationList();
+
+private:
+    void saveSizeWindows();
+    void loadSizeWindows();
 
 private slots:
     void onCreateNewGroup();
@@ -34,6 +42,8 @@ private slots:
 
 private:
     Ui::GroupInvestigationList *ui;
+    ReportSettingsManager settings;
+    const QString name_class = "GroupInvestigationList";
 
     DataBase  *db;
     TreeModel *model_tree;
@@ -45,6 +55,9 @@ private:
     QSqlQuery *m_investigations;
 
     LimeReport::ReportEngine *m_report;
+
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // GROUPINVESTIGATIONLIST_H

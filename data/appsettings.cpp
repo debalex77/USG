@@ -38,6 +38,14 @@ AppSettings::AppSettings(QWidget *parent) :
         globals().pathLogAppSettings = fileLogPath;
     }
 
+    // crearea directoriului 'settings' (~/.config/USG/settings)
+    // pu salvarea fisierelor .json cu setarile formelor
+    // QString config_dir = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation);
+    // QString json_dir = QDir::toNativeSeparators(config_dir + "/settings");
+    if (! QFile(globals().json_dir).exists())
+        QDir().mkpath(globals().json_dir);
+
+
     if (! QFile(globals().pathAppSettings).exists())
         globals().unknowModeLaunch = true; // globals().numSavedFilesLog
 
