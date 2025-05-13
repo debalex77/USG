@@ -4162,7 +4162,7 @@ void DocReportEcho::setDefaultDataBreast()
         return;
 
     if (ui->breast_right_ecostructure->text().isEmpty())
-        ui->breast_right_ecostructure->setText("omogenă");
+        ui->breast_right_ecostructure->setText("glandulară, omogenă");
     if (ui->breast_right_duct->text().isEmpty())
         ui->breast_right_duct->setText("norm.");
     if (ui->breast_right_ligament->text().isEmpty())
@@ -4173,7 +4173,7 @@ void DocReportEcho::setDefaultDataBreast()
         ui->breast_right_ganglions->setText("fără modificări patologice");
 
     if (ui->breast_left_ecostructure->text().isEmpty())
-        ui->breast_left_ecostructure->setText("omogenă");
+        ui->breast_left_ecostructure->setText("glandulară, omogenă");
     if (ui->breast_left_duct->text().isEmpty())
         ui->breast_left_duct->setText("norm.");
     if (ui->breast_left_ligament->text().isEmpty())
@@ -7212,6 +7212,11 @@ bool DocReportEcho::eventFilter(QObject *obj, QEvent *event)
             if (!currentWidget)
                 return false; // Dacă nu există widget activ, continuăm propagarea
 
+            // Dacă este apăsat Ctrl+Enter sau Shift+Enter, permite introducerea de rând nou
+            if (keyEvent->modifiers() & (Qt::ControlModifier | Qt::ShiftModifier)) {
+                return false; // Nu preluăm evenimentul, îl lăsăm să ajungă la QPlainTextEdit
+            }
+
             // Logica similară din keyPressEvent
             if (ui->stackedWidget->currentIndex() == page_organs_internal) {
                 if (currentWidget == ui->cholecist_formations)
@@ -7255,6 +7260,8 @@ bool DocReportEcho::eventFilter(QObject *obj, QEvent *event)
             focusNextChild();
             return true; // Marchează evenimentul ca procesat
         }
+
+        return QObject::eventFilter(obj, event); // Continuăm cu filtrarea normală
     }
 
     if (obj == ui->btnParameters){

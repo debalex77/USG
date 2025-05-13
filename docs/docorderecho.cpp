@@ -2123,6 +2123,7 @@ void DocOrderEcho::changeEvent(QEvent *event)
 void DocOrderEcho::keyPressEvent(QKeyEvent *event)
 {
     if(event->key()==Qt::Key_Return || event->key() == Qt::Key_Enter){
+
         if (ui->tableViewOrder->focusWidget()){
             int _row = ui->tableViewOrder->currentIndex().row();
             QModelIndex indexEdit = modelTableOrder->index(_row, Enums::PRICING_COLUMN::PRICING_COLUMN_PRICE);
