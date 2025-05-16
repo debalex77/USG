@@ -24,6 +24,8 @@
 #include "listdocreportorder.h"
 #include "ui_listdocreportorder.h"
 
+#include <QBuffer>
+#include <QToolTip>
 #include <QCache>
 
 ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
@@ -75,6 +77,9 @@ ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
 
     initBtnToolBar();
     initBtnFilter();
+
+    ui->tableView->viewport()->setMouseTracking(true);
+    ui->tableView->viewport()->installEventFilter(this);
 
     // Conectăm scroll-ul
     connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged, this, &ListDocReportOrder::onScroll);
@@ -2286,6 +2291,72 @@ void ListDocReportOrder::closeEvent(QCloseEvent *event)
 
 bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
 {
+    // previzualizarea imaginelor atasate
+    if (event->type() == QEvent::ToolTip) {
+
+        QHelpEvent *helpEvent = static_cast<QHelpEvent *>(event);
+        QModelIndex index = ui->tableView->indexAt(helpEvent->pos());
+
+        if (! index.isValid())
+            return false;
+
+        int id_order = proxyTable->index(index.row(), section_id).data(Qt::DisplayRole).toInt();
+
+        QPixmap outPixmap1, outPixmap2, outPixmap3;
+
+        QSqlQuery qry(globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase());
+        qry.prepare("SELECT "
+                    "  image_1, "
+                    "  image_2, "
+                    "  image_3 "
+                    "FROM "
+                    "  imagesReports "
+                    "WHERE "
+                    "  id_orderEcho = ?;");
+        qry.bindValue(0, id_order);
+
+        if (qry.exec() && qry.next()) {
+
+            QByteArray outByteArray1 = QByteArray::fromBase64(qry.value(0).toByteArray());
+            if (! outByteArray1.isEmpty())
+                outPixmap1.loadFromData(outByteArray1, "JPEG");
+
+            QByteArray outByteArray2 = QByteArray::fromBase64(qry.value(1).toByteArray());
+            if (! outByteArray2.isEmpty())
+                outPixmap2.loadFromData(outByteArray2, "JPEG");
+
+            QByteArray outByteArray3 = QByteArray::fromBase64(qry.value(2).toByteArray());
+            if (! outByteArray3.isEmpty())
+                outPixmap3.loadFromData(outByteArray3, "JPEG");
+
+        }
+
+        auto toBase64ImageTag = [](const QPixmap &pixmap) -> QString {
+            if (pixmap.isNull())
+                return "";
+
+            QPixmap scaled = pixmap.scaled(400, 350, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            QByteArray byteArray;
+            QBuffer buffer(&byteArray);
+            buffer.open(QIODevice::WriteOnly);
+            scaled.save(&buffer, "PNG");
+            QString base64 = QString::fromLatin1(byteArray.toBase64());
+            return QString("<img src='data:image/png;base64,%1' style='display:inline-block; margin-right:5px;'>").arg(base64);
+        };
+
+        QString html = QString("<div style='white-space:nowrap;'>%1%2%3</div>")
+                           .arg(toBase64ImageTag(outPixmap1),
+                                toBase64ImageTag(outPixmap2),
+                                toBase64ImageTag(outPixmap3));
+
+        if (! html.isEmpty() && ! outPixmap1.isNull()) {
+            QToolTip::showText(helpEvent->globalPos(), html, ui->tableView->viewport());
+            return true;
+        }
+
+    }
+
+    // comentariu butoanelor
     if (obj == ui->btnAdd){
         if (event->type() == QEvent::Enter){
             QPoint p = mapToGlobal(QPoint(ui->btnAdd->pos().x() - 20, ui->btnAdd->pos().y() + 30)); // determinam parametrii globali
@@ -2433,7 +2504,7 @@ bool ListDocReportOrder::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    return false;
+    return QWidget::eventFilter(obj, event);//return false;
 }
 
 void ListDocReportOrder::changeEvent(QEvent *event)

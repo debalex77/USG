@@ -313,7 +313,7 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
     // convertam imaginea
     QDir dir;
     QString converted_file_name = dir.toNativeSeparators(QDir::tempPath() + "/USG_report_" + QString::number(m_id) + "_" + QString::number(numberImage));
-    QPixmap::fromImage(newImage).scaled(600,450).save(converted_file_name, "jpeg", 70);
+    QPixmap::fromImage(newImage).scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation).save(converted_file_name, "jpeg", 90);//QPixmap::fromImage(newImage).scaled(600,450).save(converted_file_name, "jpeg", 70);
 
     if (numberImage == n_image1){        
         ui->image1->setPixmap(QPixmap(converted_file_name));
@@ -398,27 +398,27 @@ void DocReportEcho::loadImageOpeningDocument()
 
             QPixmap outPixmap1;
             if (! outByteArray1.isEmpty() && outPixmap1.loadFromData(outByteArray1, "jpeg")){
-                ui->image1->setPixmap(outPixmap1.scaled(600,450));
+                ui->image1->setPixmap(outPixmap1.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap2 = QPixmap();
             if (! outByteArray2.isEmpty() && outPixmap2.loadFromData(outByteArray2, "jpeg")){
-                ui->image2->setPixmap(outPixmap2.scaled(600,450));
+                ui->image2->setPixmap(outPixmap2.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap3 = QPixmap();
             if (! outByteArray3.isEmpty() && outPixmap3.loadFromData(outByteArray3)){
-                ui->image3->setPixmap(outPixmap3.scaled(600,450));
+                ui->image3->setPixmap(outPixmap3.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap4 = QPixmap();
             if (! outByteArray4.isEmpty() && outPixmap4.loadFromData(outByteArray4)){
-                ui->image4->setPixmap(outPixmap4.scaled(600,450));
+                ui->image4->setPixmap(outPixmap4.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap5 = QPixmap();
             if (! outByteArray5.isEmpty() && outPixmap5.loadFromData(outByteArray5)){
-                ui->image5->setPixmap(outPixmap5.scaled(600,450));
+                ui->image5->setPixmap(outPixmap5.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             ui->comment_image1->setPlainText(qry.value(rec.indexOf("comment_1")).toString());
