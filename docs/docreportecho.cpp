@@ -24,6 +24,7 @@
 #include "docreportecho.h"
 #include "ui_docreportecho.h"
 
+#include <QBuffer>
 #include <QDirIterator>
 #include <QFileDialog>
 #include <QImageReader>
@@ -304,70 +305,59 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
     reader.setAutoTransform(true);
     const QImage newImage = reader.read();
     if (newImage.isNull()) {
-        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+        QMessageBox::information(this,
+                                 QGuiApplication::applicationDisplayName(),
                                  tr("Nu este setată imaginea %1: %2")
                                  .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
         return false;
     }
 
-    // convertam imaginea
-    QDir dir;
-    QString converted_file_name = dir.toNativeSeparators(QDir::tempPath() + "/USG_report_" + QString::number(m_id) + "_" + QString::number(numberImage));
-    QPixmap::fromImage(newImage).scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation).save(converted_file_name, "jpeg", 90);//QPixmap::fromImage(newImage).scaled(600,450).save(converted_file_name, "jpeg", 70);
+    // Redimensionăm și transformăm imaginea - scalarea pentru baza de date (calitatea imaginei)
+    QImage scaledImage = newImage.scaled(800, 600, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
-    if (numberImage == n_image1){        
-        ui->image1->setPixmap(QPixmap(converted_file_name));
-        setCountImages(m_count_images + 1);
-    } else if (numberImage == n_image2){
-        ui->image2->setPixmap(QPixmap(converted_file_name));
-        setCountImages(m_count_images + 1);
-    } else if (numberImage == n_image3){
-        ui->image3->setPixmap(QPixmap(converted_file_name));
-        setCountImages(m_count_images + 1);
-    } else if (numberImage == n_image4){
-        ui->image4->setPixmap(QPixmap(converted_file_name));
-        setCountImages(m_count_images + 1);
-    } else if (numberImage == n_image5){
-        ui->image5->setPixmap(QPixmap(converted_file_name));
-        setCountImages(m_count_images + 1);
+    // Conversie imagine în QByteArray (JPEG 90%)
+    QByteArray imageData;
+    QBuffer buffer(&imageData);
+    buffer.open(QIODevice::WriteOnly);
+    scaledImage.save(&buffer, "JPEG", 90); // daca 'PNG' -> se mareste de 2-3 ori dimensiunea fisierului + 90% calitatea
+
+    // Afișăm imaginea în interfață
+    QPixmap pixmap;
+    pixmap.loadFromData(imageData, "JPEG");
+    pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation); // scalarea pentru interfata
+
+    // setam imaginea
+    switch (numberImage) {
+    case n_image1: ui->image1->setPixmap(pixmap); break;
+    case n_image2: ui->image2->setPixmap(pixmap); break;
+    case n_image3: ui->image3->setPixmap(pixmap); break;
+    case n_image4: ui->image4->setPixmap(pixmap); break;
+    case n_image5: ui->image5->setPixmap(pixmap); break;
+    default: return false;
     }
 
-    if (! QFile(globals().pathImageBaseAppSettings).exists() && globals().thisSqlite){
+    // prezentam cate imagini sunt afisate
+    setCountImages(m_count_images + 1);
+
+    // verificam daca este setat drumul spre baza de date a imaginilor (slite)
+    if (globals().thisSqlite &&
+            ! QFile(globals().pathImageBaseAppSettings).exists()) {
         QMessageBox::information(this,
-                                 tr("Verificarea set\304\203rilor"),
-                                 tr("Imaginea nu este salvat\304\203 \303\256n baza de date !!!<br>"
-                                    "Nu este indicat\304\203 localizarea bazei de date a imaginilor.<br>"
-                                    "Deschide\310\233i set\304\203rile aplica\310\233iei \310\231i indica\310\233i drumul spre baza de date a imaginilor."),
+                                 tr("Verificarea setărilor"),
+                                 tr("Imaginea nu este salvată în baza de date !!!<br>"
+                                    "Nu este indicată localizarea bazei de date a imaginilor.<br>"
+                                    "Deschideți setările aplicației și indicați drumul spre baza de date a imaginilor."),
                                  QMessageBox::Ok);
         qInfo(logInfo()) << tr("Imaginea nu este salvata. Nu este indicat drumul spre baza de date a imaginilor.");
         return false;
     }
 
-    if (db->existIdDocument("imagesReports", "id_reportEcho",
-                            QString::number(m_id),
-                            (globals().thisMySQL) ? db->getDatabase() : db->getDatabaseImage()))
-        updateImageIntoTableimagesReports(converted_file_name, numberImage);
-    else
-        insertImageIntoTableimagesReports(converted_file_name, numberImage);
-
-    QString str_cmd;
-#if defined(Q_OS_LINUX)
-    str_cmd = "rm -f " + converted_file_name;
-#elif defined(Q_OS_MACOS)
-    str_cmd = "rm -f " + converted_file_name;
-#elif defined(Q_OS_WIN)
-    str_cmd = "del /f " + converted_file_name;
-#endif
-    try {
-        system(str_cmd.toStdString().c_str());
-    } catch (...) {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Eliminarea imaginei."));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Eliminarea imaginei din directoriul temporar nu s-a efectuat !!!"));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
-        throw;
+    // Salvăm direct imaginea din QByteArray
+    if (db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id),
+                            globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase())) {
+        updateImageIntoTableimagesReports(imageData, numberImage);
+    } else {
+        insertImageIntoTableimagesReports(imageData, numberImage);
     }
 
     return true;
@@ -383,8 +373,8 @@ void DocReportEcho::loadImageOpeningDocument()
 
     // de modificat solicitarea -> solicitarea unica pu toate imaginile + comentarii
     QSqlQuery qry((globals().thisMySQL) ? db->getDatabase() : db->getDatabaseImage());
-    qry.prepare(QString("SELECT * FROM imagesReports WHERE id_reportEcho = :id;"));
-    qry.bindValue(":id", m_id);
+    qry.prepare(QString("SELECT * FROM imagesReports WHERE id_reportEcho = ?"));
+    qry.addBindValue(m_id);
     if (! qry.exec()){
         qWarning(logWarning()) << tr("Eroare de executare a solicitarii 'loadImageOpeningDocument': %1").arg(qry.lastError().text());
     } else {
@@ -398,7 +388,7 @@ void DocReportEcho::loadImageOpeningDocument()
 
             QPixmap outPixmap1;
             if (! outByteArray1.isEmpty() && outPixmap1.loadFromData(outByteArray1, "jpeg")){
-                ui->image1->setPixmap(outPixmap1.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->image1->setPixmap(outPixmap1.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap2 = QPixmap();
@@ -596,126 +586,104 @@ void DocReportEcho::onLinkActivatedForOpenImage5(const QString &link)
 // *******************************************************************
 // **************** INSERAREA, ACTUALIZAREA IMAGINELOR ***************
 
-void DocReportEcho::insertImageIntoTableimagesReports(const QString &fileName, const int numberImage)
+void DocReportEcho::insertImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage)
 {
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)){
-        qWarning(logWarning()) << tr("Eroare la deschiderea fisierului '%1'.").arg(fileName);
+    // verificam daca sunt date
+    if (imageData.isEmpty()){
+        qWarning(logWarning()) << tr("[insertImageIntoTableimagesReports] - nu sunt determinate date imaginei pentru salvarea in baza de date.");
         return;
     }
-    QByteArray inByteArray = file.readAll();
 
-    QByteArray inByteArray_image1;
-    QByteArray inByteArray_image2;
-    QByteArray inByteArray_image3;
-    QByteArray inByteArray_image4;
-    QByteArray inByteArray_image5;
+    // anuntam variabile
+    QByteArray img1, img2, img3, img4, img5;
 
+    // determinam date dupa nr.imaginei
     switch (numberImage) {
-    case n_image1:
-        inByteArray_image1 = inByteArray;
-        break;
-    case n_image2:
-        inByteArray_image2 = inByteArray;
-        break;
-    case n_image3:
-        inByteArray_image3 = inByteArray;
-        break;
-    case n_image4:
-        inByteArray_image4 = inByteArray;
-        break;
-    case n_image5:
-        inByteArray_image5 = inByteArray;
-        break;
-    default:;
-        break;
+    case n_image1: img1 = imageData; break;
+    case n_image2: img2 = imageData; break;
+    case n_image3: img3 = imageData; break;
+    case n_image4: img4 = imageData; break;
+    case n_image5: img5 = imageData; break;
     }
 
-    QSqlQuery qry(db->getDatabaseImage());
-    qry.prepare("INSERT INTO imagesReports ("
-                "id_reportEcho,"
-                "id_orderEcho,"
-                "id_patients,"
-                "image_1,"
-                "image_2,"
-                "image_3,"
-                "image_4,"
-                "image_5,"
-                "comment_1,"
-                "comment_2,"
-                "comment_3,"
-                "comment_4,"
-                "comment_5,"
-                "id_user) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);");
+    // crearea solicitarii
+    QSqlQuery qry(globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase());
+    qry.prepare(R"(
+        INSERT INTO imagesReports (
+            id_reportEcho, id_orderEcho, id_patients,
+            image_1, image_2, image_3, image_4, image_5,
+            comment_1, comment_2, comment_3, comment_4, comment_5,
+            id_user
+        ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    )");
+
     qry.addBindValue(m_id);
     qry.addBindValue(m_id_docOrderEcho);
     qry.addBindValue(m_idPacient);
-    qry.addBindValue((inByteArray_image1.isEmpty()) ? QVariant() : inByteArray_image1.toBase64());
-    qry.addBindValue((inByteArray_image2.isEmpty()) ? QVariant() : inByteArray_image2.toBase64());
-    qry.addBindValue((inByteArray_image3.isEmpty()) ? QVariant() : inByteArray_image3.toBase64());
-    qry.addBindValue((inByteArray_image4.isEmpty()) ? QVariant() : inByteArray_image4.toBase64());
-    qry.addBindValue((inByteArray_image5.isEmpty()) ? QVariant() : inByteArray_image5.toBase64());
-    qry.addBindValue((ui->comment_image1->toPlainText().isEmpty()) ? QVariant() : ui->comment_image1->toPlainText());
-    qry.addBindValue((ui->comment_image2->toPlainText().isEmpty()) ? QVariant() : ui->comment_image2->toPlainText());
-    qry.addBindValue((ui->comment_image3->toPlainText().isEmpty()) ? QVariant() : ui->comment_image3->toPlainText());
-    qry.addBindValue((ui->comment_image4->toPlainText().isEmpty()) ? QVariant() : ui->comment_image4->toPlainText());
-    qry.addBindValue((ui->comment_image5->toPlainText().isEmpty()) ? QVariant() : ui->comment_image5->toPlainText());
+    qry.addBindValue(img1.isEmpty() ? QVariant() : img1.toBase64());
+    qry.addBindValue(img2.isEmpty() ? QVariant() : img2.toBase64());
+    qry.addBindValue(img3.isEmpty() ? QVariant() : img3.toBase64());
+    qry.addBindValue(img4.isEmpty() ? QVariant() : img4.toBase64());
+    qry.addBindValue(img5.isEmpty() ? QVariant() : img5.toBase64());
+
+    qry.addBindValue(ui->comment_image1->toPlainText().isEmpty() ? QVariant() : ui->comment_image1->toPlainText());
+    qry.addBindValue(ui->comment_image2->toPlainText().isEmpty() ? QVariant() : ui->comment_image2->toPlainText());
+    qry.addBindValue(ui->comment_image3->toPlainText().isEmpty() ? QVariant() : ui->comment_image3->toPlainText());
+    qry.addBindValue(ui->comment_image4->toPlainText().isEmpty() ? QVariant() : ui->comment_image4->toPlainText());
+    qry.addBindValue(ui->comment_image5->toPlainText().isEmpty() ? QVariant() : ui->comment_image5->toPlainText());
     qry.addBindValue(m_idUser);
-    if (qry.exec()){
-        popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
+
+    if (qry.exec()) {
+        popUp->setPopupText(tr("Imaginea a fost salvată cu succes în baza de date."));
         popUp->show();
-        qInfo(logInfo()) << tr("A fost salvata imaginea %1 cu succes in baza de date 'BD_IMAGE'.").arg(numberImage);
+        qInfo(logInfo()) << tr("A fost salvată imaginea %1 cu succes.").arg(numberImage);
     } else {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Inserarea imaginei."));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Imaginea nu a fost salvată în baza de date !!!"));
-        msgBox.setDetailedText((qry.lastError().text().isEmpty()) ? "unknow" : qry.lastError().text());
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setStyleSheet("QPushButton{width:120px;}");
-        msgBox.exec();
+        QMessageBox::warning(this, tr("Inserarea imaginei"),
+                             tr("Imaginea nu a fost salvată în baza de date!"),
+                             QMessageBox::Ok);
+        qWarning(logWarning()) << qry.lastError().text();
     }
-    file.close();
+
 }
 
-void DocReportEcho::updateImageIntoTableimagesReports(const QString &fileName, const int numberImage)
+void DocReportEcho::updateImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage)
 {
-    QString m_comment;
+    // verificam daca sunt date
+    if (imageData.isEmpty()){
+        qWarning(logWarning()) << tr("[updateImageIntoTableimagesReports] - nu sunt determinate date imaginei pentru actualizarea in baza de date.");
+        return;
+    }
+
+    // determinam comentariu
+    QVariant m_comment;
     switch (numberImage) {
     case n_image1:
-        m_comment = ui->comment_image1->toPlainText();
+        m_comment = ui->comment_image1->toPlainText().isEmpty() ? QVariant() : ui->comment_image1->toPlainText();
         break;
     case n_image2:
-        m_comment = ui->comment_image2->toPlainText();
+        m_comment = ui->comment_image2->toPlainText().isEmpty() ? QVariant() : ui->comment_image2->toPlainText();
         break;
     case n_image3:
-        m_comment = ui->comment_image3->toPlainText();
+        m_comment = ui->comment_image3->toPlainText().isEmpty() ? QVariant() : ui->comment_image3->toPlainText();
         break;
     case n_image4:
-        m_comment = ui->comment_image4->toPlainText();
+        m_comment = ui->comment_image4->toPlainText().isEmpty() ? QVariant() : ui->comment_image4->toPlainText();
         break;
     case n_image5:
-        m_comment = ui->comment_image5->toPlainText();
+        m_comment = ui->comment_image5->toPlainText().isEmpty() ? QVariant() : ui->comment_image5->toPlainText();
         break;
     default:;
         break;
     }
 
-    QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly)){
-        qWarning(logWarning()) << tr("Eroare la deschiderea fisierului '%1'.").arg(fileName);
-        return;
-    }
-    QByteArray inByteArray = file.readAll();
+    // cream solicitarea
+    QSqlQuery qry(globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase());
+    qry.prepare(QString("UPDATE imagesReports SET  image_%1 = ?, comment_%1 = ? WHERE id_reportEcho = ?")
+                .arg(numberImage));
 
-    QSqlQuery qry(db->getDatabaseImage());
-    qry.prepare("UPDATE imagesReports SET "
-                "image_" + QString::number(numberImage) + " = :img,"
-                "comment_" + QString::number(numberImage) + " = :comment "
-                " WHERE id_reportEcho = :id_reportEcho;");
-    qry.bindValue(":id_reportEcho", m_id);
-    qry.bindValue(":img",     inByteArray.toBase64());
-    qry.bindValue(":comment", (m_comment.isEmpty()) ? QVariant() : m_comment);
+    qry.addBindValue(imageData.toBase64());
+    qry.addBindValue(m_comment);
+    qry.addBindValue(m_id);
     if (qry.exec()){
         popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
         popUp->show();
@@ -730,7 +698,7 @@ void DocReportEcho::updateImageIntoTableimagesReports(const QString &fileName, c
         msgBox.setStyleSheet("QPushButton{width:120px;}");
         msgBox.exec();
     }
-    file.close();
+
 }
 
 void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
@@ -738,28 +706,57 @@ void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
     if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
-    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), db->getDatabaseImage()))
+    QSqlDatabase dbImg = globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase();
+
+    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), dbImg))
         return;
 
-    QSqlQuery qry(db->getDatabaseImage());
-    qry.prepare(QString("UPDATE imagesReports SET "
-                        "image_" + QString::number(numberImage) + " = '',"
-                        "comment_" + QString::number(numberImage) + " = '' "
-                        " WHERE id_reportEcho = '" + QString::number(m_id) + "';"));
-    if (qry.exec()){
-        popUp->setPopupText(tr("Imaginea a fost eliminată cu succes din baza de date."));
-        popUp->show();
-        qInfo(logInfo()) << tr("Imaginea %1 a fost eliminată cu succes din baza de date 'BD_IMAGE'.").arg(numberImage);
-    } else {
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Eliminarea imaginei."));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Imaginea nu a fost eliminată în baza de date !!!"));
-        msgBox.setDetailedText((qry.lastError().text().isEmpty()) ? "unknow" : qry.lastError().text());
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setStyleSheet("QPushButton{width:120px;}");
-        msgBox.exec();
+    // Curățăm imaginea și comentariul asociat
+    QSqlQuery qry(dbImg);
+    qry.prepare(QString("UPDATE imagesReports SET image_%1 = ?, comment_%1 = ? WHERE id_reportEcho = ?")
+                .arg(numberImage));
+    qry.addBindValue(QVariant());  // imagine ștearsă
+    qry.addBindValue(QVariant());  // comentariu șters
+    qry.addBindValue(m_id);
+
+    if (!qry.exec()) {
+        QMessageBox::warning(this, tr("Eliminarea imaginei"),
+                             tr("Imaginea nu a fost eliminată în baza de date!"),
+                             QMessageBox::Ok);
+        qWarning(logWarning()) << qry.lastError().text();
+        return;
     }
+
+    // Verificăm dacă toate imaginile sunt goale → ștergem rândul complet
+    QSqlQuery checkQry(dbImg);
+    checkQry.prepare("SELECT image_1, image_2, image_3, image_4, image_5 FROM imagesReports WHERE id_reportEcho = ?");
+    checkQry.addBindValue(m_id);
+
+    if (checkQry.exec() && checkQry.next()) {
+        bool allEmpty = true;
+        for (int i = 0; i < 5; ++i) {
+            QByteArray img = checkQry.value(i).toByteArray();
+            if (!img.isEmpty()) {
+                allEmpty = false;
+                break;
+            }
+        }
+
+        if (allEmpty) {
+            QSqlQuery delQry(dbImg);
+            delQry.prepare("DELETE FROM imagesReports WHERE id_reportEcho = ?");
+            delQry.addBindValue(m_id);
+            if (delQry.exec()) {
+                qInfo(logInfo()) << tr("Toate imaginile au fost eliminate. Rândul complet a fost șters.");
+            } else {
+                qWarning(logWarning()) << tr("Eroare la ștergerea rândului gol:") << delQry.lastError().text();
+            }
+        }
+    }
+
+    popUp->setPopupText(tr("Imaginea a fost eliminată cu succes din baza de date."));
+    popUp->show();
+    qInfo(logInfo()) << tr("Imaginea %1 a fost eliminată cu succes din baza de date.").arg(numberImage);
 }
 
 void DocReportEcho::updateCommentIntoTableimagesReports()
@@ -767,23 +764,35 @@ void DocReportEcho::updateCommentIntoTableimagesReports()
     if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
-    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), db->getDatabaseImage()))
+    QSqlDatabase dbImg = globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase();
+
+    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), dbImg))
         return;
 
-    QSqlQuery qry(db->getDatabaseImage());
-    qry.prepare(QString("UPDATE imagesReports SET "
-                        "comment_1 = '" + ui->comment_image1->toPlainText() + "',"
-                        "comment_2 = '" + ui->comment_image2->toPlainText() + "',"
-                        "comment_3 = '" + ui->comment_image3->toPlainText() + "',"
-                        "comment_4 = '" + ui->comment_image4->toPlainText() + "',"
-                        "comment_5 = '" + ui->comment_image5->toPlainText() + "' "
-                        " WHERE id_reportEcho = '" + QString::number(m_id) + "';"));
-    if (! qry.exec()){
+    QSqlQuery qry(dbImg);
+    qry.prepare(R"(
+        UPDATE imagesReports SET
+            comment_1 = ?,
+            comment_2 = ?,
+            comment_3 = ?,
+            comment_4 = ?,
+            comment_5 = ?
+        WHERE id_reportEcho = ?
+    )");
+
+    qry.addBindValue(ui->comment_image1->toPlainText().isEmpty() ? QVariant() : ui->comment_image1->toPlainText());
+    qry.addBindValue(ui->comment_image2->toPlainText().isEmpty() ? QVariant() : ui->comment_image2->toPlainText());
+    qry.addBindValue(ui->comment_image3->toPlainText().isEmpty() ? QVariant() : ui->comment_image3->toPlainText());
+    qry.addBindValue(ui->comment_image4->toPlainText().isEmpty() ? QVariant() : ui->comment_image4->toPlainText());
+    qry.addBindValue(ui->comment_image5->toPlainText().isEmpty() ? QVariant() : ui->comment_image5->toPlainText());
+    qry.addBindValue(m_id);
+
+    if (! qry.exec()) {
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Inserarea comentariului."));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Comentariul nu a fost inserat/actualizat în baza de date !!!"));
-        msgBox.setDetailedText((qry.lastError().text().isEmpty()) ? "unknow" : qry.lastError().text());
+        msgBox.setDetailedText(qry.lastError().text().isEmpty() ? "unknown" : qry.lastError().text());
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setStyleSheet("QPushButton{width:120px;}");
         msgBox.exec();
@@ -4551,165 +4560,13 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
     QSqlQuery qry;
 
     try {
-        qry.prepare("INSERT INTO reportEcho ("
-                    "id,"
-                    "deletionMark,"
-                    "numberDoc,"
-                    "dateDoc,"
-                    "id_pacients,"
-                    "id_orderEcho,"
-                    "t_organs_internal,"
-                    "t_urinary_system,"
-                    "t_prostate,"
-                    "t_gynecology,"
-                    "t_breast,"
-                    "t_thyroid,"
-                    "t_gestation0,"
-                    "t_gestation1,"
-                    "t_gestation2,"
-                    "t_gestation3,"
-                    "id_users,"
-                    "concluzion,"
-                    "comment,"
-                    "attachedImages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
-        qry.addBindValue(m_id);
-        qry.addBindValue(m_post);
-        qry.addBindValue(ui->editDocNumber->text());
-        qry.addBindValue(ui->editDocDate->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
-        qry.addBindValue(m_idPacient);
-        qry.addBindValue(m_id_docOrderEcho);
-        if (globals().thisMySQL){
-            qry.addBindValue((m_organs_internal) ? true : false);
-            qry.addBindValue((m_urinary_system) ? true : false);
-            qry.addBindValue((m_prostate) ? true : false);
-            qry.addBindValue((m_gynecology) ? true : false);
-            qry.addBindValue((m_breast) ? true : false);
-            qry.addBindValue((m_thyroide) ? true : false);
-            qry.addBindValue((m_gestation0) ? true : false);
-            qry.addBindValue((m_gestation1) ? true : false);
-            qry.addBindValue((m_gestation2) ? true : false);
-            qry.addBindValue((m_gestation3) ? true : false);
-        } else {
-            qry.addBindValue((m_organs_internal) ? 1 : 0);
-            qry.addBindValue((m_urinary_system) ? 1 : 0);
-            qry.addBindValue((m_prostate) ? 1 : 0);
-            qry.addBindValue((m_gynecology) ? 1 : 0);
-            qry.addBindValue((m_breast) ? 1 : 0);
-            qry.addBindValue((m_thyroide) ? 1 : 0);
-            qry.addBindValue((m_gestation0) ? 1 : 0);
-            qry.addBindValue((m_gestation1) ? 1 : 0);
-            qry.addBindValue((m_gestation2) ? 1 : 0);
-            qry.addBindValue((m_gestation3) ? 1 : 0);
-        }
-        qry.addBindValue(m_idUser);
-        qry.addBindValue(ui->concluzion->toPlainText());
-        qry.addBindValue((ui->comment->toPlainText().isEmpty()) ? QVariant() : ui->comment->toPlainText());
-        qry.addBindValue((m_count_images == 0) ? QVariant() : 1);
-        if (! qry.exec())
-            details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'reportEcho' - %2")
-                                .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
 
-        if (m_organs_internal) {
-            //*********************************************
-            // -- tableLiver
+        if (! insertMainDocument(qry, details_error))
+            return false;
 
-            qry.prepare("INSERT INTO tableLiver ("
-                        "id_reportEcho,"
-                        "`left`,"
-                        "`right`,"
-                        "contur,"
-                        "parenchim,"
-                        "ecogenity,"
-                        "formations,"
-                        "ductsIntrahepatic,"
-                        "porta,"
-                        "lienalis,"
-                        "concluzion,"
-                        "recommendation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
-            qry.addBindValue(m_id);
-            qry.addBindValue(ui->liver_left->text());
-            qry.addBindValue(ui->liver_right->text());
-            qry.addBindValue(ui->liver_contour->text());
-            qry.addBindValue(ui->liver_parenchyma->text());
-            qry.addBindValue(ui->liver_ecogenity->text());
-            qry.addBindValue(ui->liver_formations->text());
-            qry.addBindValue(ui->liver_duct_hepatic->text());
-            qry.addBindValue(ui->liver_porta->text());
-            qry.addBindValue(ui->liver_lienalis->text());
-            qry.addBindValue(ui->organsInternal_concluzion->toPlainText());
-            qry.addBindValue((ui->organsInternal_recommendation->text().isEmpty()) ? QVariant() : ui->organsInternal_recommendation->text());
-            if (! qry.exec())
-                details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'tableLiver' - %2")
-                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
+        if (m_organs_internal && ! insertOrgansInternal(qry, details_error))
+            return false;
 
-            //*********************************************
-            // -- tableCholecist
-            qry.prepare("INSERT INTO tableCholecist ("
-                        "id_reportEcho,"
-                        "form,"
-                        "dimens,"
-                        "walls,"
-                        "choledoc,"
-                        "formations) VALUES (?,?,?,?,?,?);");
-            qry.addBindValue(m_id);
-            qry.addBindValue(ui->cholecist_form->text());
-            qry.addBindValue(ui->cholecist_dimens->text());
-            qry.addBindValue(ui->cholecist_walls->text());
-            qry.addBindValue(ui->cholecist_coledoc->text());
-            qry.addBindValue(ui->cholecist_formations->text());
-            if (! qry.exec())
-                details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'tableCholecist' - %2")
-                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
-
-            //*********************************************
-            // -- tablePancreas
-            qry.prepare("INSERT INTO tablePancreas ("
-                        "id_reportEcho,"
-                        "cefal,"
-                        "corp,"
-                        "tail,"
-                        "texture,"
-                        "ecogency,"
-                        "formations) VALUES (?,?,?,?,?,?,?);");
-            qry.addBindValue(m_id);
-            qry.addBindValue(ui->pancreas_cefal->text());
-            qry.addBindValue(ui->pancreas_corp->text());
-            qry.addBindValue(ui->pancreas_tail->text());
-            qry.addBindValue(ui->pancreas_parenchyma->text());
-            qry.addBindValue(ui->pancreas_ecogenity->text());
-            qry.addBindValue(ui->pancreas_formations->text());
-            if (! qry.exec())
-                details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'tablePancreas' - %2")
-                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
-
-            //*********************************************
-            // -- tableSpleen
-            qry.prepare("INSERT INTO tableSpleen ("
-                        "id_reportEcho,"
-                        "dimens,"
-                        "contur,"
-                        "parenchim,"
-                        "formations) VALUES (?,?,?,?,?);");
-            qry.addBindValue(m_id);
-            qry.addBindValue(ui->spleen_dimens->text());
-            qry.addBindValue(ui->spleen_contour->text());
-            qry.addBindValue(ui->spleen_parenchyma->text());
-            qry.addBindValue(ui->spleen_formations->text());
-            if (! qry.exec())
-                details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'tableSpleen' - %2")
-                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
-
-            //*********************************************
-            // -- tableIntestinalLoop
-            qry.prepare("INSERT INTO tableIntestinalLoop ("
-                        "id_reportEcho,"
-                        "formations) VALUES (?,?);");
-            qry.addBindValue(m_id);
-            qry.addBindValue(ui->intestinalHandles->toPlainText());
-            if (! qry.exec())
-                details_error = tr("Eroarea inserarii datelor documentului nr.%1 in tabela 'tableIntestinalLoop' - %2")
-                                    .arg(ui->editDocNumber->text(), (qry.lastError().text().isEmpty()) ? tr("eroare indisponibila") : qry.lastError().text());
-        }
         if (m_urinary_system) {
             //*********************************************
             // -- tableKidney
@@ -5345,9 +5202,174 @@ bool DocReportEcho::insertingDocumentDataIntoTables(QString &details_error)
         }
 
     } catch (...) {
+        details_error = tr("Exceptie neprevăzută la inserarea datelor documentului.");
         db->getDatabase().rollback();
-        throw;
+        return false;
     }
+}
+
+bool DocReportEcho::insertMainDocument(QSqlQuery &qry, QString &err)
+{
+    qry.prepare(R"(
+        INSERT INTO reportEcho (
+            id, deletionMark, numberDoc,
+            dateDoc, id_pacients, id_orderEcho,
+            t_organs_internal, t_urinary_system,
+            t_prostate, t_gynecology,
+            t_breast, t_thyroid, t_gestation0,
+            t_gestation1, t_gestation2, t_gestation3,
+            id_users, concluzion, comment,
+            attachedImages) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(m_post);
+    qry.addBindValue(ui->editDocNumber->text());
+    qry.addBindValue(ui->editDocDate->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
+    qry.addBindValue(m_idPacient);
+    qry.addBindValue(m_id_docOrderEcho);
+
+    auto b = [=](bool val) { return globals().thisMySQL ? val : int(val); };
+    qry.addBindValue(b(m_organs_internal));
+    qry.addBindValue(b(m_urinary_system));
+    qry.addBindValue(b(m_prostate));
+    qry.addBindValue(b(m_gynecology));
+    qry.addBindValue(b(m_breast));
+    qry.addBindValue(b(m_thyroide));
+    qry.addBindValue(b(m_gestation0));
+    qry.addBindValue(b(m_gestation1));
+    qry.addBindValue(b(m_gestation2));
+    qry.addBindValue(b(m_gestation3));
+
+    qry.addBindValue(m_idUser);
+    qry.addBindValue(ui->concluzion->toPlainText());
+    qry.addBindValue((ui->comment->toPlainText().isEmpty()) ? QVariant() : ui->comment->toPlainText());
+    qry.addBindValue((m_count_images == 0) ? QVariant() : 1);
+
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'reportEcho' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+    return true;
+}
+
+bool DocReportEcho::insertOrgansInternal(QSqlQuery &qry, QString &err)
+{
+    qry.prepare(R"(
+        INSERT INTO tableLiver (
+            id_reportEcho, `left`, `right`,
+            contur, parenchim, ecogenity,
+            formations, ductsIntrahepatic,
+            porta, lienalis, concluzion,
+            recommendation) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(ui->liver_left->text());
+    qry.addBindValue(ui->liver_right->text());
+    qry.addBindValue(ui->liver_contour->text());
+    qry.addBindValue(ui->liver_parenchyma->text());
+    qry.addBindValue(ui->liver_ecogenity->text());
+    qry.addBindValue(ui->liver_formations->text());
+    qry.addBindValue(ui->liver_duct_hepatic->text());
+    qry.addBindValue(ui->liver_porta->text());
+    qry.addBindValue(ui->liver_lienalis->text());
+    qry.addBindValue(ui->organsInternal_concluzion->toPlainText());
+    qry.addBindValue((ui->organsInternal_recommendation->text().isEmpty()) ? QVariant() : ui->organsInternal_recommendation->text());
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableLiver' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+
+    //*********************************************
+    // -- tableCholecist
+    qry.prepare(R"(
+        INSERT INTO tableCholecist (
+            id_reportEcho,
+            form,
+            dimens,
+            walls,
+            choledoc,
+            formations)
+        VALUES (?,?,?,?,?,?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(ui->cholecist_form->text());
+    qry.addBindValue(ui->cholecist_dimens->text());
+    qry.addBindValue(ui->cholecist_walls->text());
+    qry.addBindValue(ui->cholecist_coledoc->text());
+    qry.addBindValue(ui->cholecist_formations->text());
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableCholecist' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+
+    //*********************************************
+    // -- tablePancreas
+    qry.prepare(R"(
+        INSERT INTO tablePancreas (
+            id_reportEcho,
+            cefal,
+            corp,
+            tail,
+            texture,
+            ecogency,
+            formations)
+        VALUES (?,?,?,?,?,?,?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(ui->pancreas_cefal->text());
+    qry.addBindValue(ui->pancreas_corp->text());
+    qry.addBindValue(ui->pancreas_tail->text());
+    qry.addBindValue(ui->pancreas_parenchyma->text());
+    qry.addBindValue(ui->pancreas_ecogenity->text());
+    qry.addBindValue(ui->pancreas_formations->text());
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tablePancreas' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+
+    //*********************************************
+    // -- tableSpleen
+    qry.prepare(R"(
+        INSERT INTO tableSpleen (
+            id_reportEcho,
+            dimens,
+            contur,
+            parenchim,
+            formations)
+        VALUES (?,?,?,?,?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(ui->spleen_dimens->text());
+    qry.addBindValue(ui->spleen_contour->text());
+    qry.addBindValue(ui->spleen_parenchyma->text());
+    qry.addBindValue(ui->spleen_formations->text());
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableSpleen' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+
+    //*********************************************
+    // -- tableIntestinalLoop
+    qry.prepare(R"(
+        INSERT INTO tableIntestinalLoop (
+            id_reportEcho,
+            formations) VALUES (?,?);
+    )");
+    qry.addBindValue(m_id);
+    qry.addBindValue(ui->intestinalHandles->toPlainText());
+    if (! qry.exec()) {
+        err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableIntestinalLoop' - %2")
+              .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
+        return false;
+    }
+
+    return true;
+
 }
 
 bool DocReportEcho::updatingDocumentDataIntoTables(QString &details_error)

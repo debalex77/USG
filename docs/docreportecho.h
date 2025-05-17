@@ -222,8 +222,9 @@ private slots:
     void onLinkActivatedForOpenImage3(const QString &link);
     void onLinkActivatedForOpenImage4(const QString &link);
     void onLinkActivatedForOpenImage5(const QString &link);
-    void insertImageIntoTableimagesReports(const QString &fileName, const int numberImage);
-    void updateImageIntoTableimagesReports(const QString &fileName, const int numberImage);
+
+    void insertImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage);
+    void updateImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage);
     void removeImageIntoTableimagesReports(const int numberImage);
     void updateCommentIntoTableimagesReports();
 
@@ -379,6 +380,9 @@ private:
     void initFooterDoc();                  // initierea btn + setarea textului autorului
 
     bool insertingDocumentDataIntoTables(QString &details_error);
+    bool insertMainDocument(QSqlQuery &qry, QString &err);
+    bool insertOrgansInternal(QSqlQuery &qry, QString &err);
+
     bool updatingDocumentDataIntoTables(QString &details_error);
 
     void updateDataDocOrderEcho(); // actualizarea datelor doc.Comanda ecografica - inserarea valorii atasarii imaginei
