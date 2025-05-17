@@ -115,49 +115,61 @@ bool CatGeneral::insertDataIntoTableByNameTable(const QString name_table)
 {
     QSqlQuery qry;
     if (name_table == "pacients"){
-        qry.prepare("INSERT INTO " + name_table + " ("
-                                                  "id,"
-                                                  "deletionMark,"
-                                                  "IDNP,"
-                                                  "name,"
-                                                  "fName,"
-                                                  "mName,"
-                                                  "medicalPolicy,"
-                                                  "birthday,"
-                                                  "address,"
-                                                  "telephone,"
-                                                  "email,"
-                                                  "comment) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+
+        qry.prepare(R"(
+            INSERT INTO pacients (
+                id, deletionMark, IDNP, name, fName, mName,
+                medicalPolicy, birthday, address, telephone, email, comment
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
+        )");
         qry.addBindValue(m_Id);
         qry.addBindValue(0);
         qry.addBindValue(ui->editIDNP->text());
         qry.addBindValue(ui->editName->text());
         qry.addBindValue(ui->editPrenume->text());
-        qry.addBindValue(ui->editPatronimic->text());
-        qry.addBindValue(ui->editPoliceMed->text());
+        qry.addBindValue(ui->editPatronimic->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPatronimic->text());
+        qry.addBindValue(ui->editPoliceMed->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPoliceMed->text());
         qry.addBindValue(ui->dateEdit->date().toString("yyyy-MM-dd"));
-        qry.addBindValue(ui->editAddress->text());
-        qry.addBindValue(ui->editTelephone->text());
-        qry.addBindValue(ui->editEmail->text());
-        qry.addBindValue(ui->editComment->toPlainText());
+        qry.addBindValue(ui->editAddress->text().isEmpty()
+                             ? QVariant()
+                             : ui->editAddress->text());
+        qry.addBindValue(ui->editTelephone->text().isEmpty()
+                             ? QVariant()
+                             : ui->editTelephone->text());
+        qry.addBindValue(ui->editEmail->text().isEmpty()
+                             ? QVariant()
+                             : ui->editEmail->text());
+        qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                             ? QVariant()
+                             : ui->editComment->toPlainText());
+
     } else {
-        qry.prepare("INSERT INTO " + name_table + " ("
-                                                  "id,"
-                                                  "deletionMark,"
-                                                  "name,"
-                                                  "fName,"
-                                                  "mName,"
-                                                  "telephone,"
-                                                  "email,"
-                                                  "comment) VALUES (?,?,?,?,?,?,?,?);");
+
+        qry.prepare("INSERT INTO " + name_table + R"( (
+            id, deletionMark, name, fName, mName, telephone, email, comment
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?);
+        )");
         qry.addBindValue(m_Id);
         qry.addBindValue(0);
         qry.addBindValue(ui->editName->text());
         qry.addBindValue(ui->editPrenume->text());
-        qry.addBindValue(ui->editPatronimic->text());
-        qry.addBindValue(ui->editTelephone->text());
-        qry.addBindValue(ui->editEmail->text());
-        qry.addBindValue(ui->editComment->toPlainText());
+        qry.addBindValue(ui->editPatronimic->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPatronimic->text());
+        qry.addBindValue(ui->editTelephone->text().isEmpty()
+                             ? QVariant()
+                             : ui->editTelephone->text());
+        qry.addBindValue(ui->editEmail->text().isEmpty()
+                             ? QVariant()
+                             : ui->editEmail->text());
+        qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                             ? QVariant()
+                             : ui->editComment->toPlainText());
+
     }
     if (qry.exec()){
         qInfo(logInfo()) << tr("Datele obiectului '%1' cu id='%2' au fost salvate cu succes in tabela '%3'.")
@@ -174,49 +186,78 @@ bool CatGeneral::updateDataIntoTableByNameTable(const QString name_table)
 {
     QSqlQuery qry;
     if (name_table == "pacients"){
-        qry.prepare("UPDATE " + name_table + " SET "
-                                             "deletionMark  = :deletionMark,"
-                                             "IDNP          = :IDNP,"
-                                             "name          = :name,"
-                                             "fName         = :fName,"
-                                             "mName         = :mName,"
-                                             "medicalPolicy = :medicalPolicy,"
-                                             "birthday      = :birthday,"
-                                             "address       = :address,"
-                                             "telephone     = :telephone,"
-                                             "email         = :email,"
-                                             "comment       = :comment "
-                                             "WHERE id = :id;");
-        qry.bindValue(":id",            m_Id);
-        qry.bindValue(":deletionMark",  0);
-        qry.bindValue(":IDNP",          ui->editIDNP->text());
-        qry.bindValue(":name",          ui->editName->text());
-        qry.bindValue(":fName",         ui->editPrenume->text());
-        qry.bindValue(":mName",         ui->editPatronimic->text());
-        qry.bindValue(":medicalPolicy", ui->editPoliceMed->text());
-        qry.bindValue(":birthday",      ui->dateEdit->date().toString("yyyy-MM-dd"));
-        qry.bindValue(":address",       ui->editAddress->text());
-        qry.bindValue(":telephone",     ui->editTelephone->text());
-        qry.bindValue(":email",         ui->editEmail->text());
-        qry.bindValue(":comment",       ui->editComment->toPlainText());
+
+        qry.prepare(R"(
+            UPDATE pacients SET
+                deletionMark  = ?,
+                IDNP          = ?,
+                name          = ?,
+                fName         = ?,
+                mName         = ?,
+                medicalPolicy = ?,
+                birthday      = ?,
+                address       = ?,
+                telephone     = ?,
+                email         = ?,
+                comment       = ?
+            WHERE id = ?;
+        )");
+        qry.addBindValue(0); // deletionMark
+        qry.addBindValue(ui->editIDNP->text());
+        qry.addBindValue(ui->editName->text());
+        qry.addBindValue(ui->editPrenume->text());
+        qry.addBindValue(ui->editPatronimic->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPatronimic->text());
+        qry.addBindValue(ui->editPoliceMed->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPoliceMed->text());
+        qry.addBindValue(ui->dateEdit->date().toString("yyyy-MM-dd"));
+        qry.addBindValue(ui->editAddress->text().isEmpty()
+                             ? QVariant()
+                             : ui->editAddress->text());
+        qry.addBindValue(ui->editTelephone->text().isEmpty()
+                             ? QVariant()
+                             : ui->editTelephone->text());
+        qry.addBindValue(ui->editEmail->text().isEmpty()
+                             ? QVariant()
+                             : ui->editEmail->text());
+        qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                             ? QVariant()
+                             : ui->editComment->toPlainText());
+        qry.addBindValue(m_Id);
+
     } else {
-        qry.prepare("UPDATE " + name_table + " SET "
-                                             "deletionMark = :deletionMark,"
-                                             "name         = :name,"
-                                             "fName        = :fName,"
-                                             "mName        = :mName,"
-                                             "telephone    = :telephone,"
-                                             "email        = :email,"
-                                             "comment      = :comment "
-                                             "WHERE id = :id;");
-        qry.bindValue(":id",           m_Id);
-        qry.bindValue(":deletionMark", 0);
-        qry.bindValue(":name",         ui->editName->text());
-        qry.bindValue(":fName",        ui->editPrenume->text());
-        qry.bindValue(":mName",        ui->editPatronimic->text());
-        qry.bindValue(":telephone",    ui->editTelephone->text());
-        qry.bindValue(":email",        ui->editEmail->text());
-        qry.bindValue(":comment",      ui->editComment->toPlainText());
+
+        qry.prepare(QStringLiteral(R"(
+            UPDATE %1 SET
+                deletionMark = ?,
+                name         = ?,
+                fName        = ?,
+                mName        = ?,
+                telephone    = ?,
+                email        = ?,
+                comment      = ?
+            WHERE id = ?;
+        )").arg(name_table));
+
+        qry.addBindValue(0);
+        qry.addBindValue(ui->editName->text());
+        qry.addBindValue(ui->editPrenume->text());
+        qry.addBindValue(ui->editPatronimic->text().isEmpty()
+                             ? QVariant()
+                             : ui->editPatronimic->text());
+        qry.addBindValue(ui->editTelephone->text().isEmpty()
+                             ? QVariant()
+                             : ui->editTelephone->text());
+        qry.addBindValue(ui->editEmail->text().isEmpty()
+                             ? QVariant()
+                             : ui->editEmail->text());
+        qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                             ? QVariant()
+                             : ui->editComment->toPlainText());
+        qry.addBindValue(m_Id);
+
     }
 
     if (qry.exec()){
@@ -233,14 +274,20 @@ bool CatGeneral::updateDataIntoTableByNameTable(const QString name_table)
 bool CatGeneral::objectExistsInTableByName(const QString name_table)
 {
     QSqlQuery qry;
-    qry.prepare("SELECT COUNT(name) FROM " + name_table + " WHERE "
-                "name =  :name AND "
-                "fName = :fName AND "
-                "mName = :mName AND "
-                "deletionMark = 0;");
-    qry.bindValue(":name",  ui->editName->text());
-    qry.bindValue(":fName", ui->editPrenume->text());
-    qry.bindValue(":mName", ui->editPatronimic->text());
+    qry.prepare(QStringLiteral(R"(
+        SELECT
+            COUNT(name)
+        FROM
+            %1
+        WHERE
+            name = ? AND
+            fName = ? AND
+            mName = ? AND
+            deletionMark = 0;
+    )").arg(name_table));
+    qry.addBindValue(ui->editName->text());
+    qry.addBindValue(ui->editPrenume->text());
+    qry.addBindValue(ui->editPatronimic->text());
     if (qry.exec() && qry.next()){
         int _bool = qry.value(0).toInt();
         return (_bool > 0) ? true : false;
@@ -279,9 +326,9 @@ void CatGeneral::dataWasModified()
 void CatGeneral::clearImageSignature()
 {
     QSqlQuery qry;
-    qry.prepare("UPDATE doctors SET signature = :value WHERE id = :id;");
-    qry.bindValue(":id",    m_Id);
-    qry.bindValue(":value", QVariant());
+    qry.prepare("UPDATE doctors SET signature = ? WHERE id = ?;");
+    qry.addBindValue(QVariant());
+    qry.addBindValue(m_Id);
     if (qry.exec()){
         ui->imageSignature->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea</a>");
         ui->imageSignature->setTextFormat(Qt::RichText);
@@ -296,9 +343,9 @@ void CatGeneral::clearImageSignature()
 void CatGeneral::clearImageStamp()
 {
     QSqlQuery qry;
-    qry.prepare("UPDATE doctors SET stamp = :value WHERE id = :id;");
-    qry.bindValue(":id",    m_Id);
-    qry.bindValue(":value", QVariant());
+    qry.prepare("UPDATE doctors SET stamp = ? WHERE id = ?;");
+    qry.addBindValue(QVariant());
+    qry.addBindValue(m_Id);
     if (qry.exec()){
         ui->imageSignature->setText("<a href=\"#LoadImageStamp\">Apasa pentru a alege imaginea</a>");
         ui->imageSignature->setTextFormat(Qt::RichText);
@@ -333,9 +380,10 @@ bool CatGeneral::loadFile(const QString &fileName, const QString &link)
     QByteArray inByteArray = file.readAll();
 
     QSqlQuery qry;
-    qry.prepare(QString("UPDATE doctors SET %1 = :value WHERE id = :id;").arg((link == "#LoadImage") ? "signature" : "stamp"));
-    qry.bindValue(":id",    m_Id);
-    qry.bindValue(":value", inByteArray.toBase64());
+    qry.prepare(QStringLiteral("UPDATE doctors SET %1 = ? WHERE id = ?;")
+                    .arg((link == "#LoadImage") ? "signature" : "stamp"));
+    qry.addBindValue(inByteArray.toBase64());
+    qry.addBindValue(m_Id);
     if (qry.exec()){
         popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
         popUp->show();

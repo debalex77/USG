@@ -94,9 +94,9 @@ void AsistantTipApp::onClose()
 
     if (m_show_launch != globals().showAsistantHelper){
         QSqlQuery qry;
-        qry.prepare("UPDATE userPreferences SET showAsistantHelper = :showAsistantHelper WHERE id_users = :id_users;");
-        qry.bindValue(":showAsistantHelper", ui->show_launch->isChecked());
-        qry.bindValue(":id_users",           globals().idUserApp);
+        qry.prepare("UPDATE userPreferences SET showAsistantHelper = ? WHERE id_users = ?;");
+        qry.bindValue(0, ui->show_launch->isChecked());
+        qry.bindValue(1, globals().idUserApp);
         if (! qry.exec())
             qWarning(logWarning()) << this->metaObject()->className()
                                    << tr(": nu au fost actualizate date de prezentare a asistentului de sfaturi %1")

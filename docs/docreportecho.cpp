@@ -34,6 +34,8 @@
 
 #include <catalogs/catforsqltablemodel.h>
 
+#include <customs/custommessage.h>
+
 DocReportEcho::DocReportEcho(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DocReportEcho)
@@ -3726,14 +3728,13 @@ bool DocReportEcho::onWritingData()
 
     if (m_itNew){    
         if (! insertingDocumentDataIntoTables(details_error)){
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Validarea documentului"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Validarea documentului nu s-a efectuat."));
-            msgBox.setDetailedText(details_error);
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Validarea documentului"));
+            msgBox->setTextTitle(tr("Documentul nu este validat."));
+            msgBox->setDetailedText(details_error);
+            msgBox->exec();
+            msgBox->deleteLater();
+            return false;
         }     
         if (m_post == Enums::IDX::IDX_WRITE || m_post == Enums::IDX::IDX_POST){
             popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.")
@@ -3746,16 +3747,15 @@ bool DocReportEcho::onWritingData()
     } else {
 
         if (! updatingDocumentDataIntoTables(details_error)){
-            QMessageBox msgBox;
-            msgBox.setWindowTitle(tr("Actualizarea documentului"));
-            msgBox.setIcon(QMessageBox::Warning);
-            msgBox.setText(tr("Actualizarea datelor documentului nu s-a efectuat."));
-            msgBox.setDetailedText(details_error);
-            msgBox.setStandardButtons(QMessageBox::Ok);
-            msgBox.setStyleSheet("QPushButton{width:120px;}");
-            msgBox.exec();
+            CustomMessage *msgBox = new CustomMessage(this);
+            msgBox->setWindowTitle(tr("Actualizarea documentului"));
+            msgBox->setTextTitle(tr("Actualizarea datelor documentului nu s-a efectuat."));
+            msgBox->setDetailedText(details_error);
+            msgBox->exec();
+            msgBox->deleteLater();
             return false;
         }
+
         if (m_post == Enums::IDX::IDX_WRITE || m_post == Enums::IDX::IDX_POST){
             popUp->setPopupText(tr("Datele documentului au fost actualizate<br> cu succes."));
             popUp->show();

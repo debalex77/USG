@@ -121,27 +121,30 @@ QMap<QString, QString> CatContracts::getDataObject()
 bool CatContracts::insertIntoTableContracts()
 {
     QSqlQuery qry;
-    qry.prepare("INSERT INTO contracts ("
-                "id,"
-                "deletionMark,"
-                "id_organizations,"
-                "id_typesPrices,"
-                "name,"
-                "dateInit,"
-                "notValid,"
-                "comment"
-                ") VALUES (?,?,?,?,?,?,?,?);");
+    qry.prepare(R"(
+        INSERT INTO contracts (
+            id,
+            deletionMark,
+            id_organizations,
+            id_typesPrices,
+            name,
+            dateInit,
+            notValid,
+            comment)
+        VALUES (?,?,?,?,?,?,?,?);
+    )");
     qry.addBindValue(m_Id);
     qry.addBindValue(0);
     qry.addBindValue(m_IdOrganization);
     qry.addBindValue(m_id_types_prices);
     qry.addBindValue(ui->editName->text());
     qry.addBindValue(ui->dateInit->date().toString("yyyy-MM-dd"));
-    if (globals().thisMySQL)
-        qry.addBindValue((ui->checkBoxNotValid->isChecked()) ? true : false);
-    else
-        qry.addBindValue((ui->checkBoxNotValid->isChecked()) ? 1 : 0);
-    qry.addBindValue(ui->editComment->toPlainText());
+    qry.addBindValue(globals().thisMySQL
+                     ? QVariant(ui->checkBoxNotValid->isChecked())
+                     : QVariant(int(ui->checkBoxNotValid->isChecked())));
+    qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                         ? QVariant()
+                         : ui->editComment->toPlainText());
     if (! qry.exec()){
         qCritical(logCritical()) << tr("Eroarea la inserarea datelor contractului '%1' in tabela 'contracts' - %2").arg(ui->editName->text(), qry.lastError().text());
         return false;
@@ -154,28 +157,35 @@ bool CatContracts::insertIntoTableContracts()
 bool CatContracts::updateDataTableContracts()
 {
     QSqlQuery qry;
-    qry.prepare("UPDATE contracts SET "
-                "deletionMark     = :deletionMark,"
-                "id_organizations = :id_organizations,"
-                "id_typesPrices   = :id_typesPrices,"
-                "name             = :name,"
-                "dateInit         = :dateInit,"
-                "notValid         = :notValid,"
-                "comment          = :comment "
-                "WHERE id = :id;");
-    qry.bindValue(":id",               m_Id);
-    qry.bindValue(":deletionMark",     0);
-    qry.bindValue(":id_organizations", m_IdOrganization);
-    qry.bindValue(":id_typesPrices",   m_id_types_prices);
-    qry.bindValue(":name",             ui->editName->text());
-    qry.bindValue(":dateInit",         ui->dateInit->date().toString("yyyy-MM-dd"));
-    if (globals().thisMySQL)
-        qry.bindValue(":notValid", (ui->checkBoxNotValid->isChecked()) ? true : false);
-    else
-        qry.bindValue(":notValid", (ui->checkBoxNotValid->isChecked()) ? 1 : 0);
-    qry.bindValue(":comment", ui->editComment->toPlainText());
+    qry.prepare(R"(
+        UPDATE
+            contracts
+        SET
+            deletionMark = ?,
+            id_organizations = ?,
+            id_typesPrices = ?,
+            name = ?,
+            dateInit = ?,
+            notValid = ?,
+            comment = ?
+        WHERE
+            id = ?;
+    )");
+    qry.addBindValue(0);
+    qry.addBindValue(m_IdOrganization);
+    qry.addBindValue(m_id_types_prices);
+    qry.addBindValue(ui->editName->text());
+    qry.addBindValue(ui->dateInit->date().toString("yyyy-MM-dd"));
+    qry.addBindValue(globals().thisMySQL
+                         ? QVariant(ui->checkBoxNotValid->isChecked())
+                         : QVariant(int(ui->checkBoxNotValid->isChecked())));
+    qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+                         ? QVariant()
+                         : ui->editComment->toPlainText());
+    qry.addBindValue(m_Id);
     if (! qry.exec()){
-        qCritical(logCritical()) << tr("Eroarea la modificarea datelor contractului '%1' din tabela 'contracts' - %2").arg(ui->editName->text(), qry.lastError().text());
+        qCritical(logCritical()) << tr("Eroarea la modificarea datelor contractului '%1' din tabela 'contracts' - %2")
+                                        .arg(ui->editName->text(), qry.lastError().text());
         return false;
     }
     qInfo(logInfo()) << tr("Modificarea datelor contractului cu nume '%1', id='%2', organizatia - '%3'.")
