@@ -395,11 +395,16 @@ private:
     bool updateMainDocument(QSqlQuery &qry, QString &err);
     bool updateOrgansInternal(QSqlQuery &qry, QString &err);
     bool updateUrinarySystem(QSqlQuery &qry, QString &err);
+    bool updateProstate(QSqlQuery &qry, QString &err);
+    bool updateGynecology(QSqlQuery &qry, QString &err);
+    bool updateBreast(QSqlQuery &qry, QString &err);
+    bool updateThyroid(QSqlQuery &qry, QString &err);
+    bool updateGestation0(QSqlQuery &qry, QString &err);
+    bool updateGestation1(QSqlQuery &qry, QString &err);
+    bool updateGestation2(QSqlQuery &qry, QString &err);
 
     void updateDataDocOrderEcho(); // actualizarea datelor doc.Comanda ecografica - inserarea valorii atasarii imaginei
 
-    QString getStringTablesBySystems();
-    void processingRequest();
     void setDataFromSystemOrgansInternal(); // inserarea datelor in forma din tabele
     void setDataFromSystemUrinary();
     void setDataFromTableProstate();

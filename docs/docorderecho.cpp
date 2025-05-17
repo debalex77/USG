@@ -1419,31 +1419,27 @@ void DocOrderEcho::updateModelPacients()
 
     const QString strQuery =
         globals().thisMySQL ?
-            QStringLiteral(
-                "SELECT "
-                "  pacients.id, "
-                "  CONCAT(pacients.name, ' ', pacients.fName, ', ', "
-                "  DATE_FORMAT(pacients.birthday, '%d.%m.%Y'), ', idnp: ', "
-                "  IFNULL(pacients.IDNP, '')) AS FullName "
-                "FROM "
-                "  pacients "
-                "WHERE "
-                "  pacients.deletionMark = 0 "
-                "ORDER BY "
-                "  FullName ASC;"
-                ) :
-            QStringLiteral(
-                "SELECT "
-                "  pacients.id,"
-                "  pacients.name ||' '|| pacients.fName "
-                "  || ', ' || strftime('%d.%m.%Y', pacients.birthday) || ', idnp: ' || IFNULL(pacients.IDNP, '') AS FullName "
-                "FROM "
-                "  pacients "
-                "WHERE "
-                "  pacients.deletionMark = 0 "
-                "ORDER BY "
-                "  FullName ASC;"
-                );
+            QStringLiteral(R"(
+            SELECT
+                pacients.id,
+                CONCAT(pacients.name, ' ', pacients.fName, ', ',
+                DATE_FORMAT(pacients.birthday, '%d.%m.%Y'), ', idnp: ',
+                IFNULL(pacients.IDNP, '')) AS FullName
+            FROM pacients
+            WHERE pacients.deletionMark = 0
+            ORDER BY FullName ASC;
+        )")
+        :
+            QStringLiteral(R"(
+            SELECT
+                pacients.id,
+                pacients.name || ' ' || pacients.fName || ', ' ||
+                strftime('%d.%m.%Y', pacients.birthday) || ', idnp: ' ||
+                IFNULL(pacients.IDNP, '') AS FullName
+            FROM pacients
+            WHERE pacients.deletionMark = 0
+            ORDER BY FullName ASC;
+        )");
     QSqlQuery qry;
     if (! qry.exec(strQuery)) {
         qWarning() << "Eroare exec query:" << qry.lastError().text();
