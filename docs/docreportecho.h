@@ -379,11 +379,22 @@ private:
     void initSetCompleter();               // initierea completarului
     void initFooterDoc();                  // initierea btn + setarea textului autorului
 
-    bool insertingDocumentDataIntoTables(QString &details_error);
+    bool insertingDocumentDataIntoTables(QString &details_error); // inserarea datelor pe sisteme
     bool insertMainDocument(QSqlQuery &qry, QString &err);
     bool insertOrgansInternal(QSqlQuery &qry, QString &err);
+    bool insertUrinarySystem(QSqlQuery &qry, QString &err);
+    bool insertProstate(QSqlQuery &qry, QString &err);
+    bool insertGynecology(QSqlQuery &qry, QString &err);
+    bool insertBreast(QSqlQuery &qry, QString &err);
+    bool insertThyroid(QSqlQuery &qry, QString &err);
+    bool insertGestation0(QSqlQuery &qry, QString &err);
+    bool insertGestation1(QSqlQuery &qry, QString &err);
+    bool insertGestation2(QSqlQuery &qry, QString &err);
 
-    bool updatingDocumentDataIntoTables(QString &details_error);
+    bool updatingDocumentDataIntoTables(QString &details_error);  // actualizarea datelor pe sisteme
+    bool updateMainDocument(QSqlQuery &qry, QString &err);
+    bool updateOrgansInternal(QSqlQuery &qry, QString &err);
+    bool updateUrinarySystem(QSqlQuery &qry, QString &err);
 
     void updateDataDocOrderEcho(); // actualizarea datelor doc.Comanda ecografica - inserarea valorii atasarii imaginei
 
