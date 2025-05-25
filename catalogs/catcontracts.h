@@ -49,10 +49,13 @@ signals:
 
 private:
     void initConnections();
+    void connectionModified();
+    void disconnectionModified();
+
     bool controlRequiredObjects();
-    QMap<QString, QString> getDataObject();
-    bool insertIntoTableContracts();
-    bool updateDataTableContracts();
+    QVariantMap getDataObject();
+    bool insertIntoTableContracts(QStringList &err);
+    bool updateDataTableContracts(QStringList &err);
 
 private slots:
     void dataWasModified();
@@ -60,8 +63,9 @@ private slots:
     void slot_IdChanged();
     void slot_ItNewChanged();
     void slot_IdChangedOrganization();
+    void slot_IdTypesPricesChanged();
 
-    void changedIndexComboOrganization(const int arg1);
+    void changedIndexComboOrganization(const int index);
     void currentIndexTypesPricesChanged(const int index);
 
     bool onWritingData();

@@ -24,6 +24,8 @@
 #include "catcontracts.h"
 #include "ui_catcontracts.h"
 
+#include <customs/custommessage.h>
+
 CatContracts::CatContracts(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CatContracts)
@@ -85,112 +87,130 @@ void CatContracts::initConnections()
     connect(this, &CatContracts::IdChanged, this, &CatContracts::slot_IdChanged);
     connect(this, &CatContracts::ItNewChanged, this, &CatContracts::slot_ItNewChanged);
     connect(this, &CatContracts::IdChangedOrganization, this, &CatContracts::slot_IdChangedOrganization);
+    connect(this, &CatContracts::IdTypesPricesChanged, this, &CatContracts::slot_IdTypesPricesChanged);
+}
+
+void CatContracts::connectionModified()
+{
+    connect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &CatContracts::changedIndexComboOrganization);
+    connect(ui->comboTypesPrices, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &CatContracts::currentIndexTypesPricesChanged);
+
+    connect(ui->comboOrganizations, &QComboBox::currentIndexChanged, this, &CatContracts::dataWasModified);
+    connect(ui->comboTypesPrices,&QComboBox::currentIndexChanged, this, &CatContracts::dataWasModified);
+
+    connect(ui->editName, &QLineEdit::textChanged, this, &CatContracts::dataWasModified);
+    connect(ui->dateInit, &QDateEdit::dateChanged, this, &CatContracts::dataWasModified);
+    connect(ui->checkBoxNotValid, &QCheckBox::stateChanged, this, &CatContracts::dataWasModified);
+    connect(ui->editComment, &QPlainTextEdit::textChanged, this, &CatContracts::dataWasModified);
+}
+
+void CatContracts::disconnectionModified()
+{
+    disconnect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &CatContracts::changedIndexComboOrganization);
+    disconnect(ui->comboTypesPrices, QOverload<int>::of(&QComboBox::currentIndexChanged),
+            this, &CatContracts::currentIndexTypesPricesChanged);
+
+    disconnect(ui->comboOrganizations, &QComboBox::currentIndexChanged, this, &CatContracts::dataWasModified);
+    disconnect(ui->comboTypesPrices,&QComboBox::currentIndexChanged, this, &CatContracts::dataWasModified);
+
+    disconnect(ui->editName, &QLineEdit::textChanged, this, &CatContracts::dataWasModified);
+    disconnect(ui->dateInit, &QDateEdit::dateChanged, this, &CatContracts::dataWasModified);
+    disconnect(ui->checkBoxNotValid, &QCheckBox::stateChanged, this, &CatContracts::dataWasModified);
+    disconnect(ui->editComment, &QPlainTextEdit::textChanged, this, &CatContracts::dataWasModified);
 }
 
 bool CatContracts::controlRequiredObjects()
 {
-    if (ui->comboOrganizations->currentIndex() == -1){
-        QMessageBox::warning(this, tr("Verificarea datelor."),
-                             tr("Nu este indicat\304\203 \"<b>Organiza\310\233ia</b>\" !!!"), QMessageBox::Ok);
+    if (ui->comboOrganizations->currentIndex() == -1 || ui->comboOrganizations->currentIndex() == 0){
+        QMessageBox::warning(this,
+                             tr("Verificarea datelor."),
+                             tr("Nu este indicat\304\203 \"<b>Organiza\310\233ia</b>\" !!!"),
+                             QMessageBox::Ok);
+        return false;
+    }
+
+    if (ui->comboTypesPrices->currentIndex() == -1 || ui->comboTypesPrices->currentIndex() == 0){
+        QMessageBox::warning(this,
+                             tr("Verificarea datelor."),
+                             tr("Nu este indicat \"<b>Tipul pre\310\233ului</b>\" !!!"),
+                             QMessageBox::Ok);
         return false;
     }
 
     if (ui->editName->text().isEmpty()){
-        QMessageBox::warning(this, tr("Verificarea datelor."),
-                             tr("Nu este indicat\304\203 \"<b>Denumirea</b>\" contractului !!!"), QMessageBox::Ok);
+        QMessageBox::warning(this,
+                             tr("Verificarea datelor."),
+                             tr("Nu este indicat\304\203 \"<b>Denumirea</b>\" contractului !!!"),
+                             QMessageBox::Ok);
         return false;
     }
 
     return true;
 }
 
-QMap<QString, QString> CatContracts::getDataObject()
+QVariantMap CatContracts::getDataObject()
 {
-    int id_typesPrices = ui->comboTypesPrices->itemData(ui->comboTypesPrices->currentIndex(), Qt::UserRole).toInt();
+    QVariantMap map;
 
-    QMap<QString, QString> _items;
-    _items.insert("id_organizations", QString::number(m_IdOrganization));
-    _items.insert("id_typesPrices",   QString::number(id_typesPrices));
-    _items.insert("name",             ui->editName->text());
-    _items.insert("dateInit",         ui->dateInit->date().toString("yyyy-MM-dd"));
-    _items.insert("checkBoxNotValid", QString::number(ui->checkBoxNotValid->checkState()));
-    _items.insert("comment",          ui->editComment->toPlainText());
-    return _items;
-}
-
-bool CatContracts::insertIntoTableContracts()
-{
-    QSqlQuery qry;
-    qry.prepare(R"(
-        INSERT INTO contracts (
-            id,
-            deletionMark,
-            id_organizations,
-            id_typesPrices,
-            name,
-            dateInit,
-            notValid,
-            comment)
-        VALUES (?,?,?,?,?,?,?,?);
-    )");
-    qry.addBindValue(m_Id);
-    qry.addBindValue(0);
-    qry.addBindValue(m_IdOrganization);
-    qry.addBindValue(m_id_types_prices);
-    qry.addBindValue(ui->editName->text());
-    qry.addBindValue(ui->dateInit->date().toString("yyyy-MM-dd"));
-    qry.addBindValue(globals().thisMySQL
-                     ? QVariant(ui->checkBoxNotValid->isChecked())
-                     : QVariant(int(ui->checkBoxNotValid->isChecked())));
-    qry.addBindValue(ui->editComment->toPlainText().isEmpty()
+    map["id"]               = m_Id;
+    map["deletionMark"]     = 0;
+    map["id_organizations"] = m_IdOrganization;
+    map["id_typesPrices"]   = m_id_types_prices;
+    map["name"]             = ui->editName->text();
+    map["dateInit"]         = ui->dateInit->date().toString("yyyy-MM-dd");
+    map["notValid"] = globals().thisMySQL
+                          ? QVariant(ui->checkBoxNotValid->isChecked())
+                          : QVariant(int(ui->checkBoxNotValid->isChecked()));
+    map["comment"] = ui->editComment->toPlainText().isEmpty()
                          ? QVariant()
-                         : ui->editComment->toPlainText());
-    if (! qry.exec()){
-        qCritical(logCritical()) << tr("Eroarea la inserarea datelor contractului '%1' in tabela 'contracts' - %2").arg(ui->editName->text(), qry.lastError().text());
-        return false;
-    }
-    qInfo(logInfo()) << tr("Crearea contractului cu nume '%1', id='%2', organizatia - '%3'.")
-                            .arg(ui->editName->text(), QString::number(m_Id), ui->comboOrganizations->currentText());
-    return true;
+                         : ui->editComment->toPlainText();
+
+    return map;
 }
 
-bool CatContracts::updateDataTableContracts()
+bool CatContracts::insertIntoTableContracts(QStringList &err)
 {
-    QSqlQuery qry;
-    qry.prepare(R"(
-        UPDATE
-            contracts
-        SET
-            deletionMark = ?,
-            id_organizations = ?,
-            id_typesPrices = ?,
-            name = ?,
-            dateInit = ?,
-            notValid = ?,
-            comment = ?
-        WHERE
-            id = ?;
-    )");
-    qry.addBindValue(0);
-    qry.addBindValue(m_IdOrganization);
-    qry.addBindValue(m_id_types_prices);
-    qry.addBindValue(ui->editName->text());
-    qry.addBindValue(ui->dateInit->date().toString("yyyy-MM-dd"));
-    qry.addBindValue(globals().thisMySQL
-                         ? QVariant(ui->checkBoxNotValid->isChecked())
-                         : QVariant(int(ui->checkBoxNotValid->isChecked())));
-    qry.addBindValue(ui->editComment->toPlainText().isEmpty()
-                         ? QVariant()
-                         : ui->editComment->toPlainText());
-    qry.addBindValue(m_Id);
-    if (! qry.exec()){
-        qCritical(logCritical()) << tr("Eroarea la modificarea datelor contractului '%1' din tabela 'contracts' - %2")
-                                        .arg(ui->editName->text(), qry.lastError().text());
+    // verificam daca este corect determinat ID
+    if (m_Id == -1 || m_Id == 0) {
+        err << this->metaObject()->className()
+            << "[insertIntoTableContracts]:"
+            << "Nu este indicat ID contractului !!!";
+        qWarning(logWarning()) << err;
         return false;
     }
-    qInfo(logInfo()) << tr("Modificarea datelor contractului cu nume '%1', id='%2', organizatia - '%3'.")
-                            .arg(ui->editName->text(), QString::number(m_Id), ui->comboOrganizations->currentText());
-    return true;
+
+    // pregatim datele
+    QVariantMap map = getDataObject();
+
+    // inseram datele in bd
+    return db->insertIntoTable(this->metaObject()->className(), "contracts", map, err);
+}
+
+bool CatContracts::updateDataTableContracts(QStringList &err)
+{
+    // verificam daca este corect determinat ID
+    if (m_Id == -1 || m_Id == 0) {
+        err << this->metaObject()->className()
+            << "[insertIntoTableContracts]:"
+            << "Nu este indicat ID contractului !!!";
+        qWarning(logWarning()) << err;
+        return false;
+    }
+
+    // pregatim datele
+    QVariantMap map = getDataObject();
+
+    // pregatim conditia
+    QMap<QString, QVariant> where;
+    where["id"] = m_Id;
+    if (m_IdOrganization > 0)
+        where["id_organizations"] = m_IdOrganization;
+
+    // actualizam datele
+    return db->updateTable(this->metaObject()->className(), "contracts", map, where, err);
 }
 
 void CatContracts::dataWasModified()
@@ -203,40 +223,37 @@ void CatContracts::slot_IdChanged()
     if (m_itNew)
         return;
 
-    QMap<QString, QString> _items;
-    _items.clear();
-    if (db->getObjectDataById("contracts", m_Id, _items)){
+    disconnectionModified();
 
-        if (ui->comboOrganizations->currentIndex() == 0){ // <-selecteaza->
-            int id_organization = _items.constFind("id_organizations").value().toInt();
-            auto indexOrganization = model->match(model->index(0,0), Qt::UserRole, QString::number(id_organization), 1, Qt::MatchExactly);
-            if (!indexOrganization.isEmpty())
-                ui->comboOrganizations->setCurrentIndex(indexOrganization.first().row());
-        }
+    QSqlQuery qry;
+    qry.prepare("SELECT * FROM contracts WHERE id = ?");
+    qry.addBindValue(m_Id);
+    if (qry.exec() && qry.next()) {
 
-        int id_typesPrices = _items.constFind("id_typesPrices").value().toInt();
-        if (id_typesPrices == 0){ // 0 - nu este
-            ui->comboTypesPrices->setCurrentIndex(modelTypesPrices->index(0, 0).row());
-        } else {
-            auto indexTypesPrices = modelTypesPrices->match(modelTypesPrices->index(0, 0), Qt::UserRole, QString::number(id_typesPrices), 1, Qt::MatchExactly);
-            if (!indexTypesPrices.isEmpty())
-                ui->comboTypesPrices->setCurrentIndex(indexTypesPrices.first().row());
-        }
+        QSqlRecord rec = qry.record();
 
-        ui->editName->setText(_items.constFind("name").value());
-        ui->dateInit->setDate(QDate::fromString(_items.constFind("dateInit").value(), "yyyy-MM-dd"));
-        ui->checkBoxNotValid->setCheckState((_items.constFind("notValid").value().toInt() == 1) ? Qt::Checked : Qt::Unchecked);
-        ui->editComment->setPlainText(_items.constFind("comment").value());
+        // combo 'Organizatia'
+        int _id_organization = qry.value(rec.indexOf("id_organizations")).toInt();
+        setIdOrganization(_id_organization);
+
+        // combo 'Tipul preturilor'
+        int _id_type_price = qry.value(rec.indexOf("id_typesPrices")).toInt();
+        setIdTypesPrices(_id_type_price);
+
+        ui->editName->setText(qry.value(rec.indexOf("name")).toString());
+        ui->dateInit->setDate(QDate::fromString(qry.value(rec.indexOf("dateInit")).toString(), "yyyy-MM-dd"));
+        ui->checkBoxNotValid->setChecked(qry.value(rec.indexOf("notValid")).toBool());
+        ui->editComment->setPlainText(qry.value(rec.indexOf("comment")).toString());
     }
 
-    if (!m_itNew)                  // daca nu este nou
-        setWindowModified(false);  // schimbam modificarea
+    connectionModified();
 }
 
 void CatContracts::slot_ItNewChanged()
 {
     if (m_itNew){
         setWindowTitle(tr("Contract (crearea) %1").arg("[*]"));
+        ui->editName->setText(tr("Contract comercial"));
     } else {
         setWindowTitle(tr("Contract (salvat) %1").arg("[*]"));
     }
@@ -247,69 +264,75 @@ void CatContracts::slot_IdChangedOrganization()
     if (m_IdOrganization == -1)
         return;
 
-    disconnect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CatContracts::changedIndexComboOrganization);
-
     auto indexOrganization = model->match(model->index(0,0), Qt::UserRole, m_IdOrganization, 1, Qt::MatchExactly);
     if (!indexOrganization.isEmpty())
         ui->comboOrganizations->setCurrentIndex(indexOrganization.first().row());
-
-    connect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::currentIndexChanged), this, &CatContracts::changedIndexComboOrganization);
-
-    if (m_itNew)
-        ui->editName->setText(tr("Contract comercial"));
 }
 
-void CatContracts::changedIndexComboOrganization(const int arg1)
+void CatContracts::slot_IdTypesPricesChanged()
 {
-    int id_organization = ui->comboOrganizations->itemData(ui->comboOrganizations->currentIndex(), Qt::UserRole).toInt();
+    if (m_id_types_prices == - 1)
+        return;
 
-    qInfo(logInfo()) << tr("Selectat randul: %1").arg(QString::number(arg1))
-                     << tr("A fost selectat utilizatorul cu ID:%1").arg(QString::number(id_organization));
-    dataWasModified();
+    auto idx_type_price = modelTypesPrices->match(modelTypesPrices->index(0,0), Qt::UserRole, m_id_types_prices, 1, Qt::MatchExactly);
+    if (! idx_type_price.isEmpty())
+        ui->comboTypesPrices->setCurrentIndex(idx_type_price.first().row());
+}
+
+void CatContracts::changedIndexComboOrganization(const int index)
+{
+    int id_organization = ui->comboOrganizations->itemData(index, Qt::UserRole).toInt();
     setIdOrganization(id_organization);
+
     emit IdChangedOrganization();
 }
 
 void CatContracts::currentIndexTypesPricesChanged(const int index)
 {
-    Q_UNUSED(index)
-    int id_types_prices = ui->comboTypesPrices->itemData(ui->comboTypesPrices->currentIndex(), Qt::UserRole).toInt();
+    int id_types_prices = ui->comboTypesPrices->itemData(index, Qt::UserRole).toInt();
     setIdTypesPrices(id_types_prices);
+
     emit IdTypesPricesChanged();
-    dataWasModified();
 }
 
 bool CatContracts::onWritingData()
 {
-    if (!controlRequiredObjects())
+    // verificam completarea campurilor obligatorii
+    if (! controlRequiredObjects())
         return false;
+
+    QStringList err; // anuntam variabila pu erori
+
+    /* cream o functie lambda locala in interiorul pu oprimizarea codului
+     * si eliminarea dublajului */
+    auto showError = [&](const QString &title) {
+        CustomMessage *message = new CustomMessage(this);
+        message->setTextTitle(title.arg(ui->editName->text()));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+    };
 
     if (m_itNew){
 
         setId(db->getLastIdForTable("contracts") + 1);
 
-        if (! insertIntoTableContracts()){
-            QMessageBox::warning(this, tr("Crearea obiectului."),
-                                 tr("Salvarea datelor contractului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
-                                     .arg(ui->comboOrganizations->currentText()), QMessageBox::Ok);
+        if (! insertIntoTableContracts(err)){
+            showError(tr("Salvarea datelor contractului \"<b>%1</b>\" nu s-a efectuat."));
             return false;
         }
 
         m_itNew = false;          // setam ca obiectul nu este nou
-        emit createNewContract(); // emitem signalul pu actualizarea tabelei organizatiei
+        emit createNewContract(); // emitem signalul pu actualizarea tabela in Organizatia
 
     } else {
 
-        if (! updateDataTableContracts()){
-            QMessageBox::warning(this, tr("Modificarea datelor."),
-                                 tr("Modificarea datelor contractului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresa\310\233i-v\304\203 administratorului aplica\310\233iei.")
-                                 .arg(ui->comboOrganizations->currentText()), QMessageBox::Ok);
+        if (! updateDataTableContracts(err)){
+            showError(tr("Modificarea datelor contractului \"<b>%1</b>\" nu s-a efectuat."));
             return false;
         }
 
-        emit changedCatContract();
+        emit changedCatContract(); // emitem signalul pu actualizarea tabela in Organizatia
     }
 
     return true;

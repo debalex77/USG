@@ -207,6 +207,258 @@ QSqlDatabase DataBase::getDatabaseImage()
     return db_image.database("db_image");
 }
 
+bool DataBase::insertIntoTable(const QString class_name,
+                               const QString name_table,
+                               const QVariantMap &values,
+                               QStringList &err,
+                               QVariant *insertedId)
+{
+    // verificam daca sunt transmise date
+    if (values.isEmpty()) {
+        err << class_name
+            << "[insertIntoTable]: "
+            << "Table: " + name_table
+            << "Nu s-au furnizat date pentru inserare.";
+        return false;
+    }
+
+    // anuntam variabile necesare
+    QStringList columns;
+    QStringList placeholders;
+    QList<QVariant> orderedValues;
+
+    // Construim coloanele și valorile în ordine
+    for (auto it = values.constBegin(); it != values.constEnd(); ++it) {
+        columns << it.key();
+        placeholders << "?";               // folosit cu addBindValue
+        orderedValues.append(it.value());  // păstrăm ordinea
+    }
+
+    // textul solicitarii
+    QString queryStr = QString("INSERT INTO %1 (%2) VALUES (%3)")
+                           .arg(name_table,
+                                columns.join(", "),
+                                placeholders.join(", "));
+
+    // prepararea solicitarii
+    QSqlQuery qry;
+    if (! qry.prepare(queryStr)) {
+        err << class_name
+            << "[insertIntoTable]: "
+            << "Table: " + name_table
+            << "Eroare la pregătirea INSERT: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    // Asociere valori - addBindValue
+    for (const auto &val : orderedValues) {
+        qry.addBindValue(val);
+    }
+
+    // executarea solicitarii
+    if (! qry.exec()) {
+        err << class_name
+            << "[insertIntoTable]: "
+            << "Table: " + name_table
+            << "Eroare la execuția INSERT: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    // returnam ID inserat daca e solicitat
+    if (insertedId != nullptr)
+        *insertedId = qry.lastInsertId();
+
+    return true;
+}
+
+bool DataBase::updateTable(const QString class_name,
+                           const QString name_table,
+                           const QVariantMap &values,
+                           const QMap<QString, QVariant> &where_conditions,
+                           QStringList &err)
+{
+    if (values.isEmpty()) {
+        err << class_name
+            << "[updateTable]: "
+            << "Table: " + name_table
+            << "Nu s-au furnizat date pentru actualizare.";
+        return false;
+    }
+
+    if (where_conditions.isEmpty()) {
+        err << class_name
+            << "[updateTable]: "
+            << "Table: " + name_table
+            << "Condiția WHERE este goală. Actualizare interzisă.";
+        return false;
+    }
+
+    QStringList set_clauses;
+    QList<QVariant> bindValues;
+
+    for (auto it = values.constBegin(); it != values.constEnd(); ++it) {
+        set_clauses << QString("%1 = ?").arg(it.key());
+        bindValues << it.value();
+    }
+
+    QStringList where_clauses;
+    for (auto it = where_conditions.constBegin(); it != where_conditions.constEnd(); ++it) {
+        where_clauses << QString("%1 = ?").arg(it.key());
+        bindValues << it.value();
+    }
+
+    QString queryStr = QString("UPDATE %1 SET %2 WHERE %3")
+                           .arg(name_table,
+                                set_clauses.join(", "),
+                                where_clauses.join(" AND "));
+
+    QSqlQuery qry;
+    if (! qry.prepare(queryStr)) {
+        err << class_name
+            << "[updateTable]: "
+            << "Table: " + name_table
+            << "Eroare la pregătirea UPDATE: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    for (int i = 0; i < bindValues.size(); ++i) {
+        qry.addBindValue(bindValues.at(i));
+    }
+
+    if (! qry.exec()) {
+        err << class_name
+            << "[updateTable]: "
+            << "Table: " + name_table
+            << "Eroare la execuția UPDATE: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    return true;
+
+}
+
+QVariantMap DataBase::selectSingleRow(const QString class_name,
+                                      const QString name_table,
+                                      const QVariantMap &values,
+                                      const QMap<QString,
+                                      QVariant> &where_conditions,
+                                      QStringList &err)
+{
+    QVariantMap result;
+
+    if (values.isEmpty()) {
+        err << class_name
+            << "[selectSingleRow]: "
+            << "Nu s-au specificat coloane pentru SELECT.";
+        return result;
+    }
+
+    if (name_table.trimmed().isEmpty()) {
+        err << class_name
+            << "[selectSingleRow]: "
+            << "Numele tabelului este gol.";
+        return result;
+    }
+
+    // construim sectiile selectate
+    QStringList select_columns;
+    for (auto it = values.constBegin(); it != values.constEnd(); ++it) {
+        select_columns << it.key();
+    }
+
+    QString queryStr = QString("SELECT %1 FROM %2").arg(select_columns.join(", "), name_table);
+
+    QList<QVariant> bindValues;
+
+    // construim conditiile
+    if (! where_conditions.isEmpty()) {
+        QStringList where_clauses;
+        for (auto it = where_conditions.constBegin(); it != where_conditions.constEnd(); ++it) {
+            where_clauses << QString("%1 = ?").arg(it.key());
+            bindValues << it.value();
+        }
+        queryStr += " WHERE " + where_clauses.join(" AND ");
+    }
+
+    // LIMIT 1, pentru siguranță
+    queryStr += " LIMIT 1";
+
+    QSqlQuery qry;
+    if (! qry.prepare(queryStr)) {
+        err << class_name
+            << "[selectSingleRow]: "
+            << "Eroare la pregătirea SELECT: "
+            << qry.lastError().text();
+        return result;
+    }
+
+    for (int i = 0; i < bindValues.size(); ++i) {
+        qry.addBindValue(bindValues.at(i));
+    }
+
+    // executam
+    if (! qry.exec()) {
+        err << class_name
+            << "[selectSingleRow]: "
+            << "Eroare la execuția SELECT: "
+            << qry.lastError().text();
+        return result;
+    }
+
+    if (qry.next()) {
+        for (int i = 0; i < select_columns.size(); ++i) {
+            const QString &col = select_columns.at(i);
+            result[col] = qry.value(col);
+        }
+    }
+
+    return result;
+}
+
+QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(const int id_user)
+{
+    QVariantMap result;
+
+    if (id_user == -1 || id_user == 0)
+        return result;
+
+    QSqlQuery qry;
+    qry.prepare(R"(
+        SELECT
+            c.*,
+            u.*
+        FROM
+            constants AS c
+        JOIN
+            userPreferences AS u ON u.id_users = c.id_users
+        WHERE
+            c.id_users = ?
+    )");
+    qry.addBindValue(id_user);
+    if (qry.exec()) {
+        if (qry.next()) {
+            QSqlRecord rec = qry.record();
+            for (int i = 0; i < rec.count(); ++i) {
+                result.insert(rec.fieldName(i), qry.value(i));
+            }
+        }
+    } else {
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << "[selectJoinConstantsUserPreferencesByUserId]:"
+                               << "Eroare SELECT:" << qry.lastError().text();
+    }
+
+    return result;
+}
+
 bool DataBase::deleteDataFromTable(const QString name_table, const QString deletionCondition, const QString valueCondition)
 {
     QSqlQuery qry;

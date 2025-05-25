@@ -25,6 +25,7 @@
 #include "ui_userpreferences.h"
 #include "version.h"
 
+#include <QBuffer>
 #include <QImageReader>
 #include <QImageWriter>
 
@@ -73,18 +74,19 @@ UserPreferences::UserPreferences(QWidget *parent) :
 #endif
 
     if (globals().isSystemThemeDark){
-        ui->frame->setStyleSheet(
-            "background-color: #2b2b2b;"
-            "border: 1px solid #555;"
-            "border-radius: 5px;"
-            );
+        ui->frame->setStyleSheet(R"("
+            background-color: #2b2b2b;
+            border: 1px solid #555;
+            border-radius: 5px;
+            )");
         ui->frame_2->setObjectName("customFrame");
-        ui->frame_2->setStyleSheet("QFrame#customFrame "
-                                       "{ "
-                                       "  background-color: #2b2b2b; "
-                                       "  border: 1px solid #555; /* Linie subțire gri */ "
-                                       "  border-radius: 5px; "
-                                       "}");
+        ui->frame_2->setStyleSheet(R"(
+            QFrame#customFrame
+            {
+                background-color: #2b2b2b;
+                border: 1px solid #555;    /* Linie subțire gri */
+                border-radius: 5px;
+            })");
     }
 
 }
@@ -110,46 +112,75 @@ void UserPreferences::dataWasModified()
 
 bool UserPreferences::onWritingData()
 {
-
+    // verificam daca este determinat corect ID
     if (m_Id == idx_unknow) {
-        CustomMessage * message = new CustomMessage(this);
-        message->setAttribute(Qt::WA_DeleteOnClose);
+
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << "[onWritingData]: "
+                               << "Nu este transmis corect sau nu este determinat ID utilizatorului !!!";
+
+        CustomMessage *message = new CustomMessage(this);
         message->setTextTitle(tr("Preferintele utilizatorului nu pot fi salvate !!!"));
         message->setDetailedText(tr("Nu este determinat ID utilizatorului. Adresati-va administratorului aplicatiei."));
-        message->show();
-        qDebug() << "ID user App: " <<globals().idUserApp;
+        message->exec();
+        message->deleteLater();
+
+        return false;
     }
 
+    // verificam completarea campurilor obligatorii
     if (! controlRequiredObjects())
         return false;
 
+    QStringList err; // anuntam variabila pu erori
+
+    /* cream o functie lambda locala in interiorul pu oprimizarea codului
+     * si eliminarea dublajului */
+    auto showError = [&](const QString &title) {
+        CustomMessage *message = new CustomMessage(this);
+        message->setTextTitle(title.arg(ui->comboUsers->currentText()));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+    };
+
+    // inserarea/actualizarea datelor in tabela 'constants'
     if (! existRecordInTableConstants()){
-        if (! insertDataIntoTableConstants())
+        if (! insertDataIntoTableConstants(err)){
+            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
             return false;
+        }
     } else {
-        if (! updateDataIntoTableConstants())
+        if (! updateDataIntoTableConstants(err)) {
+            showError(tr("Preferintele utilizatorului '%1' nu pot fi actualizate !!!"));
             return false;
+        }
     }
 
+    // insrarea/actualizarea datelor in tabela 'userPreferences'
     if (! existRecordInTableUserPreferences()) {
-        if (! insertDataIntoTableUserPreferences())
+        if (! insertDataIntoTableUserPreferences(err)) {
+            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
             return false;
+        } else {
+
+        }
     } else {
-        if (! updateDataIntoTableUserPreferences())
+        if (! updateDataIntoTableUserPreferences(err)) {
+            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
             return false;
+        }
     }
 
-    /* dupa validare schimbam variabile globale
-     * ... dupa modificarea variabile globale sunt
-     * actualizate */
-    changeShowUserManual();
-    changeDatabasesArchiving();
-    changeShowDesignerMenuPrint();
-    changeMinimizeAppToTray();
-    changeShowQuestionClosingApp();
-    changeShowDocumentsInSeparatWindow();
-    changeNewVersion();
-    changeSplitFullNamePatient();
+    // dupa validare actualizam variabile globale
+    globals().showUserManual = ui->check_showUserManual->isChecked();
+    globals().databasesArchiving = ui->check_databasesArchiving->isChecked();
+    globals().showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
+    globals().minimizeAppToTray = ui->minimizeAppToTray->isChecked();
+    globals().showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
+    globals().showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
+    globals().checkNewVersionApp = ui->check_newVersion->isChecked();
+    globals().order_splitFullName = ui->check_splitFullNamePatient->isChecked();
 
     return true;
 }
@@ -182,13 +213,16 @@ void UserPreferences::slot_IdChanged()
         ui->comboUsers->setCurrentIndex(index_user.first().row());
 
     //--------------------------------------------------------------
-    // tabela 'constants'
+    // tabela 'constants' + 'userPreferences'
 
-    QMap<QString, QString> items;
-    if (db->getObjectDataByMainId("constants", "id_users", m_Id, items)){
-        int id_doctor        = items.constFind("id_doctors").value().toInt();
-        int id_nurse         = items.constFind("id_nurses").value().toInt();
-        int id_organization  = items.constFind("id_organizations").value().toInt();
+    QVariantMap map = db->selectJoinConstantsUserPreferencesByUserId(m_Id);
+
+    if (map.count() > 0) {
+
+        // -- setam comboboxurile - Doctor, As.medicala, Organizatia
+        int id_doctor       = map["id_doctors"].toInt();
+        int id_nurse        = map["id_nurses"].toInt();
+        int id_organization = map["id_organizations"].toInt();
 
         if (id_doctor > idx_write)
             setIdDoctor(id_doctor);
@@ -197,38 +231,41 @@ void UserPreferences::slot_IdChanged()
         if (id_organization > idx_write)
             setIdOrganization(id_organization);
 
-        QString brandUSG = items.constFind("brandUSG").value();
+        // -- brand
+        QString brandUSG = map["brandUSG"].toString();
         if (! brandUSG.isEmpty())
             ui->brandUSG->setText(brandUSG);
-    }
 
-    //--------------------------------------------------------------
-    // tabela 'userPreferences'
+        // -- preferintele
+        ui->minimizeAppToTray->setChecked(map["minimizeAppToTray"].toBool());
+        ui->check_showQuestionClosingApp->setChecked(map["showQuestionCloseApp"].toBool());
+        ui->check_showDesignerMenuPrint->setChecked(map["showDesignerMenuPrint"].toBool());
+        ui->check_showUserManual->setChecked(map["showUserManual"].toBool());
+        ui->showDocumentsInSeparatWindow->setChecked(map["showDocumentsInSeparatWindow"].toBool());
+        ui->check_splitFullNamePatient->setChecked(map["order_splitFullName"].toBool());
+        ui->check_newVersion->setChecked(map["checkNewVersionApp"].toBool());
+        ui->check_databasesArchiving->setChecked(map["databasesArchiving"].toBool());
+        ui->showAsistantHelper->setChecked(map["showAsistantHelper"].toBool());
+        ui->updateListDoc->setValue(map["updateListDoc"].toInt());
 
-    items.clear();
-    if (db->getObjectDataByMainId("userPreferences", "id_users", m_Id, items)){
-        if (items.count() > 0){
-            ui->minimizeAppToTray->setChecked(items.constFind("minimizeAppToTray").value().toInt());
-            ui->check_showQuestionClosingApp->setChecked(items.constFind("showQuestionCloseApp").value().toInt());
-            ui->check_showDesignerMenuPrint->setChecked(items.constFind("showDesignerMenuPrint").value().toInt());
-            ui->check_showUserManual->setChecked(items.constFind("showUserManual").value().toInt());
-            ui->showDocumentsInSeparatWindow->setChecked(items.constFind("showDocumentsInSeparatWindow").value().toInt());
-            ui->check_splitFullNamePatient->setChecked(items.constFind("order_splitFullName").value().toInt());
-            ui->check_newVersion->setChecked(items.constFind("checkNewVersionApp").value().toInt());
-            ui->check_databasesArchiving->setChecked(items.constFind("databasesArchiving").value().toInt());
-            ui->showAsistantHelper->setChecked(items.constFind("showAsistantHelper").value().toInt());
-            ui->updateListDoc->setValue(items.constFind("updateListDoc").value().toInt());
+        /**** logotip ***********************************************************
+         * 1. Extragem din variabila globala (daca este salvat)
+         * 2. Extragem din baza de date (daca nu este in variabila globala)
+         *************************************************************************/
+
+        QPixmap outPixmap = QPixmap();
+        if (! globals().c_logo_byteArray.isEmpty() && outPixmap.loadFromData(globals().c_logo_byteArray)){
+            ui->btnClearLogo->setVisible(true);
+            ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+        } else {
+            QByteArray outByteArray = QByteArray::fromBase64(map["logo"].toByteArray());
+            if (! outByteArray.isEmpty() && outPixmap.loadFromData(outByteArray)) {
+                ui->btnClearLogo->setVisible(true);
+                ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            } else {
+                ui->btnClearLogo->setVisible(false);
+            }
         }
-    }
-
-    //--------------------------------------------------------------
-    // setam logotipul
-    QPixmap outPixmap = QPixmap();
-    if (! globals().c_logo_byteArray.isEmpty() && outPixmap.loadFromData(globals().c_logo_byteArray)){
-        ui->btnClearLogo->setVisible(true);
-        ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-    } else {
-        ui->btnClearLogo->setVisible(false);
     }
 
     //--------------------------------------------------------------
@@ -292,49 +329,6 @@ void UserPreferences::activatedComboOrganizations(const int index)
 }
 
 // **********************************************************************************
-// --- procesarea chek box-urilor
-
-void UserPreferences::changeShowUserManual()
-{
-    globals().showUserManual = ui->check_showUserManual->isChecked();
-}
-
-void UserPreferences::changeDatabasesArchiving()
-{
-    globals().databasesArchiving = ui->check_databasesArchiving->isChecked();
-}
-
-void UserPreferences::changeShowDesignerMenuPrint()
-{
-    globals().showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
-}
-
-void UserPreferences::changeMinimizeAppToTray()
-{
-    globals().minimizeAppToTray = ui->minimizeAppToTray->isChecked();
-}
-
-void UserPreferences::changeShowQuestionClosingApp()
-{
-    globals().showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
-}
-
-void UserPreferences::changeShowDocumentsInSeparatWindow()
-{
-    globals().showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
-}
-
-void UserPreferences::changeNewVersion()
-{
-    globals().checkNewVersionApp = ui->check_newVersion->isChecked();
-}
-
-void UserPreferences::changeSplitFullNamePatient()
-{
-    globals().order_splitFullName = ui->check_splitFullNamePatient->isChecked();
-}
-
-// **********************************************************************************
 // --- procesarea logotipului, inserarea in BD
 
 bool UserPreferences::loadFile(const QString &fileName)
@@ -343,8 +337,9 @@ bool UserPreferences::loadFile(const QString &fileName)
     reader.setAutoTransform(true);
     const QImage newImage = reader.read();
     if (newImage.isNull()) {
-        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
-                                 tr("Nu este setată imaginea %1: %2")
+        QMessageBox::information(this,
+                                 QGuiApplication::applicationDisplayName(),
+                                 tr("Nu sunt citite datele imaginei '%1': %2")
                                  .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
         return false;
     }
@@ -352,20 +347,30 @@ bool UserPreferences::loadFile(const QString &fileName)
     ui->btnClearLogo->setVisible(true);
 
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly))
+    if (! file.open(QIODevice::ReadOnly))
         return true;
     QByteArray inByteArray = file.readAll();
 
     QSqlQuery qry;
-    qry.prepare("UPDATE constants SET logo = ? WHERE id_users = ?;");
+    qry.prepare(R"(
+        UPDATE constants SET
+            logo = ?
+        WHERE
+            id_users = ?
+    )");
     qry.addBindValue(m_Id);
     qry.addBindValue(inByteArray.toBase64());
     if (qry.exec()){
+        // prezentam mesaj informativ
         popUp->setPopupText(tr("Logotipul este salvat cu succes în baza de date."));
         popUp->show();
+        // adaugam date in variabila globala
         globals().c_logo_byteArray = QByteArray::fromBase64(inByteArray.toBase64());
     } else {
-        qDebug() << tr("Eroare de inserare a logotipului in baza de date:\n") << qry.lastError();
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << "[loadFile]:"
+                               << tr("Eroare de inserare a logotipului in baza de date:")
+                               << qry.lastError().text();
     }
     file.close();
 
@@ -379,12 +384,15 @@ static void initializeImageFileDialog(QFileDialog &dialog, QFileDialog::AcceptMo
     if (firstDialog) {
         firstDialog = false;
         const QStringList picturesLocations = QStandardPaths::standardLocations(QStandardPaths::PicturesLocation);
-        dialog.setDirectory(picturesLocations.isEmpty() ? QDir::currentPath() : picturesLocations.last());
+        dialog.setDirectory(picturesLocations.isEmpty()
+                                ? QDir::currentPath()
+                                : picturesLocations.last());
     }
 
     QStringList mimeTypeFilters;
     const QByteArrayList supportedMimeTypes = acceptMode == QFileDialog::AcceptOpen
-                                                  ? QImageReader::supportedMimeTypes() : QImageWriter::supportedMimeTypes();
+                                                  ? QImageReader::supportedMimeTypes()
+                                                  : QImageWriter::supportedMimeTypes();
     for (const QByteArray &mimeTypeName : supportedMimeTypes)
         mimeTypeFilters.append(mimeTypeName);
     mimeTypeFilters.sort();
@@ -402,8 +410,9 @@ void UserPreferences::onLinkActivatedForOpenImage(const QString &link)
     if (m_Id == idx_unknow){
         QMessageBox::StandardButton YesNo;
         YesNo = QMessageBox::warning(this,
-                                     tr("Verificarea validării"),
-                                     tr("Pentru a încărca logotipul este necesar de salvat datele.<br>Doriți să salvați datele ?"),
+                                     tr("Verificarea valid\304\203rii"),
+                                     tr("Pentru a \303\256nc\304\203rca logotipul este necesar de salvat datele."
+                                        "<br>Dori\310\233i s\304\203 salva\310\233i datele ?"),
                                      QMessageBox::Yes | QMessageBox::No | QMessageBox::Cancel);
         if (YesNo == QMessageBox::Yes)
             onWritingData();
@@ -424,23 +433,36 @@ void UserPreferences::clearImageLogo()
 {
     QMessageBox messange_box(QMessageBox::Question,
                              tr("Eliminarea logotipului"),
-                             tr("Doriți să eliminați logotipul din baza de date ?"),
+                             tr("Dori\310\233i s\304\203 elimina\310\233i logotipul din baza de date ?"),
                              QMessageBox::Yes | QMessageBox::No, this);
 
     if (messange_box.exec() == QMessageBox::No)
         return;
 
     QSqlQuery qry;
-    qry.prepare(QString("UPDATE constants SET logo = NULL WHERE id_users = '%1';").arg(m_Id));
+    qry.prepare(R"(
+        UPDATE constants SET
+            logo = NULL
+        WHERE
+            id_users = ?
+    )");
+    qry.addBindValue(m_Id);
     if (qry.exec()){
-        ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea<br>(se recomanda 400x50 px)</a>");
+        // setam textul initial in interfata
+        ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea"
+                                "<br>(se recomanda 400x50 px)</a>");
         ui->image_logo->setTextFormat(Qt::RichText);
         ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+        // prezentam mesaj informativ
         popUp->setPopupText(tr("Logotipul este eliminat din baza de date."));
         popUp->show();
+        // golim variabila globala
         globals().c_logo_byteArray = nullptr;
     } else {
-        qCritical(logCritical()) << tr("Eroare la eliminarea logotipului din baza de date %1").arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+        qCritical(logCritical()) << this->metaObject()->className()
+                                 << "[clearImageLogo]:"
+                                 << tr("Eroare la eliminarea logotipului din baza de date %1")
+                                        .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
     }
     ui->btnClearLogo->setVisible(false);
 }
@@ -732,31 +754,25 @@ void UserPreferences::disconnectCombo()
 }
 
 void UserPreferences::connectionCheckBox()
-{    
-    connect(ui->check_showUserManual, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->minimizeAppToTray, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    connect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+{
+    QList<QCheckBox*> list = this->findChildren<QCheckBox*>();
+    for (int n = 0; n < list.count(); n++) {
+        connect(list[n], &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    }
 
-    connect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
+    connect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged),
+            this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
 }
 
 void UserPreferences::disconnectionCheckBox()
 {
-    disconnect(ui->check_showUserManual, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->check_databasesArchiving, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->check_showDesignerMenuPrint, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->minimizeAppToTray, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->check_showQuestionClosingApp, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->showDocumentsInSeparatWindow, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->check_newVersion, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
-    disconnect(ui->check_splitFullNamePatient, &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    QList<QCheckBox*> list = this->findChildren<QCheckBox*>();
+    for (int n = 0; n < list.count(); n++) {
+        disconnect(list[n], &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    }
 
-    disconnect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged), this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
+    disconnect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged),
+               this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
 }
 
 // **********************************************************************************
@@ -773,14 +789,20 @@ bool UserPreferences::controlRequiredObjects()
     }
 
     return true;
-
 }
 
 bool UserPreferences::existRecordInTableConstants()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT COUNT(id_users) FROM constants WHERE id_users = :id_users;");
-    qry.bindValue(":id_users", m_Id);
+    qry.prepare(R"(
+        SELECT
+            COUNT(id_users)
+        FROM
+            constants
+        WHERE
+            id_users = ?
+    )");
+    qry.addBindValue(m_Id);
     if (qry.exec() && qry.next()) {
         int count = qry.value(0).toInt();
         return (count > 0);
@@ -792,8 +814,16 @@ bool UserPreferences::existRecordInTableConstants()
 bool UserPreferences::existRecordInTableUserPreferences()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT COUNT(id) FROM userPreferences WHERE id_users = :id_users;");
-    qry.bindValue(":id_users", m_Id);
+    qry.prepare(R"(
+        SELECT
+            COUNT(id)
+        FROM
+            userPreferences
+        WHERE
+            id_users = ?
+
+    )");
+    qry.addBindValue(m_Id);
     if (qry.exec() && qry.next()) {
         int count = qry.value(0).toInt();
         return (count > 0);
@@ -802,225 +832,158 @@ bool UserPreferences::existRecordInTableUserPreferences()
     return false;
 }
 
-bool UserPreferences::insertDataIntoTableConstants()
+bool UserPreferences::insertDataIntoTableConstants(QStringList &err)
 {
+    // verificam daca a fost transmis corect ID utilizatorului
     if (m_Id == 0) {
-        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        err << this->metaObject()->className()
+            << "[insertDataIntoTableConstants]:"
+            << "Valoarea id_users (m_Id) nu este validă.";
+        qCritical(logCritical()) << err;
         return false;
     }
 
-    QSqlQuery qry;
+    // pregatim datele
+    QVariantMap map;
+    map["id_users"]         = m_Id;
+    map["id_organizations"] = (m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization;
+    map["id_doctors"]       = (m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor;
+    map["id_nurses"]        = (m_idNurse == idx_unknow) ? QVariant() : m_idNurse;
+    map["brandUSG"]         = (ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text();
 
-    //----------------------------------------------
-    // inserarea datelor in tabela 'constants'
+    // logotipul
+    QByteArray image_data;
+    QPixmap pix = ui->image_logo->pixmap();
 
-    qry.prepare("INSERT INTO constants ("
-                "id_users,"
-                "id_organizations,"
-                "id_doctors,"
-                "id_nurses,"
-                "brandUSG,"
-                "logo) VALUES (?,?,?,?,?,?);");
-    qry.addBindValue(m_Id);
-    qry.addBindValue((m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization);
-    qry.addBindValue((m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor);
-    qry.addBindValue((m_idNurse == idx_unknow) ? QVariant() : m_idNurse);
-    qry.addBindValue((ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text());
-    qry.addBindValue(QVariant(QMetaType(QMetaType::QByteArray)));
-
-    qDebug(logDebug()) << "Parametri legați: id_users=" << m_Id
-                       << ", id_organizations=" << m_IdOrganization
-                       << ", id_doctors=" << m_idDoctor
-                       << ", id_nurses=" << m_idNurse
-                       << ", brandUSG=" << ui->brandUSG->text();
-    if (qry.exec()){
-        qInfo(logInfo()) << tr("Au fost inserate date in tabela 'constants' pentru utilizator '%1' cu id=%2.")
-                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
-    } else {
-        qCritical(logCritical()) << tr("Nu au fost inserate date in tabela 'constants' pentru utilizator '%1' cu id=%2 %3")
-                                        .arg(ui->comboUsers->currentText(), QString::number(m_Id),
-                                             (qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
-        return false;
+    if (! pix.isNull()) {
+        QBuffer buffer(&image_data);
+        buffer.open(QIODevice::WriteOnly);
+        pix.save(&buffer, "PNG");
     }
+    map["logo"] = image_data.isEmpty()
+                      ? QVariant(QMetaType(QMetaType::QByteArray))
+                      : image_data.toBase64();
 
-    return true;
-
+    // inseram datele prin functia universala
+    return db->insertIntoTable(this->metaObject()->className(), "constants", map, err);
 }
 
-bool UserPreferences::insertDataIntoTableUserPreferences()
+bool UserPreferences::insertDataIntoTableUserPreferences(QStringList &err)
 {
+    // verificam daca a fost corect trnasmis ID utilizatorului
     if (m_Id == 0) {
-        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        err << this->metaObject()->className()
+            << "[insertDataIntoTableUserPreferences]:"
+            << "Valoarea id_users (m_Id) nu este validă.";
+        qCritical(logCritical()) << err;
         return false;
     }
 
-    QSqlQuery qry;
+    // functia helper universal - converteste bool in QVariant
+    auto toDbBool = [](bool value) -> QVariant {
+        return globals().thisMySQL ? QVariant(value) : QVariant(int(value));
+    };
 
-    //----------------------------------------------
-    // inserarea datelor in tabela 'userPreferences'
-    qry.prepare("INSERT INTO userPreferences ("
-                "id_users,"
-                "versionApp,"
-                "showQuestionCloseApp,"
-                "showUserManual,"
-                "showHistoryVersion,"
-                "order_splitFullName,"
-                "updateListDoc,"
-                "showDesignerMenuPrint,"
-                "checkNewVersionApp,"
-                "databasesArchiving,"
-                "showAsistantHelper,"
-                "showDocumentsInSeparatWindow,"
-                "minimizeAppToTray) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?);");
-    qry.addBindValue(m_Id);
-    qry.addBindValue(m_Id);
-    qry.addBindValue(USG_VERSION_FULL);
-    if(globals().thisMySQL){
-        qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? true : false));
-        qry.addBindValue((ui->check_showUserManual->isChecked() ? true : false));
-        qry.addBindValue(0);
-        qry.addBindValue((ui->check_splitFullNamePatient->isChecked() ? true : false));
-        qry.addBindValue(ui->updateListDoc->value());
-        qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? true : false));
-        qry.addBindValue((ui->check_newVersion->isChecked() ? true : false));
-        qry.addBindValue((ui->check_databasesArchiving->isChecked() ? true : false));
-        qry.addBindValue((ui->showAsistantHelper->isChecked() ? true : false));
-        qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
-        qry.addBindValue((ui->minimizeAppToTray->isChecked() ? true : false));
-    } else if (globals().thisSqlite){
-        qry.addBindValue((ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->check_showUserManual->isChecked() ? 1 : 0));
-        qry.addBindValue(0);
-        qry.addBindValue((ui->check_splitFullNamePatient->isChecked() ? 1 : 0));
-        qry.addBindValue(ui->updateListDoc->value());
-        qry.addBindValue((ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->check_newVersion->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->check_databasesArchiving->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->showAsistantHelper->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
-        qry.addBindValue((ui->minimizeAppToTray->isChecked() ? 1 : 0));
-    } else {
-        qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
-        return false;
-    }
+    // pregatim datele
+    QVariantMap map;
+    map["id"]                    = db->getLastIdForTable("userPreferences") + 1;
+    map["id_users"]              = m_Id;
+    map["versionApp"]            = USG_VERSION_FULL;
+    map["showQuestionCloseApp"]  = toDbBool(ui->check_showQuestionClosingApp->isChecked());
+    map["showUserManual"]        = toDbBool(ui->check_showUserManual->isChecked());
+    map["showHistoryVersion"]    = 0;
+    map["order_splitFullName"]   = toDbBool(ui->check_splitFullNamePatient->isChecked());
+    map["updateListDoc"]         = ui->updateListDoc->value();
+    map["showDesignerMenuPrint"] = toDbBool(ui->check_showDesignerMenuPrint->isChecked());
+    map["checkNewVersionApp"]    = toDbBool(ui->check_newVersion->isChecked());
+    map["databasesArchiving"]    = toDbBool(ui->check_databasesArchiving->isChecked());
+    map["showAsistantHelper"]    = toDbBool(ui->showAsistantHelper->isChecked());
+    map["showDocumentsInSeparatWindow"] = toDbBool(ui->showDocumentsInSeparatWindow->isChecked());
+    map["minimizeAppToTray"] = toDbBool(ui->minimizeAppToTray->isChecked());
 
-    if (qry.exec()){
-        qInfo(logInfo()) << tr("Au fost inserate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
-        .arg(ui->comboUsers->currentText(), QString::number(m_Id));
-    } else {
-        qWarning(logWarning()) << tr("Solicitarea de inserarea a datelor in tabela 'userPreferences' este nereusita !!!");
-        return false;
-    }
-
-    return true;
+    // inserarea datelor
+    return db->insertIntoTable(this->metaObject()->className(), "userPreferences", map, err);
 }
 
-bool UserPreferences::updateDataIntoTableConstants()
+bool UserPreferences::updateDataIntoTableConstants(QStringList &err)
 {
-
+    // verificam daca a fost transmis corect ID utilizatorului
     if (m_Id == 0) {
-        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        err << this->metaObject()->className()
+            << "[updateDataIntoTableConstants]:"
+            << "Valoarea id_users (m_Id) nu este validă.";
+        qCritical(logCritical()) << err;
         return false;
     }
 
-    QSqlQuery qry;
+    // pregatim datele
+    QVariantMap map;
+    map["id_users"]         = m_Id;
+    map["id_organizations"] = (m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization;
+    map["id_doctors"]       = (m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor;
+    map["id_nurses"]        = (m_idNurse == idx_unknow) ? QVariant() : m_idNurse;
+    map["brandUSG"]         = (ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text();
 
-    //----------------------------------------------
-    // actualizarea datelor in tabela 'constants'
+    // logotipul
+    QByteArray image_data;
+    QPixmap pix = ui->image_logo->pixmap();
 
-    qry.prepare("UPDATE constants SET "
-                "id_organizations = :id_organizations,"
-                "id_doctors       = :id_doctors,"
-                "id_nurses        = :id_nurses,"
-                "brandUSG         = :brandUSG "
-                "WHERE id_users = :id_users;");
-    qry.bindValue(":id_users",         m_Id);
-    qry.bindValue(":id_organizations", (m_IdOrganization == idx_unknow) ? QVariant() : m_IdOrganization);
-    qry.bindValue(":id_doctors",       (m_idDoctor == idx_unknow) ? QVariant() : m_idDoctor);
-    qry.bindValue(":id_nurses",        (m_idNurse == idx_unknow) ? QVariant() : m_idNurse);
-    qry.bindValue(":brandUSG",         ui->brandUSG->text());
-    if (qry.exec()){
-        qInfo(logInfo()) << tr("Au fost actualizate date in tabela 'constants' pentru utilizator '%1' cu id=%2.")
-                                .arg(ui->comboUsers->currentText(), QString::number(m_Id));
-    } else {
-        qCritical(logCritical()) << tr("Nu au fost actualizate date in tabela 'constants' pentru utilizator '%1' cu id=%2 %3")
-                                        .arg(ui->comboUsers->currentText(), QString::number(m_Id),
-                                             (qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
-        return false;
+    if (! pix.isNull()) {
+        QBuffer buffer(&image_data);
+        buffer.open(QIODevice::WriteOnly);
+        pix.save(&buffer, "PNG");
     }
+    map["logo"] = image_data.isEmpty()
+                      ? QVariant(QMetaType(QMetaType::QByteArray))
+                      : image_data.toBase64();
 
-    return true;
+    // pregatim conditia
+    QMap<QString, QVariant> where;
+    where["id_users"] = m_Id;
 
+    // actualizam datele prin functia universala
+    return db->updateTable(this->metaObject()->className(), "constants", map, where, err);
 }
 
-bool UserPreferences::updateDataIntoTableUserPreferences()
+bool UserPreferences::updateDataIntoTableUserPreferences(QStringList &err)
 {
+    // verificam daca a fost transmisa corect ID utilizatorului
     if (m_Id == 0) {
-        qCritical(logCritical()) << "Valoarea id_users (m_Id) nu este validă.";
+        err << this->metaObject()->className()
+            << "[updateDataIntoTableUserPreferences]:"
+            << "Valoarea id_users (m_Id) nu este validă.";
+        qCritical(logCritical()) << err;
         return false;
     }
 
-    QSqlQuery qry;
+    // functia helper universal - converteste bool in QVariant
+    auto toDbBool = [](bool value) -> QVariant {
+        return globals().thisMySQL ? QVariant(value) : QVariant(int(value));
+    };
 
-    //----------------------------------------------
-    // actualizarea datelor in tabela 'userPreferences'
+    // pregatim datele
+    QVariantMap map;
+    map["id"]                    = m_Id;
+    map["id_users"]              = m_Id;
+    map["versionApp"]            = USG_VERSION_FULL;
+    map["showQuestionCloseApp"]  = toDbBool(ui->check_showQuestionClosingApp->isChecked());
+    map["showUserManual"]        = toDbBool(ui->check_showUserManual->isChecked());
+    map["showHistoryVersion"]    = 0;
+    map["order_splitFullName"]   = toDbBool(ui->check_splitFullNamePatient->isChecked());
+    map["updateListDoc"]         = ui->updateListDoc->value();
+    map["showDesignerMenuPrint"] = toDbBool(ui->check_showDesignerMenuPrint->isChecked());
+    map["checkNewVersionApp"]    = toDbBool(ui->check_newVersion->isChecked());
+    map["databasesArchiving"]    = toDbBool(ui->check_databasesArchiving->isChecked());
+    map["showAsistantHelper"]    = toDbBool(ui->showAsistantHelper->isChecked());
+    map["showDocumentsInSeparatWindow"] = toDbBool(ui->showDocumentsInSeparatWindow->isChecked());
+    map["minimizeAppToTray"] = toDbBool(ui->minimizeAppToTray->isChecked());
 
-    qry.prepare("UPDATE userPreferences SET "
-                "id_users                     = :id_users,"
-                "versionApp                   = :versionApp,"
-                "showQuestionCloseApp         = :showQuestionCloseApp,"
-                "showUserManual               = :showUserManual,"
-                "showHistoryVersion           = :showHistoryVersion,"
-                "order_splitFullName          = :order_splitFullName,"
-                "updateListDoc                = :updateListDoc,"
-                "showDesignerMenuPrint        = :showDesignerMenuPrint,"
-                "checkNewVersionApp           = :checkNewVersionApp,"
-                "databasesArchiving           = :databasesArchiving,"
-                "showAsistantHelper           = :showAsistantHelper,"
-                "showDocumentsInSeparatWindow = :showDocumentsInSeparatWindow,"
-                "minimizeAppToTray            = :minimizeAppToTray "
-                "WHERE id = :id;");
-    qry.bindValue(":id",                    m_Id);
-    qry.bindValue(":id_users",              m_Id);
-    qry.bindValue(":versionApp",            USG_VERSION_FULL);
-    if(globals().thisMySQL){
-        qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? true : false));
-        qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? true : false));
-        qry.bindValue(":showHistoryVersion",           0);
-        qry.bindValue(":order_splitFullName",          (ui->check_splitFullNamePatient->isChecked() ? true : false));
-        qry.bindValue(":updateListDoc",                ui->updateListDoc->value());
-        qry.bindValue(":showDesignerMenuPrint",        (ui->check_showDesignerMenuPrint->isChecked() ? true : false));
-        qry.bindValue(":checkNewVersionApp",           (ui->check_newVersion->isChecked() ? true : false));
-        qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? true : false));
-        qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? true : false));
-        qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? true : false));
-        qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? true : false));
-    } else if(globals().thisSqlite){
-        qry.bindValue(":showQuestionCloseApp",         (ui->check_showQuestionClosingApp->isChecked() ? 1 : 0));
-        qry.bindValue(":showUserManual",               (ui->check_showUserManual->isChecked() ? 1 : 0));
-        qry.bindValue(":showHistoryVersion",           0);
-        qry.bindValue(":order_splitFullName",          (ui->check_splitFullNamePatient->isChecked() ? 1 : 0));
-        qry.bindValue(":updateListDoc",                ui->updateListDoc->value());
-        qry.bindValue(":showDesignerMenuPrint",        (ui->check_showDesignerMenuPrint->isChecked() ? 1 : 0));
-        qry.bindValue(":checkNewVersionApp",           (ui->check_newVersion->isChecked() ? 1 : 0));
-        qry.bindValue(":databasesArchiving",           (ui->check_databasesArchiving->isChecked() ? 1 : 0));
-        qry.bindValue(":showAsistantHelper",           (ui->showAsistantHelper->isChecked() ? 1 : 0));
-        qry.bindValue(":showDocumentsInSeparatWindow", (ui->showDocumentsInSeparatWindow->isChecked() ? 1 : 0));
-        qry.bindValue(":minimizeAppToTray",            (ui->minimizeAppToTray->isChecked() ? 1 : 0));
-    } else {
-        qWarning(logWarning()) << tr("Nu a fost determinat tipul bazei de date - actualizarea datelor din tabela 'userPreferences' este nereusita !!!");
-        return false;
-    }
+    // pregatim conditia
+    QMap<QString, QVariant> where;
+    where["id_users"] = m_Id;
 
-    if (qry.exec()){
-        qInfo(logInfo()) << tr("Au fost actualizate date in tabela 'userPreferences' pentru utilizator '%1' cu id=%2.")
-        .arg(ui->comboUsers->currentText(), QString::number(m_Id));
-    } else {
-        qWarning(logWarning()) << tr("Solicitarea de actualizare a datelor in tabela 'userPreferences' este nereusita !!!");
-        return false;
-    }
-
-    return true;
+    // actualizam datele
+    return db->updateTable(this->metaObject()->className(), "userPreferences", map, where, err);
 }
 
 // **********************************************************************************

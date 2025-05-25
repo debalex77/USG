@@ -90,7 +90,7 @@ void AsistantTipApp::stepPreview()
 
 void AsistantTipApp::onClose()
 {
-    bool m_show_launch = (ui->show_launch->checkState() == Qt::Checked) ? true : false;
+    bool m_show_launch = (ui->show_launch->isChecked()) ? true : false;
 
     if (m_show_launch != globals().showAsistantHelper){
         QSqlQuery qry;
@@ -99,7 +99,8 @@ void AsistantTipApp::onClose()
         qry.bindValue(1, globals().idUserApp);
         if (! qry.exec())
             qWarning(logWarning()) << this->metaObject()->className()
-                                   << tr(": nu au fost actualizate date de prezentare a asistentului de sfaturi %1")
+                                   << "[onClose]:"
+                                   << tr("Nu au fost actualizate date de prezentare a asistentului de sfaturi %1")
                                           .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
         globals().showAsistantHelper = ui->show_launch->isChecked();
     }

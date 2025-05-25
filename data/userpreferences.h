@@ -72,15 +72,6 @@ private slots:
     void activatedComboNurses(const int index);
     void activatedComboOrganizations(const int index);
 
-    void changeShowUserManual();
-    void changeDatabasesArchiving();
-    void changeShowDesignerMenuPrint();
-    void changeMinimizeAppToTray();
-    void changeShowQuestionClosingApp();
-    void changeShowDocumentsInSeparatWindow();
-    void changeNewVersion();
-    void changeSplitFullNamePatient();
-
     bool loadFile(const QString &fileName);
     void onLinkActivatedForOpenImage(const QString &link);
     void clearImageLogo();
@@ -108,10 +99,10 @@ private:
     bool controlRequiredObjects();
     bool existRecordInTableConstants();
     bool existRecordInTableUserPreferences();
-    bool insertDataIntoTableConstants();
-    bool insertDataIntoTableUserPreferences();
-    bool updateDataIntoTableConstants();
-    bool updateDataIntoTableUserPreferences();
+    bool insertDataIntoTableConstants(QStringList &err);
+    bool insertDataIntoTableUserPreferences(QStringList &err);
+    bool updateDataIntoTableConstants(QStringList &err);
+    bool updateDataIntoTableUserPreferences(QStringList &err);
 
 private:
     Ui::UserPreferences *ui;

@@ -105,7 +105,7 @@ void CatForSqlTableModel::updateTableView()
         model->setTable("typesPrices");
         updateHeaderTableTypesPrices();
         model->setEditStrategy(QSqlTableModel::OnRowChange); // Înregistrarea modificărilordupă editarea celule
-        model->setSort(typePrice_id, Qt::AscendingOrder);                  // sortarea datelor de la sectia 0
+        model->setSort(typePrice_id, Qt::AscendingOrder);    // sortarea datelor de la sectia 0
 
         ui->btnGroupInvestigation->setVisible(false);
         break;
@@ -362,8 +362,11 @@ void CatForSqlTableModel::onMarkDeletion()
     QString _cod = model->index(_row, 2).data(Qt::DisplayRole).toString();
 
     if (!db->deletionMarkObject(getNameTable(), _id)){
-        QMessageBox::warning(this, tr("Marcarea/demarcarea obiectului"),
-                             tr("Marcarea/demarcarea obiectului cu codul \"<b>%1</b>\" nu este reusita.").arg(_cod), QMessageBox::Ok);
+        QMessageBox::warning(this,
+                             tr("Marcarea/demarcarea obiectului"),
+                             tr("Marcarea/demarcarea obiectului cu codul \"<b>%1</b>\" nu este reusita.")
+                                 .arg(_cod),
+                             QMessageBox::Ok);
         return;
     }
     if (_delMark == 0)

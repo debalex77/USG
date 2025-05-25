@@ -42,6 +42,81 @@ public:
     void removeDatabaseImageThread(const QString threadConnectionName);
     QSqlDatabase getDatabaseImage();
 
+    // functii universale
+
+    /*!
+     * \brief Functie universala - inserează o înregistrare într-un tabel.
+     * Creează automat interogarea `INSERT INTO`, folosind perechi cheie-valoare dintr-un QVariantMap.
+     *
+     * \param class_name - numele clasei apelante, folosit pentru loguri/erori.
+     * \param name_table - numele tabelului în care se face inserarea.
+     * \param values - harta cheie-valoare (coloană => valoare) pentru inserare.
+     * \param err - listă în care sunt stocate mesajele de eroare, dacă apar.
+     * \param insertedId - pointer opțional către un QVariant în care se returnează ID-ul inserat (dacă există).
+     *
+     * \return true dacă inserarea a avut succes, altfel false.
+     *
+     * \note Exemplu (in caz cand este necesar ID inserat):
+     * db.insertIntoTable("UserPreferences", "users", valori, err, &id) - cu returnarea ID inserat
+     * db.insertIntoTable("UserPreferences", "users", valori, err) - fara ID
+     */
+    bool insertIntoTable(const QString class_name,
+                         const QString name_table,
+                         const QVariantMap &values,
+                         QStringList &err,
+                         QVariant *insertedId = nullptr);
+
+    /*!
+     * \brief Actualizează un rând într-un tabel, folosind perechi cheie-valoare și o condiție WHERE.
+     *
+     * \param class_name - numele clasei apelante, folosit pentru erori/loguri.
+     * \param name_table - numele tabelului în care se face actualizarea.
+     * \param values - chei și valori pentru coloanele ce trebuie actualizate.
+     * \param where_conditions - WHERE cu mai multe conditii.
+     * \param err - referință la o listă în care se vor adăuga mesajele de eroare (dacă apar).
+     * \return true dacă actualizarea a avut succes, altfel false.
+     */
+    bool updateTable(const QString class_name,
+                     const QString name_table,
+                     const QVariantMap &values,
+                     const QMap<QString, QVariant> &where_conditions,
+                     QStringList &err);
+
+    /*!
+     * \brief Selectează un singur rând dintr-un tabel, pe baza unor condiții WHERE.
+     *
+     * Creează și execută o interogare de tip SELECT cu coloanele specificate și condiții WHERE,
+     * returnând un singur rând sub forma unui \c QVariantMap. Dacă nu există niciun rezultat,
+     * se returnează un map gol.
+     *
+     * \param class_name Numele clasei apelante, utilizat pentru loguri și mesaje de eroare.
+     * \param name_table Numele tabelului din care se face selecția.
+     * \param values Chei ce reprezintă coloanele dorite la SELECT. Valorile pot fi ignorate (doar cheia contează).
+     * \param where_conditions Condițiile pentru filtrarea rezultatelor (coloană => valoare).
+     * \param err Referință către o listă în care vor fi adăugate mesajele de eroare, dacă apar.
+     * \return Un \c QVariantMap ce conține valorile coloanelor din primul rând găsit.
+     * Dacă nu există rezultate, se returnează un map gol.
+     *
+     * \note Interogarea adaugă automat \c LIMIT 1 pentru a preveni returnarea multiplă.
+     */
+    QVariantMap selectSingleRow(const QString class_name,
+                                const QString name_table,
+                                const QVariantMap &values,
+                                const QMap<QString, QVariant> &where_conditions,
+                                QStringList &err);
+
+    /*!
+     * \brief Selectează datele prin unirea tabelelor 'constants' și 'userPreferences'.
+     * Realizează un JOIN între tabelele `constants` și `userPreferences` pe baza `id_users`,
+     * filtrând după ID-ul utilizatorului.
+     *
+     * \param id_user - ID-ul utilizatorului pentru care se selectează datele.
+     * \return result - un QVariantMap ce conține datele selectate (sau gol dacă nu există rezultate).
+     *
+     * \note Coloanele cu același nume din ambele tabele (ex: `id_users`) vor fi suprascrise în rezultat.
+     */
+    QVariantMap selectJoinConstantsUserPreferencesByUserId(const int id_user);
+
     bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
 
     void creatingTables();
