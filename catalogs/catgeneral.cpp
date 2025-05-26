@@ -29,6 +29,8 @@
 #include <QImageWriter>
 #include <QStandardPaths>
 
+#include <customs/custommessage.h>
+
 static const int max_length_comment = 255; // lungimea maxima a cometariului
 
 CatGeneral::CatGeneral(QWidget *parent) :
@@ -80,6 +82,32 @@ CatGeneral::~CatGeneral()
     delete db;
     delete popUp;
     delete ui;
+}
+
+void CatGeneral::connectionModified()
+{
+    QList<QLineEdit*> list = this->findChildren<QLineEdit*>();
+    for (int n = 0; n < list.count(); n++) {
+        connect(list[n], &QLineEdit::textChanged, this, &CatGeneral::dataWasModified);
+    }
+    connect(ui->dateEdit, &QDateEdit::dateChanged, this, &CatGeneral::dataWasModified);
+    connect(ui->editComment, &QTextEdit::textChanged, this, &CatGeneral::dataWasModified);
+
+    connect(ui->editFullName, &QLineEdit::textChanged, this, &CatGeneral::fullNameChanged);
+    connect(ui->editFullName, &QLineEdit::editingFinished, this, &CatGeneral::fullNameSplit);
+}
+
+void CatGeneral::disconnectionModified()
+{
+    QList<QLineEdit*> list = this->findChildren<QLineEdit*>();
+    for (int n = 0; n < list.count(); n++) {
+        disconnect(list[n], &QLineEdit::textChanged, this, &CatGeneral::dataWasModified);
+    }
+    disconnect(ui->dateEdit, &QDateEdit::dateChanged, this, &CatGeneral::dataWasModified);
+    disconnect(ui->editComment, &QTextEdit::textChanged, this, &CatGeneral::dataWasModified);
+
+    disconnect(ui->editFullName, &QLineEdit::textChanged, this, &CatGeneral::fullNameChanged);
+    disconnect(ui->editFullName, &QLineEdit::editingFinished, this, &CatGeneral::fullNameSplit);
 }
 
 // *******************************************************************
@@ -172,12 +200,33 @@ bool CatGeneral::insertDataIntoTableByNameTable(const QString name_table)
 
     }
     if (qry.exec()){
+
         qInfo(logInfo()) << tr("Datele obiectului '%1' cu id='%2' au fost salvate cu succes in tabela '%3'.")
                                 .arg(ui->editFullName->text(), QString::number(m_Id), name_table);
+        popUp->setPopupText(tr("Datele obiectului <b>'%1'</b> <br>"
+                               "au fost salvate cu succes.")
+                                .arg(ui->editFullName->text()));
+        popUp->show();
+
         return true;
     } else {
-        qCritical(logCritical()) << tr("Eroare la inserarea datelor obiectului '%1' cu id='%2' in tabela '%3'- %4")
-                                        .arg(ui->editFullName->text(), QString::number(m_Id), name_table, qry.lastError().text());
+
+        err.clear();
+        err << QStringLiteral("Eroare la inserarea datelor obiectului '%1' cu id='%2' in tabela '%3' - %4")
+                   .arg(ui->editFullName->text(),
+                        QString::number(m_Id),
+                        name_table,
+                        qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Inserarea datelor"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+
         return false;
     }
 }
@@ -261,12 +310,33 @@ bool CatGeneral::updateDataIntoTableByNameTable(const QString name_table)
     }
 
     if (qry.exec()){
+
         qInfo(logInfo()) << tr("Datele obiectului '%1' cu id='%2' au fost modificate cu succes in tabela '%3'.")
                                 .arg(ui->editFullName->text(), QString::number(m_Id), name_table);
+        popUp->setPopupText(tr("Datele obiectului <b>'%1'</b> <br>"
+                               "au fost modificate cu succes.").arg(ui->editFullName->text()));
+        popUp->show();
+
         return true;
+
     } else {
-        qCritical(logCritical()) << tr("Eroare la modificarea datelor obiectului '%1' cu id='%2' in tabela '%3' - %4")
-                                        .arg(ui->editFullName->text(), QString::number(m_Id), name_table, qry.lastError().text());
+
+        err.clear();
+        err << QStringLiteral("Eroare la modificarea datelor obiectului '%1' cu id='%2' in tabela '%3' - %4")
+                   .arg(ui->editFullName->text(),
+                        QString::number(m_Id),
+                        name_table,
+                        qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Inserarea datelor"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+
         return false;
     }
 }
@@ -296,21 +366,76 @@ bool CatGeneral::objectExistsInTableByName(const QString name_table)
     }
 }
 
+bool CatGeneral::confirmIfDuplicateExist(const QString &name_table, const QString &type_label, const QString &extra_info)
+{
+    // verificam daca este persoana
+    if (! objectExistsInTableByName(name_table))
+        return true;
+
+    // formam textul
+    QString text = tr("%1 exist\304\203 \303\256n baza de date:<br>"
+                      " - nume: <b>%2</b><br>"
+                      " - prenume: <b>%3</b><br>"
+                      " - patronimic: <b>%4</b><br>"
+                      "%5 <br>"
+                      "Dori\310\233i s\304\203 continua\310\233i validarea ?")
+        .arg(type_label,
+             ui->editName->text(),
+             ui->editPrenume->text(),
+             ui->editPatronimic->text(),
+             extra_info);
+
+    // prezentam mesaj
+    QMessageBox messange_box(QMessageBox::Question,
+                             tr("Verificarea datelor"),
+                             text, QMessageBox::NoButton, this);
+    QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+    messange_box.exec();
+
+    return messange_box.clickedButton() == yesButton;
+}
+
+bool CatGeneral::handleInsert(const QString &name_table, const QString &type_label, const QString &extra_info)
+{
+    // verificam daca este duplicat
+    if (! confirmIfDuplicateExist(name_table, type_label, extra_info))
+        return false;
+
+    // ne determinam cu ID
+    if (m_Id <= 0)
+        setId(db->getLastIdForTable(name_table) + 1);
+
+    // inseram datele
+    if (insertDataIntoTableByNameTable(name_table)) {
+        // !!! logarea si mesajul de inserare cu succes vezi in [insertDataIntoTableByNameTable]
+
+        setItNew(false); // setam itNew = false
+
+        return true; // returnam true
+    } else {
+        // !!! prezentarea mesajului de eroare in functia [insertDataIntoTableByNameTable]
+        return false;
+    }
+}
+
+bool CatGeneral::handleUpdate(const QString &name_table, const QString &type_label)
+{
+    Q_UNUSED(type_label);
+
+    if (updateDataIntoTableByNameTable(name_table)) {
+        // !!! logarea si mesajul de modificarea datelor vezi in [updateDataIntoTableByNameTable]
+        return true;
+    } else {
+        // !!! prezentarea mesajului de eroare in functia [updateDataIntoTableByNameTable]
+        return false;
+    }
+}
+
 // *******************************************************************
 // **************** INSERAREA IMAGINEI SI ALTELE *********************
-
-void CatGeneral::loadImageOpeningCatalog()
-{
-    QByteArray outByteArray = db->getOutByteArrayImage("doctors", "signature", "id", m_Id);
-    QPixmap outPixmap;
-    if (! outByteArray.isEmpty() && outPixmap.loadFromData(outByteArray))
-        ui->imageSignature->setPixmap(outPixmap.scaled(200,200));
-
-    QByteArray outByteArray_stamp = db->getOutByteArrayImage("doctors", "stamp", "id", m_Id);
-    QPixmap outPixmap_stamp;
-    if (! outByteArray_stamp.isEmpty() && outPixmap_stamp.loadFromData(outByteArray_stamp))
-        ui->imageStamp->setPixmap(outPixmap_stamp.scaled(200,200));
-}
 
 void CatGeneral::controlLengthComment()
 {
@@ -336,7 +461,19 @@ void CatGeneral::clearImageSignature()
         popUp->setPopupText(tr("Semnatura este eliminat din baza de date."));
         popUp->show();
     } else {
-        qCritical(logCritical()) << tr("Eroare la eliminarea semnaturei din baza de date: ") << qry.lastError().text();
+
+        err.clear();
+        err << tr("Eroare la eliminarea semnaturei din baza de date: ")
+            << qry.lastError().text();
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Eliminarea semnaturei"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
     }
 }
 
@@ -353,44 +490,83 @@ void CatGeneral::clearImageStamp()
         popUp->setPopupText(tr("Imaginea este eliminat din baza de date."));
         popUp->show();
     } else {
-        qCritical(logCritical()) << tr("Eroare la eliminarea imaginei din baza de date: ") << qry.lastError().text();
+
+        err.clear();
+        err << tr("Eroare la eliminarea imaginei din baza de date: ")
+            << qry.lastError().text();
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Eliminarea imaginei"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
     }
 }
 
 bool CatGeneral::loadFile(const QString &fileName, const QString &link)
 {
+    // 1. Citim imaginea cu auto-transformare
     QImageReader reader(fileName);
     reader.setAutoTransform(true);
     const QImage newImage = reader.read();
+
     if (newImage.isNull()) {
-        QMessageBox::information(this, QGuiApplication::applicationDisplayName(),
+        QMessageBox::information(this,
+                                 QGuiApplication::applicationDisplayName(),
                                  tr("Nu este setată imaginea %1: %2")
-                                 .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
+                                     .arg(QDir::toNativeSeparators(fileName), reader.errorString()));
         return false;
     }
 
-    if (link == "#LoadImage")
-        ui->imageSignature->setPixmap(QPixmap::fromImage(newImage).scaled(200,200));
-    else
-        ui->imageStamp->setPixmap(QPixmap::fromImage(newImage).scaled(200,200));
+    // 2. Convertim imaginea într-un QPixmap scalat o singură dată
+    QPixmap scaledPixmap = QPixmap::fromImage(newImage)
+                               .scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation);
 
+    // 3. Setăm imaginea în QLabel potrivit
+    if (link == "#LoadImage")
+        ui->imageSignature->setPixmap(scaledPixmap);
+    else
+        ui->imageStamp->setPixmap(scaledPixmap);
+
+    // 4. Citim fișierul binar pentru stocare în baza de date
     QFile file(fileName);
-    if (!file.open(QIODevice::ReadOnly))
-        return true;
+    if (! file.open(QIODevice::ReadOnly)) {
+        qWarning(logWarning()) << tr("Nu s-a putut deschide fișierul pentru citire: ") << fileName;
+        return true; // Nu blocăm operația chiar dacă nu-l putem salva
+    }
+
     QByteArray inByteArray = file.readAll();
+    file.close();
+
+    // 5. Pregătim interogarea SQL
+    QString column = (link == "#LoadImage") ? "signature" : "stamp";
 
     QSqlQuery qry;
-    qry.prepare(QStringLiteral("UPDATE doctors SET %1 = ? WHERE id = ?;")
-                    .arg((link == "#LoadImage") ? "signature" : "stamp"));
+    qry.prepare(QStringLiteral("UPDATE doctors SET %1 = ? WHERE id = ?;").arg(column));
     qry.addBindValue(inByteArray.toBase64());
     qry.addBindValue(m_Id);
-    if (qry.exec()){
-        popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
+
+    if (qry.exec()) {
+        popUp->setPopupText(tr("Imaginea a fost salvată cu succes în baza de date."));
         popUp->show();
     } else {
-        qDebug() << tr("Eroare de inserare imaginei in baza de date: ") << qry.lastError().text();
+
+        err.clear();
+        err << tr("Eroare la salvarea imaginii în baza de date: ")
+            << qry.lastError().text();
+
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Inserarea imaginei"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+
+        qWarning(logWarning()) << err;
     }
-    file.close();
 
     return true;
 }
@@ -507,74 +683,101 @@ void CatGeneral::slot_IdChanged()
     if (m_itNew)
         return;
 
-    QList<QLineEdit*> list = this->findChildren<QLineEdit*>();
-    for (int n = 0; n < list.count(); n++) {
-        disconnect(list[n], &QLineEdit::textChanged, this, &CatGeneral::dataWasModified);
-    }
-    disconnect(ui->dateEdit, &QDateEdit::dateChanged, this, &CatGeneral::dataWasModified);
-    disconnect(ui->editComment, &QTextEdit::textChanged, this, &CatGeneral::dataWasModified);
+    // deconectarea de modificarea formei
+    disconnectionModified();
 
-    disconnect(ui->editFullName, &QLineEdit::textChanged, this, &CatGeneral::fullNameChanged);
-    disconnect(ui->editFullName, &QLineEdit::editingFinished, this, &CatGeneral::fullNameSplit);
+    // container cu sectiile pu solicitare
+    //   - aceste sectii sunt comune
+    QVariantMap map_column {
+        { "name",  QVariant() },
+        { "fName", QVariant() },
+        { "mName", QVariant() },
+        { "telephone", QVariant() },
+        { "email", QVariant() },
+        { "comment", QVariant() }
+    };
 
-    QMap<QString, QString> _items;
+    // container cu conditia
+    QMap<QString, QVariant> where; // conditia este unica pentru
+    where["id"] = m_Id;            // fiecare catalog
+
+    QString class_name = this->metaObject()->className();
+    QVariantMap map_result;
+    err.clear();
+
+    QString table;
+
     switch (m_typeCatalog) {
     case Doctors:
-        if (db->getObjectDataById("doctors", m_Id, _items)){
-            ui->editName->setText(_items.constFind("name").value());           // determinam datele obiectului
-            ui->editPrenume->setText(_items.constFind("fName").value());
-            ui->editPatronimic->setText(_items.constFind("mName").value());
-            ui->editTelephone->setText(_items.constFind("telephone").value());
-            ui->editEmail->setText(_items.constFind("email").value());
-            ui->editComment->setText(_items.constFind("comment").value());
-            ui->editFullName->setText(ui->editName->text() + " " + ui->editPrenume->text() + " " + ui->editPatronimic->text());
-        }
-        loadImageOpeningCatalog();
+        // sectii specifice
+        map_column["signature"] = QVariant();
+        map_column["stamp"]     = QVariant();
+        table = "doctors";
         break;
     case Nurses:
-        if (db->getObjectDataById("nurses", m_Id, _items)){
-            ui->editName->setText(_items.constFind("name").value());           // determinam datele obiectului
-            ui->editPrenume->setText(_items.constFind("fName").value());
-            ui->editPatronimic->setText(_items.constFind("mName").value());
-            ui->editTelephone->setText(_items.constFind("telephone").value());
-            ui->editEmail->setText(_items.constFind("email").value());
-            ui->editComment->setText(_items.constFind("comment").value());
-            ui->editFullName->setText(ui->editName->text() + " " + ui->editPrenume->text() + " " + ui->editPatronimic->text());
-        }
+        table = "nurses";
         break;
     case Pacients:
-        if (db->getObjectDataById("pacients", m_Id, _items)){
-            ui->editIDNP->setText(_items.constFind("IDNP").value());     // determinam datele obiectului
-            ui->editName->setText(_items.constFind("name").value());
-            ui->editPrenume->setText(_items.constFind("fName").value());
-            ui->editPatronimic->setText(_items.constFind("mName").value());
-            ui->editPoliceMed->setText(_items.constFind("medicalPolicy").value());
-            ui->dateEdit->setDate(QDate::fromString(_items.constFind("birthday").value(), "yyyy-MM-dd"));
-            ui->editAddress->setText(_items.constFind("address").value());
-            ui->editTelephone->setText(_items.constFind("telephone").value());
-            ui->editEmail->setText(_items.constFind("email").value());
-            ui->editComment->setText(_items.constFind("comment").value());
-            ui->editFullName->setText(ui->editName->text() + " " + ui->editPrenume->text() + " " + ui->editPatronimic->text());
-        }
+        // sectii specifice
+        map_column["IDNP"]          = QVariant();
+        map_column["birthday"]      = QVariant();
+        map_column["medicalPolicy"] = QVariant();
+        table = "pacients";
         break;
     default:
-        qWarning(logWarning()) << this->metaObject()->className()
-                               << tr(": nu a fost determinanta proprietatea 'typeCatalog' !!!");
-        break;
+        qWarning(logWarning()) << class_name
+                               << tr(": nu a fost determinată proprietatea 'typeCatalog' !!!");
+        return;
+    }
+
+    map_result = db->selectSingleRow(class_name, table, map_column, where, err);
+
+    if (! map_result.isEmpty()) {
+        if (m_typeCatalog == Doctors) {
+            // signature
+            QByteArray arr_signature = QByteArray::fromBase64(map_result["signature"].toByteArray());
+            QPixmap pix_signature;
+            if (! arr_signature.isEmpty() && pix_signature.loadFromData(arr_signature)) {
+                ui->imageSignature->setPixmap(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            }
+            // stamp
+            QByteArray arr_stamp = QByteArray::fromBase64(map_result["stamp"].toByteArray());
+            QPixmap pix_stamp;
+            if (! arr_stamp.isEmpty() && pix_stamp.loadFromData(arr_stamp)) {
+                ui->imageStamp->setPixmap(pix_stamp.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+            }
+        }
+
+        if (m_typeCatalog == Pacients) {
+            ui->editIDNP->setText(map_result["IDNP"].toString());
+            ui->editPoliceMed->setText(map_result["medicalPolicy"].toString());
+            ui->dateEdit->setDate(QDate::fromString(map_result["birthday"].toString(), "yyyy-MM-dd"));
+        }
+
+        // valori comune
+        ui->editName->setText(map_result["name"].toString());
+        ui->editPrenume->setText(map_result["fName"].toString());
+        ui->editPatronimic->setText(map_result["mName"].toString());
+        ui->editTelephone->setText(map_result["telephone"].toString());
+        ui->editEmail->setText(map_result["email"].toString());
+        ui->editComment->setText(map_result["comment"].toString());
+        ui->editFullName->setText(ui->editName->text() + " " + ui->editPrenume->text() + " " + ui->editPatronimic->text());
+
+    } else if (! err.isEmpty()) {
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+        msg->setTextTitle(tr("Inserarea datelor"));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
     }
 
     ui->editName->setFocus(); // modifica forma - isWindowModified() = true
                               // cand este focusat initial pe fullName
     setFullName(ui->editFullName->text());
 
-    for (int n = 0; n < list.count(); n++) {
-        connect(list[n], &QLineEdit::textChanged, this, &CatGeneral::dataWasModified);
-    }
-    connect(ui->dateEdit, &QDateEdit::dateChanged, this, &CatGeneral::dataWasModified);
-    connect(ui->editComment, &QTextEdit::textChanged, this, &CatGeneral::dataWasModified);
-
-    connect(ui->editFullName, &QLineEdit::textChanged, this, &CatGeneral::fullNameChanged);
-    connect(ui->editFullName, &QLineEdit::editingFinished, this, &CatGeneral::fullNameSplit);
+    // conectarea la modificarea formei
+    connectionModified();
 }
 
 void CatGeneral::slot_ItNewChanged()
@@ -680,209 +883,21 @@ bool CatGeneral::onWritingData()
 
     switch (m_typeCatalog) {
     case Doctors:
-
-        if (m_itNew){ // daca itNew = true:
-
-            if (objectExistsInTableByName("doctors")){     // 1. verificam daca este obiectul in BD dupa rechizutul 'nume'
-                QMessageBox messange_box(QMessageBox::Question,
-                                         tr("Verificarea datelor"),
-                                         tr("Doctor exist\304\203 \303\256n baza de date:<br>"
-                                            " - nume: <b>%1</b><br>"
-                                            " - prenume: <b>%2</b><br>"
-                                            " - patronimic: <b>%3</b><br>"
-                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
-                                             .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
-                                        QMessageBox::NoButton, this);
-                QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-                QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                messange_box.exec();
-
-                if (messange_box.clickedButton() == yesButton){
-                } else if (messange_box.clickedButton() == noButton) {
-                    returnBool = false;
-                    break;
-                }
-            }
-
-            if (m_Id == -1 || m_Id == 0)
-                setId(db->getLastIdForTable("doctors") + 1);
-
-            if (insertDataIntoTableByNameTable("doctors")){
-                popUp->setPopupText(tr("Obiectul <b>%1</b><br> a fost creat cu succes.").arg(ui->editFullName->text()));
-                popUp->show();
-                setItNew(false);
-                returnBool = true;
-            } else {
-                QMessageBox::warning(this, tr("Crearea obiectului."),
-                                     tr("Salvarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                setId(-1);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit createCatGeneral();
-
-        } else { // daca itNew = false
-
-            if (updateDataIntoTableByNameTable("doctors")){ // modificam datele obiectului
-                popUp->setPopupText(tr("Obiectul <b>%1</b><br> a fost modificat cu succes.").arg(ui->editFullName->text()));
-                popUp->show();
-                returnBool = true;
-            } else {
-                QMessageBox::warning(this, tr("Modificarea datelor."),
-                                     tr("Modificarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit changedCatGeneral();
-        }
-
+        returnBool = m_itNew
+                         ? handleInsert("doctors", tr("Doctor"), "")
+                         : handleUpdate("doctors", tr("Doctor"));
         break;
-
     case Nurses:
-
-        if (m_itNew){
-
-            if (objectExistsInTableByName("nurses")){     // 1. verificam daca este obiectul in BD dupa rechizutul 'nume'
-                QMessageBox messange_box(QMessageBox::Question,
-                                         tr("Verificarea datelor"),
-                                         tr("As.medicala exist\304\203 \303\256n baza de date:<br>"
-                                            " - nume: <b>%1</b><br>"
-                                            " - prenume: <b>%2</b><br>"
-                                            " - patronimic: <b>%3</b><br>"
-                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
-                                             .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text()),
-                                        QMessageBox::NoButton, this);
-                QPushButton *yesButton  = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-                QPushButton *noButton   = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                messange_box.exec();
-
-                if (messange_box.clickedButton() == yesButton){
-                } else if (messange_box.clickedButton() == noButton) {
-                    returnBool = false;
-                    break;
-                }
-            }
-
-            if (m_Id == -1 || m_Id == 0)
-                setId(db->getLastIdForTable("nurses") + 1);
-
-            if (insertDataIntoTableByNameTable("nurses")){
-                popUp->setPopupText(tr("Obiectul <b>%1</b><br> a fost creat cu succes.").arg(ui->editFullName->text()));
-                popUp->show();
-                setItNew(false);
-                setWindowTitle(tr("As.medicală %1 %2").arg((m_itNew) ? tr("(crearea)"): tr("(salvat)"), "[*]"));
-                returnBool = true;
-            } else {
-                QMessageBox::warning(this, tr("Crearea obiectului."),
-                                     tr("Salvarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                setId(-1);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit createCatGeneral();
-
-        } else {
-
-            if (updateDataIntoTableByNameTable("nurses")){           // modificam datele obiectului
-                popUp->setPopupText(tr("Datele obiectului <b>%1</b><br> au fost modificate cu succes.").arg(ui->editFullName->text()));
-                popUp->show();
-                returnBool = true;
-            } else {
-                QMessageBox::warning(this, tr("Modificarea datelor."),
-                                     tr("Modificarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit changedCatGeneral();
-        }
-
+        returnBool = m_itNew
+                         ? handleInsert("nurses", tr("As.medicala"), "")
+                         : handleUpdate("nurses", tr("As.medcala"));
         break;
-
     case Pacients:
-
-        if (m_itNew){
-
-            if (objectExistsInTableByName("pacients")){
-                QMessageBox messange_box(QMessageBox::Question,
-                                         tr("Verificarea datelor"),
-                                         tr("Pacientul exist\304\203 \303\256n baza de date:<br>"
-                                            " - nume: <b>%1</b><br>"
-                                            " - prenume: <b>%2</b><br>"
-                                            " - patronimic: <b>%3</b><br>"
-                                            " - anul na\310\231terii: <b>%4</b><br>"
-                                            ". <br>Dori\310\233i s\304\203 continua\310\233i validarea ?")
-                                        .arg(ui->editName->text(), ui->editPrenume->text(), ui->editPatronimic->text(), ui->dateEdit->date().toString("dd.MM.yyyy")),
-                                        QMessageBox::NoButton, this);
-                QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-                QPushButton *noButton  = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-                yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-                messange_box.exec();
-
-                if (messange_box.clickedButton() == yesButton){
-                } else if (messange_box.clickedButton() == noButton) {
-                    returnBool = false;
-                    break;
-                }
-            }
-
-            if (m_Id == -1 || m_Id == 0)
-                setId(db->getLastIdForTable("pacients") + 1);
-
-            if (insertDataIntoTableByNameTable("pacients")){
-                setItNew(false);
-                setWindowTitle(tr("Pacientul %1 %2").arg((m_itNew) ? tr("(crearea)"): tr("(salvat)"), "[*]"));
-                returnBool = true;
-                popUp->setPopupText(tr("Obiectul <b>%1</b><br> a fost creat cu succes.").arg(ui->editFullName->text()));
-                popUp->show();
-            } else {
-                QMessageBox::warning(this,
-                                     tr("Crearea obiectului."),
-                                     tr("Salvarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                setId(-1);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit createCatGeneral();
-
-        } else {
-
-            if (updateDataIntoTableByNameTable("pacients")){           // modificam datele obiectului
-                returnBool = true;
-            } else {
-                QMessageBox::warning(this,
-                                     tr("Modificarea datelor."),
-                                     tr("Modificarea datelor obiectului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                        "Adresați-vă administratorului aplicației.")
-                                     .arg(ui->editFullName->text()), QMessageBox::Ok);
-                returnBool = false;
-            }
-
-            if (returnBool == true)
-                emit changedCatGeneral();
-        }
-
+        returnBool = m_itNew
+            ? handleInsert("pacients", tr("Pacientul"), tr(" - anul na\310\231terii: %1")
+                                                        .arg(ui->dateEdit->date().toString("dd.MM.yyyy")))
+                         : handleUpdate("pacients", tr("Pacientul"));
         break;
-
     default:
         qWarning(logWarning()) << this->metaObject()->className()
                                << tr(": nu a fost determinanta proprietatea 'typeCatalog' !!!");
@@ -890,7 +905,16 @@ bool CatGeneral::onWritingData()
         break;
     }
 
-    setWindowModified(!returnBool); // schimbam proprietatea de modificare a datelor formai
+    // emitem signal
+    if (returnBool) {
+        if (m_itNew)
+            emit createCatGeneral();
+        else
+            emit changedCatGeneral();
+    }
+
+    // modificam forma
+    setWindowModified(! returnBool); // schimbam proprietatea de modificare a datelor formai
 
     return returnBool;
 }

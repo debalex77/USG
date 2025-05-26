@@ -459,6 +459,67 @@ QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(const int id_us
     return result;
 }
 
+bool DataBase::deleteFromTable(const QString class_name,
+                               const QString name_table,
+                               const QMap<QString, QVariant> &where_conditions,
+                               QStringList &err)
+{
+    if (name_table.trimmed().isEmpty()) {
+        err << class_name
+            << "[deleteFromTable]: "
+            << "Table: " + name_table
+            << "Numele tabelului este gol.";
+        return false;
+    }
+
+    if (where_conditions.isEmpty()) {
+        err << class_name
+            << "[deleteFromTable]: "
+            << "Table: " + name_table
+            << "Condiția WHERE este goală — ștergere blocată pentru siguranță.";
+        return false;
+    }
+
+    QStringList where_clauses;
+    QList<QVariant> bindValues;
+
+    for (auto it = where_conditions.constBegin(); it != where_conditions.constEnd(); ++it) {
+        where_clauses << QString("%1 = ?").arg(it.key());
+        bindValues << it.value();
+    }
+
+    QString queryStr = QString("DELETE FROM %1 WHERE %2")
+                           .arg(name_table,
+                                where_clauses.join(" AND "));
+
+    QSqlQuery qry;
+    if (! qry.prepare(queryStr)) {
+        err << class_name
+            << "[deleteFromTable]: "
+            << "Table: " + name_table
+            << "Eroare la pregătirea DELETE: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    for (int i = 0; i < bindValues.size(); ++i) {
+        qry.addBindValue(bindValues.at(i));
+    }
+
+    if (! qry.exec()) {
+        err << class_name
+            << "[deleteFromTable]: "
+            << "Table: " + name_table
+            << "Eroare la execuția DELETE: "
+            << qry.lastError().text()
+            << "Query: " + queryStr;
+        return false;
+    }
+
+    return true;
+}
+
 bool DataBase::deleteDataFromTable(const QString name_table, const QString deletionCondition, const QString valueCondition)
 {
     QSqlQuery qry;

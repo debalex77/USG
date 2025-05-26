@@ -45,11 +45,17 @@ public:
     TypeCatalog getTypeCatalog() {return m_typeCatalog;}
 
 private:
+    void connectionModified();
+    void disconnectionModified();
+
     bool controlRequiredObjects();
     bool insertDataIntoTableByNameTable(const QString name_table);
     bool updateDataIntoTableByNameTable(const QString name_table);
     bool objectExistsInTableByName(const QString name_table);
-    void loadImageOpeningCatalog();
+
+    bool confirmIfDuplicateExist(const QString &name_table, const QString &type_label, const QString &extra_info);
+    bool handleInsert(const QString &name_table, const QString &type_label, const QString &extra_info);
+    bool handleUpdate(const QString &name_table, const QString &type_label);
 
 signals:
     void IdChanged();          // p-u conectarea la slot slot_IdChanged()
@@ -93,6 +99,8 @@ private:
     QString strName       = nullptr;
     QString strPrenume    = nullptr;
     QString strPatrimonic = nullptr;
+
+    QStringList err; // pu mesaje de eroare
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

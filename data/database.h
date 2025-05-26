@@ -117,6 +117,27 @@ public:
      */
     QVariantMap selectJoinConstantsUserPreferencesByUserId(const int id_user);
 
+    /*!
+     * \brief Șterge rânduri dintr-un tabel pe baza unor condiții WHERE.
+     *
+     * Creează și execută o interogare de tip DELETE, utilizând condițiile specificate
+     * în parametrul \c where_conditions. Pentru siguranță, dacă \c where_conditions este gol,
+     * operația este blocată.
+     *
+     * \param class_name Numele clasei apelante, utilizat pentru loguri și erori.
+     * \param name_table Numele tabelului din care se vor șterge rânduri.
+     * \param where_conditions Condițiile WHERE (chei = coloane, valori = valori căutate).
+     *                        Poate conține una sau mai multe condiții.
+     * \param err Referință la o listă de mesaje de eroare, care va fi completată în caz de eșec.
+     * \return true dacă operația DELETE a fost executată cu succes, false în caz contrar.
+     *
+     * \note Pentru siguranță, funcția nu execută DELETE fără condiții WHERE.
+     */
+    bool deleteFromTable(const QString class_name,
+                         const QString name_table,
+                         const QMap<QString, QVariant> &where_conditions,
+                         QStringList &err);
+
     bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
 
     void creatingTables();

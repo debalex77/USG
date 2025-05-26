@@ -28,6 +28,10 @@
 #include <QScreen>
 #include <QToolButton>
 
+#include <customs/custommessage.h>
+
+#include <data/popup.h>
+
 CatForSqlTableModel::CatForSqlTableModel(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CatForSqlTableModel)
@@ -351,28 +355,37 @@ void CatForSqlTableModel::onEditRowTable()
 
 void CatForSqlTableModel::onMarkDeletion()
 {
+    // verificam daca este ales randul
     if (ui->tableView->currentIndex().row() == -1){
         QMessageBox::warning(this, tr("Atentie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
         return;
     }
 
-    int _row     = ui->tableView->currentIndex().row();
-    int _id      = model->index(_row, 0).data(Qt::DisplayRole).toInt();
-    int _delMark = model->index(_row, 1).data(Qt::DisplayRole).toInt();
-    QString _cod = model->index(_row, 2).data(Qt::DisplayRole).toString();
+    // determinam ID
+    int _row = ui->tableView->currentIndex().row();
+    int _id  = model->index(_row, 0).data(Qt::DisplayRole).toInt();
 
-    if (!db->deletionMarkObject(getNameTable(), _id)){
-        QMessageBox::warning(this,
-                             tr("Marcarea/demarcarea obiectului"),
-                             tr("Marcarea/demarcarea obiectului cu codul \"<b>%1</b>\" nu este reusita.")
-                                 .arg(_cod),
-                             QMessageBox::Ok);
-        return;
+    // anuntam variabile si pregatim conditia
+    QStringList err;
+    QMap<QString, QVariant> where;
+    where["id"] = _id;
+
+    // eliminam din baza de date
+    bool remove = db->deleteFromTable(this->metaObject()->className(), getNameTable(), where, err);
+
+    // prezentam mesaj de eliminare sau de eroare
+    if (remove) {
+        PopUp *popUp = new PopUp(this);
+        popUp->setPopupText(tr("Obiectul eliminat cu succes."));
+        popUp->show();
+    } else {
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(QApplication::applicationName());
+        msg->setTextTitle(tr(""));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
     }
-    if (_delMark == 0)
-        model->setData(model->index(_row, 4), 1); // setam ca este actual
-    else
-        model->setData(model->index(_row, 4), 0);
 
     model->select();
 }
@@ -392,24 +405,9 @@ void CatForSqlTableModel::onOpenGroupInvestigations()
 
 void CatForSqlTableModel::slotContextMenuRequested(QPoint pos)
 {
-    int _row = ui->tableView->currentIndex().row();
-    int _id = model->index(_row, 0).data(Qt::DisplayRole).toInt();
-    QString _cod = model->index(_row, 2).data(Qt::DisplayRole).toString();
-
-    QString strActionDelMark;
-    int statusDeletionMark = db->statusDeletionMarkObject(getNameTable(), _id);
-    if (statusDeletionMark == DataBase::REQUIRED_NUMBER::DELETION_MARK){
-        strActionDelMark = tr("Demarcheaza obiectul cu codul '%1'").arg(_cod);
-    } else if (statusDeletionMark == DataBase::REQUIRED_NUMBER::DELETION_UNMARK){
-        strActionDelMark = tr("Marcheaza pentru eliminare obiectul co codul '%1'").arg(_cod);
-    } else {
-        qWarning(logWarning()) << tr("%1 - slotContextMenuRequested():").arg(metaObject()->className())
-                               << tr("Status 'deletionMark' a obiectului cu ID=%1 nu este determinat !!!").arg(QString::number(_id));
-    }
-
-    QAction* actionAddObject  = new QAction(QIcon(":/img/add_x32.png"), tr("Adauga obiect nou"), this);
-    QAction* actionEditObject = new QAction(QIcon(":/img/edit_x32.png"), tr("Editeaza obiect"), this);
-    QAction* actionMarkObject = new QAction(QIcon(":/img/clear_x32.png"), strActionDelMark, this);
+    QAction *actionAddObject  = new QAction(QIcon(":/img/add_x32.png"), tr("Adauga obiect nou"), this);
+    QAction *actionEditObject = new QAction(QIcon(":/img/edit_x32.png"), tr("Editeaza obiect"), this);
+    QAction *actionMarkObject = new QAction(QIcon(":/img/clear_x32.png"), tr("Eliminare obiectului"), this);
 
     connect(actionAddObject, &QAction::triggered, this, &CatForSqlTableModel::onAddRowTable);
     connect(actionEditObject, &QAction::triggered, this, &CatForSqlTableModel::onEditRowTable);
@@ -482,7 +480,8 @@ void CatForSqlTableModel::printCatalogCost()
     // Deschidem fișierul XML
     QFile file(":/xmls/investig_2024.xml");
     if (! file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qWarning(logWarning()) << "Nu se poate deschide fișierul XML:" << file.errorString();
+        qWarning(logWarning()) << "Nu se poate deschide fișierul XML:"
+                               << file.errorString();
         return;
     }
 
@@ -540,7 +539,8 @@ void CatForSqlTableModel::printCatalogCost()
         QMessageBox::warning(this,
                              tr("Verificarea \310\231ablonului"),
                              tr("Nu a fost g\304\203sit formular de tipar !!!<br>"
-                                "Probabil \303\256n set\304\203rile aplica\310\233iei nu este setat corect drumul spre formularele de tipar."),
+                                "Probabil \303\256n set\304\203rile aplica\310\233iei "
+                                "nu este setat corect drumul spre formularele de tipar."),
                              QMessageBox::Ok);
     }
     m_report->previewReport();
