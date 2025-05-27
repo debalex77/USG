@@ -1336,13 +1336,13 @@ bool DataBase::createTableUsers()
 
     if (globals().connectionMade == "MySQL") {
         qry.prepare(R"(
-            CREATE TABLE IF NOT EXISTS users (
-                id             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                deletionMark   INT NOT NULL,
-                name           VARCHAR(50) NOT NULL,
-                password       VARCHAR(50),
-                hash           CHAR(64),
-                lastConnection DATETIME
+            CREATE TABLE IF NOT EXISTS `users` (
+                `id`             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark`   INT NOT NULL,
+                `name`           VARCHAR(50) NOT NULL,
+                `password`       VARCHAR(50),
+                `hash`           CHAR(64),
+                `lastConnection` DATETIME
             );
         )");
     } else if (globals().connectionMade == "Sqlite") {
@@ -1374,17 +1374,17 @@ bool DataBase::createTableDoctors()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
         qry.prepare(R"(
-            CREATE TABLE IF NOT EXISTS doctors (
-                id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,
-                deletionMark INT NOT Null,
-                name         VARCHAR (80) NOT Null,
-                fName        VARCHAR (50),
-                mName        VARCHAR (50),
-                telephone    VARCHAR (100),
-                email        VARCHAR (100),
-                comment      VARCHAR (255),
-                signature    LONGBLOB,
-                stamp        LONGBLOB
+            CREATE TABLE IF NOT EXISTS `doctors` (
+                `id`           INT NOT Null PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT Null,
+                `name`         VARCHAR (80) NOT Null,
+                `fName`        VARCHAR (50),
+                `mName`        VARCHAR (50),
+                `telephone`    VARCHAR (100),
+                `email`        VARCHAR (100),
+                `comment`      VARCHAR (255),
+                `signature`    LONGBLOB,
+                `stamp`        LONGBLOB
             );
         )");
     else if (globals().connectionMade == "Sqlite")
@@ -1422,11 +1422,11 @@ bool DataBase::createTableFullNameDoctors()
 
         const QString sql = QStringLiteral(R"(
             CREATE TABLE IF NOT EXISTS `fullNameDoctors` (
-                `id` INT NOT NULL AUTO_INCREMENT,
+                `id`         INT NOT NULL AUTO_INCREMENT,
                 `id_doctors` INT NOT NULL,
-                `name` VARCHAR(200) NOT NULL,
+                `name`       VARCHAR(200) NOT NULL,
                 `nameAbbreviated` VARCHAR(250) DEFAULT NULL,
-                `nameTelephone` VARCHAR(250) DEFAULT NULL,
+                `nameTelephone`   VARCHAR(250) DEFAULT NULL,
                 PRIMARY KEY (`id`),
                 KEY `fullNameDoctors_doctors_id_idx` (`id_doctors`),
                 CONSTRAINT `fullNameDoctors_doctors_id`
@@ -1544,15 +1544,15 @@ bool DataBase::createTableNurses()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
         qry.prepare(R"(
-            CREATE TABLE IF NOT EXISTS nurses (
-                id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
-                deletionMark INT NOT NULL,
-                name         VARCHAR (80) NOT NULL,
-                fName        VARCHAR (50),
-                mName        VARCHAR (50),
-                telephone    VARCHAR (100),
-                email        VARCHAR (100),
-                comment      VARCHAR (255)
+            CREATE TABLE IF NOT EXISTS `nurses` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `name`         VARCHAR (80) NOT NULL,
+                `fName`        VARCHAR (50),
+                `mName`        VARCHAR (50),
+                `telephone`    VARCHAR (100),
+                `email`        VARCHAR (100),
+                `comment`      VARCHAR (255)
             );
         )");
     else if (globals().connectionMade == "Sqlite")
@@ -1585,35 +1585,45 @@ bool DataBase::createTableFullNameNurses()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL") {
 
-        qry.prepare("CREATE TABLE `fullNameNurses` ("
-                    "`id` int NOT Null AUTO_INCREMENT,"
-                    "`id_nurses`       int NOT Null,"
-                    "`name`            varchar(200) NOT Null,"
-                    "`nameAbbreviated` varchar(250) DEFAULT Null,"
-                    "`nameTelephone`   varchar(250) DEFAULT Null,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `fullNameNurses_nurses_id_idx` (`id_nurses`),"
-                    "CONSTRAINT `fullNameNurses_nurses_id` FOREIGN KEY (`id_nurses`) REFERENCES `nurses` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");"
-                    "CREATE TRIGGER `create_full_name_nurse` "
-                    "AFTER INSERT ON `nurses` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO fullNameNurses (id_nurses, name, nameAbbreviated, nameTelephone) "
-                    "  VALUES (NEW.id, "
-                    "    CONCAT(NEW.name,' ', NEW.fName),"
-                    "    CONCAT(NEW.name,' ', SUBSTRING(NEW.fName,1,1),'.'),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', tel.: ', NEW.telephone)"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_full_name_nurse` "
-                    "AFTER UPDATE ON `nurses` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE fullNameNurses SET "
-                    "  name = CONCAT(NEW.name, ' ', NEW.fName),"
-                    "  nameAbbreviated = CONCAT(NEW.name, ' ', SUBSTRING(NEW.fName, 1, 1), '.'),"
-                    "  nameTelephone = CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone) "
-                    "WHERE id_nurses = NEW.id;"
-                    "END;");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `fullNameNurses` (
+                `id` int NOT NULL AUTO_INCREMENT,
+                `id_nurses`       int NOT NULL,
+                `name`            varchar(200) NOT NULL,
+                `nameAbbreviated` varchar(250) DEFAULT NULL,
+                `nameTelephone`   varchar(250) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fullNameNurses_nurses_id_idx` (`id_nurses`),
+            CONSTRAINT `fullNameNurses_nurses_id`
+                FOREIGN KEY (`id_nurses`) REFERENCES `nurses` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+
+            CREATE TRIGGER `create_full_name_nurse`
+            AFTER INSERT ON `nurses`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO fullNameNurses (id_nurses, name, nameAbbreviated, nameTelephone)
+                VALUES (
+                    NEW.id,
+                    CONCAT(NEW.name,' ', NEW.fName),
+                    CONCAT(NEW.name,' ', SUBSTRING(NEW.fName,1,1),'.'),
+                    CONCAT(NEW.name,' ', NEW.fName,', tel.: ', NEW.telephone)
+                );
+            END;
+
+            CREATE TRIGGER `update_full_name_nurse`
+            AFTER UPDATE ON `nurses`
+            FOR EACH ROW
+            BEGIN
+                UPDATE fullNameNurses SET
+                    name            = CONCAT(NEW.name, ' ', NEW.fName),
+                    nameAbbreviated = CONCAT(NEW.name, ' ', SUBSTRING(NEW.fName, 1, 1), '.'),
+                    nameTelephone   = CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone)
+                WHERE
+                    id_nurses = NEW.id;
+            END;
+        )");
+
         if (qry.exec()){
             return true;
         } else {
@@ -1624,83 +1634,114 @@ bool DataBase::createTableFullNameNurses()
 
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-        try {
-            qry.prepare("CREATE TABLE fullNameNurses ("
-                        "id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_nurses       INTEGER NOT NULL CONSTRAINT fullNameNurses_nurses_id REFERENCES nurses (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "name            TEXT (200) NOT NULL, "
-                        "nameAbbreviated TEXT (250), "
-                        "nameTelephone   TEXT (250)"
-                        ");");
-            qry.exec();
-            qry.prepare("CREATE TRIGGER `create_full_name_nurse` "
-                        "AFTER INSERT ON `nurses` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO fullNameNurses (id_nurses, name, nameAbbreviated, nameTelephone) "
-                        "  VALUES (NEW.id, "
-                        "    NEW.name || ' ' || NEW.fName,"
-                        "    NEW.name || ' ' || SUBSTR(NEW.fName,1,1) || '.',"
-                        "    NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone"
-                        "  );"
-                        "END;");
-            qry.exec();
-            qry.prepare("CREATE TRIGGER `update_full_name_nurse` "
-                        "AFTER UPDATE ON `nurses` FOR EACH ROW "
-                        "BEGIN"
-                        " UPDATE fullNameNurses SET "
-                        "  name = NEW.name || ' ' || NEW.fName,"
-                        "  nameAbbreviated = NEW.name || ' ' || SUBSTR(NEW.fName,1,1) || '.',"
-                        "  nameTelephone = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone "
-                        "WHERE id_nurses = NEW.id;"
-                        "END;");
-            qry.exec();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
+            return false;
+        }
+
+        bool success = true;
+
+        const QStringList sqlStatements = {
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS fullNameNurses (
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_nurses       INTEGER NOT NULL,
+                    name            TEXT NOT NULL,
+                    nameAbbreviated TEXT,
+                    nameTelephone   TEXT,
+                CONSTRAINT fullNameNurses_nurses_id
+                FOREIGN KEY (id_nurses) REFERENCES nurses (id)
+                ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER create_full_name_nurse
+                AFTER INSERT ON nurses
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO fullNameNurses (id_nurses, name, nameAbbreviated, nameTelephone)
+                    VALUES (
+                        NEW.id,
+                        NEW.name || ' ' || NEW.fName,
+                        NEW.name || ' ' || SUBSTR(NEW.fName, 1, 1) || '.',
+                        NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone
+                    );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER update_full_name_nurse
+                AFTER UPDATE ON nurses
+                FOR EACH ROW
+                BEGIN
+                    UPDATE fullNameNurses SET
+                        name            = NEW.name || ' ' || NEW.fName,
+                        nameAbbreviated = NEW.name || ' ' || SUBSTR(NEW.fName, 1, 1) || '.',
+                        nameTelephone   = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone
+                    WHERE
+                        id_nurses = NEW.id;
+                END;
+            )"),
+        };
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
             db.commit();
             return true;
-        } catch (...) {
-            qWarning(logWarning()) << tr("%1 - createTableFullNameNurses()").arg(metaObject()->className())
-                                   << tr("Nu a fost creata tabela \"fullNameNurses\".") + qry.lastError().text();
+        } else {
             db.rollback();
             return false;
-            throw;
         }
-    } else {
-        return false;
     }
 
+    return false; // necunoscut
 }
 
 bool DataBase::createTablePacients()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists pacients ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark  INT NOT Null,"
-                    "IDNP          VARCHAR (20),"
-                    "name          VARCHAR (80) NOT Null,"
-                    "fName         VARCHAR (50),"
-                    "mName         VARCHAR (50),"
-                    "medicalPolicy VARCHAR (20),"
-                    "birthday      DATE NOT Null,"
-                    "address       VARCHAR (255),"
-                    "telephone     VARCHAR (100),"
-                    "email         VARCHAR (100),"
-                    "comment       VARCHAR (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pacients` (
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark`  INT NOT NULL,
+                `IDNP`          VARCHAR (20),
+                `name`          VARCHAR (80) NOT NULL,
+                `fName`         VARCHAR (50),
+                `mName`         VARCHAR (50),
+                `medicalPolicy` VARCHAR (20),
+                `birthday`      DATE NOT NULL,
+                `address`       VARCHAR (255),
+                `telephone`     VARCHAR (100),
+                `email`         VARCHAR (100),
+                `comment`       VARCHAR (255)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE pacients ("
-                    "id            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark  INTEGER NOT NULL,"
-                    "IDNP          TEXT (20),"
-                    "name          TEXT (80) NOT NULL,"
-                    "fName         TEXT (50),"
-                    "mName         TEXT (50),"
-                    "medicalPolicy TEXT (20),"
-                    "birthday      TEXT (10) NOT NULL,"
-                    "address       TEXT (255),"
-                    "telephone     TEXT (100),"
-                    "email         TEXT (100),"
-                    "comment       TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS pacients (
+                id            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark  INTEGER NOT NULL,
+                IDNP          TEXT,
+                name          TEXT NOT NULL,
+                fName         TEXT,
+                mName         TEXT,
+                medicalPolicy TEXT,
+                birthday      TEXT NOT NULL,
+                address       TEXT,
+                telephone     TEXT,
+                email         TEXT,
+                comment       TEXT
+            );
+        )");
     else
         return false;
 
@@ -1718,42 +1759,51 @@ bool DataBase::createTableFullNamePacients()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL") {
 
-        qry.prepare("CREATE TABLE `fullNamePacients` ("
-                    "`id`               int NOT Null AUTO_INCREMENT,"
-                    "`id_pacients`      int NOT Null,"
-                    "`name`             varchar(200) DEFAULT Null,"
-                    "`nameIDNP`         varchar(250) DEFAULT Null,"
-                    "`nameBirthday`     varchar(250) DEFAULT Null,"
-                    "`nameTelephone`    varchar(250) DEFAULT Null,"
-                    "`nameBirthdayIDNP` varchar(300) DEFAULT Null,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `fullNamePacients_pacients_id_idx` (`id_pacients`),"
-                    "CONSTRAINT `fullNamePacients_pacients_id` FOREIGN KEY (`id_pacients`) REFERENCES `pacients` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");"
-                    "CREATE TRIGGER `create_full_name_pacient` "
-                    "AFTER INSERT ON `pacients` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO fullNamePacients (id_pacients, name, nameIDNP, nameBirthday, nameTelephone, nameBirthdayIDNP) "
-                    "  VALUES (NEW.id, "
-                    "    CONCAT(NEW.name,' ', NEW.fName),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', idnp: ', NEW.IDNP),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', ', SUBSTRING(NEW.birthday, 9, 2),'.', SUBSTRING(NEW.birthday, 6, 2),'.',SUBSTRING(NEW.birthday, 1, 4)),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', tel.: ', NEW.telephone),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', ', SUBSTRING(NEW.birthday, 9, 2),'.', SUBSTRING(NEW.birthday, 6, 2),'.',SUBSTRING(NEW.birthday, 1, 4), ', idnp: ' , NEW.IDNP)"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_full_name_pacient` "
-                    "AFTER UPDATE ON `pacients` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE fullNamePacients SET "
-                    "    name = CONCAT(NEW.name,' ', NEW.fName),"
-                    "    nameIDNP = CONCAT(NEW.name,' ', NEW.fName,', idnp: ', NEW.IDNP),"
-                    "    nameBirthday = CONCAT(NEW.name,' ', NEW.fName,', ', SUBSTRING(NEW.birthday, 9, 2),'.', SUBSTRING(NEW.birthday, 6, 2),'.',SUBSTRING(NEW.birthday, 1, 4)),"
-                    "    nameTelephone = CONCAT(NEW.name,' ', NEW.fName,', tel.: ', NEW.telephone),"
-                    "    nameBirthdayIDNP = CONCAT(NEW.name,' ', NEW.fName,', ', SUBSTRING(NEW.birthday, 9, 2),'.', SUBSTRING(NEW.birthday, 6, 2),'.',SUBSTRING(NEW.birthday, 1, 4), ', idnp: ' , NEW.IDNP)"
-                    "  WHERE id_pacients = NEW.id;"
-                    "END"
-                    ";");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `fullNamePacients` (
+                `id` int NOT NULL AUTO_INCREMENT,
+                `id_pacients`      int NOT NULL,
+                `name`             varchar(200) DEFAULT NULL,
+                `nameIDNP`         varchar(250) DEFAULT NULL,
+                `nameBirthday`     varchar(250) DEFAULT NULL,
+                `nameTelephone`    varchar(250) DEFAULT NULL,
+                `nameBirthdayIDNP` varchar(300) DEFAULT NULL,
+            PRIMARY KEY (`id`),
+            KEY `fullNamePacients_pacients_id_idx` (`id_pacients`),
+            CONSTRAINT `fullNamePacients_pacients_id`
+                FOREIGN KEY (`id_pacients`) REFERENCES `pacients` (`id`) ON
+                DELETE CASCADE ON UPDATE RESTRICT
+            );
+
+            CREATE TRIGGER `create_full_name_pacient`
+            AFTER INSERT ON `pacients`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO fullNamePacients (id_pacients, name, nameIDNP, nameBirthday, nameTelephone, nameBirthdayIDNP)
+                VALUES (
+                    NEW.id,
+                    CONCAT(NEW.name, ' ', NEW.fName),
+                    CONCAT(NEW.name, ' ', NEW.fName, ', idnp: ', NEW.IDNP),
+                    CONCAT(NEW.name, ' ', NEW.fName, ', ', SUBSTRING(NEW.birthday, 9, 2), '.', SUBSTRING(NEW.birthday, 6, 2), '.', SUBSTRING(NEW.birthday, 1, 4)),
+                    CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone),
+                    CONCAT(NEW.name, ' ', NEW.fName, ', ', SUBSTRING(NEW.birthday, 9, 2), '.', SUBSTRING(NEW.birthday, 6, 2), '.', SUBSTRING(NEW.birthday, 1, 4), ', idnp: ' , NEW.IDNP)
+                );
+            END;
+
+            CREATE TRIGGER `update_full_name_pacient`
+            AFTER UPDATE ON `pacients`
+            FOR EACH ROW
+            BEGIN
+                UPDATE fullNamePacients SET
+                    name = CONCAT(NEW.name, ' ', NEW.fName),
+                    nameIDNP = CONCAT(NEW.name, ' ', NEW.fName, ', idnp: ', NEW.IDNP),
+                    nameBirthday = CONCAT(NEW.name, ' ', NEW.fName, ', ', SUBSTRING(NEW.birthday, 9, 2), '.', SUBSTRING(NEW.birthday, 6, 2), '.', SUBSTRING(NEW.birthday, 1, 4)),
+                    nameTelephone = CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone),
+                    nameBirthdayIDNP = CONCAT(NEW.name, ' ', NEW.fName, ', ', SUBSTRING(NEW.birthday, 9, 2), '.', SUBSTRING(NEW.birthday, 6, 2), '.', SUBSTRING(NEW.birthday, 1, 4), ', idnp: ' , NEW.IDNP)
+                WHERE
+                    id_pacients = NEW.id;
+            END;
+        )");
         if (qry.exec()){
             return true;
         } else {
