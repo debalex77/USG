@@ -59,7 +59,6 @@ private slots:
     void slot_IdChanged();
     void textChangedNameOrganization();
 
-    void loadImageOpeningCatalog();
     void clearImageStamp();
     bool loadFile(const QString &fileName);
     void onLinkActivatedForOpenImage(const QString &link);
@@ -75,12 +74,17 @@ private slots:
     void onWritingDataClose();
 
 private:
+    void initConnections();
+    void connectionsModified();
+    void disconnectionsModified();
     void initBtnToolBar();
-    QMap<QString, QString> getDataObject();
     void updateTableContracts();
     void updateHeaderTableContracts();
 
-    bool existObjectInTableOrganizations();
+    bool controlRequiredObjects();
+    bool confirmIfDuplcateExist();
+    bool handleInsert();
+    bool handleUpdate();
     bool insertIntoTableOrganizations();
     bool updateDataTableOrganizations();
 
@@ -111,13 +115,14 @@ private:
     int m_Id     = -1;          // id obiectului
     int m_IdMainContract = -1;  // id contractului de baza
     QString m_name_organization = nullptr;
-    int m_write_new_organziation = 0; // write = 1, valid = 2
 
     DataBase *db;
     PopUp    *popUp;
 
     CatContracts      *catContracts;
     BaseSqlQueryModel *modelCantract;
+
+    QStringList err;
 
 protected:
     void closeEvent(QCloseEvent *event);

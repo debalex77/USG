@@ -322,7 +322,7 @@ bool CatContracts::onWritingData()
             return false;
         }
 
-        m_itNew = false;          // setam ca obiectul nu este nou
+        setItNew(false);          // setam ca obiectul nu este nou
         emit createNewContract(); // emitem signalul pu actualizarea tabela in Organizatia
 
     } else {
@@ -334,6 +334,8 @@ bool CatContracts::onWritingData()
 
         emit changedCatContract(); // emitem signalul pu actualizarea tabela in Organizatia
     }
+
+    setWindowModified(false);
 
     return true;
 }

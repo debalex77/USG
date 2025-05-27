@@ -207,6 +207,21 @@ QSqlDatabase DataBase::getDatabaseImage()
     return db_image.database("db_image");
 }
 
+QString DataBase::formatDatabaseDate(const QString &rawDate)
+{
+    // Formatul intern din baza de date:
+    // SQLite → "yyyy-MM-dd HH:mm:ss" (cu spațiu)
+    // MySQL  → "yyyy-MM-ddTHH:mm:ss" (cu 'T')
+    const QString format = globals().thisMySQL
+                           ? "yyyy-MM-ddTHH:mm:ss"     // MySQL = ISO cu 'T'
+                           : "yyyy-MM-dd HH:mm:ss";    // SQLite = spațiu
+
+    QDateTime dt = QDateTime::fromString(rawDate, format);
+    return dt.isValid()
+           ? dt.toString("dd.MM.yyyy HH:mm:ss")
+           : rawDate;
+}
+
 bool DataBase::insertIntoTable(const QString class_name,
                                const QString name_table,
                                const QVariantMap &values,
@@ -369,12 +384,19 @@ QVariantMap DataBase::selectSingleRow(const QString class_name,
     }
 
     // construim sectiile selectate
+    QString columnStr;
     QStringList select_columns;
-    for (auto it = values.constBegin(); it != values.constEnd(); ++it) {
-        select_columns << it.key();
+
+    if (values.size() == 1 && values.contains("*")) {
+        columnStr = "*";
+    } else {
+        for (auto it = values.constBegin(); it != values.constEnd(); ++it) {
+            select_columns << it.key();
+        }
+        columnStr = select_columns.join(", ");
     }
 
-    QString queryStr = QString("SELECT %1 FROM %2").arg(select_columns.join(", "), name_table);
+    QString queryStr = QString("SELECT %1 FROM %2").arg(columnStr, name_table);
 
     QList<QVariant> bindValues;
 
@@ -414,9 +436,16 @@ QVariantMap DataBase::selectSingleRow(const QString class_name,
     }
 
     if (qry.next()) {
-        for (int i = 0; i < select_columns.size(); ++i) {
-            const QString &col = select_columns.at(i);
-            result[col] = qry.value(col);
+        if (columnStr == "*") {
+            QSqlRecord record = qry.record();
+            for (int i = 0; i < record.count(); ++i) {
+                result[record.fieldName(i)] = qry.value(i);
+            }
+        } else {
+            for (int i = 0; i < select_columns.size(); ++i) {
+                const QString &col = select_columns.at(i);
+                result[col] = qry.value(col);
+            }
         }
     }
 
@@ -1304,30 +1333,38 @@ bool DataBase::postDocument(const QString nameTable, QMap<QString, QString> &ite
 bool DataBase::createTableUsers()
 {
     QSqlQuery qry;
-    if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists users ("
-                    "id             INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark   INT NOT Null,"
-                    "name           VARCHAR (50) NOT Null,"
-                    "password       VARCHAR (50),"
-                    "hash           CHAR (64),"
-                    "lastConnection DATETIME);");
-    else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE users ("
-                    "id             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark   INTEGER NOT NULL,"
-                    "name           TEXT NOT NULL,"
-                    "password       TEXT,"
-                    "hash           TEXT,"
-                    "lastConnection TEXT);");
-    else
-        return false;
 
-    if (qry.exec()){
+    if (globals().connectionMade == "MySQL") {
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS users (
+                id             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                deletionMark   INT NOT NULL,
+                name           VARCHAR(50) NOT NULL,
+                password       VARCHAR(50),
+                hash           CHAR(64),
+                lastConnection DATETIME
+            );
+        )");
+    } else if (globals().connectionMade == "Sqlite") {
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS users (
+                id             INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark   INTEGER NOT NULL,
+                name           TEXT NOT NULL,
+                password       TEXT,
+                hash           TEXT,
+                lastConnection TEXT
+            );
+        )");
+    } else {
+        return false;
+    }
+
+    if (qry.exec()) {
         return true;
     } else {
         qWarning(logWarning()) << tr("%1 - createTableUsers()").arg(metaObject()->className())
-                               << tr("Nu a fost creata tabela \"users\".") + qry.lastError().text();
+                               << tr("Nu a fost creată tabela \"users\": ") + qry.lastError().text();
         return false;
     }
 }
@@ -1336,29 +1373,35 @@ bool DataBase::createTableDoctors()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists doctors ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "name         VARCHAR (80) NOT Null, "
-                    "fName        VARCHAR (50), "
-                    "mName        VARCHAR (50),"
-                    "telephone    VARCHAR (100),"
-                    "email        VARCHAR (100),"
-                    "comment      VARCHAR (255),"
-                    "signature    LONGBLOB,"
-                    "stamp        LONGBLOB);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS doctors (
+                id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,
+                deletionMark INT NOT Null,
+                name         VARCHAR (80) NOT Null,
+                fName        VARCHAR (50),
+                mName        VARCHAR (50),
+                telephone    VARCHAR (100),
+                email        VARCHAR (100),
+                comment      VARCHAR (255),
+                signature    LONGBLOB,
+                stamp        LONGBLOB
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE doctors ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "name         TEXT (80) NOT NULL, "
-                    "fName        TEXT (50), "
-                    "mName        TEXT (50),"
-                    "telephone    TEXT (100),"
-                    "email        TEXT (100),"
-                    "comment      TEXT (255),"
-                    "signature    BLOB,"
-                    "stamp        BLOB);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS doctors (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                name         TEXT NOT NULL,
+                fName        TEXT,
+                mName        TEXT,
+                telephone    TEXT,
+                email        TEXT,
+                comment      TEXT,
+                signature    BLOB,
+                stamp        BLOB
+            );
+        )");
     else
         return false;
 
@@ -1374,121 +1417,157 @@ bool DataBase::createTableDoctors()
 bool DataBase::createTableFullNameDoctors()
 {
     QSqlQuery qry;
+
     if (globals().connectionMade == "MySQL") {
-        qry.prepare("CREATE TABLE `fullNameDoctors` ("
-                    "`id` int NOT Null AUTO_INCREMENT,"
-                    "`id_doctors`      int NOT Null,"
-                    "`name`            varchar(200) NOT Null,"
-                    "`nameAbbreviated` varchar(250) DEFAULT Null,"
-                    "`nameTelephone`   varchar(250) DEFAULT Null,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `fullNameDoctors_doctors_id_idx` (`id_doctors`),"
-                    "CONSTRAINT `fullNameDoctors_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");"
-                    "CREATE TRIGGER `create_full_name_doctor` "
-                    "AFTER INSERT ON `doctors` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO fullNameDoctors (id_doctors, name, nameAbbreviated, nameTelephone) "
-                    "  VALUES (NEW.id, "
-                    "    CONCAT(NEW.name,' ', NEW.fName),"
-                    "    CONCAT(NEW.name,' ', SUBSTRING(NEW.fName,1,1),'.'),"
-                    "    CONCAT(NEW.name,' ', NEW.fName,', tel.: ', NEW.telephone)"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_full_name_doctor` "
-                    "AFTER UPDATE ON `doctors` FOR EACH ROW "
-                    "BEGIN"
-                    "UPDATE fullNameDoctors SET "
-                    "  name = CONCAT(NEW.name, ' ', NEW.fName),"
-                    "  nameAbbreviated = CONCAT(NEW.name, ' ', SUBSTRING(NEW.fName, 1, 1), '.'),"
-                    "  nameTelephone = CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone) "
-                    "WHERE id_doctors = NEW.id;"
-                    "END;");
-        if (qry.exec()){
-            return true;
-        } else {
-            qWarning(logWarning()) << tr("%1 - createTableFullNameDoctors()").arg(metaObject()->className())
-                                   << tr("Nu a fost creata tabela \"fullNameDoctors\".") + qry.lastError().text();
+
+        const QString sql = QStringLiteral(R"(
+            CREATE TABLE IF NOT EXISTS `fullNameDoctors` (
+                `id` INT NOT NULL AUTO_INCREMENT,
+                `id_doctors` INT NOT NULL,
+                `name` VARCHAR(200) NOT NULL,
+                `nameAbbreviated` VARCHAR(250) DEFAULT NULL,
+                `nameTelephone` VARCHAR(250) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `fullNameDoctors_doctors_id_idx` (`id_doctors`),
+                CONSTRAINT `fullNameDoctors_doctors_id`
+                  FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`)
+                  ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+
+            CREATE TRIGGER `create_full_name_doctor`
+            AFTER INSERT ON `doctors`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO fullNameDoctors (id_doctors, name, nameAbbreviated, nameTelephone)
+                VALUES (
+                    NEW.id,
+                    CONCAT(NEW.name, ' ', NEW.fName),
+                    CONCAT(NEW.name, ' ', SUBSTRING(NEW.fName, 1, 1), '.'),
+                    CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone)
+                );
+            END;
+
+            CREATE TRIGGER `update_full_name_doctor`
+            AFTER UPDATE ON `doctors`
+            FOR EACH ROW
+            BEGIN
+                UPDATE fullNameDoctors SET
+                    name = CONCAT(NEW.name, ' ', NEW.fName),
+                    nameAbbreviated = CONCAT(NEW.name, ' ', SUBSTRING(NEW.fName, 1, 1), '.'),
+                    nameTelephone = CONCAT(NEW.name, ' ', NEW.fName, ', tel.: ', NEW.telephone)
+                WHERE id_doctors = NEW.id;
+            END;
+        )");
+
+        if (! qry.exec(sql)) {
+            qWarning(logWarning()) << tr("%1 - createTableFullNameDoctors() - MySQL").arg(metaObject()->className())
+                                   << tr("Nu a fost creată tabela 'fullNameDoctors': ") + qry.lastError().text();
             return false;
         }
+
+        return true;
+
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-
-        try {
-            qry.prepare("CREATE TABLE fullNameDoctors ("
-                        "id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_doctors      INTEGER NOT NULL CONSTRAINT fullNameDoctors_doctors_id REFERENCES doctors (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "name            TEXT (200) NOT NULL, "
-                        "nameAbbreviated TEXT (250), "
-                        "nameTelephone   TEXT (250)"
-                        ");");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `create_full_name_doctor` "
-                        "AFTER INSERT ON `doctors` FOR EACH ROW "
-                        "BEGIN "
-                        "  INSERT INTO fullNameDoctors (id_doctors, name, nameAbbreviated, nameTelephone) "
-                        "  VALUES (NEW.id, "
-                        "    NEW.name || ' ' || NEW.fName,"
-                        "    NEW.name || ' ' || SUBSTR(NEW.fName,1,1) || '.',"
-                        "    NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_full_name_doctor` "
-                        "AFTER UPDATE ON `doctors` FOR EACH ROW "
-                        "BEGIN"
-                        " UPDATE fullNameDoctors SET "
-                        "  name = NEW.name || ' ' || NEW.fName,"
-                        "  nameAbbreviated = NEW.name || ' ' || SUBSTR(NEW.fName,1,1) || '.',"
-                        "  nameTelephone = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone "
-                        " WHERE id_doctors = NEW.id;"
-                        "END;");
-            qry.exec();
-
-            db.commit();
-            return true;
-
-        } catch (...) {
-            db.rollback();
-            qWarning(logWarning()) << tr("%1 - createTableFullNameDoctors()").arg(metaObject()->className())
-                                   << tr("Nu a fost creata tabela \"fullNameDoctors\".") + qry.lastError().text();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
             return false;
-            throw;
         }
 
-    } else {
-        return false;
+        bool success = true;
+
+        const QStringList sqlStatements = {
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS fullNameDoctors (
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_doctors INTEGER NOT NULL,
+                    name            TEXT NOT NULL,
+                    nameAbbreviated TEXT,
+                    nameTelephone   TEXT,
+                    CONSTRAINT fullNameDoctors_doctors_id
+                      FOREIGN KEY (id_doctors) REFERENCES doctors(id)
+                      ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER IF NOT EXISTS create_full_name_doctor
+                AFTER INSERT ON doctors
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO fullNameDoctors (id_doctors, name, nameAbbreviated, nameTelephone)
+                    VALUES (
+                        NEW.id,
+                        NEW.name || ' ' || NEW.fName,
+                        NEW.name || ' ' || SUBSTR(NEW.fName, 1, 1) || '.',
+                        NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone
+                    );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER IF NOT EXISTS update_full_name_doctor
+                AFTER UPDATE ON doctors
+                FOR EACH ROW
+                BEGIN
+                    UPDATE fullNameDoctors SET
+                        name = NEW.name || ' ' || NEW.fName,
+                        nameAbbreviated = NEW.name || ' ' || SUBSTR(NEW.fName, 1, 1) || '.',
+                        nameTelephone = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone
+                    WHERE id_doctors = NEW.id;
+                END;
+            )")
+        };
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
+            db.commit();
+            return true;
+        } else {
+            db.rollback();
+            return false;
+        }
     }
 
-
+    return false; // necunoscut
 }
 
 bool DataBase::createTableNurses()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists nurses ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "name         VARCHAR (80) NOT Null, "
-                    "fName        VARCHAR (50), "
-                    "mName        VARCHAR (50),"
-                    "telephone    VARCHAR (100),"
-                    "email        VARCHAR (100),"
-                    "comment      VARCHAR (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS nurses (
+                id           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                deletionMark INT NOT NULL,
+                name         VARCHAR (80) NOT NULL,
+                fName        VARCHAR (50),
+                mName        VARCHAR (50),
+                telephone    VARCHAR (100),
+                email        VARCHAR (100),
+                comment      VARCHAR (255)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE nurses ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "name         TEXT (80) NOT NULL, "
-                    "fName        TEXT (50), "
-                    "mName        TEXT (50),"
-                    "telephone    TEXT (100),"
-                    "email        TEXT (100),"
-                    "comment      TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS nurses (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                name         TEXT NOT NULL,
+                fName        TEXT,
+                mName        TEXT,
+                telephone    TEXT,
+                email        TEXT,
+                comment      TEXT
+            );
+        )");
     else
         return false;
 
@@ -1777,7 +1856,7 @@ bool DataBase::createTableOrganizations()
         qry.prepare("CREATE TABLE if not exists organizations ("
                     "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "deletionMark INT NOT Null,"
-                    "IDNP         VARCHAR (15),"
+                    "IDNP         VARCHAR (15) NOT Null,"
                     "TVA          VARCHAR (10),"
                     "name         VARCHAR (100) NOT Null,"
                     "address      VARCHAR (255),"
@@ -1790,13 +1869,13 @@ bool DataBase::createTableOrganizations()
         qry.prepare("CREATE TABLE organizations ("
                     "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
                     "deletionMark INTEGER NOT NULL,"
-                    "IDNP         TEXT (15),"
-                    "TVA          TEXT (10),"
-                    "name         TEXT (100) NOT NULL,"
-                    "address      TEXT (255),"
-                    "telephone    TEXT (100),"
-                    "email        TEXT (100),"
-                    "comment      TEXT (255),"
+                    "IDNP         TEXT NOT NULL,"
+                    "TVA          TEXT ,"
+                    "name         TEXT NOT NULL,"
+                    "address      TEXT ,"
+                    "telephone    TEXT ,"
+                    "email        TEXT ,"
+                    "comment      TEXT ,"
                     "id_contracts INTEGER CONSTRAINT organizations_contracts_id REFERENCES contracts (id),"
                     "stamp        BLOB);");
     else

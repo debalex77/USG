@@ -552,11 +552,18 @@ bool CatGeneral::loadFile(const QString &fileName, const QString &link)
     if (qry.exec()) {
         popUp->setPopupText(tr("Imaginea a fost salvată cu succes în baza de date."));
         popUp->show();
+        qInfo(logInfo()) << QStringLiteral("A fost inserata imaginea - %1").arg(ui->editName->text());
     } else {
 
         err.clear();
-        err << tr("Eroare la salvarea imaginii în baza de date: ")
-            << qry.lastError().text();
+        err << this->metaObject()->className()
+            << "[loadFile]"
+            << tr("Eroare la salvarea imaginii în baza de date %1")
+                   .arg(qry.lastError().text().isEmpty()
+                            ? ": eroarea indisponibila"
+                            : ": " + qry.lastError().text());
+
+        qWarning(logWarning()) << err;
 
         CustomMessage *msg = new CustomMessage(this);
         msg->setWindowTitle(QGuiApplication::applicationDisplayName());
@@ -564,8 +571,6 @@ bool CatGeneral::loadFile(const QString &fileName, const QString &link)
         msg->setDetailedText(err.join("\n"));
         msg->exec();
         msg->deleteLater();
-
-        qWarning(logWarning()) << err;
     }
 
     return true;

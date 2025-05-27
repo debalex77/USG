@@ -25,7 +25,7 @@ public:
     explicit CatContracts(QWidget *parent = nullptr);
     ~CatContracts();
 
-    void setItNew(bool itNew) {m_itNew = itNew;}
+    void setItNew(bool itNew) {m_itNew = itNew; emit ItNewChanged();}
     bool getItNew() {return m_itNew;}
 
     void setId(const int Id) {m_Id = Id; emit IdChanged();}

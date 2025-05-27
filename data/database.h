@@ -42,7 +42,27 @@ public:
     void removeDatabaseImageThread(const QString threadConnectionName);
     QSqlDatabase getDatabaseImage();
 
-    // functii universale
+    // -------------------------------------------------------------
+    //----------- functii universale
+
+    /*!
+     * \brief Formatează o dată din baza de date în formatul afișabil „dd.MM.yyyy HH:mm:ss”.
+     *
+     * În funcție de tipul bazei de date (MySQL sau SQLite), aplică formatul corespunzător
+     * pentru parsarea valorii brute a datei din baza de date și o convertește într-un
+     * format uman-lizibil.
+     *
+     * \param rawDate Data brută sub formă de string, obținută din câmpul SQL (ex: "2024-05-28T14:33:00").
+     * \return Un string cu data convertită în format „dd.MM.yyyy HH:mm:ss” dacă parsarea reușește,
+     * altfel returnează valoarea originală \c rawDate.
+     *
+     * \note Formatul de intrare este determinat din contextul aplicației prin \c globals().thisMySQL:
+     *  - dacă este \c true, se așteaptă formatul „yyyy-MM-ddTHH:mm:ss” (MySQL)
+     *  - dacă este \c false, se așteaptă formatul „yyyy-MM-dd HH:mm:ss” (SQLite)
+     *
+     * \see QDateTime::fromString, QDateTime::toString
+     */
+    QString formatDatabaseDate(const QString &rawDate);
 
     /*!
      * \brief Functie universala - inserează o înregistrare într-un tabel.
@@ -138,7 +158,17 @@ public:
                          const QMap<QString, QVariant> &where_conditions,
                          QStringList &err);
 
+    /*!
+     * \brief Elimina rand dintr-un tabel, pe baza unor conditii
+     * \param name_table - numele tabelei
+     * \param deletionCondition - sectia conditie (coloana => valoarea)
+     * \param valueCondition - valoarea conditiei
+     * \return true daca operatia e reusita
+     */
     bool deleteDataFromTable(const QString name_table, const QString deletionCondition = nullptr, const QString valueCondition = nullptr);
+
+    // -------------------------------------------------------------
+    //----------- alte functii
 
     void creatingTables();
     bool checkTable(const QString name_table);
