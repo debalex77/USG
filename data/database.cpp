@@ -1930,31 +1930,37 @@ bool DataBase::createTableOrganizations()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists organizations ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "IDNP         VARCHAR (15) NOT Null,"
-                    "TVA          VARCHAR (10),"
-                    "name         VARCHAR (100) NOT Null,"
-                    "address      VARCHAR (255),"
-                    "telephone    VARCHAR (100),"
-                    "email        VARCHAR (100),"
-                    "comment      VARCHAR (255),"
-                    "id_contracts INTEGER,"
-                    "stamp        LONGBLOB);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `organizations` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `IDNP`         VARCHAR (15) NOT NULL,
+                `TVA`          VARCHAR (10),
+                `name`         VARCHAR (100) NOT NULL,
+                `address`      VARCHAR (255),
+                `telephone`    VARCHAR (100),
+                `email`        VARCHAR (100),
+                `comment`      VARCHAR (255),
+                `id_contracts` INTEGER,
+                `stamp`        LONGBLOB
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE organizations ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "IDNP         TEXT NOT NULL,"
-                    "TVA          TEXT ,"
-                    "name         TEXT NOT NULL,"
-                    "address      TEXT ,"
-                    "telephone    TEXT ,"
-                    "email        TEXT ,"
-                    "comment      TEXT ,"
-                    "id_contracts INTEGER CONSTRAINT organizations_contracts_id REFERENCES contracts (id),"
-                    "stamp        BLOB);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS organizations (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                IDNP         TEXT NOT NULL,
+                TVA          TEXT,
+                name         TEXT NOT NULL,
+                address      TEXT,
+                telephone    TEXT,
+                email        TEXT,
+                comment      TEXT,
+                id_contracts INTEGER,
+                stamp        BLOB
+            );
+        )");
     else
         return false;
 
@@ -1971,32 +1977,40 @@ bool DataBase::createTableContracts()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists contracts ("
-                    "id               INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark     INT NOT Null,"
-                    "id_organizations INT NOT Null,"
-                    "id_typesPrices   INT,"
-                    "name             VARCHAR (50) NOT Null,"
-                    "dateInit         DATE,"
-                    "notValid         BOOLEAN,"
-                    "comment          VARCHAR (255),"
-                    "KEY `contracts_organizations_id_idx` (`id_organizations`),"
-                    "KEY `contracts_typesPrices_id_idx` (`id_typesPrices`),"
-                    "CONSTRAINT `contracts_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,"
-                    "CONSTRAINT `contracts_typesPrices_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT);"
-                    "ALTER TABLE `organizations` ADD INDEX `organizations_contracts_id_idx` (`id_contracts` ASC) VISIBLE;"
-                    "ALTER TABLE `organizations` ADD CONSTRAINT `organizations_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT"
-                    ";");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `contracts` (
+                `id`               INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark`     INT NOT NULL,
+                `id_organizations` INT NOT NULL,
+                `id_typesPrices`   INT,
+                `name`             VARCHAR (50) NOT NULL,
+                `dateInit`         DATE,
+                `notValid`         BOOLEAN,
+                `comment`          VARCHAR (255),
+                KEY `contracts_organizations_id_idx` (`id_organizations`),
+                KEY `contracts_typesPrices_id_idx` (`id_typesPrices`),
+                CONSTRAINT `contracts_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,
+                CONSTRAINT `contracts_typesPrices_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+            );
+            ALTER TABLE `organizations` ADD INDEX `organizations_contracts_id_idx` (`id_contracts` ASC) VISIBLE;
+            ALTER TABLE `organizations` ADD CONSTRAINT `organizations_contracts_id`
+                FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT;
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE contracts ("
-                    "id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark     INTEGER NOT NULL,"
-                    "id_organizations INTEGER NOT NULL CONSTRAINT contracts_organizations_id REFERENCES organizations (id) ON DELETE CASCADE,"
-                    "id_typesPrices   INTEGER CONSTRAINT contracts_typesPrices_id REFERENCES typesPrices (id) ON DELETE SET NULL,"
-                    "name             TEXT (50) NOT NULL,"
-                    "dateInit         TEXT (10),"
-                    "notValid         INTEGER NOT NULL,"
-                    "comment          TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS contracts (
+                id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark     INTEGER NOT NULL,
+                id_organizations INTEGER NOT NULL,
+                id_typesPrices   INTEGER NOT NULL,
+                name             TEXT NOT NULL,
+                dateInit         TEXT,
+                notValid         INTEGER NOT NULL,
+                comment          TEXT,
+                CONSTRAINT contracts_organizations_id FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,
+                CONSTRAINT contracts_typesPrices_id FOREIGN KEY (id_typesPrices) REFERENCES typesPrices (id) ON DELETE SET NULL
+            );
+        )");
     else
         return false;
 
@@ -2013,23 +2027,29 @@ bool DataBase::createTableInvestigations()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists investigations ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT,"
-                    "cod          VARCHAR (10),"
-                    "name         VARCHAR (500),"
-                    "`use`        BOOLEAN,"
-                    "owner        VARCHAR (150),"
-                    "KEY `idx_investigations_cod` (`cod`),"
-                    "KEY `idx_investigations_name` (`name`));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `investigations` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `cod`          VARCHAR (10) NOT NULL,
+                `name`         VARCHAR (500) NOT NULL,
+                `use`          BOOLEAN NOT NULL,
+                `owner`        VARCHAR (150),
+                KEY `idx_investigations_cod` (`cod`),
+                KEY `idx_investigations_name` (`name`)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE investigations ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "cod          TEXT (10) NOT NULL,"
-                    "name         TEXT (500) NOT NULL,"
-                    "use          INTEGER NOT NULL,"
-                    "owner        TEXT);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS investigations (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                cod          TEXT NOT NULL,
+                name         TEXT NOT NULL,
+                use          INTEGER NOT NULL,
+                owner        TEXT
+            );
+        )");
     else
         return false;
 
@@ -2046,20 +2066,25 @@ bool DataBase::createTableInvestigationsGroup()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists investigationsGroup ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT,"
-                    "cod          VARCHAR (10),"
-                    "name         VARCHAR (50),"
-                    "nameForPrint VARCHAR (250)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `investigationsGroup` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `cod`          VARCHAR (10),
+                `name`         VARCHAR (50),
+                `nameForPrint` VARCHAR (250)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists investigationsGroup ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "cod          TEXT,"
-                    "name         TEXT,"
-                    "nameForPrint TEXT);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS investigationsGroup (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                cod          TEXT,
+                name         TEXT,
+                nameForPrint TEXT
+            );
+        )");
     else
         return false;
 
@@ -2085,35 +2110,55 @@ bool DataBase::createTablePricings()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists pricings ("
-                    "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark       INT NOT Null,"
-                    "numberDoc          VARCHAR (15) NOT Null,"
-                    "dateDoc            DATETIME NOT Null,"
-                    "id_typesPrices     INT NOT Null,"
-                    "id_organizations   INT NOT Null,"
-                    "id_contracts       INT NOT Null,"
-                    "id_users           INT NOT Null,"
-                    "comment            VARCHAR (255),"
-                    "KEY `pricings_typesProces_id_idx` (`id_typesPrices`),"
-                    "KEY `pricings_organizations_id_idx` (`id_organizations`),"
-                    "KEY `pricings_contracts_id_idx` (`id_contracts`),"
-                    "KEY `pricings_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `pricings_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`),"
-                    "CONSTRAINT `pricings_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`),"
-                    "CONSTRAINT `pricings_typesProces_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),"
-                    "CONSTRAINT `pricings_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pricings` (
+                `id` int NOT NULL AUTO_INCREMENT,
+                `deletionMark`     int NOT NULL,
+                `numberDoc`        varchar(15) NOT NULL,
+                `dateDoc`          datetime NOT NULL,
+                `id_typesPrices`   int NOT NULL,
+                `id_organizations` int NOT NULL,
+                `id_contracts`     int NOT NULL,
+                `id_users`         int NOT NULL,
+                `comment`          varchar(255) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `pricings_typesProces_id_idx` (`id_typesPrices`),
+                KEY `pricings_organizations_id_idx` (`id_organizations`),
+                KEY `pricings_contracts_id_idx` (`id_contracts`),
+                KEY `pricings_users_id_idx` (`id_users`),
+                KEY `idx_dateDoc_pricing` (`dateDoc`),
+                KEY `idx_id_organizations_pricing` (`id_organizations`),
+                KEY `idx_id_contracts_pricing` (`id_contracts`),
+                KEY `idx_id_users_pricing` (`id_users`),
+                KEY `idx_id_typesPrices_pricing` (`id_typesPrices`),
+                CONSTRAINT `pricings_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`),
+                CONSTRAINT `pricings_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`),
+                CONSTRAINT `pricings_typesProces_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),
+                CONSTRAINT `pricings_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE pricings ("
-                    "id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark       INTEGER NOT NULL,"
-                    "numberDoc          TEXT (15) NOT NULL,"
-                    "dateDoc            TEXT (19) NOT NULL,"
-                    "id_typesPrices     INTEGER NOT NULL CONSTRAINT pricings_typesPrices_id REFERENCES typesPrices (id) ON DELETE RESTRICT,"
-                    "id_organizations   INTEGER NOT NULL CONSTRAINT pricings_organizations_id REFERENCES organizations (id) ON DELETE RESTRICT,"
-                    "id_contracts       INTEGER NOT NULL CONSTRAINT pricings_contracts_id REFERENCES contracts (id) ON DELETE RESTRICT,"
-                    "id_users           INTEGER NOT NULL CONSTRAINT pricings_users_id REFERENCES users (id) ON DELETE RESTRICT,"
-                    "comment            TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS pricings ("
+                id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark       INTEGER NOT NULL,
+                numberDoc          TEXT NOT NULL,
+                dateDoc            TEXT NOT NULL,
+                id_typesPrices     INTEGER NOT NULL,
+                id_organizations   INTEGER NOT NULL,
+                id_contracts       INTEGER NOT NULL,
+                id_users           INTEGER NOT NULL,
+                comment            TEXT,
+                CONSTRAINT pricings_typesPrices_id FOREIGN KEY (id_typesPrices)
+                    REFERENCES typesPrices (id) ON DELETE RESTRICT,
+                CONSTRAINT pricings_organizations_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE RESTRICT,
+                CONSTRAINT pricings_contracts_id FOREIGN KEY (id_contracts)
+                    REFERENCES contracts (id) ON DELETE RESTRICT,
+                CONSTRAINT pricings_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2130,24 +2175,32 @@ bool DataBase::createTable_PricingsTable()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists pricingsTable ("
-                    "id	          INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "id_pricings  INT NOT Null,"
-                    "cod	      VARCHAR (10) NOT Null,"
-                    "name	      VARCHAR (500) NOT Null,"
-                    "price	      DECIMAL (15,3) DEFAULT '0.00',"
-                    "KEY `pricingsTable_pricing_id_idx` (`id_pricings`),"
-                    "CONSTRAINT `pricingsTable_pricing_id` FOREIGN KEY (`id_pricings`) REFERENCES `pricings` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pricingsTable` (
+                `id`	          INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `id_pricings`  INT NOT NULL,
+                `cod`	      VARCHAR (10) NOT NULL,
+                `name`	      VARCHAR (500) NOT NULL,
+                `price`	      DECIMAL (15,3) DEFAULT '0.00',
+                KEY `pricingsTable_pricing_id_idx` (`id_pricings`),
+                CONSTRAINT `pricingsTable_pricing_id` FOREIGN KEY (`id_pricings`)
+                    REFERENCES `pricings` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE pricingsTable ("
-                    "id	          INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "id_pricings  INTEGER NOT NULL CONSTRAINT pricingsTable_pricings_id REFERENCES pricings (id) ON DELETE CASCADE,"
-                    "cod	      TEXT (10) NOT NULL,"
-                    "name	      TEXT (500) NOT NULL,"
-                    "price	      REAL);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS pricingsTable (
+                id	         INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark  INTEGER NOT NULL,
+                id_pricings   INTEGER NOT NULL,
+                cod	         TEXT NOT NULL,
+                name	         TEXT NOT NULL,
+                price	     REAL,
+                CONSTRAINT pricingsTable_pricings_id FOREIGN KEY (id_pricings)
+                    REFERENCES pricings (id) ON DELETE CASCADE
+            );
+        )");
     else
         return false;
 
