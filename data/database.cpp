@@ -1814,79 +1814,106 @@ bool DataBase::createTableFullNamePacients()
 
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-        try {
-            qry.prepare("CREATE TABLE fullNamePacients ("
-                        "id               INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_pacients      INTEGER NOT NULL CONSTRAINT fullNamePacients_pacients_id REFERENCES pacients (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "name             TEXT(200) DEFAULT NULL,"
-                        "nameIDNP         TEXT(250) DEFAULT NULL,"
-                        "nameBirthday     TEXT(250) DEFAULT NULL,"
-                        "nameTelephone    TEXT(250) DEFAULT NULL,"
-                        "nameBirthdayIDNP TEXT (300)"
-                        ");");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `create_full_name_pacient` "
-                        "AFTER INSERT ON `pacients` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO fullNamePacients (id_pacients, name, nameIDNP, nameBirthday, nameTelephone, nameBirthdayIDNP) "
-                        "  VALUES (NEW.id, "
-                        "    NEW.name || ' ' || NEW.fName,"
-                        "    NEW.name || ' ' || NEW.fName || ', idnp: ' || NEW.IDNP,"
-                        "    NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4),"
-                        "    NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone,"
-                        "    NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4) || ', idnp: ' || NEW.IDNP"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_full_name_pacient` "
-                        "AFTER UPDATE ON `pacients` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE fullNamePacients SET "
-                        "    name = NEW.name || ' ' || NEW.fName,"
-                        "    nameIDNP = NEW.name || ' ' || NEW.fName || ', idnp: ' || NEW.IDNP,"
-                        "    nameBirthday = NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4),"
-                        "    nameTelephone = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone,"
-                        "    nameBirthdayIDNP = NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4) || ', idnp: ' || NEW.IDNP"
-                        "  WHERE id_pacients = NEW.id;"
-                        "END"
-                        ";");
-            qry.exec();
-            db.commit();
-            return true;
-        } catch (...) {
-            qWarning(logWarning()) << tr("%1 - createTableFullNamePacients()").arg(metaObject()->className())
-                                   << tr("Nu a fost creata tabela \"fullNamePacients\".") + qry.lastError().text();
-            db.rollback();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
             return false;
-            throw;
         }
 
-    } else {
-        return false;
+        bool success = true;
+
+        const QStringList sqlStatements = {
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS fullNamePacients (
+                    id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_pacients      INTEGER NOT NULL,
+                    name             TEXT DEFAULT NULL,
+                    nameIDNP         TEXT DEFAULT NULL,
+                    nameBirthday     TEXT DEFAULT NULL,
+                    nameTelephone    TEXT DEFAULT NULL,
+                    nameBirthdayIDNP TEXT DEFAULT NULL,
+                CONSTRAINT fullNamePacients_pacients_id
+                FOREIGN KEY (id_pacients) REFERENCES pacients (id)
+                ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER create_full_name_pacient
+                AFTER INSERT ON pacients
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO fullNamePacients (id_pacients, name, nameIDNP, nameBirthday, nameTelephone, nameBirthdayIDNP )
+                    VALUES (
+                        NEW.id,
+                        NEW.name || ' ' || NEW.fName,
+                        NEW.name || ' ' || NEW.fName || ', idnp: ' || NEW.IDNP,
+                        NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4),
+                        NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone,
+                        NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4) || ', idnp: ' || NEW.IDNP
+                    );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_full_name_pacient`
+                AFTER UPDATE ON `pacients`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE fullNamePacients SET
+                        name = NEW.name || ' ' || NEW.fName,
+                        nameIDNP = NEW.name || ' ' || NEW.fName || ', idnp: ' || NEW.IDNP,
+                        nameBirthday = NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4),
+                        nameTelephone = NEW.name || ' ' || NEW.fName || ', tel.: ' || NEW.telephone,
+                        nameBirthdayIDNP = NEW.name || ' ' || NEW.fName || ', ' || SUBSTR(NEW.birthday, 9, 2) || '.' || SUBSTR(NEW.birthday, 6, 2) || '.' || SUBSTR(NEW.birthday, 1, 4) || ', idnp: ' || NEW.IDNP
+                    WHERE
+                        id_pacients = NEW.id;
+                END;
+            )")
+        };
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
+            db.commit();
+            return true;
+        } else {
+            db.rollback();
+            return false;
+        }
     }
 
+    return false; // necunoscut
 }
 
 bool DataBase::createTableTypesPrices()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists typesPrices ("
-                    "id	          INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "name	      VARCHAR (50) NOT Null,"
-                    "discount	  DECIMAL (15,3) DEFAULT Null,"
-                    "noncomercial BOOLEAN);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `typesPrices` (
+                `id`	INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `name`	      VARCHAR (50) NOT NULL,
+                `discount`	  DECIMAL (15,3) DEFAULT NULL,
+                `noncomercial` BOOLEAN
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE typesPrices ("
-                    "id	          INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "name	      TEXT (50) NOT NULL,"
-                    "discount	  REAL,"
-                    "noncomercial INTEGER);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS typesPrices (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                name	      TEXT NOT NULL,
+                discount	  REAL,
+                noncomercial INTEGER
+            );
+        )");
     else
         return false;
 
