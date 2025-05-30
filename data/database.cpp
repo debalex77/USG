@@ -4398,35 +4398,42 @@ bool DataBase::createTableSettingsUsers()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE IF NOT EXISTS `settingsUsers` ("
-                    "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_users              INT NOT Null,"
-                    "owner                 VARCHAR (50),"
-                    "nameOption            VARCHAR (150),"
-                    "versionApp            VARCHAR (8),"
-                    "showQuestionCloseApp  BOOLEAN,"
-                    "showUserManual        BOOLEAN,"
-                    "showHistoryVersion    BOOLEAN,"
-                    "order_splitFullName   BOOLEAN,"
-                    "updateListDoc         VARCHAR (3),"
-                    "showDesignerMenuPrint BOOLEAN,"
-                    "KEY `settingsUsers_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `settingsUsers_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `settingsUsers` (
+                `id`                    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_users`              INT NOT NULL,
+                `owner`                 VARCHAR (50),
+                `nameOption`            VARCHAR (150),
+                `versionApp`            VARCHAR (8),
+                `showQuestionCloseApp`  BOOLEAN,
+                `showUserManual`        BOOLEAN,
+                `showHistoryVersion`    BOOLEAN,
+                `order_splitFullName`   BOOLEAN,
+                `updateListDoc`         VARCHAR (3),
+                `showDesignerMenuPrint` BOOLEAN,
+                KEY `settingsUsers_users_id_idx` (`id_users`),
+                CONSTRAINT `settingsUsers_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE IF NOT EXISTS settingsUsers ("
-                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_users              INT NOT NULL CONSTRAINT settingsUsers_users_id REFERENCES users (id) ON DELETE CASCADE,"
-                    "owner                 TEXT (50),"
-                    "nameOption            TEXT (150),"
-                    "versionApp            TEXT (8),"
-                    "showQuestionCloseApp  INT,"
-                    "showUserManual        INT,"
-                    "showHistoryVersion    INT,"
-                    "order_splitFullName   INT,"
-                    "updateListDoc         TEXT (3),"
-                    "showDesignerMenuPrint INT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS settingsUsers (
+                id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_users              INT NOT NULL,
+                owner                 TEXT,
+                nameOption            TEXT,
+                versionApp            TEXT,
+                showQuestionCloseApp  INT,
+                showUserManual        INT,
+                showHistoryVersion    INT,
+                order_splitFullName   INT,
+                updateListDoc         TEXT,
+                showDesignerMenuPrint INT,
+                CONSTRAINT settingsUsers_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4443,41 +4450,48 @@ bool DataBase::createTableUserPreferences()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE userPreferences ("
-                    "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_users              INT NOT Null,"
-                    "versionApp            VARCHAR (8),"
-                    "showQuestionCloseApp  BOOLEAN,"
-                    "showUserManual        BOOLEAN,"
-                    "showHistoryVersion    BOOLEAN,"
-                    "order_splitFullName   BOOLEAN,"
-                    "updateListDoc         VARCHAR (3),"
-                    "showDesignerMenuPrint BOOLEAN,"
-                    "checkNewVersionApp    BOOLEAN,"
-                    "databasesArchiving    BOOLEAN,"
-                    "showAsistantHelper    BOOLEAN,"
-                    "showDocumentsInSeparatWindow BOOLEAN,"
-                    "minimizeAppToTray     BOOLEAN,"
-                    "KEY `userPreferences_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `userPreferences` (
+                `id`                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,
+                `id_users`              INT NOT Null,
+                `versionApp`            VARCHAR (8),
+                `showQuestionCloseApp`  BOOLEAN,
+                `showUserManual`        BOOLEAN,
+                `showHistoryVersion`    BOOLEAN,
+                `order_splitFullName`   BOOLEAN,
+                `updateListDoc`         VARCHAR (3),
+                `showDesignerMenuPrint` BOOLEAN,
+                `checkNewVersionApp`    BOOLEAN,
+                `databasesArchiving`    BOOLEAN,
+                `showAsistantHelper`    BOOLEAN,
+                `showDocumentsInSeparatWindow` BOOLEAN,
+                `minimizeAppToTray`     BOOLEAN,
+                KEY `userPreferences_users_id_idx` (`id_users`),
+                CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE userPreferences ("
-                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
-                    "versionApp            TEXT (8),"
-                    "showQuestionCloseApp  INT,"
-                    "showUserManual        INT,"
-                    "showHistoryVersion    INT,"
-                    "order_splitFullName   INT,"
-                    "updateListDoc         TEXT (3),"
-                    "showDesignerMenuPrint INT,"
-                    "checkNewVersionApp    INT,"
-                    "databasesArchiving    INT,"
-                    "showAsistantHelper    INT,"
-                    "showDocumentsInSeparatWindow INT,"
-                    "minimizeAppToTray     INT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS userPreferences (
+                id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_users              INT NOT NULL,
+                versionApp            TEXT,
+                showQuestionCloseApp  INT,
+                showUserManual        INT,
+                showHistoryVersion    INT,
+                order_splitFullName   INT,
+                updateListDoc         TEXT,
+                showDesignerMenuPrint INT,
+                checkNewVersionApp    INT,
+                databasesArchiving    INT,
+                showAsistantHelper    INT,
+                showDocumentsInSeparatWindow INT,
+                minimizeAppToTray     INT,
+                CONSTRAINT userPreferences_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4494,21 +4508,25 @@ bool DataBase::createTableConclusionTemplates()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE conclusionTemplates ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "cod          VARCHAR (10) NOT Null, "
-                    "name         VARCHAR (500) NOT Null,"
-                    "`system`     VARCHAR (150)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `conclusionTemplates` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `cod`          VARCHAR (10) NOT NULL,
+                `name`         VARCHAR (500) NOT NULL,
+                `system`       VARCHAR (150)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE conclusionTemplates ("
-                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "deletionMark INT NOT NULL,"
-                    "cod          TEXT (10) NOT NULL, "
-                    "name         TEXT (500) NOT NULL,"
-                    "system       TEXT (150)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS conclusionTemplates (
+                id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                deletionMark INT NOT NULL,
+                cod          TEXT NOT NULL,
+                name         TEXT NOT NULL,
+                system       TEXT
+            );
+        )");
     else
         return false;
 
@@ -4525,31 +4543,35 @@ bool DataBase::createTableFormationsSystemTemplates()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "name         VARCHAR (500) NOT Null,"
-                    "typeSystem   ENUM('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)', "
-                    "                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)', "
-                    "                   'Prostata', 'Recomandari (prostata)', "
-                    "                   'Tiroida', 'Recomandari (tiroida)', "
-                    "                   'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',"
-                    "                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)', "
-                    "                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)') DEFAULT 'Unknow'"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `formationsSystemTemplates` (
+                `id`           INT NOT Null PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT Null,
+                `name`         VARCHAR (500) NOT Null,
+                `typeSystem`   ENUM('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)',
+                                    'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
+                                    'Prostata', 'Recomandari (prostata)',
+                                    'Tiroida', 'Recomandari (tiroida)',
+                                    'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',
+                                    'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)',
+                                    'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)') DEFAULT 'Unknow'
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists formationsSystemTemplates ("
-                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "deletionMark INT NOT NULL,"
-                    "name         TEXT NOT NULL,"
-                    "typeSystem   TEXT CHECK(typeSystem IN ('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)', "
-                    "                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)', "
-                    "                   'Prostata', 'Recomandari (prostata)', "
-                    "                   'Tiroida', 'Recomandari (tiroida)', "
-                    "                   'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',"
-                    "                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)', "
-                    "                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)')) DEFAULT 'Unknow'"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS formationsSystemTemplates (
+                id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                deletionMark INT NOT NULL,
+                name         TEXT NOT NULL,
+                typeSystem   TEXT CHECK(typeSystem IN ('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)',
+                                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
+                                   'Prostata', 'Recomandari (prostata)',
+                                   'Tiroida', 'Recomandari (tiroida)',
+                                   'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',
+                                   'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)',
+                                   'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)')) DEFAULT 'Unknow'
+            );
+        )");
     else
         return false;
 
@@ -4569,31 +4591,37 @@ bool DataBase::createTableImagesReports()
 
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE imagesReports ("
-                    "id            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT NULL,"
-                    "id_orderEcho  INT NOT NULL,"
-                    "id_patients   INT NOT NULL,"
-                    "image_1       LONGBLOB,"
-                    "image_2       LONGBLOB,"
-                    "image_3       LONGBLOB,"
-                    "image_4       LONGBLOB,"
-                    "image_5       LONGBLOB,"
-                    "comment_1     VARCHAR (150),"
-                    "comment_2     VARCHAR (150),"
-                    "comment_3     VARCHAR (150),"
-                    "comment_4     VARCHAR (150),"
-                    "comment_5     VARCHAR (150),"
-                    "id_user       INT NOT NULL,"
-                    "KEY `imagesReports_reportEcho_id_idx` (`id_reportEcho`),"
-                    "KEY `imagesReports_orderEcho_id_idx` (`id_orderEcho`),"
-                    "KEY `imagesReports_patients_id_idx` (`id_patients`),"
-                    "KEY `imagesReports_user_id_idx` (`id_user`),"
-                    "CONSTRAINT `imagesReports_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                    "CONSTRAINT `imagesReports_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                    "CONSTRAINT `imagesReports_patients_id` FOREIGN KEY (`id_patients`) REFERENCES `pacients` (`id`),"
-                    "CONSTRAINT `imagesReports_user_id_idx` FOREIGN KEY (`id_user`) REFERENCES `users` (`id`)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `imagesReports` (
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `id_orderEcho`  INT NOT NULL,
+                `id_patients`   INT NOT NULL,
+                `image_1`       LONGBLOB,
+                `image_2`       LONGBLOB,
+                `image_3`       LONGBLOB,
+                `image_4`       LONGBLOB,
+                `image_5`       LONGBLOB,
+                `comment_1`     VARCHAR (150),
+                `comment_2`     VARCHAR (150),
+                `comment_3`     VARCHAR (150),
+                `comment_4`     VARCHAR (150),
+                `comment_5`     VARCHAR (150),
+                `id_user`       INT NOT NULL,
+                KEY `imagesReports_reportEcho_id_idx` (`id_reportEcho`),
+                KEY `imagesReports_orderEcho_id_idx` (`id_orderEcho`),
+                KEY `imagesReports_patients_id_idx` (`id_patients`),
+                KEY `imagesReports_user_id_idx` (`id_user`),
+                CONSTRAINT `imagesReports_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT `imagesReports_orderEcho_id` FOREIGN KEY (`id_orderEcho`)
+                    REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT `imagesReports_patients_id` FOREIGN KEY (`id_patients`)
+                    REFERENCES `pacients` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `imagesReports_user_id_idx` FOREIGN KEY (`id_user`)
+                    REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4905,32 +4933,42 @@ bool DataBase::createTableContOnline()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists contsOnline ("
-                    "id               int NOT NULL AUTO_INCREMENT, "
-                    "id_organizations INT NOT Null, "
-                    "id_users         INT NOT Null, "
-                    "smtp_server      VARCHAR(30) NOT Null, "
-                    "port             VARCHAR(5) NOT Null, "
-                    "username         VARCHAR(50) NOT Null, "
-                    "password         VARCHAR(255) NOT Null,"
-                    "iv               VARCHAR(24) NOT Null," // pu criptare vezi clasa CryptoManager
-                    "PRIMARY KEY (`id`),"
-                    "KEY `contsOnline_organizations_id_idx` (`id_organizations`),"
-                    "KEY `contsOnline_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `contsOnline_organizations_id_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,"
-                    "CONSTRAINT `contsOnline_users_id_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE;");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `contsOnline` (
+                `id`               int NOT NULL AUTO_INCREMENT,
+                `id_organizations` INT NOT NULL,
+                `id_users`         INT NOT NULL,
+                `smtp_server`      VARCHAR(30) NOT NULL,
+                `port`             VARCHAR(5) NOT NULL,
+                `username`         VARCHAR(50) NOT NULL,
+                `password`         VARCHAR(255) NOT NULL,
+                `iv`               VARCHAR(24) NOT NULL,
+                PRIMARY KEY (`id`),
+                KEY `contsOnline_organizations_id_idx` (`id_organizations`),
+                KEY `contsOnline_users_id_idx` (`id_users`),
+                CONSTRAINT `contsOnline_organizations_id_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT `contsOnline_users_id_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists contsOnline ("
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-                    "id_organizations INTEGER NOT NULL, "
-                    "id_users         INTEGER NOT NULL, "
-                    "smtp_server      TEXT NOT NULL, "
-                    "port             TEXT NOT NULL, "
-                    "username         TEXT NOT NULL, "
-                    "password         TEXT NOT NULL, "
-                    "iv               TEXT NOT NULL, " // pu criptare vezi clasa CryptoManager
-                    "FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,"
-                    "FOREIGN KEY (id_users) REFERENCES users (id) ON DELETE CASCADE);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS contsOnline (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_organizations INTEGER NOT NULL,
+                id_users         INTEGER NOT NULL,
+                smtp_server      TEXT NOT NULL,
+                port             TEXT NOT NULL,
+                username         TEXT NOT NULL,
+                password         TEXT NOT NULL,
+                iv               TEXT NOT NULL,
+                CONSTRAINT contsOnline_organizations_id_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT contsOnline_users_id_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4947,36 +4985,46 @@ bool DataBase::createTableCloudServer()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists cloudServer ("
-                    "id               int NOT NULL AUTO_INCREMENT, "
-                    "id_organizations INT NOT Null, "
-                    "id_users         INT NOT Null, "
-                    "hostName         VARCHAR(30) NOT Null, "
-                    "databaseName     VARCHAR(30) NOT Null, "
-                    "port             VARCHAR(5), "
-                    "connectionOption VARCHAR(255), "
-                    "username         VARCHAR(50) NOT Null, "
-                    "password         VARCHAR(255) NOT Null,"
-                    "iv               VARCHAR(24) NOT Null," // pu criptare vezi clasa CryptoManager
-                    "PRIMARY KEY (`id`),"
-                    "KEY `contsOnline_organizations_id_idx` (`id_organizations`),"
-                    "KEY `contsOnline_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `cloudServer_organizations_id_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,"
-                    "CONSTRAINT `cloudServer_users_id_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE;");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `cloudServer` (
+                `id`               int NOT NULL AUTO_INCREMENT,
+                `id_organizations` INT NOT NULL,
+                `id_users`         INT NOT NULL,
+                `hostName`         VARCHAR(30) NOT NULL,
+                `databaseName`     VARCHAR(30) NOT NULL,
+                `port`             VARCHAR(5),
+                `connectionOption` VARCHAR(255),
+                `username`         VARCHAR(50) NOT NULL,
+                `password`         VARCHAR(255) NOT NULL,
+                `iv`               VARCHAR(24) NOT NULL,
+                PRIMARY KEY (`id`),
+                KEY `contsOnline_organizations_id_idx` (`id_organizations`),
+                KEY `contsOnline_users_id_idx` (`id_users`),
+                CONSTRAINT `cloudServer_organizations_id_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT `cloudServer_users_id_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists cloudServer ("
-                    "id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, "
-                    "id_organizations INTEGER NOT NULL, "
-                    "id_users         INTEGER NOT NULL, "
-                    "hostName         TEXT NOT NULL, "
-                    "databaseName     TEXT NOT NULL, "
-                    "port             TEXT, "
-                    "connectionOption TEXT, "
-                    "username         TEXT NOT NULL, "
-                    "password         TEXT NOT NULL, "
-                    "iv               TEXT NOT NULL, " // pu criptare vezi clasa CryptoManager
-                    "FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,"
-                    "FOREIGN KEY (id_users) REFERENCES users (id) ON DELETE CASCADE);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS cloudServer (
+                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_organizations INTEGER NOT NULL,
+                id_users         INTEGER NOT NULL,
+                hostName         TEXT NOT NULL,
+                databaseName     TEXT NOT NULL,
+                port             TEXT,
+                connectionOption TEXT,
+                username         TEXT NOT NULL,
+                password         TEXT NOT NULL,
+                iv               TEXT NOT NULL,
+                CONSTRAINT cloudServer_organizations_id_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT cloudServer_users_id_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4992,19 +5040,25 @@ bool DataBase::createTableCloudServer()
 void DataBase::updateVariableFromTableSettingsUser()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT "
-                "showQuestionCloseApp,"
-                "showUserManual,"
-                "showHistoryVersion,"
-                "order_splitFullName,"
-                "updateListDoc,"
-                "showDesignerMenuPrint,"
-                "checkNewVersionApp,"
-                "databasesArchiving,"
-                "showAsistantHelper,"
-                "showDocumentsInSeparatWindow,"
-                "minimizeAppToTray FROM userPreferences WHERE id_users = :id_users;");
-    qry.bindValue(":id_users", globals().idUserApp);
+    qry.prepare(R"(
+        SELECT
+            showQuestionCloseApp,
+            showUserManual,
+            showHistoryVersion,
+            order_splitFullName,
+            updateListDoc,
+            showDesignerMenuPrint,
+            checkNewVersionApp,
+            databasesArchiving,
+            showAsistantHelper,
+            showDocumentsInSeparatWindow,
+            minimizeAppToTray
+        FROM
+            userPreferences
+        WHERE
+            id_users = ?;
+        )");
+    qry.addBindValue(globals().idUserApp);
     if (qry.exec() && qry.next()){
         QSqlRecord rec = qry.record();
         globals().showQuestionCloseApp         = qry.value(rec.indexOf("showQuestionCloseApp")).toBool();
@@ -5098,8 +5152,9 @@ bool DataBase::existIdDocument(const QString nameTable, const QString name_condi
 {
     bool exist_id = false;
     QSqlQuery qry(nameDatabase);
-    qry.prepare(QString("SELECT count(id) FROM " + nameTable + " WHERE " + name_condition + " = :value;"));
-    qry.bindValue(":value", value_condition);
+    qry.prepare(QString("SELECT count(id) FROM %1 WHERE &2 = ?")
+                .arg(nameTable, name_condition));
+    qry.addBindValue(value_condition);
     if (qry.exec()){
         qry.next();
         if (qry.value(0).toInt() > 0)
@@ -5114,8 +5169,9 @@ bool DataBase::existIdDocument(const QString nameTable, const QString name_condi
 bool DataBase::existSubalternDocument(const QString nameTable, const QString name_condition, const QString value_condition, int &id_doc)
 {
     QSqlQuery qry;
-    qry.prepare("SELECT id  FROM " + nameTable + " WHERE " + name_condition + " = :value ;");
-    qry.bindValue(":value", value_condition);
+    qry.prepare(QString("SELECT id  FROM %1 WHERE %1 = ?")
+                .arg(nameTable, name_condition));
+    qry.addBindValue(value_condition);
     if (qry.exec()){
         qry.next();
         if (qry.value(0).toInt() > 0){
@@ -5133,143 +5189,168 @@ bool DataBase::existSubalternDocument(const QString nameTable, const QString nam
 
 QString DataBase::getQryFromTableConstantById(const int id_user) const
 {
-    return QString("SELECT constants.id_organizations, "
-                   "  organizations.IDNP, "
-                   "  organizations.name, "
-                   "  organizations.address, "
-                   "  organizations.telephone, "
-                   "  fullNameDoctors.nameAbbreviated AS doctor,"
-                   "  organizations.email FROM constants "
-                   "INNER JOIN "
-                   "  organizations ON constants.id_organizations = organizations.id "
-                   "INNER JOIN "
-                   "  fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors "
-                   "WHERE "
-                   "  constants.id_users = %1;").arg(QString::number(id_user));
+    return QString(R"(
+        SELECT
+            constants.id_organizations,
+            organizations.IDNP,
+            organizations.name,
+            organizations.address,
+            organizations.telephone,
+            fullNameDoctors.nameAbbreviated AS doctor,
+            organizations.email FROM constants
+        INNER JOIN
+            organizations ON constants.id_organizations = organizations.id
+        INNER JOIN
+            fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors
+        WHERE
+            constants.id_users = %1;
+    )").arg(QString::number(id_user));
 }
 
 QString DataBase::getQryFromTablePatientById(const int id_patient) const
 {
     if (globals().thisMySQL)
-        return QString("SELECT CONCAT(pacients.name,' ', pacients.fName) AS FullName,"
-                       "  CONCAT(SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS birthday,"
-                       "  pacients.IDNP,"
-                       "  pacients.medicalPolicy,"
-                       "  pacients.address "
-                       "FROM "
-                       "  pacients "
-                       "WHERE "
-                       "  id = '%1' AND deletionMark = '0';").arg(QString::number(id_patient));
+        return QString(R"(
+            SELECT
+                CONCAT(pacients.name,' ', pacients.fName) AS FullName,
+                DATE_FORMAT(pacients.birthday, '%d.%m.%Y') AS birthday,
+                pacients.IDNP,
+                pacients.medicalPolicy,
+                pacients.address
+            FROM
+                pacients
+            WHERE
+                id = '%1' AND
+                deletionMark = '0';
+        )").arg(QString::number(id_patient));
     else
-        return QString("SELECT pacients.name ||' '|| pacients.fName AS FullName,"
-                       "  substr(pacients.birthday, 9, 2) ||'.'|| substr(pacients.birthday, 6, 2) ||'.'|| substr(pacients.birthday, 1, 4) AS birthday,"
-                       "  pacients.IDNP,"
-                       "  pacients.medicalPolicy,"
-                       "  pacients.address "
-                       "FROM "
-                       "  pacients "
-                       "WHERE "
-                       "  id = '%1' AND deletionMark = '0';").arg(QString::number(id_patient));
+        return QString(R"(
+            SELECT
+                pacients.name ||' '|| pacients.fName AS FullName,
+                strftime('%d.%m.%Y', pacients.birthday) AS birthday,
+                pacients.IDNP,
+                pacients.medicalPolicy,
+                pacients.address
+            FROM
+                pacients
+            WHERE
+                id = '%1' AND
+                deletionMark = '0';
+        )").arg(QString::number(id_patient));
 }
 
 QString DataBase::getQryForTableOrgansInternalById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "  reportEchoPresentation.docPresentationDate AS title_report,"
-                   "  %1 AS liver_left,"
-                   "  %2 AS liver_right,"
-                   "  tableLiver.contur AS liver_contur,"
-                   "  tableLiver.parenchim AS liver_parenchim,"
-                   "  tableLiver.ecogenity AS liver_ecogenity,"
-                   "  tableLiver.formations AS liver_formations,"
-                   "  tableLiver.ductsIntrahepatic AS liver_duct_hepatic,"
-                   "  tableLiver.porta AS liver_porta,"
-                   "  tableLiver.lienalis AS liver_lienalis,"
-                   "  tableCholecist.form AS cholecist_form,"
-                   "  tableCholecist.dimens AS cholecist_dimens,"
-                   "  tableCholecist.walls AS cholecist_walls,"
-                   "  tableCholecist.formations AS cholecist_formations,"
-                   "  tableCholecist.choledoc AS cholecist_choledoc,"
-                   "  tablePancreas.cefal AS pancreas_cefal,"
-                   "  tablePancreas.corp AS pancreas_corp,"
-                   "  tablePancreas.tail AS pancreas_tail,"
-                   "  tablePancreas.ecogency AS pancreas_ecogenity,"
-                   "  tablePancreas.texture AS pancreas_parenchim,"
-                   "  tablePancreas.formations AS pancreas_formations,"
-                   "  tableSpleen.dimens AS spleen_dimens,"
-                   "  tableSpleen.contur AS spleen_contur,"
-                   "  tableSpleen.parenchim AS spleen_parenchim,"
-                   "  tableSpleen.formations AS spleen_formations,"
-                   "  tableIntestinalLoop.formations AS intestinal_formations,"
-                   "  tableLiver.concluzion AS organs_internal_concluzion,"
-                   "  tableLiver.recommendation AS recommendation,"
-                   "  reportEcho.concluzion AS concluzion "
-                   "FROM "
-                   "  reportEcho "
-                   "LEFT JOIN "
-                   "  reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "LEFT JOIN "
-                   "  tableLiver ON reportEcho.id = tableLiver.id_reportEcho "
-                   "LEFT JOIN "
-                   "  tableIntestinalLoop ON reportEcho.id = tableIntestinalLoop.id_reportEcho "
-                   "LEFT JOIN "
-                   "  tableCholecist ON reportEcho.id = tableCholecist.id_reportEcho "
-                   "LEFT JOIN "
-                   "  tablePancreas ON reportEcho.id = tablePancreas.id_reportEcho "
-                   "LEFT JOIN "
-                   "  tableSpleen ON reportEcho.id = tableSpleen.id_reportEcho "
-                   "WHERE "
-                   "  reportEcho.deletionMark = '2' AND "
-                   "  reportEcho.id = '%3';")
-        .arg((globals().thisMySQL) ? "tableLiver.left" : "tableLiver.[left]",
-             (globals().thisMySQL) ? "tableLiver.right" : "tableLiver.[right]",
-             QString::number(id_doc));
+    const bool isMySQL = globals().thisMySQL;
+
+    const QString leftField  = isMySQL ? "tableLiver.left"  : "tableLiver.[left]";
+    const QString rightField = isMySQL ? "tableLiver.right" : "tableLiver.[right]";
+
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            %1 AS liver_left,
+            %2 AS liver_right,
+            tableLiver.contur AS liver_contur,
+            tableLiver.parenchim AS liver_parenchim,
+            tableLiver.ecogenity AS liver_ecogenity,
+            tableLiver.formations AS liver_formations,
+            tableLiver.ductsIntrahepatic AS liver_duct_hepatic,
+            tableLiver.porta AS liver_porta,
+            tableLiver.lienalis AS liver_lienalis,
+            tableCholecist.form AS cholecist_form,
+            tableCholecist.dimens AS cholecist_dimens,
+            tableCholecist.walls AS cholecist_walls,
+            tableCholecist.formations AS cholecist_formations,
+            tableCholecist.choledoc AS cholecist_choledoc,
+            tablePancreas.cefal AS pancreas_cefal,
+            tablePancreas.corp AS pancreas_corp,
+            tablePancreas.tail AS pancreas_tail,
+            tablePancreas.ecogency AS pancreas_ecogenity,
+            tablePancreas.texture AS pancreas_parenchim,
+            tablePancreas.formations AS pancreas_formations,
+            tableSpleen.dimens AS spleen_dimens,
+            tableSpleen.contur AS spleen_contur,
+            tableSpleen.parenchim AS spleen_parenchim,
+            tableSpleen.formations AS spleen_formations,
+            tableIntestinalLoop.formations AS intestinal_formations,
+            tableLiver.concluzion AS organs_internal_concluzion,
+            tableLiver.recommendation AS recommendation,
+            reportEcho.concluzion AS concluzion
+        FROM
+            reportEcho
+        LEFT JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho
+        LEFT JOIN tableLiver ON reportEcho.id = tableLiver.id_reportEcho
+        LEFT JOIN tableIntestinalLoop ON reportEcho.id = tableIntestinalLoop.id_reportEcho
+        LEFT JOIN tableCholecist ON reportEcho.id = tableCholecist.id_reportEcho
+        LEFT JOIN tablePancreas ON reportEcho.id = tablePancreas.id_reportEcho
+        LEFT JOIN tableSpleen ON reportEcho.id = tableSpleen.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2' AND
+            reportEcho.id = %3;
+    )").arg(leftField, rightField, QString::number(id_doc)).trimmed();
+
 }
 
 QString DataBase::getQryForTableUrinarySystemById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "      reportEchoPresentation.docPresentationDate AS title_report,"
-                   "      tableKidney.contour_right,"
-                   "      tableKidney.contour_left,"
-                   "      tableKidney.dimens_right,"
-                   "      tableKidney.dimens_left,"
-                   "      tableKidney.corticomed_right,"
-                   "      tableKidney.corticomed_left,"
-                   "      tableKidney.pielocaliceal_right,"
-                   "      tableKidney.pielocaliceal_left,"
-                   "      tableKidney.formations AS kidney_formations,"
-                   "      tableKidney.suprarenal_formations,"
-                   "      tableBladder.volum AS bladder_volum,"
-                   "      tableBladder.walls AS bladder_walls,"
-                   "      tableBladder.formations AS bladder_formations,"
-                   "      tableKidney.concluzion AS urinary_system_concluzion,"
-                   "      tableKidney.recommendation AS recommendation,"
-                   "      reportEcho.concluzion "
-                   "FROM reportEcho "
-                   "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  LEFT JOIN tableKidney ON reportEcho.id = tableKidney.id_reportEcho "
-                   "  LEFT JOIN tableBladder ON reportEcho.id = tableBladder.id_reportEcho "
-                   "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(QString::number(id_doc));
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableKidney.contour_right,
+            tableKidney.contour_left,
+            tableKidney.dimens_right,
+            tableKidney.dimens_left,
+            tableKidney.corticomed_right,
+            tableKidney.corticomed_left,
+            tableKidney.pielocaliceal_right,
+            tableKidney.pielocaliceal_left,
+            tableKidney.formations AS kidney_formations,
+            tableKidney.suprarenal_formations,
+            tableBladder.volum AS bladder_volum,
+            tableBladder.walls AS bladder_walls,
+            tableBladder.formations AS bladder_formations,
+            tableKidney.concluzion AS urinary_system_concluzion,
+            tableKidney.recommendation AS recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        LEFT JOIN tableKidney ON
+            reportEcho.id = tableKidney.id_reportEcho
+        LEFT JOIN tableBladder ON
+            reportEcho.id = tableBladder.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 }
 
 QString DataBase::getQryForTableProstateById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "      reportEchoPresentation.docPresentationDate AS title_report,"
-                   "      tableProstate.dimens AS prostate_dimens,"
-                   "      tableProstate.volume AS prostate_volume,"
-                   "      tableProstate.ecostructure AS prostate_ecostructure,"
-                   "      tableProstate.contour AS prostate_contur,"
-                   "      tableProstate.ecogency AS prostate_ecogency,"
-                   "      tableProstate.formations AS prostate_formations,"
-                   "      tableProstate.concluzion AS prostate_concluzion,"
-                   "      tableProstate.recommendation AS prostate_recommendation,"
-                   "      reportEcho.concluzion "
-                   "  FROM reportEcho "
-                   "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  INNER JOIN tableProstate ON reportEcho.id = tableProstate.id_reportEcho "
-                   "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(QString::number(id_doc));
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableProstate.dimens AS prostate_dimens,
+            tableProstate.volume AS prostate_volume,
+            tableProstate.ecostructure AS prostate_ecostructure,
+            tableProstate.contour AS prostate_contur,
+            tableProstate.ecogency AS prostate_ecogency,
+            tableProstate.formations AS prostate_formations,
+            tableProstate.concluzion AS prostate_concluzion,
+            tableProstate.recommendation AS prostate_recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableProstate ON
+            reportEcho.id = tableProstate.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 }
 
 QString DataBase::getQryForTableGynecologyById(const int id_doc) const
