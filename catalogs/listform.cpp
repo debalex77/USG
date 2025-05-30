@@ -285,20 +285,40 @@ const QString ListForm::qryTableNurses()
 
 const QString ListForm::qryTablePacients()
 {
-    return QString("SELECT pacients.id,"
-                   "  pacients.deletionMark,"
-                   "  fullNamePacients.name AS FullName,"
-                   "  pacients.birthday,"
-                   "  pacients.address,"
-                   "  pacients.telephone,"
-                   "  pacients.IDNP,"
-                   "  pacients.comment "
-                   "FROM "
-                   "  pacients "
-                   "INNER JOIN "
-                   "  fullNamePacients ON pacients.id = fullNamePacients.id_pacients "
-                   "ORDER BY "
-                   "  fullNamePacients.name;");
+    const QString strQuery =
+        globals().thisMySQL ?
+        QStringLiteral(R"(
+            SELECT
+                pacients.id,
+                pacients.deletionMark,
+                CONCAT(pacients.name, ' ', pacients.fName) AS FullName,
+                DATE_FORMAT(pacients.birthday, '%d.%m.%Y') AS birthday,
+                pacients.address,
+                pacients.telephone,
+                IFNULL(pacients.IDNP, '') AS IDNP,
+                pacients.comment
+            FROM
+                pacients
+            ORDER BY
+                FullName;
+        )") :
+        QStringLiteral(R"(
+            SELECT
+                pacients.id,
+                pacients.deletionMark,
+                pacients.name || ' ' || pacients.fName AS FullName,
+                strftime('%d.%m.%Y', pacients.birthday) AS birthday,
+                pacients.address,
+                pacients.telephone,
+                IFNULL(pacients.IDNP, '') AS IDNP,
+                pacients.comment
+            FROM
+                pacients
+            ORDER BY
+                FullName;
+        )");
+
+    return strQuery;
 }
 
 const QString ListForm::qryTableUsers()
