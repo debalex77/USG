@@ -1832,9 +1832,9 @@ bool DataBase::createTableFullNamePacients()
                     nameBirthday     TEXT DEFAULT NULL,
                     nameTelephone    TEXT DEFAULT NULL,
                     nameBirthdayIDNP TEXT DEFAULT NULL,
-                CONSTRAINT fullNamePacients_pacients_id
-                FOREIGN KEY (id_pacients) REFERENCES pacients (id)
-                ON DELETE CASCADE ON UPDATE RESTRICT
+                    CONSTRAINT fullNamePacients_pacients_id
+                        FOREIGN KEY (id_pacients) REFERENCES pacients (id)
+                        ON DELETE CASCADE ON UPDATE RESTRICT
                 );
             )"),
             QStringLiteral(R"(
@@ -1989,8 +1989,10 @@ bool DataBase::createTableContracts()
                 `comment`          VARCHAR (255),
                 KEY `contracts_organizations_id_idx` (`id_organizations`),
                 KEY `contracts_typesPrices_id_idx` (`id_typesPrices`),
-                CONSTRAINT `contracts_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE,
-                CONSTRAINT `contracts_typesPrices_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+                CONSTRAINT `contracts_organizations_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE CASCADE,
+                CONSTRAINT `contracts_typesPrices_id` FOREIGN KEY (`id_typesPrices`)
+                    REFERENCES `typesPrices` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
             );
             ALTER TABLE `organizations` ADD INDEX `organizations_contracts_id_idx` (`id_contracts` ASC) VISIBLE;
             ALTER TABLE `organizations` ADD CONSTRAINT `organizations_contracts_id`
@@ -2007,8 +2009,10 @@ bool DataBase::createTableContracts()
                 dateInit         TEXT,
                 notValid         INTEGER NOT NULL,
                 comment          TEXT,
-                CONSTRAINT contracts_organizations_id FOREIGN KEY (id_organizations) REFERENCES organizations (id) ON DELETE CASCADE,
-                CONSTRAINT contracts_typesPrices_id FOREIGN KEY (id_typesPrices) REFERENCES typesPrices (id) ON DELETE SET NULL
+                CONSTRAINT contracts_organizations_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE CASCADE,
+                CONSTRAINT contracts_typesPrices_id FOREIGN KEY (id_typesPrices)
+                    REFERENCES typesPrices (id) ON DELETE SET NULL
             );
         )");
     else
@@ -2131,15 +2135,19 @@ bool DataBase::createTablePricings()
                 KEY `idx_id_contracts_pricing` (`id_contracts`),
                 KEY `idx_id_users_pricing` (`id_users`),
                 KEY `idx_id_typesPrices_pricing` (`id_typesPrices`),
-                CONSTRAINT `pricings_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`),
-                CONSTRAINT `pricings_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`),
-                CONSTRAINT `pricings_typesProces_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),
-                CONSTRAINT `pricings_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)
+                CONSTRAINT `pricings_contracts_id` FOREIGN KEY (`id_contracts`)
+                    REFERENCES `contracts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `pricings_organizations_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `pricings_typesProces_id` FOREIGN KEY (`id_typesPrices`)
+                    REFERENCES `typesPrices` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `pricings_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
             );
         )");
     else if (globals().connectionMade == "Sqlite")
         qry.prepare(R"(
-            CREATE TABLE IF NOT EXISTS pricings ("
+            CREATE TABLE IF NOT EXISTS pricings (
                 id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 deletionMark       INTEGER NOT NULL,
                 numberDoc          TEXT NOT NULL,
@@ -2150,13 +2158,13 @@ bool DataBase::createTablePricings()
                 id_users           INTEGER NOT NULL,
                 comment            TEXT,
                 CONSTRAINT pricings_typesPrices_id FOREIGN KEY (id_typesPrices)
-                    REFERENCES typesPrices (id) ON DELETE RESTRICT,
+                    REFERENCES typesPrices (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
                 CONSTRAINT pricings_organizations_id FOREIGN KEY (id_organizations)
-                    REFERENCES organizations (id) ON DELETE RESTRICT,
+                    REFERENCES organizations (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
                 CONSTRAINT pricings_contracts_id FOREIGN KEY (id_contracts)
-                    REFERENCES contracts (id) ON DELETE RESTRICT,
+                    REFERENCES contracts (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
                 CONSTRAINT pricings_users_id FOREIGN KEY (id_users)
-                    REFERENCES users (id) ON DELETE RESTRICT
+                    REFERENCES users (id) ON DELETE RESTRICT ON UPDATE RESTRICT
             );
         )");
     else
@@ -2165,7 +2173,7 @@ bool DataBase::createTablePricings()
     if (qry.exec()){
         return true;
     } else {
-        qWarning(logWarning()) << tr("%1 - createTableInvestigations()").arg(metaObject()->className())
+        qWarning(logWarning()) << tr("%1 - createTablePricings()").arg(metaObject()->className())
                                << tr("Nu a fost creata tabela \"pricings\".") + qry.lastError().text();
         return false;
     }
@@ -2219,83 +2227,115 @@ bool DataBase::createTablePricingsPresentation()
     if (globals().connectionMade == "MySQL") {
 
 #if defined(Q_OS_LINUX)
-        qry.prepare("CREATE TABLE if not exists `pricingsPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_pricings`         INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),"
-                    "CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`) REFERENCES `pricings` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_Pricings_presentation` "
-                    "AFTER INSERT ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_Pricings_presentation` "
-                    "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    " UPDATE pricingsPresentation SET "
-                    "  docPresentation = CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "  docPresentationDate = CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4)) "
-                    " WHERE id_pricings = NEW.id; "
-                    "END;");
+
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pricingsPresentation` (
+                `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_pricings` INT NOT NULL,
+                `docPresentation` VARCHAR (250) NOT NULL,
+                `docPresentationDate` VARCHAR (250) NOT NULL,
+                KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),
+                CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`)
+                    REFERENCES `pricings` (`id`) ON DELETE CASCADE
+            );
+
+            CREATE TRIGGER `create_Pricings_presentation`
+            AFTER INSERT ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO pricingsPresentation (id_pricings, docPresentation,docPresentationDate)
+                VALUES (
+                    NEW.id,
+                    CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                );
+            END;
+
+            CREATE TRIGGER `update_Pricings_presentation`
+            AFTER UPDATE ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                UPDATE pricingsPresentation SET
+                    docPresentation = CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    docPresentationDate = CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                WHERE
+                    id_pricings = NEW.id;
+            END;
+        )");
+
 #elif defined(Q_OS_MACOS)
-        qry.prepare("CREATE TABLE if not exists `pricingsPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_pricings`         INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),"
-                    "CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`) REFERENCES `pricings` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_Pricings_presentation` "
-                    "AFTER INSERT ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_Pricings_presentation` "
-                    "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    " UPDATE pricingsPresentation SET "
-                    "  docPresentation = CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "  docPresentationDate = CONCAT('Formarea prețurilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4)) "
-                    " WHERE id_pricings = NEW.id; "
-                    "END;");
+
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pricingsPresentation` (
+                `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_pricings` INT NOT NULL,
+                `docPresentation` VARCHAR (250) NOT NULL,
+                `docPresentationDate` VARCHAR (250) NOT NULL,
+                KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),
+                CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`)
+                    REFERENCES `pricings` (`id`) ON DELETE CASCADE
+            );
+
+            CREATE TRIGGER `create_Pricings_presentation`
+            AFTER INSERT ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO pricingsPresentation (id_pricings, docPresentation,docPresentationDate)
+                VALUES (
+                    NEW.id,
+                    CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                );
+            END;
+
+            CREATE TRIGGER `update_Pricings_presentation`
+            AFTER UPDATE ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                UPDATE pricingsPresentation SET
+                    docPresentation = CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    docPresentationDate = CONCAT('Formarea prețurilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                WHERE
+                    id_pricings = NEW.id;
+            END;
+        )");
+
 #elif defined(Q_OS_WIN)
-        qry.prepare("CREATE TABLE if not exists `pricingsPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_pricings`         INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),"
-                    "CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`) REFERENCES `pricings` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_Pricings_presentation` "
-                    "AFTER INSERT ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc ,' din ',SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_Pricings_presentation` "
-                    "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                    "BEGIN"
-                    " UPDATE pricingsPresentation SET "
-                    "  docPresentation = CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "  docPresentationDate = CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4)) "
-                    " WHERE id_pricings = NEW.id; "
-                    "END;");
+
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `pricingsPresentation` (
+                `id` INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_pricings` INT NOT NULL,
+                `docPresentation` VARCHAR (250) NOT NULL,
+                `docPresentationDate` VARCHAR (250) NOT NULL,
+                KEY `pricingsPresentation_pricings_id_idx` (`id_pricings`),
+                CONSTRAINT `pricingsPresentation_pricings_id` FOREIGN KEY (`id_pricings`)
+                    REFERENCES `pricings` (`id`) ON DELETE CASCADE);
+
+            CREATE TRIGGER `create_Pricings_presentation`
+            AFTER INSERT ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO pricingsPresentation (id_pricings, docPresentation, docPresentationDate)
+                VALUES (
+                    NEW.id,
+                    CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                );
+            END;
+
+            CREATE TRIGGER `update_Pricings_presentation`
+            AFTER UPDATE ON `pricings`
+            FOR EACH ROW
+            BEGIN
+                UPDATE pricingsPresentation SET
+                    docPresentation = CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    docPresentationDate = CONCAT('Formarea pre\310\233urilor nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                WHERE
+                    id_pricings = NEW.id;
+            END;
+        )");
+
 #endif
         if (qry.exec()){
             return true;
@@ -2307,152 +2347,222 @@ bool DataBase::createTablePricingsPresentation()
 
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-
-        try {
-            qry.prepare("CREATE TABLE pricingsPresentation ("
-                        "id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_pricings     INTEGER NOT NULL CONSTRAINT pricingsPresentation_pricings_id REFERENCES pricings (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "docPresentation TEXT (250) NOT NULL,"
-                        "docPresentationDate TEXT (250) NOT NULL"
-                        ");");
-            qry.exec();
-
-#if defined(Q_OS_LINUX)
-            qry.prepare("CREATE TRIGGER `create_Pricings_presentation` "
-                        "AFTER INSERT ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_Pricings_presentation` "
-                        "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE pricingsPresentation SET "
-                        "  docPresentation = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "  docPresentationDate = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        " WHERE id_pricings = NEW.id;"
-                        "END;");
-            qry.exec();
-#elif defined(Q_OS_MACOS)
-            qry.prepare("CREATE TRIGGER `create_Pricings_presentation` "
-                        "AFTER INSERT ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_Pricings_presentation` "
-                        "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE pricingsPresentation SET "
-                        "  docPresentation = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "  docPresentationDate = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        " WHERE id_pricings = NEW.id;"
-                        "END;");
-            qry.exec();
-#elif defined(Q_OS_WIN)
-            qry.prepare("CREATE TRIGGER `create_Pricings_presentation` "
-                        "AFTER INSERT ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_Pricings_presentation` "
-                        "AFTER UPDATE ON `pricings` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE pricingsPresentation SET "
-                        "  docPresentation = 'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "  docPresentationDate = 'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        " WHERE id_pricings = NEW.id;"
-                        "END;");
-            qry.exec();
-#endif
-            db.commit();
-            return true;
-
-        } catch (...) {
-            db.rollback();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
             return false;
-            throw;
         }
 
-    } else {
-        return false;
+        bool success = true;
+
+        const QStringList sqlStatements = {
+
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS pricingsPresentation (
+                    id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_pricings     INTEGER NOT NULL,
+                    docPresentation TEXT NOT NULL,
+                    docPresentationDate TEXT NOT NULL,
+                    CONSTRAINT pricingsPresentation_pricings_id FOREIGN KEY (id_pricings)
+                        REFERENCES pricings (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+
+#if defined(Q_OS_LINUX)
+
+            QStringLiteral(R"(
+                CREATE TRIGGER `create_Pricings_presentation`
+                AFTER INSERT ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                     INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate)
+                     VALUES (
+                        NEW.id,
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                     );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_Pricings_presentation`
+                AFTER UPDATE ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE pricingsPresentation SET
+                        docPresentation = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        docPresentationDate = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    WHERE
+                        id_pricings = NEW.id;
+                END;
+            )")
+
+
+#elif defined(Q_OS_MACOS)
+
+            QStringLiteral(R"(
+                CREATE TRIGGER `create_Pricings_presentation`
+                AFTER INSERT ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                     INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate)
+                     VALUES (
+                        NEW.id,
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                     );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_Pricings_presentation`
+                AFTER UPDATE ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE pricingsPresentation SET
+                        docPresentation = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        docPresentationDate = 'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    WHERE
+                        id_pricings = NEW.id;
+                END;
+            )")
+
+#elif defined(Q_OS_WIN)
+
+            QStringLiteral(R"(
+                CREATE TRIGGER `create_Pricings_presentation`
+                AFTER INSERT ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                     INSERT INTO pricingsPresentation (id_pricings , docPresentation, docPresentationDate)
+                     VALUES (
+                        NEW.id,
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        'Formarea prețurilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                     );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_Pricings_presentation`
+                AFTER UPDATE ON `pricings`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE pricingsPresentation SET
+                        docPresentation = 'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        docPresentationDate = 'Formarea pre\310\233urilor nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    WHERE
+                        id_pricings = NEW.id;
+                END;
+            )")
+
+#endif
+        }; // const QStringList sqlStatements
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
+            db.commit();
+            return true;
+        } else {
+            db.rollback();
+            return false;
+        }
     }
+
+    return false; // necunoscut
+
 }
 
 bool DataBase::createTableOrderEcho()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists orderEcho ("
-                    "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark       INT NOT Null,"
-                    "numberDoc          VARCHAR (15),"
-                    "dateDoc            DATETIME,"
-                    "id_organizations   INT,"
-                    "id_contracts       INT,"
-                    "id_typesPrices     INT,"
-                    "id_doctors         INT,"
-                    "id_doctors_execute INT,"
-                    "id_nurses          INT,"
-                    "id_pacients        INT,"
-                    "id_users           INT,"
-                    "sum                DECIMAL (15,2) DEFAULT '0.00',"
-                    "comment            VARCHAR (255),"
-                    "cardPayment        INT,"
-                    "attachedImages     INT,"
-                    "KEY `orderEcho_organizations_id_idx` (`id_organizations`),"
-                    "KEY `orderEcho_contracts_idx` (`id_contracts`),"
-                    "KEY `orderEcho_typesPrices_id_idx` (`id_typesPrices`),"
-                    "KEY `orderEcho_doctors_id_idx` (`id_doctors`),"
-                    "KEY `orderEcho_doctors_execute_id_idx` (`id_doctors_execute`),"
-                    "KEY `orderEcho_nurses_id_idx` (`id_nurses`),"
-                    "KEY `orderEcho_pacients_id_idx` (`id_pacients`),"
-                    "KEY `orderEcho_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `orderEcho_contracts_id` FOREIGN KEY (`id_contracts`) REFERENCES `contracts` (`id`),"
-                    "CONSTRAINT `orderEcho_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`),"
-                    "CONSTRAINT `orderEcho_doctors_execute_id` FOREIGN KEY (`id_doctors_execute`) REFERENCES `doctors` (`id`),"
-                    "CONSTRAINT `orderEcho_nurses_id` FOREIGN KEY (`id_nurses`) REFERENCES `nurses` (`id`),"
-                    "CONSTRAINT `orderEcho_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`),"
-                    "CONSTRAINT `orderEcho_pacients_id` FOREIGN KEY (`id_pacients`) REFERENCES `pacients` (`id`),"
-                    "CONSTRAINT `orderEcho_typesPrices_id` FOREIGN KEY (`id_typesPrices`) REFERENCES `typesPrices` (`id`),"
-                    "CONSTRAINT `orderEcho_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `orderEcho` (
+                `id`                 INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark`       INT NOT NULL,
+                `numberDoc`          VARCHAR (15),
+                `dateDoc`            DATETIME,
+                `id_organizations`   INT,
+                `id_contracts`       INT,
+                `id_typesPrices`     INT,
+                `id_doctors`         INT,
+                `id_doctors_execute` INT,
+                `id_nurses`          INT,
+                `id_pacients`        INT,
+                `id_users`           INT,
+                `sum`                DECIMAL (15,2) DEFAULT '0.00',
+                `comment`            VARCHAR (255),
+                `cardPayment`        INT,
+                `attachedImages`     INT,
+                KEY `orderEcho_organizations_id_idx` (`id_organizations`),
+                KEY `orderEcho_contracts_idx` (`id_contracts`),
+                KEY `orderEcho_typesPrices_id_idx` (`id_typesPrices`),
+                KEY `orderEcho_doctors_id_idx` (`id_doctors`),
+                KEY `orderEcho_doctors_execute_id_idx` (`id_doctors_execute`),
+                KEY `orderEcho_nurses_id_idx` (`id_nurses`),
+                KEY `orderEcho_pacients_id_idx` (`id_pacients`),
+                KEY `orderEcho_users_id_idx` (`id_users`),
+                CONSTRAINT `orderEcho_contracts_id` FOREIGN KEY (`id_contracts`)
+                    REFERENCES `contracts` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_doctors_id` FOREIGN KEY (`id_doctors`)
+                    REFERENCES `doctors` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_doctors_execute_id` FOREIGN KEY (`id_doctors_execute`)
+                    REFERENCES `doctors` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_nurses_id` FOREIGN KEY (`id_nurses`)
+                    REFERENCES `nurses` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_organizations_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_pacients_id` FOREIGN KEY (`id_pacients`)
+                    REFERENCES `pacients` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_typesPrices_id` FOREIGN KEY (`id_typesPrices`)
+                    REFERENCES `typesPrices` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `orderEcho_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE orderEcho ("
-                    "id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark       INTEGER NOT NULL,"
-                    "numberDoc          TEXT (15),"
-                    "dateDoc            TEXT (19),"
-                    "id_organizations   INTEGER CONSTRAINT orderEcho_organizations_id REFERENCES organizations (id) ON DELETE RESTRICT,"
-                    "id_contracts       INTEGER CONSTRAINT orderEcho_contracts_id REFERENCES contracts (id) ON DELETE RESTRICT,"
-                    "id_typesPrices     INTEGER CONSTRAINT orderEcho_typesPrices_id REFERENCES typesPrices (id) ON DELETE RESTRICT,"
-                    "id_doctors         INTEGER CONSTRAINT orderEcho_doctors_id REFERENCES doctors (id) ON DELETE RESTRICT,"
-                    "id_doctors_execute INTEGER CONSTRAINT orderEcho_doctors_execute_id REFERENCES doctors (id) ON DELETE RESTRICT,"
-                    "id_nurses          INTEGER CONSTRAINT orderEcho_nurses_id REFERENCES nurses (id) ON DELETE RESTRICT,"
-                    "id_pacients        INTEGER CONSTRAINT orderEcho_pacients_id REFERENCES pacients (id) ON DELETE RESTRICT,"
-                    "id_users           INTEGER CONSTRAINT orderEcho_users_id REFERENCES users (id) ON DELETE RESTRICT,"
-                    "sum                REAL,"
-                    "comment            TEXT (255),"
-                    "cardPayment        INTEGER,"
-                    "attachedImages     INTEGER"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS orderEcho (
+                id                 INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark       INTEGER NOT NULL,
+                numberDoc          TEXT,
+                dateDoc            TEXT,
+                id_organizations   INTEGER,
+                id_contracts       INTEGER,
+                id_typesPrices     INTEGER,
+                id_doctors         INTEGER,
+                id_doctors_execute INTEGER,
+                id_nurses          INTEGER,
+                id_pacients        INTEGER,
+                id_users           INTEGER,
+                sum                REAL,
+                comment            TEXT,
+                cardPayment        INTEGER,
+                attachedImages     INTEGER,
+                CONSTRAINT orderEcho_organizations_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_contracts_id FOREIGN KEY (id_contracts)
+                    REFERENCES contracts (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_typesPrices_id FOREIGN KEY (id_typesPrices)
+                    REFERENCES typesPrices (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_doctors_id FOREIGN KEY (id_doctors)
+                    REFERENCES doctors (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_doctors_execute_id FOREIGN KEY (id_doctors_execute)
+                    REFERENCES doctors (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_nurses_id FOREIGN KEY (id_nurses)
+                    REFERENCES nurses (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_pacients_id FOREIGN KEY (id_pacients)
+                    REFERENCES pacients (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT orderEcho_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2469,25 +2579,32 @@ bool DataBase::createTable_OrderEchoTable()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists orderEchoTable ("
-                    "id           INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark INT NOT Null,"
-                    "id_orderEcho INT,"
-                    "cod          VARCHAR (10),"
-                    "name         VARCHAR (500) NOT Null,"
-                    "price        DECIMAL (15,3) DEFAULT '0.00',"
-                    "KEY `orderEchoTable_orderEcho_id_idx` (`id_orderEcho`),"
-                    "CONSTRAINT `orderEchoTable_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `orderEchoTable` (
+                `id`           INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark` INT NOT NULL,
+                `id_orderEcho` INT NOT NULL,
+                `cod`          VARCHAR (10) NOT NULL,
+                `name`         VARCHAR (500) NOT NULL,
+                `price`        DECIMAL (15,3) DEFAULT '0.00',
+                KEY `orderEchoTable_orderEcho_id_idx` (`id_orderEcho`),
+                CONSTRAINT `orderEchoTable_orderEcho_id` FOREIGN KEY (`id_orderEcho`)
+                    REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE orderEchoTable ("
-                    "id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "deletionMark INTEGER NOT NULL,"
-                    "id_orderEcho INTEGER CONSTRAINT orderEchoTable_orderEcho_id REFERENCES orderEcho (id) ON DELETE CASCADE,"
-                    "cod          TEXT (10),"
-                    "name         TEXT (500),"
-                    "price        REAL"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS orderEchoTable (
+                id           INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                deletionMark INTEGER NOT NULL,
+                id_orderEcho INTEGER NOT NULL,
+                cod          TEXT NOT NULL,
+                name         TEXT NOT NULL,
+                price        REAL,
+                CONSTRAINT orderEchoTable_orderEcho_id FOREIGN KEY (id_orderEcho)
+                    REFERENCES orderEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2505,91 +2622,41 @@ bool DataBase::createTableOrderEchoPresentation()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL") {
 
-#if defined(Q_OS_LINUX)
-        qry.prepare("CREATE TABLE `orderEchoPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_orderEcho`        INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `orderEchoPresentation_orderEcho_id_idx` (`id_orderEcho`),"
-                    "CONSTRAINT `orderEchoPresentation_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_orderDoc_presentation` "
-                    "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Comanda ecografică nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Comanda ecografică nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_orderDoc_presentation` "
-                    "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE orderEchoPresentation SET "
-                    "    docPresentation = CONCAT('Comanda ecografică nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),"
-                    "    docPresentationDate = CONCAT('Comanda ecografică nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4)) "
-                    "  WHERE id_orderEcho = NEW.id;"
-                    "END;");
-#elif defined(Q_OS_MACOS)
-        qry.prepare("CREATE TABLE `orderEchoPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_orderEcho`        INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `orderEchoPresentation_orderEcho_id_idx` (`id_orderEcho`),"
-                    "CONSTRAINT `orderEchoPresentation_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_orderDoc_presentation` "
-                    "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Comanda ecografică nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Comanda ecografică nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_orderDoc_presentation` "
-                    "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE orderEchoPresentation SET "
-                    "    docPresentation = CONCAT('Comanda ecografică nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),"
-                    "    docPresentationDate = CONCAT('Comanda ecografică nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4)) "
-                    "  WHERE id_orderEcho = NEW.id;"
-                    "END;");
-#elif defined(Q_OS_WIN)
-        qry.prepare("CREATE TABLE `orderEchoPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_orderEcho`        INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `orderEchoPresentation_orderEcho_id_idx` (`id_orderEcho`),"
-                    "CONSTRAINT `orderEchoPresentation_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_orderDoc_presentation` "
-                    "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Comanda ecografic\304\203 nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Comanda ecografic\304\203 nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_orderDoc_presentation` "
-                    "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE orderEchoPresentation SET "
-                    "    docPresentation = CONCAT('Comanda ecografic\304\203 nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),"
-                    "    docPresentationDate = CONCAT('Comanda ecografic\304\203 nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4)) "
-                    "  WHERE id_orderEcho = NEW.id;"
-                    "END;");
-#endif
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `orderEchoPresentation` (
+                `id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,
+                `id_orderEcho`        INT NOT Null,
+                `docPresentation`     VARCHAR (250) NOT Null,
+                `docPresentationDate` VARCHAR (250) NOT Null,
+                KEY `orderEchoPresentation_orderEcho_id_idx` (`id_orderEcho`),
+                CONSTRAINT `orderEchoPresentation_orderEcho_id` FOREIGN KEY (`id_orderEcho`)
+                REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+
+            CREATE TRIGGER `create_orderDoc_presentation`
+            AFTER INSERT ON `orderEcho`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate)
+                VALUES (
+                    NEW.id,
+                    CONCAT('Comanda ecografica nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),
+                    CONCAT('Comanda ecografica nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))
+                );
+            END;
+
+            CREATE TRIGGER `update_orderDoc_presentation`
+            AFTER UPDATE ON `orderEcho`
+            FOR EACH ROW
+            BEGIN
+                UPDATE orderEchoPresentation SET
+                    docPresentation = CONCAT('Comanda ecografica nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    docPresentationDate = CONCAT('Comanda ecografica nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                WHERE
+                    id_orderEcho = NEW.id;
+            END;
+        )");
+
         if (qry.exec()){
             return true;
         } else {
@@ -2600,100 +2667,71 @@ bool DataBase::createTableOrderEchoPresentation()
 
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-
-        try {
-
-            qry.prepare("CREATE TABLE orderEchoPresentation ("
-                        "id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_orderEcho    INTEGER NOT NULL CONSTRAINT orderEchoPresentation_orderEcho_id REFERENCES orderEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "docPresentation TEXT (250) NOT NULL,"
-                        "docPresentationDate TEXT (250)"
-                        ");");
-            qry.exec();
-
-#if defined(Q_OS_LINUX)
-            qry.prepare("CREATE TRIGGER `create_orderDoc_presentation` "
-                        "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Comanda ecografică nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Comanda ecografică nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_orderDoc_presentation` "
-                        "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE orderEchoPresentation SET "
-                        "    docPresentation = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    docPresentationDate = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        "  WHERE id_orderEcho = NEW.id;"
-                        "END;");
-            qry.exec();
-#elif defined(Q_OS_MACOS)
-            qry.prepare("CREATE TRIGGER `create_orderDoc_presentation` "
-                        "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Comanda ecografică nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Comanda ecografică nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_orderDoc_presentation` "
-                        "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE orderEchoPresentation SET "
-                        "    docPresentation = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    docPresentationDate = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        "  WHERE id_orderEcho = NEW.id;"
-                        "END;");
-            qry.exec();
-#elif defined(Q_OS_WIN)
-            qry.prepare("CREATE TRIGGER `create_orderDoc_presentation` "
-                        "AFTER INSERT ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Comanda ecografic\304\203 nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Comanda ecografic\304\203 nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_orderDoc_presentation` "
-                        "AFTER UPDATE ON `orderEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE orderEchoPresentation SET "
-                        "    docPresentation = 'Comanda ecografic\304\203 nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),"
-                        "    docPresentationDate = 'Comanda ecografic\304\203 nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        "  WHERE id_orderEcho = NEW.id;"
-                        "END;");
-            qry.exec();
-#endif
-            return db.commit();
-        } catch (...) {
-            qWarning(logWarning()) << tr("%1 - createTableOrderEchoPresentation()").arg(metaObject()->className())
-                                   << tr("Nu a fost creata tabela \"orderEchoPresentation\".") + qry.lastError().text();
-            db.rollback();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
             return false;
-            throw;
         }
 
-    } else {
-        return false;
+        bool success = true;
+
+        const QStringList sqlStatements = {
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS orderEchoPresentation (
+                    id              INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_orderEcho    INTEGER NOT NULL,
+                    docPresentation TEXT NOT NULL,
+                    docPresentationDate TEXT,
+                    CONSTRAINT orderEchoPresentation_orderEcho_id FOREIGN KEY (id_orderEcho)
+                        REFERENCES orderEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `create_orderDoc_presentation`
+                AFTER INSERT ON `orderEcho`
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO orderEchoPresentation (id_orderEcho, docPresentation, docPresentationDate)
+                    VALUES (
+                        NEW.id,
+                        'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_orderDoc_presentation`
+                AFTER UPDATE ON `orderEcho`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE orderEchoPresentation SET
+                        docPresentation = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        docPresentationDate = 'Comanda ecografică nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    WHERE
+                        id_orderEcho = NEW.id;
+                END;
+            )")
+        };
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
+            db.commit();
+            return true;
+        } else {
+            db.rollback();
+            return false;
+        }
     }
+
+    return false; // necunoscut
 
 }
 
@@ -2701,30 +2739,47 @@ bool DataBase::createTableConstants()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists constants ("
-                    "id_users	        INT NOT Null,"
-                    "id_organizations	INT,"
-                    "id_doctors	        INT,"
-                    "id_nurses	        INT,"
-                    "brandUSG	        VARCHAR (200),"
-                    "logo               LONGBLOB,"
-                    "KEY `constants_users_id_idx` (`id_users`),"
-                    "KEY `constants_organizations_id_idx` (`id_organizations`),"
-                    "KEY `constants_doctors_id_idx` (`id_doctors`),"
-                    "KEY `constants_nurses_id_idx` (`id_nurses`),"
-                    "CONSTRAINT `constants_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,"
-                    "CONSTRAINT `constants_nurses_id` FOREIGN KEY (`id_nurses`) REFERENCES `nurses` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,"
-                    "CONSTRAINT `constants_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,"
-                    "CONSTRAINT `constants_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `constants` (
+                `id_users`	      INT NOT NULL,
+                `id_organizations` INT,
+                `id_doctors`	      INT,
+                `id_nurses`	      INT,
+                `brandUSG`	      VARCHAR (200),
+                `logo`             LONGBLOB,
+                KEY `constants_users_id_idx` (`id_users`),
+                KEY `constants_organizations_id_idx` (`id_organizations`),
+                KEY `constants_doctors_id_idx` (`id_doctors`),
+                KEY `constants_nurses_id_idx` (`id_nurses`),
+                CONSTRAINT `constants_doctors_id` FOREIGN KEY (`id_doctors`)
+                    REFERENCES `doctors` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT `constants_nurses_id` FOREIGN KEY (`id_nurses`)
+                    REFERENCES `nurses` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT `constants_organizations_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT `constants_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE constants ("
-                    "id_users	        INTEGER NOT NULL CONSTRAINT constants_users_id REFERENCES users (id) ON DELETE CASCADE,"
-                    "id_organizations	INTEGER CONSTRAINT constants_organizations_id REFERENCES organizations (id) ON DELETE SET NULL,"
-                    "id_doctors	        INTEGER CONSTRAINT constants_doctors_id REFERENCES doctors (id) ON DELETE SET NULL,"
-                    "id_nurses	        INTEGER CONSTRAINT constants_nurses_id REFERENCES nurses (id) ON DELETE SET NULL,"
-                    "brandUSG	        TEXT (200),"
-                    "logo               BLOB);");
+        qry.prepare(R"(
+            CREATE TABLE constants (
+                id_users	        INTEGER NOT NULL,
+                id_organizations	INTEGER,
+                id_doctors	    INTEGER,
+                id_nurses	    INTEGER,
+                brandUSG	        TEXT,
+                logo             BLOB,
+                CONSTRAINT constants_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT constants_organizations_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT constants_doctors_id FOREIGN KEY (id_doctors)
+                    REFERENCES doctors (id) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT constants_nurses_id FOREIGN KEY (id_nurses)
+                    REFERENCES nurses (id) ON DELETE SET NULL ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2741,57 +2796,70 @@ bool DataBase::createTableReportEcho()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists reportEcho ("
-                    "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "deletionMark      INT NOT Null,"
-                    "numberDoc         VARCHAR (15) NOT Null,"
-                    "dateDoc           DATETIME NOT Null,"
-                    "id_pacients       INT NOT Null,"
-                    "id_orderEcho      INT NOT Null,"
-                    "t_organs_internal BOOLEAN,"
-                    "t_urinary_system  BOOLEAN,"
-                    "t_prostate        BOOLEAN,"
-                    "t_gynecology      BOOLEAN,"
-                    "t_breast          BOOLEAN,"
-                    "t_thyroid         BOOLEAN,"
-                    "t_gestation0      BOOLEAN,"
-                    "t_gestation1      BOOLEAN,"
-                    "t_gestation2      BOOLEAN,"
-                    "t_gestation3      BOOLEAN,"
-                    "id_users          INT,"
-                    "concluzion        VARCHAR (700),"
-                    "comment           VARCHAR (255),"
-                    "attachedImages    INT,"
-                    "KEY `reportEcho_pacients_id_idx` (`id_pacients`),"
-                    "KEY `reportEcho_order_id_idx` (`id_orderEcho`),"
-                    "KEY `reportEcho_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `reportEcho_orderEcho_id` FOREIGN KEY (`id_orderEcho`) REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                    "CONSTRAINT `reportEcho_pacients_id` FOREIGN KEY (`id_pacients`) REFERENCES `pacients` (`id`),"
-                    "CONSTRAINT `reportEcho_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `reportEcho` (
+                `id`                INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `deletionMark`      INT NOT NULL,
+                `numberDoc`         VARCHAR (15) NOT NULL,
+                `dateDoc`           DATETIME NOT NULL,
+                `id_pacients`       INT NOT NULL,
+                `id_orderEcho`      INT NOT NULL,
+                `t_organs_internal` BOOLEAN,
+                `t_urinary_system`  BOOLEAN,
+                `t_prostate`        BOOLEAN,
+                `t_gynecology`      BOOLEAN,
+                `t_breast`          BOOLEAN,
+                `t_thyroid`         BOOLEAN,
+                `t_gestation0`      BOOLEAN,
+                `t_gestation1`      BOOLEAN,
+                `t_gestation2`      BOOLEAN,
+                `t_gestation3`      BOOLEAN,
+                `id_users`          INT NOT NULL,
+                `concluzion`        VARCHAR (700),
+                `comment`           VARCHAR (255),
+                `attachedImages`    INT,
+                KEY `reportEcho_pacients_id_idx` (`id_pacients`),
+                KEY `reportEcho_order_id_idx` (`id_orderEcho`),
+                KEY `reportEcho_users_id_idx` (`id_users`),
+                CONSTRAINT `reportEcho_orderEcho_id` FOREIGN KEY (`id_orderEcho`)
+                    REFERENCES `orderEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT `reportEcho_pacients_id` FOREIGN KEY (`id_pacients`)
+                    REFERENCES `pacients` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT `reportEcho_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE RESTRICT ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE reportEcho ("
-                    "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "deletionMark      INTEGER NOT NULL,"
-                    "numberDoc         TEXT (15),"
-                    "dateDoc           TEXT (19),"
-                    "id_pacients       INTEGER NOT NULL CONSTRAINT reportEcho_pacients_id REFERENCES pacients (id) ON DELETE RESTRICT,"
-                    "id_orderEcho      INTEGER NOT NULL CONSTRAINT reportEcho_orderEcho_id REFERENCES orderEcho (id) ON DELETE CASCADE,"
-                    "t_organs_internal INTEGER,"
-                    "t_urinary_system  INTEGER,"
-                    "t_prostate        INTEGER,"
-                    "t_gynecology      INTEGER,"
-                    "t_breast          INTEGER,"
-                    "t_thyroid         INTEGER,"
-                    "t_gestation0      INTEGER,"
-                    "t_gestation1      INTEGER,"
-                    "t_gestation2      INTEGER,"
-                    "t_gestation3      INTEGER,"
-                    "id_users          INTEGER CONSTRAINT reportEcho_users_id REFERENCES users (id) ON DELETE RESTRICT,"
-                    "concluzion        TEXT (700),"
-                    "comment           TEXT (255),"
-                    "attachedImages    INTEGER"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS reportEcho (
+                id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                deletionMark      INTEGER NOT NULL,
+                numberDoc         TEXT NOT NULL,
+                dateDoc           TEXT NOT NULL,
+                id_pacients       INTEGER NOT NULL,
+                id_orderEcho      INTEGER NOT NULL,
+                t_organs_internal INTEGER,
+                t_urinary_system  INTEGER,
+                t_prostate        INTEGER,
+                t_gynecology      INTEGER,
+                t_breast          INTEGER,
+                t_thyroid         INTEGER,
+                t_gestation0      INTEGER,
+                t_gestation1      INTEGER,
+                t_gestation2      INTEGER,
+                t_gestation3      INTEGER,
+                id_users          INTEGER NOT NULL,
+                concluzion        TEXT,
+                comment           TEXT,
+                attachedImages    INTEGER,
+                CONSTRAINT reportEcho_pacients_id FOREIGN KEY (id_pacients)
+                    REFERENCES pacients (id) ON DELETE RESTRICT ON UPDATE RESTRICT,
+                CONSTRAINT reportEcho_orderEcho_id FOREIGN KEY (id_orderEcho)
+                    REFERENCES orderEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT,
+                CONSTRAINT reportEcho_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE RESTRICT ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2809,33 +2877,40 @@ bool DataBase::createTableReportEchoPresentation()
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL") {
 
-        qry.prepare("CREATE TABLE `reportEchoPresentation` ("
-                    "`id`                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "`id_reportEcho`       INT NOT Null,"
-                    "`docPresentation`     VARCHAR (250) NOT Null,"
-                    "`docPresentationDate` VARCHAR (250) NOT Null,"
-                    "KEY `reportEchoPresentation_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `reportEchoPresentation_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE"
-                    ");"
-                    "CREATE TRIGGER `create_reportEcho_presentation` "
-                    "AFTER INSERT ON `reportEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  INSERT INTO reportEchoPresentation (id_reportEcho , docPresentation, docPresentationDate) "
-                    "  VALUES (NEW.id,"
-                    "    CONCAT('Raport ecografic nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),"
-                    "    CONCAT('Raport ecografic nr.', NEW.numberDoc ,' din ',"
-                    "    SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))"
-                    "  );"
-                    "END;"
-                    "CREATE TRIGGER `update_reportEcho_presentation` "
-                    "AFTER UPDATE ON `reportEcho` FOR EACH ROW "
-                    "BEGIN"
-                    "  UPDATE reportEchoPresentation SET "
-                    "    docPresentation = CONCAT('Raport ecografic nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),"
-                    "    docPresentationDate = CONCAT('Raport ecografic nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))"
-                    "  WHERE id_reportEcho = NEW.id;"
-                    "END;");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `reportEchoPresentation` (
+                `id`                  INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`       INT NOT NULL,
+                `docPresentation`     VARCHAR (250) NOT NULL,
+                `docPresentationDate` VARCHAR (250) NOT NULL,
+                KEY `reportEchoPresentation_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `reportEchoPresentation_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+
+            CREATE TRIGGER `create_reportEcho_presentation`
+            AFTER INSERT ON `reportEcho`
+            FOR EACH ROW
+            BEGIN
+                INSERT INTO reportEchoPresentation (id_reportEcho , docPresentation, docPresentationDate)
+                VALUES (
+                    NEW.id,
+                    CONCAT('Raport ecografic nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4),' ',SUBSTRING(NEW.dateDoc,12,8)),
+                    CONCAT('Raport ecografic nr.', NEW.numberDoc ,' din ', SUBSTRING(NEW.dateDoc,9,2) ,'.', SUBSTRING(NEW.dateDoc,6,2),'.', SUBSTRING(NEW.dateDoc,1,4))
+                );
+            END;
+
+            CREATE TRIGGER `update_reportEcho_presentation`
+            AFTER UPDATE ON `reportEcho`
+            FOR EACH ROW
+            BEGIN
+                UPDATE reportEchoPresentation SET
+                    docPresentation     = CONCAT('Raport ecografic nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4), ' ', SUBSTRING(NEW.dateDoc, 12, 8)),
+                    docPresentationDate = CONCAT('Raport ecografic nr.', NEW.numberDoc , ' din ', SUBSTRING(NEW.dateDoc, 9, 2) , '.', SUBSTRING(NEW.dateDoc, 6, 2), '.', SUBSTRING(NEW.dateDoc, 1, 4))
+                WHERE
+                    id_reportEcho = NEW.id;
+            END;
+        )");
         if (qry.exec()){
             return true;
         } else {
@@ -2846,90 +2921,118 @@ bool DataBase::createTableReportEchoPresentation()
 
     } else if (globals().connectionMade == "Sqlite") {
 
-        db.transaction();
-
-        try {
-            qry.prepare("CREATE TABLE reportEchoPresentation ("
-                        "id                  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                        "id_reportEcho       INTEGER NOT NULL CONSTRAINT reportEchoPresentation_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                        "docPresentation     TEXT (250) NOT NULL,"
-                        "docPresentationDate TEXT (250)"
-                        ");");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `create_reportEcho_presentation` "
-                        "AFTER INSERT ON `reportEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  INSERT INTO reportEchoPresentation (id_reportEcho , docPresentation, docPresentationDate) "
-                        "  VALUES (NEW.id,"
-                        "    'Raport ecografic nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' ||SUBSTR(NEW.dateDoc,12,8),"
-                        "    'Raport ecografic nr.' || NEW.numberDoc || ' din ' ||"
-                        "    SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)"
-                        "  );"
-                        "END;");
-            qry.exec();
-
-            qry.prepare("CREATE TRIGGER `update_reportEcho_presentation` "
-                        "AFTER UPDATE ON `reportEcho` FOR EACH ROW "
-                        "BEGIN"
-                        "  UPDATE reportEchoPresentation SET "
-                        "    docPresentation = 'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' ||SUBSTR(NEW.dateDoc,12,8),"
-                        "    docPresentationDate = 'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) "
-                        "  WHERE id_reportEcho = NEW.id;"
-                        "END;");
-            qry.exec();
-
-            return db.commit();
-
-        } catch (...) {
-            db.rollback();
+        if (! db.transaction()) {
+            qWarning(logWarning()) << tr("%1 - SQLite transaction begin failed")
+                                      .arg(metaObject()->className());
             return false;
-            throw;
         }
 
-    } else {
-        return false;
+        bool success = true;
+
+
+        const QStringList sqlStatements = {
+            QStringLiteral(R"(
+                CREATE TABLE IF NOT EXISTS reportEchoPresentation (
+                    id                  INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                    id_reportEcho       INTEGER NOT NULL,
+                    docPresentation     TEXT NOT NULL,
+                    docPresentationDate TEXT,
+                    CONSTRAINT reportEchoPresentation_reportEcho_id FOREIGN KEY (id_reportEcho)
+                        REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+                );
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `create_reportEcho_presentation`
+                AFTER INSERT ON `reportEcho`
+                FOR EACH ROW
+                BEGIN
+                    INSERT INTO reportEchoPresentation (id_reportEcho , docPresentation, docPresentationDate)
+                    VALUES (
+                        NEW.id,
+                        'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' || SUBSTR(NEW.dateDoc,12,8),
+                        'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    );
+                END;
+            )"),
+            QStringLiteral(R"(
+                CREATE TRIGGER `update_reportEcho_presentation`
+                AFTER UPDATE ON `reportEcho`
+                FOR EACH ROW
+                BEGIN
+                    UPDATE reportEchoPresentation SET
+                        docPresentation = 'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4) || ' ' ||SUBSTR(NEW.dateDoc,12,8),
+                        docPresentationDate = 'Raport ecografic nr.' || NEW.numberDoc || ' din ' || SUBSTR(NEW.dateDoc,9,2) || '.' || SUBSTR(NEW.dateDoc,6,2) || '.' || SUBSTR(NEW.dateDoc,1,4)
+                    WHERE
+                        id_reportEcho = NEW.id;
+                END;
+            )"),
+        };
+
+        for (const QString &stmt : sqlStatements) {
+            if (! qry.exec(stmt)) {
+                success = false;
+                qWarning(logWarning()) << tr("%1 - SQLite statement failed").arg(metaObject()->className())
+                                       << qry.lastError().text();
+                break;
+            }
+        }
+
+        if (success) {
+            db.commit();
+            return true;
+        } else {
+            db.rollback();
+            return false;
+        }
     }
+
+    return false; // necunoscut
 }
 
 bool DataBase::createTableLiver()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableLiver ("
-                    "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho     INT NOT Null,"
-                    "`left`            VARCHAR (5),"
-                    "`right`           VARCHAR (5),"
-                    "contur            VARCHAR (20),"
-                    "parenchim         VARCHAR (20),"
-                    "ecogenity         VARCHAR (30),"
-                    "formations        VARCHAR (300),"
-                    "ductsIntrahepatic VARCHAR (50),"
-                    "porta             VARCHAR (5),"
-                    "lienalis          VARCHAR (5),"
-                    "concluzion        VARCHAR (500),"
-                    "recommendation    VARCHAR (255),"
-                    "KEY `tableLiver_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableLiver_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableLiver` (
+                `id`                INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`     INT NOT NULL,
+                `left`              VARCHAR (5),
+                `right`             VARCHAR (5),
+                `contur`            VARCHAR (20),
+                `parenchim`         VARCHAR (20),
+                `ecogenity`         VARCHAR (30),
+                `formations`        VARCHAR (300),
+                `ductsIntrahepatic` VARCHAR (50),
+                `porta`             VARCHAR (5),
+                `lienalis`          VARCHAR (5),
+                `concluzion`        VARCHAR (500),
+                `recommendation`    VARCHAR (255),
+                KEY `tableLiver_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableLiver_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableLiver ("
-                    "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho     INTEGER NOT NULL CONSTRAINT tableLiver_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "[left]            TEXT (5),"
-                    "[right]           TEXT (5),"
-                    "contur            TEXT (20),"
-                    "parenchim         TEXT (20),"
-                    "ecogenity         TEXT (30),"
-                    "formations        TEXT (300),"
-                    "ductsIntrahepatic TEXT (50),"
-                    "porta             TEXT (5),"
-                    "lienalis          TEXT (5),"
-                    "concluzion        TEXT (500),"
-                    "recommendation    TEXT (255)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableLiver (
+                id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho     INTEGER NOT NULL,
+                [left]            TEXT,
+                [right]           TEXT,
+                contur            TEXT,
+                parenchim         TEXT,
+                ecogenity         TEXT,
+                formations        TEXT,
+                ductsIntrahepatic TEXT,
+                porta             TEXT,
+                lienalis          TEXT,
+                concluzion        TEXT,
+                recommendation    TEXT,
+                CONSTRAINT tableLiver_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2946,27 +3049,34 @@ bool DataBase::createTableCholecist()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableCholecist ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT Null,"
-                    "form          VARCHAR (150),"
-                    "dimens        VARCHAR (15),"
-                    "walls         VARCHAR (5),"
-                    "choledoc      VARCHAR (5),"
-                    "formations    VARCHAR (300),"
-                    "KEY `tableCholecist_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableCholecist_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableCholecist` (
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `form`          VARCHAR (150),
+                `dimens`        VARCHAR (15),
+                `walls`         VARCHAR (5),
+                `choledoc`      VARCHAR (5),
+                `formations`    VARCHAR (300),
+                KEY `tableCholecist_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableCholecist_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableCholecist ("
-                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tableCholecist_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "form          TEXT (150),"
-                    "dimens        TEXT (15),"
-                    "walls         TEXT (5),"
-                    "choledoc      TEXT (5),"
-                    "formations    TEXT (300)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableCholecist (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho INTEGER NOT NULL,
+                form          TEXT,
+                dimens        TEXT,
+                walls         TEXT,
+                choledoc      TEXT,
+                formations    TEXT,
+                CONSTRAINT tableCholecist_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -2983,29 +3093,36 @@ bool DataBase::createTablePancreas()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tablePancreas ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT Null,"
-                    "cefal         VARCHAR (5),"
-                    "corp          VARCHAR (5),"
-                    "tail          VARCHAR (5),"
-                    "texture       VARCHAR (20),"
-                    "ecogency      VARCHAR (30),"
-                    "formations    VARCHAR (300),"
-                    "KEY `tablePancreas_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tablePancreas_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tablePancreas` ("
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `cefal`         VARCHAR (5),
+                `corp`          VARCHAR (5),
+                `tail`          VARCHAR (5),
+                `texture`       VARCHAR (20),
+                `ecogency`      VARCHAR (30),
+                `formations`    VARCHAR (300),
+                KEY `tablePancreas_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tablePancreas_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tablePancreas ("
-                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tablePancreas_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "cefal         TEXT (5),"
-                    "corp          TEXT (5),"
-                    "tail          TEXT (5),"
-                    "texture       TEXT (20),"
-                    "ecogency      TEXT (30),"
-                    "formations    TEXT (300)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tablePancreas (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho INTEGER NOT NULL,
+                cefal         TEXT,
+                corp          TEXT,
+                tail          TEXT,
+                texture       TEXT,
+                ecogency      TEXT,
+                formations    TEXT,
+                CONSTRAINT tablePancreas_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3022,25 +3139,32 @@ bool DataBase::createTableSpleen()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableSpleen ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT Null,"
-                    "dimens        VARCHAR (15),"
-                    "contur        VARCHAR (20),"
-                    "parenchim     VARCHAR (30),"
-                    "formations    VARCHAR (300),"
-                    "KEY `tableSpleen_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableSpleen_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableSpleen` (
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `dimens`        VARCHAR (15),
+                `contur`        VARCHAR (20),
+                `parenchim`     VARCHAR (30),
+                `formations`    VARCHAR (300),
+                KEY `tableSpleen_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableSpleen_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableSpleen ("
-                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tableSpleen_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "dimens        TEXT (15),"
-                    "contur        TEXT (20),"
-                    "parenchim     TEXT (30),"
-                    "formations    TEXT (300)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableSpleen (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho INTEGER NOT NULL,
+                dimens        TEXT,
+                contur        TEXT,
+                parenchim     TEXT,
+                formations    TEXT,
+                CONSTRAINT tableSpleen_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE
+            );
+        )");
     else
         return false;
 
@@ -3057,19 +3181,26 @@ bool DataBase::createTableIntestinalLoop()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableIntestinalLoop ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT Null,"
-                    "formations    VARCHAR (300),"
-                    "KEY `tableIntestinalLoop_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableIntestinalLoop_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableIntestinalLoop` ("
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `formations`    VARCHAR (300),
+                KEY `tableIntestinalLoop_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableIntestinalLoop_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableIntestinalLoop ("
-                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tableIntestinalLoop_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "formations    TEXT DEFAULT NULL"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableIntestinalLoop (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho INTEGER NOT NULL,
+                formations    TEXT DEFAULT NULL,
+                CONSTRAINT tableIntestinalLoop_reportEcho_id FOREIGN KEY (id_reportEcho)
+                REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3086,41 +3217,48 @@ bool DataBase::createTableKidney()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableKidney ("
-                    "id                  INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho       INT NOT Null,"
-                    "`contour_right` ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',"
-                    "`contour_left`  ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',"
-                    "dimens_right        VARCHAR (15),"
-                    "dimens_left         VARCHAR (15),"
-                    "corticomed_right    VARCHAR (5),"
-                    "corticomed_left     VARCHAR (5),"
-                    "pielocaliceal_right VARCHAR (30),"
-                    "pielocaliceal_left  VARCHAR (30),"
-                    "formations          VARCHAR (500),"
-                    "`suprarenal_formations` VARCHAR(500) COLLATE utf8mb4_general_ci DEFAULT NULL,"
-                    "concluzion          VARCHAR (500),"
-                    "recommendation      VARCHAR (255),"
-                    "KEY `tableKidney_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableKidney_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableKidney` (
+                `id`                    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`         INT NOT NULL,
+                `contour_right`         ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',
+                `contour_left`          ENUM('clar', 'sters', 'regulat', 'neregulat') DEFAULT 'clar',
+                `dimens_right`          VARCHAR (15),
+                `dimens_left`           VARCHAR (15),
+                `corticomed_right`      VARCHAR (5),
+                `corticomed_left`       VARCHAR (5),
+                `pielocaliceal_right`   VARCHAR (30),
+                `pielocaliceal_left`    VARCHAR (30),
+                `formations`            VARCHAR (500),
+                `suprarenal_formations` VARCHAR(500) DEFAULT NULL,
+                `concluzion`            VARCHAR (500),
+                `recommendation`        VARCHAR (255),
+                KEY `tableKidney_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableKidney_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableKidney ("
-                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableKidney_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "contour_right         TEXT CHECK(contour_right IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',"
-                    "contour_left          TEXT CHECK(contour_left IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',"
-                    "dimens_right          TEXT DEFAULT NULL,"
-                    "dimens_left           TEXT DEFAULT NULL,"
-                    "corticomed_right      TEXT DEFAULT NULL,"
-                    "corticomed_left       TEXT DEFAULT NULL,"
-                    "pielocaliceal_right   TEXT DEFAULT NULL,"
-                    "pielocaliceal_left    TEXT DEFAULT NULL,"
-                    "formations            TEXT DEFAULT NULL,"
-                    "suprarenal_formations TEXT DEFAULT NULL,"
-                    "concluzion            TEXT DEFAULT NULL,"
-                    "recommendation        TEXT DEFAULT NULL"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableKidney (
+                id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho         INTEGER NOT NULL,
+                contour_right         TEXT CHECK(contour_right IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',
+                contour_left          TEXT CHECK(contour_left IN ('clar', 'sters', 'regulat', 'neregulat')) DEFAULT 'clar',
+                dimens_right          TEXT DEFAULT NULL,
+                dimens_left           TEXT DEFAULT NULL,
+                corticomed_right      TEXT DEFAULT NULL,
+                corticomed_left       TEXT DEFAULT NULL,
+                pielocaliceal_right   TEXT DEFAULT NULL,
+                pielocaliceal_left    TEXT DEFAULT NULL,
+                formations            TEXT DEFAULT NULL,
+                suprarenal_formations TEXT DEFAULT NULL,
+                concluzion            TEXT DEFAULT NULL,
+                recommendation        TEXT DEFAULT NULL,
+                CONSTRAINT tableKidney_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3137,23 +3275,30 @@ bool DataBase::createTableBladder()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableBladder ("
-                    "id            INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho INT NOT Null,"
-                    "volum         VARCHAR (5),"
-                    "walls         VARCHAR (5),"
-                    "formations    VARCHAR (300),"
-                    "KEY `tableBladder_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableBladder_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableBladder` (
+                `id`            INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho` INT NOT NULL,
+                `volum`         VARCHAR (5),
+                `walls`         VARCHAR (5),
+                `formations`    VARCHAR (300),
+                KEY `tableBladder_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableBladder_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableBladder ("
-                    "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho INTEGER NOT NULL CONSTRAINT tableBladder_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "volum         TEXT (5),"
-                    "walls         TEXT (5),"
-                    "formations    TEXT (300)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableBladder (
+                id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho INTEGER NOT NULL,
+                volum         TEXT,
+                walls         TEXT,
+                formations    TEXT,
+                CONSTRAINT tableBladder_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3170,35 +3315,42 @@ bool DataBase::createTableProstate()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableProstate ("
-                    "id             INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho  INT NOT Null,"
-                    "dimens         VARCHAR (25),"
-                    "volume         VARCHAR (5),"
-                    "ecostructure   VARCHAR (30),"
-                    "contour        VARCHAR (20),"
-                    "ecogency       VARCHAR (30),"
-                    "formations     VARCHAR (300),"
-                    "transrectal    BOOLEAN,"
-                    "concluzion     VARCHAR (500),"
-                    "recommendation VARCHAR (255),"
-                    "KEY `tableProstate_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableProstate_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableProstate` (
+                `id`             INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`  INT NOT NULL,
+                `dimens`         VARCHAR (25),
+                `volume`         VARCHAR (5),
+                `ecostructure`   VARCHAR (30),
+                `contour`        VARCHAR (20),
+                `ecogency`       VARCHAR (30),
+                `formations`     VARCHAR (300),
+                `transrectal`    BOOLEAN,
+                `concluzion`     VARCHAR (500),
+                `recommendation` VARCHAR (255),
+                KEY `tableProstate_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableProstate_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableProstate ("
-                    "id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho  INTEGER NOT NULL CONSTRAINT tableProstate_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "dimens         TEXT (25),"
-                    "volume         TEXT (5),"
-                    "ecostructure   TEXT (30),"
-                    "contour        TEXT (20),"
-                    "ecogency       TEXT (30),"
-                    "formations     TEXT (300),"
-                    "transrectal    INTEGER NOT NULL,"
-                    "concluzion     TEXT (500),"
-                    "recommendation TEXT (255)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableProstate (
+                id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho  INTEGER NOT NULL,
+                dimens         TEXT,
+                volume         TEXT,
+                ecostructure   TEXT,
+                contour        TEXT,
+                ecogency       TEXT,
+                formations     TEXT,
+                transrectal    INTEGER NOT NULL,
+                concluzion     TEXT,
+                recommendation TEXT,
+                CONSTRAINT tableProstate_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3215,74 +3367,84 @@ bool DataBase::createTableGynecology()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableGynecology ("
-                    "id                     INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho          INT NOT Null,"
-                    "transvaginal           BOOLEAN,"
-                    "dateMenstruation       DATE,"
-                    "antecedent             VARCHAR (150),"
-                    "uterus_dimens          VARCHAR (25),"
-                    "uterus_pozition        VARCHAR (30),"
-                    "uterus_ecostructure    VARCHAR (30),"
-                    "uterus_formations      VARCHAR (500),"
-                    "junctional_zone             ENUM('contur clar', 'contur sters') DEFAULT 'contur clar',"
-                    "junctional_zone_description VARCHAR(256),"
-                    "ecou_dimens            VARCHAR (5),"
-                    "ecou_ecostructure      VARCHAR (100),"
-                    "cervix_dimens          VARCHAR (25),"
-                    "cervix_ecostructure    VARCHAR (100),"
-                    "cervical_canal            ENUM('nedilatat', 'dilatat') DEFAULT 'nedilatat',"
-                    "cervical_canal_formations VARCHAR(256),"
-                    "douglas                VARCHAR (100),"
-                    "plex_venos             VARCHAR (150),"
-                    "ovary_right_dimens     VARCHAR (25),"
-                    "ovary_left_dimens      VARCHAR (25),"
-                    "ovary_right_volum      VARCHAR (5),"
-                    "ovary_left_volum       VARCHAR (5),"
-                    "ovary_right_follicle   VARCHAR (100),"
-                    "ovary_left_follicle    VARCHAR (100),"
-                    "ovary_right_formations VARCHAR (300),"
-                    "ovary_left_formations  VARCHAR (300),"
-                    "fallopian_tubes            ENUM('nonvizibile', 'vizibile') DEFAULT 'nonvizibile',"
-                    "fallopian_tubes_formations VARCHAR(256),"
-                    "concluzion             VARCHAR (500),"
-                    "recommendation         VARCHAR (255),"
-                    "KEY `tableGynecology_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGynecology_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGynecology` (
+                `id`                     int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`          int NOT NULL,
+                `transvaginal`           BOOLEAN,
+                `dateMenstruation`       date DEFAULT NULL,
+                `antecedent`             varchar(150) DEFAULT NULL,
+                `uterus_dimens`          varchar(25) DEFAULT NULL,
+                `uterus_pozition`        varchar(30) DEFAULT NULL,
+                `uterus_ecostructure`    varchar(30) DEFAULT NULL,
+                `uterus_formations`      varchar(500) DEFAULT NULL,
+                `ecou_dimens`            varchar(5) DEFAULT NULL,
+                `ecou_ecostructure`      varchar(100) DEFAULT NULL,
+                `cervix_dimens`          varchar(25) DEFAULT NULL,
+                `cervix_ecostructure`    varchar(100) DEFAULT NULL,
+                `douglas`                varchar(100) DEFAULT NULL,
+                `plex_venos`             varchar(150) DEFAULT NULL,
+                `ovary_right_dimens`     varchar(25) DEFAULT NULL,
+                `ovary_left_dimens`      varchar(25) DEFAULT NULL,
+                `ovary_right_volum`      varchar(5) DEFAULT NULL,
+                `ovary_left_volum`       varchar(5) DEFAULT NULL,
+                `ovary_right_follicle`   varchar(100) DEFAULT NULL,
+                `ovary_left_follicle`    varchar(100) DEFAULT NULL,
+                `ovary_right_formations` varchar(300) DEFAULT NULL,
+                `ovary_left_formations`  varchar(300) DEFAULT NULL,
+                `concluzion`             varchar(500) DEFAULT NULL,
+                `recommendation`         varchar(255) DEFAULT NULL,
+                `junctional_zone`             enum('contur clar','contur sters') DEFAULT 'contur clar',
+                `junctional_zone_description` varchar(256) DEFAULT NULL,
+                `cervical_canal`              enum('nedilatat','dilatat') DEFAULT 'nedilatat',
+                `cervical_canal_formations`   varchar(256) DEFAULT NULL,
+                `fallopian_tubes`             enum('nonvizibile','vizibile') DEFAULT 'nonvizibile',
+                `fallopian_tubes_formations`  varchar(256) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGynecology_reportEcho_id_idx` (`id_reportEcho`),
+                KEY `idx_id_reportEcho_gynecology` (`id_reportEcho`),
+                CONSTRAINT `tableGynecology_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGynecology ("
-                    "id                          INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho               INTEGER NOT NULL CONSTRAINT tableGynecology_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "transvaginal                INTEGER,"
-                    "dateMenstruation            TEXT,"
-                    "antecedent                  TEXT,"
-                    "uterus_dimens               TEXT,"
-                    "uterus_pozition             TEXT,"
-                    "uterus_ecostructure         TEXT,"
-                    "uterus_formations           TEXT,"
-                    "junctional_zone             TEXT CHECK(junctional_zone IN ('contur clar', 'contur sters')) DEFAULT 'contur clar',"
-                    "junctional_zone_description TEXT DEFAULT NULL,"
-                    "ecou_dimens                 TEXT,"
-                    "ecou_ecostructure           TEXT,"
-                    "cervix_dimens               TEXT,"
-                    "cervix_ecostructure         TEXT,"
-                    "cervical_canal              TEXT CHECK(cervical_canal IN ('nedilatat', 'dilatat')) DEFAULT 'nedilatat',"
-                    "cervical_canal_formations   TEXT DEFAULT NULL,"
-                    "douglas                     TEXT,"
-                    "plex_venos                  TEXT,"
-                    "ovary_right_dimens          TEXT,"
-                    "ovary_left_dimens           TEXT,"
-                    "ovary_right_volum           TEXT,"
-                    "ovary_left_volum            TEXT,"
-                    "ovary_right_follicle        TEXT,"
-                    "ovary_left_follicle         TEXT,"
-                    "ovary_right_formations      TEXT,"
-                    "ovary_left_formations       TEXT,"
-                    "fallopian_tubes             TEXT CHECK(fallopian_tubes IN ('nonvizibile', 'vizibile')) DEFAULT 'nonvizibile',"
-                    "fallopian_tubes_formations  TEXT DEFAULT NULL,"
-                    "concluzion                  TEXT,"
-                    "recommendation              TEXT);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGynecology (
+                id                          INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho               INTEGER NOT NULL,
+                transvaginal                INTEGER,
+                dateMenstruation            TEXT DEFAULT NULL,
+                antecedent                  TEXT DEFAULT NULL,
+                uterus_dimens               TEXT DEFAULT NULL,
+                uterus_pozition             TEXT DEFAULT NULL,
+                uterus_ecostructure         TEXT DEFAULT NULL,
+                uterus_formations           TEXT DEFAULT NULL,
+                ecou_dimens                 TEXT DEFAULT NULL,
+                ecou_ecostructure           TEXT DEFAULT NULL,
+                cervix_dimens               TEXT DEFAULT NULL,
+                cervix_ecostructure         TEXT DEFAULT NULL,
+                douglas                     TEXT DEFAULT NULL,
+                plex_venos                  TEXT DEFAULT NULL,
+                ovary_right_dimens          TEXT DEFAULT NULL,
+                ovary_left_dimens           TEXT DEFAULT NULL,
+                ovary_right_volum           TEXT DEFAULT NULL,
+                ovary_left_volum            TEXT DEFAULT NULL,
+                ovary_right_follicle        TEXT DEFAULT NULL,
+                ovary_left_follicle         TEXT DEFAULT NULL,
+                ovary_right_formations      TEXT DEFAULT NULL,
+                ovary_left_formations       TEXT DEFAULT NULL,
+                concluzion                  TEXT DEFAULT NULL,
+                recommendation              TEXT DEFAULT NULL,
+                junctional_zone             TEXT CHECK(junctional_zone IN ('contur clar', 'contur sters')) DEFAULT 'contur clar',
+                junctional_zone_description TEXT DEFAULT NULL,
+                cervical_canal              TEXT CHECK(cervical_canal IN ('nedilatat', 'dilatat')) DEFAULT 'nedilatat',
+                cervical_canal_formations   TEXT DEFAULT NULL,
+                fallopian_tubes             TEXT CHECK(fallopian_tubes IN ('nonvizibile', 'vizibile')) DEFAULT 'nonvizibile',
+                fallopian_tubes_formations  TEXT DEFAULT NULL,
+                CONSTRAINT tableGynecology_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3299,40 +3461,48 @@ bool DataBase::createTableBreast()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableBreast ("
-                    "id                       INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho            INT NOT Null,"
-                    "breast_right_ecostrcture VARCHAR (255),"
-                    "breast_right_duct        VARCHAR (20),"
-                    "breast_right_ligament    VARCHAR (20),"
-                    "breast_right_formations  VARCHAR (500),"
-                    "breast_right_ganglions   VARCHAR (300),"
-                    "breast_left_ecostrcture  VARCHAR (255),"
-                    "breast_left_duct         VARCHAR (20),"
-                    "breast_left_ligament     VARCHAR (20),"
-                    "breast_left_formations   VARCHAR (500),"
-                    "breast_left_ganglions    VARCHAR (300),"
-                    "concluzion               VARCHAR (500),"
-                    "recommendation           VARCHAR (255),"
-                    "KEY `tableBreast_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableBreast_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableBreast` (
+                `id`                       INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`            INT NOT NULL,
+                `breast_right_ecostrcture` VARCHAR (255),
+                `breast_right_duct`        VARCHAR (20),
+                `breast_right_ligament`    VARCHAR (20),
+                `breast_right_formations`  VARCHAR (500),
+                `breast_right_ganglions`   VARCHAR (300),
+                `breast_left_ecostrcture`  VARCHAR (255),
+                `breast_left_duct`         VARCHAR (20),
+                `breast_left_ligament`     VARCHAR (20),
+                `breast_left_formations`   VARCHAR (500),
+                `breast_left_ganglions`    VARCHAR (300),
+                `concluzion`               VARCHAR (500),
+                `recommendation`           VARCHAR (255),
+                KEY `tableBreast_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableBreast_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableBreast ("
-                    "id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho            INTEGER NOT NULL CONSTRAINT tableBreast_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "breast_right_ecostrcture TEXT (255),"
-                    "breast_right_duct        TEXT (20),"
-                    "breast_right_ligament    TEXT (20),"
-                    "breast_right_formations  TEXT (500),"
-                    "breast_right_ganglions   TEXT (300),"
-                    "breast_left_ecostrcture  TEXT (255),"
-                    "breast_left_duct         TEXT (20),"
-                    "breast_left_ligament     TEXT (20),"
-                    "breast_left_formations   TEXT (500),"
-                    "breast_left_ganglions    TEXT (300),"
-                    "concluzion               TEXT (500),"
-                    "recommendation           TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableBreast (
+                id                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho            INTEGER NOT NULL,
+                breast_right_ecostrcture TEXT,
+                breast_right_duct        TEXT,
+                breast_right_ligament    TEXT,
+                breast_right_formations  TEXT,
+                breast_right_ganglions   TEXT,
+                breast_left_ecostrcture  TEXT,
+                breast_left_duct         TEXT,
+                breast_left_ligament     TEXT,
+                breast_left_formations   TEXT,
+                breast_left_ganglions    TEXT,
+                concluzion               TEXT,
+                recommendation           TEXT,
+                CONSTRAINT tableBreast_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3349,36 +3519,44 @@ bool DataBase::createTableThyroid()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableThyroid ("
-                    "id                   INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho        INT NOT Null,"
-                    "thyroid_right_dimens VARCHAR (20),"
-                    "thyroid_right_volum  VARCHAR (5),"
-                    "thyroid_left_dimens  VARCHAR (20),"
-                    "thyroid_left_volum   VARCHAR (5),"
-                    "thyroid_istm         VARCHAR (4),"
-                    "thyroid_ecostructure VARCHAR (20),"
-                    "thyroid_formations   VARCHAR (500),"
-                    "thyroid_ganglions    VARCHAR (300),"
-                    "concluzion           VARCHAR (500),"
-                    "recommendation       VARCHAR (255),"
-                    "KEY `tableThyroid_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableThyroid_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableThyroid` (
+                `id`                   INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`        INT NOT NULL,
+                `thyroid_right_dimens` VARCHAR (20),
+                `thyroid_right_volum`  VARCHAR (5),
+                `thyroid_left_dimens`  VARCHAR (20),
+                `thyroid_left_volum`   VARCHAR (5),
+                `thyroid_istm`         VARCHAR (4),
+                `thyroid_ecostructure` VARCHAR (20),
+                `thyroid_formations`   VARCHAR (500),
+                `thyroid_ganglions`    VARCHAR (300),
+                `concluzion`           VARCHAR (500),
+                `recommendation`       VARCHAR (255),
+                KEY `tableThyroid_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableThyroid_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableThyroid ("
-                    "id                   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho        INTEGER NOT NULL CONSTRAINT tableThyroid_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "thyroid_right_dimens TEXT (20),"
-                    "thyroid_right_volum  TEXT (5),"
-                    "thyroid_left_dimens  TEXT (20),"
-                    "thyroid_left_volum   TEXT (5),"
-                    "thyroid_istm         TEXT (4),"
-                    "thyroid_ecostructure TEXT (20),"
-                    "thyroid_formations   TEXT (500),"
-                    "thyroid_ganglions    TEXT (300),"
-                    "concluzion           TEXT (500),"
-                    "recommendation       TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableThyroid (
+                id                   INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho        INTEGER NOT NULL,
+                thyroid_right_dimens TEXT,
+                thyroid_right_volum  TEXT,
+                thyroid_left_dimens  TEXT,
+                thyroid_left_volum   TEXT,
+                thyroid_istm         TEXT,
+                thyroid_ecostructure TEXT,
+                thyroid_formations   TEXT,
+                thyroid_ganglions    TEXT,
+                concluzion           TEXT,
+                recommendation       TEXT,
+                CONSTRAINT tableThyroid_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3395,46 +3573,54 @@ bool DataBase::createTableGestation0()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableGestation0 ("
-                    "id               INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho    INT NOT Null,"
-                    "view_examination INT,"
-                    "antecedent       VARCHAR (150),"
-                    "lmp              VARCHAR(10),"
-                    "gestation_age    VARCHAR (20),"
-                    "GS               VARCHAR (5),"
-                    "GS_age           VARCHAR (20),"
-                    "CRL              VARCHAR (5),"
-                    "CRL_age          VARCHAR (20),"
-                    "BCF              VARCHAR (30),"
-                    "liquid_amniotic  VARCHAR (40),"
-                    "miometer         VARCHAR (200),"
-                    "cervix           VARCHAR (200),"
-                    "ovary            VARCHAR (200),"
-                    "concluzion       VARCHAR (500),"
-                    "recommendation   VARCHAR (255),"
-                    "KEY `tableGestation0_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation0_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation0` (
+                `id`               INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`    INT NOT NULL,
+                `view_examination` INT,
+                `antecedent`       VARCHAR (150),
+                `lmp`              VARCHAR(10),
+                `gestation_age`    VARCHAR (20),
+                `GS`               VARCHAR (5),
+                `GS_age`           VARCHAR (20),
+                `CRL`              VARCHAR (5),
+                `CRL_age`          VARCHAR (20),
+                `BCF`              VARCHAR (30),
+                `liquid_amniotic`  VARCHAR (40),
+                `miometer`         VARCHAR (200),
+                `cervix`           VARCHAR (200),
+                `ovary`            VARCHAR (200),
+                `concluzion`       VARCHAR (500),
+                `recommendation`   VARCHAR (255),
+                KEY `tableGestation0_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation0_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation0 ("
-                    "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho    INTEGER NOT NULL CONSTRAINT tableGestation0_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "view_examination INTEGER,"
-                    "antecedent       TEXT,"
-                    "lmp              TEXT,"
-                    "gestation_age    TEXT,"
-                    "GS               TEXT,"
-                    "GS_age           TEXT,"
-                    "CRL              TEXT,"
-                    "CRL_age          TEXT,"
-                    "BCF              TEXT,"
-                    "liquid_amniotic  TEXT,"
-                    "miometer         TEXT,"
-                    "cervix           TEXT,"
-                    "ovary            TEXT,"
-                    "concluzion       TEXT,"
-                    "recommendation   TEXT);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation0 (
+                id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho    INTEGER NOT NULL,
+                view_examination INTEGER,
+                antecedent       TEXT,
+                lmp              TEXT,
+                gestation_age    TEXT,
+                GS               TEXT,
+                GS_age           TEXT,
+                CRL              TEXT,
+                CRL_age          TEXT,
+                BCF              TEXT,
+                liquid_amniotic  TEXT,
+                miometer         TEXT,
+                cervix           TEXT,
+                ovary            TEXT,
+                concluzion       TEXT,
+                recommendation   TEXT,
+                CONSTRAINT tableGestation0_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3451,76 +3637,84 @@ bool DataBase::createTableGestation1()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists tableGestation1 ("
-                    "id                INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_reportEcho     INT NOT Null,"
-                    "view_examination  INT,"
-                    "antecedent        VARCHAR (150),"
-                    "lmp               VARCHAR (10),"
-                    "gestation_age     VARCHAR (20),"
-                    "CRL               VARCHAR (5),"
-                    "CRL_age           VARCHAR (20),"
-                    "BPD               VARCHAR (5),"
-                    "BPD_age           VARCHAR (20),"
-                    "NT                VARCHAR (5),"
-                    "NT_percent        VARCHAR (20),"
-                    "BN                VARCHAR (5),"
-                    "BN_percent        VARCHAR (20),"
-                    "BCF               VARCHAR (30),"
-                    "FL                VARCHAR (5),"
-                    "FL_age            VARCHAR (20),"
-                    "callote_cranium   VARCHAR (50),"
-                    "plex_choroid      VARCHAR (50),"
-                    "vertebral_column  VARCHAR (50),"
-                    "stomach           VARCHAR (50),"
-                    "bladder           VARCHAR (50),"
-                    "diaphragm         VARCHAR (50),"
-                    "abdominal_wall    VARCHAR (50),"
-                    "location_placenta VARCHAR (50),"
-                    "sac_vitelin       VARCHAR (50),"
-                    "amniotic_liquid   VARCHAR (50),"
-                    "miometer          VARCHAR (200),"
-                    "cervix            VARCHAR (200),"
-                    "ovary             VARCHAR (200),"
-                    "concluzion        VARCHAR (500),"
-                    "recommendation    VARCHAR (255),"
-                    "KEY `tableGestation1_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation1_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation1` (
+                `id`                INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `id_reportEcho`     INT NOT NULL,
+                `view_examination`  INT,
+                `antecedent`        VARCHAR (150),
+                `lmp`               VARCHAR (10),
+                `gestation_age`     VARCHAR (20),
+                `CRL`               VARCHAR (5),
+                `CRL_age`           VARCHAR (20),
+                `BPD`               VARCHAR (5),
+                `BPD_age`           VARCHAR (20),
+                `NT`                VARCHAR (5),
+                `NT_percent`        VARCHAR (20),
+                `BN`                VARCHAR (5),
+                `BN_percent`        VARCHAR (20),
+                `BCF`               VARCHAR (30),
+                `FL`                VARCHAR (5),
+                `FL_age`            VARCHAR (20),
+                `callote_cranium`   VARCHAR (50),
+                `plex_choroid`      VARCHAR (50),
+                `vertebral_column`  VARCHAR (50),
+                `stomach`           VARCHAR (50),
+                `bladder`           VARCHAR (50),
+                `diaphragm`         VARCHAR (50),
+                `abdominal_wall`    VARCHAR (50),
+                `location_placenta` VARCHAR (50),
+                `sac_vitelin`       VARCHAR (50),
+                `amniotic_liquid`   VARCHAR (50),
+                `miometer`          VARCHAR (200),
+                `cervix`            VARCHAR (200),
+                `ovary`             VARCHAR (200),
+                `concluzion`        VARCHAR (500),
+                `recommendation`    VARCHAR (255),
+                KEY `tableGestation1_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation1_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation1 ("
-                    "id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho     INTEGER NOT NULL CONSTRAINT tableGestation1_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "view_examination  INTEGER,"
-                    "antecedent        TEXT,"
-                    "gestation_age     TEXT,"
-                    "lmp               TEXT,"
-                    "CRL               TEXT,"
-                    "CRL_age           TEXT,"
-                    "BPD               TEXT,"
-                    "BPD_age           TEXT,"
-                    "NT                TEXT,"
-                    "NT_percent        TEXT,"
-                    "BN                TEXT,"
-                    "BN_percent        TEXT,"
-                    "BCF               TEXT,"
-                    "FL                TEXT,"
-                    "FL_age            TEXT,"
-                    "callote_cranium   TEXT,"
-                    "plex_choroid      TEXT,"
-                    "vertebral_column  TEXT,"
-                    "stomach           TEXT,"
-                    "bladder           TEXT,"
-                    "diaphragm         TEXT,"
-                    "abdominal_wall    TEXT,"
-                    "location_placenta TEXT,"
-                    "sac_vitelin       TEXT,"
-                    "amniotic_liquid   TEXT,"
-                    "miometer          TEXT,"
-                    "cervix            TEXT,"
-                    "ovary             TEXT,"
-                    "concluzion        TEXT,"
-                    "recommendation    TEXT);");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation1 (
+                id                INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho     INTEGER NOT NULL,
+                view_examination  INTEGER,
+                antecedent        TEXT,
+                gestation_age     TEXT,
+                lmp               TEXT,
+                CRL               TEXT,
+                CRL_age           TEXT,
+                BPD               TEXT,
+                BPD_age           TEXT,
+                NT                TEXT,
+                NT_percent        TEXT,
+                BN                TEXT,
+                BN_percent        TEXT,
+                BCF               TEXT,
+                FL                TEXT,
+                FL_age            TEXT,
+                callote_cranium   TEXT,
+                plex_choroid      TEXT,
+                vertebral_column  TEXT,
+                stomach           TEXT,
+                bladder           TEXT,
+                diaphragm         TEXT,
+                abdominal_wall    TEXT,
+                location_placenta TEXT,
+                sac_vitelin       TEXT,
+                amniotic_liquid   TEXT,
+                miometer          TEXT,
+                cervix            TEXT,
+                ovary             TEXT,
+                concluzion        TEXT,
+                recommendation    TEXT,
+                CONSTRAINT tableGestation1_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3537,38 +3731,45 @@ bool DataBase::createTableGestation2()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE tableGestation2 ("
-                    "`id`                                    int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`                         int NOT NULL,"
-                    "`gestation_age`                         varchar(20) DEFAULT NULL,"
-                    "`trimestru`                             int DEFAULT NULL,"
-                    "`dateMenstruation`                      varchar(10) DEFAULT NULL,"
-                    "`view_examination`                      int DEFAULT NULL,"
-                    "`single_multiple_pregnancy`             int DEFAULT NULL,"
-                    "`single_multiple_pregnancy_description` varchar(250) DEFAULT NULL,"
-                    "`antecedent`                            varchar(150) DEFAULT NULL,"
-                    "`comment`                               varchar(250) DEFAULT NULL,"
-                    "`concluzion`                            varchar(500) DEFAULT NULL,"
-                    "`recommendation`                        varchar(250) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2` (
+                `id`                                    int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`                         int NOT NULL,
+                `gestation_age`                         varchar(20) DEFAULT NULL,
+                `trimestru`                             int DEFAULT NULL,
+                `dateMenstruation`                      varchar(10) DEFAULT NULL,
+                `view_examination`                      int DEFAULT NULL,
+                `single_multiple_pregnancy`             int DEFAULT NULL,
+                `single_multiple_pregnancy_description` varchar(250) DEFAULT NULL,
+                `antecedent`                            varchar(150) DEFAULT NULL,
+                `comment`                               varchar(250) DEFAULT NULL,
+                `concluzion`                            varchar(500) DEFAULT NULL,
+                `recommendation`                        varchar(250) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2 ("
-                    "id                                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho                         INTEGER NOT NULL CONSTRAINT tableGestation2_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "gestation_age                         TEXT (20),"
-                    "trimestru                             INTEGER,"
-                    "dateMenstruation                      TEXT (10),"
-                    "view_examination                      INTEGER,"
-                    "single_multiple_pregnancy             INTEGER,"
-                    "single_multiple_pregnancy_description TEXT (250),"
-                    "antecedent                            TEXT (150),"
-                    "comment                               TEXT (250),"
-                    "concluzion                            TEXT (500),"
-                    "recommendation                        TEXT (250) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2 (
+                id                                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho                         INTEGER NOT NULL,
+                gestation_age                         TEXT,
+                trimestru                             INTEGER,
+                dateMenstruation                      TEXT,
+                view_examination                      INTEGER,
+                single_multiple_pregnancy             INTEGER,
+                single_multiple_pregnancy_description TEXT,
+                antecedent                            TEXT,
+                comment                               TEXT,
+                concluzion                            TEXT,
+                recommendation                        TEXT,
+                CONSTRAINT tableGestation2_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3585,36 +3786,43 @@ bool DataBase::createTableGestation2_biometry()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_biometry` ("
-                    "`id`               int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`    int NOT NULL,"
-                    "`BPD`              varchar(5) DEFAULT NULL,"
-                    "`BPD_age`          varchar(20) DEFAULT NULL,"
-                    "`HC`               varchar(5) DEFAULT NULL,"
-                    "`HC_age`           varchar(20) DEFAULT NULL,"
-                    "`AC`               varchar(5) DEFAULT NULL,"
-                    "`AC_age`           varchar(20) DEFAULT NULL,"
-                    "`FL`               varchar(5) DEFAULT NULL,"
-                    "`FL_age`           varchar(20) DEFAULT NULL,"
-                    "`FetusCorresponds` varchar(20) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_biometry_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_biometry_reportEcho_id_idx` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_biometry` (
+                `id`               int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`    int NOT NULL,
+                `BPD`              varchar(5) DEFAULT NULL,
+                `BPD_age`          varchar(20) DEFAULT NULL,
+                `HC`               varchar(5) DEFAULT NULL,
+                `HC_age`           varchar(20) DEFAULT NULL,
+                `AC`               varchar(5) DEFAULT NULL,
+                `AC_age`           varchar(20) DEFAULT NULL,
+                `FL`               varchar(5) DEFAULT NULL,
+                `FL_age`           varchar(20) DEFAULT NULL,
+                `FetusCorresponds` varchar(20) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_biometry_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_biometry_reportEcho_id_idx` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_biometry ("
-                    "id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho    INTEGER NOT NULL CONSTRAINT tableGestation2_biometry_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "BPD              TEXT (5),"
-                    "BPD_age          TEXT (20),"
-                    "HC               TEXT (5),"
-                    "HC_age           TEXT (20),"
-                    "AC               TEXT (5),"
-                    "AC_age           TEXT (20),"
-                    "FL               TEXT (5),"
-                    "FL_age           TEXT (20),"
-                    "FetusCorresponds TEXT (20) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_biometry (
+                id               INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho    INTEGER NOT NULL,
+                BPD              TEXT,
+                BPD_age          TEXT,
+                HC               TEXT,
+                HC_age           TEXT,
+                AC               TEXT,
+                AC_age           TEXT,
+                FL               TEXT,
+                FL_age           TEXT,
+                FetusCorresponds TEXT,
+                CONSTRAINT tableGestation2_biometry_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3631,36 +3839,43 @@ bool DataBase::createTableGestation2_cranium()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_cranium` ("
-                    "`id`                             int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`                  int NOT NULL,"
-                    "`calloteCranium`                 int DEFAULT NULL,"
-                    "`facialeProfile`                 int DEFAULT NULL,"
-                    "`nasalBones`                     int DEFAULT NULL,"
-                    "`nasalBones_dimens`              varchar(5) DEFAULT NULL,"
-                    "`eyeball`                        int DEFAULT NULL,"
-                    "`eyeball_desciption`             varchar(100) DEFAULT NULL,"
-                    "`nasolabialTriangle`             int DEFAULT NULL,"
-                    "`nasolabialTriangle_description` varchar(100) DEFAULT NULL,"
-                    "`nasalFold`                      varchar(5) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_cranium_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_cranium_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_cranium` (
+                `id`                             int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`                  int NOT NULL,
+                `calloteCranium`                 int DEFAULT NULL,
+                `facialeProfile`                 int DEFAULT NULL,
+                `nasalBones`                     int DEFAULT NULL,
+                `nasalBones_dimens`              varchar(5) DEFAULT NULL,
+                `eyeball`                        int DEFAULT NULL,
+                `eyeball_desciption`             varchar(100) DEFAULT NULL,
+                `nasolabialTriangle`             int DEFAULT NULL,
+                `nasolabialTriangle_description` varchar(100) DEFAULT NULL,
+                `nasalFold`                      varchar(5) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_cranium_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_cranium_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_cranium ("
-                    "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2Cranium_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "calloteCranium                 INTEGER,"
-                    "facialeProfile                 INTEGER,"
-                    "nasalBones                     INTEGER,"
-                    "nasalBones_dimens              TEXT (5),"
-                    "eyeball                        INTEGER,"
-                    "eyeball_desciption             TEXT (100),"
-                    "nasolabialTriangle             INTEGER,"
-                    "nasolabialTriangle_description TEXT (100),"
-                    "nasalFold                      TEXT (5) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_cranium (
+                id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho                  INTEGER NOT NULL,
+                calloteCranium                 INTEGER,
+                facialeProfile                 INTEGER,
+                nasalBones                     INTEGER,
+                nasalBones_dimens              TEXT,
+                eyeball                        INTEGER,
+                eyeball_desciption             TEXT,
+                nasolabialTriangle             INTEGER,
+                nasolabialTriangle_description TEXT,
+                nasalFold                      TEXT,
+                CONSTRAINT tableGestation2Cranium_reportEcho_id FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3677,42 +3892,49 @@ bool DataBase::createTableGestation2_snc()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_SNC` ("
-                    "`id`                            int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`                 int NOT NULL,"
-                    "`hemispheres`                   int DEFAULT NULL,"
-                    "`fissureSilvius`                int DEFAULT NULL,"
-                    "`corpCalos`                     int DEFAULT NULL,"
-                    "`ventricularSystem`             int DEFAULT NULL,"
-                    "`ventricularSystem_description` varchar(70) DEFAULT NULL,"
-                    "`cavityPellucidSeptum`          int DEFAULT NULL,"
-                    "`choroidalPlex`                 int DEFAULT NULL,"
-                    "`choroidalPlex_description`     varchar(70) DEFAULT NULL,"
-                    "`cerebellum`                    int DEFAULT NULL,"
-                    "`cerebellum_description`        varchar(70) DEFAULT NULL,"
-                    "`vertebralColumn`               int DEFAULT NULL,"
-                    "`vertebralColumn_description`   varchar(100) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_SNC_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_SNC_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ") ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_SNC` (
+                `id`                            int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`                 int NOT NULL,
+                `hemispheres`                   int DEFAULT NULL,
+                `fissureSilvius`                int DEFAULT NULL,
+                `corpCalos`                     int DEFAULT NULL,
+                `ventricularSystem`             int DEFAULT NULL,
+                `ventricularSystem_description` varchar(70) DEFAULT NULL,
+                `cavityPellucidSeptum`          int DEFAULT NULL,
+                `choroidalPlex`                 int DEFAULT NULL,
+                `choroidalPlex_description`     varchar(70) DEFAULT NULL,
+                `cerebellum`                    int DEFAULT NULL,
+                `cerebellum_description`        varchar(70) DEFAULT NULL,
+                `vertebralColumn`               int DEFAULT NULL,
+                `vertebralColumn_description`   varchar(100) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_SNC_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_SNC_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_SNC ("
-                    "id                            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "id_reportEcho                 INTEGER NOT NULL CONSTRAINT tableGestation2_SNC_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "hemispheres                   INTEGER,"
-                    "fissureSilvius                INTEGER,"
-                    "corpCalos                     INTEGER,"
-                    "ventricularSystem             INTEGER,"
-                    "ventricularSystem_description TEXT (70),"
-                    "cavityPellucidSeptum          INTEGER,"
-                    "choroidalPlex                 INTEGER,"
-                    "choroidalPlex_description     TEXT (70),"
-                    "cerebellum                    INTEGER,"
-                    "cerebellum_description        TEXT (70),"
-                    "vertebralColumn               INTEGER,"
-                    "vertebralColumn_description   TEXT (100)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_SNC (
+                id                            INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                id_reportEcho                 INTEGER NOT NULL,
+                hemispheres                   INTEGER,
+                fissureSilvius                INTEGER,
+                corpCalos                     INTEGER,
+                ventricularSystem             INTEGER,
+                ventricularSystem_description TEXT,
+                cavityPellucidSeptum          INTEGER,
+                choroidalPlex                 INTEGER,
+                choroidalPlex_description     TEXT,
+                cerebellum                    INTEGER,
+                cerebellum_description        TEXT,
+                vertebralColumn               INTEGER,
+                vertebralColumn_description   TEXT,
+                CONSTRAINT tableGestation2_SNC_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3729,52 +3951,59 @@ bool DataBase::createTableGestation2_heart()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_heart` ("
-                    "`id`                                       int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`                            int NOT NULL,"
-                    "`position`                                 varchar(50) DEFAULT NULL,"
-                    "`heartBeat`                                int DEFAULT NULL,"
-                    "`heartBeat_frequency`                      varchar(5) DEFAULT NULL,"
-                    "`heartBeat_rhythm`                         int DEFAULT NULL,"
-                    "`pericordialCollections`                   int DEFAULT NULL,"
-                    "`planPatruCamere`                          int DEFAULT NULL,"
-                    "`planPatruCamere_description`              varchar(70) DEFAULT NULL,"
-                    "`ventricularEjectionPathLeft`              int DEFAULT NULL,"
-                    "`ventricularEjectionPathLeft_description`  varchar(70) DEFAULT NULL,"
-                    "`ventricularEjectionPathRight`             int DEFAULT NULL,"
-                    "`ventricularEjectionPathRight_description` varchar(70) DEFAULT NULL,"
-                    "`intersectionVesselMagistral`              int DEFAULT NULL,"
-                    "`intersectionVesselMagistral_description`  varchar(70) DEFAULT NULL,"
-                    "`planTreiVase`                             int DEFAULT NULL,"
-                    "`planTreiVase_description`                 varchar(70) DEFAULT NULL,"
-                    "`archAorta`                                int DEFAULT NULL,"
-                    "`planBicav`                                int DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_heart_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_heart_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_heart` (
+                `id`                                       int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`                            int NOT NULL,
+                `position`                                 varchar(50) DEFAULT NULL,
+                `heartBeat`                                int DEFAULT NULL,
+                `heartBeat_frequency`                      varchar(5) DEFAULT NULL,
+                `heartBeat_rhythm`                         int DEFAULT NULL,
+                `pericordialCollections`                   int DEFAULT NULL,
+                `planPatruCamere`                          int DEFAULT NULL,
+                `planPatruCamere_description`              varchar(70) DEFAULT NULL,
+                `ventricularEjectionPathLeft`              int DEFAULT NULL,
+                `ventricularEjectionPathLeft_description`  varchar(70) DEFAULT NULL,
+                `ventricularEjectionPathRight`             int DEFAULT NULL,
+                `ventricularEjectionPathRight_description` varchar(70) DEFAULT NULL,
+                `intersectionVesselMagistral`              int DEFAULT NULL,
+                `intersectionVesselMagistral_description`  varchar(70) DEFAULT NULL,
+                `planTreiVase`                             int DEFAULT NULL,
+                `planTreiVase_description`                 varchar(70) DEFAULT NULL,
+                `archAorta`                                int DEFAULT NULL,
+                `planBicav`                                int DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_heart_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_heart_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_heart ("
-                    "id                                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho                            INTEGER NOT NULL CONSTRAINT tableGestation2_heart_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "position                                 TEXT (50),"
-                    "heartBeat                                INTEGER,"
-                    "heartBeat_frequency                      TEXT (5),"
-                    "heartBeat_rhythm                         INTEGER,"
-                    "pericordialCollections                   INTEGER,"
-                    "planPatruCamere                          INTEGER,"
-                    "planPatruCamere_description              TEXT (70),"
-                    "ventricularEjectionPathLeft              INTEGER,"
-                    "ventricularEjectionPathLeft_description  TEXT (70),"
-                    "ventricularEjectionPathRight             INTEGER,"
-                    "ventricularEjectionPathRight_description TEXT (70),"
-                    "intersectionVesselMagistral              INTEGER,"
-                    "intersectionVesselMagistral_description  TEXT (70),"
-                    "planTreiVase                             INTEGER,"
-                    "planTreiVase_description                 TEXT (70),"
-                    "archAorta                                INTEGER,"
-                    "planBicav                                INTEGER"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_heart (
+                id                                       INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho                            INTEGER NOT NULL,
+                position                                 TEXT,
+                heartBeat                                INTEGER,
+                heartBeat_frequency                      TEXT,
+                heartBeat_rhythm                         INTEGER,
+                pericordialCollections                   INTEGER,
+                planPatruCamere                          INTEGER,
+                planPatruCamere_description              TEXT,
+                ventricularEjectionPathLeft              INTEGER,
+                ventricularEjectionPathLeft_description  TEXT,
+                ventricularEjectionPathRight             INTEGER,
+                ventricularEjectionPathRight_description TEXT,
+                intersectionVesselMagistral              INTEGER,
+                intersectionVesselMagistral_description  TEXT,
+                planTreiVase                             INTEGER,
+                planTreiVase_description                 TEXT,
+                archAorta                                INTEGER,
+                planBicav                                INTEGER,
+                CONSTRAINT tableGestation2_heart_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3791,26 +4020,33 @@ bool DataBase::createTableGestation2_thorax()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_thorax` ("
-                    "`id`                         int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`              int NOT NULL,"
-                    "`pulmonaryAreas`             int DEFAULT NULL,"
-                    "`pulmonaryAreas_description` varchar(70) DEFAULT NULL,"
-                    "`pleuralCollections`         int DEFAULT NULL,"
-                    "`diaphragm`                  int DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_thorax_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_thorax_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_thorax` (
+                `id`                         int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`              int NOT NULL,
+                `pulmonaryAreas`             int DEFAULT NULL,
+                `pulmonaryAreas_description` varchar(70) DEFAULT NULL,
+                `pleuralCollections`         int DEFAULT NULL,
+                `diaphragm`                  int DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_thorax_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_thorax_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_thorax ("
-                    "id                         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho              INTEGER NOT NULL CONSTRAINT tableGestation2_thorax_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "pulmonaryAreas             INTEGER (1),"
-                    "pulmonaryAreas_description TEXT (70),"
-                    "pleuralCollections         INTEGER (1),"
-                    "diaphragm                  INTEGER (1) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_thorax (
+                id                         INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho              INTEGER NOT NULL,
+                pulmonaryAreas             INTEGER,
+                pulmonaryAreas_description TEXT,
+                pleuralCollections         INTEGER,
+                diaphragm                  INTEGER,
+                CONSTRAINT tableGestation2_thorax_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3827,36 +4063,43 @@ bool DataBase::createTableGestation2_abdomen()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_abdomen` ("
-                    "`id`                    int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`         int NOT NULL,"
-                    "`abdominalWall`         int DEFAULT NULL,"
-                    "`abdominalCollections`  int DEFAULT NULL,"
-                    "`stomach`               int DEFAULT NULL,"
-                    "`stomach_description`   varchar(50) DEFAULT NULL,"
-                    "`abdominalOrgans`       int DEFAULT NULL,"
-                    "`cholecist`             int DEFAULT NULL,"
-                    "`cholecist_description` varchar(50) DEFAULT NULL,"
-                    "`intestine` int DEFAULT NULL,"
-                    "`intestine_description` varchar(70) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_abdomen_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_abdomen_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_abdomen` (
+                `id`                    int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`         int NOT NULL,
+                `abdominalWall`         int DEFAULT NULL,
+                `abdominalCollections`  int DEFAULT NULL,
+                `stomach`               int DEFAULT NULL,
+                `stomach_description`   varchar(50) DEFAULT NULL,
+                `abdominalOrgans`       int DEFAULT NULL,
+                `cholecist`             int DEFAULT NULL,
+                `cholecist_description` varchar(50) DEFAULT NULL,
+                `intestine` int DEFAULT NULL,
+                `intestine_description` varchar(70) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_abdomen_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_abdomen_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_abdomen ("
-                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho         INTEGER NOT NULL CONSTRAINT tableGestation2_abdomen_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "abdominalWall         INTEGER,"
-                    "abdominalCollections  INTEGER,"
-                    "stomach               INTEGER,"
-                    "stomach_description   TEXT (50),"
-                    "abdominalOrgans       INTEGER,"
-                    "cholecist             INTEGER,"
-                    "cholecist_description TEXT (50),"
-                    "intestine             INTEGER,"
-                    "intestine_description TEXT (70) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_abdomen (
+                id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho         INTEGER NOT NULL,
+                abdominalWall         INTEGER,
+                abdominalCollections  INTEGER,
+                stomach               INTEGER,
+                stomach_description   TEXT,
+                abdominalOrgans       INTEGER,
+                cholecist             INTEGER,
+                cholecist_description TEXT,
+                intestine             INTEGER,
+                intestine_description TEXT,
+                CONSTRAINT tableGestation2_abdomen_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3873,28 +4116,35 @@ bool DataBase::createTableGestation2_urinarySystem()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_urinarySystem` ("
-                    "`id`                   int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`        int NOT NULL,"
-                    "`kidneys`              int DEFAULT NULL,"
-                    "`kidneys_descriptions` varchar(70) DEFAULT NULL,"
-                    "`ureter`               int DEFAULT NULL,"
-                    "`ureter_descriptions`  varchar(70) DEFAULT NULL,"
-                    "`bladder`              int DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_urinarySystem_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_urinarySystem_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_urinarySystem` (
+                `id`                   int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`        int NOT NULL,
+                `kidneys`              int DEFAULT NULL,
+                `kidneys_descriptions` varchar(70) DEFAULT NULL,
+                `ureter`               int DEFAULT NULL,
+                `ureter_descriptions`  varchar(70) DEFAULT NULL,
+                `bladder`              int DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_urinarySystem_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_urinarySystem_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_urinarySystem ("
-                    "id                   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,"
-                    "id_reportEcho        INTEGER NOT NULL CONSTRAINT tableGestation2_urinarySystem_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "kidneys              INTEGER,"
-                    "kidneys_descriptions TEXT (70),"
-                    "ureter               INTEGER,"
-                    "ureter_descriptions  TEXT (70),"
-                    "bladder              INTEGER"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_urinarySystem (
+                id                   INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                id_reportEcho        INTEGER NOT NULL,
+                kidneys              INTEGER,
+                kidneys_descriptions TEXT,
+                ureter               INTEGER,
+                ureter_descriptions  TEXT,
+                bladder              INTEGER,
+                CONSTRAINT tableGestation2_urinarySystem_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3911,56 +4161,63 @@ bool DataBase::createTableGestation2_other()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_other` ("
-                    "`id`                             int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`                  int NOT NULL,"
-                    "`externalGenitalOrgans`          int DEFAULT NULL,"
-                    "`externalGenitalOrgans_aspect`   int DEFAULT NULL,"
-                    "`extremities`                    int DEFAULT NULL,"
-                    "`extremities_descriptions`       varchar(150) DEFAULT NULL,"
-                    "`fetusMass`                      varchar(5) DEFAULT NULL,"
-                    "`placenta`                       int DEFAULT NULL,"
-                    "`placentaLocalization`           varchar(50) DEFAULT NULL,"
-                    "`placentaDegreeMaturation`       varchar(5) DEFAULT NULL,"
-                    "`placentaDepth`                  varchar(5) DEFAULT NULL,"
-                    "`placentaStructure`              int DEFAULT NULL,"
-                    "`placentaStructure_descriptions` varchar(150) DEFAULT NULL,"
-                    "`umbilicalCordon`                int DEFAULT NULL,"
-                    "`umbilicalCordon_description`    varchar(70) DEFAULT NULL,"
-                    "`insertionPlacenta`              int DEFAULT NULL,"
-                    "`amnioticIndex`                  varchar(5) DEFAULT NULL,"
-                    "`amnioticIndexAspect`            int DEFAULT NULL,"
-                    "`amnioticBedDepth`               varchar(5) DEFAULT NULL,"
-                    "`cervix`                         varchar(5) DEFAULT NULL,"
-                    "`cervix_description`             varchar(150) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_other_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_other_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_other` (
+                `id`                             int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`                  int NOT NULL,
+                `externalGenitalOrgans`          int DEFAULT NULL,
+                `externalGenitalOrgans_aspect`   int DEFAULT NULL,
+                `extremities`                    int DEFAULT NULL,
+                `extremities_descriptions`       varchar(150) DEFAULT NULL,
+                `fetusMass`                      varchar(5) DEFAULT NULL,
+                `placenta`                       int DEFAULT NULL,
+                `placentaLocalization`           varchar(50) DEFAULT NULL,
+                `placentaDegreeMaturation`       varchar(5) DEFAULT NULL,
+                `placentaDepth`                  varchar(5) DEFAULT NULL,
+                `placentaStructure`              int DEFAULT NULL,
+                `placentaStructure_descriptions` varchar(150) DEFAULT NULL,
+                `umbilicalCordon`                int DEFAULT NULL,
+                `umbilicalCordon_description`    varchar(70) DEFAULT NULL,
+                `insertionPlacenta`              int DEFAULT NULL,
+                `amnioticIndex`                  varchar(5) DEFAULT NULL,
+                `amnioticIndexAspect`            int DEFAULT NULL,
+                `amnioticBedDepth`               varchar(5) DEFAULT NULL,
+                `cervix`                         varchar(5) DEFAULT NULL,
+                `cervix_description`             varchar(150) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_other_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_other_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_other ("
-                    "id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho                  INTEGER NOT NULL CONSTRAINT tableGestation2_other_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "externalGenitalOrgans          INTEGER,"
-                    "externalGenitalOrgans_aspect   INTEGER,"
-                    "extremities                    INTEGER,"
-                    "extremities_descriptions       TEXT (150),"
-                    "fetusMass                      TEXT (5),"
-                    "placenta                       INTEGER,"
-                    "placentaLocalization           TEXT (50),"
-                    "placentaDegreeMaturation       TEXT (5),"
-                    "placentaDepth                  TEXT (5),"
-                    "placentaStructure              INTEGER,"
-                    "placentaStructure_descriptions TEXT (150),"
-                    "umbilicalCordon                INTEGER,"
-                    "umbilicalCordon_description    TEXT (70),"
-                    "insertionPlacenta              INTEGER,"
-                    "amnioticIndex                  TEXT (5),"
-                    "amnioticIndexAspect            INTEGER,"
-                    "amnioticBedDepth               TEXT (5),"
-                    "cervix                         TEXT (5),"
-                    "cervix_description             TEXT (150) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_other (
+                id                             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho                  INTEGER NOT NULL,
+                externalGenitalOrgans          INTEGER,
+                externalGenitalOrgans_aspect   INTEGER,
+                extremities                    INTEGER,
+                extremities_descriptions       TEXT,
+                fetusMass                      TEXT,
+                placenta                       INTEGER,
+                placentaLocalization           TEXT,
+                placentaDegreeMaturation       TEXT,
+                placentaDepth                  TEXT,
+                placentaStructure              INTEGER,
+                placentaStructure_descriptions TEXT,
+                umbilicalCordon                INTEGER,
+                umbilicalCordon_description    TEXT,
+                insertionPlacenta              INTEGER,
+                amnioticIndex                  TEXT,
+                amnioticIndexAspect            INTEGER,
+                amnioticBedDepth               TEXT,
+                cervix                         TEXT,
+                cervix_description             TEXT,
+                CONSTRAINT tableGestation2_other_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -3977,52 +4234,59 @@ bool DataBase::createTableGestation2_doppler()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE `tableGestation2_doppler` ("
-                    "`id`             int NOT NULL AUTO_INCREMENT,"
-                    "`id_reportEcho`  int NOT NULL,"
-                    "`ombilic_PI`     varchar(5) DEFAULT NULL,"
-                    "`ombilic_RI`     varchar(5) DEFAULT NULL,"
-                    "`ombilic_SD`     varchar(5) DEFAULT NULL,"
-                    "`ombilic_flux`   int DEFAULT NULL,"
-                    "`cerebral_PI`    varchar(5) DEFAULT NULL,"
-                    "`cerebral_RI`    varchar(5) DEFAULT NULL,"
-                    "`cerebral_SD`    varchar(5) DEFAULT NULL,"
-                    "`cerebral_flux`  int DEFAULT NULL,"
-                    "`uterRight_PI`   varchar(5) DEFAULT NULL,"
-                    "`uterRight_RI`   varchar(5) DEFAULT NULL,"
-                    "`uterRight_SD`   varchar(5) DEFAULT NULL,"
-                    "`uterRight_flux` int DEFAULT NULL,"
-                    "`uterLeft_PI`    varchar(5) DEFAULT NULL,"
-                    "`uterLeft_RI`    varchar(5) DEFAULT NULL,"
-                    "`uterLeft_SD`    varchar(5) DEFAULT NULL,"
-                    "`uterLeft_flux`  int DEFAULT NULL,"
-                    "`ductVenos`      varchar(50) DEFAULT NULL,"
-                    "PRIMARY KEY (`id`),"
-                    "KEY `tableGestation2_doppler_reportEcho_id_idx` (`id_reportEcho`),"
-                    "CONSTRAINT `tableGestation2_doppler_reportEcho_id` FOREIGN KEY (`id_reportEcho`) REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `tableGestation2_doppler` (
+                `id`             int NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`  int NOT NULL,
+                `ombilic_PI`     varchar(5) DEFAULT NULL,
+                `ombilic_RI`     varchar(5) DEFAULT NULL,
+                `ombilic_SD`     varchar(5) DEFAULT NULL,
+                `ombilic_flux`   int DEFAULT NULL,
+                `cerebral_PI`    varchar(5) DEFAULT NULL,
+                `cerebral_RI`    varchar(5) DEFAULT NULL,
+                `cerebral_SD`    varchar(5) DEFAULT NULL,
+                `cerebral_flux`  int DEFAULT NULL,
+                `uterRight_PI`   varchar(5) DEFAULT NULL,
+                `uterRight_RI`   varchar(5) DEFAULT NULL,
+                `uterRight_SD`   varchar(5) DEFAULT NULL,
+                `uterRight_flux` int DEFAULT NULL,
+                `uterLeft_PI`    varchar(5) DEFAULT NULL,
+                `uterLeft_RI`    varchar(5) DEFAULT NULL,
+                `uterLeft_SD`    varchar(5) DEFAULT NULL,
+                `uterLeft_flux`  int DEFAULT NULL,
+                `ductVenos`      varchar(50) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableGestation2_doppler_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableGestation2_doppler_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE tableGestation2_doppler ("
-                    "id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_reportEcho  INTEGER NOT NULL CONSTRAINT tableGestation2_doppler_reportEcho_id REFERENCES reportEcho (id) ON DELETE CASCADE,"
-                    "ombilic_PI     TEXT (5),"
-                    "ombilic_RI     TEXT (5),"
-                    "ombilic_SD     TEXT (5),"
-                    "ombilic_flux   INTEGER,"
-                    "cerebral_PI    TEXT (5),"
-                    "cerebral_RI    TEXT (5),"
-                    "cerebral_SD    TEXT (5),"
-                    "cerebral_flux  INTEGER,"
-                    "uterRight_PI   TEXT (5),"
-                    "uterRight_RI   TEXT (5),"
-                    "uterRight_SD   TEXT (5),"
-                    "uterRight_flux INTEGER,"
-                    "uterLeft_PI    TEXT (5),"
-                    "uterLeft_RI    TEXT (5),"
-                    "uterLeft_SD    TEXT (5),"
-                    "uterLeft_flux  INTEGER,"
-                    "ductVenos      TEXT (50) "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableGestation2_doppler (
+                id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho  INTEGER NOT NULL,
+                ombilic_PI     TEXT,
+                ombilic_RI     TEXT,
+                ombilic_SD     TEXT,
+                ombilic_flux   INTEGER,
+                cerebral_PI    TEXT,
+                cerebral_RI    TEXT,
+                cerebral_SD    TEXT,
+                cerebral_flux  INTEGER,
+                uterRight_PI   TEXT,
+                uterRight_RI   TEXT,
+                uterRight_SD   TEXT,
+                uterRight_flux INTEGER,
+                uterLeft_PI    TEXT,
+                uterLeft_RI    TEXT,
+                uterLeft_SD    TEXT,
+                uterLeft_flux  INTEGER,
+                ductVenos      TEXT,
+                CONSTRAINT tableGestation2_doppler_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4039,24 +4303,28 @@ bool DataBase::createTableNormograms()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists normograms ("
-                    "`id`         int NOT NULL AUTO_INCREMENT,"
-                    "`name`       varchar (30) NOT NULL,"
-                    "`crl`        varchar (5) NOT NULL,"
-                    "`5_centile`  DOUBLE NOT NULL,"
-                    "`50_centile` DOUBLE NOT NULL,"
-                    "`95_centile` DOUBLE NOT NULL,"
-                    "PRIMARY KEY (`id`)"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS  `normograms` (
+                `id`         int NOT NULL AUTO_INCREMENT,
+                `name`       varchar (30) NOT NULL,
+                `crl`        varchar (5) NOT NULL,
+                `5_centile`  DOUBLE NOT NULL,
+                `50_centile` DOUBLE NOT NULL,
+                `95_centile` DOUBLE NOT NULL,
+                PRIMARY KEY (`id`)
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists normograms ("
-                    "id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "name         TEXT (30) NOT NULL,"
-                    "crl          TEXT (5) NOT NULL,"
-                    "`5_centile`  REAL NOT NULL,"
-                    "`50_centile` REAL NOT NULL,"
-                    "`95_centile` REAL NOT NULL "
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS normograms (
+                id           INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                name         TEXT NOT NULL,
+                crl          TEXT NOT NULL,
+                `5_centile`  REAL NOT NULL,
+                `50_centile` REAL NOT NULL,
+                `95_centile` REAL NOT NULL
+            );
+        )");
     else
         return false;
 
@@ -4073,36 +4341,47 @@ bool DataBase::createTableRegistrationPatients()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists registrationPatients ("
-                    "id                 INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "dateDoc            DATE NOT NULL,"
-                    "time_registration  INT,"
-                    "execute            BOOLEAN,"
-                    "dataPatient        VARCHAR (200) NOT Null,"
-                    "name_organizations VARCHAR (150),"
-                    "id_organizations   INT,"
-                    "name_doctors       VARCHAR (150),"
-                    "id_doctors         INT,"
-                    "investigations     VARCHAR (150),"
-                    "comment            VARCHAR (255),"
-                    "KEY `registrationPatients_organizations_id_idx` (`id_organizations`),"
-                    "KEY `registrationPatients_doctors_id_idx` (`id_doctors`),"
-                    "CONSTRAINT `registrationPatients_organizations_id` FOREIGN KEY (`id_organizations`) REFERENCES `organizations` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT,"
-                    "CONSTRAINT `registrationPatients_doctors_id` FOREIGN KEY (`id_doctors`) REFERENCES `doctors` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS `registrationPatients` (
+                `id`                 INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                `dateDoc`            DATE NOT NULL,
+                `time_registration`  INT,
+                `execute`            BOOLEAN,
+                `dataPatient`        VARCHAR (200) NOT NULL,
+                `name_organizations` VARCHAR (150),
+                `id_organizations`   INT,
+                `name_doctors`       VARCHAR (150),
+                `id_doctors`         INT,
+                `investigations`     VARCHAR (150),
+                `comment`            VARCHAR (255),
+                KEY `registrationPatients_organizations_id_idx` (`id_organizations`),
+                KEY `registrationPatients_doctors_id_idx` (`id_doctors`),
+                CONSTRAINT `registrationPatients_organizations_id` FOREIGN KEY (`id_organizations`)
+                    REFERENCES `organizations` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT `registrationPatients_doctors_id` FOREIGN KEY (`id_doctors`)
+                    REFERENCES `doctors` (`id`) ON DELETE SET NULL ON UPDATE RESTRICT
+            );
+        )");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE if not exists registrationPatients ("
-                    "id                 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "dateDoc            TEXT (10) NOT NULL,"
-                    "time_registration  INTEGER,"
-                    "execute            INT,"
-                    "dataPatient        TEXT (200) NOT NULL,"
-                    "name_organizations TEXT (150),"
-                    "id_organizations   INT CONSTRAINT registrationPatients_organizations_id REFERENCES organizations (id) ON DELETE RESTRICT,"
-                    "name_doctors       TEXT (150),"
-                    "id_doctors         INT CONSTRAINT registrationPatients_doctors_id REFERENCES doctors (id) ON DELETE RESTRICT,"
-                    "investigations     TEXT (150),"
-                    "comment            TEXT (255));");
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS registrationPatients (
+                id                 INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                dateDoc            TEXT NOT NULL,
+                time_registration  INTEGER,
+                execute            INT,
+                dataPatient        TEXT NOT NULL,
+                name_organizations TEXT,
+                id_organizations   INT,
+                name_doctors       TEXT,
+                id_doctors         INT,
+                investigations     TEXT,
+                comment            TEXT,
+                CONSTRAINT registrationPatients_organizations_id FOREIGN KEY (id_organizations)
+                    REFERENCES organizations (id) ON DELETE SET NULL ON UPDATE RESTRICT,
+                CONSTRAINT registrationPatients_doctors_id FOREIGN KEY (id_doctors)
+                    REFERENCES doctors (id) ON DELETE SET NULL ON UPDATE RESTRICT
+            );
+        )");
     else
         return false;
 
@@ -4119,7 +4398,7 @@ bool DataBase::createTableSettingsUsers()
 {
     QSqlQuery qry;
     if (globals().connectionMade == "MySQL")
-        qry.prepare("CREATE TABLE if not exists settingsUsers ("
+        qry.prepare("CREATE TABLE IF NOT EXISTS `settingsUsers` ("
                     "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
                     "id_users              INT NOT Null,"
                     "owner                 VARCHAR (50),"
@@ -4135,7 +4414,7 @@ bool DataBase::createTableSettingsUsers()
                     "CONSTRAINT `settingsUsers_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
                     ");");
     else if (globals().connectionMade == "Sqlite")
-        qry.prepare("CREATE TABLE settingsUsers ("
+        qry.prepare("CREATE TABLE IF NOT EXISTS settingsUsers ("
                     "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
                     "id_users              INT NOT NULL CONSTRAINT settingsUsers_users_id REFERENCES users (id) ON DELETE CASCADE,"
                     "owner                 TEXT (50),"
