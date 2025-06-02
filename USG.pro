@@ -94,6 +94,7 @@ SOURCES += \
     common/cryptomanager.cpp \
     common/datapercentage.cpp \
     common/emailcore.cpp \
+    common/firstrunwizard.cpp \
     common/handlerfunctionthread.cpp \
     common/processingaction.cpp \
     customs/custommessage.cpp \
@@ -161,6 +162,7 @@ HEADERS += \
     common/cryptomanager.h \
     common/datapercentage.h \
     common/emailcore.h \
+    common/firstrunwizard.h \
     common/handlerfunctionthread.h \
     common/processingaction.h \
     common/reportsettingsmanager.h \
@@ -239,6 +241,7 @@ FORMS += \
     common/agentsendemail.ui \
     common/cloudserverconfig.ui \
     common/contonline.ui \
+    common/firstrunwizard.ui \
     common/processingaction.ui \
     customs/custommessage.ui \
     data/about.ui \

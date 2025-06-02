@@ -5355,114 +5355,143 @@ QString DataBase::getQryForTableProstateById(const int id_doc) const
 
 QString DataBase::getQryForTableGynecologyById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "  reportEchoPresentation.docPresentationDate AS title_report,"
-                   "  tableGynecology.transvaginal,"
-                   "  %1 AS dateMenstruation,"
-                   "  tableGynecology.antecedent,"
-                   "  tableGynecology.uterus_dimens,"
-                   "  tableGynecology.uterus_pozition,"
-                   "  tableGynecology.uterus_ecostructure,"
-                   "  tableGynecology.uterus_formations,"
-                   "  tableGynecology.junctional_zone,"
-                   "  tableGynecology.junctional_zone_description,"
-                   "  tableGynecology.ecou_dimens,"
-                   "  tableGynecology.ecou_ecostructure,"
-                   "  tableGynecology.cervix_dimens,"
-                   "  tableGynecology.cervix_ecostructure,"
-                   "  tableGynecology.cervical_canal,"
-                   "  tableGynecology.cervical_canal_formations,"
-                   "  tableGynecology.douglas,"
-                   "  tableGynecology.plex_venos,"
-                   "  tableGynecology.ovary_right_dimens,"
-                   "  tableGynecology.ovary_left_dimens,"
-                   "  tableGynecology.ovary_right_volum,"
-                   "  tableGynecology.ovary_left_volum,"
-                   "  tableGynecology.ovary_right_follicle,"
-                   "  tableGynecology.ovary_left_follicle,"
-                   "  tableGynecology.ovary_right_formations,"
-                   "  tableGynecology.ovary_left_formations,"
-                   "  tableGynecology.fallopian_tubes,"
-                   "  tableGynecology.fallopian_tubes_formations,"
-                   "  tableGynecology.concluzion AS gynecology_concluzion,"
-                   "  tableGynecology.recommendation AS gynecology_recommendation,"
-                   "  reportEcho.concluzion "
-                   " FROM reportEcho "
-                   "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  INNER JOIN tableGynecology ON reportEcho.id = tableGynecology.id_reportEcho "
-                   "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = " + QString::number(id_doc) + ";")
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableGynecology.transvaginal,
+            %1 AS dateMenstruation,
+            tableGynecology.antecedent,
+            tableGynecology.uterus_dimens,
+            tableGynecology.uterus_pozition,
+            tableGynecology.uterus_ecostructure,
+            tableGynecology.uterus_formations,
+            tableGynecology.junctional_zone,
+            tableGynecology.junctional_zone_description,
+            tableGynecology.ecou_dimens,
+            tableGynecology.ecou_ecostructure,
+            tableGynecology.cervix_dimens,
+            tableGynecology.cervix_ecostructure,
+            tableGynecology.cervical_canal,
+            tableGynecology.cervical_canal_formations,
+            tableGynecology.douglas,
+            tableGynecology.plex_venos,
+            tableGynecology.ovary_right_dimens,
+            tableGynecology.ovary_left_dimens,
+            tableGynecology.ovary_right_volum,
+            tableGynecology.ovary_left_volum,
+            tableGynecology.ovary_right_follicle,
+            tableGynecology.ovary_left_follicle,
+            tableGynecology.ovary_right_formations,
+            tableGynecology.ovary_left_formations,
+            tableGynecology.fallopian_tubes,
+            tableGynecology.fallopian_tubes_formations,
+            tableGynecology.concluzion AS gynecology_concluzion,
+            tableGynecology.recommendation AS gynecology_recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableGynecology ON
+            reportEcho.id = tableGynecology.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%2';
+    )")
         .arg((globals().thisMySQL) ?
-                 "CONCAT(SUBSTRING(tableGynecology.dateMenstruation, 9, 2) , '.' , SUBSTRING(tableGynecology.dateMenstruation, 6, 2) , '.' , SUBSTRING(tableGynecology.dateMenstruation, 1, 4))" :
-                 "substr(tableGynecology.dateMenstruation, 9, 2) || '.' || substr(tableGynecology.dateMenstruation, 6, 2) || '.' || substr(tableGynecology.dateMenstruation, 1, 4)");
+                 "DATE_FORMAT(tableGynecology.dateMenstruation, '%d.%m.%Y')" :
+                 "strftime('%d.%m.%Y', tableGynecology.dateMenstruation)",
+             QString::number(id_doc));
 }
 
 QString DataBase::getQryForTableBreastById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "  reportEchoPresentation.docPresentationDate AS title_report,"
-                   "  tableBreast.breast_right_ecostrcture,"
-                   "  tableBreast.breast_right_duct,"
-                   "  tableBreast.breast_right_ligament,"
-                   "  tableBreast.breast_right_formations,"
-                   "  tableBreast.breast_right_ganglions,"
-                   "  tableBreast.breast_left_ecostrcture,"
-                   "  tableBreast.breast_left_duct,"
-                   "  tableBreast.breast_left_ligament,"
-                   "  tableBreast.breast_left_formations,"
-                   "  tableBreast.breast_left_ganglions,"
-                   "  tableBreast.concluzion AS breast_concluzion,"
-                   "  tableBreast.recommendation AS recommendation,"
-                   "  reportEcho.concluzion "
-                   "FROM reportEcho "
-                   "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  INNER JOIN tableBreast ON reportEcho.id = tableBreast.id_reportEcho "
-                   "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(QString::number(id_doc));
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableBreast.breast_right_ecostrcture,
+            tableBreast.breast_right_duct,
+            tableBreast.breast_right_ligament,
+            tableBreast.breast_right_formations,
+            tableBreast.breast_right_ganglions,
+            tableBreast.breast_left_ecostrcture,
+            tableBreast.breast_left_duct,
+            tableBreast.breast_left_ligament,
+            tableBreast.breast_left_formations,
+            tableBreast.breast_left_ganglions,
+            tableBreast.concluzion AS breast_concluzion,
+            tableBreast.recommendation AS recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableBreast ON
+            reportEcho.id = tableBreast.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 }
 
 QString DataBase::getQryForTableThyroidById(const int id_doc) const
 {
-    return QString("SELECT "
-                   "  reportEchoPresentation.docPresentationDate AS title_report,"
-                   "  tableThyroid.thyroid_right_dimens,"
-                   "  tableThyroid.thyroid_right_volum,"
-                   "  tableThyroid.thyroid_left_dimens,"
-                   "  tableThyroid.thyroid_left_volum,"
-                   "  tableThyroid.thyroid_istm,"
-                   "  tableThyroid.thyroid_ecostructure,"
-                   "  tableThyroid.thyroid_formations,"
-                   "  tableThyroid.thyroid_ganglions,"
-                   "  tableThyroid.concluzion AS thyroid_concluzion,"
-                   "  tableThyroid.recommendation AS thyroid_recommendation,"
-                   "  reportEcho.concluzion "
-                   "FROM reportEcho "
-                   "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                   "  INNER JOIN tableThyroid ON reportEcho.id = tableThyroid.id_reportEcho "
-                   "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(QString::number(id_doc));
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableThyroid.thyroid_right_dimens,
+            tableThyroid.thyroid_right_volum,
+            tableThyroid.thyroid_left_dimens,
+            tableThyroid.thyroid_left_volum,
+            tableThyroid.thyroid_istm,
+            tableThyroid.thyroid_ecostructure,
+            tableThyroid.thyroid_formations,
+            tableThyroid.thyroid_ganglions,
+            tableThyroid.concluzion AS thyroid_concluzion,
+            tableThyroid.recommendation AS thyroid_recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableThyroid ON
+            reportEcho.id = tableThyroid.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 }
 
 QString DataBase::getQryForTableGestation0dById(const int id_doc) const
 {
     QString str_qry;
-    str_qry =  QString("SELECT "
-                      "  reportEchoPresentation.docPresentationDate AS title_report,"
-                      "  tableGestation0.antecedent,"
-                      "  tableGestation0.gestation_age,"
-                      "  tableGestation0.GS,"
-                      "  tableGestation0.GS_age,"
-                      "  tableGestation0.CRL,"
-                      "  tableGestation0.CRL_age,"
-                      "  tableGestation0.BCF,"
-                      "  tableGestation0.liquid_amniotic,"
-                      "  tableGestation0.miometer,"
-                      "  tableGestation0.cervix,"
-                      "  tableGestation0.ovary,"
-                      "  tableGestation0.concluzion AS gestation0_concluzion,"
-                      "  tableGestation0.recommendation AS gestation0_recommendation,"
-                      "  reportEcho.concluzion "
-                      "FROM reportEcho "
-                      "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                      "  INNER JOIN tableGestation0 ON reportEcho.id = tableGestation0.id_reportEcho "
-                      "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(id_doc);
+    str_qry =  QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableGestation0.antecedent,
+            tableGestation0.gestation_age,
+            tableGestation0.GS,
+            tableGestation0.GS_age,
+            tableGestation0.CRL,
+            tableGestation0.CRL_age,
+            tableGestation0.BCF,
+            tableGestation0.liquid_amniotic,
+            tableGestation0.miometer,
+            tableGestation0.cervix,
+            tableGestation0.ovary,
+            tableGestation0.concluzion AS gestation0_concluzion,
+            tableGestation0.recommendation AS gestation0_recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableGestation0 ON
+            reportEcho.id = tableGestation0.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 
     return str_qry;
 }
@@ -5470,41 +5499,48 @@ QString DataBase::getQryForTableGestation0dById(const int id_doc) const
 QString DataBase::getQryForTableGestation1dById(const int id_doc) const
 {
     QString str_qry;
-    str_qry = QString("SELECT "
-                      "  reportEchoPresentation.docPresentationDate AS title_report,"
-                      "  tableGestation1.antecedent,"
-                      "  tableGestation1.gestation_age,"
-                      "  tableGestation1.CRL,"
-                      "  tableGestation1.CRL_age,"
-                      "  tableGestation1.BPD,"
-                      "  tableGestation1.BPD_age,"
-                      "  tableGestation1.NT,"
-                      "  tableGestation1.NT_percent,"
-                      "  tableGestation1.BN,"
-                      "  tableGestation1.BN_percent,"
-                      "  tableGestation1.BCF,"
-                      "  tableGestation1.FL,"
-                      "  tableGestation1.FL_age,"
-                      "  tableGestation1.callote_cranium,"
-                      "  tableGestation1.plex_choroid,"
-                      "  tableGestation1.vertebral_column,"
-                      "  tableGestation1.stomach,"
-                      "  tableGestation1.bladder,"
-                      "  tableGestation1.diaphragm,"
-                      "  tableGestation1.abdominal_wall,"
-                      "  tableGestation1.location_placenta,"
-                      "  tableGestation1.sac_vitelin,"
-                      "  tableGestation1.amniotic_liquid,"
-                      "  tableGestation1.miometer,"
-                      "  tableGestation1.cervix,"
-                      "  tableGestation1.ovary,"
-                      "  tableGestation1.concluzion AS gestation1_concluzion,"
-                      "  tableGestation1.recommendation AS gestation1_recommendation,"
-                      "  reportEcho.concluzion "
-                      "FROM reportEcho "
-                      "  INNER JOIN reportEchoPresentation ON reportEcho.id = reportEchoPresentation.id_reportEcho "
-                      "  INNER JOIN tableGestation1 ON reportEcho.id = tableGestation1.id_reportEcho "
-                      "WHERE reportEcho.deletionMark = '2' AND reportEcho.id = '%1';").arg(id_doc);
+    str_qry = QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableGestation1.antecedent,
+            tableGestation1.gestation_age,
+            tableGestation1.CRL,
+            tableGestation1.CRL_age,
+            tableGestation1.BPD,
+            tableGestation1.BPD_age,
+            tableGestation1.NT,
+            tableGestation1.NT_percent,
+            tableGestation1.BN,
+            tableGestation1.BN_percent,
+            tableGestation1.BCF,
+            tableGestation1.FL,
+            tableGestation1.FL_age,
+            tableGestation1.callote_cranium,
+            tableGestation1.plex_choroid,
+            tableGestation1.vertebral_column,
+            tableGestation1.stomach,
+            tableGestation1.bladder,
+            tableGestation1.diaphragm,
+            tableGestation1.abdominal_wall,
+            tableGestation1.location_placenta,
+            tableGestation1.sac_vitelin,
+            tableGestation1.amniotic_liquid,
+            tableGestation1.miometer,
+            tableGestation1.cervix,
+            tableGestation1.ovary,
+            tableGestation1.concluzion AS gestation1_concluzion,
+            tableGestation1.recommendation AS gestation1_recommendation,
+            reportEcho.concluzion
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableGestation1 ON
+            reportEcho.id = tableGestation1.id_reportEcho
+        WHERE
+            reportEcho.deletionMark = '2'
+            AND reportEcho.id = '%1';
+    )").arg(QString::number(id_doc));
 
     return str_qry;
 }
@@ -5512,359 +5548,428 @@ QString DataBase::getQryForTableGestation1dById(const int id_doc) const
 QString DataBase::getQryForTableGestation2(const int id_doc) const
 {
     QString str;
-    str = QString("SELECT "
-                  "reportEchoPresentation.docPresentationDate AS title_report, "
-                  " /* ----------------- main ----------------- */ "
-                  "tableGestation2.gestation_age,"
-                  "tableGestation2.trimestru,"
-                  "tableGestation2.dateMenstruation,"
-                  "CASE tableGestation2.view_examination "
-                  "     WHEN 0 THEN 'adecvată'"
-                  "     WHEN 1 THEN 'limitată'"
-                  "     ELSE 'dificilă'"
-                  "END as view_examination,"
-                  "CASE tableGestation2.single_multiple_pregnancy "
-                  "     WHEN 0 THEN 'monofetală'"
-                  "     ELSE 'multiplă'"
-                  "END as pregnancy,"
-                  "tableGestation2.single_multiple_pregnancy_description,"
-                  "tableGestation2.antecedent,"
-                  "tableGestation2.comment,"
-                  "tableGestation2.concluzion,"
-                  "tableGestation2.recommendation,"
-                  " /* ----------------- biometry ----------------- */ "
-                  "tableGestation2_biometry.BPD,"
-                  "tableGestation2_biometry.BPD_age,"
-                  "tableGestation2_biometry.HC,"
-                  "tableGestation2_biometry.HC_age,"
-                  "tableGestation2_biometry.AC,"
-                  "tableGestation2_biometry.AC_age,"
-                  "tableGestation2_biometry.FL,"
-                  "tableGestation2_biometry.FL_age,"
-                  "tableGestation2_biometry.FetusCorresponds,"
-                  " /* ----------------- cranium ----------------- */ "
-                  "CASE tableGestation2_cranium.calloteCranium "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as calloteCranium,"
-                  "CASE tableGestation2_cranium.facialeProfile "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as facialeProfile,"
-                  "CASE tableGestation2_cranium.nasalBones "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as nasalBones,"
-                  "tableGestation2_cranium.nasalBones_dimens,"
-                  "CASE tableGestation2_cranium.eyeball "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as eyeball,"
-                  "tableGestation2_cranium.eyeball_desciption,"
-                  "CASE tableGestation2_cranium.nasolabialTriangle "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as nasolabialTriangle,"
-                  "tableGestation2_cranium.nasolabialTriangle_description,"
-                  "tableGestation2_cranium.nasalFold,"
-                  " /* ----------------- snc ----------------- */ "
-                  "CASE tableGestation2_SNC.hemispheres "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as hemispheres,"
-                  "CASE tableGestation2_SNC.fissureSilvius "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as fissureSilvius,"
-                  "CASE tableGestation2_SNC.corpCalos "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as corpCalos,"
-                  "CASE tableGestation2_SNC.ventricularSystem "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as ventricularSystem,"
-                  "tableGestation2_SNC.ventricularSystem_description,"
-                  "CASE tableGestation2_SNC.cavityPellucidSeptum "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as cavityPellucidSeptum,"
-                  "CASE tableGestation2_SNC.choroidalPlex "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as choroidalPlex,"
-                  "tableGestation2_SNC.choroidalPlex_description,    "
-                  "CASE tableGestation2_SNC.cerebellum "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as cerebellum,"
-                  "tableGestation2_SNC.cerebellum_description,"
-                  "CASE tableGestation2_SNC.vertebralColumn "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as vertebralColumn,"
-                  "tableGestation2_SNC.vertebralColumn_description,"
-                  " /* ----------------- heart ----------------- */ "
-                  "tableGestation2_heart.position,"
-                  "CASE tableGestation2_heart.heartBeat "
-                  "     WHEN 0 THEN 'prezente'"
-                  "     ELSE 'absente'"
-                  "END as heartBeat,"
-                  "tableGestation2_heart.heartBeat_frequency,"
-                  "CASE tableGestation2_heart.heartBeat_rhythm "
-                  "     WHEN 0 THEN 'ritmice'"
-                  "     ELSE 'aritmice'"
-                  "END as heartBeat_rhythm,"
-                  "CASE tableGestation2_heart.pericordialCollections "
-                  "     WHEN 0 THEN 'absente'"
-                  "     ELSE 'prezente'"
-                  "END as pericordialCollections,"
-                  "CASE tableGestation2_heart.planPatruCamere "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as planPatruCamere,"
-                  "tableGestation2_heart.planPatruCamere_description,"
-                  "CASE tableGestation2_heart.ventricularEjectionPathLeft "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as ventricularEjectionPathLeft,"
-                  "tableGestation2_heart.ventricularEjectionPathLeft_description,"
-                  "CASE tableGestation2_heart.ventricularEjectionPathRight "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as ventricularEjectionPathRight,"
-                  "tableGestation2_heart.ventricularEjectionPathRight_description,"
-                  "CASE tableGestation2_heart.intersectionVesselMagistral "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as intersectionVesselMagistral,"
-                  "tableGestation2_heart.intersectionVesselMagistral_description,"
-                  "CASE tableGestation2_heart.planTreiVase "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as planTreiVase,"
-                  "tableGestation2_heart.planTreiVase_description,"
-                  "CASE tableGestation2_heart.archAorta "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as archAorta,"
-                  "CASE tableGestation2_heart.planBicav "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as planBicav,"
-                  " /* ----------------- thorax ----------------- */ "
-                  "CASE tableGestation2_thorax.pulmonaryAreas "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as pulmonaryAreas,"
-                  "tableGestation2_thorax.pulmonaryAreas_description,"
-                  "CASE tableGestation2_thorax.pleuralCollections "
-                  "     WHEN 0 THEN 'absente'"
-                  "     ELSE 'prezente'"
-                  "END as pleuralCollections,"
-                  "CASE tableGestation2_thorax.diaphragm "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as diaphragm,"
-                  " /* ----------------- abdomen ----------------- */ "
-                  "CASE tableGestation2_abdomen.abdominalWall "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as abdominalWall,"
-                  "CASE tableGestation2_abdomen.abdominalCollections "
-                  "     WHEN 0 THEN 'absente'"
-                  "     WHEN 1 THEN 'prezente'"
-                  "     ELSE 'dificil'"
-                  "END as abdominalCollections,"
-                  "CASE tableGestation2_abdomen.stomach "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as stomach,"
-                  "tableGestation2_abdomen.stomach_description,"
-                  "CASE tableGestation2_abdomen.abdominalOrgans "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as abdominalOrgans,"
-                  "CASE tableGestation2_abdomen.abdominalOrgans "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as abdominalOrgans,"
-                  "CASE tableGestation2_abdomen.cholecist "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as cholecist,"
-                  "tableGestation2_abdomen.cholecist_description,"
-                  "CASE tableGestation2_abdomen.intestine "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as intestine,"
-                  "tableGestation2_abdomen.intestine_description,"
-                  " /* ----------------- urinary system ----------------- */ "
-                  "CASE tableGestation2_urinarySystem.kidneys "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as kidneys,"
-                  "tableGestation2_urinarySystem.kidneys_descriptions,"
-                  "CASE tableGestation2_urinarySystem.ureter "
-                  "     WHEN 0 THEN 'nonvizibile'"
-                  "     ELSE 'vizibile'"
-                  "END as ureter,"
-                  "tableGestation2_urinarySystem.ureter_descriptions,"
-                  "CASE tableGestation2_urinarySystem.bladder "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as bladder,"
-                  " /* ----------------- other ----------------- */ "
-                  "CASE tableGestation2_other.externalGenitalOrgans "
-                  "     WHEN 0 THEN 'masc.'"
-                  "     WHEN 1 THEN 'fem.'"
-                  "     ELSE 'dificil'"
-                  "END as externalGenitalOrgans,"
-                  "CASE tableGestation2_other.extremities "
-                  "     WHEN 0 THEN 'normal'"
-                  "     WHEN 1 THEN 'anormal'"
-                  "     ELSE 'dificil'"
-                  "END as extremities,"
-                  "tableGestation2_other.extremities_descriptions,"
-                  "tableGestation2_other.fetusMass,"
-                  "CASE tableGestation2_other.placenta "
-                  "     WHEN 0 THEN 'nonprevia'"
-                  "     ELSE 'previa'"
-                  "END as placenta,"
-                  "tableGestation2_other.placentaLocalization,"
-                  "tableGestation2_other.placentaDegreeMaturation,"
-                  "tableGestation2_other.placentaDepth,"
-                  "CASE tableGestation2_other.placentaStructure "
-                  "     WHEN 0 THEN 'omogenă'"
-                  "     ELSE 'neomogenă'"
-                  "END as placentaStructure,"
-                  "tableGestation2_other.placentaStructure_descriptions,"
-                  "CASE tableGestation2_other.umbilicalCordon "
-                  "     WHEN 0 THEN 'trei vase'"
-                  "     ELSE 'două vase'"
-                  "END as umbilicalCordon,"
-                  "tableGestation2_other.umbilicalCordon_description,"
-                  "CASE tableGestation2_other.insertionPlacenta "
-                  "     WHEN 0 THEN 'centrală'"
-                  "     WHEN 1 THEN 'excentrică'"
-                  "     WHEN 2 THEN 'periferică'"
-                  "     WHEN 3 THEN 'marginală'"
-                  "     ELSE 'velamentoasă'"
-                  "END as insertionPlacenta,"
-                  "tableGestation2_other.amnioticIndex,"
-                  "CASE tableGestation2_other.amnioticIndexAspect "
-                  "     WHEN 0 THEN 'omogen'"
-                  "     ELSE 'neomogen'"
-                  "END as amnioticIndexAspect,"
-                  "tableGestation2_other.amnioticBedDepth,"
-                  "tableGestation2_other.cervix,"
-                  "tableGestation2_other.cervix_description,"
-                  " /* ----------------- doppler ----------------- */ "
-                  "tableGestation2_doppler.ombilic_PI,"
-                  "tableGestation2_doppler.ombilic_RI,"
-                  "tableGestation2_doppler.ombilic_SD,"
-                  "CASE tableGestation2_doppler.ombilic_flux "
-                  "     WHEN 1 THEN 'normal'"
-                  "     WHEN 2 THEN 'anormal'"
-                  "     ELSE ''"
-                  "END as ombilic_flux,"
-                  "tableGestation2_doppler.cerebral_PI,"
-                  "tableGestation2_doppler.cerebral_RI,"
-                  "tableGestation2_doppler.cerebral_SD,"
-                  "CASE tableGestation2_doppler.cerebral_flux "
-                  "     WHEN 1 THEN 'normal'"
-                  "     WHEN 2 THEN 'anormal'"
-                  "     ELSE ''"
-                  "END as cerebral_flux,"
-                  "tableGestation2_doppler.uterRight_PI,"
-                  "tableGestation2_doppler.uterRight_RI,"
-                  "tableGestation2_doppler.uterRight_SD,"
-                  "CASE tableGestation2_doppler.uterRight_flux "
-                  "     WHEN 1 THEN 'normal'"
-                  "     WHEN 2 THEN 'anormal'"
-                  "     ELSE ''"
-                  "END as uterRight_flux,"
-                  "tableGestation2_doppler.uterLeft_PI,"
-                  "tableGestation2_doppler.uterLeft_RI,"
-                  "tableGestation2_doppler.uterLeft_SD,"
-                  "CASE tableGestation2_doppler.uterLeft_flux "
-                  "     WHEN 1 THEN 'normal'"
-                  "     WHEN 2 THEN 'anormal'"
-                  "     ELSE ''"
-                  "END as uterLeft_flux,"
-                  "CASE tableGestation2_doppler.ductVenos "
-                  "     WHEN 1 THEN 'normal' "
-                  "     WHEN 2 THEN 'anormal redus' "
-                  "     WHEN 3 THEN 'anormal nul' "
-                  "     WHEN 4 THEN 'anormal revers' "
-                  "     WHEN 5 THEN 'dificil' "
-                  "     ELSE ''"
-                  "END as ductVenos "
-                " FROM tableGestation2 "
-                "INNER JOIN reportEchoPresentation ON reportEchoPresentation.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_biometry ON tableGestation2_biometry.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_cranium ON tableGestation2_cranium.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_SNC ON tableGestation2_SNC.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_heart ON tableGestation2_heart.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_thorax ON tableGestation2_thorax.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_abdomen ON tableGestation2_abdomen.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_urinarySystem ON tableGestation2_urinarySystem.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_other ON tableGestation2_other.id_reportEcho = tableGestation2.id_reportEcho "
-                "INNER JOIN tableGestation2_doppler ON tableGestation2_doppler.id_reportEcho = tableGestation2.id_reportEcho "
-                "WHERE tableGestation2.id_reportEcho = '%1';").arg(QString::number(id_doc));
-    qDebug() << str;
+    str = QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            /* ----------------- main ----------------- */
+            tableGestation2.gestation_age,
+            tableGestation2.trimestru,
+            tableGestation2.dateMenstruation,
+            CASE
+                tableGestation2.view_examination
+                WHEN 0 THEN 'adecvată'
+                WHEN 1 THEN 'limitată'
+                ELSE 'dificilă'
+            END as view_examination,
+            CASE
+                tableGestation2.single_multiple_pregnancy
+                WHEN 0 THEN 'monofetală'
+                ELSE 'multiplă'
+            END as pregnancy,
+            tableGestation2.single_multiple_pregnancy_description,
+            tableGestation2.antecedent,
+            tableGestation2.comment,
+            tableGestation2.concluzion,
+            tableGestation2.recommendation,
+            /* ----------------- biometry ----------------- */
+            tableGestation2_biometry.BPD,
+            tableGestation2_biometry.BPD_age,
+            tableGestation2_biometry.HC,
+            tableGestation2_biometry.HC_age,
+            tableGestation2_biometry.AC,
+            tableGestation2_biometry.AC_age,
+            tableGestation2_biometry.FL,
+            tableGestation2_biometry.FL_age,
+            tableGestation2_biometry.FetusCorresponds,
+            /* ----------------- cranium ----------------- */
+            CASE
+                tableGestation2_cranium.calloteCranium
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as calloteCranium,
+            CASE
+                tableGestation2_cranium.facialeProfile
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as facialeProfile,
+            CASE
+                tableGestation2_cranium.nasalBones
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as nasalBones,
+            tableGestation2_cranium.nasalBones_dimens,
+            CASE
+                tableGestation2_cranium.eyeball
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as eyeball,
+            tableGestation2_cranium.eyeball_desciption,
+            CASE
+                tableGestation2_cranium.nasolabialTriangle
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as nasolabialTriangle,
+            tableGestation2_cranium.nasolabialTriangle_description,
+            tableGestation2_cranium.nasalFold,
+            /* ----------------- snc ----------------- */
+            CASE
+                tableGestation2_SNC.hemispheres
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as hemispheres,
+            CASE
+                tableGestation2_SNC.fissureSilvius
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as fissureSilvius,
+            CASE
+                tableGestation2_SNC.corpCalos
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as corpCalos,
+            CASE
+                tableGestation2_SNC.ventricularSystem
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as ventricularSystem,
+            tableGestation2_SNC.ventricularSystem_description,
+            CASE
+                tableGestation2_SNC.cavityPellucidSeptum
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as cavityPellucidSeptum,
+            CASE
+                tableGestation2_SNC.choroidalPlex
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as choroidalPlex,
+            tableGestation2_SNC.choroidalPlex_description,
+            CASE
+                tableGestation2_SNC.cerebellum
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as cerebellum,
+            tableGestation2_SNC.cerebellum_description,
+            CASE
+                tableGestation2_SNC.vertebralColumn
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as vertebralColumn,
+            tableGestation2_SNC.vertebralColumn_description,
+            /* ----------------- heart ----------------- */
+            tableGestation2_heart.position,
+            CASE
+                tableGestation2_heart.heartBeat
+                WHEN 0 THEN 'prezente'
+                ELSE 'absente'
+            END as heartBeat,
+            tableGestation2_heart.heartBeat_frequency,
+            CASE
+                tableGestation2_heart.heartBeat_rhythm
+                WHEN 0 THEN 'ritmice'
+                ELSE 'aritmice'
+            END as heartBeat_rhythm,
+            CASE
+                tableGestation2_heart.pericordialCollections
+                WHEN 0 THEN 'absente'
+                ELSE 'prezente'
+            END as pericordialCollections,
+            CASE
+                tableGestation2_heart.planPatruCamere
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as planPatruCamere,
+            tableGestation2_heart.planPatruCamere_description,
+            CASE
+                tableGestation2_heart.ventricularEjectionPathLeft
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as ventricularEjectionPathLeft,
+            tableGestation2_heart.ventricularEjectionPathLeft_description,
+            CASE
+                tableGestation2_heart.ventricularEjectionPathRight
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as ventricularEjectionPathRight,
+            tableGestation2_heart.ventricularEjectionPathRight_description,
+            CASE
+                tableGestation2_heart.intersectionVesselMagistral
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as intersectionVesselMagistral,
+            tableGestation2_heart.intersectionVesselMagistral_description,
+            CASE
+                tableGestation2_heart.planTreiVase
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as planTreiVase,
+            tableGestation2_heart.planTreiVase_description,
+            CASE
+                tableGestation2_heart.archAorta
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as archAorta,
+            CASE
+                tableGestation2_heart.planBicav
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as planBicav,
+            /* ----------------- thorax ----------------- */
+            CASE
+                tableGestation2_thorax.pulmonaryAreas
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as pulmonaryAreas,
+            tableGestation2_thorax.pulmonaryAreas_description,
+            CASE
+                tableGestation2_thorax.pleuralCollections
+                WHEN 0 THEN 'absente'
+                ELSE 'prezente'
+            END as pleuralCollections,
+            CASE
+                tableGestation2_thorax.diaphragm
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as diaphragm,
+            /* ----------------- abdomen ----------------- */
+            CASE
+                tableGestation2_abdomen.abdominalWall
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as abdominalWall,
+            CASE
+                tableGestation2_abdomen.abdominalCollections
+                WHEN 0 THEN 'absente'
+                WHEN 1 THEN 'prezente'
+                ELSE 'dificil'
+            END as abdominalCollections,
+            CASE
+                tableGestation2_abdomen.stomach
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as stomach,
+            tableGestation2_abdomen.stomach_description,
+            CASE
+                tableGestation2_abdomen.abdominalOrgans
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as abdominalOrgans,
+            CASE
+                tableGestation2_abdomen.abdominalOrgans
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as abdominalOrgans,
+            CASE
+                tableGestation2_abdomen.cholecist
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as cholecist,
+            tableGestation2_abdomen.cholecist_description,
+            CASE
+                tableGestation2_abdomen.intestine
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as intestine,
+            tableGestation2_abdomen.intestine_description,
+            /* ----------------- urinary system ----------------- */
+            CASE
+                tableGestation2_urinarySystem.kidneys
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as kidneys,
+            tableGestation2_urinarySystem.kidneys_descriptions,
+            CASE
+                tableGestation2_urinarySystem.ureter
+                WHEN 0 THEN 'nonvizibile'
+                ELSE 'vizibile'
+            END as ureter,
+            tableGestation2_urinarySystem.ureter_descriptions,
+            CASE
+                tableGestation2_urinarySystem.bladder
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as bladder,
+            /* ----------------- other ----------------- */
+            CASE
+                tableGestation2_other.externalGenitalOrgans
+                WHEN 0 THEN 'masc.'
+                WHEN 1 THEN 'fem.'
+                ELSE 'dificil'
+            END as externalGenitalOrgans,
+            CASE
+                tableGestation2_other.extremities
+                WHEN 0 THEN 'normal'
+                WHEN 1 THEN 'anormal'
+                ELSE 'dificil'
+            END as extremities,
+            tableGestation2_other.extremities_descriptions,
+            tableGestation2_other.fetusMass,
+            CASE
+                tableGestation2_other.placenta
+                WHEN 0 THEN 'nonprevia'
+                ELSE 'previa'
+            END as placenta,
+            tableGestation2_other.placentaLocalization,
+            tableGestation2_other.placentaDegreeMaturation,
+            tableGestation2_other.placentaDepth,
+            CASE
+                tableGestation2_other.placentaStructure
+                WHEN 0 THEN 'omogenă'
+                ELSE 'neomogenă'
+            END as placentaStructure,
+            tableGestation2_other.placentaStructure_descriptions,
+            CASE
+                tableGestation2_other.umbilicalCordon
+                WHEN 0 THEN 'trei vase'
+                ELSE 'două vase'
+            END as umbilicalCordon,
+            tableGestation2_other.umbilicalCordon_description,
+            CASE
+                tableGestation2_other.insertionPlacenta
+                WHEN 0 THEN 'centrală'
+                WHEN 1 THEN 'excentrică'
+                WHEN 2 THEN 'periferică'
+                WHEN 3 THEN 'marginală'
+                ELSE 'velamentoasă'
+            END as insertionPlacenta,
+            tableGestation2_other.amnioticIndex,
+            CASE
+                tableGestation2_other.amnioticIndexAspect
+                WHEN 0 THEN 'omogen'
+                ELSE 'neomogen'
+            END as amnioticIndexAspect,
+            tableGestation2_other.amnioticBedDepth,
+            tableGestation2_other.cervix,
+            tableGestation2_other.cervix_description,
+            /* ----------------- doppler ----------------- */
+            tableGestation2_doppler.ombilic_PI,
+            tableGestation2_doppler.ombilic_RI,
+            tableGestation2_doppler.ombilic_SD,
+            CASE
+                tableGestation2_doppler.ombilic_flux
+                WHEN 1 THEN 'normal'
+                WHEN 2 THEN 'anormal'
+                ELSE ''
+            END as ombilic_flux,
+            tableGestation2_doppler.cerebral_PI,
+            tableGestation2_doppler.cerebral_RI,
+            tableGestation2_doppler.cerebral_SD,
+            CASE
+                tableGestation2_doppler.cerebral_flux
+                WHEN 1 THEN 'normal'
+                WHEN 2 THEN 'anormal'
+                ELSE ''
+            END as cerebral_flux,
+            tableGestation2_doppler.uterRight_PI,
+            tableGestation2_doppler.uterRight_RI,
+            tableGestation2_doppler.uterRight_SD,
+            CASE
+                tableGestation2_doppler.uterRight_flux
+                WHEN 1 THEN 'normal'
+                WHEN 2 THEN 'anormal'
+                ELSE ''
+            END as uterRight_flux,
+            tableGestation2_doppler.uterLeft_PI,
+            tableGestation2_doppler.uterLeft_RI,
+            tableGestation2_doppler.uterLeft_SD,
+            CASE
+                tableGestation2_doppler.uterLeft_flux
+                WHEN 1 THEN 'normal'
+                WHEN 2 THEN 'anormal'
+                ELSE ''
+            END as uterLeft_flux,
+            CASE
+                tableGestation2_doppler.ductVenos
+                WHEN 1 THEN 'normal'
+                WHEN 2 THEN 'anormal redus'
+                WHEN 3 THEN 'anormal nul'
+                WHEN 4 THEN 'anormal revers'
+                WHEN 5 THEN 'dificil'
+                ELSE ''
+            END as ductVenos
+        FROM
+            tableGestation2
+        INNER JOIN reportEchoPresentation ON
+            reportEchoPresentation.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_biometry ON
+            tableGestation2_biometry.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_cranium ON
+            tableGestation2_cranium.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_SNC ON
+            tableGestation2_SNC.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_heart ON
+            tableGestation2_heart.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_thorax ON
+            tableGestation2_thorax.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_abdomen ON
+            tableGestation2_abdomen.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_urinarySystem ON
+            tableGestation2_urinarySystem.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_other ON
+            tableGestation2_other.id_reportEcho = tableGestation2.id_reportEcho
+        INNER JOIN tableGestation2_doppler ON
+            tableGestation2_doppler.id_reportEcho = tableGestation2.id_reportEcho
+        WHERE
+            tableGestation2.id_reportEcho = '%1';
+    )").arg(QString::number(id_doc));
+
+    // qDebug() << str;
+
     return str;
 }
 
 QString DataBase::getQryForTableOrderById(const int id_doc, const QString str_price) const
 {
     QString str_qry;
-    str_qry = QString("SELECT "
-                      "  orderEchoPresentation.docPresentationDate AS title_order,"
-                      "  orderEchoTable.cod,"
-                      "  orderEchoTable.name AS Investigation, "
-                      "  %1 AS Price "
-                      "FROM "
-                      "  orderEcho "
-                      "INNER JOIN "
-                      "  orderEchoTable ON orderEcho.id = orderEchoTable.id_orderEcho "
-                      "INNER JOIN "
-                      "  orderEchoPresentation ON orderEcho.id = orderEchoPresentation.id_orderEcho "
-                      "WHERE "
-                      "  orderEcho.id = '%2' AND orderEcho.deletionMark = '2' "
-                      "ORDER BY "
-                      "  orderEchoTable.cod;")
-                  .arg(str_price, QString::number(id_doc));
+    str_qry = QString(R"(
+        SELECT
+            orderEchoPresentation.docPresentationDate AS title_order,
+            orderEchoTable.cod,
+            orderEchoTable.name AS Investigation,
+            %1 AS Price
+        FROM
+            orderEcho
+        INNER JOIN
+            orderEchoTable ON orderEcho.id = orderEchoTable.id_orderEcho
+        INNER JOIN
+            orderEchoPresentation ON orderEcho.id = orderEchoPresentation.id_orderEcho
+        WHERE
+            orderEcho.id = '%2' AND
+            orderEcho.deletionMark = '2'
+        ORDER BY
+            orderEchoTable.cod;
+    )").arg(str_price, QString::number(id_doc));
+
     return str_qry;
 }
 
@@ -5887,7 +5992,9 @@ QByteArray DataBase::getOutByteArrayImage(const QString nameTable, const QString
 {
     QSqlQuery qry;
 
-    qry.prepare(QString("SELECT %1 FROM %2 WHERE %3 = '%4';").arg(selectedColumn, nameTable, whereColumn, QString::number(_id)));
+    qry.prepare(QString("SELECT %1 FROM %2 WHERE %3 = ?;")
+                .arg(selectedColumn, nameTable, whereColumn));
+    qry.addBindValue(_id);
     if (!qry.exec())
         qDebug() << "Error getting image from table:\n" << qry.lastError();
     qry.first();
@@ -5898,7 +6005,9 @@ QByteArray DataBase::getOutByteArrayImageByDatabase(const QString nameTable, con
 {
     QSqlQuery qry(m_base);
 
-    qry.prepare(QString("SELECT %1 FROM %2 WHERE %3 = '%4';").arg(selectedColumn, nameTable, whereColumn, QString::number(_id)));
+    qry.prepare(QString("SELECT %1 FROM %2 WHERE %3 = ?;")
+                .arg(selectedColumn, nameTable, whereColumn));
+    qry.addBindValue(_id);
     if (!qry.exec())
         qDebug() << "Error getting image from table:\n" << qry.lastError();
     qry.first();
@@ -5962,124 +6071,136 @@ QString DataBase::getHTMLImageWarning()
 QString DataBase::getStyleForButtonMessageBox()
 {
     if (globals().isSystemThemeDark)
-        return QString("QPushButton "
-                       "{"
-                       "  min-width: 60px;"
-                       "  border: 1px solid rgba(255, 255, 255, 0.2);"
-                       "  border-radius: 8px;"
-                       "  background-color: #2b2b2b;"
-                       "  color: #ffffff;"
-                       "  font-size: 13px;"
-                       "  padding: 4px 10px;"
-                       "  min-width: 80px;"
-                       "}"
-                       "QPushButton:hover "
-                       "{"
-                       "  background-color: #3b3b3b;"
-                       "}"
-                       "QPushButton:pressed "
-                       "{"
-                       "  background-color: #4b4b4b;"
-                       "}");
+        return QString(R"(
+            QPushButton
+            {
+                min-width: 60px;
+                border: 1px solid rgba(255, 255, 255, 0.2);
+                border-radius: 8px;
+                background-color: #2b2b2b;
+                color: #ffffff;
+                font-size: 13px;
+                padding: 4px 10px;
+                min-width: 80px;
+            }
+            QPushButton:hover
+            {
+                background-color: #3b3b3b;
+            }
+            QPushButton:pressed
+            {
+                background-color: #4b4b4b;
+            }
+        )");
     else
-        return QString("QPushButton "
-                       "{"
-                       "  min-width: 60px;"
-                       "  border: 1px solid rgba(0, 0, 0, 0.2);"
-                       "  border-radius: 8px;"
-                       "  background-color: #f5f5f5;"
-                       "  color: #000000;"
-                       "  font-size: 13px;"
-                       "  padding: 4px 10px;"
-                       "  min-width: 80px;"
-                       "}"
-                       "QPushButton:hover "
-                       "{"
-                       "  background-color: #e0e0e0;"
-                       "}"
-                       "QPushButton:pressed "
-                       "{"
-                       "  background-color: #d0d0d0;"
-                       "}");
+        return QString(R"(
+            QPushButton
+            {
+                min-width: 60px;
+                border: 1px solid rgba(0, 0, 0, 0.2);
+                border-radius: 8px;
+                background-color: #f5f5f5;
+                color: #000000;
+                font-size: 13px;
+                padding: 4px 10px;
+                min-width: 80px;
+            }
+            QPushButton:hover
+            {
+                background-color: #e0e0e0;
+            }
+            QPushButton:pressed
+            {
+                background-color: #d0d0d0;
+            }
+        )");
 }
 
 QString DataBase::getStyleForToolButton()
 {
     if (globals().isSystemThemeDark)
-        return QString("QToolButton"
-                       "{"
-                       "  border: 1px solid rgba(255, 255, 255, 0.6);"
-                       "  border-radius: 8px;"
-                       "  background-color: #2b2b2b;"
-                       "  color: #ffffff;"
-                       "  font-size: 13px;"
-                       "  padding: 4px 4px;"
-                       "}"
-                       "QToolButton:hover"
-                       "{"
-                       "  background-color: #3b3b3b;"
-                       "  border: 1px solid rgba(255, 255, 255, 0.8); "
-                       "}"
-                       "QToolButton:pressed"
-                       "{"
-                       "  background-color: #4b4b4b;"
-                       "}");
+        return QString(R"(
+            QToolButton
+            {
+                border: 1px solid rgba(255, 255, 255, 0.6);
+                border-radius: 8px;
+                background-color: #2b2b2b;
+                color: #ffffff;
+                font-size: 13px;
+                padding: 4px 4px;
+            }
+            QToolButton:hover
+            {
+                background-color: #3b3b3b;
+                border: 1px solid rgba(255, 255, 255, 0.8);
+            }
+            QToolButton:pressed
+            {
+                background-color: #4b4b4b;
+            }
+        )");
     else
-        return QString("QToolButton"
-                       "{"
-                       "  border: 1px solid rgba(0, 0, 0, 0.1);"
-                       "  border-radius: 8px;"
-                       "  background-color: #f1f1f1;"
-                       "  color: #000000;"
-                       "  font-size: 13px;"
-                       "  padding: 4px 4px;"
-                       "}"
-                       "QToolButton:hover"
-                       "{"
-                       "  background-color: #e0e0e0;"
-                       "}"
-                       "QToolButton:pressed"
-                       "{"
-                       "  background-color: #d0d0d0;"
-                       "}");
+        return QString(R"(
+            QToolButton
+            {
+                border: 1px solid rgba(0, 0, 0, 0.1);
+                border-radius: 8px;
+                background-color: #f1f1f1;
+                color: #000000;
+                font-size: 13px;
+                padding: 4px 4px;
+            }
+            QToolButton:hover
+            {
+                background-color: #e0e0e0;
+            }
+            QToolButton:pressed
+            {
+                background-color: #d0d0d0;
+            }
+        )");
 }
 
 QString DataBase::getStyleForButtonToolBar()
 {
     if (globals().isSystemThemeDark)
-        return QString("QToolButton "
-                       "{ "
-                       "  border: none;"
-                       "  background-color: transparent;"
-                       "  color: #ffffff;"
-                       "  font-size: 14px;"
-                       "}"
-                       "QToolButton:hover "
-                       "{"
-                       "  background-color: #3b3b3b;"
-                       "  color: #000000;"
-                       "}"
-                       "QToolButton:pressed "
-                       "{ "
-                       "  background-color: #4b4b4b;"
-                       "}");
+        return QString(R"(
+            QToolButton
+            {
+                border: none;
+                background-color: transparent;
+                color: #ffffff;
+                font-size: 14px;
+            }
+            QToolButton:hover
+            {
+                background-color: #3b3b3b;
+                color: #000000;
+            }
+            QToolButton:pressed
+            {
+                background-color: #4b4b4b;
+            }
+        )");
     else
-        return QString("QToolButton "
-                       "{ "
-                       "  border: none;"
-                       "  background-color: transparent;"
-                       "  color: #4a4a4a;"
-                       "  font-size: 14px;"
-                       "}"
-                       "QToolButton:hover "
-                       "{"
-                       "  background-color: #f0f0f0;"
-                       "  color: #000000;"
-                       "}"
-                       "QToolButton:pressed "
-                       "{ "
-                       "  background-color: #dcdcdc;"
-                       "}");
+        return QString(R"(
+            QToolButton
+            {
+                border: none;
+                background-color: transparent;
+                color: #4a4a4a;
+                font-size: 14px;
+            }
+            QToolButton:hover
+            {
+                background-color: #f0f0f0;
+                color: #000000;
+            }
+            QToolButton:pressed
+            {
+                background-color: #dcdcdc;
+            }
+        )");
 }
 
 QByteArray DataBase::getHashUserApp()
