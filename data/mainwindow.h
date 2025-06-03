@@ -99,6 +99,7 @@ private slots:
     void onBlockApp();
     void openAgentContOnline();
     void openCloudServerConfig();
+    void openFirstRunWizard();
 
     void downloadNewVersionApp(const QString str_new_version);
     void onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal);

@@ -197,7 +197,7 @@ public:
 
     int statusDeletionMarkObject(const QString nameTable, const int _id) const;
     bool deletionMarkObject(const QString nameTable, const int _id);
-    bool getObjectDataById(const QString nameTable, const int _id, QMap<QString, QString> &items);
+    bool getObjectDataById(const QString &nameTable, const int _id, QMap<QString, QString> &items);
 
     bool postDocument(const QString nameTable, QMap<QString, QString> &items);
 

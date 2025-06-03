@@ -744,22 +744,25 @@ bool DataBase::checkTable(const QString name_table)
 void DataBase::creatingTables_DbImage()
 {
     QSqlQuery qry(db_image);
-    qry.prepare("CREATE TABLE imagesReports ("
-                "id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                "id_reportEcho INT     NOT NULL,"
-                "id_orderEcho  INT     NOT NULL,"
-                "id_patients   INT     NOT NULL,"
-                "image_1       BLOB,"
-                "image_2       BLOB,"
-                "image_3       BLOB,"
-                "image_4       BLOB,"
-                "image_5       BLOB,"
-                "comment_1     TEXT,"
-                "comment_2     TEXT,"
-                "comment_3     TEXT,"
-                "comment_4     TEXT,"
-                "comment_5     TEXT,"
-                "id_user       INT);");
+    qry.prepare(R"(
+        CREATE TABLE imagesReports (
+            id            INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+            id_reportEcho INT NOT NULL,
+            id_orderEcho  INT NOT NULL,
+            id_patients   INT NOT NULL,
+            image_1       BLOB,
+            image_2       BLOB,
+            image_3       BLOB,
+            image_4       BLOB,
+            image_5       BLOB,
+            comment_1     TEXT,
+            comment_2     TEXT,
+            comment_3     TEXT,
+            comment_4     TEXT,
+            comment_5     TEXT,
+            id_user       INT
+        );
+    )");
     if (qry.exec()){
         qInfo(logInfo()) << tr("Creata tabela 'imagesReports' in baza de date 'DB_IMAGE'.");
     } else {
@@ -790,16 +793,22 @@ void DataBase::loadInvestigationFromXml()
                 QString name = node.attribute("name", "name");
 
                 QSqlQuery qry;
-                qry.prepare("INSERT INTO investigations (id,deletionMark,cod,name,`use`) VALUES ( ?, ?, ?, ?, ?);");
+                qry.prepare(R"(
+                    INSERT INTO investigations (
+                        id,deletionMark,cod,name,`use`)
+                    VALUES ( ?, ?, ?, ?, ?);
+                )");
                 qry.addBindValue(getLastIdForTable("investigations") + 1);
                 qry.addBindValue(0);
                 qry.addBindValue(cod);
                 qry.addBindValue(name);
                 qry.addBindValue(1);
                 if (qry.exec())
-                    qInfo(logInfo()) << tr("Investigatia '%1' este introdusa in baza de date cu codul '%2'.").arg(name, cod);
+                    qInfo(logInfo()) << tr("Investigatia '%1' este introdusa in baza de date cu codul '%2'.")
+                                        .arg(name, cod);
                 else
-                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'investigations': %1").arg(qry.lastError().text());
+                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'investigations': %1")
+                                              .arg(qry.lastError().text());
 
                 ++progress;
                 emit updateProgress(count_num, progress);
@@ -844,7 +853,8 @@ void DataBase::updateInvestigationFromXML_2024()
     // Marcăm toate înregistrările existente în SQLite ca `use=0`
     QSqlQuery query;
     if (! query.exec("UPDATE investigations SET `use` = 0;")) {
-        qWarning(logWarning()) << "Nu a fost gasita nici o investigatiei: " << query.lastError().text();
+        qWarning(logWarning()) << "Nu a fost gasita nici o investigatiei: "
+                               << query.lastError().text();
         // return;
     }
 
@@ -860,34 +870,50 @@ void DataBase::updateInvestigationFromXML_2024()
         QString owner = entry.attribute("owner");
 
         // Verificăm dacă codul există deja în baza de date
-        query.prepare("SELECT id FROM investigations WHERE cod = :cod;");
-        query.bindValue(":cod", cod);
+        query.prepare("SELECT id FROM investigations WHERE cod = ?;");
+        query.addBindValue(cod);
         if (! query.exec()) {
-            qWarning(logWarning()) << "Eroare la interogarea codului: " << query.lastError().text();
+            qWarning(logWarning()) << "Eroare la interogarea codului: "
+                                   << query.lastError().text();
             continue;
         }
 
         if (query.next()) {
             // Codul există -> Actualizăm
-            query.prepare("UPDATE investigations SET name = :name, `use` = 1 WHERE cod = :cod;");
-            query.bindValue(":name", name);
-            query.bindValue(":cod", cod);
+            query.prepare(R"(
+                UPDATE investigations SET
+                    name = ?, `use` = 1
+                WHERE cod = ?;
+            )");
+            query.addBindValue(name);
+            query.addBindValue(cod);
             if (! query.exec()) {
-                qWarning(logWarning()) << "Eroare la actualizarea codului: " << query.lastError().text();
+                qWarning(logWarning()) << "Eroare la actualizarea codului: "
+                                       << query.lastError().text();
             } else {
-                qInfo(logInfo()) << "Investigatia cu codul " << cod << " a fost actualizata cu succes.";
+                qInfo(logInfo()) << "Investigatia cu codul "
+                                 << cod << " a fost actualizata cu succes.";
             }
         } else {
             // Codul nu există -> Inserăm
-            query.prepare("INSERT INTO investigations (deletionMark, cod, name, `use`, owner) "
-                          "VALUES (0, :cod, :name, 1, :owner);");
-            query.bindValue(":cod",  cod);
-            query.bindValue(":name", name);
-            query.bindValue(":owner", owner);
+            query.prepare(R"(
+                INSERT INTO investigations (
+                    `deletionMark`,
+                    `cod`,
+                    `name`,
+                    `use`,
+                    `owner`)
+                VALUES (0, ?, ?, 1, ?);
+            )");
+            query.addBindValue(cod);
+            query.addBindValue(name);
+            query.addBindValue(owner);
             if (! query.exec()) {
-                qWarning(logWarning()) << "Eroare la inserarea codului: " << query.lastError().text();
+                qWarning(logWarning()) << "Eroare la inserarea codului: "
+                                       << query.lastError().text();
             } else {
-                qInfo(logInfo()) << "A fost inserata investigatia noua cu codul " << cod << ".";
+                qInfo(logInfo()) << "A fost inserata investigatia noua cu codul "
+                                 << cod << ".";
             }
         }
 
@@ -924,14 +950,19 @@ void DataBase::loadNormogramsFromXml()
                 QString _95_centile = node.attribute("_95_centile", "_95_centile");
 
                 QSqlQuery qry;
-                qry.prepare("INSERT INTO normograms (`name`, `crl`, `5_centile`, `50_centile`, `95_centile`) VALUES (?, ?, ?, ?, ?);");
+                qry.prepare(R"(
+                    INSERT INTO normograms (
+                        `name`, `crl`, `5_centile`, `50_centile`, `95_centile`)
+                    VALUES (?, ?, ?, ?, ?);
+                )");
                 qry.addBindValue(name);
                 qry.addBindValue(crl);
                 qry.addBindValue(_5_centile);
                 qry.addBindValue(_50_centile);
                 qry.addBindValue(_95_centile);
                 if (! qry.exec())
-                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'normograms': %1").arg(qry.lastError().text());
+                    qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'normograms': %1")
+                                              .arg(qry.lastError().text());
 
                 ++progress;
                 emit updateProgress(count_num, progress);
@@ -942,7 +973,8 @@ void DataBase::loadNormogramsFromXml()
         node = node.nextSibling().toElement();
     }
 
-    emit finishedProgress(tr("Au fost încărcate %1 elemente a normogramelor.").arg(QString::number(count_num)));
+    emit finishedProgress(tr("Au fost încărcate %1 elemente a normogramelor.")
+                          .arg(QString::number(count_num)));
 
 }
 
@@ -953,7 +985,11 @@ void DataBase::insertDataForTabletypesPrices()
 {
     QSqlQuery qry;
     int m_id = getLastIdForTable("typesPrices") + 1;
-    qry.prepare("INSERT INTO typesPrices (id, deletionMark, name, discount, noncomercial) VALUES ( ?, ?, ?, ?, ?);");
+    qry.prepare(R"(
+        INSERT INTO typesPrices (
+            id, deletionMark, name, discount, noncomercial)
+        VALUES ( ?, ?, ?, ?, ?);
+    )");
     qry.addBindValue(m_id);
     qry.addBindValue(0);
     qry.addBindValue(tr("Pre\310\233uri comerciale"));
@@ -968,7 +1004,11 @@ void DataBase::insertDataForTabletypesPrices()
         qWarning(logWarning()) << tr("Eroare la inserare a datelor in tabela 'typesPrices': %1").arg(qry.lastError().text());
 
     qry.clear();
-    qry.prepare("INSERT INTO typesPrices (id, deletionMark, name, discount, noncomercial) VALUES ( ?, ?, ?, ?, ?);");
+    qry.prepare(R"(
+        INSERT INTO typesPrices (
+            id, deletionMark, name, discount, noncomercial)
+        VALUES ( ?, ?, ?, ?, ?);
+    )");
     qry.addBindValue(m_id + 1);
     qry.addBindValue(0);
     qry.addBindValue(tr("Pre\310\233uri CNAM"));
@@ -986,19 +1026,22 @@ void DataBase::insertDataForTabletypesPrices()
 void DataBase::insertSetTableSettingsUsers()
 {
     QSqlQuery qry;
-    qry.prepare("INSERT INTO userPreferences ("
-                "id,"
-                "id_users,"
-                "versionApp,"
-                "showQuestionCloseApp,"
-                "showUserManual,"
-                "showHistoryVersion,"
-                "order_splitFullName,"
-                "updateListDoc,"
-                "showDesignerMenuPrint,"
-                "checkNewVersionApp,"
-                "databasesArchiving,"
-                "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+    qry.prepare(R"(
+        INSERT INTO userPreferences ("
+            id,"
+            id_users,"
+            versionApp,"
+            showQuestionCloseApp,"
+            showUserManual,"
+            showHistoryVersion,"
+            order_splitFullName,"
+            updateListDoc,"
+            showDesignerMenuPrint,"
+            checkNewVersionApp,"
+            databasesArchiving,"
+            showAsistantHelper)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
+    )");
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue("");
@@ -1023,10 +1066,8 @@ void DataBase::insertSetTableSettingsUsers()
 bool DataBase::existNameObject(const QString nameTable, const QString nameObject)
 {
     QSqlQuery qry;
-    qry.prepare("SELECT count(name) "
-                "FROM " + nameTable + " "
-                                      "WHERE name = '" + nameObject + "' "
-                                                                      "AND deletionMark = 0;");
+    qry.prepare(QString("SELECT count(name) FROM %1 WHERE name = ? AND deletionMark = 0;").arg(nameTable));
+    qry.addBindValue(nameObject);
     if (qry.exec()){
         qry.next();
         int n = qry.value(0).toInt();
@@ -1042,10 +1083,8 @@ bool DataBase::existNameObject(const QString nameTable, const QString nameObject
 bool DataBase::existNameObjectReturnId(const QString nameTable, const QString nameObject, int &_id)
 {
     QSqlQuery qry;
-    qry.prepare("SELECT id "
-                "FROM " + nameTable + " "
-                                      "WHERE name = '" + nameObject + "' "
-                                                                      "AND deletionMark = 0;");
+    qry.prepare(QString("SELECT id FROM %1 WHERE name = ? AND deletionMark = 0;").arg(nameTable));
+    qry.addBindValue(nameObject);
     if (qry.exec()){
         qry.next();
         _id = qry.value(0).toInt();
@@ -1175,7 +1214,7 @@ int DataBase::getLastIdForTableByDatabase(const QString nameTable, QSqlDatabase 
 {
     int last_id = 0;
     QSqlQuery qry(name_database);
-    qry.prepare(QString("SELECT id FROM " + nameTable + " ORDER BY id DESC LIMIT 1;"));
+    qry.prepare(QString("SELECT id FROM %1 ORDER BY id DESC LIMIT 1;").arg(nameTable));
     if (qry.exec()){
         qry.first();
         last_id = qry.value(0).toInt();
@@ -1204,7 +1243,8 @@ int DataBase::getLastNumberDoc(const QString nameTable) const
 bool DataBase::getObjectDataByMainId(const QString nameTable, const QString nameId, const int _id, QMap<QString, QString> &items)
 {
     QSqlQuery qry;
-    qry.exec("SELECT * FROM " + nameTable + " WHERE " + nameId + " = " + QString::number(_id) + ";");
+    qry.exec(QString("SELECT * FROM %1 WHERE %2 = ?;").arg(nameTable, nameId));
+    qry.addBindValue(_id);
     qry.next();
     QSqlRecord rec = qry.record();
     for (int n = 0; n < rec.count(); n++) {
@@ -1240,8 +1280,8 @@ bool DataBase::getDataFromQueryByRecord(const QString strQuery, QMap<QString, QS
 int DataBase::statusDeletionMarkObject(const QString nameTable, const int _id) const
 {
     QSqlQuery qry;
-    qry.prepare("SELECT deletionMark  FROM " + nameTable + "  WHERE id = :id;");
-    qry.bindValue(":id", _id);
+    qry.prepare(QString("SELECT deletionMark FROM %1 WHERE id = ?;").arg(nameTable));
+    qry.addBindValue(_id);
     if (qry.exec() && qry.next()){
         return qry.value(0).toInt();
     } else {
@@ -1262,7 +1302,8 @@ bool DataBase::deletionMarkObject(const QString nameTable, const int _id)
             statusDeletion = DELETION_UNMARK;
         }
     } else {
-        qWarning(logWarning()) << tr("%1 - deletionMarkObject(nameTable = %2, id = %3)").arg(metaObject()->className(), nameTable, QString::number(_id))
+        qWarning(logWarning()) << tr("%1 - deletionMarkObject(nameTable = %2, id = %3)")
+                                  .arg(metaObject()->className(), nameTable, QString::number(_id))
                                << tr("Status 'deletionMark' = -1 : nu poate fi negativ !!!");
         return false;
     }
@@ -1274,22 +1315,37 @@ bool DataBase::deletionMarkObject(const QString nameTable, const int _id)
     if (qry.exec()){
         return true;
     } else {
-        qWarning(logWarning()) << tr("%1 - deletionMarkObject(nameTable = %2, id = %3)").arg(metaObject()->className(), nameTable, QString::number(_id))
+        qWarning(logWarning()) << tr("%1 - deletionMarkObject(nameTable = %2, id = %3)")
+                                  .arg(metaObject()->className(), nameTable, QString::number(_id))
                                << tr("Modificarea statusului 'deletionMark' a obiectului cu 'ID'=%1 nu este reusita. Erroarea:%2")
                                   .arg(QString::number(_id), qry.lastError().text());
         return false;
     }
 }
 
-bool DataBase::getObjectDataById(const QString nameTable, const int _id, QMap<QString, QString> &items)
+bool DataBase::getObjectDataById(const QString &nameTable, const int _id, QMap<QString, QString> &items)
 {   
     QSqlQuery qry;
-    qry.exec("SELECT * FROM " + nameTable + " WHERE id = " + QString::number(_id) + ";");
-    qry.next();
+    qry.prepare(QString("SELECT * FROM %1 WHERE id = ?").arg(nameTable));
+    qry.addBindValue(_id);
+
+    if (! qry.exec()) {
+        qWarning() << "Query exec failed:"
+                   << qry.lastError().text();
+        return false;
+    }
+
+    if (! qry.next()) {
+        qWarning() << "No record found with id ="
+                   << _id << "in table" << nameTable;
+        return false;
+    }
+
     QSqlRecord rec = qry.record();
-    for (int n = 0; n < rec.count(); n++) {
+    for (int n = 0; n < rec.count(); ++n) {
         items.insert(rec.fieldName(n), rec.value(n).toString());
     }
+
     return true;
 }
 

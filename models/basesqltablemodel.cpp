@@ -89,7 +89,7 @@ QVariant BaseSqlTableModel::data(const QModelIndex &index, int role) const
 {
     QVariant value = QSqlTableModel::data(index, role);
 
-    if (parent()->inherits("CatForSqlTableModel"))
+    if (parent()->inherits("CatForSqlTableModel") || parent()->inherits("FirstRunWizard"))
         return dataFromCatForTableModel(index, role, value);
     else if(parent()->inherits("DocPricing"))
         return dataFromDocPricing(index, role);

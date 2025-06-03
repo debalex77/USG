@@ -29,6 +29,7 @@
 #include <QDirIterator>
 #include <QDockWidget>
 #include <QFontDatabase>
+#include <common/firstrunwizard.h>
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -345,23 +346,24 @@ void MainWindow::initButton()
 
 void MainWindow::initActions()
 {
-    QAction* actionDoctors          = new QAction(QIcon(":img/doctor_x32.png"), tr("Doctori"), this);
-    QAction* actionNurses           = new QAction(QIcon(":img/nurse_x32.png"), tr("As.medicale"), this);
-    QAction* actionPacients         = new QAction(QIcon(":img/pacient_x32.png"), tr("Pacienți"), this);
-    QAction* actionOrganizations    = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
-    QAction* actionUsers            = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
+    QAction *actionDoctors          = new QAction(QIcon(":img/doctor_x32.png"), tr("Doctori"), this);
+    QAction *actionNurses           = new QAction(QIcon(":img/nurse_x32.png"), tr("As.medicale"), this);
+    QAction *actionPacients         = new QAction(QIcon(":img/pacient_x32.png"), tr("Pacienți"), this);
+    QAction *actionOrganizations    = new QAction(QIcon(":img/company_x32.png"), tr("Persoane juridice"), this);
+    QAction *actionUsers            = new QAction(QIcon(":img/user_x32.png"), tr("Utilizatori"), this);
 
-    QAction* actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
-    QAction* actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
-    QAction* actionAgentEmail       = new QAction(QIcon(":/img/email.png"), tr("Cont online"), this);
-    QAction* actionCloudServer      = new QAction(QIcon(":/img/cloud-server.png"), tr("Configurarea cloud server"), this);
+    QAction *actionAppSettings      = new QAction(QIcon(":img/settings_x32.png"), tr("Setările aplicației"), this);
+    QAction *actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
+    QAction *actionAgentEmail       = new QAction(QIcon(":/img/email.png"), tr("Cont online"), this);
+    QAction *actionCloudServer      = new QAction(QIcon(":/img/cloud-server.png"), tr("Configurarea cloud server"), this);
+    QAction *actionFirstWizard      = new QAction(QIcon(""), tr("Asistent primei lansari"), this);
 
-    QAction* actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
-    QAction* actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
-    QAction* actionOpenOrderEcho    = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
-    QAction* actionOpenReportEcho   = new QAction(QIcon(":/img/examenEcho.png"), tr("Raport ecografic"), this);
-    QAction* actionOpenDesigner     = new QAction(QIcon("://images/logo1.png"), tr("LimeReport (designer)"), this);
-    QAction* actionOpenNormograms   = new QAction(QIcon("://img/normograma.png"), tr("Normograme"), this);
+    QAction *actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
+    QAction *actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
+    QAction *actionOpenOrderEcho    = new QAction(QIcon(":/img/orderEcho_x32.png"), tr("Comanda ecografică"), this);
+    QAction *actionOpenReportEcho   = new QAction(QIcon(":/img/examenEcho.png"), tr("Raport ecografic"), this);
+    QAction *actionOpenDesigner     = new QAction(QIcon("://images/logo1.png"), tr("LimeReport (designer)"), this);
+    QAction *actionOpenNormograms   = new QAction(QIcon("://img/normograma.png"), tr("Normograme"), this);
 
     connect(actionDoctors, &QAction::triggered, this, [this](){
         openListForm(static_cast<int>(ListForm::TypeListForm::Doctors));
@@ -387,6 +389,7 @@ void MainWindow::initActions()
     connect(actionUserSettings, &QAction::triggered, this, &MainWindow::openUserSettings);
     connect(actionAgentEmail, &QAction::triggered, this, &MainWindow::openAgentContOnline);
     connect(actionCloudServer, &QAction::triggered, this, &MainWindow::openCloudServerConfig);
+    connect(actionFirstWizard, &QAction::triggered, this, &MainWindow::openFirstRunWizard);
 
     connect(actionOpenPricing, &QAction::triggered, this, &MainWindow::openPricing);
     connect(actionOpenAppointments, &QAction::triggered, this, &MainWindow::openPatientAppointments);
@@ -401,7 +404,7 @@ void MainWindow::initActions()
     ui->menuCataloage->addSeparator();
     ui->menuCataloage->addAction(actionUsers);
 
-    QMenu* clasifiers = new QMenu(ui->menuCataloage);
+    QMenu *clasifiers = new QMenu(ui->menuCataloage);
     ui->menuCataloage->addMenu(clasifiers);
     clasifiers->setTitle(tr("Clasificatori"));
 
@@ -409,10 +412,10 @@ void MainWindow::initActions()
     ui->menuCataloage->addAction(actionOpenNormograms);
     connect(actionOpenNormograms, &QAction::triggered, this, &MainWindow::openNormograms);
 
-    QAction* actionTypesPrice = new QAction(QIcon(":/img/typesPrices_x32.png"), tr("Tipul prețurilor"), this);
-    QAction* actionInvestigations = new QAction(QIcon(":/img/investigations_x32.png"), tr("Investigații"), this);
-    QAction* actionGroupInvestigations = new QAction(QIcon(":/img/tree_yellow.png"), tr("Arbore investigațiilor"), this);
-    QAction* actionConcluzionTemplets = new QAction(QIcon(":/img/templates.png"), tr("Șabloane concluziilor"), this);
+    QAction *actionTypesPrice = new QAction(QIcon(":/img/typesPrices_x32.png"), tr("Tipul prețurilor"), this);
+    QAction *actionInvestigations = new QAction(QIcon(":/img/investigations_x32.png"), tr("Investigații"), this);
+    QAction *actionGroupInvestigations = new QAction(QIcon(":/img/tree_yellow.png"), tr("Arbore investigațiilor"), this);
+    QAction *actionConcluzionTemplets = new QAction(QIcon(":/img/templates.png"), tr("Șabloane concluziilor"), this);
 
     clasifiers->addAction(actionInvestigations);
     clasifiers->addAction(actionGroupInvestigations);
@@ -441,6 +444,8 @@ void MainWindow::initActions()
     ui->menuService->addAction(actionAgentEmail);
     ui->menuService->addSeparator();
     ui->menuService->addAction(actionCloudServer);
+    ui->menuService->addSeparator();
+    ui->menuService->addAction(actionFirstWizard);
 
     QAction *actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
     ui->menuAssistance->addAction(actionSourceCode);
@@ -463,11 +468,11 @@ void MainWindow::initActions()
     ui->menuAssistance->addAction(actionCheckUpdate);
     connect(actionCheckUpdate, &QAction::triggered, this, &MainWindow::checkUpdateApp);
 
-    QAction* actionShowAsistantTip = new QAction(QIcon(":/img/oxygen/ktip.png"), tr("Prezentarea asistentului de sfaturi"), this);
+    QAction *actionShowAsistantTip = new QAction(QIcon(":/img/oxygen/ktip.png"), tr("Prezentarea asistentului de sfaturi"), this);
     ui->menuAssistance->addAction(actionShowAsistantTip);
     connect(actionShowAsistantTip, &QAction::triggered, this, &MainWindow::onShowAsistantTip);
 
-    QAction* action_about = new QAction(QIcon(":/img/info_x32.png"), tr("Despre aplicația"), this);
+    QAction *action_about = new QAction(QIcon(":/img/info_x32.png"), tr("Despre aplicația"), this);
     ui->menuAssistance->addSeparator();
     ui->menuAssistance->addAction(action_about);
     connect(action_about, &QAction::triggered, this, &MainWindow::openAbout);
@@ -996,6 +1001,12 @@ void MainWindow::openCloudServerConfig()
     cloud_server->setProperty("ID_user", globals().idUserApp);
     cloud_server->setProperty("ID_Organization", globals().c_id_organizations);
     cloud_server->show();
+}
+
+void MainWindow::openFirstRunWizard()
+{
+    FirstRunWizard *first_wizard = new FirstRunWizard(this);
+    first_wizard->exec();
 }
 
 // **********************************************************************************

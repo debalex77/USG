@@ -253,34 +253,40 @@ int ListForm::sizeSectionDefault(const int numberSection)
 
 const QString ListForm::qryTableDoctors()
 {
-    return QString("SELECT doctors.id,"
-                   "  doctors.deletionMark,"
-                   "  fullNameDoctors.name AS FullName,"
-                   "  doctors.telephone,"
-                   "  doctors.email,"
-                   "  doctors.comment "
-                   "FROM "
-                   "  doctors "
-                   "INNER JOIN "
-                   "  fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors "
-                   "ORDER BY "
-                   "  fullNameDoctors.name;");
+    return QString(R"(
+        SELECT
+            doctors.id,
+            doctors.deletionMark,
+            fullNameDoctors.name AS FullName,
+            doctors.telephone,
+            doctors.email,
+            doctors.comment
+        FROM
+            doctors
+        INNER JOIN
+            fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors
+        ORDER BY
+            fullNameDoctors.name;
+    )");
 }
 
 const QString ListForm::qryTableNurses()
 {
-    return QString("SELECT nurses.id,"
-                   "  nurses.deletionMark,"
-                   "  fullNameNurses.name AS FullName,"
-                   "  nurses.telephone,"
-                   "  nurses.email,"
-                   "  nurses.comment "
-                   "FROM "
-                   "  nurses "
-                   "INNER JOIN "
-                   "  fullNameNurses ON nurses.id = fullNameNurses.id_nurses "
-                   "ORDER BY "
-                   "  fullNameNurses.name;");
+    return QString(R"(
+        SELECT
+            nurses.id,
+            nurses.deletionMark,
+            fullNameNurses.name AS FullName,
+            nurses.telephone,
+            nurses.email,
+            nurses.comment
+        FROM
+            nurses
+        INNER JOIN
+            fullNameNurses ON nurses.id = fullNameNurses.id_nurses
+        ORDER BY
+            fullNameNurses.name;
+    )");
 }
 
 const QString ListForm::qryTablePacients()
@@ -323,31 +329,35 @@ const QString ListForm::qryTablePacients()
 
 const QString ListForm::qryTableUsers()
 {
-    return QString("SELECT "
-                   "  id,"
-                   "  deletionMark,"
-                   "  name "
-                   "FROM "
-                   "  users "
-                   "ORDER BY "
-                   "  name;");
+    return QString(R"(
+        SELECT
+            id,
+            deletionMark,
+            name
+        FROM
+            users
+        ORDER BY
+            name;
+    )");
 }
 
 const QString ListForm::qryTableOrganizations()
 {
-    return QString("SELECT "
-                   "  id,"
-                   "  deletionMark,"
-                   "  name,"
-                   "  IDNP,"
-                   "  address,"
-                   "  telephone,"
-                   "  email,"
-                   "  comment "
-                   "FROM "
-                   "  organizations "
-                   "ORDER BY "
-                   "  name;");
+    return QString(R"(
+        SELECT
+            id,
+            deletionMark,
+            name,
+            IDNP,
+            address,
+            telephone,
+            email,
+            comment
+        FROM
+            organizations
+        ORDER BY
+            name;
+    )");
 }
 
 QString ListForm::enumToString(TypeListForm typeCatalog)
