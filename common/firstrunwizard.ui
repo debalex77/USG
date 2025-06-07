@@ -94,19 +94,61 @@
          <widget class="QWidget" name="page">
           <layout class="QGridLayout" name="gridLayout_4">
            <item row="0" column="0">
-            <widget class="QLabel" name="label_2">
-             <property name="text">
-              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Vă salută asistentul pentru prima lansarea a aplicației și &lt;br&gt;completarea inițială a bazei de date&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+            <spacer name="verticalSpacer_2">
+             <property name="orientation">
+              <enum>Qt::Vertical</enum>
              </property>
-             <property name="scaledContents">
-              <bool>false</bool>
+             <property name="sizeType">
+              <enum>QSizePolicy::Preferred</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>50</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_10">
+             <property name="font">
+              <font>
+               <family>Times New Roman</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(176, 176, 176);</string>
+             </property>
+             <property name="text">
+              <string>&lt;br&gt;Prin utilizarea acestui asistent, se minimizează semnificativ riscul unor erori &lt;br&gt;de configurare și se asigură o funcționare optimă a aplicației încă de la prima utilizare.</string>
              </property>
              <property name="alignment">
-              <set>Qt::AlignCenter</set>
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
              </property>
             </widget>
            </item>
            <item row="1" column="0">
+            <widget class="QLabel" name="label_9">
+             <property name="font">
+              <font>
+               <family>Times New Roman</family>
+               <pointsize>12</pointsize>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(176, 176, 176);</string>
+             </property>
+             <property name="text">
+              <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;b&gt;Asistentul de configurare inițială&lt;/b&gt; are rolul de a facilita completarea &lt;br&gt;corectă a bazei de date.&lt;br&gt;Acesta permite setarea parametrilor esențiali și introducerea informațiilor
+ &lt;br&gt;fundamentale despre organizații/centre medicale, investigații ecografice,&lt;br&gt; cadre medicale și personal auxiliar.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+             </property>
+             <property name="alignment">
+              <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
             <spacer name="verticalSpacer">
              <property name="orientation">
               <enum>Qt::Vertical</enum>
@@ -114,7 +156,7 @@
              <property name="sizeHint" stdset="0">
               <size>
                <width>20</width>
-               <height>380</height>
+               <height>40</height>
               </size>
              </property>
             </spacer>
@@ -174,6 +216,9 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Clasificatorul ”Investigații”</string>
              </property>
@@ -215,6 +260,9 @@
            </item>
            <item row="0" column="0" colspan="2">
             <widget class="QLabel" name="label_4">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Catalogul &quot;Tipul preturilor&quot;</string>
              </property>
@@ -229,6 +277,9 @@
           <layout class="QGridLayout" name="gridLayout_7">
            <item row="0" column="0">
             <widget class="QLabel" name="label_5">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Catalogul &quot;Utilizatori&quot;</string>
              </property>
@@ -237,15 +288,71 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QTableView" name="tableView_users"/>
+           </item>
+           <item row="1" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_2">
+             <item>
+              <widget class="QToolButton" name="btnAdd_users">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnEdit_users">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/edit_x32.png</normaloff>:/img/edit_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnRemove_users">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_4">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="page_6">
           <layout class="QGridLayout" name="gridLayout_9">
+           <item row="2" column="0">
+            <widget class="QTableView" name="tableView_doctors"/>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_7">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Catalogul &quot;Doctori&quot;</string>
              </property>
@@ -255,14 +362,67 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QTableView" name="tableView_doctors"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_3">
+             <item>
+              <widget class="QToolButton" name="btnAdd_doctors">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnEdit_doctors">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnRemove_doctors">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_5">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
          <widget class="QWidget" name="page_7">
           <layout class="QGridLayout" name="gridLayout_10">
+           <item row="2" column="0">
+            <widget class="QTableView" name="tableView_nurses"/>
+           </item>
            <item row="0" column="0">
             <widget class="QLabel" name="label_8">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Catalogul &quot;As.medicale&quot;</string>
              </property>
@@ -272,7 +432,54 @@
             </widget>
            </item>
            <item row="1" column="0">
-            <widget class="QTableView" name="tableView_nurses"/>
+            <layout class="QHBoxLayout" name="horizontalLayout_4">
+             <item>
+              <widget class="QToolButton" name="btnAdd_nurses">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnEdit_nurses">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnRemove_nurses">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_6">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>
@@ -280,6 +487,9 @@
           <layout class="QGridLayout" name="gridLayout_8">
            <item row="0" column="0">
             <widget class="QLabel" name="label_6">
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 191, 255);</string>
+             </property>
              <property name="text">
               <string>Catalogul &quot;Organizatii / Centre medicale&quot;</string>
              </property>
@@ -288,8 +498,58 @@
              </property>
             </widget>
            </item>
-           <item row="1" column="0">
+           <item row="2" column="0">
             <widget class="QTableView" name="tableView_organizations"/>
+           </item>
+           <item row="1" column="0">
+            <layout class="QHBoxLayout" name="horizontalLayout_5">
+             <item>
+              <widget class="QToolButton" name="btnAdd_organizations">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnEdit_organizations">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <widget class="QToolButton" name="btnRemove_organizations">
+               <property name="text">
+                <string>...</string>
+               </property>
+               <property name="icon">
+                <iconset resource="../resource.qrc">
+                 <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
+               </property>
+              </widget>
+             </item>
+             <item>
+              <spacer name="horizontalSpacer_7">
+               <property name="orientation">
+                <enum>Qt::Horizontal</enum>
+               </property>
+               <property name="sizeHint" stdset="0">
+                <size>
+                 <width>40</width>
+                 <height>20</height>
+                </size>
+               </property>
+              </spacer>
+             </item>
+            </layout>
            </item>
           </layout>
          </widget>

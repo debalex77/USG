@@ -4,10 +4,12 @@
 #include <QDialog>
 #include <QStringListModel>
 
+#include <catalogs/catgeneral.h>
+#include <catalogs/catorganizations.h>
+#include <catalogs/catusers.h>
+
 #include <models/basesqlquerymodel.h>
 #include <models/basesqltablemodel.h>
-#include <delegates/checkboxdelegate.h>
-#include <delegates/combodelegate.h>
 #include <data/database.h>
 
 namespace Ui {
@@ -23,12 +25,16 @@ public:
     ~FirstRunWizard();
 
 private:
+    void initBtnToolBar();
     void initConnections();
     void setListStep();
     void updateTextListStep();
     void updateTableInvestigations();
     void updateTableTypePrices();
     void updateTableUsers();
+    void updateTableDoctors();
+    void updateTableNurses();
+    void updateTableOrganizations();
 
 private slots:
     void clickedBackPage();
@@ -38,6 +44,22 @@ private slots:
 
     void handleUpdateProgress(int num_records, int value);
 
+    void addCatUser();
+    void editCatUser();
+    void removeCatUser();
+
+    void addCatDoctor();
+    void editCatDoctor();
+    void removeCatDoctor();
+
+    void addCatNurse();
+    void editCatNurse();
+    void removeCatNurse();
+
+    void addCatOrganization();
+    void editCatOrganization();
+    void removeCatOrganization();
+
 private:
     Ui::FirstRunWizard *ui;
 
@@ -45,9 +67,9 @@ private:
         page_first,
         page_classifiers,
         page_typePrices,
+        page_users,
         page_doctors,
         page_nurses,
-        page_users,
         page_organizations
     };
 
@@ -58,9 +80,10 @@ private:
     BaseSqlTableModel *model_investigations;
     BaseSqlTableModel *model_typePrices;
     BaseSqlQueryModel *model_users;
+    BaseSqlQueryModel *model_doctors;
+    BaseSqlQueryModel *model_nurses;
+    BaseSqlQueryModel *model_organizations;
 
-    CheckBoxDelegate *checkbox_delegate;
-    ComboDelegate *gr_investig_delegate;
 };
 
 #endif // FIRSTRUNWIZARD_H
