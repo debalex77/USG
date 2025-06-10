@@ -70,9 +70,7 @@ MainWindow::MainWindow(QWidget *parent)
     updateTextBtn();
 
     timer = new QTimer(this);
-    timer_doc_widget = new QTimer(this);
     connect(timer, &QTimer::timeout, this, &MainWindow::updateTimer);  // pu aprecierea daca e deschisa forma MainWindow
-    connect(timer_doc_widget, &QTimer::timeout, this, &MainWindow::updateTimerDocWidget);
     timer->start(1000);
 }
 
@@ -96,7 +94,7 @@ MainWindow::~MainWindow()
 void MainWindow::mDockWidgetShowTex(const QString txtMsg)
 {
     textEdit_dockWidget->setHtml(txtMsg);
-    textEdit_dockWidget->setFixedHeight(70);
+    textEdit_dockWidget->setFixedHeight(100);
     dock_widget->show();
 }
 
@@ -542,17 +540,16 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 {
     QString version_app;
     QSqlQuery qry;
-    qry.prepare(
-        QStringLiteral(
-            "SELECT "
-            "  versionApp "
-            "FROM "
-            "  userPreferences "
-            "WHERE "
-            "  id_users = %1 AND"
-            "  versionApp IS NOT NULL;")
-        .arg(QString::number(globals().idUserApp))
-        );
+    qry.prepare(R"(
+            SELECT
+                versionApp
+            FROM
+                userPreferences
+            WHERE
+                id_users = ? AND
+                versionApp IS NOT NULL
+        )");
+    qry.addBindValue(globals().idUserApp);
     if (qry.exec() && qry.next())
         version_app = qry.value(0).toString();
     else
@@ -565,19 +562,18 @@ QString MainWindow::getVersionAppInTableSettingsUsers()
 void MainWindow::setVersionAppInTableSettingsUsers()
 {
     QSqlQuery qry;
-    qry.prepare(
-        QStringLiteral(
-            "UPDATE userPreferences SET "
-            "  versionApp = '%1' "
-            "WHERE "
-            "  id_users = %2 AND "
-            "  versionApp IS NOT NULL;")
-        .arg(USG_VERSION_FULL,
-             QString::number(globals().idUserApp))
-        );
+    qry.prepare(R"(
+        UPDATE userPreferences SET
+            versionApp = ?
+        WHERE
+            id_users = ? AND
+            versionApp IS NOT NULL
+    )");
+    qry.addBindValue(USG_VERSION_FULL);
+    qry.addBindValue(globals().idUserApp);
     if (! qry.exec() && qry.next())
         qCritical(logCritical()) << tr("%1 - setVersionAppInTableSettingsUsers()").arg(metaObject()->className())
-                                 << tr("Eroare de actualizare a veriunei aplicatiei din tabela 'settingsUsers'.");
+                                 << tr("Eroare de actualizare a veriunei aplicatiei din tabela 'userPreferences'.");
 }
 
 void MainWindow::closeDatabases()
@@ -622,32 +618,42 @@ void MainWindow::updateTimer()
         }
         timer->stop(); // oprim timerul
 
+        // setam titlu aplicatiei
         if (globals().thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+                           tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
                            globals().nameUserApp + ")");
         else if (globals().thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(" (.sqlite3): utilizator (") + globals().nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+                           tr(" (.sqlite3): utilizator (") + globals().nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL + tr(": utilizator (") + globals().nameUserApp + ")");
+            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+                           tr(": utilizator (") + globals().nameUserApp + ")");
 
+        // daca prima lansare prezentam asistentul de configurare
         if (globals().firstLaunch){
-            textEdit_dockWidget->setHtml(tr("%1   %2: Se completează catalogul <b><u>'Investigații'</u></b>.")
-                                         .arg(db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
-            textEdit_dockWidget->setFixedHeight(70);
+            // prezentam textul
+            textEdit_dockWidget->append(tr("%1  S-a depistat lansarea primara a aplicatiei.")
+                                         .arg(db->getHTMLImageInfo()));
+            textEdit_dockWidget->setFixedHeight(100);
             dock_widget->show();
-            timer_doc_widget->start(1000);
+
+            // lansam asistentul de configurare
+            launchFirstRunWizard();
         }
 
-        // Verificam daca este schimbata versiunea aplicatiei
+        // determinam versiunea aplicatiei din BD
         QString version_app = getVersionAppInTableSettingsUsers();
 
+        // verificam daca versiunea aplicatiei e actuala
         if (version_app != USG_VERSION_FULL){
             if (update_app->execUpdateCurrentRelease(version_app)){
                 setVersionAppInTableSettingsUsers();
                 openDescriptionRealease();
                 // prezentam informatia de actualizarea in panoul informativ
-                textEdit_dockWidget->clear();
-                textEdit_dockWidget->setHtml(tr("%1   Aplicația a fost actualizată până la versiunea: USG v" USG_VERSION_FULL).arg(db->getHTMLImageInfo()));
+                // textEdit_dockWidget->clear();
+                textEdit_dockWidget->append(tr("%1  Aplicația a fost actualizată până la versiunea: USG v" USG_VERSION_FULL)
+                                                 .arg(db->getHTMLImageInfo()));
                 textEdit_dockWidget->setFixedHeight(100);
                 dock_widget->show();
             }
@@ -671,34 +677,13 @@ void MainWindow::updateTimer()
     }
 }
 
-void MainWindow::updateTimerDocWidget()
+void MainWindow::launchFirstRunWizard()
 {
-    if (dock_widget->isVisible()){
-        timer_doc_widget->stop();
+    FirstRunWizard *first_run_wizard = new FirstRunWizard(this);
+    first_run_wizard->exec();
 
-        txt_title_bar->setText(tr("Se incarca clasificatorul \"Investigații\" ... "));
-
-        progress = new QProgressBar(ui->statusbar);
-        progress->setAlignment(Qt::AlignRight);
-        progress->setMaximumSize(120, 15);
-        progress->hide(); // Ascunde inițial bara de progres
-        txt_title_bar->hide();
-        ui->statusbar->addWidget(txt_title_bar);
-        ui->statusbar->addWidget(progress);
-
-        db->updateInvestigationFromXML_2024();
-        connect(db, &DataBase::updateProgress, this, &MainWindow::handleUpdateProgress);
-        connect(db, &DataBase::finishedProgress, this, &MainWindow::handleFinishedProgress);
-
-        db->insertDataForTabletypesPrices(); //completarea preturilor
-
-        textEdit_dockWidget->setHtml(tr("%1<br>%2 %3 Completat clasificatorul <b><u>'Investigații'</u></b> sursa - <b>Catalogul tarifelor unice (anexa nr.3)</b>.<br>"
-                                        "     <b>Vezi:</b> <em>Meniu principal al aplicației -> Cataloage -> Clasificatori -> Investigații<em>")
-                                     .arg(textEdit_dockWidget->toHtml(), db->getHTMLImageInfo(), QDateTime::currentDateTime().toString("dd.MM.yyyy hh:mm:ss.zzz")));
-
-        // Lansarea - User Manual
-        globals().firstLaunch = false;
-    }
+    // Lansarea - User Manual
+    globals().firstLaunch = false;
 }
 
 // **********************************************************************************
@@ -1006,6 +991,7 @@ void MainWindow::openCloudServerConfig()
 void MainWindow::openFirstRunWizard()
 {
     FirstRunWizard *first_wizard = new FirstRunWizard(this);
+    connect(first_wizard, &FirstRunWizard::finishLoadClassifier, this, &MainWindow::mDockWidgetShowTex);
     first_wizard->exec();
 }
 

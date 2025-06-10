@@ -465,11 +465,11 @@ QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(const int id_us
             c.*,
             u.*
         FROM
-            constants AS c
-        JOIN
-            userPreferences AS u ON u.id_users = c.id_users
+            userPreferences AS u
+        LEFT JOIN
+            constants AS c ON c.id_users = u.id_users
         WHERE
-            c.id_users = ?
+            u.id_users = ?
     )");
     qry.addBindValue(id_user);
     if (qry.exec()) {
@@ -921,6 +921,8 @@ void DataBase::updateInvestigationFromXML_2024()
         emit updateProgress(count_num, progress);
     }
 
+    emit finishedProgress(tr("Actualizat clasificatorul \"Investigatii\" pe anul 2024."));
+
     qInfo(logInfo()) << "Actualizat clasificatorul \"Investigatii\" pe anul 2024.";
 }
 
@@ -1027,37 +1029,52 @@ void DataBase::insertSetTableSettingsUsers()
 {
     QSqlQuery qry;
     qry.prepare(R"(
-        INSERT INTO userPreferences ("
-            id,"
-            id_users,"
-            versionApp,"
-            showQuestionCloseApp,"
-            showUserManual,"
-            showHistoryVersion,"
-            order_splitFullName,"
-            updateListDoc,"
-            showDesignerMenuPrint,"
-            checkNewVersionApp,"
-            databasesArchiving,"
-            showAsistantHelper)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?);
+        INSERT INTO userPreferences (
+            id,
+            id_users,
+            versionApp,
+            showQuestionCloseApp,
+            showUserManual,
+            showHistoryVersion,
+            order_splitFullName,
+            updateListDoc,
+            showDesignerMenuPrint,
+            checkNewVersionApp,
+            databasesArchiving,
+            showAsistantHelper,
+            showDocumentsInSeparatWindow,
+            minimizeAppToTray)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     )");
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue(globals().idUserApp);
-    qry.addBindValue("");
-    qry.addBindValue(1);
-    qry.addBindValue(0);
-    qry.addBindValue(0);
-    qry.addBindValue(0);
-    qry.addBindValue(10);
-    qry.addBindValue(0);
-    qry.addBindValue(1);
-    qry.addBindValue(0);
-    qry.addBindValue(1);
+    qry.addBindValue(""); // versionApp
+    qry.addBindValue(1);  // showQuestionCloseApp
+    qry.addBindValue(0);  // showUserManual
+    qry.addBindValue(0);  // showHistoryVersion
+    qry.addBindValue(0);  // order_splitFullName
+    qry.addBindValue(0);  // updateListDoc
+    qry.addBindValue(0);  // showDesignerMenuPrint
+    qry.addBindValue(1);  // checkNewVersionApp
+    qry.addBindValue(0);  // databasesArchiving
+    qry.addBindValue(1);  // showAsistantHelper
+    qry.addBindValue(0);  // showDocumentsInSeparatWindow
+    qry.addBindValue(0);  // minimizeAppToTray
 
-    if (! qry.exec())
+    if (qry.exec()) {
+        globals().showQuestionCloseApp  = true;
+        globals().showUserManual        = false;
+        globals().order_splitFullName   = false;
+        globals().showDesignerMenuPrint = false;
+        globals().checkNewVersionApp    = true;
+        globals().databasesArchiving    = false;
+        globals().showAsistantHelper    = true;
+        globals().showDocumentsInSeparatWindow = false;
+        globals().minimizeAppToTray = false;
+    } else {
         qCritical(logCritical()) << tr("Nu au fost inserate date initiale in tabela 'userPreferences' %1.")
                                         .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
+    }
 }
 
 // *******************************************************************
@@ -6116,12 +6133,12 @@ QString DataBase::getVersionMySQL()
 
 QString DataBase::getHTMLImageInfo()
 {
-    return QString("<img src = \"qrc:///img/info_x32.png\" alt = \"info\" width=\"20\" height=\"20\" align=\"left\" />");
+    return QString("<img src=\"qrc:///img/info_x32.png\" alt=\"info\" width=\"20\" height=\"20\" style=\"vertical-align:middle; margin-right:5px;\" />");
 }
 
 QString DataBase::getHTMLImageWarning()
 {
-    return QString("<img src = \"qrc:///img/warning.png\" alt = \"info\" width=\"20\" height=\"20\" align=\"left\" />");
+    return QString("<img src = \"qrc:///img/warning.png\" alt = \"info\" width=\"20\" height=\"20\" style=\"vertical-align:middle; margin-right:5px;\"  />");
 }
 
 QString DataBase::getStyleForButtonMessageBox()
@@ -6314,30 +6331,16 @@ bool DataBase::openDataBase()
             qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals().sqliteNameBase);
             if (! enableForeignKeys())
                 qWarning(logWarning()) << "Nu a fost activata suportul cheii externe";
-            if (globals().firstLaunch) {
-                creatingTables();
-                loadNormogramsFromXml();
-                // create index se afla dupa crearea db_image, vezi crearea db_image
-            }
+            // if (globals().firstLaunch) {
+            //     creatingTables();
+            //     loadNormogramsFromXml();
+            //     // create index se afla dupa crearea db_image, vezi crearea db_image
+            // }
         } else {
             qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals().sqliteNameBase)
                                    << db.lastError().text();
             return false;
         }
-
-        //----------------------------------------------------------------------------------------------------
-        // baza de date implicita db_thread
-        // m_connectionName = "db_thread";
-        // db_thread = QSqlDatabase::addDatabase("QSQLITE", m_connectionName);
-        // db_thread.setHostName(globals().sqliteNameBase);
-        // db_thread.setDatabaseName(globals().sqlitePathBase);
-        // if(db_thread.open()){
-        //     qInfo(logInfo()) << tr("Conectarea la baza de date '%1' prin conectarea 'db_thread' este instalata cu succes.").arg(globals().sqliteNameBase);
-        // } else {
-        //     qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nameConnection 'db_thread' nu a fost instalata.").arg(globals().sqliteNameBase)
-        //                            << db_thread.lastError().text();
-        //     return false;
-        // }
 
         //----------------------------------------------------------------------------------------------------
         // baza de date image
@@ -6349,10 +6352,10 @@ bool DataBase::openDataBase()
             db_image.setDatabaseName(globals().pathImageBaseAppSettings);
             if (db_image.open()){
                 qInfo(logInfo()) << tr("Conectarea la baza de date 'db_image' este instalata cu succes.");
-                if (globals().firstLaunch){
-                    creatingTables_DbImage();
-                    createIndexTables();
-                }
+                // if (globals().firstLaunch){
+                //     creatingTables_DbImage();
+                //     createIndexTables();
+                // }
             } else {
                 qWarning(logWarning()) << tr("Conectarea la baza de date 'db_image' nu a fost instalata.")
                                        << db.lastError().text();
@@ -6382,11 +6385,11 @@ bool DataBase::enableForeignKeys()
     QSqlQuery qry;
     qry.prepare("PRAGMA foreign_keys = ON;");
     if(! qry.exec()){
-        qDebug() << "Error - enable foreign_keys.";
-        qDebug() << qry.lastError().text();
+        qCritical(logCritical()) << "Error - enable foreign_keys.";
+        qCritical(logCritical()) << qry.lastError().text();
         return false;
     } else {
-        qDebug() << "Enable foreign_keys succes.";
+        qInfo(logInfo()) << "Enable foreign_keys succes.";
         return true;
     }
     return false;

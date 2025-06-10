@@ -50,6 +50,8 @@ private:
     int m_Id = -1;     /* proprietatea - id obiectului */
     DataBase *db;
 
+    QStringList err;
+
     QLineEdit   *edit_password;
     QToolButton *show_hide_password;
     HandlerFunctionThread *handler_functionThread;

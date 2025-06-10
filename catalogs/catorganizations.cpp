@@ -652,6 +652,9 @@ bool CatOrganizations::onWritingData()
                      ? handleInsert()
                      : handleUpdate();
 
+    if (m_itNew)
+        setItNew(false); // setam ca nu este nou
+
     // modificarea formei
     if (returnBool)
         setWindowModified(false);
@@ -832,8 +835,7 @@ bool CatOrganizations::handleInsert()
     // inseram datele
     if (insertIntoTableOrganizations()) {
         // !!! logarea si prezentarea erorii se efectuiaza in [insertIntoTableOrganizations]
-        // setam ca nu este nou
-        setItNew(false);
+
         // prezentam mesaj
         popUp->setPopupText(tr("Datele organizatiei <b>%1</b> <br>"
                                "au fost inserate cu succes.")

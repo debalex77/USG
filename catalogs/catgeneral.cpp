@@ -411,9 +411,6 @@ bool CatGeneral::handleInsert(const QString &name_table, const QString &type_lab
     // inseram datele
     if (insertDataIntoTableByNameTable(name_table)) {
         // !!! logarea si mesajul de inserare cu succes vezi in [insertDataIntoTableByNameTable]
-
-        setItNew(false); // setam itNew = false
-
         return true; // returnam true
     } else {
         // !!! prezentarea mesajului de eroare in functia [insertDataIntoTableByNameTable]
@@ -912,10 +909,12 @@ bool CatGeneral::onWritingData()
 
     // emitem signal
     if (returnBool) {
-        if (m_itNew)
+        if (m_itNew) {
             emit createCatGeneral();
-        else
+            setItNew(false); // setam itNew = false
+        } else {
             emit changedCatGeneral();
+        }
     }
 
     // modificam forma

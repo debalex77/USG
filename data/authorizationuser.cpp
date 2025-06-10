@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "authorizationuser.h"
+#include "data/appsettings.h"
 #include "ui_authorizationuser.h"
 
 AuthorizationUser::AuthorizationUser(QWidget *parent) :
@@ -118,15 +119,35 @@ void AuthorizationUser::setDataConstants()
 
 void AuthorizationUser::slot_IdChanged()
 {
-    if (globals().idUserApp == -1 || globals().idUserApp == 0)
+    if (globals().idUserApp <= 0)
         return;
-    QMap<QString, QString> items;
-    if (db->getObjectDataById("users", globals().idUserApp, items)){
-        ui->editLogin->setText(items.constFind("name").value());
+
+
+    QVariantMap map_column {
+        { "name",  QVariant() },
+        { "lastConnection", QVariant() }
+    };
+
+    // container cu conditia
+    QMap<QString, QVariant> where;
+    where["id"] = globals().idUserApp;
+
+    err.clear();
+
+    QVariantMap map_result = db->selectSingleRow(this->metaObject()->className(),
+                                                 "users", map_column, where, err);
+
+    if (! map_result.isEmpty()) {
         ui->checkBoxMemory->setChecked(globals().memoryUser);
-    } else {
-        qWarning(logWarning()) << tr("%1 - slot_IdChanged():").arg(metaObject()->className())
-                               << tr("ID utilizatorului nu poate sa fie egal cu '0' !!!");
+        if (globals().memoryUser) {
+            ui->editLogin->setText(map_result["name"].toString());
+            ui->label_info->setText(tr("Ultima accesare: ") +
+                                    map_result["lastConnection"]
+                                    .toDateTime().toString("dd.MM.yyyy hh:mm:ss"));
+        } else {
+            ui->label_info->setVisible(false);
+            this->adjustSize();
+        }
     }
 }
 
@@ -173,7 +194,10 @@ bool AuthorizationUser::onControlAccept()
     //*****************************************************************************************
     // 1. Verificam daca este complectat login-ul
     if (ui->editLogin->text().isEmpty()){
-        QMessageBox::warning(this, tr("Verificarea datelor"), tr("Nu este indicat <b>Login</b> !!!<br>Accesul este interzis."), QMessageBox::Ok);
+        QMessageBox::warning(this,
+                             tr("Verificarea datelor"),
+                             tr("Nu este indicat <b>Login</b> !!!"
+                                "<br>Accesul este interzis."), QMessageBox::Ok);
         qWarning(logWarning()) << tr("Incercarea accesului în aplicația fără indicarea numelui utilizatorului !!!");
         return false;
     }
@@ -184,7 +208,10 @@ bool AuthorizationUser::onControlAccept()
         db->connectToDataBase();
 
     if (! db->existNameObjectReturnId("users", ui->editLogin->text(), m_Id)){
-        QMessageBox::warning(this, tr("Controlul accesului"), tr("Utilizatorul cu nume <b>%1</b> nu a fost depistat in baza de date !!!<br>Accesul este interzis.")
+        QMessageBox::warning(this,
+                             tr("Controlul accesului"),
+                             tr("Utilizatorul cu nume <b>%1</b> nu a fost depistat in baza de date !!!<br>"
+                                "Accesul este interzis.")
                              .arg(ui->editLogin->text()), QMessageBox::Ok);
         qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
                                << tr("Accesul la aplicație. Utilizatorul cu nume '%1' nu a fost depistat in baza de date.")
@@ -195,13 +222,16 @@ bool AuthorizationUser::onControlAccept()
     //*****************************************************************************************
     // 3. Verificam daca a fost extras ID utilizatorului
     if (m_Id == -1 || m_Id == 0){
-        QMessageBox::warning(this, tr("Controlul accesului"),
-                             tr("Utilizatorul <b>%1</b> a fost depistat in baza de date, <b>'id'</b> utilizatorului nu a fost determinat (sau determinat incorect) !!!"
+        QMessageBox::warning(this,
+                             tr("Controlul accesului"),
+                             tr("Utilizatorul <b>%1</b> a fost depistat in baza de date, <b>'id'</b> "
+                                "utilizatorului nu a fost determinat (sau determinat incorect) !!!"
                                 "<br>Adresați-vă administratorului aplicației.>"
                                 "<br>Accesul este interzis.")
                              .arg(ui->editLogin->text()), QMessageBox::Ok);
         qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
-                               << tr("Accesul la aplicație. Utilizatorul cu nume '%1' a fost depistat in baza de date, dar 'id' utilizatorului nu a fost determinat.")
+                               << tr("Accesul la aplicație. Utilizatorul cu nume '%1' a fost depistat in baza de date, "
+                                     "dar 'id' utilizatorului nu a fost determinat.")
                                   .arg(ui->editLogin->text());
         return false;
     }
@@ -210,7 +240,10 @@ bool AuthorizationUser::onControlAccept()
     // 4. Extragem datele utilizatorului inclusiv parola
     QMap<QString, QString> items;
     if (m_Id != -1 && ! db->getObjectDataById("users", m_Id, items)){
-        QMessageBox::warning(this, tr("Controlul accesului"), tr("Utilizatorul <b>%1</b> cu <b>id='%2'</b> nu este depistat în baza de date !!!")
+        QMessageBox::warning(this,
+                             tr("Controlul accesului"),
+                             tr("Utilizatorul <b>%1</b> cu <b>id='%2'</b> "
+                                "nu este depistat în baza de date !!!")
                              .arg(items.constFind("name").value(), items.constFind("id").value()),
                              QMessageBox::Ok);
         qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
@@ -222,7 +255,11 @@ bool AuthorizationUser::onControlAccept()
     //*****************************************************************************************
     // 5. Decriptarea parolei + verificarea corectitudinei parolei
     if (QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex() != items.constFind("hash").value()){
-        QMessageBox::warning(this, tr("Controlul accesului"), tr("Parola utilizatorului <b>'%1'</b> este incorectă !!!<br> Accesul este interzis.").arg(ui->editLogin->text()),
+        QMessageBox::warning(this,
+                             tr("Controlul accesului"),
+                             tr("Parola utilizatorului <b>'%1'</b> este incorectă !!!<br> "
+                                "Accesul este interzis.")
+                                 .arg(ui->editLogin->text()),
                              QMessageBox::Ok);
         qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
                                << tr("Accesul la aplicație. Utilizatorul '%1' cu id='%2' - întroducerea parolei incorecte.")
@@ -235,6 +272,17 @@ bool AuthorizationUser::onControlAccept()
     globals().idUserApp   = m_Id;
     globals().nameUserApp = items.constFind("name").value();
     globals().memoryUser  = ui->checkBoxMemory->isChecked();
+
+    // ID si nume utilizatorului cryptat
+    QString id_encode        = db->encode_string(QString::number(m_Id));
+    QString name_user_encode = db->encode_string(ui->editLogin->text());
+
+    // salvam in fisierul .conf
+    AppSettings *app_settings = new AppSettings(this);
+    app_settings->setKeyAndValue("on_start", "idUserApp", id_encode);
+    app_settings->setKeyAndValue("on_start", "nameUserApp", name_user_encode);
+    app_settings->setKeyAndValue("on_start", "memoryUser", ui->checkBoxMemory->isChecked() ? 1 : 0);
+    app_settings->deleteLater();
 
     QSqlQuery qry;
     qry.prepare(QString("UPDATE users SET lastConnection = '%1' WHERE id = '%2' AND deletionMark = '0';")

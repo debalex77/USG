@@ -1,3 +1,26 @@
+/*****************************************************************************
+ *
+ * SPDX-License-Identifier: GPL-3.0-or-later
+ *
+ * Copyright (c) 2025 Codreanu Alexandru <alovada.med@gmail.com>
+ *
+ * This file is part of the USG project.
+ *
+ * This program is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program. If not, see <https://www.gnu.org/licenses/>.
+ *
+ ******************************************************************************/
+
 #include "firstrunwizard.h"
 #include "ui_firstrunwizard.h"
 
@@ -12,6 +35,7 @@ FirstRunWizard::FirstRunWizard(QWidget *parent)
 
     // alocam memoria pentru modelul listei
     db = new DataBase(this);
+    popUp = new PopUp(this);
     model = new QStringListModel(this);
     model_investigations = new BaseSqlTableModel(this);
     model_typePrices     = new BaseSqlTableModel(this);
@@ -117,8 +141,20 @@ FirstRunWizard::FirstRunWizard(QWidget *parent)
 
 FirstRunWizard::~FirstRunWizard()
 {
+    delete popUp;
+    delete model;
+    delete model_doctors;
+    delete model_nurses;
+    delete model_investigations;
+    delete model_typePrices;
+    delete model_users;
+    delete model_organizations;
+    delete db;
     delete ui;
 }
+
+// *******************************************************************
+// **************** PROCESSINGS INIT *********************************
 
 void FirstRunWizard::initBtnToolBar()
 {
@@ -203,6 +239,9 @@ void FirstRunWizard::setListStep()
     )");
 }
 
+// *******************************************************************
+// **************** PROCESSINGS UPDATE TABLES ************************
+
 void FirstRunWizard::updateTextListStep()
 {
     QModelIndex index = model->index(currentStepIndex);
@@ -283,6 +322,8 @@ void FirstRunWizard::updateTableUsers()
     if (ui->stackedWidget->currentIndex() != page_users)
         return;
 
+    model_users->clear();
+    model_users->setQuery("SELECT id, deletionMark, name FROM users ORDER BY name");
     model_users->setHeaderData(1, Qt::Horizontal, "");
     model_users->setHeaderData(2, Qt::Horizontal, "Nume utilizatorilor");
 
@@ -305,6 +346,22 @@ void FirstRunWizard::updateTableDoctors()
     if (ui->stackedWidget->currentIndex() != page_doctors)
         return;
 
+    model_doctors->clear();
+    model_doctors->setQuery(R"(
+        SELECT
+            doctors.id,
+            doctors.deletionMark,
+            fullNameDoctors.name AS FullName,
+            doctors.telephone,
+            doctors.email,
+            doctors.comment
+        FROM
+            doctors
+        INNER JOIN
+            fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors
+        ORDER BY
+            fullNameDoctors.name
+    )");
     model_doctors->setHeaderData(1, Qt::Horizontal, "");
     model_doctors->setHeaderData(2, Qt::Horizontal, tr("NPP doctorului"));
     model_doctors->setHeaderData(3, Qt::Horizontal, tr("Telefoane"));
@@ -333,6 +390,22 @@ void FirstRunWizard::updateTableNurses()
     if (ui->stackedWidget->currentIndex() != page_nurses)
         return;
 
+    model_nurses->clear();
+    model_nurses->setQuery(R"(
+        SELECT
+            nurses.id,
+            nurses.deletionMark,
+            fullNameNurses.name AS FullName,
+            nurses.telephone,
+            nurses.email,
+            nurses.comment
+        FROM
+            nurses
+        INNER JOIN
+            fullNameNurses ON nurses.id = fullNameNurses.id_nurses
+        ORDER BY
+            fullNameNurses.name;
+    )");
     model_nurses->setHeaderData(1, Qt::Horizontal, "");
     model_nurses->setHeaderData(2, Qt::Horizontal, tr("NPP as.medicale"));
     model_nurses->setHeaderData(3, Qt::Horizontal, tr("Telefoane"));
@@ -361,6 +434,22 @@ void FirstRunWizard::updateTableOrganizations()
     if (ui->stackedWidget->currentIndex() != page_organizations)
         return;
 
+    model_organizations->clear();
+    model_organizations->setQuery(R"(
+        SELECT
+            id,
+            deletionMark,
+            name,
+            IDNP,
+            address,
+            telephone,
+            email,
+            comment
+        FROM
+            organizations
+        ORDER BY
+            name;
+    )");
     model_organizations->setHeaderData(1, Qt::Horizontal, "");
     model_organizations->setHeaderData(2, Qt::Horizontal, tr("Denumirea organizației"));
     model_organizations->setHeaderData(3, Qt::Horizontal, tr("IDNP"));
@@ -387,6 +476,9 @@ void FirstRunWizard::updateTableOrganizations()
         ui->tableView_organizations->selectRow(0); // selectam primul rand
     }
 }
+
+// *******************************************************************
+// **************** PROCESSINGS BTN NEXT, BACK ***********************
 
 void FirstRunWizard::clickedBackPage()
 {
@@ -418,6 +510,9 @@ void FirstRunWizard::clickedNextPage()
     }
 }
 
+// *******************************************************************
+// **************** PROCESAREA BTN LOAD ******************************
+
 void FirstRunWizard::loadInvestigations()
 {
     if (! globals().firstLaunch)
@@ -425,6 +520,7 @@ void FirstRunWizard::loadInvestigations()
 
     db->updateInvestigationFromXML_2024();
     connect(db, &DataBase::updateProgress, this, &FirstRunWizard::handleUpdateProgress);
+    connect(db, &DataBase::finishedProgress, this, &FirstRunWizard::handleFinishedProgress);
 }
 
 void FirstRunWizard::loadTypePrices()
@@ -433,6 +529,8 @@ void FirstRunWizard::loadTypePrices()
         return;
 
     db->insertDataForTabletypesPrices();
+    updateTableTypePrices();
+    emit finishLoadClassifier(tr("Completat catalogul \"Tipul prețurilor\"."));
 }
 
 void FirstRunWizard::handleUpdateProgress(int num_records, int value)
@@ -446,10 +544,22 @@ void FirstRunWizard::handleUpdateProgress(int num_records, int value)
     ui->progressBar->setValue(value_progress);
 }
 
+void FirstRunWizard::handleFinishedProgress(const QString txt)
+{
+    updateTableInvestigations();
+    emit finishLoadClassifier(txt);
+}
+
+// *******************************************************************
+// **************** PROCESAREA BTN USER ******************************
+
 void FirstRunWizard::addCatUser()
 {
     CatUsers* cat_user = new CatUsers(this);
     cat_user->setProperty("itNew", true);
+    connect(cat_user, &CatUsers::mCreateNewUser, this, [this] (){
+        updateTableUsers();
+    });
     cat_user->exec();
 }
 
@@ -471,14 +581,200 @@ void FirstRunWizard::editCatUser()
 
 void FirstRunWizard::removeCatUser()
 {
+    // 1. Verificam daca este marcat randul
+    if (ui->tableView_users->currentIndex().row() == -1){
+        QMessageBox::warning(this, tr("Atenție"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
+        return;
+    }
 
+    // 2. pregatim variabile necesare
+    auto row = ui->tableView_users->currentIndex().row();
+    int id_user       = model_users->data(model_users->index(row, 0), Qt::DisplayRole).toInt();
+    QString name_user = model_users->data(model_users->index(row, 2), Qt::DisplayRole).toString();
+
+    // 3. preagatim soliciatre
+    QString strQry;
+    strQry = globals().thisMySQL ?
+        QStringLiteral(R"(
+            SELECT
+                CONCAT('Comanda ecografica nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                CONCAT('Raport ecografic nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                reportEcho
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                CONCAT('Formarea preturilor nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                pricings
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                userPreferences
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Cont online' AS typeDoc
+            FROM
+                contsOnline
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Cloud server' AS typeDoc
+            FROM
+                cloudServer
+            WHERE
+                id_users = ?
+        )") :
+        QStringLiteral(R"(
+            SELECT
+                'Comanda ecografica nr.'|| numberDoc ||' din '|| strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Raport ecografic nr.'|| numberDoc ||' din '|| strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                reportEcho
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Formarea preturilor nr.' || numberDoc || ' din ' || strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                pricings
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                userPreferences
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Cont online' AS typeDoc
+            FROM
+                contsOnline
+            WHERE
+                id_users = ?
+
+            UNION ALL
+
+            SELECT
+                'Cloud server' AS typeDoc
+            FROM
+                cloudServer
+            WHERE
+                id_users = ?
+        )");
+
+    // 4. executam
+    QSqlQuery qry;
+    qry.prepare(strQry);
+    qry.addBindValue(id_user); //pu orderEcho
+    qry.addBindValue(id_user); //pu reportEcho
+    qry.addBindValue(id_user); //pu pricings
+    qry.addBindValue(id_user); //pu userPreferences
+    qry.addBindValue(id_user); //pu contsOnline
+    qry.addBindValue(id_user); //pu cloudServer
+    if (qry.exec()) {
+        QStringList list_doc;
+
+        list_doc << tr("Utilizatorul '%1' figureaza in urmatoarele documente:")
+                        .arg(name_user);
+
+        while (qry.next()) {
+            QString doc_type = qry.value(0).toString();
+            list_doc << tr(" - %1").arg(doc_type);
+        }
+
+        if (list_doc.size() > 1) { // > 1 din cauza initierea textului vezi mai sus
+            CustomMessage *message = new CustomMessage(this);
+            message->setWindowTitle(QGuiApplication::applicationDisplayName());
+            message->setTextTitle(tr("Utilizatorul '%1' nu poate fi eliminat !!!").arg(name_user));
+            message->setDetailedText(list_doc.join("\n"));
+            message->exec();
+            message->deleteLater();
+
+            return;
+        }
+    } else {
+        err.clear();
+        err << this->metaObject()->className()
+            << "[removeCatUser]"
+            << tr("Eroarea solicitarii de selectare a utilizatorului %1")
+                   .arg(qry.lastError().text().isEmpty()
+                            ? ": eroarea indisponibila"
+                            : ": " + qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(QGuiApplication::applicationDisplayName());
+        message->setTextTitle(tr("Utilizatorul '%1' nu poate fi eliminat !!!").arg(name_user));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+
+        return;
+    }
+
+    // 5. eliminam din baza de date
+    if (db->deleteDataFromTable("users", "id", QString::number(id_user))) {
+        popUp->setPopupText(tr("Utilizatorul '%1' eliminat cu cucces din baza de date.")
+                                .arg(name_user));
+        popUp->show();
+
+        qInfo(logInfo()) << "Utilizatorul " + name_user + " eliminat din baza de date.";
+        updateTableUsers();
+    }
 }
+
+// *******************************************************************
+// **************** PROCESAREA BTN DOCTOR ****************************
 
 void FirstRunWizard::addCatDoctor()
 {
     CatGeneral *cat_General = new CatGeneral(this);
     cat_General->setProperty("itNew", true);
     cat_General->setProperty("typeCatalog", CatGeneral::TypeCatalog::Doctors);
+    connect(cat_General, &CatGeneral::createCatGeneral, this, [this]() {
+        updateTableDoctors();
+    });
     cat_General->exec();
 }
 
@@ -496,19 +792,134 @@ void FirstRunWizard::editCatDoctor()
     cat_General->setProperty("itNew", false);
     cat_General->setProperty("typeCatalog", CatGeneral::TypeCatalog::Doctors);
     cat_General->setProperty("Id", id_doctor);
+    connect(cat_General, &CatGeneral::changedCatGeneral, this, [this]() {
+        updateTableDoctors();
+    });
     cat_General->exec();
 }
 
 void FirstRunWizard::removeCatDoctor()
 {
+    // 1. Verificam daca este marcat randul
+    if (ui->tableView_doctors->currentIndex().row() == -1){
+        QMessageBox::warning(this, tr("Atenție"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
+        return;
+    }
 
+    // 2. pregatim variabile necesare
+    auto row = ui->tableView_doctors->currentIndex().row();
+    int id_doctor       = model_doctors->data(model_doctors->index(row, 0), Qt::DisplayRole).toInt();
+    QString name_doctor = model_doctors->data(model_doctors->index(row, 2), Qt::DisplayRole).toString();
+
+    // 3. preagatim soliciatre
+    QString strQry;
+    strQry = globals().thisMySQL ?
+        QStringLiteral(R"(
+            SELECT
+                CONCAT('Comanda ecografica nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_doctors = ? OR id_doctors_execute = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_doctors = ?
+        )") :
+        QStringLiteral(R"(
+            SELECT
+                'Comanda ecografica nr.'|| numberDoc ||' din '|| strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_doctors = ? OR id_doctors_execute = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_doctors = ?
+        )");
+
+    // 4. executam
+    QSqlQuery qry;
+    qry.prepare(strQry);
+    qry.addBindValue(id_doctor); //pu orderEcho - id_doctors
+    qry.addBindValue(id_doctor); //pu orderEcho - id_doctors_execute
+    qry.addBindValue(id_doctor); //pu constants
+    if (qry.exec()) {
+
+        QStringList list_doc;
+
+        list_doc << tr("Doctor '%1' figureaza in urmatoarele documente:")
+                        .arg(name_doctor);
+
+        while (qry.next()) {
+            QString doc_type = qry.value(0).toString();
+            list_doc << tr(" - %1").arg(doc_type);
+        }
+
+        if (list_doc.size() > 1) { // > 1 din cauza initierea textului vezi mai sus
+            CustomMessage *message = new CustomMessage(this);
+            message->setWindowTitle(QGuiApplication::applicationDisplayName());
+            message->setTextTitle(tr("Doctor '%1' nu poate fi eliminat !!!").arg(name_doctor));
+            message->setDetailedText(list_doc.join("\n"));
+            message->exec();
+            message->deleteLater();
+
+            return;
+        }
+    } else {
+        err.clear();
+        err << this->metaObject()->className()
+            << "[removeCatDoctor]"
+            << tr("Eroarea solicitarii de selectare a doctorului %1")
+                   .arg(qry.lastError().text().isEmpty()
+                            ? ": eroarea indisponibila"
+                            : ": " + qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(QGuiApplication::applicationDisplayName());
+        message->setTextTitle(tr("Doctor '%1' nu poate fi eliminat !!!").arg(name_doctor));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+
+        return;
+    }
+
+    // 5. eliminam din baza de date
+    if (db->deleteDataFromTable("doctors", "id", QString::number(id_doctor))) {
+        popUp->setPopupText(tr("Doctor '%1' eliminat cu cucces din baza de date.")
+                                .arg(name_doctor));
+        popUp->show();
+
+        qInfo(logInfo()) << "Doctor " + name_doctor + " eliminat din baza de date.";
+        updateTableDoctors();
+    }
 }
+
+// *******************************************************************
+// **************** PROCESAREA BTN NURSE *****************************
 
 void FirstRunWizard::addCatNurse()
 {
     CatGeneral *cat_General = new CatGeneral(this);
     cat_General->setProperty("itNew", true);
     cat_General->setProperty("typeCatalog", CatGeneral::TypeCatalog::Nurses);
+    connect(cat_General, &CatGeneral::createCatGeneral, this, [this]() {
+        updateTableNurses();
+    });
     cat_General->exec();
 }
 
@@ -526,18 +937,133 @@ void FirstRunWizard::editCatNurse()
     cat_General->setProperty("itNew", false);
     cat_General->setProperty("typeCatalog", CatGeneral::TypeCatalog::Nurses);
     cat_General->setProperty("Id", id_nurse);
+    connect(cat_General, &CatGeneral::changedCatGeneral, this, [this]() {
+        updateTableNurses();
+    });
     cat_General->exec();
 }
 
 void FirstRunWizard::removeCatNurse()
 {
+    // 1. Verificam daca este marcat randul
+    if (ui->tableView_nurses->currentIndex().row() == -1){
+        QMessageBox::warning(this, tr("Atenție"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
+        return;
+    }
 
+    // 2. pregatim variabile necesare
+    auto row = ui->tableView_nurses->currentIndex().row();
+    int id_nurse       = model_nurses->data(model_nurses->index(row, 0), Qt::DisplayRole).toInt();
+    QString name_nurse = model_nurses->data(model_nurses->index(row, 2), Qt::DisplayRole).toString();
+
+    // 3. preagatim soliciatre
+    QString strQry;
+    strQry = globals().thisMySQL ?
+        QStringLiteral(R"(
+            SELECT
+                CONCAT('Comanda ecografica nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_nurses = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_nurses = ?
+        )") :
+        QStringLiteral(R"(
+            SELECT
+                'Comanda ecografica nr.'|| numberDoc ||' din '|| strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_nurses = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_nurses = ?
+        )");
+
+    // 4. executam
+    QSqlQuery qry;
+    qry.prepare(strQry);
+    qry.addBindValue(id_nurse); //pu orderEcho
+    qry.addBindValue(id_nurse); //pu constants
+    if (qry.exec()) {
+
+        QStringList list_doc;
+
+        list_doc << tr("As.medicala '%1' figureaza in urmatoarele documente:")
+                        .arg(name_nurse);
+
+        while (qry.next()) {
+            QString doc_type = qry.value(0).toString();
+            list_doc << tr(" - %1").arg(doc_type);
+        }
+
+        if (list_doc.size() > 1) { // > 1 din cauza initierea textului vezi mai sus
+            CustomMessage *message = new CustomMessage(this);
+            message->setWindowTitle(QGuiApplication::applicationDisplayName());
+            message->setTextTitle(tr("As.medicala '%1' nu poate fi eliminat !!!").arg(name_nurse));
+            message->setDetailedText(list_doc.join("\n"));
+            message->exec();
+            message->deleteLater();
+
+            return;
+        }
+    } else {
+        err.clear();
+        err << this->metaObject()->className()
+            << "[removeCatNurse]"
+            << tr("Eroarea solicitarii de selectare a as.medicale %1")
+                   .arg(qry.lastError().text().isEmpty()
+                            ? ": eroarea indisponibila"
+                            : ": " + qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(QGuiApplication::applicationDisplayName());
+        message->setTextTitle(tr("As.medicala '%1' nu poate fi eliminat !!!").arg(name_nurse));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+
+        return;
+    }
+
+
+    // 5. eliminam din baza de date
+    if (db->deleteDataFromTable("nurses", "id", QString::number(id_nurse))) {
+        popUp->setPopupText(tr("As.medicala '%1' eliminat cu cucces din baza de date.")
+                                .arg(name_nurse));
+        popUp->show();
+
+        qInfo(logInfo()) << "As.medicala " + name_nurse + " eliminat din baza de date.";
+        updateTableNurses();
+    }
 }
+
+// *******************************************************************
+// **************** PROCESAREA BTN ORGANIZATION **********************
 
 void FirstRunWizard::addCatOrganization()
 {
     CatOrganizations *catOrganization = new CatOrganizations(this);
     catOrganization->setProperty("itNew", true);
+    connect(catOrganization, &CatOrganizations::mWriteNewOrganization, this, [this]() {
+        updateTableOrganizations();
+    });
     catOrganization->exec();
 }
 
@@ -554,10 +1080,176 @@ void FirstRunWizard::editCatOrganization()
     CatOrganizations *catOrganization = new CatOrganizations(this);
     catOrganization->setProperty("itNew", false);
     catOrganization->setProperty("Id", id_organization);
+    connect(catOrganization, &CatOrganizations::mChangedDateOrganization, this, [this]() {
+        updateTableOrganizations();
+    });
     catOrganization->exec();
 }
 
 void FirstRunWizard::removeCatOrganization()
 {
+    // 1. Verificam daca este marcat randul
+    if (ui->tableView_organizations->currentIndex().row() == -1){
+        QMessageBox::warning(this, tr("Atenție"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
+        return;
+    }
 
+    // 2. pregatim variabile necesare
+    auto row = ui->tableView_organizations->currentIndex().row();
+    int id_organizations       = model_organizations->data(model_organizations->index(row, 0), Qt::DisplayRole).toInt();
+    QString name_organizations = model_organizations->data(model_organizations->index(row, 2), Qt::DisplayRole).toString();
+
+    // 3. preagatim soliciatre
+    QString strQry;
+    strQry = globals().thisMySQL ?
+        QStringLiteral(R"(
+            SELECT
+                CONCAT('Comanda ecografica nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                CONCAT('Formarea preturilor nr.', numberDoc ,' din ', DATE_FORMAT(dateDoc, '%d.%m.%Y')) AS typeDoc
+            FROM
+                pricings
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Cont online' AS typeDoc
+            FROM
+                contsOnline
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Cloud server' AS typeDoc
+            FROM
+                cloudServer
+            WHERE
+                id_organizations = ?
+        )") :
+        QStringLiteral(R"(
+            SELECT
+                'Comanda ecografica nr.'|| numberDoc ||' din '|| strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                orderEcho
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Formarea preturilor nr.' || numberDoc || ' din ' || strftime('%d.%m.%Y', dateDoc) AS typeDoc
+            FROM
+                pricings
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Preferintele utilizatorului' AS typeDoc
+            FROM
+                constants
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Cont online' AS typeDoc
+            FROM
+                contsOnline
+            WHERE
+                id_organizations = ?
+
+            UNION ALL
+
+            SELECT
+                'Cloud server' AS typeDoc
+            FROM
+                cloudServer
+            WHERE
+                id_organizations = ?
+        )");
+
+    // 4. executam
+    QSqlQuery qry;
+    qry.prepare(strQry);
+    qry.addBindValue(id_organizations); //pu orderEcho
+    qry.addBindValue(id_organizations); //pu pricings
+    qry.addBindValue(id_organizations); //pu constants
+    qry.addBindValue(id_organizations); //pu contsOnline
+    qry.addBindValue(id_organizations); //pu cloudServer
+    if (qry.exec()) {
+
+        QStringList list_doc;
+
+        list_doc << tr("Organizatia '%1' figureaza in urmatoarele documente:")
+                        .arg(name_organizations);
+
+        while (qry.next()) {
+            QString doc_type = qry.value(0).toString();
+            list_doc << tr(" - %1").arg(doc_type);
+        }
+
+        if (list_doc.size() > 1) { // > 1 din cauza initierea textului vezi mai sus
+            CustomMessage *message = new CustomMessage(this);
+            message->setWindowTitle(QGuiApplication::applicationDisplayName());
+            message->setTextTitle(tr("Organizatia '%1' nu poate fi eliminat !!!").arg(name_organizations));
+            message->setDetailedText(list_doc.join("\n"));
+            message->exec();
+            message->deleteLater();
+
+            return;
+        }
+
+    } else {
+        err.clear();
+        err << this->metaObject()->className()
+            << "[removeCatOrganization]"
+            << tr("Eroarea solicitarii de selectare a organizatiei %1")
+                   .arg(qry.lastError().text().isEmpty()
+                            ? ": eroarea indisponibila"
+                            : ": " + qry.lastError().text());
+
+        qCritical(logCritical()) << err;
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(QGuiApplication::applicationDisplayName());
+        message->setTextTitle(tr("Organizatia '%1' nu poate fi eliminat !!!").arg(name_organizations));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+
+        return;
+    }
+
+    // 5. eliminam din baza de date
+    if (db->deleteDataFromTable("organizations", "id", QString::number(id_organizations))) {
+        popUp->setPopupText(tr("Organizatia '%1' eliminat cu cucces din baza de date.")
+                                .arg(name_organizations));
+        popUp->show();
+
+        qInfo(logInfo()) << "Organizatia " + name_organizations + " eliminat din baza de date.";
+        updateTableOrganizations();
+    }
 }

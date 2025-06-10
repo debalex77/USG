@@ -69,10 +69,12 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
             // Apelăm funcțiile de actualizare necesare
             for (int i = version_release + 1; i <= USG_VERSION_RELEASE; ++i) {
                 if (updateFunctions[version_major][version_minor].contains(i)) {
-                    qInfo(logInfo()) << "Se executa actualizare pana la versiunea:" << QString("%1.%2.%3").arg(version_major, version_minor, version_release);
+                    qInfo(logInfo()) << "Se executa actualizare pana la versiunea:"
+                                     << QString("%1.%2.%3").arg(version_major, version_minor, version_release);
                     updateFunctions[version_major][version_minor][i](); // Apelăm funcția de actualizare
                 } else {
-                    qInfo(logInfo()) << QString("Functia de actualizare pentru versiunea ""%1.%2.%3"" nu este definita !!!").arg(version_major).arg(version_minor).arg(version_release);
+                    qInfo(logInfo()) << QString("Functia de actualizare pentru versiunea ""%1.%2.%3"" nu este definita !!!")
+                                            .arg(version_major).arg(version_minor).arg(version_release);
                 }
             }
         }
@@ -104,37 +106,44 @@ void UpdateReleasesApp::updateRelease_2_0_4()
 
     QSqlQuery qry;
     if (globals().thisSqlite){
-        qry.prepare("CREATE TABLE userPreferences ("
-                    "id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-                    "id_users              INT NOT NULL CONSTRAINT userPreferences_users_id REFERENCES users (id) ON DELETE CASCADE,"
-                    "versionApp            TEXT (8),"
-                    "showQuestionCloseApp  INT,"
-                    "showUserManual        INT,"
-                    "showHistoryVersion    INT,"
-                    "order_splitFullName   INT,"
-                    "updateListDoc         TEXT (3),"
-                    "showDesignerMenuPrint INT,"
-                    "checkNewVersionApp    INT,"
-                    "databasesArchiving    INT,"
-                    "showAsistantHelper    INT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE userPreferences (
+                id                    INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_users              INT NOT NULL,
+                versionApp            TEXT,
+                showQuestionCloseApp  INT,
+                showUserManual        INT,
+                showHistoryVersion    INT,
+                order_splitFullName   INT,
+                updateListDoc         TEXT,
+                showDesignerMenuPrint INT,
+                checkNewVersionApp    INT,
+                databasesArchiving    INT,
+                showAsistantHelper    INT,
+                CONSTRAINT userPreferences_users_id FOREIGN KEY (id_users)
+                    REFERENCES users (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     } else if (globals().thisMySQL){
-        qry.prepare("CREATE TABLE userPreferences ("
-                    "id                    INT NOT Null PRIMARY KEY AUTO_INCREMENT,"
-                    "id_users              INT NOT Null,"
-                    "versionApp            VARCHAR (8),"
-                    "showQuestionCloseApp  BOOLEAN,"
-                    "showUserManual        BOOLEAN,"
-                    "showHistoryVersion    BOOLEAN,"
-                    "order_splitFullName   BOOLEAN,"
-                    "updateListDoc         VARCHAR (3),"
-                    "showDesignerMenuPrint BOOLEAN,"
-                    "checkNewVersionApp    BOOLEAN,"
-                    "databasesArchiving    BOOLEAN,"
-                    "showAsistantHelper    BOOLEAN,"
-                    "KEY `userPreferences_users_id_idx` (`id_users`),"
-                    "CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`) REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT"
-                    ");");
+        qry.prepare(R"(
+            CREATE TABLE userPreferences (
+                id                    INT NOT NULL PRIMARY KEY AUTO_INCREMENT,
+                id_users              INT NOT NULL,
+                versionApp            VARCHAR (8),
+                showQuestionCloseApp  BOOLEAN,
+                showUserManual        BOOLEAN,
+                showHistoryVersion    BOOLEAN,
+                order_splitFullName   BOOLEAN,
+                updateListDoc         VARCHAR (3),
+                showDesignerMenuPrint BOOLEAN,
+                checkNewVersionApp    BOOLEAN,
+                databasesArchiving    BOOLEAN,
+                showAsistantHelper    BOOLEAN,
+                KEY `userPreferences_users_id_idx` (`id_users`),
+                CONSTRAINT `userPreferences_users_id` FOREIGN KEY (`id_users`)
+                    REFERENCES `users` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
     } else {
         qCritical(logCritical()) << tr("Nu a fost determinată tipul bazei de date - actualizarea bazei de date la versiunea '2.0.4' nu sa efectuat !!!");
         return;
@@ -148,19 +157,22 @@ void UpdateReleasesApp::updateRelease_2_0_4()
     //-------------------------------------------------
     // inserarea datelor
     db->updateVariableFromTableSettingsUser();
-    qry.prepare("INSERT INTO userPreferences ("
-                "id,"
-                "id_users,"
-                "versionApp,"
-                "showQuestionCloseApp,"
-                "showUserManual,"
-                "showHistoryVersion,"
-                "order_splitFullName,"
-                "updateListDoc,"
-                "showDesignerMenuPrint,"
-                "checkNewVersionApp,"
-                "databasesArchiving,"
-                "showAsistantHelper) VALUES (?,?,?,?,?,?,?,?,?,?,?,?);");
+    qry.prepare(R"(
+        INSERT INTO userPreferences (
+            id,
+            id_users,
+            versionApp,
+            showQuestionCloseApp,
+            showUserManual,
+            showHistoryVersion,
+            order_splitFullName,
+            updateListDoc,
+            showDesignerMenuPrint,
+            checkNewVersionApp,
+            databasesArchiving,
+            showAsistantHelper)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+    )");
     qry.addBindValue(1);
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue("");

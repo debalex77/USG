@@ -8,7 +8,8 @@ QT       += core \
             xml \
             multimedia \
             multimediawidgets \
-            gui-private
+            gui-private \
+            concurrent
 
 #-----------------------------------------------------------------------
 #------ Verifică dacă versiunea de Qt este cel puțin 6.5.3
@@ -89,6 +90,7 @@ SOURCES += \
     catalogs/normograms.cpp \
     catalogs/patienthistory.cpp \
     common/agentsendemail.cpp \
+    common/appcontroller.cpp \
     common/cloudserverconfig.cpp \
     common/contonline.cpp \
     common/cryptomanager.cpp \
@@ -96,7 +98,11 @@ SOURCES += \
     common/emailcore.cpp \
     common/firstrunwizard.cpp \
     common/handlerfunctionthread.cpp \
+    common/logmanager.cpp \
     common/processingaction.cpp \
+    common/splashmanager.cpp \
+    common/thememanager.cpp \
+    common/windowmanager.cpp \
     customs/custommessage.cpp \
     customs/lineeditcustom.cpp \
     customs/lineeditopen.cpp \
@@ -155,8 +161,8 @@ HEADERS += \
     catalogs/listform.h \
     catalogs/normograms.h \
     catalogs/patienthistory.h \
-    common/StructVariable.h \
     common/agentsendemail.h \
+    common/appcontroller.h \
     common/cloudserverconfig.h \
     common/contonline.h \
     common/cryptomanager.h \
@@ -164,8 +170,13 @@ HEADERS += \
     common/emailcore.h \
     common/firstrunwizard.h \
     common/handlerfunctionthread.h \
+    common/logmanager.h \
     common/processingaction.h \
     common/reportsettingsmanager.h \
+    common/splashmanager.h \
+    common/structvariable.h \
+    common/thememanager.h \
+    common/windowmanager.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
     customs/lineeditopen.h \
@@ -190,6 +201,7 @@ HEADERS += \
     data/updatereleasesapp.h \
     data/userpreferences.h \
     data/version.h \
+    databaseinit.h \
     delegates/checkboxdelegate.h \
     delegates/combodelegate.h \
     delegates/doublespinboxdelegate.h \

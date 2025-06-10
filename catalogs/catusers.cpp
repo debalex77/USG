@@ -24,8 +24,6 @@
 #include "catusers.h"
 #include "ui_catusers.h"
 
-#include <customs/custommessage.h>
-
 CatUsers::CatUsers(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::CatUsers)
@@ -97,7 +95,7 @@ CatUsers::CatUsers(QWidget *parent) :
     connect(this, &CatUsers::ItNewChanged, this, &CatUsers::slot_ItNewChanged);
     connect(ui->btnOK, &QAbstractButton::clicked, this, &CatUsers::onWritingDataClose);
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &CatUsers::onWritingData);
-    connect(ui->btnCancel, &QAbstractButton::clicked, this, &CatUsers::onClose);
+    connect(ui->btnCancel, &QAbstractButton::clicked, this, &CatUsers::close);
 
     connect(ui->editNameUser, &QLineEdit::textEdited, this, &CatUsers::dataWasModified);
     connect(edit_password, &QLineEdit::textEdited, this, &CatUsers::dataWasModified);
@@ -118,6 +116,9 @@ void CatUsers::dataWasModified()
     setWindowModified(true);
 }
 
+// *******************************************************************
+// **************** PROCESAREA SLOT-URILOR ***************************
+
 void CatUsers::slot_ItNewChanged()
 {
     if (m_itNew){
@@ -137,98 +138,58 @@ void CatUsers::textChangedPasswd()
         edit_password->setPlaceholderText("");
 }
 
+void CatUsers::changedIdObject()
+{
+    if (m_itNew)
+        return;
+
+    QVariantMap map_column {
+        { "name",  QVariant() },
+        { "lastConnection", QVariant() }
+    };
+
+    // container cu conditia
+    QMap<QString, QVariant> where;
+    where["id"] = m_Id;
+
+    err.clear();
+
+    QVariantMap map_result = db->selectSingleRow(this->metaObject()->className(),
+                                                 "users", map_column, where, err);
+
+    if (! map_result.isEmpty()) {
+        ui->editNameUser->setText(map_result["name"].toString());
+        ui->label_info->setText(tr("Ultima accesare: ") +
+                                map_result["lastConnection"]
+                                .toDateTime().toString("dd.MM.yyyy hh:mm:ss"));
+    }
+    setNameUser(ui->editNameUser->text());
+}
+
+// *******************************************************************
+// **************** VALIDAREA DATELOR ********************************
+
 bool CatUsers::onWritingData()
 {
     if (! db->getDatabase().isOpen())
         db->connectToDataBase();
 
-    if (m_Id == -1){
-        // setam id
-        setId(db->getLastIdForTable("users") + 1);
-        if (m_Id == -1 || m_Id == 0){
-            qWarning(logWarning()) << this->metaObject()->className()
-                                   << tr(": eroarea la atasarea 'id' utilizatorului '%1'.").arg(ui->editNameUser->text());
-            QMessageBox::warning(this,
-                                 tr("Crearea utilizatorului."),
-                                 tr("Eroare la crearea utilizatorului <b>\"%1\"</b>.<br>"
-                                    "Adresați-vă administratorului aplicației.")
-                                 .arg(ui->editNameUser->text()), QMessageBox::Ok);
-            return false;
-        }
+    bool returnBool;
 
-        // verificam NUME daca este in BD
-        if (db->existNameObject("users", ui->editNameUser->text())){
-            QMessageBox::warning(this,
-                                 tr("Verificarea datelor."),
-                                 tr("Utilizatorul cu nume \"<b>%1</b>\" există în baza de date.<br>"
-                                    "Alegeți alt nume a utilizatorului pentru validare.")
-                                 .arg(ui->editNameUser->text()), QMessageBox::Ok);
-            return false;
-        }
+    returnBool = m_itNew
+                ? handleInsert()
+                : handleUpdate();
 
-        // crearea utilizatorului
-        QString details_error;
-        if (insertDataTableUsers(details_error)){
-            qInfo(logInfo()) << tr("A fost creat %1")
-                                .arg((globals().firstLaunch) ?
-                                             "primul utilizator cu nume 'admin'." :
-                                             "utilizator cu nume '" + ui->editNameUser->text() + "'.");
+    if (returnBool) {
+        if (m_itNew) {
+            emit mCreateNewUser(); // emitem signal ca a fost creat user nou
+            setItNew(false);       // modificam proprietatea
         } else {
-            CustomMessage *msgBox = new CustomMessage(this);
-            msgBox->setWindowTitle(tr("Crearea utilizatorului"));
-            msgBox->setTextTitle(tr("Validarea datelor utilizatorului '%1' nu s-a efectuat.").arg(ui->editNameUser->text()));
-            msgBox->setDetailedText((details_error.isEmpty()) ? tr("eroarea indisponibila") : details_error);
-            msgBox->exec();
-            msgBox->deleteLater();
-            return false;
+            emit mChangedDataUser(); // emitem signal ca au fost modificate date user-lui
         }
-        // setam variabile globale
-        if (globals().firstLaunch){
-            globals().idUserApp   = m_Id;        // id primului utilizator (fara + 1 = a fost inscris primul users)
-            globals().nameUserApp = "admin";     // nume primului utilizator
-            db->insertSetTableSettingsUsers();  // setarile utilizatorului
-        } else {
-            db->insertSetTableSettingsUsers(); // setarile utilizatorului
-        }
-
-        setItNew(false);
-
-        if (m_name_user == nullptr)
-            setNameUser(ui->editNameUser->text());
-
-        emit mCreateNewUser();
-
-    } else {
-
-        // verificam daca a fost transmis proprietatea ID utilizatorului
-        if (m_Id == - 1){
-            qWarning(logWarning()) << this->metaObject()->className()
-                                   << tr(": nu este transmisa/indicata proprietatea <<-Id->> clasei %1").arg(metaObject()->className());
-            QMessageBox::warning(this,
-                                 tr("Modificarea datelor."),
-                                 tr("Modificarea datelor utilizatorului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresați-vă administratorului aplicației.")
-                                 .arg(ui->editNameUser->text()), QMessageBox::Ok);
-            return false;
-        }
-        // modificam datele utilizatorului
-        if (updateDataTableUsers()){
-            qInfo(logInfo()) << tr("Datele utilizatorului cu nume '%1' id='%2' au fost actualizate.")
-                                .arg(ui->editNameUser->text(), QString::number(m_Id));
-        } else {
-            QMessageBox::warning(this,
-                                 tr("Modificarea datelor."),
-                                 tr("Modificarea datelor utilizatorului \"<b>%1</b>\" nu s-a efectuat.<br>"
-                                    "Adresați-vă administratorului aplicației.")
-                                 .arg(ui->editNameUser->text()), QMessageBox::Ok);
-            return false;
-        }
-
-        emit mChangedDataUser();
     }
-    setItNew(false);
 
-    return true;
+    return returnBool;
 }
 
 void CatUsers::onWritingDataClose()
@@ -237,74 +198,159 @@ void CatUsers::onWritingDataClose()
         QDialog::accept();
 }
 
-void CatUsers::onClose()
+// *******************************************************************
+// ********** PROCESAREA INSERARII, MODIFICARII DATELOR **************
+
+QVariantMap CatUsers::getDataObject()
 {
-    this->close();
+    QVariantMap map;
+
+    map["id"]           = m_Id;
+    map["deletionMark"] = 0;
+    map["name"]         = ui->editNameUser->text();
+    map["password"]     = QVariant();
+    map["hash"]         = QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex();
+    map["lastConnection"] = QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss");
+
+    return map;
 }
 
-void CatUsers::changedIdObject()
+bool CatUsers::handleInsert()
 {
-    if (m_itNew)
-        return;
-
-    QMap<QString, QString> _items;
-    if (db->getObjectDataById("users", m_Id, _items)){
-        QMap<QString, QString>::const_iterator _iterName = _items.constFind("name");
-        if (_iterName.key() == "name"){
-            ui->editNameUser->setText(_iterName.value());
-        }
-        QMap<QString, QString>::const_iterator _iterPasswd = _items.constFind("password");
-        if (_iterPasswd.key() == "password"){
-            edit_password->setText(db->decode_string(_iterPasswd.value()));
-        }
-    }
-
-    setNameUser(ui->editNameUser->text());
-}
-
-bool CatUsers::insertDataTableUsers(QString &details_error)
-{
-    QSqlQuery qry;
-    qry.prepare("INSERT INTO users("
-                "id, deletionMark, name, password, hash, lastConnection) "
-                "VALUES (?, ?, ?, ?, ?, ?);");
-    qry.addBindValue(m_Id);
-    qry.addBindValue(0);
-    qry.addBindValue((globals().firstLaunch) ? "admin" : ui->editNameUser->text());
-    qry.addBindValue(QVariant());
-    qry.addBindValue(QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex());
-    qry.addBindValue(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    if (qry.exec()){
-        return true;
-    } else {
-        details_error = qry.lastError().text();
+    // 1. verificam user cu acelasi NUME in BD
+    if (db->existNameObject("users", ui->editNameUser->text())){
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(tr("Verificarea datelor."));
+        msg->setTextTitle(tr("Utilizatorul cu nume \"<b>%1</b>\" exist\304\203 în baza de date")
+                          .arg(ui->editNameUser->text()));
+        msg->setDetailedText(tr("Alege\310\233i alt nume a utilizatorului pentru validare."));
+        msg->exec();
+        msg->deleteLater();
         return false;
     }
-}
 
-bool CatUsers::updateDataTableUsers()
-{
-    QString str_qry = "UPDATE users SET "
-                      "deletionMark = :deletionMark, "
-                      "name         = :name, "
-                      "password     = :password, "
-                      "hash         = :hash "
-                      "WHERE id = :id;";
-    QSqlQuery qry;
-    qry.prepare(str_qry);
-    qry.bindValue(":id",           QString::number(m_Id));
-    qry.bindValue(":deletionMark", QString::number(0));
-    qry.bindValue(":name",         ui->editNameUser->text());
-    qry.bindValue(":password",     QVariant());
-    qry.bindValue(":hash",         QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex());
-    if (qry.exec()){
-        return true;
-    } else {
-        qCritical(logCritical()) << tr("Eroare la actualizare datelor utilizatorului '%1' cu id='%2': %3")
-                                    .arg(ui->editNameUser->text(), QString::number(m_Id), qry.lastError().text());
+    // 2. setam ID
+    setId(db->getLastIdForTable("users") + 1);
+
+    // 3. verificam daca este corect determinat ID
+    if (m_Id <= 0) {
+        err << this->metaObject()->className()
+        << "[handleInsert]:"
+        << "Nu este determinat ID utilizatorului !!!";
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(tr("Verificarea datelor."));
+        msg->setTextTitle(tr("Nu este determinat ID utilizatorului !!!")
+                              .arg(ui->editNameUser->text()));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+        qWarning(logWarning()) << err;
         return false;
     }
+
+    // 4. pregatim datele
+    QVariantMap map = getDataObject();
+
+    // 5. inseram datele
+    if (db->insertIntoTable(this->metaObject()->className(), "users", map, err)){
+        popUp->setPopupText(tr("Datele utilizatorului <b>%1</b><br>"
+                               "au fost salvate in baza de date.")
+                            .arg(ui->editNameUser->text()));
+        popUp->show();
+        qInfo(logInfo()) << QStringLiteral("Datele utilizatorului %1 au fost salvate in baza de date.")
+                                .arg(ui->editNameUser->text());
+    } else {
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(tr("Inserarea datelor."));
+        msg->setTextTitle(tr("Datele utilizatorului '%1' nu au fost salvate in baza de date")
+                              .arg(ui->editNameUser->text()));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+        qCritical(logCritical()) << QStringLiteral("Datele utilizatorului %1 nu au fost salvate in baza de date %2")
+                                        .arg(ui->editNameUser->text(), err.join("\n"));
+        return false;
+    }
+
+    // 6. setam variabile globale + salvam in fisierul .conf
+    if (globals().firstLaunch) {
+
+        // variabile globale pu titlu mainwindow
+        globals().idUserApp = m_Id;
+        globals().nameUserApp = ui->editNameUser->text();
+
+        // ID si nume utilizatorului cryptat
+        QString id_encode        = db->encode_string(QString::number(m_Id));
+        QString name_user_encode = db->encode_string(ui->editNameUser->text());
+
+        // salvam in fisierul .conf
+        AppSettings *app_settings = new AppSettings(this);
+        app_settings->setKeyAndValue("on_start", "idUserApp", id_encode);
+        app_settings->setKeyAndValue("on_start", "nameUserApp", name_user_encode);
+        app_settings->setKeyAndValue("on_start", "memoryUser", 1);
+        app_settings->deleteLater();
+    }
+
+    // 7. inseram datele in tabele 'userPreferences'
+    db->insertSetTableSettingsUsers();
+
+    return true;
+
 }
+
+bool CatUsers::handleUpdate()
+{
+    // 1. verificam daca este corect determinat ID
+    if (m_Id <= 0) {
+        err << this->metaObject()->className()
+        << "[handleUpdate]:"
+        << "Nu este determinat ID utilizatorului !!!";
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(tr("Verificarea datelor."));
+        msg->setTextTitle(tr("Nu este determinat ID utilizatorului !!!")
+                              .arg(ui->editNameUser->text()));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+        qWarning(logWarning()) << err;
+        return false;
+    }
+
+    // 2. pregatim datele
+    QVariantMap map = getDataObject();
+
+    // pregatim conditia
+    QMap<QString, QVariant> where;
+    where["id"] = m_Id;
+    if (m_Id > 0)
+        where["id"] = m_Id;
+
+    // actualizam datele
+    if (db->updateTable(this->metaObject()->className(), "users", map, where, err)) {
+        popUp->setPopupText(tr("Datele utilizatorului <b>%1</b><br>"
+                               "au fost modificate in baza de date.")
+                                .arg(ui->editNameUser->text()));
+        popUp->show();
+        qInfo(logInfo()) << QStringLiteral("Datele utilizatorului %1 au fost modificate in baza de date.")
+                                .arg(ui->editNameUser->text());
+    } else {
+        CustomMessage *msg = new CustomMessage(this);
+        msg->setWindowTitle(tr("Modificare datelor."));
+        msg->setTextTitle(tr("Datele utilizatorului '%1' nu au fost modificate in baza de date")
+                              .arg(ui->editNameUser->text()));
+        msg->setDetailedText(err.join("\n"));
+        msg->exec();
+        msg->deleteLater();
+        qCritical(logCritical()) << QStringLiteral("Datele utilizatorului %1 nu au fost modificate in baza de date %2")
+                                        .arg(ui->editNameUser->text(), err.join("\n"));
+        return false;
+    }
+
+    return true;
+}
+
+// *******************************************************************
+// **************** EVENIMENTELE FORMEI ******************************
 
 void CatUsers::closeEvent(QCloseEvent *event)
 {

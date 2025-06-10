@@ -55,11 +55,10 @@ AppSettings::AppSettings(QWidget *parent) :
                                  QMessageBox::Ok);
         QString str_cmd = "pkexec mkdir /" NAME_DIR_LOG_PATH " && pkexec chmod 777 /" NAME_DIR_LOG_PATH " && touch " + fileLogPath;
         system(str_cmd.toStdString().c_str()); // pkexec mkdir /var/log/usg && pkexec chmod 777 /var/log/usg && touch /var/log/usg/usg.log
-        globals().pathLogAppSettings = fileLogPath;
-    } else {
-        processingLoggingFiles(nameMatches);
-        globals().pathLogAppSettings = fileLogPath;
     }
+
+    globals().pathLogAppSettings = fileLogPath;
+    processingLoggingFiles(nameMatches);
 
     // crearea directoriului 'settings' (~/.config/USG/settings)
     // pu salvarea fisierelor .json cu setarile formelor
@@ -657,38 +656,38 @@ void AppSettings::setDefaultPathSqlite()
             qCritical(logCritical()) << tr("Directoria '%1' pentru baza de date SQlite nu a fost creată.").arg(str_dir_database);
         }
     } else {
-        if (QFile(str_file_database).exists()){
-            QMessageBox messange_box(QMessageBox::Question,
-                                     tr("Determinarea existen\310\233ei bazei de date"),
-                                     tr("Baza de date '<u>%1</u>' exist\304\203 \303\256n sistem !!!<br><br>"
-                                        "Pentru crearea bazei de date noi cu nume '<b><u>%2</u></b>' este necesar de eliminat fi\310\231ierul vechi. "
-                                        "Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul din sistem ?").arg(str_file_database, (ui->nameBaseSqlite->text().isEmpty()) ? "base" : ui->nameBaseSqlite->text()),
-                                     QMessageBox::NoButton, this);
-            QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-            QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-            yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-            noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-            messange_box.exec();
+//         if (QFile(str_file_database).exists()){
+//             QMessageBox messange_box(QMessageBox::Question,
+//                                      tr("Determinarea existen\310\233ei bazei de date"),
+//                                      tr("Baza de date '<u>%1</u>' exist\304\203 \303\256n sistem !!!<br><br>"
+//                                         "Pentru crearea bazei de date noi cu nume '<b><u>%2</u></b>' este necesar de eliminat fi\310\231ierul vechi. "
+//                                         "Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul din sistem ?").arg(str_file_database, (ui->nameBaseSqlite->text().isEmpty()) ? "base" : ui->nameBaseSqlite->text()),
+//                                      QMessageBox::NoButton, this);
+//             QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
+//             QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
+//             yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
+//             noButton->setStyleSheet(db->getStyleForButtonMessageBox());
+//             messange_box.exec();
 
-            if (messange_box.clickedButton() == yesButton){
-#if defined(Q_OS_LINUX)
-                QString str_cmd = "rm \"" + str_file_database + "\"";
-                system(str_cmd.toStdString().c_str());
-                str_cmd = "rm \"" + str_file_database_image + "\"";
-                system(str_cmd.toStdString().c_str());
-#elif defined(Q_OS_MACOS)
-                QString str_cmd = "rm \"" + str_file_database + "\"";
-                system(str_cmd.toStdString().c_str());
-                str_cmd = "rm \"" + str_file_database_image + "\"";
-                system(str_cmd.toStdString().c_str());
-#elif defined(Q_OS_WIN)
-                QString str_cmd = "del " + str_file_database;
-                system(str_cmd.toStdString().c_str());
-#endif
-            } else if (messange_box.clickedButton() == noButton) {
-                return;
-            }
-        }
+//             if (messange_box.clickedButton() == yesButton){
+// #if defined(Q_OS_LINUX)
+//                 QString str_cmd = "rm \"" + str_file_database + "\"";
+//                 system(str_cmd.toStdString().c_str());
+//                 str_cmd = "rm \"" + str_file_database_image + "\"";
+//                 system(str_cmd.toStdString().c_str());
+// #elif defined(Q_OS_MACOS)
+//                 QString str_cmd = "rm \"" + str_file_database + "\"";
+//                 system(str_cmd.toStdString().c_str());
+//                 str_cmd = "rm \"" + str_file_database_image + "\"";
+//                 system(str_cmd.toStdString().c_str());
+// #elif defined(Q_OS_WIN)
+//                 QString str_cmd = "del " + str_file_database;
+//                 system(str_cmd.toStdString().c_str());
+// #endif
+//             } else if (messange_box.clickedButton() == noButton) {
+//                 return;
+//             }
+//         }
         ui->nameBaseSqlite->setText("base");
         lineEditPathDBSqlite->setText(str_file_database);
         globals().sqlitePathBase = dir.toNativeSeparators(str_file_database);  // variabile globale
@@ -865,7 +864,8 @@ void AppSettings::saveSettings()
     }
 #endif
 
-    globals().pathAppSettings = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
+    globals().pathAppSettings    = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
+    globals().pathLogAppSettings = dir_conf.toNativeSeparators(ui->txtPathLog->text());
 
     settApp = new QSettings(globals().pathAppSettings, QSettings::IniFormat, this);
 

@@ -11,6 +11,8 @@
 #include <QLineEdit>
 #include <QToolButton>
 
+#include <customs/custommessage.h>
+#include <data/appsettings.h>
 #include "data/database.h"
 #include "data/popup.h"
 
@@ -50,16 +52,15 @@ private slots:
 
     void slot_ItNewChanged();
     void textChangedPasswd();
+    void changedIdObject();
 
     bool onWritingData();
     void onWritingDataClose();
-    void onClose();
-
-    void changedIdObject();
 
 private:
-    bool insertDataTableUsers(QString &details_error);
-    bool updateDataTableUsers();
+    QVariantMap getDataObject();
+    bool handleInsert();
+    bool handleUpdate();
 
 private:
     Ui::CatUsers *ui;
@@ -70,6 +71,8 @@ private:
 
     DataBase *db;
     PopUp    *popUp;
+
+    QStringList err;
 
     QLineEdit   *edit_password;
     QToolButton *show_hide_password;

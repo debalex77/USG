@@ -71,7 +71,7 @@ public slots:
 
 private slots:
     void updateTimer();
-    void updateTimerDocWidget();
+    void launchFirstRunWizard();
     void checkUpdateApp();
     void openDescriptionRealease();
     void openSourceCode();
@@ -122,7 +122,6 @@ private:
     QTextEdit    *textEdit;
     QMenu        *menu;
     QTimer       *timer;
-    QTimer       *timer_doc_widget;
     QProgressBar *progress;
 
     int pause_timer = 0; //pu pauza in 5 secunde

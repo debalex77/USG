@@ -7,6 +7,7 @@
 #include <catalogs/catgeneral.h>
 #include <catalogs/catorganizations.h>
 #include <catalogs/catusers.h>
+#include <customs/custommessage.h>
 
 #include <models/basesqlquerymodel.h>
 #include <models/basesqltablemodel.h>
@@ -23,6 +24,9 @@ class FirstRunWizard : public QDialog
 public:
     explicit FirstRunWizard(QWidget *parent = nullptr);
     ~FirstRunWizard();
+
+signals:
+    void finishLoadClassifier(const QString &msg);
 
 private:
     void initBtnToolBar();
@@ -43,6 +47,7 @@ private slots:
     void loadTypePrices();
 
     void handleUpdateProgress(int num_records, int value);
+    void handleFinishedProgress(const QString txt);
 
     void addCatUser();
     void editCatUser();
@@ -75,6 +80,9 @@ private:
 
     int currentStepIndex = -1;
 
+    QStringList err;
+
+    PopUp *popUp;
     DataBase *db;
     QStringListModel *model;
     BaseSqlTableModel *model_investigations;
