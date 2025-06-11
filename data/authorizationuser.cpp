@@ -157,36 +157,41 @@ void AuthorizationUser::textChangedPasswd()
         edit_password->setPlaceholderText(tr(""));
 }
 
-void AuthorizationUser::onDataReceived(QVector<ConstantsData> data_constants)
+void AuthorizationUser::onDataReceived()
 {
-    for (const auto &constant : data_constants) {
-        // constante
-        globals().c_id_organizations = constant.c_id_organizations;
-        globals().c_id_doctor        = constant.c_id_doctor;
-        globals().c_id_nurse         = constant.c_id_nurse;
-        globals().c_brandUSG         = constant.c_brandUSG;
-        globals().c_logo_byteArray   = constant.c_logo;
-        // organizatia
-        globals().main_name_organization   = constant.organization_name;
-        globals().main_addres_organization = constant.organization_address;
-        globals().main_phone_organization  = constant.organization_phone;
-        globals().main_email_organization  = constant.organization_email;
-        globals().main_stamp_organization  = constant.organization_stamp;
-        // doctor
-        globals().signature_main_doctor      = constant.doctor_signatute;
-        globals().stamp_main_doctor          = constant.doctor_stamp;
-        globals().main_name_doctor           = constant.doctor_nameFull;
-        globals().main_name_abbreviat_doctor = constant.doctor_nameAbbreviate;
-        // cloud server
-        globals().cloud_host           = constant.cloud_host;
-        globals().cloud_nameBase       = constant.cloud_databaseName;
-        globals().cloud_port           = constant.cloud_port;
-        globals().cloud_optionConnect  = constant.cloud_connectionOption;
-        globals().cloud_user           = constant.cloud_user;
-        globals().cloud_passwd         = QString::fromUtf8(crypto_manager->decryptPassword(constant.cloud_password,
-                                                                                   db->getHashUserApp(),
-                                                                                   constant.cloud_iv));
-    }
+    qInfo(logInfo()) << "Au fost actualizate variabile globale: "
+                        "constante, "
+                        "datele organizatiei implicite, "
+                        "datele doctorului implicit, "
+                        "datele cloud serverului.";
+    // for (const auto &constant : data_constants) {
+    //     // constante
+    //     globals().c_id_organizations = constant.c_id_organizations;
+    //     globals().c_id_doctor        = constant.c_id_doctor;
+    //     globals().c_id_nurse         = constant.c_id_nurse;
+    //     globals().c_brandUSG         = constant.c_brandUSG;
+    //     globals().c_logo_byteArray   = constant.c_logo;
+    //     // organizatia
+    //     globals().main_name_organization   = constant.organization_name;
+    //     globals().main_addres_organization = constant.organization_address;
+    //     globals().main_phone_organization  = constant.organization_phone;
+    //     globals().main_email_organization  = constant.organization_email;
+    //     globals().main_stamp_organization  = constant.organization_stamp;
+    //     // doctor
+    //     globals().signature_main_doctor      = constant.doctor_signatute;
+    //     globals().stamp_main_doctor          = constant.doctor_stamp;
+    //     globals().main_name_doctor           = constant.doctor_nameFull;
+    //     globals().main_name_abbreviat_doctor = constant.doctor_nameAbbreviate;
+    //     // cloud server
+    //     globals().cloud_host           = constant.cloud_host;
+    //     globals().cloud_nameBase       = constant.cloud_databaseName;
+    //     globals().cloud_port           = constant.cloud_port;
+    //     globals().cloud_optionConnect  = constant.cloud_connectionOption;
+    //     globals().cloud_user           = constant.cloud_user;
+    //     globals().cloud_passwd         = QString::fromUtf8(crypto_manager->decryptPassword(constant.cloud_password,
+    //                                                                                db->getHashUserApp(),
+    //                                                                                constant.cloud_iv));
+    // }
 }
 
 bool AuthorizationUser::onControlAccept()

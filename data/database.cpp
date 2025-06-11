@@ -99,8 +99,6 @@ QSqlDatabase DataBase::getDatabase()
 
 QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, const bool thisMySQL)
 {
-    qInfo(logInfo()) << "";
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << "Se initiaza 'Thread' connection: " << threadConnectionName;
     if (! QSqlDatabase::contains(threadConnectionName)) {
         if (thisMySQL) {
@@ -130,8 +128,6 @@ QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, con
 
 QSqlDatabase DataBase::getDatabaseCloudThread(const QString threadConnectionName)
 {
-    qInfo(logInfo()) << "";
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION CLOUD THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << "Se initiaza 'Cloud Thread' connection: " << threadConnectionName;
     if (! QSqlDatabase::contains(threadConnectionName)) {
         QSqlDatabase db_thread = QSqlDatabase::addDatabase("QMYSQL", threadConnectionName);
@@ -151,8 +147,6 @@ QSqlDatabase DataBase::getDatabaseCloudThread(const QString threadConnectionName
 
 QSqlDatabase DataBase::getDatabaseImageThread(const QString threadConnectionName)
 {
-    qInfo(logInfo()) << "";
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~= CONNECTION THREAD ~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
     qInfo(logInfo()) << "Se initiaza 'Thread' connection 'Image': " << threadConnectionName;
     if (! QSqlDatabase::contains(threadConnectionName)) {
 
@@ -182,24 +176,21 @@ void DataBase::removeDatabaseThread(const QString threadConnectionName)
         }
 
         if (QSqlDatabase::contains(threadConnectionName)) {
-            qInfo(logInfo()) << "Lista conexiuni inainte de eliminare:" << QSqlDatabase::connectionNames();
+            // qInfo(logInfo()) << "Lista conexiuni inainte de eliminare:" << QSqlDatabase::connectionNames();
 
-            // Observă, și aici dacă vrei doar să verifici starea, folosești tot open=false
+            // info de eliminare a conexiunei
             qInfo(logInfo()) << "Se inchide conexiunea" << threadConnectionName
-                             << "isOpen?"
+                             << "isOpen="
                              << QSqlDatabase::database(threadConnectionName, false).isOpen();
 
             QSqlDatabase::removeDatabase(threadConnectionName);
 
-            qInfo(logInfo()) << "Lista conexiuni dupa eliminare 'Thread' connection:" << QSqlDatabase::connectionNames();
+            // qInfo(logInfo()) << "Lista conexiuni dupa eliminare 'Thread' connection:" << QSqlDatabase::connectionNames();
         }
     }
 
     if (! QSqlDatabase::contains(threadConnectionName))
         qInfo(logInfo()) << "Connection 'Thread' -" << threadConnectionName << " a fost eliminata cu succes.";
-
-    qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=~~=~=~=~~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
-    qInfo(logInfo()) << "";
 }
 
 QSqlDatabase DataBase::getDatabaseImage()

@@ -8,34 +8,6 @@
 
 #include <data/database.h>
 
-struct ConstantsData {
-    // constants
-    int        c_id_organizations;
-    int        c_id_doctor;
-    int        c_id_nurse;
-    QString    c_brandUSG;
-    QByteArray c_logo;
-    // organization
-    QString    organization_name;
-    QString    organization_address;
-    QString    organization_phone;
-    QString    organization_email;
-    QByteArray organization_stamp;
-    // doctor
-    QByteArray doctor_signatute;
-    QByteArray doctor_stamp;
-    QString    doctor_nameFull;
-    QString    doctor_nameAbbreviate;
-    // cloud server
-    QString cloud_host;
-    QString cloud_databaseName;
-    QString cloud_port;
-    QString cloud_connectionOption;
-    QString cloud_user;
-    QByteArray cloud_password;
-    QByteArray cloud_iv;
-};
-
 struct ExportData {
     QString nr_order;
     QString nr_report;
@@ -94,11 +66,12 @@ public:
 public slots:
     void setDataConstants();
     void saveDataPatient();
+    void syncWithMySQL(int localPatientId);
     void updateDataPatientInDB();
     void exportDocumentsToPDF();
 
 signals:
-    void finishSetDataConstants(QVector<ConstantsData> data_constants);
+    void finishSetDataConstants();
     void finishExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp);
     void finishInsertDataCatPatient(const bool succes, const int patient_id);
     void finishUpdateDataCatPatient(const bool succes);
@@ -175,8 +148,9 @@ private:
     // class
     DataBase *db;
     LimeReport::ReportEngine *m_report;
-    QVector<ConstantsData> data_constants;
     QVector<ExportData> data_agentEmail;
+
+    CryptoManager *crypto_manager;
 
     QStandardItemModel *model_img;
     QSqlQueryModel *model_organization;

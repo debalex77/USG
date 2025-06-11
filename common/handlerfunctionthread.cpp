@@ -127,30 +127,33 @@ void HandlerFunctionThread::setDataConstants()
 {
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
-    ConstantsData data;
-
     {
         QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
         {
             QSqlQuery qry(dbConnection);
-            qry.prepare("SELECT * FROM constants WHERE id_users = ?;");
+            qry.prepare(R"(SELECT * FROM constants WHERE id_users = ?)");
             qry.addBindValue(m_id_user);
             if (! qry.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    data.c_id_organizations = qry.value(rec.indexOf("id_organizations")).toInt();
-                    data.c_id_doctor        = qry.value(rec.indexOf("id_doctors")).toInt();
-                    data.c_id_nurse         = qry.value(rec.indexOf("id_nurses")).toInt();
-                    data.c_brandUSG         = qry.value(rec.indexOf("brandUSG")).toString();
-                    data.c_logo             = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
+                    globals().c_id_organizations = qry.value(rec.indexOf("id_organizations")).toInt();
+                    globals().c_id_doctor = qry.value(rec.indexOf("id_doctors")).toInt();
+                    globals().c_id_nurse = qry.value(rec.indexOf("id_nurses")).toInt();
+                    globals().c_brandUSG = qry.value(rec.indexOf("brandUSG")).toString();
+                    globals().c_logo_byteArray = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
                 }
             }
 
-            qry.prepare("SELECT name,address,telephone,email,stamp FROM organizations WHERE id = ?;");
+            qry.prepare(R"(
+                SELECT
+                    name,address,telephone,email,stamp
+                FROM
+                    organizations WHERE id = ?
+            )");
             if (m_id_mainOrganization == -1)
-                qry.addBindValue(data.c_id_organizations);
+                qry.addBindValue(globals().c_id_organizations);
             else
                 qry.addBindValue(m_id_mainOrganization);
             if (! qry.exec()) {
@@ -158,28 +161,31 @@ void HandlerFunctionThread::setDataConstants()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    data.organization_name    = qry.value(rec.indexOf("name")).toString();
-                    data.organization_address = qry.value(rec.indexOf("address")).toString();
-                    data.organization_phone   = qry.value(rec.indexOf("telephone")).toString();
-                    data.organization_email   = qry.value(rec.indexOf("email")).toString();
-                    data.organization_stamp   = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().main_name_organization = qry.value(rec.indexOf("name")).toString();
+                    globals().main_addres_organization = qry.value(rec.indexOf("address")).toString();
+                    globals().main_phone_organization = qry.value(rec.indexOf("telephone")).toString();
+                    globals().main_email_organization = qry.value(rec.indexOf("email")).toString();
+                    globals().main_stamp_organization = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
                 }
             }
 
-            qry.prepare("SELECT "
-                        "  doctors.id, "
-                        "  doctors.signature, "
-                        "  doctors.stamp, "
-                        "  fullNameDoctors.name AS fullName, "
-                        "  fullNameDoctors.nameAbbreviated "
-                        "FROM "
-                        "  doctors "
-                        "INNER JOIN "
-                        "  fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors "
-                        "WHERE "
-                        "  doctors.deletionMark = 0 AND doctors.id = ?;");
+            qry.prepare(R"(
+                SELECT
+                    doctors.id,
+                    doctors.signature,
+                    doctors.stamp,
+                    fullNameDoctors.name AS fullName,
+                    fullNameDoctors.nameAbbreviated
+                FROM
+                    doctors
+                INNER JOIN
+                    fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors
+                WHERE
+                    doctors.deletionMark = 0 AND
+                    doctors.id = ?
+            )");
             if (m_id_mainDoctor == -1)
-                qry.addBindValue(data.c_id_doctor);
+                qry.addBindValue(globals().c_id_doctor);
             else
                 qry.addBindValue(m_id_mainDoctor);
             if (! qry.exec()) {
@@ -187,35 +193,50 @@ void HandlerFunctionThread::setDataConstants()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    data.doctor_signatute      = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
-                    data.doctor_stamp          = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
-                    data.doctor_nameFull       = qry.value(rec.indexOf("fullName")).toString();
-                    data.doctor_nameAbbreviate = qry.value(rec.indexOf("nameAbbreviated")).toString();
+                    globals().main_name_doctor           = qry.value(rec.indexOf("fullName")).toString();
+                    globals().main_name_abbreviat_doctor = qry.value(rec.indexOf("nameAbbreviated")).toString();
+                    globals().stamp_main_doctor     = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().signature_main_doctor = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
                 }
             }
 
             QSqlQuery qry_cloud(dbConnection);
-            qry_cloud.prepare("SELECT * FROM cloudServer WHERE id_organizations = ? AND id_users = ?;");
-            qry_cloud.addBindValue(data.c_id_organizations);
+            qry_cloud.prepare(R"(
+                SELECT
+                    cloudServer.*,
+                    users.hash AS hashUser
+                FROM
+                    cloudServer
+                INNER JOIN
+                    users ON cloudServer.id_users = users.id
+                WHERE
+                    cloudServer.id_organizations = ? AND
+                    cloudServer.id_users = ?
+            )");
+            qry_cloud.addBindValue(globals().c_id_organizations);
             qry_cloud.addBindValue(m_id_user);
             if (! qry_cloud.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
                 while (qry_cloud.next()) {
                     QSqlRecord rec = qry_cloud.record();
-                    data.cloud_host             = qry_cloud.value(rec.indexOf("hostName")).toString();
-                    data.cloud_databaseName     = qry_cloud.value(rec.indexOf("databaseName")).toString();
-                    data.cloud_port             = qry_cloud.value(rec.indexOf("port")).toString();
-                    data.cloud_connectionOption = qry_cloud.value(rec.indexOf("connectionOption")).toString();
-                    data.cloud_user             = qry_cloud.value(rec.indexOf("username")).toString();
-                    data.cloud_password         = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("password")).toString().toUtf8());
-                    data.cloud_iv               = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("iv")).toString().toUtf8());
+                    globals().cloud_host          = qry_cloud.value(rec.indexOf("hostName")).toString();
+                    globals().cloud_nameBase      = qry_cloud.value(rec.indexOf("databaseName")).toString();
+                    globals().cloud_port          = qry_cloud.value(rec.indexOf("port")).toString();
+                    globals().cloud_optionConnect = qry_cloud.value(rec.indexOf("connectionOption")).toString();
+                    globals().cloud_user          = qry_cloud.value(rec.indexOf("username")).toString();
+
+                    QByteArray hash_user         = QByteArray::fromHex(qry_cloud.value(rec.indexOf("hashUser")).toString().toUtf8());
+                    QByteArray iv                = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("iv")).toString().toUtf8());
+                    QByteArray encryptedPassword = QByteArray::fromBase64(qry_cloud.value(rec.indexOf("password")).toString().toUtf8());
+                    QByteArray decryptedPassword = crypto_manager->decryptPassword(encryptedPassword, hash_user, iv);
+                    globals().cloud_passwd = decryptedPassword;
                 }
             }
 
         }  // qry se destruge aici
 
-        data_constants.append(data);
+        emit finishSetDataConstants();
 
         if (dbConnection.isOpen()) {
             dbConnection.close();
@@ -224,8 +245,6 @@ void HandlerFunctionThread::setDataConstants()
     } // dbConnection se destruge aici
 
     db->removeDatabaseThread(threadConnectionName);
-
-    emit finishSetDataConstants(data_constants);
 
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
@@ -242,6 +261,9 @@ void HandlerFunctionThread::saveDataPatient()
             if (! patientExistsInDB(dbConnection)){
                 if (insertDataPatientInDB(dbConnection)){
                     emit finishInsertDataCatPatient(true, cat_patient_id);
+                    if (! m_thisMySQL) {
+                        syncWithMySQL(cat_patient_id);  // sincronizare în cloud
+                    }
                 } else {
                     emit finishInsertDataCatPatient(false, cat_patient_id);
                 }
@@ -264,6 +286,81 @@ void HandlerFunctionThread::saveDataPatient()
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
 
+void HandlerFunctionThread::syncWithMySQL(int localPatientId)
+{
+    // 1. verificam daca este completat tabela 'cloudServer'
+    if (globals().cloud_host.isEmpty() ||
+        globals().cloud_nameBase.isEmpty() ||
+        globals().cloud_user.isEmpty() ||
+        globals().cloud_passwd.isEmpty())
+        return;
+
+    // 2. verificam daca ID e valid
+    if (localPatientId <= 0)
+        return;
+
+    // 3. efectuam conectarea la BD MySQL
+    QSqlDatabase dbCloud = QSqlDatabase::addDatabase("QMYSQL", "cloud_sync_conn");
+    dbCloud.setHostName(globals().cloud_host); // completează din globals sau cloudServer
+    dbCloud.setDatabaseName(globals().cloud_nameBase);
+    dbCloud.setPort(globals().cloud_port.toInt());
+    dbCloud.setUserName(globals().cloud_user);
+    dbCloud.setPassword(globals().cloud_passwd);
+    dbCloud.setConnectOptions(globals().cloud_optionConnect);
+    if (! dbCloud.open()) {
+        qWarning(logWarning()) << "[SYNC] Conectarea la MySQL (cloud) a eșuat: " << dbCloud.lastError().text();
+        return;
+    }
+
+    // 4. efectuam selectarea din bd locala
+    QSqlQuery qrySelect(QSqlDatabase::database("connection_" + QString::number(reinterpret_cast<quintptr>(QThread::currentThreadId()))));
+    qrySelect.prepare("SELECT * FROM pacients WHERE id = ?");
+    qrySelect.addBindValue(localPatientId);
+    if (! qrySelect.exec() || ! qrySelect.next()) {
+        qWarning(logWarning()) << "[SYNC] Pacientul nu a fost găsit în baza locală: " << qrySelect.lastError().text();
+        dbCloud.close();
+        QSqlDatabase::removeDatabase("cloud_sync_conn");
+        return;
+    }
+
+    // 5. sincronizam datele cu MySQL
+    QSqlQuery qryCloud(dbCloud);
+    qryCloud.prepare(R"(
+        INSERT INTO pacients (
+            deletionMark, IDNP, name, fName, mName,
+            medicalPolicy, birthday, address, telephone, email, comment)
+        VALUES (:deletionMark, :IDNP, :name, :fName, :mName,
+            :medicalPolicy, :birthday, :address, :telephone, :email, :comment)
+        ON DUPLICATE KEY UPDATE
+            deletionMark = VALUES(deletionMark), IDNP = VALUES(IDNP), name = VALUES(name), fName = VALUES(fName), mName = VALUES(mName),
+            medicalPolicy = VALUES(medicalPolicy), birthday = VALUES(birthday), address = VALUES(address), telephone = VALUES(telephone),
+            email = VALUES(email), comment = VALUES(comment)
+    )");
+    // id nu adaugam
+    qryCloud.bindValue(":deletionMark", qrySelect.value("deletionMark"));
+    qryCloud.bindValue(":IDNP", qrySelect.value("IDNP"));
+    qryCloud.bindValue(":name", qrySelect.value("name"));
+    qryCloud.bindValue(":fName", qrySelect.value("fName"));
+    qryCloud.bindValue(":mName", qrySelect.value("mName"));
+    qryCloud.bindValue(":medicalPolicy", qrySelect.value("medicalPolicy"));
+    qryCloud.bindValue(":birthday", qrySelect.value("birthday"));
+    qryCloud.bindValue(":address", qrySelect.value("address"));
+    qryCloud.bindValue(":telephone", qrySelect.value("telephone"));
+    qryCloud.bindValue(":email", qrySelect.value("email"));
+    qryCloud.bindValue(":comment", qrySelect.value("comment"));
+
+    if (! qryCloud.exec()) {
+        qWarning(logWarning()) << "[SYNC] Inserarea/actualizarea pacientului în MySQL (cloud) a eșuat: "
+                               << qryCloud.lastError().text();
+    } else {
+        qInfo(logInfo()) << "[SYNC] Pacientul a fost sincronizat cu succes în cloud.";
+    }
+
+    // 6. inchidem bd cloud si eliminam conectarea
+    dbCloud.close();
+    QSqlDatabase::removeDatabase("cloud_sync_conn");
+}
+
 void HandlerFunctionThread::updateDataPatientInDB()
 {
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
@@ -273,19 +370,21 @@ void HandlerFunctionThread::updateDataPatientInDB()
 
         { // -- bloc pentru QSqlQuery
             QSqlQuery qry(dbConnection);
-            qry.prepare("UPDATE pacients SET "
-                        "  deletionMark  = ?,"
-                        "  IDNP          = ?,"
-                        "  name          = ?,"
-                        "  fName         = ?,"
-                        "  mName         = ?,"
-                        "  medicalPolicy = ?,"
-                        "  birthday      = ?,"
-                        "  address       = ?,"
-                        "  telephone     = ?,"
-                        "  email         = ?,"
-                        "  comment       = ? "
-                        "WHERE id = ?;");
+            qry.prepare(R"(
+                UPDATE pacients SET
+                    deletionMark  = ?,
+                    IDNP          = ?,
+                    name          = ?,
+                    fName         = ?,
+                    mName         = ?,
+                    medicalPolicy = ?,
+                    birthday      = ?,
+                    address       = ?,
+                    telephone     = ?,
+                    email         = ?,
+                    comment       = ?
+                WHERE id = ?
+            )");
             qry.addBindValue(0);
             qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);
             qry.addBindValue(cat_patient_name);
@@ -371,15 +470,19 @@ bool HandlerFunctionThread::patientExistsInDB(QSqlDatabase dbConnection)
 
     if (! cat_patient_idnp.isEmpty()) {  // 1. daca este idnp - (principal)
 
-        qry.prepare("SELECT 1 FROM pacients "
-                    "WHERE IDNP = ? LIMIT 1;");
+        qry.prepare(R"(
+            SELECT 1 FROM pacients
+            WHERE IDNP = ? LIMIT 1
+        )");
         qry.addBindValue(cat_patient_idnp);
 
     } else {  // 2. daca nu este idnp (cautarea dupa: nume, prenume, data nasterii)
 
         QSqlQuery qry_no_idnp(dbConnection);
-        qry_no_idnp.prepare("SELECT 1 FROM pacients "
-                            "WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1;");
+        qry_no_idnp.prepare(R"(
+            SELECT 1 FROM pacients
+            WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1
+        )");
         qry_no_idnp.addBindValue(cat_patient_name);
         qry_no_idnp.addBindValue(cat_patient_fname);
         qry_no_idnp.addBindValue(cat_patient_birthday);
@@ -392,20 +495,22 @@ bool HandlerFunctionThread::patientExistsInDB(QSqlDatabase dbConnection)
 bool HandlerFunctionThread::insertDataPatientInDB(QSqlDatabase dbConnection)
 {
     QSqlQuery qry(dbConnection);
-    qry.prepare("INSERT INTO pacients ("
-                "  id,"
-                "  deletionMark,"
-                "  IDNP,"
-                "  name,"
-                "  fName,"
-                "  mName,"
-                "  medicalPolicy,"
-                "  birthday,"
-                "  address,"
-                "  telephone,"
-                "  email,"
-                "  comment) "
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+    qry.prepare(R"(
+        INSERT INTO pacients (
+            id,
+            deletionMark,
+            IDNP,
+            name,
+            fName,
+            mName,
+            medicalPolicy,
+            birthday,
+            address,
+            telephone,
+            email,
+            comment)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+    )");
     qry.addBindValue(cat_patient_id);
     qry.addBindValue(0);
     qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);

@@ -162,7 +162,15 @@ QByteArray CloudServerConfig::getHashUserApp()
 bool CloudServerConfig::existServerConfig()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT count(hostName) FROM cloudServer WHERE id_organizations = ? AND id_users = ?;");
+    qry.prepare(R"(
+        SELECT
+            count(hostName)
+        FROM
+            cloudServer
+        WHERE
+            id_organizations = ? AND
+            id_users = ?
+    )");
     qry.addBindValue(m_id_organization);
     qry.addBindValue(m_id_user);
     if (! qry.exec()) {
@@ -190,17 +198,20 @@ bool CloudServerConfig::insertDataIntoTableCloudServer()
         return false;
 
     QSqlQuery qry;
-    qry.prepare("INSERT INTO cloudServer("
-                "id,"
-                "id_organizations,"
-                "id_users,"
-                "hostName,"
-                "databaseName,"
-                "port,"
-                "connectionOption,"
-                "username,"
-                "password,"
-                "iv) VALUES (?,?,?,?,?,?,?,?,?,?);");
+    qry.prepare(R"(
+        INSERT INTO cloudServer (
+            id,
+            id_organizations,
+            id_users,
+            hostName,
+            databaseName,
+            port,
+            connectionOption,
+            username,
+            password,
+            iv)
+        VALUES (?,?,?,?,?,?,?,?,?,?)
+    )");
     qry.addBindValue(db->getLastIdForTable("cloudServer") + 1);
     qry.addBindValue(m_id_organization);
     qry.addBindValue(m_id_user);
@@ -234,16 +245,19 @@ bool CloudServerConfig::updateDataIntoTableCloudServer()
         return false;
 
     QSqlQuery qry;
-    qry.prepare("UPDATE cloudServer SET "
-                "  hostName         = ?,"
-                "  databaseName     = ?,"
-                "  port             = ?,"
-                "  connectionOption = ?,"
-                "  username         = ?,"
-                "  password         = ?,"
-                "  iv               = ? "
-                "WHERE "
-                "  id_organizations = ? AND id_users = ?;");
+    qry.prepare(R"(
+        UPDATE cloudServer SET
+            hostName         = ?,
+            databaseName     = ?,
+            port             = ?,
+            connectionOption = ?,
+            username         = ?,
+            password         = ?,
+            iv               = ?
+        WHERE "
+            id_organizations = ? AND
+            id_users = ?
+    )");
     qry.addBindValue(ui->txt_host->text());
     qry.addBindValue(ui->txt_nameBase->text());
     qry.addBindValue(ui->txt_port->text());
@@ -285,21 +299,24 @@ void CloudServerConfig::slot_ID_OrganizationChanged()
     }
 
     QSqlQuery qry;
-    qry.prepare("SELECT "
-                "  cloudServer.hostName,"
-                "  cloudServer.databaseName,"
-                "  cloudServer.port,"
-                "  cloudServer.connectionOption,"
-                "  cloudServer.username,"
-                "  cloudServer.password,"
-                "  cloudServer.iv,"
-                "  users.hash AS hashUser "
-                "FROM "
-                "  cloudServer "
-                "INNER JOIN "
-                "  users ON users.id = cloudServer.id_users "
-                "WHERE "
-                "  cloudServer.id_organizations = ? AND cloudServer.id_users = ?;");
+    qry.prepare(R"(
+        SELECT
+            cloudServer.hostName,
+            cloudServer.databaseName,
+            cloudServer.port,
+            cloudServer.connectionOption,
+            cloudServer.username,
+            cloudServer.password,
+            cloudServer.iv,
+            users.hash AS hashUser
+        FROM
+            cloudServer
+        INNER JOIN
+            users ON users.id = cloudServer.id_users
+        WHERE
+            cloudServer.id_organizations = ? AND
+            cloudServer.id_users = ?
+    )");
     qry.addBindValue(m_id_organization);
     qry.addBindValue(m_id_user);
     if (qry.exec() && qry.next()) {

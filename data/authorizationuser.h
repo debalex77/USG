@@ -39,7 +39,7 @@ private slots:
     void slot_IdChanged();
     void textChangedPasswd();
 
-    void onDataReceived(QVector<ConstantsData> data_constants);
+    void onDataReceived();
 
     bool onControlAccept();
     void onAccepted();

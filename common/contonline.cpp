@@ -67,7 +67,15 @@ ContOnline::~ContOnline()
 bool ContOnline::existEmail()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT count(email) FROM contsOnline WHERE id_organizations = ? AND id_users = ?;");
+    qry.prepare(R"(
+        SELECT
+            count(email)
+        FROM
+            contsOnline
+        WHERE
+            id_organizations = ? AND
+            id_users = ?
+    )");
     qry.addBindValue(m_idOrganization);
     qry.addBindValue(globals().idUserApp);
     if (! qry.exec()) {
@@ -85,7 +93,7 @@ bool ContOnline::existEmail()
 void ContOnline::setHashUserApp()
 {
     QSqlQuery qry;
-    qry.prepare("SELECT hash FROM users WHERE id = ?");
+    qry.prepare(R"(SELECT hash FROM users WHERE id = ?)");
     qry.addBindValue(globals().idUserApp);
     if (qry.exec() && qry.next()) {
         m_hashUserApp = QByteArray::fromHex(qry.value(0).toString().toUtf8());
@@ -108,19 +116,23 @@ void ContOnline::slot_IdChangedOrganization()
 
     // 2.verificam daca sunt date in tabela 'contsOnline'
     QSqlQuery qry;
-    qry.prepare("SELECT "
-                "  contsOnline.email,"
-                "  contsOnline.smtp_server,"
-                "  contsOnline.port,"
-                "  contsOnline.username,"
-                "  contsOnline.password,"
-                "  contsOnline.iv, "
-                "  users.hash AS hashUser "
-                " FROM "
-                "  contsOnline "
-                " INNER JOIN "
-                "  users ON users.id = contsOnline.id_users "
-                " WHERE id_organizations = ? AND id_users = ?;");
+    qry.prepare(R"(
+        SELECT
+            contsOnline.email,
+            contsOnline.smtp_server,
+            contsOnline.port,
+            contsOnline.username,
+            contsOnline.password,
+            contsOnline.iv,
+            users.hash AS hashUser
+        FROM
+            contsOnline
+        INNER JOIN
+            users ON users.id = contsOnline.id_users
+        WHERE
+            id_organizations = ? AND
+            id_users = ?
+    )");
     qry.addBindValue(m_idOrganization);
     qry.addBindValue(globals().idUserApp);
     if (! qry.exec()) {
@@ -145,7 +157,7 @@ void ContOnline::slot_IdChangedOrganization()
     }
 
     // 3.daca nu sunt date in tabela 'contsOnline' extragem email din catalogul 'Organizations'
-    qry.prepare("SELECT email FROM organizations WHERE id = ?;");
+    qry.prepare(R"(SELECT email FROM organizations WHERE id = ?)");
     qry.addBindValue(m_idOrganization);
     if (! qry.exec()) {
         qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
@@ -177,16 +189,19 @@ bool ContOnline::insertDataIntoTableContsOnline()
         return false;
 
     QSqlQuery qry;
-    qry.prepare("INSERT INTO contsOnline ("
-                "id,"
-                "id_organizations, "
-                "id_users, "
-                "email, "
-                "smtp_server, "
-                "port, "
-                "username, "
-                "password,"
-                "iv) VALUES (?,?,?,?,?,?,?,?,?);");
+    qry.prepare(R"(
+        INSERT INTO contsOnline (
+            id,
+            id_organizations,
+            id_users,
+            email,
+            smtp_server,
+            port,
+            username,
+            password,
+            iv)
+        VALUES (?,?,?,?,?,?,?,?,?)
+    )");
     qry.addBindValue(db->getLastIdForTable("contsOnline") + 1);
     qry.addBindValue(m_idOrganization);
     qry.addBindValue(globals().idUserApp);
@@ -218,16 +233,18 @@ bool ContOnline::updateDataIntoTableContsOnline()
         setHashUserApp();
 
     QSqlQuery qry;
-    qry.prepare("UPDATE contsOnline SET "
-                " id_users      = ?,"
-                " email         = ?,"
-                " smtp_server   = ?,"
-                " port          = ?,"
-                " username      = ?,"
-                " password      = ?,"
-                " iv            = ? "
-                "WHERE "
-                " id_organizations = ?;");
+    qry.prepare(R"(
+        UPDATE contsOnline SET
+            id_users      = ?,
+            email         = ?,
+            smtp_server   = ?,
+            port          = ?,
+            username      = ?,
+            password      = ?,
+            iv            = ?
+        WHERE "
+            id_organizations = ?
+    )");
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue(ui->txt_email->text());
     qry.addBindValue(ui->txt_smtp_server->text());
