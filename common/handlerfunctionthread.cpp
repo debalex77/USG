@@ -317,13 +317,43 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
     qrySelect.prepare("SELECT * FROM pacients WHERE id = ?");
     qrySelect.addBindValue(localPatientId);
     if (! qrySelect.exec() || ! qrySelect.next()) {
-        qWarning(logWarning()) << "[SYNC] Pacientul nu a fost găsit în baza locală: " << qrySelect.lastError().text();
+        qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul '%1' nu a fost găsit în baza locală: ")
+                                      .arg(cat_patient_name + " " + cat_patient_fname)
+                               << qrySelect.lastError().text();
         dbCloud.close();
         QSqlDatabase::removeDatabase("cloud_sync_conn");
         return;
     }
 
-    // 5. sincronizam datele cu MySQL
+    // 5. verificam daca exista pacient cu acelasi IDNP
+    QSqlQuery qryIDNP_cloud(dbCloud);
+    qryIDNP_cloud.prepare(R"(
+        SELECT 1 FROM pacients WHERE IDNP = ? LIMIT 1
+    )");
+    qryIDNP_cloud.addBindValue(cat_patient_idnp);
+    if (qryIDNP_cloud.exec() && qryIDNP_cloud.next()) {
+        qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul cu IDNP:%1 deja exista in baza de date 'cloud'.")
+                                      .arg(cat_patient_idnp);
+        return;
+    }
+
+    // 6. verificam daca exista pacient cu acelasi nume, prenume
+    QSqlQuery qryName_cloud(dbCloud);
+    qryName_cloud.prepare(R"(
+        SELECT 1 FROM pacients
+        WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1
+    )");
+    qryName_cloud.addBindValue(cat_patient_name);
+    qryName_cloud.addBindValue(cat_patient_fname);
+    qryName_cloud.addBindValue(cat_patient_birthday);
+    if (qryName_cloud.exec() && qryName_cloud.next()) {
+        qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul '%1' din %2 deja exista in baza de date 'cloud'.")
+                                      .arg(cat_patient_name + " " + cat_patient_fname,
+                                           cat_patient_birthday.toString("dd.MM.yyyy"));
+        return;
+    }
+
+    // 7. sincronizam datele cu MySQL
     QSqlQuery qryCloud(dbCloud);
     qryCloud.prepare(R"(
         INSERT INTO pacients (
@@ -350,13 +380,15 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
     qryCloud.bindValue(":comment", qrySelect.value("comment"));
 
     if (! qryCloud.exec()) {
-        qWarning(logWarning()) << "[SYNC] Inserarea/actualizarea pacientului în MySQL (cloud) a eșuat: "
+        qWarning(logWarning()) << QStringLiteral("[SYNC] Inserarea datelor pacientului '%1' în MySQL (cloud) a eșuat: ")
+                                      .arg(cat_patient_name + " " + cat_patient_fname)
                                << qryCloud.lastError().text();
     } else {
-        qInfo(logInfo()) << "[SYNC] Pacientul a fost sincronizat cu succes în cloud.";
+        qInfo(logInfo()) << QStringLiteral("[SYNC] Pacientul '%1' a fost sincronizat cu succes în cloud.")
+                                .arg(cat_patient_name + " " + cat_patient_fname);
     }
 
-    // 6. inchidem bd cloud si eliminam conectarea
+    // 8. inchidem bd cloud si eliminam conectarea
     dbCloud.close();
     QSqlDatabase::removeDatabase("cloud_sync_conn");
 }
