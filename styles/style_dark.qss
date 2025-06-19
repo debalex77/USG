@@ -174,7 +174,7 @@ QPlainTextEdit[readOnly="true"] {
 
 QTextBrowser {
     background-color: #121212;
-    color: #FFFFFF;
+    color: #e3e1e1;
     font-size: 13px;
  /*   font-family: Consolas, 'Courier New', monospace; */
     border: 1px solid #2E2E2E;

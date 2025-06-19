@@ -79,10 +79,19 @@ void InfoWindow::setTitle(const QString title)
 
 void InfoWindow::setTex(const QString content)
 {
-    if (m_typeInfo == INFO_REALEASE)
+    QString str_style = globals().isSystemThemeDark
+                            ? "<div style='color:#a6a6a6;'>"
+                            : "<div>";
+    QString str;
+    str.append(str_style);
+    str.append(content);
+    str.append("</div>");
+
+    if (m_typeInfo == INFO_REALEASE) {
         ui->textBrowser->setMarkdown(content);
-    else if (m_typeInfo == INFO_VIDEO || m_typeInfo == INFO_REPORT)
-        ui->textBrowser->setHtml(content);
+    } else if (m_typeInfo == INFO_VIDEO || m_typeInfo == INFO_REPORT) {
+        ui->textBrowser->setHtml(str);
+    }
 }
 
 void InfoWindow::slot_typeInfoChanged()

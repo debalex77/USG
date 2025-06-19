@@ -46,8 +46,13 @@ AsistantTipApp::AsistantTipApp(QWidget *parent)
 
     ui->show_launch->setChecked(globals().showAsistantHelper);
 
+    setTextSteps();
+
+    str_style = globals().isSystemThemeDark
+                    ? "<div style='color:#b5b5b5; font-size:11pt;'>"
+                    : "<div style='font-size:11pt;'>";
+
 #if defined(Q_OS_WIN)
-    ui->tip_text->setStyleSheet("font: 14px 'Cantarell';");
     ui->frame->setStyle(style_fusion);
 #endif
     if (globals().isSystemThemeDark)
@@ -94,7 +99,11 @@ void AsistantTipApp::onClose()
 
     if (m_show_launch != globals().showAsistantHelper){
         QSqlQuery qry;
-        qry.prepare("UPDATE userPreferences SET showAsistantHelper = ? WHERE id_users = ?;");
+        qry.prepare(R"(
+            UPDATE userPreferences SET
+                showAsistantHelper = ?
+            WHERE id_users = ?
+        )");
         qry.bindValue(0, ui->show_launch->isChecked());
         qry.bindValue(1, globals().idUserApp);
         if (! qry.exec())
@@ -107,32 +116,70 @@ void AsistantTipApp::onClose()
     this->close();
 }
 
+void AsistantTipApp::setTextSteps()
+{
+    text_step1 =
+        tr(R"(
+            <u><b>Preferințele utilizatorului</b></u> - configurarea setărilor utilizatorului:
+                <li>&nbsp;&nbsp; - Setările generale - setarea aplicației implicite, logotipul etc.</li>
+                <li>&nbsp;&nbsp; - Lansarea/închiderea - setările la lansarea sau închiderea aplicației.</li>
+                <li>&nbsp;&nbsp; - Setările documentelor - setări pentru documente.</li>
+                <li>&nbsp;&nbsp; - Setările neredactabile - setările informative.</li>
+        )");
+
+    text_step2 =
+        tr(R"(
+            <u><b>Jurnalul de logare</b></u> - vizualizați jurnalul de logare.<br>
+            Deschideți Setările aplicației -> Tabul 'Fișiere de logare' -> alegeți fișierul pentru a vizualiza
+            jurnalul.
+        )");
+
+    text_step3 =
+        tr(R"(
+            <u><b>Logotipul organizației</b></u> - folosiți logotipul organizației.<br>
+            Atașați logotipul organizației în setările utilizatorului pentru a prezenta în formele de tipar a documentelor și în rapoarte.
+        )");
+
+    text_step4 =
+        tr(R"(
+            <u><b>Ștampila organizației</b></u> - folosiți ștampila organizației.<br>
+            Deschideți catalogul "Centre medicale" și găsiți organizația -> tabul "Ștampila" - atașați ștampila,
+            pentru a prezenta în formele de tipar a documentelor și în rapoarte.
+        )");
+
+    text_step5 =
+        tr(R"(
+            <u><b>Ștampila și semnătura doctorului</b></u> - folosiți ștampila sau semnătura doctorului pentru a prezenta în formele
+            de tipar a documentelor și în rapoarte.<br>
+            Deschideți catalogul "Doctori" și alegeți persoana -> tabul "Ștampila, semnătura" - atașați ștampila sau semnărura.
+        )");
+}
+
 void AsistantTipApp::setTipText()
 {
-    if (current_step == 1)
-        ui->tip_text->setHtml(tr("<u><b>Preferințele utilizatorului</b></u> - configurarea setărilor utilizatorului:"
-                                 "<li>&nbsp;&nbsp; - Setările generale - setarea aplicației implicite, logotipul etc.</li>"
-                                 "<li>&nbsp;&nbsp; - Lansarea/închiderea - setările la lansarea sau închiderea aplicației.</li>"
-                                 "<li>&nbsp;&nbsp; - Setările documentelor - setări pentru documente.</li>"
-                                 "<li>&nbsp;&nbsp; - Setările neredactabile - setările informative.</li>"));
+    QString content;
 
-    if (current_step == 2)
-        ui->tip_text->setHtml(tr("<u><b>Jurnalul de logare</b></u> - vizualizați jurnalul de logare.<br>"
-                                 "Deschideți Setările aplicației -> Tabul 'Fișiere de logare' -> alegeți fișierul pentru a vizualiza "
-                                 "jurnalul."));
+    switch (current_step) {
+    case 1:
+        content = text_step1;
+        break;
+    case 2:
+        content = text_step2;
+        break;
+    case 3:
+        content = text_step3;
+        break;
+    case 4:
+        content = text_step4;
+        break;
+    case 5:
+        content = text_step5;
+        break;
+    default:
+        content = "";
+        break;
+    }
 
-    if (current_step == 3)
-        ui->tip_text->setHtml(tr("<u><b>Logotipul organizației</b></u> - folosiți logotipul organizației.<br>"
-                                 "Atașați logotipul organizației în setările utilizatorului pentru a prezenta în formele de tipar a documentelor și în rapoarte."));
-
-    if (current_step == 4)
-        ui->tip_text->setHtml(tr("<u><b>Ștampila organizației</b></u> - folosiți ștampila organizației.<br>"
-                                 "Deschideți catalogul \"Centre medicale\" și găsiți organizația -> tabul \"Ștampila\" - atașați ștampila, "
-                                 "pentru a prezenta în formele de tipar a documentelor și în rapoarte."));
-
-    if (current_step == 5)
-        ui->tip_text->setHtml(tr("<u><b>Ștampila și semnătura doctorului</b></u> - folosiți ștampila sau semnătura doctorului pentru a prezenta în formele "
-                                 "de tipar a documentelor și în rapoarte.<br>"
-                                 "Deschideți catalogul \"Doctori\" și alegeți persoana -> tabul \"Ștampila, semnătura\" - atașați ștampila sau semnărura."));
-
+    QString finalHtml = str_style + content + "</div>";
+    ui->tip_text->setHtml(finalHtml);
 }

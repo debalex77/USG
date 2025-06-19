@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>500</width>
+    <width>637</width>
     <height>480</height>
    </rect>
   </property>
@@ -19,7 +19,7 @@
   <property name="font">
    <font>
     <family>Segoe UI</family>
-    <pointsize>8</pointsize>
+    <pointsize>10</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -46,8 +46,14 @@
    </item>
    <item row="1" column="0" colspan="3">
     <widget class="QTextBrowser" name="textBrowser">
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>12</pointsize>
+      </font>
+     </property>
      <property name="styleSheet">
-      <string notr="true">background-color: rgb(222, 221, 218);</string>
+      <string notr="true">color:#a6a6a6;</string>
      </property>
     </widget>
    </item>
@@ -90,9 +96,6 @@
      </property>
      <property name="text">
       <string>TextLabel</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
      </property>
     </widget>
    </item>

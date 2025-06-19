@@ -1228,6 +1228,7 @@ void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
 
         QTextStream in(&file);
         QString html;
+        html.append("<p style='color:#a6a6a6'>");
 
         while (!in.atEnd()) {
             QString line = in.readLine().trimmed();
@@ -1252,6 +1253,8 @@ void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
 
             html += line.toHtmlEscaped() + "<br>";
         }
+
+        html.append("</p>");
 
         ui->textLog->setHtml(html);
         ui->textLog->setStyleSheet("font-size: 13px;");

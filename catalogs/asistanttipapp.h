@@ -25,11 +25,20 @@ private slots:
     void onClose();
 
 private:
+    void setTextSteps();
     void setTipText();
 
 private:
     Ui::AsistantTipApp *ui;
     DataBase *db;
+
+    QString str_style;
+
+    QString text_step1;
+    QString text_step2;
+    QString text_step3;
+    QString text_step4;
+    QString text_step5;
 
     int current_step = 0;
     int max_step     = 5;
