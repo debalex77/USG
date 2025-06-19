@@ -5216,15 +5216,17 @@ bool DataBase::existIdDocument(const QString nameTable, const QString name_condi
 {
     bool exist_id = false;
     QSqlQuery qry(nameDatabase);
-    qry.prepare(QString("SELECT count(id) FROM %1 WHERE &2 = ?")
-                .arg(nameTable, name_condition));
+    qry.prepare(QString(R"(
+        SELECT count(id) FROM %1 WHERE %2 = ?
+    )").arg(nameTable, name_condition));
     qry.addBindValue(value_condition);
     if (qry.exec()){
         qry.next();
         if (qry.value(0).toInt() > 0)
             exist_id = true;
     } else {
-        qWarning(logWarning()) << tr("Eroare determinarii existentii 'count(id)' a documentului cu 'id=%1' din tabela 'DB_IMAGE':\n").arg(value_condition) << qry.lastError();
+        qWarning(logWarning()) << tr("Eroare determinarii existentii 'count(id)' a documentului cu 'id=%1' din baza de date 'DB_IMAGE':\n")
+                                  .arg(value_condition) << qry.lastError().text();
     }
 
     return exist_id;
@@ -5233,8 +5235,9 @@ bool DataBase::existIdDocument(const QString nameTable, const QString name_condi
 bool DataBase::existSubalternDocument(const QString nameTable, const QString name_condition, const QString value_condition, int &id_doc)
 {
     QSqlQuery qry;
-    qry.prepare(QString("SELECT id  FROM %1 WHERE %1 = ?")
-                .arg(nameTable, name_condition));
+    qry.prepare(QString(R"(
+        SELECT id  FROM %1 WHERE %1 = ?
+    )").arg(nameTable, name_condition));
     qry.addBindValue(value_condition);
     if (qry.exec()){
         qry.next();
@@ -5254,21 +5257,21 @@ bool DataBase::existSubalternDocument(const QString nameTable, const QString nam
 QString DataBase::getQryFromTableConstantById(const int id_user) const
 {
     return QString(R"(
-        SELECT
-            constants.id_organizations,
-            organizations.IDNP,
-            organizations.name,
-            organizations.address,
-            organizations.telephone,
-            fullNameDoctors.nameAbbreviated AS doctor,
-            organizations.email FROM constants
-        INNER JOIN
-            organizations ON constants.id_organizations = organizations.id
-        INNER JOIN
-            fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors
-        WHERE
-            constants.id_users = %1;
-    )").arg(QString::number(id_user));
+            SELECT
+                constants.id_organizations,
+                organizations.IDNP,
+                organizations.name,
+                organizations.address,
+                organizations.telephone,
+                fullNameDoctors.nameAbbreviated AS doctor,
+                organizations.email FROM constants
+            INNER JOIN
+                organizations ON constants.id_organizations = organizations.id
+            INNER JOIN
+                fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors
+            WHERE
+                constants.id_users = %1;
+        )").arg(QString::number(id_user));
 }
 
 QString DataBase::getQryFromTablePatientById(const int id_patient) const

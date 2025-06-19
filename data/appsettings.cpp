@@ -1192,24 +1192,72 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
 
 void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
 {
-    if (! index.isValid())
+    // if (! index.isValid())
+    //     return;
+
+    // QDir dir;
+    // int row = index.row();
+    // QString m_file_log = model_logs->data(model_logs->index(row, 0), Qt::DisplayRole).toString();
+    // QFile file(dir.toNativeSeparators(m_file_log));
+    // if(! file.exists())
+    //     return;
+
+    // ui->textLog->clear();
+
+    // if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+    //     qInfo(logInfo()) << tr("Vizualizarea fisierului de logare '%1'.").arg(dir.toNativeSeparators(m_file_log));
+    //     ui->textLog->setPlainText(file.readAll());
+    // }
+    // file.close();
+    // ui->textLog->setStyleSheet("font-size: 13px;");
+
+    if (!index.isValid())
         return;
 
     QDir dir;
     int row = index.row();
     QString m_file_log = model_logs->data(model_logs->index(row, 0), Qt::DisplayRole).toString();
     QFile file(dir.toNativeSeparators(m_file_log));
-    if(! file.exists())
+    if (!file.exists())
         return;
 
     ui->textLog->clear();
 
-    if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
         qInfo(logInfo()) << tr("Vizualizarea fisierului de logare '%1'.").arg(dir.toNativeSeparators(m_file_log));
-        ui->textLog->setPlainText(file.readAll());
+
+        QTextStream in(&file);
+        QString html;
+
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+
+            QString icon;
+            if (line.contains("WRN"))
+                icon = ":/img/warning.png";
+            else if (line.contains("INF"))
+                icon = ":/img/info_x32.png";
+            else if (line.contains("CRT"))
+                icon = ":/img/critical.png";
+            else if (line.contains("FTL"))
+                icon = ":/img/error.png";
+            else if (line.contains("DBG"))
+                icon = ":/img/bug.png";
+            else
+                icon = ""; // sau "" dacă nu vrei nimic
+
+            if (!icon.isEmpty()) {
+                html += QString("<img src='%1' width='16' height='16'> ").arg(icon);
+            }
+
+            html += line.toHtmlEscaped() + "<br>";
+        }
+
+        ui->textLog->setHtml(html);
+        ui->textLog->setStyleSheet("font-size: 13px;");
     }
+
     file.close();
-    ui->textLog->setStyleSheet("font-size: 13px;");
 }
 
 // *******************************************************************

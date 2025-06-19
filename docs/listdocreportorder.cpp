@@ -1622,17 +1622,6 @@ void ListDocReportOrder::updateTableViewOrderEcho()
     strQry = strQry + " ORDER BY orderEcho.dateDoc DESC "
                       " LIMIT :limit OFFSET :offset;";
 
-#ifdef QT_DEBUG
-    qDebug() << "----------------------------------------------------------------------------------------------------------'";
-    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
-    qDebug() << strQry;
-#else
-    if (QCoreApplication::arguments().count() > 1
-        && QCoreApplication::arguments()[1].contains("/debug")){
-        qDebug() << strQry;
-    }
-#endif
-
     int scrollPosition = ui->tableView->verticalScrollBar()->value();
     int maxScroll = ui->tableView->verticalScrollBar()->maximum();
 
@@ -1759,17 +1748,6 @@ void ListDocReportOrder::updateTableViewOrderEchoFull()
 
     strQry = strQry + " ORDER BY orderEcho.dateDoc DESC;";
 
-#ifdef QT_DEBUG
-    qDebug() << "----------------------------------------------------------------------------------------------------------'";
-    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
-    qDebug() << strQry;
-#else
-    if (QCoreApplication::arguments().count() > 1
-        && QCoreApplication::arguments()[1].contains("/debug")){
-        qDebug() << strQry;
-    }
-#endif
-
     modelTable->setStrQuery(strQry);
     modelTable->fetchMoreDataFull();
 
@@ -1862,17 +1840,6 @@ void ListDocReportOrder::updateTableViewReportEcho()
 
     strQry = strQry + " ORDER BY orderEcho.dateDoc DESC "
                       " LIMIT :limit OFFSET :offset;";
-
-#ifdef QT_DEBUG
-    qDebug() << "----------------------------------------------------------------------------------------------------------'";
-    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
-    qDebug() << strQry;
-#else
-    if (QCoreApplication::arguments().count() > 1
-        && QCoreApplication::arguments()[1].contains("/debug")){
-        qDebug() << strQry;
-    }
-#endif
 
     int scrollPosition = ui->tableView->verticalScrollBar()->value();
     int maxScroll = ui->tableView->verticalScrollBar()->maximum();
@@ -1982,17 +1949,6 @@ void ListDocReportOrder::updateTableViewReportEchoFull()
         strQry = strQry + QString(" WHERE orderEcho.dateDoc BETWEEN '%1' AND '%2'").arg(startDate, endDate);
 
     strQry = strQry + " ORDER BY orderEcho.dateDoc DESC;";
-
-#ifdef QT_DEBUG
-    qDebug() << "----------------------------------------------------------------------------------------------------------'";
-    qDebug() << "Solicitarea pentru popularea listei de documente pe perioada:" + startDate + " - " + endDate;
-    qDebug() << strQry;
-#else
-    if (QCoreApplication::arguments().count() > 1
-        && QCoreApplication::arguments()[1].contains("/debug")){
-        qDebug() << strQry;
-    }
-#endif
 
     modelTable->setStrQuery(strQry);
     modelTable->fetchMoreDataFull();

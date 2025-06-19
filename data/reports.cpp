@@ -357,16 +357,6 @@ QString Reports::getMainQry()
 
         str_qry = str_qry + QString(" orderEcho.dateDoc BETWEEN '%1' AND '%2';").arg(m_dateStart.toString("yyyy-MM-dd hh:mm:ss"), m_dateEnd.toString("yyyy-MM-dd hh:mm:ss"));
 
-#ifdef QT_DEBUG
-        qDebug() << "Raport 'Lista pacientilor (filtru - organizatii)' solicitarea: ";
-        qDebug() << str_qry;
-#else
-        if (QCoreApplication::arguments().count() > 1
-            && QCoreApplication::arguments()[1].contains("/debug")){
-            qDebug() << str_qry;
-        }
-#endif
-
         return str_qry;
 
     } else if (name_report == "Lista pacientilor (filtru - doctori)"){
@@ -414,16 +404,6 @@ QString Reports::getMainQry()
         str = str + "  reportEcho.deletionMark = 2 AND "
                     "reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
 
-#ifdef QT_DEBUG
-        qDebug() << "Raport 'Volumul investigatiilor' solicitarea: ";
-        qDebug() << str;
-#else
-        if (QCoreApplication::arguments().count() > 1
-            && QCoreApplication::arguments()[1].contains("/debug")){
-            qDebug() << str;
-        }
-#endif
-
         return str;
 
     } else if (name_report == "Structura patologiilor"){
@@ -448,16 +428,6 @@ QString Reports::getMainQry()
               "FROM tableLiver "
               "INNER JOIN reportEcho ON tableLiver.id_reportEcho = reportEcho.id "
               "WHERE reportEcho.dateDoc BETWEEN '" + m_dateStart.toString("yyyy-MM-dd hh:mm:ss") + "' AND '" + m_dateEnd.toString("yyyy-MM-dd hh:mm:ss") + "';";
-
-#ifdef QT_DEBUG
-        qDebug() << "Raport 'Structura patologiilor' solicitarea: ";
-        qDebug() << str;
-#else
-        if (QCoreApplication::arguments().count() > 1
-            && QCoreApplication::arguments()[1].contains("/debug")){
-            qDebug() << str;
-        }
-#endif
 
         return str;
 
@@ -506,16 +476,6 @@ QString Reports::getMainQry()
             str = str + ", fullNameDoctors.nameAbbreviated ";
 
         str = str + "ORDER BY orderEchoTable.cod;";
-
-#ifdef QT_DEBUG
-        qDebug() << "Raport 'Volumul investigatiilor per cod si institutie' solicitarea: ";
-        qDebug() << str;
-#else
-        if (QCoreApplication::arguments().count() > 1
-            && QCoreApplication::arguments()[1].contains("/debug")){
-            qDebug() << str;
-        }
-#endif
 
         return str;
 

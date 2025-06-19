@@ -170,6 +170,17 @@ QPlainTextEdit[readOnly="true"] {
     border: 1px solid #555555;
 }
 
+/* --------------------- QTextBrowser ------------------- */
+
+QTextBrowser {
+    background-color: #121212;
+    color: #FFFFFF;
+    font-size: 13px;
+ /*   font-family: Consolas, 'Courier New', monospace; */
+    border: 1px solid #2E2E2E;
+    padding: 6px;
+}
+
 /* --------------------- QScrollArea ------------------ */
 QScrollArea {
     border: 1px solid rgba(255, 255, 255, 0.2);

@@ -516,12 +516,8 @@ void DocOrderEcho::slot_editingFinishedPhonePatient()
 
 void DocOrderEcho::activatedItemCompleter(const QModelIndex &index)
 {
-//    qDebug() << index.data(Qt::UserRole).toString()
-//             << index.data(Qt::DisplayRole).toString(); // returneaza 'id'
-
-
     int _id = index.data(Qt::UserRole).toInt();    // determinam 'id'
-    if (_id == Enums::IDX_UNKNOW || _id == Enums::IDX_WRITE)     // verificarea id
+    if (_id <= 0)     // verificarea id
         return;
 
     setIdPacient(index.data(Qt::UserRole).toInt()); // setam 'id' pacientului
@@ -545,16 +541,23 @@ void DocOrderEcho::indexChangedComboOrganization(const int index)
     dataWasModified();
 
     QMap<QString, QString> items;
-    QString strQry = "SELECT organizations.name,"
-                     "organizations.id_contracts AS id_contract,"
-                     "contracts.name AS nameContract,"
-                     "contracts.id_typesPrices AS id_typePrice,"
-                     "typesPrices.name AS nameTypePrice, "
-                     "typesPrices.noncomercial AS noncomercial "
-                     "FROM organizations "
-                     "INNER JOIN contracts ON organizations.id_contracts = contracts.id "
-                     "INNER JOIN typesPrices ON contracts.id_typesPrices = typesPrices.id "
-                     "WHERE organizations.id = " + QString::number(id_organization) + ";";
+    QString strQry = QStringLiteral(R"(
+            SELECT
+                organizations.name,
+                organizations.id_contracts AS id_contract,
+                contracts.name             AS nameContract,
+                contracts.id_typesPrices   AS id_typePrice,
+                typesPrices.name           AS nameTypePrice,
+                typesPrices.noncomercial   AS noncomercial
+            FROM
+                organizations
+            INNER JOIN
+                contracts ON organizations.id_contracts = contracts.id
+            INNER JOIN
+                typesPrices ON contracts.id_typesPrices = typesPrices.id
+            WHERE
+                organizations.id = '%1'
+        )").arg(QString::number(id_organization));
     if (db->getDataFromQueryByRecord(strQry, items)){
         if (items.count() == 0)
             return;
@@ -562,19 +565,21 @@ void DocOrderEcho::indexChangedComboOrganization(const int index)
         int id_typePrice   = items.constFind("id_typePrice").value().toInt();
         noncomercial_price = items.constFind("noncomercial").value().toInt();
 
-        modelContracts->clear();                                        // actualizam solicitarea
-        QString strQryContracts = "SELECT id,name FROM contracts "      // filtru dupa organizatia
-                                  "WHERE deletionMark = 0 AND id_organizations = "
-                                    + QString::number(id_organization)+ " AND notValid = 0;";
+        modelContracts->clear();
+        QString strQryContracts = QStringLiteral(R"(
+            SELECT
+                id,name FROM contracts
+            WHERE
+                deletionMark = 0 AND
+                id_organizations = '%1' AND
+                notValid = 0
+        )").arg(QString::number(id_organization));
         modelContracts->setQuery(strQryContracts);
-        if (id_contract == 0)
-            ui->comboContract->setCurrentIndex(0); // setam indexul 0 - selecteaza
-        else
+
+        if (id_contract > 0)
             setIdContract(id_contract);
 
-        if (id_typePrice == 0)
-            ui->comboTypesPricing->setCurrentIndex(0); // setam indexul 0 - selecteaza
-        else
+        if (id_typePrice > 0)
             setIdTypePrice(id_typePrice);
 
         if (ui->comboTypesPricing->currentIndex() > Enums::IDX::IDX_WRITE)
@@ -585,6 +590,10 @@ void DocOrderEcho::indexChangedComboOrganization(const int index)
 void DocOrderEcho::indexChangedComboContract(const int index)
 {
     int id_contract = ui->comboContract->itemData(index, Qt::UserRole).toInt();
+
+    if (id_contract <= 0)
+        return;
+
     setIdContract(id_contract);
     dataWasModified();
 
@@ -601,6 +610,9 @@ void DocOrderEcho::indexChangedComboContract(const int index)
 void DocOrderEcho::indexChangedComboTypePrice(const int index)
 {
     int id_typePrice = ui->comboTypesPricing->itemData(index, Qt::UserRole).toInt();
+    if (id_typePrice <= 0)
+        return;
+
     setIdTypePrice(id_typePrice);
     dataWasModified();
 }
@@ -608,6 +620,9 @@ void DocOrderEcho::indexChangedComboTypePrice(const int index)
 void DocOrderEcho::indexChangedComboDoctor(const int index)
 {
     int id_doctor = ui->comboDoctor->itemData(index, Qt::UserRole).toInt();
+    if (id_doctor <= 0)
+        return;
+
     setIdDoctor(id_doctor);
     dataWasModified();
 
@@ -618,6 +633,9 @@ void DocOrderEcho::indexChangedComboDoctor(const int index)
 void DocOrderEcho::indexChangedComboDoctorExecute(const int index)
 {
     int id_doctor_execute = ui->comboDoctorExecute->itemData(index, Qt::UserRole).toInt();
+    if (id_doctor_execute <= 0)
+        return;
+
     setIdDoctorExecute(id_doctor_execute);
     dataWasModified();
 }
@@ -625,6 +643,9 @@ void DocOrderEcho::indexChangedComboDoctorExecute(const int index)
 void DocOrderEcho::indexChangedComboNurse(const int index)
 {
     int id_nurse = ui->comboNurse->itemData(index, Qt::UserRole).toInt();
+    if (id_nurse <= 0)
+        return;
+
     setIdNurse(id_nurse);
     dataWasModified();
 }

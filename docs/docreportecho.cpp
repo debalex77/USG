@@ -326,15 +326,14 @@ bool DocReportEcho::loadFile(const QString &fileName, const int numberImage)
     // Afișăm imaginea în interfață
     QPixmap pixmap;
     pixmap.loadFromData(imageData, "JPEG");
-    pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation); // scalarea pentru interfata
 
     // setam imaginea
     switch (numberImage) {
-    case n_image1: ui->image1->setPixmap(pixmap); break;
-    case n_image2: ui->image2->setPixmap(pixmap); break;
-    case n_image3: ui->image3->setPixmap(pixmap); break;
-    case n_image4: ui->image4->setPixmap(pixmap); break;
-    case n_image5: ui->image5->setPixmap(pixmap); break;
+    case n_image1: ui->image1->setPixmap(pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation)); break;
+    case n_image2: ui->image2->setPixmap(pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation)); break;
+    case n_image3: ui->image3->setPixmap(pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation)); break;
+    case n_image4: ui->image4->setPixmap(pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation)); break;
+    case n_image5: ui->image5->setPixmap(pixmap.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation)); break;
     default: return false;
     }
 
@@ -395,22 +394,22 @@ void DocReportEcho::loadImageOpeningDocument()
             }
             QPixmap outPixmap2 = QPixmap();
             if (! outByteArray2.isEmpty() && outPixmap2.loadFromData(outByteArray2, "jpeg")){
-                ui->image2->setPixmap(outPixmap2.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->image2->setPixmap(outPixmap2.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap3 = QPixmap();
             if (! outByteArray3.isEmpty() && outPixmap3.loadFromData(outByteArray3)){
-                ui->image3->setPixmap(outPixmap3.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->image3->setPixmap(outPixmap3.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap4 = QPixmap();
             if (! outByteArray4.isEmpty() && outPixmap4.loadFromData(outByteArray4)){
-                ui->image4->setPixmap(outPixmap4.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->image4->setPixmap(outPixmap4.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             QPixmap outPixmap5 = QPixmap();
             if (! outByteArray5.isEmpty() && outPixmap5.loadFromData(outByteArray5)){
-                ui->image5->setPixmap(outPixmap5.scaled(600,450, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+                ui->image5->setPixmap(outPixmap5.scaled(640,400, Qt::KeepAspectRatio, Qt::SmoothTransformation));
                 setCountImages(m_count_images + 1);
             }
             ui->comment_image1->setPlainText(qry.value(rec.indexOf("comment_1")).toString());
@@ -705,33 +704,71 @@ void DocReportEcho::updateImageIntoTableimagesReports(const QByteArray &imageDat
 
 void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
 {
+    // verificam ID
     if (m_id == Enums::IDX::IDX_UNKNOW)
         return;
 
-    QSqlDatabase dbImg = globals().thisSqlite ? db->getDatabaseImage() : db->getDatabase();
+    // determinam baza de date
+    QSqlDatabase dbImg = globals().thisMySQL ? db->getDatabase() : db->getDatabaseImage();
 
-    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), dbImg))
+    // verificam daca exista inregistrarea
+    if (! db->existIdDocument("imagesReports", "id_reportEcho", QString::number(m_id), dbImg)) {
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(tr(""));
+        message->setTextTitle(tr("Imaginea nu poate fi eliminată din baza de date !!!"));
+        message->setDetailedText(tr("Nu au fost gasite date documentului cu ID '%1' in baza de date '%2'.")
+                                 .arg(QString::number(m_id),
+                                      dbImg.databaseName()));
+        message->exec();
+        message->deleteLater();
         return;
+    }
 
     // Curățăm imaginea și comentariul asociat
     QSqlQuery qry(dbImg);
-    qry.prepare(QString("UPDATE imagesReports SET image_%1 = ?, comment_%1 = ? WHERE id_reportEcho = ?")
-                .arg(numberImage));
+    qry.prepare(QString(R"(
+        UPDATE imagesReports SET
+            image_%1 = ?,
+            comment_%1 = ?
+        WHERE
+            id_reportEcho = ?
+    )").arg(numberImage));
     qry.addBindValue(QVariant());  // imagine ștearsă
     qry.addBindValue(QVariant());  // comentariu șters
     qry.addBindValue(m_id);
 
-    if (!qry.exec()) {
-        QMessageBox::warning(this, tr("Eliminarea imaginei"),
-                             tr("Imaginea nu a fost eliminată în baza de date!"),
-                             QMessageBox::Ok);
-        qWarning(logWarning()) << qry.lastError().text();
+    if (! qry.exec()) {
+
+        // pregatim textul erorii
+        err.clear();
+        err << this->metaObject()->className()
+            << "[removeImageIntoTableimagesReports]:"
+            << tr("Imaginea nu a fost eliminată din baza de date")
+               .arg(qry.lastError().text().isEmpty()
+                        ? ": eroarea indisponibila"
+                        : ": " + qry.lastError().text());
+
+        CustomMessage *message = new CustomMessage(this);
+        message->setWindowTitle(tr(""));
+        message->setTextTitle(tr("Imaginea nu poate fi eliminată din baza de date !!!"));
+        message->setDetailedText(err.join("\n"));
+        message->exec();
+        message->deleteLater();
+
+        qWarning(logWarning()) << err;
         return;
     }
 
     // Verificăm dacă toate imaginile sunt goale → ștergem rândul complet
     QSqlQuery checkQry(dbImg);
-    checkQry.prepare("SELECT image_1, image_2, image_3, image_4, image_5 FROM imagesReports WHERE id_reportEcho = ?");
+    checkQry.prepare(R"(
+        SELECT
+            image_1, image_2, image_3, image_4, image_5
+        FROM
+            imagesReports
+        WHERE id_reportEcho = ?
+    )");
     checkQry.addBindValue(m_id);
 
     if (checkQry.exec() && checkQry.next()) {
@@ -744,9 +781,10 @@ void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
             }
         }
 
+        // eliminam complect inregistrarea
         if (allEmpty) {
             QSqlQuery delQry(dbImg);
-            delQry.prepare("DELETE FROM imagesReports WHERE id_reportEcho = ?");
+            delQry.prepare(R"(DELETE FROM imagesReports WHERE id_reportEcho = ?)");
             delQry.addBindValue(m_id);
             if (delQry.exec()) {
                 qInfo(logInfo()) << tr("Toate imaginile au fost eliminate. Rândul complet a fost șters.");
@@ -756,8 +794,11 @@ void DocReportEcho::removeImageIntoTableimagesReports(const int numberImage)
         }
     }
 
+    // prezentam mesaj
     popUp->setPopupText(tr("Imaginea a fost eliminată cu succes din baza de date."));
     popUp->show();
+
+    // logarea
     qInfo(logInfo()) << tr("Imaginea %1 a fost eliminată cu succes din baza de date.").arg(numberImage);
 }
 

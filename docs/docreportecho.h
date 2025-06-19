@@ -497,6 +497,7 @@ private:
     qint64         m_duration;
     int            m_count_video     = 0;
 
+    QStringList err;
     InfoWindow *info_win;
 
     DataPercentage *data_percentage;

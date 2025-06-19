@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>955</width>
-    <height>816</height>
+    <height>818</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -861,7 +861,7 @@ QToolButton:pressed
            </size>
           </property>
          </widget>
-         <widget class="QPlainTextEdit" name="textLog">
+         <widget class="QTextBrowser" name="textLog">
           <property name="minimumSize">
            <size>
             <width>0</width>
