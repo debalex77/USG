@@ -72,7 +72,7 @@ CONFIG += c++20
 #------ SOURCES, HEADERS, FORMS, TRANSLATIONS
 
 mac {
-    SOURCES += AppDelegate.mm
+    SOURCES += others/AppDelegate.mm
 }
 
 SOURCES += \
@@ -135,7 +135,7 @@ SOURCES += \
     docs/docreportecho.cpp \
     docs/listdoc.cpp \
     docs/listdocreportorder.cpp \
-    infowindow.cpp \
+    common/infowindow.cpp \
     main.cpp \
     models/basecombomodel.cpp \
     models/basesortfilterproxymodel.cpp \
@@ -201,7 +201,7 @@ HEADERS += \
     data/updatereleasesapp.h \
     data/userpreferences.h \
     data/version.h \
-    databaseinit.h \
+    common/databaseinit.h \
     delegates/checkboxdelegate.h \
     delegates/combodelegate.h \
     delegates/doublespinboxdelegate.h \
@@ -212,7 +212,7 @@ HEADERS += \
     docs/docreportecho.h \
     docs/listdoc.h \
     docs/listdocreportorder.h \
-    infowindow.h \
+    common/infowindow.h \
     models/basecombomodel.h \
     models/basesortfilterproxymodel.h \
     models/basesqlquerymodel.h \
@@ -231,9 +231,9 @@ win32 {
 # ... problema in LimeReport cu conectarile:
 #       exemplu - connect(m_report, QOverload<int>::of(&LimeReport::ReportEngine::renderPageFinished), this, QOverload<int>::of(&Reports::renderPageFinished));
     HEADERS += \
-    LimeReport/include/lrcallbackdatasourceintf.h \
-    LimeReport/include/lrpreviewreportwidget.h \
-    LimeReport/include/lrreportengine.h
+        3rdparty/LimeReport/include/lrcallbackdatasourceintf.h \
+        3rdparty/LimeReport/include/lrpreviewreportwidget.h \
+        3rdparty/LimeReport/include/lrreportengine.h
 }
 
 FORMS += \
@@ -270,7 +270,7 @@ FORMS += \
     docs/docreportecho.ui \
     docs/listdoc.ui \
     docs/listdocreportorder.ui \
-    infowindow.ui
+    common/infowindow.ui
 
 TRANSLATIONS += \
     translate/USG_ro_RO.ts \
@@ -286,27 +286,29 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    Fonts/Cantarell Bold.ttf \
-    Fonts/Cantarell-Bold.otf \
-    Fonts/Cantarell-BoldOblique.ttf \
-    Fonts/Cantarell-Oblique.ttf \
-    Fonts/Cantarell-Regular.ttf \
-    Fonts/freefontsdownload.txt \
-    Fonts/www.freefontsdownload.net.url \
-    USG_ro_RO.qm \
-    USG_ru_RU.qm \
-    build_maosx.sh \
-    build_project.sh \
-    build_win \
-    debian/control \
-    debian/postinst \
-    debian/preinst \
-    debian/prerm \
-    debian/usr/share/applications/org.alovada.usg.desktop \
-    debian/usr/share/doc/usg/changelog \
-    debian/usr/share/doc/usg/changelog.Debian \
-    debian/usr/share/doc/usg/copyright \
-    debian/usr/share/metainfo/org.alovada.usg.metainfo.xml \
+    build_scripts/build_maosx \
+    build_scripts/build_project \
+    build_sripts/build_maosx \
+    resources/fonts/Cantarell Bold.ttf \
+    resources/fonts/Cantarell-Bold.otf \
+    resources/fonts/Cantarell-BoldOblique.ttf \
+    resources/fonts/Cantarell-Oblique.ttf \
+    resources/fonts/Cantarell-Regular.ttf \
+    resources/fonts/freefontsdownload.txt \
+    resources/fonts/www.freefontsdownload.net.url \
+    translate/USG_ro_RO.qm \
+    translate/USG_ru_RU.qm \
+    build_scripts/ripts/build_project.sh \
+    build_scripts/build_win \
+    build_scripts/debian/control \
+    build_scripts/debian/postinst \
+    build_scripts/debian/preinst \
+    build_scripts/debian/prerm \
+    build_scripts/debian/usr/share/applications/org.alovada.usg.desktop \
+    build_scripts/debian/usr/share/doc/usg/changelog \
+    build_scripts/debian/usr/share/doc/usg/changelog.Debian \
+    build_scripts/debian/usr/share/doc/usg/copyright \
+    build_scripts/debian/usr/share/metainfo/org.alovada.usg.metainfo.xml \
     installer/linux/config/config.xml \
     installer/linux/config/eco.png \
     installer/linux/config/eco_256x256.png \
@@ -316,12 +318,12 @@ DISTFILES += \
     installer/linux/packages/com.alovada.usg/meta/installscript.qs \
     installer/linux/packages/com.alovada.usg/meta/license.txt \
     installer/linux/packages/com.alovada.usg/meta/package.xml \
-    styles/style_dark.qss \
+    resources/styles/style_dark.qss \
     version.txt
 
 RESOURCES += \
     installer/linux/config/installer.qrc \
-    resource.qrc
+    resources/resource.qrc
 
 macx{
     CONFIG += app_bundle
@@ -330,78 +332,65 @@ macx{
 #----------------------------------------------------------------------------------------
 #---------------------------------- LIMEREPORT ------------------------------------------
 
-INCLUDEPATH += $$PWD/LimeReport/include
-DEPENDPATH += $$PWD/LimeReport/include
+INCLUDEPATH += $$PWD/3rdparty/LimeReport/include
+DEPENDPATH  += $$PWD/3rdparty/LimeReport/include
 
-win32:CONFIG(release, debug|release): LIBS += -L$$PWD/LimeReport/release/ -llimereport
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/LimeReport/debug/ -llimereportd
-else:unix:!macx: LIBS += -L$$PWD/LimeReport/release/ -llimereport
-else:unix:!macx: LIBS += -L$$PWD/LimeReport/debug/ -llimereportd
+# Adaugă ambele directoare pentru build în INCLUDEPATH (dacă header-ele pot varia)
+INCLUDEPATH += $$PWD/3rdparty/LimeReport/debug
+INCLUDEPATH += $$PWD/3rdparty/LimeReport/release
 
-win32:CONFIG(release, release|debug): LIBS += -L$$PWD/LimeReport/release/ -lQtZint
-else:win32:CONFIG(debug, debug|release): LIBS += -L$$PWD/LimeReport/debug/ -lQtZintd
-else:unix:!macx: LIBS += -L$$PWD/LimeReport/release/ -lQtZint
-else:unix:!macx: LIBS += -L$$PWD/LimeReport/debug/ -lQtZintd
-
-unix:{
-
-    #-------------------------------------------
-    macx: LIBS += -L$$PWD/LimeReport/debug/ -llimereportd
-    macx: LIBS += -L$$PWD/LimeReport/debug/ -lQtZintd
-
-    INCLUDEPATH += $$PWD/LimeReport/debug
-    DEPENDPATH += $$PWD/LimeReport/debug
-
-    #-------------------------------------------
-    macx: LIBS += -L$$PWD/LimeReport/release/ -llimereport
-    macx: LIBS += -L$$PWD/LimeReport/release/ -lQtZint
-
-    INCLUDEPATH += $$PWD/LimeReport/release
-    DEPENDPATH += $$PWD/LimeReport/release
-
-    linux{
-        QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN
-        QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/LimeReport/debug
-        QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/../LimeReport/debug
-        QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/LimeReport/release
-        QMAKE_LFLAGS += -Wl,--rpath=\\\$\$ORIGIN/../LimeReport/release
-        QMAKE_LFLAGS_RPATH += #. .. ./libs
-    }
+unix:!macx {
+    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN
+    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN/3rdparty/LimeReport/debug
+    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN/3rdparty/LimeReport/release
 }
 
-LIBS += -L$$PWD/LimeReport
+# LimeReport Library
 CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/LimeReport/debug/ -llimereportd
+    LIBS += -L$$PWD/3rdparty/LimeReport/debug/ -llimereportd
 } else {
-    LIBS += -L$$PWD/LimeReport/release/ -llimereport
+    LIBS += -L$$PWD/3rdparty/LimeReport/release/ -llimereport
 }
-message($$LIBS)
 
-!CONFIG(static_build) : CONFIG(zint) {
-    LIBS += -L$${DEST_LIBS}
+# QtZint Library
+CONFIG(debug, debug|release) {
+    LIBS += -L$$PWD/3rdparty/LimeReport/debug/ -lQtZintd
+} else {
+    LIBS += -L$$PWD/3rdparty/LimeReport/release/ -lQtZint
+}
+
+# macOS specific
+macx {
+    LIBS += -L$$PWD/3rdparty/LimeReport/debug/ -llimereportd -lQtZintd
+    LIBS += -L$$PWD/3rdparty/LimeReport/release/ -llimereport -lQtZint
+}
+
+# Opțional: suport pentru variabilă externă DEST_LIBS (dacă o folosești)
+!CONFIG(static_build):CONFIG(zint) {
+    isEmpty(DEST_LIBS): DEST_LIBS = $$PWD/3rdparty/LimeReport/release
     CONFIG(debug, debug|release) {
-        LIBS += -L$$PWD/LimeReport/debug/ -lQtZintd
+        LIBS += -L$${DEST_LIBS} -lQtZintd
     } else {
-        LIBS += -L$$PWD/LimeReport/release/ -lQtZint
+        LIBS += -L$${DEST_LIBS} -lQtZint
     }
 }
 
 #----------------------------------------------------------------------------------------
 #------------------------------------- OPENSSL ------------------------------------------
 
-INCLUDEPATH += $$PWD/openssl
+INCLUDEPATH += $$PWD/3rdparty/openssl
 
 # Linkare librării OpenSSL specifice platformelor
 win32 {
-    LIBS += -L$$PWD/openssl -llibssl -llibcrypto
+    LIBS += -L$$PWD/3rdparty/openssl -llibssl -llibcrypto
 }
 
 unix:!macx {
-    LIBS += -L$$PWD/openssl -lssl -lcrypto
+    LIBS += -L$$PWD/3rdparty/openssl -lssl -lcrypto
 }
 
 macx {
-    LIBS += -L$$PWD/openssl -lssl -lcrypto
+    LIBS += -L$$PWD/3rdparty/openssl -lssl -lcrypto
 }
 
 #----------------------------------------------------------------------------------------

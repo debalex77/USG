@@ -12,7 +12,7 @@
 #include <QMediaPlayer>
 #include <QMediaFormat>
 #include <QVideoWidget>
-#include <infowindow.h>
+#include <common/infowindow.h>
 #include <QGraphicsScene>
 #include <QGraphicsVideoItem>
 #include <QGraphicsView>

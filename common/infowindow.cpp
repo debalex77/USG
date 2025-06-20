@@ -37,7 +37,7 @@ InfoWindow::InfoWindow(QWidget *parent)
     ui->textBrowser->clear();
 
     (globals().show_content_info_video) ? ui->notShow->setChecked(false)
-                                       : ui->notShow->setChecked(true);
+                                        : ui->notShow->setChecked(true);
 
     ui->textBrowser->setFocus();
 
@@ -79,9 +79,7 @@ void InfoWindow::setTitle(const QString title)
 
 void InfoWindow::setTex(const QString content)
 {
-    QString str_style = globals().isSystemThemeDark
-                            ? "<div style='color:#a6a6a6;'>"
-                            : "<div>";
+    QString str_style = globals().isSystemThemeDark ? "<div style='color:#a6a6a6;'>" : "<div>";
     QString str;
     str.append(str_style);
     str.append(content);

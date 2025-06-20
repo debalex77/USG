@@ -8,7 +8,7 @@
 #include <QSpinBox>
 #include <QStyleFactory>
 #include <QProgressDialog>
-#include <infowindow.h>
+#include <common/infowindow.h>
 
 #include <data/globals.h>
 #include <models/basesqlquerymodel.h>

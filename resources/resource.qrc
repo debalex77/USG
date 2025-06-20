@@ -169,16 +169,16 @@
         <file>icons/splash_santa.png</file>
         <file>icons/splash_snow.png</file>
         <file>icons/usg_splash.png</file>
-        <file>Fonts/segoeUI/segoeui.ttf</file>
-        <file>Fonts/segoeUI/segoeuib.ttf</file>
-        <file>Fonts/segoeUI/segoeuii.ttf</file>
-        <file>Fonts/segoeUI/segoeuil.ttf</file>
-        <file>Fonts/segoeUI/segoeuisl.ttf</file>
-        <file>Fonts/segoeUI/segoeuiz.ttf</file>
-        <file>Fonts/segoeUI/seguili.ttf</file>
-        <file>Fonts/segoeUI/seguisb.ttf</file>
-        <file>Fonts/segoeUI/seguisbi.ttf</file>
-        <file>Fonts/segoeUI/seguisli.ttf</file>
+        <file>fonts/segoeUI/segoeui.ttf</file>
+        <file>fonts/segoeUI/segoeuib.ttf</file>
+        <file>fonts/segoeUI/segoeuii.ttf</file>
+        <file>fonts/segoeUI/segoeuil.ttf</file>
+        <file>fonts/segoeUI/segoeuisl.ttf</file>
+        <file>fonts/segoeUI/segoeuiz.ttf</file>
+        <file>fonts/segoeUI/seguili.ttf</file>
+        <file>fonts/segoeUI/seguisb.ttf</file>
+        <file>fonts/segoeUI/seguisbi.ttf</file>
+        <file>fonts/segoeUI/seguisli.ttf</file>
         <file>img/select.png</file>
         <file>xmls/street_cahul.xml</file>
         <file>xmls/city.xml</file>

@@ -3,6 +3,7 @@ Version: 3.0.3
 Maintainer: Codreanu Alexandru <alovada.med@gmail.com>
 Architecture: amd64
 Section: misc
+Depends: libssl3, libc6 (>= 2.31)
 Priority: optional
 Installed-Size: 11111
 Homepage: https://github.com/debalex77/USG

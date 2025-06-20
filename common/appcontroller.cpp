@@ -41,7 +41,7 @@
 #include <QSqlDatabase>
 #include <QFile>
 #include <QString>
-#include <databaseinit.h>
+#include <common/databaseinit.h>
 
 int AppController::run(int &argc, char **argv)
 {
@@ -81,11 +81,11 @@ int AppController::run(int &argc, char **argv)
 void AppController::applyGlobalFont()
 {
 #ifdef Q_OS_WIN
-    int id = QFontDatabase::addApplicationFont(":/Fonts/segoeUI/segoeui.ttf");
+    int id = QFontDatabase::addApplicationFont(":/fonts/segoeUI/segoeui.ttf");
     QFont f(QFontDatabase::applicationFontFamilies(id).value(0), 10);
     qApp->setFont(f);
 #elif defined(Q_OS_LINUX)
-    int id = QFontDatabase::addApplicationFont(":/Fonts/segoeUI/segoeui.ttf");
+    int id = QFontDatabase::addApplicationFont(":/fonts/segoeUI/segoeui.ttf");
     QFont f(QFontDatabase::applicationFontFamilies(id).value(0), 11);
     qApp->setFont(f);
 #else
