@@ -208,5 +208,7 @@
         <file>img/cloud-server.png</file>
         <file>img/critical.png</file>
         <file>img/error.png</file>
+        <file>img/sync.png</file>
+        <file>img/thread.png</file>
     </qresource>
 </RCC>

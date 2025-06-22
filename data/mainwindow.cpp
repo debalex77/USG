@@ -38,6 +38,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     QSettings settings(ORGANIZATION_NAME, USG_VERSION_FULL); // denumirea organizatiei si aplicatiei
 
+    qInfo(logInfo()) << "Se lanseaza fereastra principala a aplicatiei";
+
     if (globals().minimizeAppToTray)
         initMinimizeAppToTray();
 
@@ -612,6 +614,7 @@ void MainWindow::closeAndSaveSettingsSubwindows()
 void MainWindow::updateTimer()
 {
     if (this->isVisible()){
+
         if (pause_timer < 1){  // pauza in 2-3 secunde
             pause_timer += 1;
             return;

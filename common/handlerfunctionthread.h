@@ -24,44 +24,67 @@ public:
     explicit HandlerFunctionThread(QObject *parent = nullptr);
     ~HandlerFunctionThread();
 
-    void setRequiredVariabile(const int id_mainUser,
-                              const int id_mainOrganization,
-                              const int id_mainDoctor,
-                              const bool thisMySQL);
+    //---- constante sau date generale
+    struct GeneralData
+    {
+        int id_user;
+        int id_organization;
+        int id_doctor;
+        bool thisMySQL;
+    };
+    void setGeneralData(const GeneralData &data);
 
-    void setRequiredVariableForCatPatient(const int patient_id,
-                                          const QString patient_name,
-                                          const QString patient_fname,
-                                          const QString patient_idnp,
-                                          const QString patient_medicalPolicy,
-                                          const QDate patient_birthday,
-                                          const QString patient_address,
-                                          const QString patient_email,
-                                          const QString patient_telephone,
-                                          const QString patient_comment,
-                                          const bool thisMySQL);
+    //---- date pacientului
+    struct DataCatPatient
+    {
+        int id;
+        QString name;
+        QString fname;
+        QString idnp;
+        QString medicalPolicy;
+        QDate birthday;
+        QString address;
+        QString email;
+        QString phone;
+        QString comment;
+        bool thisMySQL;
+    };
+    void setDataCatPatient(const DataCatPatient &data);
 
-    void setRequiredVariableForExportDocuments(const bool thisMySQL,
-                                               const int id_order,
-                                               const int id_report,
-                                               const QString unitMeasure,
-                                               const QByteArray logo_byteArray,
-                                               const QByteArray stamp_main_organization,
-                                               const QByteArray stamp_main_doctor,
-                                               const QByteArray signature_main_doctor,
-                                               const QString pathTemplatesDocs,
-                                               const QString filePDF);
+    //---- date documentelor pu exportul prin e-mail
+    struct DocumentExportEmailData
+    {
+        bool thisMySQL;
+        int id_order;
+        int id_report;
+        QString nr_order;
+        QString nr_report;
+        int id_patient;
+        QString unitMeasure;
+        QByteArray logo_byteArray;
+        QByteArray stamp_organization_byteArray;
+        QByteArray stamp_doctor_byteArray;
+        QByteArray signature_doctor_byteArray;
+        QString pathTemplatesDocs;
+        QString filePDF;
+    };
+    void setDocumentExportEmailData(const DocumentExportEmailData &data);
 
-    void setTagsDocumentReport(const bool organs_internal,
-                               const bool urinary_system,
-                               const bool prostate,
-                               const bool gynecology,
-                               const bool breast,
-                               const bool thyroide,
-                               const bool gestation0,
-                               const bool gestation1,
-                               const bool gestation2,
-                               const bool gestation3);
+    //---- tag-le pe sisteme documentului orderEcho & reportEcho
+    struct TagsSystemDocument
+    {
+        bool organs_internal;
+        bool urinary_system;
+        bool prostate;
+        bool gynecology;
+        bool breast;
+        bool thyroide;
+        bool gestation0;
+        bool gestation1;
+        bool gestation2;
+        bool gestation3;
+    };
+    void setTagsSystemDocument(const TagsSystemDocument &data);
 
 public slots:
     void setDataConstants();
@@ -96,30 +119,15 @@ private:
 
 private:
 
-    // common
-    int m_id_user = -1;
-    int m_id_mainDoctor = -1;
-    int m_id_mainOrganization = -1;
+    // structura generala
+    GeneralData m_GeneralData;
 
-    // save data patient
-    int cat_patient_id = -1;
-    QString cat_patient_name = nullptr;
-    QString cat_patient_fname = nullptr;
-    QString cat_patient_idnp = nullptr;
-    QDate   cat_patient_birthday;
-    QString cat_patient_address = nullptr;
-    QString cat_patient_email = nullptr;
-    QString cat_patient_medicalPolicy = nullptr;
-    QString cat_patient_telephone = nullptr;
-    QString cat_patient_comment = nullptr;
+    // structura datelor pacientului
+    DataCatPatient m_DataCatPatient;
 
-    // documents
-    bool m_thisMySQL = false;
-    int m_id_order  = -1;
-    int m_nr_order  = -1;
-    int m_id_report = -1;
-    int m_nr_report = -1;
-    int m_id_patient = -1;
+    // datele documentului pu export prin e-mail
+    DocumentExportEmailData m_DocumentExportEmailData;
+
     int exist_logo = 0;
     int exist_stamp_organization = 0;
     int exist_stamp_doctor = 0;
@@ -134,16 +142,7 @@ private:
     QString m_filePDF = nullptr;
 
     //tag documentului raport ecografic
-    bool m_organs_internal = false;
-    bool m_urinary_system  = false;
-    bool m_prostate        = false;
-    bool m_gynecology      = false;
-    bool m_breast          = false;
-    bool m_thyroide        = false;
-    bool m_gestation0      = false;
-    bool m_gestation1      = false;
-    bool m_gestation2      = false;
-    bool m_gestation3      = false;
+    TagsSystemDocument m_TagsSystemDocument;
 
     // class
     DataBase *db;

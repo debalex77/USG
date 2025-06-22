@@ -6379,11 +6379,11 @@ bool DataBase::enableForeignKeys()
     QSqlQuery qry;
     qry.prepare("PRAGMA foreign_keys = ON;");
     if(! qry.exec()){
-        qCritical(logCritical()) << "Error - enable foreign_keys.";
+        qCritical(logCritical()) << "Eroare la activare a cheilor externe (foreign_keys).";
         qCritical(logCritical()) << qry.lastError().text();
         return false;
     } else {
-        qInfo(logInfo()) << "Enable foreign_keys succes.";
+        qInfo(logInfo()) << "Cheile externe(foreign_keys) au fost activate cu succes.";
         return true;
     }
     return false;

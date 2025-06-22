@@ -94,26 +94,38 @@ AuthorizationUser::~AuthorizationUser()
     delete ui;
 }
 
+DatabaseProvider *AuthorizationUser::dbProvider()
+{
+    return &m_dbProvider;
+}
+
 void AuthorizationUser::setDataConstants()
 {
-    // 📌 1 Creăm thread-ul pentru trimiterea emailului
+    // 1. Creăm thread-ul pentru trimiterea emailului
     QThread *thread = new QThread();
-    handler_functionThread = new HandlerFunctionThread();
-    // 📌 2 Mutăm `handler_functionThread` în thread-ul nou
-    handler_functionThread->moveToThread(thread);
-    // 📌 3 setam `handler_functionThread` cu variabile necesrare
-    handler_functionThread->setRequiredVariabile(globals().idUserApp,
-                                                 globals().c_id_organizations,
-                                                 globals().c_id_doctor,
-                                                 globals().thisMySQL);
-    // 📌 4 Conectăm semnalele și sloturile
-    connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::setDataConstants);
-    connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, this, &AuthorizationUser::onDataReceived);
-    connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, thread, &QThread::quit);
-    // connect(handler_functionThread, &HandlerFunctionThread::finishSetDataConstants, handler_functionThread, &QObject::deleteLater);
-    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
-    // 📌 5 Pornim thread-ul
+    // 2. Setam date necesare pentru procesarea
+    DataConstantsWorker::GeneralData data;
+    data.thisMySQL       = globals().thisMySQL;
+    data.id_user         = globals().idUserApp;
+    data.id_doctor       = globals().c_id_doctor;
+    data.id_organization = globals().c_id_organizations;
+
+    auto worker = new DataConstantsWorker(dbProvider(), data);
+
+    // 3. mutal in flux nou
+    worker->moveToThread(thread);
+
+    // 4. conectarea pentru procesare si emiterea signalului de finisare
+    connect(thread,  &QThread::started,  worker, &DataConstantsWorker::process);
+    connect(worker, &DataConstantsWorker::finished, this, &AuthorizationUser::onDataReceived, Qt::QueuedConnection);
+
+    // 5. clean‑up worker & thread
+    connect(worker, &DataConstantsWorker::finished, thread, &QThread::quit);
+    connect(worker, &DataConstantsWorker::finished, worker, &QObject::deleteLater);
+    connect(thread,  &QThread::finished, thread, &QObject::deleteLater);
+
+    // 6. Pornim thread-ul
     thread->start();
 }
 
@@ -159,39 +171,19 @@ void AuthorizationUser::textChangedPasswd()
 
 void AuthorizationUser::onDataReceived()
 {
-    qInfo(logInfo()) << "Au fost actualizate variabile globale: "
+    qInfo(logInfo()) << "Actualizate variabile globale: "
                         "constante, "
-                        "datele organizatiei implicite, "
-                        "datele doctorului implicit, "
+                        "datele organizatiei, "
+                        "datele doctorului, "
                         "datele cloud serverului.";
-    // for (const auto &constant : data_constants) {
-    //     // constante
-    //     globals().c_id_organizations = constant.c_id_organizations;
-    //     globals().c_id_doctor        = constant.c_id_doctor;
-    //     globals().c_id_nurse         = constant.c_id_nurse;
-    //     globals().c_brandUSG         = constant.c_brandUSG;
-    //     globals().c_logo_byteArray   = constant.c_logo;
-    //     // organizatia
-    //     globals().main_name_organization   = constant.organization_name;
-    //     globals().main_addres_organization = constant.organization_address;
-    //     globals().main_phone_organization  = constant.organization_phone;
-    //     globals().main_email_organization  = constant.organization_email;
-    //     globals().main_stamp_organization  = constant.organization_stamp;
-    //     // doctor
-    //     globals().signature_main_doctor      = constant.doctor_signatute;
-    //     globals().stamp_main_doctor          = constant.doctor_stamp;
-    //     globals().main_name_doctor           = constant.doctor_nameFull;
-    //     globals().main_name_abbreviat_doctor = constant.doctor_nameAbbreviate;
-    //     // cloud server
-    //     globals().cloud_host           = constant.cloud_host;
-    //     globals().cloud_nameBase       = constant.cloud_databaseName;
-    //     globals().cloud_port           = constant.cloud_port;
-    //     globals().cloud_optionConnect  = constant.cloud_connectionOption;
-    //     globals().cloud_user           = constant.cloud_user;
-    //     globals().cloud_passwd         = QString::fromUtf8(crypto_manager->decryptPassword(constant.cloud_password,
-    //                                                                                db->getHashUserApp(),
-    //                                                                                constant.cloud_iv));
-    // }
+
+    /**** !!! NOTA !!! *****************************************************
+     *
+     *  Distrugem manual dupa ce au fost finisat setarea variabilor globale
+     *  si dupa emiterea signalului DataConstantsWorker::finished
+     *
+    **********************************************************************/
+    this->deleteLater();
 }
 
 bool AuthorizationUser::onControlAccept()
@@ -273,16 +265,16 @@ bool AuthorizationUser::onControlAccept()
     }
 
     //*****************************************************************************************
-    // 6. Setam variabile globale
+    // 6. Setam variabile globale necesare
     globals().idUserApp   = m_Id;
     globals().nameUserApp = items.constFind("name").value();
     globals().memoryUser  = ui->checkBoxMemory->isChecked();
 
-    // ID si nume utilizatorului cryptat
+    // ---- ID si nume utilizatorului cryptat
     QString id_encode        = db->encode_string(QString::number(m_Id));
     QString name_user_encode = db->encode_string(ui->editLogin->text());
 
-    // salvam in fisierul .conf
+    // ---- salvam in fisierul .conf
     AppSettings *app_settings = new AppSettings(this);
     app_settings->setKeyAndValue("on_start", "idUserApp", id_encode);
     app_settings->setKeyAndValue("on_start", "nameUserApp", name_user_encode);
@@ -294,13 +286,14 @@ bool AuthorizationUser::onControlAccept()
                     .arg(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"),
                          QString::number(m_Id)));
     if (! qry.exec())
-        qInfo(logInfo()) << tr("Nu este inregistrata timpul si data conectarii utilizatorului - %1").arg(qry.lastError().text());
+        qInfo(logInfo()) << tr("Nu este inregistrat timpul si data conectarii utilizatorului - %1").arg(qry.lastError().text());
 
 
     qInfo(logInfo()) << tr("Accesul la aplicatia. Autorizarea reusita a utilizatorului '%1' cu id='%2'.")
                         .arg(ui->editLogin->text(), QString::number(m_Id));
 
-    // setam datele constantelor
+    //*****************************************************************************************
+    // 7. setam datele constantelor
     setDataConstants();
 
     return true;

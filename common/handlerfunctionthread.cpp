@@ -37,87 +37,26 @@ HandlerFunctionThread::~HandlerFunctionThread()
 }
 
 // **********************************************************************************
-// --- functiile pentru setarea variabilelor locale
+// --- completarea datelor: generale, tag-le documentelor, pacientului etc.
 
-void HandlerFunctionThread::setRequiredVariabile(const int id_mainUser,
-                                                 const int id_mainOrganization,
-                                                 const int id_mainDoctor, const bool thisMySQL)
+void HandlerFunctionThread::setGeneralData(const GeneralData &data)
 {
-    m_id_user = id_mainUser;
-    m_id_mainDoctor = id_mainDoctor;
-    m_id_mainOrganization = id_mainOrganization;
-    m_thisMySQL = thisMySQL;
+    m_GeneralData = data;
 }
 
-void HandlerFunctionThread::setRequiredVariableForCatPatient(const int patient_id,
-                                                             const QString patient_name,
-                                                             const QString patient_fname,
-                                                             const QString patient_idnp,
-                                                             const QString patient_medicalPolicy,
-                                                             const QDate patient_birthday,
-                                                             const QString patient_address,
-                                                             const QString patient_email,
-                                                             const QString patient_telephone,
-                                                             const QString patient_comment,
-                                                             const bool thisMySQL)
+void HandlerFunctionThread::setDataCatPatient(const DataCatPatient &data)
 {
-    cat_patient_id = patient_id;
-    cat_patient_name = patient_name;
-    cat_patient_fname = patient_fname;
-    cat_patient_idnp = patient_idnp;
-    cat_patient_medicalPolicy = patient_medicalPolicy;
-    cat_patient_birthday = patient_birthday;
-    cat_patient_address = patient_address;
-    cat_patient_email = patient_email;
-    cat_patient_telephone = patient_telephone;
-    cat_patient_comment = patient_comment;
-    m_thisMySQL = thisMySQL;
+    m_DataCatPatient = data;
 }
 
-void HandlerFunctionThread::setRequiredVariableForExportDocuments(const bool thisMySQL,
-                                                                  const int id_order,
-                                                                  const int id_report,
-                                                                  const QString unitMeasure,
-                                                                  const QByteArray logo_byteArray,
-                                                                  const QByteArray stamp_main_organization,
-                                                                  const QByteArray stamp_main_doctor,
-                                                                  const QByteArray signature_main_doctor,
-                                                                  const QString pathTemplatesDocs,
-                                                                  const QString filePDF)
+void HandlerFunctionThread::setDocumentExportEmailData(const DocumentExportEmailData &data)
 {
-    m_thisMySQL = thisMySQL;
-    m_id_order = id_order;
-    m_id_report = id_report;
-    m_unitMeasure = unitMeasure;
-    m_logo_byteArray = logo_byteArray;
-    m_stamp_main_organization = stamp_main_organization;
-    m_stamp_main_doctor = stamp_main_doctor;
-    m_signature_main_doctor = signature_main_doctor;
-    m_pathTemplatesDocs = pathTemplatesDocs;
-    m_filePDF = filePDF;
+    m_DocumentExportEmailData = data;
 }
 
-void HandlerFunctionThread::setTagsDocumentReport(const bool organs_internal,
-                                                  const bool urinary_system,
-                                                  const bool prostate,
-                                                  const bool gynecology,
-                                                  const bool breast,
-                                                  const bool thyroide,
-                                                  const bool gestation0,
-                                                  const bool gestation1,
-                                                  const bool gestation2,
-                                                  const bool gestation3)
+void HandlerFunctionThread::setTagsSystemDocument(const TagsSystemDocument &data)
 {
-    m_organs_internal = organs_internal;
-    m_urinary_system = urinary_system;
-    m_prostate = prostate;
-    m_gynecology = gynecology;
-    m_breast = breast;
-    m_thyroide = thyroide;
-    m_gestation0 = gestation0;
-    m_gestation1 = gestation1;
-    m_gestation2 = gestation2;
-    m_gestation3 = gestation3;
+    m_TagsSystemDocument = data;
 }
 
 // **********************************************************************************
@@ -128,21 +67,21 @@ void HandlerFunctionThread::setDataConstants()
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     {
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_GeneralData.thisMySQL);
         {
             QSqlQuery qry(dbConnection);
             qry.prepare(R"(SELECT * FROM constants WHERE id_users = ?)");
-            qry.addBindValue(m_id_user);
+            qry.addBindValue(m_GeneralData.id_user);
             if (! qry.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
                     globals().c_id_organizations = qry.value(rec.indexOf("id_organizations")).toInt();
-                    globals().c_id_doctor = qry.value(rec.indexOf("id_doctors")).toInt();
-                    globals().c_id_nurse = qry.value(rec.indexOf("id_nurses")).toInt();
-                    globals().c_brandUSG = qry.value(rec.indexOf("brandUSG")).toString();
-                    globals().c_logo_byteArray = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
+                    globals().c_id_doctor        = qry.value(rec.indexOf("id_doctors")).toInt();
+                    globals().c_id_nurse         = qry.value(rec.indexOf("id_nurses")).toInt();
+                    globals().c_brandUSG         = qry.value(rec.indexOf("brandUSG")).toString();
+                    globals().c_logo_byteArray   = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
                 }
             }
 
@@ -152,20 +91,20 @@ void HandlerFunctionThread::setDataConstants()
                 FROM
                     organizations WHERE id = ?
             )");
-            if (m_id_mainOrganization == -1)
+            if (m_GeneralData.id_organization == -1)
                 qry.addBindValue(globals().c_id_organizations);
             else
-                qry.addBindValue(m_id_mainOrganization);
+                qry.addBindValue(m_GeneralData.id_organization);
             if (! qry.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().main_name_organization = qry.value(rec.indexOf("name")).toString();
+                    globals().main_name_organization   = qry.value(rec.indexOf("name")).toString();
                     globals().main_addres_organization = qry.value(rec.indexOf("address")).toString();
-                    globals().main_phone_organization = qry.value(rec.indexOf("telephone")).toString();
-                    globals().main_email_organization = qry.value(rec.indexOf("email")).toString();
-                    globals().main_stamp_organization = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().main_phone_organization  = qry.value(rec.indexOf("telephone")).toString();
+                    globals().main_email_organization  = qry.value(rec.indexOf("email")).toString();
+                    globals().main_stamp_organization  = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
                 }
             }
 
@@ -184,10 +123,10 @@ void HandlerFunctionThread::setDataConstants()
                     doctors.deletionMark = 0 AND
                     doctors.id = ?
             )");
-            if (m_id_mainDoctor == -1)
+            if (m_GeneralData.id_doctor == -1)
                 qry.addBindValue(globals().c_id_doctor);
             else
-                qry.addBindValue(m_id_mainDoctor);
+                qry.addBindValue(m_GeneralData.id_doctor);
             if (! qry.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
@@ -195,8 +134,8 @@ void HandlerFunctionThread::setDataConstants()
                     QSqlRecord rec = qry.record();
                     globals().main_name_doctor           = qry.value(rec.indexOf("fullName")).toString();
                     globals().main_name_abbreviat_doctor = qry.value(rec.indexOf("nameAbbreviated")).toString();
-                    globals().stamp_main_doctor     = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
-                    globals().signature_main_doctor = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
+                    globals().stamp_main_doctor          = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().signature_main_doctor      = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
                 }
             }
 
@@ -214,7 +153,7 @@ void HandlerFunctionThread::setDataConstants()
                     cloudServer.id_users = ?
             )");
             qry_cloud.addBindValue(globals().c_id_organizations);
-            qry_cloud.addBindValue(m_id_user);
+            qry_cloud.addBindValue(m_GeneralData.id_user);
             if (! qry_cloud.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
             } else {
@@ -236,15 +175,17 @@ void HandlerFunctionThread::setDataConstants()
 
         }  // qry se destruge aici
 
-        emit finishSetDataConstants();
-
         if (dbConnection.isOpen()) {
             dbConnection.close();
         }
 
     } // dbConnection se destruge aici
 
+    // distrugem thread-ul
     db->removeDatabaseThread(threadConnectionName);
+
+    // emitem signal de finisare
+    emit finishSetDataConstants();
 
     QMetaObject::invokeMethod(this, "deleteLater", Qt::QueuedConnection);
 }
@@ -254,24 +195,24 @@ void HandlerFunctionThread::saveDataPatient()
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     { // -- bloc pentru dbConnection
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_DataCatPatient.thisMySQL);
 
         { // -- bloc pentru QSqlQuery
 
             if (! patientExistsInDB(dbConnection)){
                 if (insertDataPatientInDB(dbConnection)){
-                    emit finishInsertDataCatPatient(true, cat_patient_id);
-                    if (! m_thisMySQL) {
-                        syncWithMySQL(cat_patient_id);  // sincronizare în cloud
+                    emit finishInsertDataCatPatient(true, m_DataCatPatient.id);
+                    if (! m_DataCatPatient.thisMySQL) {
+                        syncWithMySQL(m_DataCatPatient.id);  // sincronizare în cloud
                     }
                 } else {
-                    emit finishInsertDataCatPatient(false, cat_patient_id);
+                    emit finishInsertDataCatPatient(false, m_DataCatPatient.id);
                 }
             } else {
-                emit finishExistPatientInBD(cat_patient_name,
-                                            cat_patient_fname,
-                                            cat_patient_birthday,
-                                            cat_patient_idnp);
+                emit finishExistPatientInBD(m_DataCatPatient.name,
+                                            m_DataCatPatient.fname,
+                                            m_DataCatPatient.birthday,
+                                            m_DataCatPatient.idnp);
             }
 
         } // -- distrugerea QSqlQuery
@@ -318,7 +259,7 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
     qrySelect.addBindValue(localPatientId);
     if (! qrySelect.exec() || ! qrySelect.next()) {
         qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul '%1' nu a fost găsit în baza locală: ")
-                                      .arg(cat_patient_name + " " + cat_patient_fname)
+                                      .arg(m_DataCatPatient.name + " " + m_DataCatPatient.fname)
                                << qrySelect.lastError().text();
         dbCloud.close();
         QSqlDatabase::removeDatabase("cloud_sync_conn");
@@ -330,10 +271,10 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
     qryIDNP_cloud.prepare(R"(
         SELECT 1 FROM pacients WHERE IDNP = ? LIMIT 1
     )");
-    qryIDNP_cloud.addBindValue(cat_patient_idnp);
+    qryIDNP_cloud.addBindValue(m_DataCatPatient.idnp);
     if (qryIDNP_cloud.exec() && qryIDNP_cloud.next()) {
         qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul cu IDNP:%1 deja exista in baza de date 'cloud'.")
-                                      .arg(cat_patient_idnp);
+                                      .arg(m_DataCatPatient.idnp);
         return;
     }
 
@@ -343,13 +284,13 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
         SELECT 1 FROM pacients
         WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1
     )");
-    qryName_cloud.addBindValue(cat_patient_name);
-    qryName_cloud.addBindValue(cat_patient_fname);
-    qryName_cloud.addBindValue(cat_patient_birthday);
+    qryName_cloud.addBindValue(m_DataCatPatient.name);
+    qryName_cloud.addBindValue(m_DataCatPatient.fname);
+    qryName_cloud.addBindValue(m_DataCatPatient.birthday);
     if (qryName_cloud.exec() && qryName_cloud.next()) {
         qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul '%1' din %2 deja exista in baza de date 'cloud'.")
-                                      .arg(cat_patient_name + " " + cat_patient_fname,
-                                           cat_patient_birthday.toString("dd.MM.yyyy"));
+                                      .arg(m_DataCatPatient.name + " " + m_DataCatPatient.fname,
+                                           m_DataCatPatient.birthday.toString("dd.MM.yyyy"));
         return;
     }
 
@@ -381,11 +322,11 @@ void HandlerFunctionThread::syncWithMySQL(int localPatientId)
 
     if (! qryCloud.exec()) {
         qWarning(logWarning()) << QStringLiteral("[SYNC] Inserarea datelor pacientului '%1' în MySQL (cloud) a eșuat: ")
-                                      .arg(cat_patient_name + " " + cat_patient_fname)
+                                      .arg(m_DataCatPatient.name + " " + m_DataCatPatient.fname)
                                << qryCloud.lastError().text();
     } else {
         qInfo(logInfo()) << QStringLiteral("[SYNC] Pacientul '%1' a fost sincronizat cu succes în cloud.")
-                                .arg(cat_patient_name + " " + cat_patient_fname);
+                                .arg(m_DataCatPatient.name + " " + m_DataCatPatient.fname);
     }
 
     // 8. inchidem bd cloud si eliminam conectarea
@@ -398,7 +339,7 @@ void HandlerFunctionThread::updateDataPatientInDB()
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     { // -- bloc pentru dbConnection
-        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
+        QSqlDatabase dbConnection = db->getDatabaseThread(threadConnectionName, m_DataCatPatient.thisMySQL);
 
         { // -- bloc pentru QSqlQuery
             QSqlQuery qry(dbConnection);
@@ -418,17 +359,17 @@ void HandlerFunctionThread::updateDataPatientInDB()
                 WHERE id = ?
             )");
             qry.addBindValue(0);
-            qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);
-            qry.addBindValue(cat_patient_name);
-            qry.addBindValue(cat_patient_fname);
+            qry.addBindValue((m_DataCatPatient.idnp.isEmpty()) ? QVariant() : m_DataCatPatient.idnp);
+            qry.addBindValue(m_DataCatPatient.name);
+            qry.addBindValue(m_DataCatPatient.fname);
             qry.addBindValue(QVariant());
-            qry.addBindValue((cat_patient_medicalPolicy.isEmpty()) ? QVariant() : cat_patient_medicalPolicy);
-            qry.addBindValue(cat_patient_birthday); //???
-            qry.addBindValue((cat_patient_address.isEmpty()) ? QVariant() : cat_patient_address);
-            qry.addBindValue((cat_patient_telephone.isEmpty()) ? QVariant() : cat_patient_telephone);
-            qry.addBindValue((cat_patient_email.isEmpty()) ? QVariant() : cat_patient_email);
-            qry.addBindValue((cat_patient_comment.isEmpty()) ? QVariant() : cat_patient_comment);
-            qry.addBindValue(cat_patient_id);
+            qry.addBindValue((m_DataCatPatient.medicalPolicy.isEmpty()) ? QVariant() : m_DataCatPatient.medicalPolicy);
+            qry.addBindValue(m_DataCatPatient.birthday); //???
+            qry.addBindValue((m_DataCatPatient.address.isEmpty()) ? QVariant() : m_DataCatPatient.address);
+            qry.addBindValue((m_DataCatPatient.phone.isEmpty()) ? QVariant() : m_DataCatPatient.phone);
+            qry.addBindValue((m_DataCatPatient.email.isEmpty()) ? QVariant() : m_DataCatPatient.email);
+            qry.addBindValue((m_DataCatPatient.comment.isEmpty()) ? QVariant() : m_DataCatPatient.comment);
+            qry.addBindValue(m_DataCatPatient.id);
             if (qry.exec()){
                 emit finishUpdateDataCatPatient(true);
             }
@@ -451,7 +392,7 @@ void HandlerFunctionThread::exportDocumentsToPDF()
     // 📌 1 Generam denumirile conexiunilor in afara blocului
     const QString threadConnectionName = QString("connection_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
     const QString threadImageConnectionName = QString("connection_image_%1").arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
-    if (m_thisMySQL)
+    if (m_DocumentExportEmailData.thisMySQL)
         Q_UNUSED(threadImageConnectionName);
 
     // 💡
@@ -465,14 +406,14 @@ void HandlerFunctionThread::exportDocumentsToPDF()
     {
         QSqlDatabase dbConnection;
         QSqlDatabase dbImageConnection;
-        dbConnection = db->getDatabaseThread(threadConnectionName, m_thisMySQL);
-        if (! m_thisMySQL) {
+        dbConnection = db->getDatabaseThread(threadConnectionName, m_DocumentExportEmailData.thisMySQL);
+        if (! m_DocumentExportEmailData.thisMySQL) {
             dbImageConnection = db->getDatabaseImageThread(threadImageConnectionName);
         }
 
         exportDocumentOrder(dbConnection);
         exportDocumentReport(dbConnection);
-        if (m_thisMySQL)
+        if (m_DocumentExportEmailData.thisMySQL)
             exportDocumentImages(dbConnection);
         else
             exportDocumentImages(dbImageConnection);
@@ -481,13 +422,13 @@ void HandlerFunctionThread::exportDocumentsToPDF()
             dbConnection.close();
         }
 
-        if (! m_thisMySQL && dbImageConnection.isOpen()) {
+        if (! m_DocumentExportEmailData.thisMySQL && dbImageConnection.isOpen()) {
             dbImageConnection.close();
         }
     } // 💡 la nivel acesta se distruge: dbConnection & dbImageConnection
 
     db->removeDatabaseThread(threadConnectionName);
-    if (! m_thisMySQL)
+    if (! m_DocumentExportEmailData.thisMySQL)
         db->removeDatabaseThread(threadImageConnectionName);
 
     // emitem signal de exportare cu succes
@@ -500,13 +441,13 @@ bool HandlerFunctionThread::patientExistsInDB(QSqlDatabase dbConnection)
 {
     QSqlQuery qry(dbConnection);
 
-    if (! cat_patient_idnp.isEmpty()) {  // 1. daca este idnp - (principal)
+    if (! m_DataCatPatient.idnp.isEmpty()) {  // 1. daca este idnp - (principal)
 
         qry.prepare(R"(
             SELECT 1 FROM pacients
             WHERE IDNP = ? LIMIT 1
         )");
-        qry.addBindValue(cat_patient_idnp);
+        qry.addBindValue(m_DataCatPatient.idnp);
 
     } else {  // 2. daca nu este idnp (cautarea dupa: nume, prenume, data nasterii)
 
@@ -515,9 +456,9 @@ bool HandlerFunctionThread::patientExistsInDB(QSqlDatabase dbConnection)
             SELECT 1 FROM pacients
             WHERE name = ? AND fName = ? AND birthday = ? LIMIT 1
         )");
-        qry_no_idnp.addBindValue(cat_patient_name);
-        qry_no_idnp.addBindValue(cat_patient_fname);
-        qry_no_idnp.addBindValue(cat_patient_birthday);
+        qry_no_idnp.addBindValue(m_DataCatPatient.name);
+        qry_no_idnp.addBindValue(m_DataCatPatient.fname);
+        qry_no_idnp.addBindValue(m_DataCatPatient.birthday);
 
     }
 
@@ -543,18 +484,18 @@ bool HandlerFunctionThread::insertDataPatientInDB(QSqlDatabase dbConnection)
             comment)
         VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
     )");
-    qry.addBindValue(cat_patient_id);
+    qry.addBindValue(m_DataCatPatient.id);
     qry.addBindValue(0);
-    qry.addBindValue((cat_patient_idnp.isEmpty()) ? QVariant() : cat_patient_idnp);
-    qry.addBindValue(cat_patient_name);
-    qry.addBindValue(cat_patient_fname);
+    qry.addBindValue((m_DataCatPatient.idnp.isEmpty()) ? QVariant() : m_DataCatPatient.idnp);
+    qry.addBindValue(m_DataCatPatient.name);
+    qry.addBindValue(m_DataCatPatient.fname);
     qry.addBindValue(QVariant());
-    qry.addBindValue((cat_patient_medicalPolicy.isEmpty()) ? QVariant() : cat_patient_medicalPolicy);
-    qry.addBindValue(cat_patient_birthday); //???
-    qry.addBindValue((cat_patient_address.isEmpty()) ? QVariant() : cat_patient_address);
-    qry.addBindValue((cat_patient_telephone.isEmpty()) ? QVariant() : cat_patient_telephone);
-    qry.addBindValue((cat_patient_email.isEmpty()) ? QVariant() : cat_patient_email);
-    qry.addBindValue((cat_patient_comment.isEmpty()) ? QVariant() : cat_patient_comment);
+    qry.addBindValue((m_DataCatPatient.medicalPolicy.isEmpty()) ? QVariant() : m_DataCatPatient.medicalPolicy);
+    qry.addBindValue(m_DataCatPatient.birthday); //???
+    qry.addBindValue((m_DataCatPatient.address.isEmpty()) ? QVariant() : m_DataCatPatient.address);
+    qry.addBindValue((m_DataCatPatient.phone.isEmpty()) ? QVariant() : m_DataCatPatient.phone);
+    qry.addBindValue((m_DataCatPatient.email.isEmpty()) ? QVariant() : m_DataCatPatient.email);
+    qry.addBindValue((m_DataCatPatient.comment.isEmpty()) ? QVariant() : m_DataCatPatient.comment);
     return qry.exec();
 }
 
@@ -610,7 +551,7 @@ void HandlerFunctionThread::setModelImgForPrint()
 
 void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
 {
-    if (m_id_order == -1) {
+    if (m_DocumentExportEmailData.id_order == -1) {
         emit errorExportDocs("Nu este determinat ID documentului 'OrderEcho' pentru exportare in PDF !!!");
         return;
     }
@@ -621,47 +562,49 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
 
     {
         //-----------------------------------------------------------------------------
-        // 📌 1 setam variabila 'noncomercial_price'
+        // 1 setam variabila 'noncomercial_price'
         QSqlQuery qry(dbConnection);
-        qry.prepare("SELECT "
-                    "  orderEcho.id_typesPrices, "
-                    "  orderEcho.id_pacients, "
-                    "  orderEcho.sum, "
-                    "  orderEcho.numberDoc  AS nr_order, "
-                    "  orderEcho.dateDoc    AS dateInvestigation, "
-                    "  reportEcho.id        AS id_report, "
-                    "  reportEcho.numberDoc AS nr_report, "
-                    "  typesPrices.noncomercial,"
-                    "  fullNamePacients.name AS name_patient, "
-                    "  fullNameDoctors.nameAbbreviated AS doctore_execute, "
-                    "  pacients.email AS emailTo "
-                    "FROM "
-                    "  orderEcho "
-                    "INNER JOIN "
-                    "  typesPrices ON typesPrices.id = orderEcho.id_typesPrices "
-                    "INNER JOIN "
-                    "  reportEcho ON reportEcho.id_orderEcho = orderEcho.id "
-                    "INNER JOIN "
-                    "  fullNamePacients ON fullNamePacients.id_pacients = orderEcho.id_pacients "
-                    "INNER JOIN "
-                    "  fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors_execute "
-                    "INNER JOIN "
-                    "  pacients ON pacients.id = orderEcho.id_pacients "
-                    "WHERE "
-                    "  orderEcho.id = ?;");
-        qry.addBindValue(m_id_order);
+        qry.prepare(R"(
+            SELECT
+                orderEcho.id_typesPrices,
+                orderEcho.id_pacients,
+                orderEcho.sum,
+                orderEcho.numberDoc  AS nr_order,
+                orderEcho.dateDoc    AS dateInvestigation,
+                reportEcho.id        AS id_report,
+                reportEcho.numberDoc AS nr_report,
+                typesPrices.noncomercial,
+                fullNamePacients.name AS name_patient,
+                fullNameDoctors.nameAbbreviated AS doctore_execute,
+                pacients.email AS emailTo
+            FROM
+                orderEcho
+            INNER JOIN
+                typesPrices ON typesPrices.id = orderEcho.id_typesPrices
+            INNER JOIN
+                reportEcho ON reportEcho.id_orderEcho = orderEcho.id
+            INNER JOIN
+                fullNamePacients ON fullNamePacients.id_pacients = orderEcho.id_pacients
+            INNER JOIN
+                fullNameDoctors ON fullNameDoctors.id_doctors = orderEcho.id_doctors_execute
+            INNER JOIN
+                pacients ON pacients.id = orderEcho.id_pacients
+            WHERE
+                orderEcho.id = ?
+        )");
+        qry.addBindValue(m_DocumentExportEmailData.id_order);
         if (! qry.exec()) {
             emit errorExportDocs("SQL Error: " + qry.lastError().text());
             return;
         } else {
             while (qry.next()) {
                 QSqlRecord rec = qry.record();
-                noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
-                m_id_patient = qry.value(rec.indexOf("id_pacients")).toInt();
-                sum_order    = qry.value(rec.indexOf("sum")).toInt();
-                m_id_report  = qry.value(rec.indexOf("id_report")).toInt();
-                m_nr_order   = qry.value(rec.indexOf("nr_order")).toInt();
-                m_nr_report  = qry.value(rec.indexOf("nr_report")).toInt();
+                noncomercial_price                   = qry.value(rec.indexOf("noncomercial")).toBool();
+                m_DocumentExportEmailData.id_patient = qry.value(rec.indexOf("id_pacients")).toInt();
+                sum_order                            = qry.value(rec.indexOf("sum")).toInt();
+                m_DocumentExportEmailData.id_report  = qry.value(rec.indexOf("id_report")).toInt();
+                m_DocumentExportEmailData.nr_order   = qry.value(rec.indexOf("nr_order")).toString();
+                m_DocumentExportEmailData.nr_report  = qry.value(rec.indexOf("nr_report")).toString();
 
                 // introducem date in structura pentru transmiterea
                 data.nr_order     = qry.value(rec.indexOf("nr_order")).toString();
@@ -677,33 +620,36 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         data_agentEmail.append(data);
 
         //-----------------------------------------------------------------------------
-        // 📌 2 setam modelul 'model_img' - logotipul, stampila organizatiei,
+        // 2 setam modelul 'model_img' - logotipul, stampila organizatiei,
         // semnatura doctorului si stampila doctorului
         setModelImgForPrint();
 
         //-----------------------------------------------------------------------------
-        // 📌 3 alocam memoria
+        // 3 alocam memoria
         m_report = new LimeReport::ReportEngine(this);
         m_report->dataManager()->addModel("table_img", model_img, true);
 
         //-----------------------------------------------------------------------------
-        // 📌 4 setam model pentru organizatia
+        // 4 setam model pentru organizatia
         model_organization = new QSqlQueryModel(this);
         QSqlQuery qry_organiation(dbConnection);
-        qry_organiation.prepare("SELECT constants.id_organizations, "
-                                "  organizations.IDNP, "
-                                "  organizations.name, "
-                                "  organizations.address, "
-                                "  organizations.telephone, "
-                                "  fullNameDoctors.nameAbbreviated AS doctor,"
-                                "  organizations.email FROM constants "
-                                "INNER JOIN "
-                                "  organizations ON constants.id_organizations = organizations.id "
-                                "INNER JOIN "
-                                "  fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors "
-                                "WHERE "
-                                "  constants.id_users = ?;");
-        qry_organiation.addBindValue(m_id_user);
+        qry_organiation.prepare(R"(
+            SELECT
+                constants.id_organizations,
+                organizations.IDNP,
+                organizations.name,
+                organizations.address,
+                organizations.telephone,
+                fullNameDoctors.nameAbbreviated AS doctor,
+                organizations.email FROM constants
+            INNER JOIN
+                organizations ON constants.id_organizations = organizations.id
+            INNER JOIN
+                fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors
+            WHERE
+                constants.id_users = ?
+        )");
+        qry_organiation.addBindValue(m_GeneralData.id_user);
         if (! qry_organiation.exec()) {
             model_organization->deleteLater();
             m_report->deleteLater();
@@ -713,30 +659,36 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         model_organization->setQuery(std::move(qry_organiation));
 
         //-----------------------------------------------------------------------------
-        // 📌 5 setam model pentru pacient
+        // 5 setam model pentru pacient
         model_patient = new QSqlQueryModel(this);
         QSqlQuery qry_patient(dbConnection);
-        if (m_thisMySQL)
-            qry_patient.prepare("SELECT CONCAT(pacients.name,' ', pacients.fName) AS FullName,"
-                                "  CONCAT(SUBSTRING(pacients.birthday, 9, 2) ,'.', SUBSTRING(pacients.birthday, 6, 2) ,'.', SUBSTRING(pacients.birthday, 1, 4)) AS birthday,"
-                                "  pacients.IDNP,"
-                                "  pacients.medicalPolicy,"
-                                "  pacients.address "
-                                "FROM "
-                                "  pacients "
-                                "WHERE "
-                                "  id = ?;");
+        if (m_DocumentExportEmailData.thisMySQL)
+            qry_patient.prepare(R"(
+                SELECT
+                    CONCAT(pacients.name,' ', pacients.fName) AS FullName,
+                    DATE_FORMAT(pacients.birthday, '%d.%m.%Y') AS birthday,
+                    pacients.IDNP,
+                    pacients.medicalPolicy,
+                    pacients.address
+                FROM
+                    pacients
+                WHERE
+                    id = ?
+            )");
         else
-            qry_patient.prepare("SELECT pacients.name ||' '|| pacients.fName AS FullName,"
-                                "  substr(pacients.birthday, 9, 2) ||'.'|| substr(pacients.birthday, 6, 2) ||'.'|| substr(pacients.birthday, 1, 4) AS birthday,"
-                                "  pacients.IDNP,"
-                                "  pacients.medicalPolicy,"
-                                "  pacients.address "
-                                "FROM "
-                                "  pacients "
-                                "WHERE "
-                                "  id = ?;");
-        qry_patient.addBindValue(m_id_patient);
+            qry_patient.prepare(R"(
+                SELECT
+                    pacients.name ||' '|| pacients.fName AS FullName,
+                    strftime('%d.%m.%Y', pacients.birthday) AS birthday,
+                    pacients.IDNP,
+                    pacients.medicalPolicy,
+                    pacients.address
+                FROM
+                    pacients
+                WHERE
+                    id = ?
+            )");
+        qry_patient.addBindValue(m_DocumentExportEmailData.id_patient);
         if (! qry_patient.exec()) {
             model_organization->deleteLater();
             model_patient->deleteLater();
@@ -747,15 +699,15 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         model_patient->setQuery(std::move(qry_patient));
 
         //-----------------------------------------------------------------------------
-        // 📌 6 setam model pentru tabela documentului
+        // 6 setam model pentru tabela documentului
         model_table = new QSqlQueryModel(this);
         QSqlQuery qry_table(dbConnection);
         QString str_price;
-        if (m_thisMySQL)
+        if (m_DocumentExportEmailData.thisMySQL)
             str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price";
         else
             str_price = (noncomercial_price) ? "'0-00'" : "orderEchoTable.price ||'0'";
-        qry_table.prepare(db->getQryForTableOrderById(m_id_order, (noncomercial_price) ? "'0-00'" : str_price));
+        qry_table.prepare(db->getQryForTableOrderById(m_DocumentExportEmailData.id_order, (noncomercial_price) ? "'0-00'" : str_price));
         if (! qry_table.exec()) {
             model_organization->deleteLater();
             model_patient->deleteLater();
@@ -770,7 +722,7 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         _num = (noncomercial_price) ? 0 : sum_order; // daca 'noncomercial_price' -> nu aratam suma
 
         // *************************************************************************************
-        // 📌 7 transmitem variabile si modelurile generatorului de rapoarte
+        // 7 transmitem variabile si modelurile generatorului de rapoarte
         m_report->dataManager()->clearUserVariables();
         m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(_num, 0, 'f', 2));
         m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
@@ -784,7 +736,7 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         m_report->setShowProgressDialog(true);
 
         // *************************************************************************************
-        // 📌 8 verificam daca este fisierul de tipar
+        // 8 verificam daca este fisierul de tipar
         QDir dir;
         if (! QFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml")).exists()){
             model_img->deleteLater();
@@ -797,16 +749,16 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
         }
 
         // *************************************************************************************
-        // 📌 9 exportam fgisierul in formatul PDF
+        // 9 exportam fgisierul in formatul PDF
         m_report->loadFromFile(dir.toNativeSeparators(m_pathTemplatesDocs + "/Order.lrxml"));
-        m_report->printToPDF(m_filePDF + "/Comanda_ecografica_nr_" + QString::number(m_nr_order) + ".pdf");
+        m_report->printToPDF(m_filePDF + "/Comanda_ecografica_nr_" + m_DocumentExportEmailData.nr_order + ".pdf");
         emit setTextInfo("S-a descarcat documentul 'Comanda ecografica'...");
 
         model_table->deleteLater();
     }
 
     // *************************************************************************************
-    // 📌 10 elibiram memoria
+    // 10 elibiram memoria
     // model_img->deleteLater();
     // model_organization->deleteLater();
     // model_patient->deleteLater();
@@ -817,7 +769,7 @@ void HandlerFunctionThread::exportDocumentOrder(QSqlDatabase dbConnection)
 
 void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 {
-    if (m_id_report == -1) {
+    if (m_DocumentExportEmailData.id_report == -1) {
         emit errorExportDocs("Nu este determinat ID documentului 'ReportEcho' pentru exportare in PDF !!!");
         return;
     }
@@ -836,22 +788,24 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
         QSqlQuery qry(dbConnection);
         {
-            qry.prepare("SELECT "
-                        "  t_organs_internal,"
-                        "  t_urinary_system,"
-                        "  t_prostate,"
-                        "  t_gynecology,"
-                        "  t_breast,"
-                        "  t_thyroid,"
-                        "  t_gestation0,"
-                        "  t_gestation1,"
-                        "  t_gestation2,"
-                        "  t_gestation3 "
-                        " FROM "
-                        "  reportEcho "
-                        "WHERE "
-                        "  id_orderEcho = ?;");
-            qry.addBindValue(m_id_order);
+            qry.prepare(R"(
+                SELECT "
+                    t_organs_internal,
+                    t_urinary_system,
+                    t_prostate,
+                    t_gynecology,
+                    t_breast,
+                    t_thyroid,
+                    t_gestation0,
+                    t_gestation1,
+                    t_gestation2,
+                    t_gestation3
+                FROM
+                    reportEcho
+                WHERE
+                    id_orderEcho = ?
+            )");
+            qry.addBindValue(m_DocumentExportEmailData.id_order);
             if (! qry.exec()) {
                 // eliberam memoria
                 model_img->deleteLater();
@@ -873,16 +827,16 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
             } else {
                 if (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    m_organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
-                    m_urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
-                    m_prostate   = qry.value(rec.indexOf("t_prostate")).toBool();
-                    m_gynecology = qry.value(rec.indexOf("t_gynecology")).toBool();
-                    m_breast     = qry.value(rec.indexOf("t_breast")).toBool();
-                    m_thyroide   = qry.value(rec.indexOf("t_thyroid")).toBool();
-                    m_gestation0 = qry.value(rec.indexOf("t_gestation0")).toBool();
-                    m_gestation1 = qry.value(rec.indexOf("t_gestation1")).toBool();
-                    m_gestation2 = qry.value(rec.indexOf("t_gestation2")).toBool();
-                    m_gestation3 = qry.value(rec.indexOf("t_gestation3")).toBool();
+                    m_TagsSystemDocument.organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
+                    m_TagsSystemDocument.urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
+                    m_TagsSystemDocument.prostate   = qry.value(rec.indexOf("t_prostate")).toBool();
+                    m_TagsSystemDocument.gynecology = qry.value(rec.indexOf("t_gynecology")).toBool();
+                    m_TagsSystemDocument.breast     = qry.value(rec.indexOf("t_breast")).toBool();
+                    m_TagsSystemDocument.thyroide   = qry.value(rec.indexOf("t_thyroid")).toBool();
+                    m_TagsSystemDocument.gestation0 = qry.value(rec.indexOf("t_gestation0")).toBool();
+                    m_TagsSystemDocument.gestation1 = qry.value(rec.indexOf("t_gestation1")).toBool();
+                    m_TagsSystemDocument.gestation2 = qry.value(rec.indexOf("t_gestation2")).toBool();
+                    m_TagsSystemDocument.gestation3 = qry.value(rec.indexOf("t_gestation3")).toBool();
                 }
             }
 
@@ -897,16 +851,16 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
             m_report->dataManager()->setReportVariable("unitMeasure", (m_unitMeasure == "milimetru") ? "mm" : "cm");
 
             // complex
-            if (m_organs_internal && m_urinary_system){
+            if (m_TagsSystemDocument.organs_internal && m_TagsSystemDocument.urinary_system){
 
                 QSqlQuery qry_organsInternal(dbConnection);
-                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
+                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_DocumentExportEmailData.id_report));
                 if (qry_organsInternal.exec()) {
                     modelOrgansInternal->setQuery(std::move(qry_organsInternal));
 
                 }
                 QSqlQuery qry_urinarySystem(dbConnection);
-                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
+                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_DocumentExportEmailData.id_report));
                 if (qry_urinarySystem.exec()){
                     modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
                 }
@@ -940,17 +894,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // export
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_complex.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_complex.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - complex ...");
             }
 
             // organs internal
-            if (m_organs_internal && !m_urinary_system){
+            if (m_TagsSystemDocument.organs_internal && ! m_TagsSystemDocument.urinary_system){
 
                 // extragem datele si introducem in model + setam variabile
                 m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
                 QSqlQuery qry_organsInternal(dbConnection);
-                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_id_report));
+                qry_organsInternal.prepare(db->getQryForTableOrgansInternalById(m_DocumentExportEmailData.id_report));
                 if (qry_organsInternal.exec()) {
                     modelOrgansInternal->setQuery(std::move(qry_organsInternal));
 
@@ -983,17 +937,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // export
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_organe_interne.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_organe_interne.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - organe interne ...");
             }
 
             // urinary system
-            if (m_urinary_system && !m_organs_internal){
+            if (m_TagsSystemDocument.urinary_system && ! m_TagsSystemDocument.organs_internal){
 
                 // extragem datele si introducem in model + setam variabile
                 m_report->dataManager()->setReportVariable("unit_measure_volum", "ml");
                 QSqlQuery qry_urinarySystem(dbConnection);
-                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_id_report));
+                qry_urinarySystem.prepare(db->getQryForTableUrinarySystemById(m_DocumentExportEmailData.id_report));
                 if (qry_urinarySystem.exec()){
                     modelUrinarySystem->setQuery(std::move(qry_urinarySystem));
                 }
@@ -1026,17 +980,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // export
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sistemul_urinar.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_sistemul_urinar.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - s.urinar ...");
             }
 
             // prostate
-            if (m_prostate){
+            if (m_TagsSystemDocument.prostate){
 
                 // extragem datele si introducem in model + setam variabile
                 QSqlQuery qry_supliment(dbConnection);
                 qry_supliment.prepare("SELECT transrectal FROM tableProstate WHERE id_reportEcho = ?;");
-                qry_supliment.addBindValue(m_id_report);
+                qry_supliment.addBindValue(m_DocumentExportEmailData.id_report);
                 if (qry_supliment.exec() && qry_supliment.next()){
                     m_report->dataManager()->setReportVariable("method_examination", (qry_supliment.value(0).toInt() == 1) ? "transrectal" : "transabdominal");
                 } else {
@@ -1045,7 +999,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
 
                 QSqlQuery qry_prostate(dbConnection);
-                qry_prostate.prepare(db->getQryForTableProstateById(m_id_report));
+                qry_prostate.prepare(db->getQryForTableProstateById(m_DocumentExportEmailData.id_report));
                 if (qry_prostate.exec()){
                     modelProstate->setQuery(std::move(qry_prostate));
                 }
@@ -1078,17 +1032,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_prostata.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_prostata.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - prostata ...");
             }
 
             // gynecology
-            if (m_gynecology){
+            if (m_TagsSystemDocument.gynecology){
 
                 // extragem datele si introducem in model + setam variabile
                 QSqlQuery qry_ginecSupliment(dbConnection);
                 qry_ginecSupliment.prepare("SELECT transvaginal FROM tableGynecology WHERE id_reportEcho = ?;");
-                qry_ginecSupliment.addBindValue(m_id_report);
+                qry_ginecSupliment.addBindValue(m_DocumentExportEmailData.id_report);
                 if (qry_ginecSupliment.exec() && qry_ginecSupliment.next()){
                     m_report->dataManager()->setReportVariable("method_examination", (qry_ginecSupliment.value(0).toInt() == 1) ? "transvaginal" : "transabdominal");
                 } else {
@@ -1097,7 +1051,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
 
                 QSqlQuery qry_ginecology(dbConnection);
-                qry_ginecology.prepare(db->getQryForTableGynecologyById(m_id_report));
+                qry_ginecology.prepare(db->getQryForTableGynecologyById(m_DocumentExportEmailData.id_report));
                 if (qry_ginecology.exec()){
                     modelGynecology->setQuery(std::move(qry_ginecology));
                 }
@@ -1130,16 +1084,16 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_ginecologie.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_ginecologie.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic - ginecologia'...");
             }
 
             // breast
-            if (m_breast){
+            if (m_TagsSystemDocument.breast){
 
                 // extragem datele si introducem in model + setam variabile
                 QSqlQuery qry_breast(dbConnection);
-                qry_breast.prepare(db->getQryForTableBreastById(m_id_report));
+                qry_breast.prepare(db->getQryForTableBreastById(m_DocumentExportEmailData.id_report));
                 if (qry_breast.exec()){
                     modelBreast->setQuery(std::move(qry_breast));
                 }
@@ -1172,17 +1126,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_glandele_mamare.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_glandele_mamare.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - gl.mamare ...");
             }
 
             // thyroid
-            if (m_thyroide){
+            if (m_TagsSystemDocument.thyroide){
 
                 // extragem datele si introducem in model + setam variabile
                 m_report->dataManager()->setReportVariable("unit_measure_volum", "cm3");
                 QSqlQuery qry_thyroid(dbConnection);
-                qry_thyroid.prepare(db->getQryForTableThyroidById(m_id_report));
+                qry_thyroid.prepare(db->getQryForTableThyroidById(m_DocumentExportEmailData.id_report));
                 if (qry_thyroid.exec()){
                     modelThyroid->setQuery(std::move(qry_thyroid));
                 }
@@ -1215,17 +1169,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_tiroida.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_tiroida.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - tiroida ...");
             }
 
             // gestation0
-            if (m_gestation0){
+            if (m_TagsSystemDocument.gestation0){
 
                 // extragem datele si introducem in model + setam variabile
                 QSqlQuery qry_supGestation0(dbConnection);
                 qry_supGestation0.prepare("SELECT view_examination FROM tableGestation0 WHERE id_reportEcho = ?;");
-                qry_supGestation0.addBindValue(m_id_report);
+                qry_supGestation0.addBindValue(m_DocumentExportEmailData.id_report);
                 if (qry_supGestation0.exec() && qry_supGestation0.next()){
                     m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation0.value(0).toInt() == 1));
                 } else {
@@ -1233,7 +1187,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 }
 
                 QSqlQuery qry_gestation0(dbConnection);
-                qry_gestation0.prepare(db->getQryForTableGestation0dById(m_id_report));
+                qry_gestation0.prepare(db->getQryForTableGestation0dById(m_DocumentExportEmailData.id_report));
                 if (qry_gestation0.exec()){
                     modelGestationO->setQuery(std::move(qry_gestation0));
                 }
@@ -1266,17 +1220,17 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina0.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_sarcina0.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina pana la 11 sapt. ...");
             }
 
             // gestation1
-            if (m_gestation1){
+            if (m_TagsSystemDocument.gestation1){
 
                 // extragem datele si introducem in model + setam variabile
                 QSqlQuery qry_supGestation1(dbConnection);
                 qry_supGestation1.prepare("SELECT view_examination FROM tableGestation1 WHERE id_reportEcho = ?;");
-                qry_supGestation1.addBindValue(m_id_report);
+                qry_supGestation1.addBindValue(m_DocumentExportEmailData.id_report);
                 if (qry_supGestation1.exec() && qry_supGestation1.next()){
                     m_report->dataManager()->setReportVariable("ivestigation_view", (qry_supGestation1.value(0).toInt() == 1));
                 } else {
@@ -1284,7 +1238,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 }
 
                 QSqlQuery qry_gestation1(dbConnection);
-                qry_gestation1.prepare(db->getQryForTableGestation1dById(m_id_report));
+                qry_gestation1.prepare(db->getQryForTableGestation1dById(m_DocumentExportEmailData.id_report));
                 if (qry_gestation1.exec()){
                     modelGestation1->setQuery(std::move(qry_gestation1));
                 }
@@ -1317,15 +1271,15 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentarea preview sau designer
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina1.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_sarcina1.pdf");
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina trim.I ...");
             }
 
             // gestation2
-            if (m_gestation2){
+            if (m_TagsSystemDocument.gestation2){
 
                 QSqlQuery qry_gestation2(dbConnection);
-                qry_gestation2.prepare(db->getQryForTableGestation2(m_id_report));
+                qry_gestation2.prepare(db->getQryForTableGestation2(m_DocumentExportEmailData.id_report));
                 if (qry_gestation2.exec()){
                     modelGestation2->setQuery(std::move(qry_gestation2));
                 }
@@ -1334,7 +1288,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
                 int trim = -1;
                 QSqlQuery qry_supGestation2(dbConnection);
                 qry_supGestation2.prepare("SELECT trimestru FROM tableGestation2 WHERE id_reportEcho = ?;");
-                qry_supGestation2.addBindValue(m_id_report);
+                qry_supGestation2.addBindValue(m_DocumentExportEmailData.id_report);
                 if (qry_supGestation2.exec() && qry_supGestation2.next()){
                     trim = qry_supGestation2.value(0).toInt();
                 } else {
@@ -1368,7 +1322,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
                 // prezentam
                 m_report->setShowProgressDialog(true);
-                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + QString::number(m_nr_report) + "_sarcina2.pdf");
+                m_report->printToPDF(m_filePDF + "/Raport_ecografic_nr_" + m_DocumentExportEmailData.nr_report + "_sarcina2.pdf");
                 QString str_txt = (trim == 2) ? "trim.II" : "trim.III";
                 emit setTextInfo("S-a descarcat documentul 'Raport ecografic' - sarcina " + str_txt);
             }
@@ -1396,7 +1350,7 @@ void HandlerFunctionThread::exportDocumentReport(QSqlDatabase dbConnection)
 
 void HandlerFunctionThread::exportDocumentImages(QSqlDatabase dbImageConnection)
 {
-    if (m_id_report == -1) {
+    if (m_DocumentExportEmailData.id_report == -1) {
         emit errorExportDocs("Nu este determinat ID documentului 'ReportEcho' pentru exportare in PDF !!!");
         return;
     }
@@ -1404,18 +1358,21 @@ void HandlerFunctionThread::exportDocumentImages(QSqlDatabase dbImageConnection)
     emit setTextInfo("Se pregateste exportarea imaginelor ...");
 
     QSqlQuery qry(dbImageConnection);
-    qry.prepare("SELECT "
-                "  image_1,"
-                "  image_2,"
-                "  image_3,"
-                "  image_4,"
-                "  image_5 "
-                "FROM "
-                "  imagesReports "
-                "WHERE "
-                "  id_orderEcho = ? AND id_reportEcho = ?;");
-    qry.addBindValue(m_id_order);
-    qry.addBindValue(m_id_report);
+    qry.prepare(R"(
+        SELECT
+            image_1,
+            image_2,
+            image_3,
+            image_4,
+            image_5
+        FROM
+            imagesReports
+        WHERE
+            id_orderEcho = ? AND
+            id_reportEcho = ?
+    )");
+    qry.addBindValue(m_DocumentExportEmailData.id_order);
+    qry.addBindValue(m_DocumentExportEmailData.id_report);
     if (! qry.exec()) {
         emit errorExportDocs("SQL Error: " + qry.lastError().text());
         return;
@@ -1434,7 +1391,7 @@ void HandlerFunctionThread::exportDocumentImages(QSqlDatabase dbImageConnection)
                 if (! imageByteArrays[i].isEmpty()) {
                     QPixmap pixmap;
                     if (pixmap.loadFromData(imageByteArrays[i])) {
-                        QString filePath = m_filePDF + "/" + QString("Image_report_%1_nr_%2.jpg").arg(QString::number(m_nr_report), QString::number(i + 1));
+                        QString filePath = m_filePDF + "/" + QString("Image_report_%1_nr_%2.jpg").arg(m_DocumentExportEmailData.nr_report, QString::number(i + 1));
                         if (!pixmap.save(filePath)) {
                             emit errorExportDocs("Eroare la salvarea imaginii: " + filePath);
                             return;

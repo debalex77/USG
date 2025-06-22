@@ -28,6 +28,8 @@
 #include <QToolTip>
 #include <QCache>
 
+#include <threads/docemailexporterworker.h>
+
 ListDocReportOrder::ListDocReportOrder(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::ListDocReportOrder),
@@ -551,77 +553,124 @@ void ListDocReportOrder::onClickBtnPrint()
 
 void ListDocReportOrder::onClickBtnSendEmail()
 {
-    // 📌 1 Lansam loader-ul
+    // 1 Lansam loader-ul
     loader = new ProcessingAction(this);
     loader->setAttribute(Qt::WA_DeleteOnClose);
     loader->setProperty("txtInfo", "Se descarca documentele în formatul PDF ...");
     loader->show();
 
-    // 📌 2 verificam daca este directoriu tmp/USG
+    // 2 verificam daca este directoriu tmp/USG
     if (! QFile(globals().main_path_save_documents).exists()) {
         QDir().mkpath(globals().main_path_save_documents);
     }
 
-    // 📌 3 determinam id comenzii ecografice
+    // 3 determinam id comenzii ecografice
     int _id_order = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
 
-    // 📌 4 Creăm thread-ul pentru trimiterea emailului
     QThread *thread = new QThread();
-    HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
+    DocEmailExporterWorker::DocData data;
+    data.id_user = globals().idUserApp;
+    data.thisMySQL = globals().thisMySQL;
+    data.id_order = _id_order;
+    data.id_report = -1;
+    data.nr_order = nullptr;
+    data.nr_report = nullptr;
+    data.id_patient = -1;
+    data.unitMeasure = globals().unitMeasure;
+    data.logo_byteArray = globals().c_logo_byteArray;
+    data.stamp_organization_byteArray = globals().main_stamp_organization;
+    data.stamp_doctor_byteArray = globals().stamp_main_doctor;
+    data.signature_doctor_byteArray = globals().signature_main_doctor;
+    data.pathTemplatesDocs = globals().pathTemplatesDocs;
+    data.filePDF = globals().main_path_save_documents;
 
-    // 📌 5 Mutăm `handler_functionThread` în thread-ul nou
-    handler_functionThread->moveToThread(thread);
+    auto worker = new DocEmailExporterWorker(dbProvider(), data);
+    worker->moveToThread(thread);
 
-    // 📌 6 setam `handler_functionThread` cu variabile necesrare
-    handler_functionThread->setRequiredVariabile(globals().idUserApp,
-                                                 globals().c_id_organizations,
-                                                 globals().c_id_doctor,
-                                                 globals().thisMySQL);
-    handler_functionThread->setRequiredVariableForExportDocuments(globals().thisMySQL,
-                                                                  _id_order,
-                                                                  -1,
-                                                                  globals().unitMeasure,
-                                                                  globals().c_logo_byteArray,
-                                                                  globals().main_stamp_organization,
-                                                                  globals().stamp_main_doctor,
-                                                                  globals().signature_main_doctor,
-                                                                  globals().pathTemplatesDocs,
-                                                                  globals().main_path_save_documents);
-
-    // 📌 7 Conectăm semnalele și sloturile
-    connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::exportDocumentsToPDF);
-    connect(handler_functionThread, &HandlerFunctionThread::setTextInfo, this, [this](QString txtInfo)
+    connect(thread,  &QThread::started,  worker, &DocEmailExporterWorker::process);
+    connect(worker, &DocEmailExporterWorker::setTextInfo, this, [this](QString txtInfo)
             {
                 loader->setProperty("txtInfo", txtInfo);
-            });
-    connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, this, [this](QVector<ExportData> data_agentEmail)
+            }, Qt::QueuedConnection);
+    connect(worker, &DocEmailExporterWorker::finished, this, [this] ()
             {
-                agent_sendEmail = new AgentSendEmail(this);
-                agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
-                for (const auto &data : data_agentEmail) {
-                    agent_sendEmail->setProperty("ThisReports", false);
-                    agent_sendEmail->setProperty("NameReport",  QVariant());
-                    agent_sendEmail->setProperty("NrOrder",     data.nr_order);
-                    agent_sendEmail->setProperty("NrReport",    data.nr_report);
-                    agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);
-                    agent_sendEmail->setProperty("EmailTo",     data.emailTo);
-                    agent_sendEmail->setProperty("NamePatient", data.name_patient);
-                    agent_sendEmail->setProperty("NameDoctor",  data.name_doctor_execute);
-                    QDate _date_investigation = QDate::fromString(data.str_dateInvestigation.left(10), "dd.MM.yyyy");
-                    agent_sendEmail->setProperty("DateInvestigation", _date_investigation);
-                }
-                agent_sendEmail->show();
-
+                qDebug() << "S-a finisat exportul !!!";
                 if (loader) {
                     loader->close();
                 }
-            });
-    connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, thread, &QThread::quit);
-    // connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, handler_functionThread, &QObject::deleteLater);
-    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+            }, Qt::QueuedConnection);
 
-    // 📌 8 Pornim thread-ul
+    connect(worker, &DocEmailExporterWorker::finished, thread, &QThread::quit);
+    connect(worker, &DocEmailExporterWorker::finished, worker, &QObject::deleteLater);
+    connect(thread,  &QThread::finished, thread, &QObject::deleteLater);
+
     thread->start();
+
+
+    // // 4 Creăm thread-ul pentru trimiterea emailului
+    // QThread *thread = new QThread();
+    // HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
+
+    // // 5 Completam structura si transmitem
+    // HandlerFunctionThread::GeneralData data;
+    // data.id_user = globals().idUserApp;
+    // data.id_organization = globals().c_id_organizations;
+    // data.id_doctor = globals().c_id_doctor;
+    // data.thisMySQL = globals().thisMySQL;
+
+    // HandlerFunctionThread::DocumentExportEmailData data_doc;
+    // data_doc.thisMySQL                    = globals().thisMySQL;
+    // data_doc.id_order                     = _id_order;
+    // data_doc.id_report                    = -1;
+    // data_doc.unitMeasure                  = globals().unitMeasure;
+    // data_doc.logo_byteArray               = globals().c_logo_byteArray;
+    // data_doc.stamp_organization_byteArray = globals().main_stamp_organization;
+    // data_doc.stamp_doctor_byteArray       = globals().stamp_main_doctor;
+    // data_doc.signature_doctor_byteArray   = globals().signature_main_doctor;
+    // data_doc.pathTemplatesDocs            = globals().pathTemplatesDocs;
+    // data_doc.filePDF                      = globals().main_path_save_documents;
+
+    // // 6 Mutăm `handler_functionThread` în thread-ul nou
+    // handler_functionThread->moveToThread(thread);
+
+    // // 7 setam `handler_functionThread` cu variabile necesrare
+    // handler_functionThread->setGeneralData(data);
+    // handler_functionThread->setDocumentExportEmailData(data_doc);
+
+    // // 8 Conectăm semnalele și sloturile
+    // connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::exportDocumentsToPDF);
+    // connect(handler_functionThread, &HandlerFunctionThread::setTextInfo, this, [this](QString txtInfo)
+    //         {
+    //             loader->setProperty("txtInfo", txtInfo);
+    //         });
+    // connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, this, [this](QVector<ExportData> data_agentEmail)
+    //         {
+    //             agent_sendEmail = new AgentSendEmail(this);
+    //             agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
+    //             for (const auto &data : data_agentEmail) {
+    //                 agent_sendEmail->setProperty("ThisReports", false);
+    //                 agent_sendEmail->setProperty("NameReport",  QVariant());
+    //                 agent_sendEmail->setProperty("NrOrder",     data.nr_order);
+    //                 agent_sendEmail->setProperty("NrReport",    data.nr_report);
+    //                 agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);
+    //                 agent_sendEmail->setProperty("EmailTo",     data.emailTo);
+    //                 agent_sendEmail->setProperty("NamePatient", data.name_patient);
+    //                 agent_sendEmail->setProperty("NameDoctor",  data.name_doctor_execute);
+    //                 QDate _date_investigation = QDate::fromString(data.str_dateInvestigation.left(10), "dd.MM.yyyy");
+    //                 agent_sendEmail->setProperty("DateInvestigation", _date_investigation);
+    //             }
+    //             agent_sendEmail->show();
+
+    //             if (loader) {
+    //                 loader->close();
+    //             }
+    //         });
+    // connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, thread, &QThread::quit);
+    // // connect(handler_functionThread, &HandlerFunctionThread::finishExportDocumenstToPDF, handler_functionThread, &QObject::deleteLater);
+    // connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // // 9 Pornim thread-ul
+    // thread->start();
 
 }
 
@@ -2233,6 +2282,11 @@ int ListDocReportOrder::sizeSectionDefault(const int numberSection)
             return 0;
         }
     }
+}
+
+DatabaseProvider *ListDocReportOrder::dbProvider()
+{
+    return &m_dbProvider;
 }
 
 // **********************************************************************************

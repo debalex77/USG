@@ -60,8 +60,8 @@ int AppController::run(int &argc, char **argv)
     m_appSettings = new AppSettings();
 
     // 2. Inițializăm fișierul de log (dacă nu suntem în /debug)
-    if (argc < 2 || QString(argv[1]).compare("/debug", Qt::CaseInsensitive) != 0) {
-        LogManager::init(globals().pathLogAppSettings);
+    if (argc < 2 || QString(argv[1]).compare("/debug", Qt::CaseInsensitive) != 0) { // !=
+        // LogManager::init(globals().pathLogAppSettings);
     }
 
     // 3. Gestionăm fluxul primei lansări / mutării / normal
@@ -150,6 +150,18 @@ int AppController::handleLaunchFlow(char **/*argv*/)
                     }
 
                 // 1.4 Lansăm autorizarea imediat cu userul creat
+
+                /**** !!! NOTA !!! *****************************************************
+                *
+                *  !!! auth->setAttribute(Qt::WA_DeleteOnClose);
+                *  Nu setam atributul WA_DeleteOnClose !!! Distrugerea se petrece
+                *  in clasa AuthorizationUser dupa ce a fost creat flux (thread)
+                *  pentru a seta varibile globale vezi AuthorizationUser::setDataConstants()
+                *  si a fost emis signalul DataConstantsWorker::finished
+                *  Distrugerea se efectuiaza in functia
+                *  AuthorizationUser::onDataReceived()
+                *
+                **********************************************************************/
                 auto auth = new AuthorizationUser();
                 auth->setAttribute(Qt::WA_DeleteOnClose);
                 auth->setProperty("Id", globals().idUserApp);
@@ -165,6 +177,17 @@ int AppController::handleLaunchFlow(char **/*argv*/)
         if (m_appSettings->exec() != QDialog::Accepted)
             return 0;
 
+        /**** !!! NOTA !!! *****************************************************
+         *
+         *  !!! auth->setAttribute(Qt::WA_DeleteOnClose);
+         *  Nu setam atributul WA_DeleteOnClose !!! Distrugerea se petrece
+         *  in clasa AuthorizationUser dupa ce a fost creat flux (thread)
+         *  pentru a seta varibile globale vezi AuthorizationUser::setDataConstants()
+         *  si a fost emis signalul DataConstantsWorker::finished
+         *  Distrugerea se efectuiaza in functia
+         *  AuthorizationUser::onDataReceived()
+         *
+         **********************************************************************/
         AuthorizationUser *auth = new AuthorizationUser();
         auth->setAttribute(Qt::WA_DeleteOnClose);
         auth->setProperty("Id", globals().idUserApp);
@@ -176,8 +199,18 @@ int AppController::handleLaunchFlow(char **/*argv*/)
         // 3️ Lansare normală
         m_appSettings->loadSettings();
 
+        /**** !!! NOTA !!! *****************************************************
+         *
+         *  !!! auth->setAttribute(Qt::WA_DeleteOnClose);
+         *  Nu setam atributul WA_DeleteOnClose !!! Distrugerea se petrece
+         *  in clasa AuthorizationUser dupa ce a fost creat flux (thread)
+         *  pentru a seta varibile globale vezi AuthorizationUser::setDataConstants()
+         *  si a fost emis signalul DataConstantsWorker::finished
+         *  Distrugerea se efectuiaza in functia
+         *  AuthorizationUser::onDataReceived()
+         *
+         **********************************************************************/
         AuthorizationUser *auth = new AuthorizationUser();
-        auth->setAttribute(Qt::WA_DeleteOnClose);
         auth->setProperty("Id", globals().idUserApp);
         if (auth->exec() != QDialog::Accepted)
             return 0;

@@ -32,6 +32,8 @@
 #include <common/handlerfunctionthread.h>
 #include <common/reportsettingsmanager.h>
 
+#include <threads/databaseprovider.h>
+
 namespace Ui {
 class ListDocReportOrder;
 }
@@ -207,6 +209,8 @@ private:
     void saveSizeSectionTable();
     int sizeSectionDefault(const int numberSection);
 
+    DatabaseProvider *dbProvider();
+
 private:
     Ui::ListDocReportOrder *ui;
     ReportSettingsManager settings;
@@ -289,6 +293,8 @@ private:
         };
 
     DataBase *db;
+    DatabaseProvider m_dbProvider;
+
     PopUp    *popUp;
     QMenu    *menu;
     QMenu    *setUpMenu_order;

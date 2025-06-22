@@ -1234,7 +1234,11 @@ void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
             QString line = in.readLine().trimmed();
 
             QString icon;
-            if (line.contains("WRN"))
+            if (line.contains("[SYNC]"))
+                icon = ":/img/sync.png";
+            else if (line.contains("THREAD"))
+                icon = ":/img/thread.png";
+            else if (line.contains("WRN"))
                 icon = ":/img/warning.png";
             else if (line.contains("INF"))
                 icon = ":/img/info_x32.png";

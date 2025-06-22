@@ -655,7 +655,7 @@ void DocOrderEcho::indexChangedComboNurse(const int index)
 
 void DocOrderEcho::onClickNewPacient()
 {
-    // 📌 1. Verificam daca este completat combo pacientului
+    // 1. Verificam daca este completat combo pacientului
     if (ui->comboPacient->currentText().isEmpty()){
         QMessageBox::warning(this,
                              tr("Verificarea datelor"),
@@ -664,40 +664,44 @@ void DocOrderEcho::onClickNewPacient()
         return;
     }
 
-    // 📌 2. Anuntam variabile necesare
+    // 2. Anuntam variabile necesare
     QString patient_name;
     QString patient_fName;
 
-    // 📌 3. Despartim nume, prenume
+    // 3. Despartim nume, prenume
     if (! splitFullNamePacient(patient_name, patient_fName))
         return;
 
-    // 📌 4. Verificam daca sunt completate variabile
+    // 4. Verificam daca sunt completate variabile
     if (patient_name.isEmpty() || patient_fName.isEmpty())
         return;
 
-    // 📌 5. Creăm thread-ul pentru trimiterea
+    // 5. Creăm thread-ul pentru trimiterea
     QThread *thread = new QThread();
     HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
 
-    // 📌 6 Mutăm `handler_functionThread` în thread-ul nou
+    // 6. completam structura
+    HandlerFunctionThread::DataCatPatient data_patient;
+    data_patient.id = (ui->checkBox->isChecked() && m_idPacient == -1)
+                          ? (db->getLastIdForTable("pacients") + 1)
+                          : m_idPacient;
+    data_patient.name          = patient_name;
+    data_patient.fname         = patient_fName;
+    data_patient.idnp          = ui->editIDNP->text();
+    data_patient.medicalPolicy = ui->editPolicyMedical->text();
+    data_patient.birthday      = ui->dateEditBirthday->date();
+    data_patient.address       = ui->editAddress->text();
+    data_patient.phone         = ui->editPhone->text();
+    data_patient.comment       = ui->editComment->toPlainText();
+    data_patient.thisMySQL     = globals().thisMySQL;
+
+    // 7. Mutăm `handler_functionThread` în thread-ul nou
     handler_functionThread->moveToThread(thread);
 
-    // 📌 7. Setam variabile necesare
-    handler_functionThread->setRequiredVariableForCatPatient((ui->checkBox->isChecked() && m_idPacient == -1) ?
-                                                                 (db->getLastIdForTable("pacients") + 1) : m_idPacient,
-                                                             patient_name,
-                                                             patient_fName,
-                                                             ui->editIDNP->text(),
-                                                             ui->editPolicyMedical->text(),
-                                                             ui->dateEditBirthday->date(),
-                                                             ui->editAddress->text(),
-                                                             ui->editEmail->text(),
-                                                             ui->editPhone->text(),
-                                                             nullptr,
-                                                             globals().thisMySQL);
+    // 8. Setam variabile necesare
+    handler_functionThread->setDataCatPatient(data_patient);
 
-    // 📌 8. Inseram sau actualizam date a pacientului
+    // 9. Inseram sau actualizam date a pacientului
     if (ui->checkBox->isChecked() && m_idPacient == -1){
 
         connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::saveDataPatient);
@@ -715,7 +719,7 @@ void DocOrderEcho::onClickNewPacient()
         connect(thread, &QThread::finished, thread, &QObject::deleteLater);
     }
 
-    // 📌 9. Pornim thread-ul
+    // 10. Pornim thread-ul
     thread->start();
 }
 

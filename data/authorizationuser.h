@@ -9,8 +9,9 @@
 #include <QToolButton>
 #include <QThread>
 
-#include <common/handlerfunctionthread.h>
 #include <data/database.h>
+#include <threads/databaseprovider.h>
+#include <threads/dataconstantsworker.h>
 
 namespace Ui {
 class AuthorizationUser;
@@ -33,6 +34,7 @@ signals:
     void PwdHashChanged();
 
 private:
+    DatabaseProvider *dbProvider();
     void setDataConstants();
 
 private slots:
@@ -54,8 +56,9 @@ private:
 
     QLineEdit   *edit_password;
     QToolButton *show_hide_password;
-    HandlerFunctionThread *handler_functionThread;
     CryptoManager *crypto_manager;
+
+    DatabaseProvider m_dbProvider;
 
 protected:
     void changeEvent(QEvent *event);       // contolam traducerea aplicatiei

@@ -145,7 +145,10 @@ SOURCES += \
     models/registrationtablemodel.cpp \
     models/treeitem.cpp \
     models/treemodel.cpp \
-    models/variantmaptablemodel.cpp
+    models/variantmaptablemodel.cpp \
+    threads/databaseprovider.cpp \
+    threads/dataconstantsworker.cpp \
+    threads/docemailexporterworker.cpp
 
 HEADERS += \
     catalogs/asistanttipapp.h \
@@ -221,7 +224,10 @@ HEADERS += \
     models/registrationtablemodel.h \
     models/treeitem.h \
     models/treemodel.h \
-    models/variantmaptablemodel.h
+    models/variantmaptablemodel.h \
+    threads/databaseprovider.h \
+    threads/dataconstantsworker.h \
+    threads/docemailexporterworker.h
 
 win32 {
 # pentru eroarea numai pe Windows:
@@ -287,8 +293,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 DISTFILES += \
     build_scripts/build_maosx \
+    build_scripts/build_maosx \
     build_scripts/build_project \
-    build_sripts/build_maosx \
     resources/fonts/Cantarell Bold.ttf \
     resources/fonts/Cantarell-Bold.otf \
     resources/fonts/Cantarell-BoldOblique.ttf \
