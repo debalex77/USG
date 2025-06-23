@@ -21,7 +21,7 @@ void DocEmailExporterWorker::process()
             qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
                             .arg(this->metaObject()->className())
                         << dbConn.lastError().text();
-            emit finished();
+            emit finished(datesExportForAgentEmail);
             return;
         }
 
@@ -41,7 +41,7 @@ void DocEmailExporterWorker::process()
 
     m_db->removeDatabaseThread(connName);
 
-    emit finished();
+    emit finished(datesExportForAgentEmail);
 }
 
 // **********************************************************************************
@@ -188,8 +188,10 @@ void DocEmailExporterWorker::setModelDocTable(QSqlDatabase &dbConn, bool noncome
                             .arg(this->metaObject()->className())
                     << qry.lastError().text();
         return;
+    } else {
+        model_table = new QSqlQueryModel(this);
+        model_table->setQuery(std::move(qry));
     }
-    model_table->setQuery(std::move(qry));
 }
 
 // **********************************************************************************
@@ -257,22 +259,24 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
                                         .arg(this->metaObject()->className())
                                  << qry.lastError().text();
     } else {
-        QSqlRecord rec = qry.record();
-        noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
-        m_data.id_patient  = qry.value(rec.indexOf("id_pacients")).toInt();
-        sum_order          = qry.value(rec.indexOf("sum")).toInt();
-        m_data.id_report   = qry.value(rec.indexOf("id_report")).toInt();
-        m_data.nr_order    = qry.value(rec.indexOf("nr_order")).toString();
-        m_data.nr_report   = qry.value(rec.indexOf("nr_report")).toString();
-        qInfo(logInfo()) << "[THREAD] Se initializeaza exportul documentului 'Comanda ecografica' nr." << m_data.nr_order;
+        if (qry.next()) {
+            QSqlRecord rec = qry.record();
+            noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
+            m_data.id_patient  = qry.value(rec.indexOf("id_pacients")).toInt();
+            sum_order          = qry.value(rec.indexOf("sum")).toInt();
+            m_data.id_report   = qry.value(rec.indexOf("id_report")).toInt();
+            m_data.nr_order    = qry.value(rec.indexOf("nr_order")).toString();
+            m_data.nr_report   = qry.value(rec.indexOf("nr_report")).toString();
+            qInfo(logInfo()) << "[THREAD] Se initializeaza exportul documentului 'Comanda ecografica' nr." << m_data.nr_order;
 
-        // setam datele pentru export
-        m_datesExport.nr_order              = m_data.nr_order;
-        m_datesExport.nr_report             = m_data.nr_report;
-        m_datesExport.emailTo               = qry.value(rec.indexOf("emailTo")).toString();
-        m_datesExport.name_patient          = qry.value(rec.indexOf("name_patient")).toString();
-        m_datesExport.name_doctor_execute   = qry.value(rec.indexOf("doctore_execute")).toString();
-        m_datesExport.str_dateInvestigation = qry.value(rec.indexOf("dateInvestigation")).toString();
+            // setam datele pentru export
+            m_datesExport.nr_order              = m_data.nr_order;
+            m_datesExport.nr_report             = m_data.nr_report;
+            m_datesExport.emailTo               = qry.value(rec.indexOf("emailTo")).toString();
+            m_datesExport.name_patient          = qry.value(rec.indexOf("name_patient")).toString();
+            m_datesExport.name_doctor_execute   = qry.value(rec.indexOf("doctore_execute")).toString();
+            m_datesExport.str_dateInvestigation = qry.value(rec.indexOf("dateInvestigation")).toString();
+        }
     }
 
     // 3. introducem date pu export in vector
@@ -329,6 +333,7 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
     // 10. eliberam memoria medelelor si a generatorului de rapoarte
     cleaningUpModelInstances();
     m_report->deleteLater();
+    m_report = nullptr;
 }
 
 // **********************************************************************************
@@ -524,20 +529,33 @@ void DocEmailExporterWorker::exportReportEcho(QSqlDatabase &dbConn)
                                     .arg(this->metaObject()->className())
                                  << qry.lastError().text();
     } else {
-        QSqlRecord rec = qry.record();
-        organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
-        urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
-        prostate        = qry.value(rec.indexOf("t_prostate")).toBool();
-        gynecology      = qry.value(rec.indexOf("t_gynecology")).toBool();
-        breast          = qry.value(rec.indexOf("t_breast")).toBool();
-        thyroide        = qry.value(rec.indexOf("t_thyroid")).toBool();
-        gestation0      = qry.value(rec.indexOf("t_gestation0")).toBool();
-        gestation1      = qry.value(rec.indexOf("t_gestation1")).toBool();
-        gestation2      = qry.value(rec.indexOf("t_gestation2")).toBool();
-        qInfo(logInfo()) << "[THREAD] Se initializeaza exportul documentului 'Raport ecografic' nr." << m_data.nr_report;
+        if (qry.next()) {
+            QSqlRecord rec = qry.record();
+            organs_internal = qry.value(rec.indexOf("t_organs_internal")).toBool();
+            urinary_system  = qry.value(rec.indexOf("t_urinary_system")).toBool();
+            prostate        = qry.value(rec.indexOf("t_prostate")).toBool();
+            gynecology      = qry.value(rec.indexOf("t_gynecology")).toBool();
+            breast          = qry.value(rec.indexOf("t_breast")).toBool();
+            thyroide        = qry.value(rec.indexOf("t_thyroid")).toBool();
+            gestation0      = qry.value(rec.indexOf("t_gestation0")).toBool();
+            gestation1      = qry.value(rec.indexOf("t_gestation1")).toBool();
+            gestation2      = qry.value(rec.indexOf("t_gestation2")).toBool();
+            qInfo(logInfo()) << "[THREAD] Se initializeaza exportul documentului 'Raport ecografic' nr." << m_data.nr_report;
+        }
     }
 
     m_report = new LimeReport::ReportEngine(this);
+    setModelImgForPrint();
+    setModelDatesOrganization(dbConn);
+    setModelDatesPatient(dbConn);
+    m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
+    m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp_organization);
+    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
+    m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
+
+    m_report->dataManager()->addModel("table_img", model_img, true);
+    m_report->dataManager()->addModel("main_organization", model_organization, false);
+    m_report->dataManager()->addModel("table_pacient", model_patient, false);
 
     // complex
     if (organs_internal && urinary_system){

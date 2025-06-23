@@ -33,6 +33,7 @@
 #include <common/reportsettingsmanager.h>
 
 #include <threads/databaseprovider.h>
+#include <common/appmetatypes.h>
 
 namespace Ui {
 class ListDocReportOrder;

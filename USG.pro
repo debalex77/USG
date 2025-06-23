@@ -166,6 +166,7 @@ HEADERS += \
     catalogs/patienthistory.h \
     common/agentsendemail.h \
     common/appcontroller.h \
+    common/appmetatypes.h \
     common/cloudserverconfig.h \
     common/contonline.h \
     common/cryptomanager.h \

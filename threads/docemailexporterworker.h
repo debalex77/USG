@@ -7,6 +7,7 @@
 #include <QStandardItemModel>
 #include <data/database.h>
 #include <threads/databaseprovider.h>
+#include <common/appmetatypes.h>
 
 class DocEmailExporterWorker : public QObject
 {
@@ -37,7 +38,7 @@ public slots:
     void process();
 
 signals:
-    void finished();
+    void finished(QVector<DatesForAgentEmail> datesExport);
     void setTextInfo(QString txtInfo);
 
 private:
@@ -71,15 +72,15 @@ private:
     DataBase *db;
     DatabaseProvider *m_db{nullptr};
 
-    struct DatesForAgentEmail
-    {
-        QString nr_order;
-        QString nr_report;
-        QString emailTo;
-        QString name_patient;
-        QString name_doctor_execute;
-        QString str_dateInvestigation;
-    };
+    // struct DatesForAgentEmail
+    // {
+    //     QString nr_order;
+    //     QString nr_report;
+    //     QString emailTo;
+    //     QString name_patient;
+    //     QString name_doctor_execute;
+    //     QString str_dateInvestigation;
+    // };
     DatesForAgentEmail m_datesExport;
     QVector<DatesForAgentEmail> datesExportForAgentEmail;
 
@@ -87,22 +88,22 @@ private:
     int exist_signature = 0;
     int exist_stamp_doctor = 0;
     int exist_stamp_organization = 0;
-    QStandardItemModel *model_img;
+    QStandardItemModel *model_img = nullptr;
 
     LimeReport::ReportEngine *m_report;
-    QSqlQueryModel *model_organization;
-    QSqlQueryModel *model_patient;
-    QSqlQueryModel *model_table;
+    QSqlQueryModel *model_organization = nullptr;
+    QSqlQueryModel *model_patient      = nullptr;
+    QSqlQueryModel *model_table        = nullptr;
 
-    QSqlQueryModel *modelOrgansInternal;
-    QSqlQueryModel *modelUrinarySystem;
-    QSqlQueryModel *modelProstate;
-    QSqlQueryModel *modelGynecology;
-    QSqlQueryModel *modelBreast;
-    QSqlQueryModel *modelThyroid;
-    QSqlQueryModel *modelGestationO;
-    QSqlQueryModel *modelGestation1;
-    QSqlQueryModel *modelGestation2;
+    QSqlQueryModel *modelOrgansInternal = nullptr;
+    QSqlQueryModel *modelUrinarySystem  = nullptr;
+    QSqlQueryModel *modelProstate       = nullptr;
+    QSqlQueryModel *modelGynecology     = nullptr;
+    QSqlQueryModel *modelBreast         = nullptr;
+    QSqlQueryModel *modelThyroid        = nullptr;
+    QSqlQueryModel *modelGestationO     = nullptr;
+    QSqlQueryModel *modelGestation1     = nullptr;
+    QSqlQueryModel *modelGestation2     = nullptr;
 };
 
 #endif // DOCEMAILEXPORTERWORKER_H
