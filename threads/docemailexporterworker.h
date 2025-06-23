@@ -14,31 +14,14 @@ class DocEmailExporterWorker : public QObject
     Q_OBJECT
 public:
 
-    struct DocData
-    {
-        int id_user;
-        bool thisMySQL;
-        int id_order;
-        int id_report;
-        QString nr_order;
-        QString nr_report;
-        int id_patient;
-        QString unitMeasure;
-        QByteArray logo_byteArray;
-        QByteArray stamp_organization_byteArray;
-        QByteArray stamp_doctor_byteArray;
-        QByteArray signature_doctor_byteArray;
-        QString pathTemplatesDocs;
-        QString filePDF;
-    };
-
-    DocEmailExporterWorker(DatabaseProvider *provider, DocData &data, QObject *parent = nullptr);
+    // DatesDocForExportEmail - metatype definit in common/appmetatypes.h
+    DocEmailExporterWorker(DatabaseProvider *provider, DatesDocForExportEmail &data, QObject *parent = nullptr);
 
 public slots:
     void process();
 
 signals:
-    void finished(QVector<DatesForAgentEmail> datesExport);
+    void finished(QVector<DatesForAgentEmail> datesExport); // DatesForAgentEmail - metatype definit in common/appmetatypes.h
     void setTextInfo(QString txtInfo);
 
 private:
@@ -68,20 +51,11 @@ private:
     void exportImagesDocument(QSqlDatabase &dbConn);
 
 private:
-    DocData m_data;
+    DatesDocForExportEmail m_data; // DatesDocForExportEmail - metatype definit in common/appmetatypes.h
     DataBase *db;
     DatabaseProvider *m_db{nullptr};
 
-    // struct DatesForAgentEmail
-    // {
-    //     QString nr_order;
-    //     QString nr_report;
-    //     QString emailTo;
-    //     QString name_patient;
-    //     QString name_doctor_execute;
-    //     QString str_dateInvestigation;
-    // };
-    DatesForAgentEmail m_datesExport;
+    DatesForAgentEmail m_datesExport; // DatesForAgentEmail - metatype definit in common/appmetatypes.h
     QVector<DatesForAgentEmail> datesExportForAgentEmail;
 
     int exist_logo = 0;

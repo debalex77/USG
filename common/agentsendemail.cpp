@@ -323,22 +323,24 @@ void AgentSendEmail::slot_DateInvestigationChanged()
     m_body = ui->txt_body->toPlainText();
 
     QSqlQuery qry;
-    qry.prepare("SELECT "
-                "  contsOnline.email,"
-                "  contsOnline.smtp_server,"
-                "  contsOnline.port,"
-                "  contsOnline.username,"
-                "  contsOnline.password,"
-                "  contsOnline.iv, "
-                "  users.hash AS hashUser "
-                " FROM "
-                "  contsOnline "
-                " INNER JOIN "
-                "  users ON users.id = contsOnline.id_users "
-                " WHERE "
-                "  contsOnline.id_organizations = ? AND "
-                "  contsOnline.id_users = ? AND "
-                "  contsOnline.email = ?;");
+    qry.prepare(R"(
+        SELECT
+            contsOnline.email,
+            contsOnline.smtp_server,
+            contsOnline.port,
+            contsOnline.username,
+            contsOnline.password,
+            contsOnline.iv,
+            users.hash AS hashUser
+        FROM
+            contsOnline
+        INNER JOIN
+            users ON users.id = contsOnline.id_users
+        WHERE
+            contsOnline.id_organizations = ? AND
+            contsOnline.id_users = ? AND
+            contsOnline.email = ?
+    )");
     qry.addBindValue(globals().c_id_organizations);
     qry.addBindValue(globals().idUserApp);
     qry.addBindValue(m_emailFrom);
@@ -428,23 +430,26 @@ void AgentSendEmail::onSend()
         return;
     }
 
-    // 📌 1️⃣ Creăm și afișăm loaderul
+    // 1. Creăm și afișăm loaderul
     loader = new ProcessingAction(this);
     loader->setAttribute(Qt::WA_DeleteOnClose);
     loader->setProperty("txtInfo", "Se transmit documentele destinatarului ...");
     loader->show();
 
-    // 📌 2️⃣ Ascundem fereastra principală
+    // 2️. Ascundem fereastra principală
     this->hide();
 
-    // 📌 3️⃣ Creăm thread-ul pentru trimiterea emailului
+    qInfo(logInfo()) << "[THREAD] Se initializeaza trimiterea datelor investigatiilor catre e-mail"
+                     << ui->txt_to->text();
+
+    // 3️. Creăm thread-ul pentru trimiterea emailului
     QThread *thread = new QThread();
     EmailCore *email_core = new EmailCore();
 
-    // 📌 4️⃣ Mutăm `email_core` în thread-ul nou
+    // 4️. Mutăm `email_core` în thread-ul nou
     email_core->moveToThread(thread);
 
-    // 📌 5️⃣ Configurăm datele pentru email
+    // 5️. Configurăm datele pentru email
     email_core->setEmailData(m_smtp_server,
                              m_port,
                              ui->txt_from->text(),
@@ -455,23 +460,23 @@ void AgentSendEmail::onSend()
                              m_body,
                              filesAttachments);
 
-    // 📌 6️⃣ Conectăm semnalele și sloturile
+    // 6️. Conectăm semnalele și sloturile
     connect(thread, &QThread::started, email_core, &EmailCore::sendEmail);
     connect(email_core, &EmailCore::emailSent, this, &AgentSendEmail::onEmailSent);
     connect(email_core, &EmailCore::emailSent, thread, &QThread::quit);
     connect(email_core, &EmailCore::emailSent, email_core, &QObject::deleteLater);
     connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
-    // 📌 7️⃣ Pornim thread-ul
+    // 7️. Pornim thread-ul
     thread->start();
 }
 
 void AgentSendEmail::onEmailSent(bool success)
 {
     if (success) {
-        qInfo(logInfo()) << "Email trimis cu succes!";
+        qInfo(logInfo()) << "[THREAD] E-mail trimis cu succes !";
     } else {
-        qWarning(logWarning()) << "Eroare la trimiterea emailului!";
+        qCritical(logCritical()) << "[THREAD] Eroare la trimiterea e-mail-lui !";
     }
 
     // Închidem loader-ul
@@ -488,12 +493,12 @@ void AgentSendEmail::onClose()
     QDir dir(globals().main_path_save_documents);
     if (dir.exists()) {
         if (dir.removeRecursively()) {
-            qInfo(logInfo()) << "Directorul" << globals().main_path_save_documents << " a fost șters cu succes !";
+            qInfo(logInfo()) << "[THREAD] Directorul" << globals().main_path_save_documents << " a fost șters cu succes !";
         } else {
-            qWarning(logWarning()) << "Eroare: Nu s-a putut șterge directorul - " << globals().main_path_save_documents;
+            qWarning(logWarning()) << "[THREAD] Eroare: Nu s-a putut șterge directorul - " << globals().main_path_save_documents;
         }
     } else {
-        qInfo(logInfo()) << "Directorul nu există - " << globals().main_path_save_documents;
+        qWarning(logWarning()) << "[THREAD] Directorul nu există - " << globals().main_path_save_documents;
     }
     this->close();
 }

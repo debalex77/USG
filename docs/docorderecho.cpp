@@ -676,13 +676,9 @@ void DocOrderEcho::onClickNewPacient()
     if (patient_name.isEmpty() || patient_fName.isEmpty())
         return;
 
-    // 5. Creăm thread-ul pentru trimiterea
-    QThread *thread = new QThread();
-    HandlerFunctionThread *handler_functionThread = new HandlerFunctionThread();
-
-    // 6. completam structura
-    HandlerFunctionThread::DataCatPatient data_patient;
-    data_patient.id = (ui->checkBox->isChecked() && m_idPacient == -1)
+    // 5. setam structura
+    DatesCatPatient data_patient;
+    data_patient.id = (ui->checkBox->isChecked() && m_idPacient <= 0)
                           ? (db->getLastIdForTable("pacients") + 1)
                           : m_idPacient;
     data_patient.name          = patient_name;
@@ -695,89 +691,89 @@ void DocOrderEcho::onClickNewPacient()
     data_patient.comment       = ui->editComment->toPlainText();
     data_patient.thisMySQL     = globals().thisMySQL;
 
-    // 7. Mutăm `handler_functionThread` în thread-ul nou
-    handler_functionThread->moveToThread(thread);
+    // 6. Creăm thread-ul pentru trimiterea
+    QThread *thread = new QThread();
 
-    // 8. Setam variabile necesare
-    handler_functionThread->setDataCatPatient(data_patient);
+    // 7. alocam memoria worker-lui si mutam in flux nou
+    auto worker = new PatientDataSaverWorker(dbProvider(), data_patient);
+    worker->moveToThread(thread);
 
-    // 9. Inseram sau actualizam date a pacientului
-    if (ui->checkBox->isChecked() && m_idPacient == -1){
-
-        connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::saveDataPatient);
-        connect(handler_functionThread, &HandlerFunctionThread::finishExistPatientInBD, thread, &QThread::quit);
-        connect(handler_functionThread, &HandlerFunctionThread::finishInsertDataCatPatient, thread, &QThread::quit);
-        connect(handler_functionThread, &HandlerFunctionThread::finishExistPatientInBD, this, &DocOrderEcho::handlerExistPatientInBD);
-        connect(handler_functionThread, &HandlerFunctionThread::finishInsertDataCatPatient, this, &DocOrderEcho::handlerAfterInsertingDataPatient);
-        connect(thread, &QThread::finished, thread, &QObject::deleteLater);
-
+    // 8. conectarea - lansarea procesului inserarii sau actualizarii datelor
+    if (ui->checkBox->isChecked() && m_idPacient <= 0){
+        connect(thread, &QThread::started, worker, &PatientDataSaverWorker::processInsert);
     } else {
-
-        connect(thread, &QThread::started, handler_functionThread, &HandlerFunctionThread::updateDataPatientInDB);
-        connect(handler_functionThread, &HandlerFunctionThread::finishUpdateDataCatPatient, thread, &QThread::quit);
-        connect(handler_functionThread, &HandlerFunctionThread::finishUpdateDataCatPatient, this, &DocOrderEcho::handlerAfterUpdatingDataPatient);
-        connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+        connect(thread, &QThread::started, worker, &PatientDataSaverWorker::processUpdate);
     }
 
-    // 10. Pornim thread-ul
+    // 9. conectarea - procesarea daca exista pacient in bd si daca exista erori la inserare sau actualizare datelor
+    connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, this, &DocOrderEcho::handlerExistPatientInBD, Qt::QueuedConnection);
+    connect(worker, &PatientDataSaverWorker::finishedError, this, &DocOrderEcho::handlerErrorSavePatient, Qt::QueuedConnection);
+    connect(worker, &PatientDataSaverWorker::finished, this, &DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD, Qt::QueuedConnection);
+
+    // 10. conectarea - distrugerea daca a fost emis ca exista pacient
+    connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, thread, &QThread::quit);
+    connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, worker, &PatientDataSaverWorker::deleteLater);
+
+    // 11. conectarea - distrugerea daca a fost emis ca sunt erori
+    connect(worker, &PatientDataSaverWorker::finishedError, thread, &QThread::quit);
+    connect(worker, &PatientDataSaverWorker::finishedError, worker, &PatientDataSaverWorker::deleteLater);
+
+    // 12. conectarea - distrugerea daca inserate/actualizate datele cu succes
+    connect(worker, &PatientDataSaverWorker::finished, thread, &QThread::quit);
+    connect(worker, &PatientDataSaverWorker::finished, worker, &PatientDataSaverWorker::deleteLater);
+
+    // 13. conectarea distrugerea thread-lui
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 14. start thread
     thread->start();
+
 }
 
-void DocOrderEcho::handlerExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp)
+void DocOrderEcho::handlerExistPatientInBD(const QVariantMap &map_data)
 {
-    QMetaObject::invokeMethod(this, [=, this]() {
-        QMessageBox msgBox;
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setWindowTitle(tr("Varificarea datelor"));
-        msgBox.setText(tr("Pacientul(a) exista in baza da date:<br>%1")
-                           .arg(" - nume, prenume: " + patient_name + " " + patient_fname + "<br>"
-                                " - anul nasterii: " + patient_birthday.toString("dd.MM.yyyy") + "<br>"
-                                " - idnp: " + patient_idnp)
-                       );
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.exec();
-    }, Qt::QueuedConnection);
+    QMessageBox msgBox;
+    msgBox.setIcon(QMessageBox::Warning);
+    msgBox.setWindowTitle(tr("Varificarea datelor"));
+    msgBox.setText(tr("Pacientul(a) exista in baza da date:"
+                      "<br>%1")
+                       .arg(" - nume, prenume: " + map_data.value("fullName").toString() + "<br>"
+                            " - anul nasterii: " + map_data.value("birthday").toDate().toString("dd.MM.yyyy") + "<br>"
+                            " - idnp: " + map_data.value("idnp").toString())
+                   );
+    msgBox.setStandardButtons(QMessageBox::Ok);
+    msgBox.exec();
 }
 
-void DocOrderEcho::handlerAfterInsertingDataPatient(const bool succes, const int patient_id)
+void DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD()
 {
-    QMetaObject::invokeMethod(this, [=, this]() {
-        if (succes){
-            popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
-                                   "au fost introduse in baza de date cu succes.")
-                                    .arg(ui->comboPacient->currentText()));
-            popUp->show();
+    popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
+                           "au fost inserate/modificate in baza de date cu succes.")
+                            .arg(ui->comboPacient->currentText()));
+    popUp->show();
 
-            qInfo(logInfo()) << tr("Crearea: pacientul '%1' cu id='%2'.")
-                                    .arg(ui->comboPacient->currentText(), QString::number(patient_id));
+    DatesCatPatient data;
 
-            QTimer::singleShot(100, this, &DocOrderEcho::updateModelPacients); //updateModelPacients();             // actualizam 'modelPacients'
-            setIdPacient(patient_id);         // setam 'id' pacientului
-            emit mCreateNewPacient();          // emitem signal pu conectarea din alte clase
+    QTimer::singleShot(100, this, &DocOrderEcho::updateModelPacients);
+    setIdPacient(data.id);    // setam 'id' pacientului
+    emit mCreateNewPacient(); // emitem signal pu conectarea din alte clase
 
-            if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
-                ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
-        }
-    }, Qt::QueuedConnection);
+    if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
+        ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
 }
 
-void DocOrderEcho::handlerAfterUpdatingDataPatient(const bool succes)
+void DocOrderEcho::handlerErrorSavePatient(const QStringList &listErr)
 {
-    QMetaObject::invokeMethod(this, [=, this]() {
-        if (succes) {
-            popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
-                                   "au fost modificate cu succes.")
-                                    .arg(ui->comboPacient->currentText()));
-            popUp->show();
+    if (listErr.isEmpty())
+        return;
 
-            qInfo(logInfo()) << tr("Modificare: datele pacientului '%1' cu id='%2'.")
-                                    .arg(ui->comboPacient->currentText(), QString::number(m_idPacient));
-
-            updateModelPacients();     // actualizam 'modelPacients'
-            setIdPacient(m_idPacient);
-            ui->editFilterPattern->setFocus(); // setam focus
-        }
-    }, Qt::QueuedConnection);
+    CustomMessage *msg = new CustomMessage(this);
+    msg->setWindowTitle(QGuiApplication::applicationDisplayName());
+    msg->setTextTitle(tr("Inserarea/modificarea datelor pacientului %1 nu s-a efectuat !!!")
+                          .arg(ui->comboPacient->currentText()));
+    msg->setDetailedText(listErr.join("\n"));
+    msg->exec();
+    msg->deleteLater();
 }
 
 void DocOrderEcho::onClikEditPacient()
@@ -2097,6 +2093,11 @@ void DocOrderEcho::initCompleterAddressPatients()
     city_completer->setCompletionMode(QCompleter::PopupCompletion);
 
     connect(ui->editAddress, &QLineEdit::textChanged, this, &DocOrderEcho::handleCompleterAddressPatients);
+}
+
+DatabaseProvider *DocOrderEcho::dbProvider()
+{
+    return &m_dbProvider;
 }
 
 // **********************************************************************************

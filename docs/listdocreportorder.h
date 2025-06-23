@@ -29,11 +29,11 @@
 
 #include <common/agentsendemail.h>
 #include <common/processingaction.h>
-#include <common/handlerfunctionthread.h>
 #include <common/reportsettingsmanager.h>
 
 #include <threads/databaseprovider.h>
 #include <common/appmetatypes.h>
+#include <threads/docemailexporterworker.h>
 
 namespace Ui {
 class ListDocReportOrder;
@@ -139,6 +139,9 @@ private slots:
     void onActionEditPacient();
 
     void showHideColums();
+
+    void updateTextInfoLoader(const QString &txt);
+    void launchAgentEmail(QVector<DatesForAgentEmail> data_agentEmail);
 
 private:
 

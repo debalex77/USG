@@ -44,6 +44,30 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
     return db;
 }
 
+QSqlDatabase DatabaseProvider::getDatabaseImagesThread(const QString &connectionName)
+{
+    if (QSqlDatabase::contains(connectionName))
+        return QSqlDatabase::database(connectionName);
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    db.setHostName("db_image");
+    db.setDatabaseName(globals().pathImageBaseAppSettings);
+    if (! db.open()) {
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << "[getDatabaseThread()]"
+                               << "[THREAD] Eroare la deschiderea bazei de date(db_image 'sqlite'):"
+                               << db.lastError().text();
+    } else {
+        qInfo(logInfo()) << "[THREAD] realizata conexiunea (db_image) -" << connectionName;
+    }
+    return db;
+}
+
+bool DatabaseProvider::containConnection(const QString &connectionName)
+{
+    return QSqlDatabase::contains(connectionName);
+}
+
 void DatabaseProvider::removeDatabaseThread(const QString &connectionName)
 {
     QSqlDatabase::removeDatabase(connectionName);

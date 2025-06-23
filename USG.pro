@@ -148,7 +148,8 @@ SOURCES += \
     models/variantmaptablemodel.cpp \
     threads/databaseprovider.cpp \
     threads/dataconstantsworker.cpp \
-    threads/docemailexporterworker.cpp
+    threads/docemailexporterworker.cpp \
+    threads/patientdatasaverworker.cpp
 
 HEADERS += \
     catalogs/asistanttipapp.h \
@@ -228,7 +229,8 @@ HEADERS += \
     models/variantmaptablemodel.h \
     threads/databaseprovider.h \
     threads/dataconstantsworker.h \
-    threads/docemailexporterworker.h
+    threads/docemailexporterworker.h \
+    threads/patientdatasaverworker.h
 
 win32 {
 # pentru eroarea numai pe Windows:

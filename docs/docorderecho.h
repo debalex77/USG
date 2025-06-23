@@ -25,6 +25,8 @@
 #include <data/customdialoginvestig.h>
 #include <catalogs/patienthistory.h>
 #include <common/handlerfunctionthread.h>
+#include <common/appmetatypes.h>
+#include <threads/patientdatasaverworker.h>
 
 // https://qtexcel.github.io/QXlsx/Example.html
 //#include <QXlsx/header/xlsxdocument.h>
@@ -150,9 +152,10 @@ private slots:
     void indexChangedComboNurse(const int index);
 
     void onClickNewPacient();   // slot-urile pu crearea, editarea
-    void handlerExistPatientInBD(const QString patient_name, const QString patient_fname, QDate patient_birthday, const QString patient_idnp);
-    void handlerAfterInsertingDataPatient(const bool succes, const int patient_id);
-    void handlerAfterUpdatingDataPatient(const bool succes);
+    void handlerExistPatientInBD(const QVariantMap &map_data);
+    void handlerAfterInsertUpdateDataPatientInBD();
+    void handlerErrorSavePatient(const QStringList &listErr);
+
     void onClikEditPacient();   // pacientului
     void onClickClearPacient(); // golirea datelor pacientului + 'comboPacient'
     void onClickOpenHistoryPatient();
@@ -216,6 +219,8 @@ private:
     QStringList loadDataFromXml(const QString &filePath, const QString &tagName);
     void initCompleterAddressPatients();
 
+    DatabaseProvider *dbProvider();
+
 private:
     Ui::DocOrderEcho *ui;
 
@@ -249,6 +254,7 @@ private:
     QMenu      *menu;
     QMenu      *setUpMenu;
     DataBase   *db;
+    DatabaseProvider m_dbProvider;
     QTimer     *timer;  // pu data si ora actuala
     QCompleter *completer;
 

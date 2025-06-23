@@ -1,6 +1,8 @@
 #include "docemailexporterworker.h"
 
-DocEmailExporterWorker::DocEmailExporterWorker(DatabaseProvider *provider, DocData &data, QObject *parent)
+DocEmailExporterWorker::DocEmailExporterWorker(DatabaseProvider *provider,
+                                               DatesDocForExportEmail &data,
+                                               QObject *parent)
     : QObject{parent}, m_data(data), m_db(provider)
 {}
 
@@ -11,6 +13,9 @@ void DocEmailExporterWorker::process()
 {
     const QString connName = QStringLiteral("connection_%1")
                                     .arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
+
+    const QString connNameImage = QStringLiteral("connectionImage_%1")
+                                      .arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     { // Conexiunea trăieşte DOAR în acest bloc
 
@@ -32,12 +37,21 @@ void DocEmailExporterWorker::process()
         exportReportEcho(dbConn);
 
         // 4. exportam imaginile
-        exportImagesDocument(dbConn);
+        if (m_data.thisMySQL) {
+            exportImagesDocument(dbConn);
+        } else {
+            QSqlDatabase dbConnImage = m_db->getDatabaseImagesThread(connNameImage);
+            exportImagesDocument(dbConnImage);
+            dbConnImage.close();
+        }
 
         // 5. inchidem conexiunea cu BD
         dbConn.close();
 
     } // <- destructor QSqlDatabase
+
+    if (m_db->containConnection(connNameImage))
+        m_db->removeDatabaseThread(connNameImage);
 
     m_db->removeDatabaseThread(connName);
 
@@ -331,7 +345,7 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
     }
 
     // 10. eliberam memoria medelelor si a generatorului de rapoarte
-    cleaningUpModelInstances();
+    // cleaningUpModelInstances(); // eliberam memori in exportReportEcho
     m_report->deleteLater();
     m_report = nullptr;
 }
@@ -545,17 +559,14 @@ void DocEmailExporterWorker::exportReportEcho(QSqlDatabase &dbConn)
     }
 
     m_report = new LimeReport::ReportEngine(this);
-    setModelImgForPrint();
-    setModelDatesOrganization(dbConn);
-    setModelDatesPatient(dbConn);
     m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
     m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp_organization);
     m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
     m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
 
-    m_report->dataManager()->addModel("table_img", model_img, true);
+    m_report->dataManager()->addModel("table_logo", model_img, true);
     m_report->dataManager()->addModel("main_organization", model_organization, false);
-    m_report->dataManager()->addModel("table_pacient", model_patient, false);
+    m_report->dataManager()->addModel("table_patient", model_patient, false);
 
     // complex
     if (organs_internal && urinary_system){
@@ -856,7 +867,7 @@ void DocEmailExporterWorker::exportReportEcho(QSqlDatabase &dbConn)
                                      << m_data.nr_report;
         }
     }
-
+    cleaningUpModelInstances();
     cleaningUpModelInstancesReport();
     m_report->deleteLater();
 
