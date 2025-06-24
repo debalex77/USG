@@ -4,7 +4,7 @@ DatabaseProvider::DatabaseProvider(QObject *parent)
     : QObject{parent}
 {}
 
-QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, bool mysql)
+QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, bool mysql, QString prefixConn)
 {
     if (QSqlDatabase::contains(connectionName))
         return QSqlDatabase::database(connectionName);
@@ -23,10 +23,11 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         if (! db.open()) {
             qWarning(logWarning()) << this->metaObject()->className()
                                    << "[getDatabaseThread()]"
-                                   << "[THREAD] Eroare la deschiderea bazei de date(MYSQL):"
+                                   << prefixConn + " Eroare la deschiderea bazei de date(MYSQL):"
                                    << db.lastError().text();
         } else {
-            qInfo(logInfo()) << "[THREAD] realizata conexiunea -" << connectionName;
+            qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
+                             << connectionName;
         }
     } else {
         db.setHostName(globals().sqliteNameBase);
@@ -34,10 +35,11 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         if (! db.open()) {
             qWarning(logWarning()) << this->metaObject()->className()
                                    << "[getDatabaseThread()]"
-                                   << "[THREAD] Eroare la deschiderea bazei de date(sqlite):"
+                                   << prefixConn + " Eroare la deschiderea bazei de date(sqlite):"
                                    << db.lastError().text();
         } else {
-            qInfo(logInfo()) << "[THREAD] realizata conexiunea -" << connectionName;
+            qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
+                             << connectionName;
         }
     }
 
@@ -63,16 +65,44 @@ QSqlDatabase DatabaseProvider::getDatabaseImagesThread(const QString &connection
     return db;
 }
 
+QSqlDatabase DatabaseProvider::getDatabaseSyncThread(const QString &connectionName, bool mysql)
+{
+    if (! mysql)
+        return QSqlDatabase();
+
+    if (QSqlDatabase::contains(connectionName))
+        return QSqlDatabase::database(connectionName);
+
+    QSqlDatabase db = QSqlDatabase::addDatabase("QMYSQL", connectionName);
+    db.setHostName(globals().cloud_host);
+    db.setDatabaseName(globals().cloud_nameBase);
+    db.setPort(globals().cloud_port.toInt());
+    db.setConnectOptions(globals().cloud_optionConnect);
+    db.setUserName(globals().cloud_user);
+    db.setPassword(globals().cloud_passwd);
+    if (! db.open()) {
+        qWarning(logWarning()) << this->metaObject()->className()
+                               << "[getDatabaseThread()]"
+                               << "[SYNC] Eroare la deschiderea bazei de date(db_image 'sqlite'):"
+                               << db.lastError().text();
+    } else {
+        qInfo(logInfo()) << "[SYNC] realizata conexiunea -" << connectionName;
+    }
+    return db;
+}
+
 bool DatabaseProvider::containConnection(const QString &connectionName)
 {
     return QSqlDatabase::contains(connectionName);
 }
 
-void DatabaseProvider::removeDatabaseThread(const QString &connectionName)
+void DatabaseProvider::removeDatabaseThread(const QString &connectionName, QString prefixConn)
 {
     QSqlDatabase::removeDatabase(connectionName);
     if (QSqlDatabase::contains(connectionName))
-        qWarning(logWarning()) << "[THREAD] eroare la eliminare conexiunei -" << connectionName;
+        qWarning(logWarning()) << QStringLiteral("%1 eroare la eliminare conexiunei - %2")
+            .arg(prefixConn, connectionName);
     else
-        qInfo(logInfo()) << "[THREAD] eliminarea cu succes conexiunei -" << connectionName;
+        qInfo(logInfo()) << QStringLiteral("%1 eliminarea cu succes conexiunei - %2")
+            .arg(prefixConn, connectionName);
 }

@@ -16,7 +16,7 @@ public slots:
     void processUpdate();
 
 signals:
-    void finished();
+    void finished(const QVariantMap &map_data);
     void finishedError(const QStringList &err);
     void finishedPatientExistInBD(const QVariantMap &map_data);
 

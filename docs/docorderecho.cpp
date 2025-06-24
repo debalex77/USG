@@ -745,21 +745,25 @@ void DocOrderEcho::handlerExistPatientInBD(const QVariantMap &map_data)
     msgBox.exec();
 }
 
-void DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD()
+void DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD(const QVariantMap &map_data)
 {
+    // prezentam mesaj ca au fost salvate datele pacientului
     popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
                            "au fost inserate/modificate in baza de date cu succes.")
-                            .arg(ui->comboPacient->currentText()));
+                            .arg(map_data.value("fullName").toString()));
     popUp->show();
 
-    DatesCatPatient data;
-
+    // actualizam modelul comboPacient
     QTimer::singleShot(100, this, &DocOrderEcho::updateModelPacients);
-    setIdPacient(data.id);    // setam 'id' pacientului
-    emit mCreateNewPacient(); // emitem signal pu conectarea din alte clase
+
+    setIdPacient(map_data.value("id").toInt()); // setam 'id' pacientului
+    emit mCreateNewPacient();                   // emitem signal pu conectarea din alte clase
 
     if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
         ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
+
+    // initierea syncronizarii
+    initSyncPatientData();
 }
 
 void DocOrderEcho::handlerErrorSavePatient(const QStringList &listErr)
@@ -2098,6 +2102,58 @@ void DocOrderEcho::initCompleterAddressPatients()
 DatabaseProvider *DocOrderEcho::dbProvider()
 {
     return &m_dbProvider;
+}
+
+void DocOrderEcho::initSyncPatientData()
+{
+    // 1. Anuntam variabile necesare
+    QString patient_name;
+    QString patient_fName;
+
+    // 2. Despartim nume, prenume
+    if (! splitFullNamePacient(patient_name, patient_fName))
+        return;
+
+    // 3. Verificam daca sunt completate variabile
+    if (patient_name.isEmpty() || patient_fName.isEmpty())
+        return;
+
+    // 4. setam structura
+    DatesCatPatient data_patient;
+    data_patient.id = (ui->checkBox->isChecked() && m_idPacient <= 0)
+                          ? (db->getLastIdForTable("pacients") + 1)
+                          : m_idPacient;
+    data_patient.name          = patient_name;
+    data_patient.fname         = patient_fName;
+    data_patient.idnp          = ui->editIDNP->text();
+    data_patient.medicalPolicy = ui->editPolicyMedical->text();
+    data_patient.birthday      = ui->dateEditBirthday->date();
+    data_patient.address       = ui->editAddress->text();
+    data_patient.phone         = ui->editPhone->text();
+    data_patient.comment       = ui->editComment->toPlainText();
+    data_patient.thisMySQL     = globals().thisMySQL;
+
+    // 5. Creăm thread-ul pentru trimiterea
+    QThread *thread = new QThread();
+
+    // 6. alocam memoria worker-lui si mutam in flux nou
+    auto worker = new SyncPatientDataWorker(dbProvider(), data_patient);
+    worker->moveToThread(thread);
+
+    // 7. conectarea - lansarea procesului de syncronizare
+    connect(thread, &QThread::started, worker, &SyncPatientDataWorker::process);
+
+    // 8. conectarea - procesarea finisarii syncronizarii
+
+    // 9. conectarea - distrugea workerului
+    connect(worker, &SyncPatientDataWorker::finished, thread, &QThread::quit);
+    connect(worker, &SyncPatientDataWorker::finished, worker, &SyncPatientDataWorker::deleteLater);
+
+    // 10. distrugerea thread-lui
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 11. lansarea thread-lui
+    thread->start();
 }
 
 // **********************************************************************************

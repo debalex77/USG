@@ -149,7 +149,8 @@ SOURCES += \
     threads/databaseprovider.cpp \
     threads/dataconstantsworker.cpp \
     threads/docemailexporterworker.cpp \
-    threads/patientdatasaverworker.cpp
+    threads/patientdatasaverworker.cpp \
+    threads/syncpatientdataworker.cpp
 
 HEADERS += \
     catalogs/asistanttipapp.h \
@@ -230,7 +231,8 @@ HEADERS += \
     threads/databaseprovider.h \
     threads/dataconstantsworker.h \
     threads/docemailexporterworker.h \
-    threads/patientdatasaverworker.h
+    threads/patientdatasaverworker.h \
+    threads/syncpatientdataworker.h
 
 win32 {
 # pentru eroarea numai pe Windows:

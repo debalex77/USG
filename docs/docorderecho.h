@@ -27,6 +27,7 @@
 #include <common/handlerfunctionthread.h>
 #include <common/appmetatypes.h>
 #include <threads/patientdatasaverworker.h>
+#include <threads/syncpatientdataworker.h>
 
 // https://qtexcel.github.io/QXlsx/Example.html
 //#include <QXlsx/header/xlsxdocument.h>
@@ -153,7 +154,7 @@ private slots:
 
     void onClickNewPacient();   // slot-urile pu crearea, editarea
     void handlerExistPatientInBD(const QVariantMap &map_data);
-    void handlerAfterInsertUpdateDataPatientInBD();
+    void handlerAfterInsertUpdateDataPatientInBD(const QVariantMap &map_data);
     void handlerErrorSavePatient(const QStringList &listErr);
 
     void onClikEditPacient();   // pacientului
@@ -220,6 +221,7 @@ private:
     void initCompleterAddressPatients();
 
     DatabaseProvider *dbProvider();
+    void initSyncPatientData();
 
 private:
     Ui::DocOrderEcho *ui;
