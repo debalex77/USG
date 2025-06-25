@@ -49,7 +49,7 @@
          <string>Adauga      </string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/database_connect.png</normaloff>:/img/database_connect.png</iconset>
         </property>
        </widget>
@@ -105,7 +105,7 @@
          <string>Conectarea</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/database.png</normaloff>:/img/database.png</iconset>
         </property>
        </widget>
@@ -128,7 +128,7 @@
          <string>Eliminare    </string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/database_remove.png</normaloff>:/img/database_remove.png</iconset>
         </property>
        </widget>
@@ -151,7 +151,7 @@
          <string>Anulare      </string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
         </property>
        </widget>
@@ -167,7 +167,7 @@
   <tabstop>btnRemove</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

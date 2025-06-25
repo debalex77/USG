@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>303</width>
-    <height>213</height>
+    <height>216</height>
    </rect>
   </property>
   <property name="font">
@@ -129,7 +129,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
       </widget>
@@ -146,7 +146,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
       </widget>
@@ -156,7 +156,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

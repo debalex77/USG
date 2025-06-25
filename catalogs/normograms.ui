@@ -19,7 +19,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resource.qrc">
+   <iconset resource="../resources/resource.qrc">
     <normaloff>:/img/normograma.png</normaloff>:/img/normograma.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -42,7 +42,7 @@
           <string>Oasele nazale</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
          </property>
         </widget>
@@ -53,7 +53,7 @@
           <string>Index lichidului amniotic</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
          </property>
         </widget>
@@ -84,7 +84,7 @@
           <string>Translucența nucală</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/NT.png</normaloff>:/img/NT.png</iconset>
          </property>
         </widget>
@@ -95,7 +95,7 @@
           <string>Doppler - a.ombelicală (PI)</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/doppler.png</normaloff>:/img/doppler.png</iconset>
          </property>
         </widget>
@@ -106,7 +106,7 @@
           <string>Doppler - a.uterine (PI)</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/doppler.png</normaloff>:/img/doppler.png</iconset>
          </property>
         </widget>
@@ -135,6 +135,7 @@
             <widget class="QLabel" name="label">
              <property name="font">
               <font>
+               <family>Cantarell</family>
                <bold>true</bold>
                <underline>true</underline>
               </font>
@@ -167,6 +168,7 @@
             <widget class="QLabel" name="label_2">
              <property name="font">
               <font>
+               <family>Cantarell</family>
                <bold>true</bold>
                <underline>true</underline>
               </font>
@@ -194,6 +196,7 @@ sursa: M.V.Medvedev 2012a.</string>
             <widget class="QLabel" name="label_3">
              <property name="font">
               <font>
+               <family>Cantarell</family>
                <bold>true</bold>
                <underline>true</underline>
               </font>
@@ -218,6 +221,7 @@ sursa: T.Moore ... 1990a.</string>
             <widget class="QLabel" name="label_4">
              <property name="font">
               <font>
+               <family>Cantarell</family>
                <bold>true</bold>
                <underline>true</underline>
               </font>
@@ -247,6 +251,7 @@ sursa: T.Moore ... 1990a.</string>
             <widget class="QLabel" name="label_5">
              <property name="font">
               <font>
+               <family>Cantarell</family>
                <bold>true</bold>
                <underline>true</underline>
               </font>
@@ -279,7 +284,7 @@ sursa: T.Moore ... 1990a.</string>
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

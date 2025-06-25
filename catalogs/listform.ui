@@ -31,7 +31,7 @@
       <string>Editează</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/edit_x32.png</normaloff>:/img/edit_x32.png</iconset>
      </property>
      <property name="shortcut">
@@ -51,7 +51,7 @@
       <string>Adaugă</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
      </property>
      <property name="shortcut">
@@ -71,7 +71,7 @@
       <string>Închide</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
      </property>
      <property name="shortcut">
@@ -107,7 +107,7 @@
       <string>Elimină</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
      </property>
      <property name="shortcut">
@@ -118,7 +118,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

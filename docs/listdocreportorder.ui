@@ -68,7 +68,7 @@
            <string>Deschide</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
           </property>
          </widget>
@@ -85,7 +85,7 @@
            <string>Printare</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
           </property>
          </widget>
@@ -166,7 +166,7 @@
            <string>Deschide</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
           </property>
          </widget>
@@ -218,7 +218,7 @@
            <string>Printare</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
           </property>
          </widget>
@@ -436,7 +436,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="../resource.qrc">
+            <iconset resource="../resources/resource.qrc">
              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
            </property>
           </widget>
@@ -447,7 +447,7 @@
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="../resource.qrc">
+            <iconset resource="../resources/resource.qrc">
              <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
            </property>
           </widget>
@@ -488,7 +488,7 @@
            <string>Aplica</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
           </property>
          </widget>
@@ -511,7 +511,7 @@
            <string>Goleste</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
           </property>
          </widget>
@@ -534,7 +534,7 @@
            <string>Inchide</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
           </property>
          </widget>
@@ -565,7 +565,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
        </property>
        <property name="shortcut">
@@ -579,7 +579,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
        </property>
        <property name="shortcut">
@@ -593,7 +593,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
        </property>
        <property name="shortcut">
@@ -614,7 +614,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/filter-add-icon.png</normaloff>:/img/filter-add-icon.png</iconset>
        </property>
        <property name="shortcut">
@@ -628,7 +628,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/filter-icon.png</normaloff>:/img/filter-icon.png</iconset>
        </property>
        <property name="shortcut">
@@ -642,7 +642,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/filter-delete-icon.png</normaloff>:/img/filter-delete-icon.png</iconset>
        </property>
        <property name="shortcut">
@@ -663,7 +663,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/update_x32.png</normaloff>:/img/update_x32.png</iconset>
        </property>
        <property name="shortcut">
@@ -684,7 +684,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/table-cell.png</normaloff>:/img/table-cell.png</iconset>
        </property>
        <property name="shortcut">
@@ -705,7 +705,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
        </property>
        <property name="shortcut">
@@ -719,7 +719,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
        </property>
       </widget>
@@ -743,7 +743,7 @@
         <string>Raport</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/examenEcho.png</normaloff>:/img/examenEcho.png</iconset>
        </property>
        <property name="shortcut">
@@ -766,7 +766,7 @@
         <string>Tabela</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/view_table.png</normaloff>:/img/view_table.png</iconset>
        </property>
        <property name="shortcut">
@@ -790,7 +790,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/date_period.png</normaloff>:/img/date_period.png</iconset>
        </property>
        <property name="shortcut">
@@ -811,7 +811,7 @@
         <string>...</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/search_pacients.png</normaloff>:/img/search_pacients.png</iconset>
        </property>
        <property name="shortcut">
@@ -866,7 +866,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

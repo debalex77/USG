@@ -156,7 +156,7 @@ QToolButton:pressed {
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="../resource.qrc">
+            <iconset resource="../resources/resource.qrc">
              <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
            </property>
           </widget>
@@ -182,7 +182,7 @@ QToolButton:pressed {
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="../resource.qrc">
+            <iconset resource="../resources/resource.qrc">
              <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
            </property>
           </widget>
@@ -208,7 +208,7 @@ QToolButton:pressed {
             <string>...</string>
            </property>
            <property name="icon">
-            <iconset resource="../resource.qrc">
+            <iconset resource="../resources/resource.qrc">
              <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
            </property>
           </widget>
@@ -317,7 +317,7 @@ QToolButton:pressed {
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
          </property>
         </widget>
@@ -406,7 +406,7 @@ QToolButton:pressed {
       <string>OK</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
      </property>
     </widget>
@@ -423,7 +423,7 @@ QToolButton:pressed {
       <string>Salvează</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
      </property>
     </widget>
@@ -440,7 +440,7 @@ QToolButton:pressed {
       <string>Închide</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
      </property>
     </widget>
@@ -461,7 +461,7 @@ QToolButton:pressed {
   <tabstop>editComment</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

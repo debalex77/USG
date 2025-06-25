@@ -25,7 +25,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resource.qrc">
+   <iconset resource="../resources/resource.qrc">
     <normaloff>:/img/reports.png</normaloff>:/img/reports.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
@@ -62,7 +62,7 @@
          <string>Printează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -98,7 +98,7 @@
          <string>Export PDF</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/export_pdf.png</normaloff>:/img/export_pdf.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -141,7 +141,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/images/ZoomOut.png</normaloff>:/images/ZoomOut.png</iconset>
         </property>
        </widget>
@@ -158,7 +158,7 @@
          <string>Formează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/right-arrow.png</normaloff>:/img/right-arrow.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -178,7 +178,7 @@
          <string>Setări</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/settings_x32.png</normaloff>:/img/settings_x32.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -199,7 +199,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/images/ZoomIn.png</normaloff>:/images/ZoomIn.png</iconset>
         </property>
        </widget>
@@ -256,7 +256,7 @@
          <string>Designer</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/images/design.png</normaloff>:/images/design.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -270,7 +270,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/images/Next.png</normaloff>:/images/Next.png</iconset>
         </property>
        </widget>
@@ -316,7 +316,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/images/Prev.png</normaloff>:/images/Prev.png</iconset>
         </property>
        </widget>
@@ -333,7 +333,7 @@
          <string>E-mail</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -385,7 +385,7 @@
         <widget class="QDateEdit" name="dateEnd">
          <property name="dateTime">
           <datetime>
-           <hour>11</hour>
+           <hour>9</hour>
            <minute>59</minute>
            <second>59</second>
            <year>2000</year>
@@ -455,7 +455,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
          </property>
         </widget>
@@ -480,7 +480,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
          </property>
         </widget>
@@ -525,7 +525,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
          </property>
         </widget>
@@ -574,7 +574,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

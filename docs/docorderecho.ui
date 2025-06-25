@@ -169,12 +169,12 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>992</width>
+        <width>514</width>
         <height>114</height>
        </rect>
       </property>
       <attribute name="icon">
-       <iconset resource="../resource.qrc">
+       <iconset resource="../resources/resource.qrc">
         <normaloff>:/img/right-arrow_tool_box.png</normaloff>:/img/right-arrow_tool_box.png</iconset>
       </attribute>
       <attribute name="label">
@@ -216,7 +216,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/add-user.png</normaloff>:/img/add-user.png</iconset>
          </property>
         </widget>
@@ -272,7 +272,7 @@
           <string>...</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
          </property>
         </widget>
@@ -393,7 +393,7 @@
        </rect>
       </property>
       <attribute name="icon">
-       <iconset resource="../resource.qrc">
+       <iconset resource="../resources/resource.qrc">
         <normaloff>:/img/right-arrow_tool_box.png</normaloff>:/img/right-arrow_tool_box.png</iconset>
       </attribute>
       <attribute name="label">
@@ -677,7 +677,7 @@
           <string>Valideaza</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
          </property>
          <property name="toolButtonStyle">
@@ -703,7 +703,7 @@
           <string>Editeaza</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
          </property>
          <property name="toolButtonStyle">
@@ -729,7 +729,7 @@
           <string>Goleste</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
          </property>
          <property name="toolButtonStyle">
@@ -755,7 +755,7 @@
           <string>Istoria</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/medical-history.png</normaloff>:/img/medical-history.png</iconset>
          </property>
          <property name="toolButtonStyle">
@@ -770,12 +770,12 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>992</width>
+        <width>98</width>
         <height>68</height>
        </rect>
       </property>
       <attribute name="icon">
-       <iconset resource="../resource.qrc">
+       <iconset resource="../resources/resource.qrc">
         <normaloff>:/img/right-arrow_tool_box.png</normaloff>:/img/right-arrow_tool_box.png</iconset>
       </attribute>
       <attribute name="label">
@@ -850,7 +850,7 @@
          <string>Validează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
         </property>
        </widget>
@@ -873,7 +873,7 @@
          <string>Salvează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
         </property>
        </widget>
@@ -896,7 +896,7 @@
          <string>Printează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
         </property>
        </widget>
@@ -919,7 +919,7 @@
          <string>Raport</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/reports.png</normaloff>:/img/reports.png</iconset>
         </property>
        </widget>
@@ -942,7 +942,7 @@
          <string>Inchide</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
         </property>
        </widget>
@@ -1000,7 +1000,7 @@
   <tabstop>cardPayment</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

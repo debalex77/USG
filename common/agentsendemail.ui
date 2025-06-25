@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resource.qrc">
+   <iconset resource="../resources/resource.qrc">
     <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -124,7 +124,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
       </widget>
@@ -170,7 +170,7 @@
   <tabstop>attached_img5</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

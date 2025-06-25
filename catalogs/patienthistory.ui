@@ -19,7 +19,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resource.qrc">
+   <iconset resource="../resources/resource.qrc">
     <normaloff>:/img/medical-history.png</normaloff>:/img/medical-history.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout_3">
@@ -91,7 +91,7 @@ QToolButton:pressed
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/search_pacients.png</normaloff>:/img/search_pacients.png</iconset>
      </property>
     </widget>
@@ -326,7 +326,7 @@ QToolButton:pressed
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
      </property>
     </widget>
@@ -334,7 +334,7 @@ QToolButton:pressed
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

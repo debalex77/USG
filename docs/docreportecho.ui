@@ -25,7 +25,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resource.qrc">
+   <iconset resource="../resources/resource.qrc">
     <normaloff>:/img/examenEcho.png</normaloff>:/img/examenEcho.png</iconset>
   </property>
   <property name="sizeGripEnabled">
@@ -57,7 +57,7 @@ QToolButton:pressed
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
      </property>
     </widget>
@@ -89,7 +89,7 @@ QToolButton:pressed
         <string>Printeaza</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/print_x32.png</normaloff>:/img/print_x32.png</iconset>
        </property>
        <property name="shortcut">
@@ -106,7 +106,7 @@ QToolButton:pressed
         <string>Valideaza</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
        <property name="shortcut">
@@ -123,7 +123,7 @@ QToolButton:pressed
         <string>Salveaza</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
        </property>
        <property name="shortcut">
@@ -140,7 +140,7 @@ QToolButton:pressed
         <string>Inchide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
        <property name="shortcut">
@@ -188,7 +188,7 @@ QToolButton:pressed
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
      </property>
     </widget>
@@ -295,7 +295,7 @@ QToolButton:pressed
           <string>Organe interne</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/liver.png</normaloff>:/img/liver.png</iconset>
          </property>
         </widget>
@@ -306,7 +306,7 @@ QToolButton:pressed
           <string>Sistemul urinar</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/kidney.png</normaloff>:/img/kidney.png</iconset>
          </property>
         </widget>
@@ -317,7 +317,7 @@ QToolButton:pressed
           <string>Prostata</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/prostate.png</normaloff>:/img/prostate.png</iconset>
          </property>
         </widget>
@@ -328,7 +328,7 @@ QToolButton:pressed
           <string>Ginecologic</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/pubis.png</normaloff>:/img/pubis.png</iconset>
          </property>
         </widget>
@@ -339,7 +339,7 @@ QToolButton:pressed
           <string>Glandele mamare</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/breast.png</normaloff>:/img/breast.png</iconset>
          </property>
         </widget>
@@ -350,7 +350,7 @@ QToolButton:pressed
           <string>Glanda tiroida</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/thyroide.png</normaloff>:/img/thyroide.png</iconset>
          </property>
         </widget>
@@ -361,7 +361,7 @@ QToolButton:pressed
           <string>Sarcina până la 11 săptămâni</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/pregnant0.png</normaloff>:/img/pregnant0.png</iconset>
          </property>
         </widget>
@@ -372,7 +372,7 @@ QToolButton:pressed
           <string>Sarcina 11-14 săptămâni</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/pregnant1.png</normaloff>:/img/pregnant1.png</iconset>
          </property>
         </widget>
@@ -383,7 +383,7 @@ QToolButton:pressed
           <string>Sarcina 14-40 săptămâni</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/pregnant2.png</normaloff>:/img/pregnant2.png</iconset>
          </property>
         </widget>
@@ -401,7 +401,7 @@ QToolButton:pressed
           <string>Imagini</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/image-files.png</normaloff>:/img/image-files.png</iconset>
          </property>
         </widget>
@@ -412,7 +412,7 @@ QToolButton:pressed
           <string>Video</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/video.png</normaloff>:/img/video.png</iconset>
          </property>
         </widget>
@@ -423,7 +423,7 @@ QToolButton:pressed
           <string>Normograme</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/normograma.png</normaloff>:/img/normograma.png</iconset>
          </property>
         </widget>
@@ -441,7 +441,7 @@ QToolButton:pressed
           <string>Comentariu</string>
          </property>
          <property name="icon">
-          <iconset resource="../resource.qrc">
+          <iconset resource="../resources/resource.qrc">
            <normaloff>:/img/comment.png</normaloff>:/img/comment.png</iconset>
          </property>
         </widget>
@@ -797,7 +797,7 @@ QToolButton:pressed
                      <string/>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -830,7 +830,7 @@ QToolButton:pressed
                      <string>Adaugă</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -1473,7 +1473,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -1503,7 +1503,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -1529,7 +1529,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>550</width>
                 <height>660</height>
                </rect>
               </property>
@@ -1961,7 +1961,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -1991,7 +1991,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -2182,7 +2182,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -2225,7 +2225,7 @@ QToolButton:pressed
                      <string>Șablon</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -2264,8 +2264,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>417</width>
+                <height>387</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_15">
@@ -2371,7 +2371,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -2444,7 +2444,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -2569,7 +2569,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>584</width>
                 <height>919</height>
                </rect>
               </property>
@@ -2927,7 +2927,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -2977,7 +2977,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -3295,7 +3295,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -3357,7 +3357,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -3416,7 +3416,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -3504,7 +3504,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -3558,7 +3558,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -3598,7 +3598,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -3707,7 +3707,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>338</width>
                 <height>622</height>
                </rect>
               </property>
@@ -3859,7 +3859,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -3889,7 +3889,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -4067,7 +4067,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -4097,7 +4097,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -4174,7 +4174,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -4242,7 +4242,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -4281,8 +4281,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>351</width>
+                <height>490</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_35">
@@ -4584,7 +4584,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -4614,7 +4614,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -4685,7 +4685,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -4753,7 +4753,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -4792,7 +4792,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>693</width>
                 <height>577</height>
                </rect>
               </property>
@@ -5378,7 +5378,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -5408,7 +5408,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -5434,7 +5434,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>722</width>
                 <height>885</height>
                </rect>
               </property>
@@ -5582,7 +5582,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
                     </property>
                    </widget>
@@ -5628,7 +5628,7 @@ QToolButton:pressed
                      <string>...</string>
                     </property>
                     <property name="icon">
-                     <iconset resource="../resource.qrc">
+                     <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/select.png</normaloff>:/img/select.png</iconset>
                     </property>
                    </widget>
@@ -6377,7 +6377,7 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>727</width>
+                <width>701</width>
                 <height>783</height>
                </rect>
               </property>
@@ -8658,8 +8658,8 @@ QToolButton:pressed
                <rect>
                 <x>0</x>
                 <y>0</y>
-                <width>741</width>
-                <height>543</height>
+                <width>545</width>
+                <height>221</height>
                </rect>
               </property>
               <layout class="QGridLayout" name="gridLayout_49">
@@ -8748,7 +8748,7 @@ QToolButton:pressed
                           <string>Golește</string>
                          </property>
                          <property name="icon">
-                          <iconset resource="../resource.qrc">
+                          <iconset resource="../resources/resource.qrc">
                            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
                          </property>
                          <property name="toolButtonStyle">
@@ -8852,7 +8852,7 @@ QToolButton:pressed
                           <string>Golește</string>
                          </property>
                          <property name="icon">
-                          <iconset resource="../resource.qrc">
+                          <iconset resource="../resources/resource.qrc">
                            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
                          </property>
                          <property name="toolButtonStyle">
@@ -8956,7 +8956,7 @@ QToolButton:pressed
                           <string>Golește</string>
                          </property>
                          <property name="icon">
-                          <iconset resource="../resource.qrc">
+                          <iconset resource="../resources/resource.qrc">
                            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
                          </property>
                          <property name="toolButtonStyle">
@@ -9060,7 +9060,7 @@ QToolButton:pressed
                           <string>Golește</string>
                          </property>
                          <property name="icon">
-                          <iconset resource="../resource.qrc">
+                          <iconset resource="../resources/resource.qrc">
                            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
                          </property>
                          <property name="toolButtonStyle">
@@ -9164,7 +9164,7 @@ QToolButton:pressed
                           <string>Golește</string>
                          </property>
                          <property name="icon">
-                          <iconset resource="../resource.qrc">
+                          <iconset resource="../resources/resource.qrc">
                            <normaloff>:/img/trash.png</normaloff>:/img/trash.png</iconset>
                          </property>
                          <property name="toolButtonStyle">
@@ -9235,7 +9235,7 @@ QToolButton:pressed
       <string>Parametrii</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/investigations_x32.png</normaloff>:/img/investigations_x32.png</iconset>
      </property>
     </widget>
@@ -9306,7 +9306,7 @@ QToolButton:pressed
       <string/>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/medical-history.png</normaloff>:/img/medical-history.png</iconset>
      </property>
     </widget>
@@ -9671,7 +9671,7 @@ QToolButton:pressed
   <tabstop>gestation1_view_good</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

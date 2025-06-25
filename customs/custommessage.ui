@@ -98,7 +98,7 @@ QToolButton:pressed
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../resource.qrc">:/img/oxygen/dialog-warning.png</pixmap>
+      <pixmap resource="../resources/resource.qrc">:/img/oxygen/dialog-warning.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -162,7 +162,7 @@ QToolButton:pressed
       <string/>
      </property>
      <property name="pixmap">
-      <pixmap resource="../resource.qrc">:/img/right-arrow_tool_box.png</pixmap>
+      <pixmap resource="../resources/resource.qrc">:/img/right-arrow_tool_box.png</pixmap>
      </property>
      <property name="scaledContents">
       <bool>true</bool>
@@ -191,6 +191,7 @@ QToolButton:pressed
   </layout>
  </widget>
  <resources>
+  <include location="../resources/resource.qrc"/>
   <include location="../resource.qrc"/>
  </resources>
  <connections/>

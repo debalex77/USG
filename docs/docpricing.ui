@@ -187,7 +187,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
         </property>
         <property name="shortcut">
@@ -201,7 +201,7 @@
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
         </property>
        </widget>
@@ -229,7 +229,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
           </property>
           <property name="shortcut">
@@ -246,7 +246,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/write.png</normaloff>:/img/write.png</iconset>
           </property>
           <property name="shortcut">
@@ -263,7 +263,7 @@
            <string>...</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/clear_x32.png</normaloff>:/img/clear_x32.png</iconset>
           </property>
           <property name="shortcut">
@@ -293,7 +293,7 @@
            <string>Formeaza</string>
           </property>
           <property name="icon">
-           <iconset resource="../resource.qrc">
+           <iconset resource="../resources/resource.qrc">
             <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
           </property>
           <property name="shortcut">
@@ -382,7 +382,7 @@
          <string>Închide</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
         </property>
         <property name="shortcut">
@@ -405,7 +405,7 @@
          <string>Printează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/print_x32.png</normaloff>:/img/print_x32.png</iconset>
         </property>
         <property name="shortcut">
@@ -428,7 +428,7 @@
          <string>Salvează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
         </property>
         <property name="shortcut">
@@ -451,7 +451,7 @@
          <string>Validează</string>
         </property>
         <property name="icon">
-         <iconset resource="../resource.qrc">
+         <iconset resource="../resources/resource.qrc">
           <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
         </property>
         <property name="shortcut">
@@ -532,7 +532,7 @@
   <tabstop>btnClose</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

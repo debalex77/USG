@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>798</width>
-    <height>558</height>
+    <height>559</height>
    </rect>
   </property>
   <property name="font">
@@ -203,7 +203,7 @@ QToolButton:pressed
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="../resource.qrc">
+              <iconset resource="../resources/resource.qrc">
                <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
              </property>
             </widget>
@@ -233,7 +233,7 @@ QToolButton:pressed
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="../resource.qrc">
+              <iconset resource="../resources/resource.qrc">
                <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
              </property>
             </widget>
@@ -280,7 +280,7 @@ QToolButton:pressed
               <string>...</string>
              </property>
              <property name="icon">
-              <iconset resource="../resource.qrc">
+              <iconset resource="../resources/resource.qrc">
                <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
              </property>
             </widget>
@@ -360,7 +360,7 @@ QToolButton:pressed {
                  <string>...</string>
                 </property>
                 <property name="icon">
-                 <iconset resource="../resource.qrc">
+                 <iconset resource="../resources/resource.qrc">
                   <normaloff>:/img/oxygen/application-exit.png</normaloff>:/img/oxygen/application-exit.png</iconset>
                 </property>
                </widget>
@@ -793,7 +793,7 @@ QToolButton:pressed
       <string>...</string>
      </property>
      <property name="icon">
-      <iconset resource="../resource.qrc">
+      <iconset resource="../resources/resource.qrc">
        <normaloff>:/img/open-search.png</normaloff>:/img/open-search.png</iconset>
      </property>
     </widget>
@@ -848,7 +848,7 @@ QToolButton:pressed
         <string>Ok</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
       </widget>
@@ -865,7 +865,7 @@ QToolButton:pressed
         <string>Salvează</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
        </property>
       </widget>
@@ -882,7 +882,7 @@ QToolButton:pressed
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
       </widget>
@@ -892,7 +892,7 @@ QToolButton:pressed
   </layout>
  </widget>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

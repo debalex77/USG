@@ -144,7 +144,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/accept_button.png</normaloff>:/img/accept_button.png</iconset>
        </property>
       </widget>
@@ -161,7 +161,7 @@
         <string>Salvează</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/save.png</normaloff>:/img/save.png</iconset>
        </property>
       </widget>
@@ -178,7 +178,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resource.qrc">
+        <iconset resource="../resources/resource.qrc">
          <normaloff>:/img/close_x32.png</normaloff>:/img/close_x32.png</iconset>
        </property>
       </widget>
@@ -230,7 +230,7 @@
   <tabstop>editComment</tabstop>
  </tabstops>
  <resources>
-  <include location="../resource.qrc"/>
+  <include location="../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>
