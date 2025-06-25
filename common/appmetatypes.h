@@ -38,6 +38,7 @@ struct DatesForAgentEmail
 
 struct TagsSystemDocument
 {
+    int id_doc;
     bool organs_internal;
     bool urinary_system;
     bool prostate;

@@ -138,7 +138,8 @@ void DataConstantsWorker::process()
                 QByteArray encryptedPassword = QByteArray::fromBase64(qry.value(rec.indexOf("password")).toString().toUtf8());
                 QByteArray decryptedPassword = crypto_manager->decryptPassword(encryptedPassword, hash_user, iv);
                 globals().cloud_passwd = decryptedPassword;
-                qInfo(logInfo()) << "[THREAD] Actualizate variabile globale cu date pentru sincronizare cu serverul.";
+                globals().cloud_srv_exist  = true;
+                qInfo(logInfo()) << "[THREAD] Actualizate variabile globale pentru sincronizare cu serverul.";
             }
         }
 

@@ -25,10 +25,9 @@
 #include <catalogs/chooseformprint.h>
 #include <docs/docorderecho.h>
 #include <models/basesortfilterproxymodel.h>
-
 #include <catalogs/normograms.h>
-
 #include <common/datapercentage.h>
+#include <common/appmetatypes.h>
 
 namespace Ui {
 class DocReportEcho;
@@ -501,6 +500,8 @@ private:
     InfoWindow *info_win;
 
     DataPercentage *data_percentage;
+
+    TagsSystemDocument m_tagDoc_sync;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

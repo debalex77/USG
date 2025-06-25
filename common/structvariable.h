@@ -86,6 +86,7 @@ struct GlobalVariable {
     bool thisSqlite = false;
     bool thisSqlCipher = false;
 
+    bool cloud_srv_exist = false;
     bool showUserManual = false;
     bool showHistoryVersion = false;
     bool memoryUser = false;

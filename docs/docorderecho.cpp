@@ -664,6 +664,7 @@ void DocOrderEcho::onClickNewPacient()
         return;
     }
 
+
     // 2. Anuntam variabile necesare
     QString patient_name;
     QString patient_fName;
@@ -763,7 +764,8 @@ void DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD(const QVariantMap &ma
         ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
 
     // initierea syncronizarii
-    initSyncPatientData();
+    if (globals().cloud_srv_exist)
+        initSyncPatientData();
 }
 
 void DocOrderEcho::handlerErrorSavePatient(const QStringList &listErr)
@@ -1092,9 +1094,15 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print, QString &filePDF)
     print_model_organization->setQuery(db->getQryFromTableConstantById(globals().idUserApp));
     print_model_patient->setQuery(db->getQryFromTablePatientById(m_idPacient));
     if (globals().thisMySQL)
-        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "FORMAT(orderEchoTable.price, 2)"));
+        print_model_table->setQuery(db->getQryForTableOrderById(m_id,
+                                                                (noncomercial_price)
+                                                                    ? "'0-00'"
+                                                                    : "FORMAT(orderEchoTable.price, 2)"));
     else
-        print_model_table->setQuery(db->getQryForTableOrderById(m_id, (noncomercial_price) ? "'0-00'" : "printf('%.2f', orderEchoTable.price)"));
+        print_model_table->setQuery(db->getQryForTableOrderById(m_id,
+                                                                (noncomercial_price)
+                                                                    ? "'0-00'"
+                                                                    : "printf('%.2f', orderEchoTable.price)"));
 
     double _num;
     _num = (noncomercial_price == 0) ? sumOrder : 0; // daca 'noncomercial_price' -> nu aratam suma
@@ -1113,7 +1121,10 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print, QString &filePDF)
     m_report->dataManager()->addModel("table_table", print_model_table, false);
     m_report->setShowProgressDialog(true);
 
-    m_report->setPreviewWindowTitle(tr("Comanda ecografică nr.") + ui->editNumberDoc->text() + tr(" din ") + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss") + tr(" (printare)"));
+    m_report->setPreviewWindowTitle(tr("Comanda ecografică nr.") +
+                                    ui->editNumberDoc->text() + tr(" din ") +
+                                    ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss") +
+                                    tr(" (printare)"));
 
     // *************************************************************************************
     // verificam drumul spre forme de tipar
@@ -1140,16 +1151,16 @@ void DocOrderEcho::onPrint(Enums::TYPE_PRINT type_print, QString &filePDF)
     // *************************************************************************************
     // prezentam forma de tipar
     if (type_print == Enums::TYPE_PRINT::OPEN_DESIGNER){
-        qInfo(logInfo()) << tr("Printare (designer): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+        qInfo(logInfo()) << QStringLiteral("Printare (designer) - document 'Comanda ecografica' nr.%1")
+                                .arg(ui->editNumberDoc->text());
         m_report->designReport();
     } else if (type_print == Enums::TYPE_PRINT::OPEN_PREVIEW){
-        qInfo(logInfo()) << tr("Printare (preview): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+        qInfo(logInfo()) << QStringLiteral("Printare (preview) - document 'Comanda ecografica' nr.%1")
+                                .arg(ui->editNumberDoc->text());
         m_report->previewReport();
     } else if (type_print == Enums::TYPE_PRINT::PRINT_TO_PDF){
-        qInfo(logInfo()) << tr("Printare (pdf): document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-        .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+        qInfo(logInfo()) << QStringLiteral("Printare (export pdf) - document 'Comanda ecografica' nr.%1")
+                                .arg(ui->editNumberDoc->text());
         m_report->printToPDF(filePDF);
     }
 
@@ -1218,11 +1229,12 @@ bool DocOrderEcho::onWritingData()
         }
 
         if (m_post == Enums::IDX_WRITE || m_post == Enums::IDX_POST){
-            popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.").arg((m_post == Enums::IDX_WRITE) ? tr("salvat") : tr("validat")));
+            popUp->setPopupText(tr("Documentul a fost %1 cu succes<br> in baza de date.")
+                                    .arg((m_post == Enums::IDX_WRITE) ? tr("salvat") : tr("validat")));
             popUp->show();
             setItNew(false);
-            qInfo(logInfo()) << tr("Crearea: documentul 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+            qInfo(logInfo()) << QStringLiteral("Documentul 'Comanda ecografica' nr.='%1' creat cu succes in baza de date.")
+                                    .arg(ui->editNumberDoc->text());
         }
     } else {        
 
@@ -1250,8 +1262,8 @@ bool DocOrderEcho::onWritingData()
             popUp->show();
 
             setItNew(false);
-            qInfo(logInfo()) << tr("Modificare: document 'Comanda ecografica' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                .arg(QString::number(m_id), ui->editNumberDoc->text(), QString::number(m_idPacient), ui->comboPacient->currentText());
+            qInfo(logInfo()) << QStringLiteral("Documentul 'Comanda ecografica' nr.='%1' modificat cu succes in baza de date.")
+                                    .arg(ui->editNumberDoc->text());
         }
     }
     emit PostDocument(); // pu actualizarea listei documentelor

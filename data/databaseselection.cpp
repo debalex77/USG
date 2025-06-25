@@ -72,6 +72,9 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     if (globals().isSystemThemeDark)
         ui->frame->setObjectName("customFrame");
 
+    ui->listWidget->setCurrentRow(0);
+    ui->listWidget->setFocus();
+
 }
 
 DatabaseSelection::~DatabaseSelection()

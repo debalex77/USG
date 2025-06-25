@@ -229,10 +229,19 @@ bool CloudServerConfig::insertDataIntoTableCloudServer()
     qry.addBindValue(encryptedPassword.toBase64());
     qry.addBindValue(iv.toBase64());
     if (! qry.exec()) {
-        qWarning(logWarning()) << "Eroarea de inserare a datelor in tabela 'cloudServer' - SQL Error:" << qry.lastError().text();
+        qWarning(logWarning()) << "Eroarea de inserare a datelor in tabela 'cloudServer' - SQL Error:"
+                               << qry.lastError().text();
         return false;
     } else {
         qInfo(logInfo()) << "Inserarea datelor in tabela 'cloudServer'.";
+        globals().cloud_host          = ui->txt_host->text();
+        globals().cloud_nameBase      = ui->txt_nameBase->text();
+        globals().cloud_port          = ui->txt_port->text();
+        globals().cloud_optionConnect = ui->txt_option->text();
+        globals().cloud_user          = ui->txt_user->text();
+        globals().cloud_passwd        = ui->txt_password->text();
+        globals().cloud_srv_exist     = true;
+        qInfo(logInfo()) << "Actualizate variabile globale pentru sincronizare cu serverul.";
     }
 
     return true;
@@ -279,6 +288,14 @@ bool CloudServerConfig::updateDataIntoTableCloudServer()
         return false;
     } else {
         qInfo(logInfo()) << "Actualizarea datelor in tabela 'cloudServer'.";
+        globals().cloud_host          = ui->txt_host->text();
+        globals().cloud_nameBase      = ui->txt_nameBase->text();
+        globals().cloud_port          = ui->txt_port->text();
+        globals().cloud_optionConnect = ui->txt_option->text();
+        globals().cloud_user          = ui->txt_user->text();
+        globals().cloud_passwd        = ui->txt_password->text();
+        globals().cloud_srv_exist     = true;
+        qInfo(logInfo()) << "Actualizate variabile globale pentru sincronizare cu serverul.";
     }
     return true;
 }

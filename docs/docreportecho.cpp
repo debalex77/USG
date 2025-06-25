@@ -637,12 +637,14 @@ void DocReportEcho::insertImageIntoTableimagesReports(const QByteArray &imageDat
     if (qry.exec()) {
         popUp->setPopupText(tr("Imaginea a fost salvată cu succes în baza de date."));
         popUp->show();
-        qInfo(logInfo()) << tr("A fost salvată imaginea %1 cu succes.").arg(numberImage);
+        qInfo(logInfo()) << QStringLiteral("Documentului 'Raport ecografic' nr.%1 a fost atasata imaginea %2.")
+                            .arg(ui->editDocNumber->text(), numberImage);
     } else {
         QMessageBox::warning(this, tr("Inserarea imaginei"),
                              tr("Imaginea nu a fost salvată în baza de date!"),
                              QMessageBox::Ok);
-        qWarning(logWarning()) << qry.lastError().text();
+        qCritical(logCritical()) << QStringLiteral("Eroare de atasare a imaginei %1 la documentul 'Raport ecografic' nr.%2")
+                                    .arg(qry.lastError().text(), ui->editDocNumber->text());
     }
 
 }
@@ -3256,20 +3258,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - complex: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - complex: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_complex.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - complex: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3307,20 +3309,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - organs internal: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - organs internal: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "organs_internal.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - organs internal: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3361,20 +3363,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - urinary system: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - urinary system: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_urinary_sistem.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - urinary system: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3413,20 +3415,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - prostate: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - prostate: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_prostate.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - prostate: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3465,20 +3467,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - gynecology: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - gynecology: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_gynecology.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gynecology: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3515,20 +3517,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - breast: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - breast: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_breast.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - breast: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3566,20 +3568,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - thyroid: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - thyroid: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_thyroid.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - thyroid: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3620,20 +3622,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - gestation0: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - gestation0: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_gestation0.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation0: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3674,20 +3676,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentarea preview sau designer
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW){
-            qInfo(logInfo()) << tr("Printare (preview) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - gestation1: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - gestation1: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_gestation1.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation1: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3727,20 +3729,20 @@ void DocReportEcho::onPrint(Enums::TYPE_PRINT _typeReport, QString &filePDF)
         // prezentam
         m_report->setShowProgressDialog(true);
         if (_typeReport == Enums::TYPE_PRINT::OPEN_DESIGNER){
-            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         } else if (_typeReport == Enums::TYPE_PRINT::OPEN_PREVIEW) {
-            qInfo(logInfo()) << tr("Printare (preview) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (preview) - gestation2: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->previewReport();
         } else if (_typeReport == Enums::TYPE_PRINT::PRINT_TO_PDF){
-            qInfo(logInfo()) << tr("Printare (PDF) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (export PDF) - gestation2: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->printToPDF(filePDF + "_gestation2.pdf");
         } else {
-            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                                    .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+            qInfo(logInfo()) << tr("Printare (designer) - gestation2: document 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text());
             m_report->designReport();
         }
     }
@@ -3783,8 +3785,8 @@ bool DocReportEcho::onWritingData()
             popUp->show();
             setItNew(false);
         }
-        qInfo(logInfo()) << tr("Document 'Raport ecografic' - crearea: id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
-                            .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+        qInfo(logInfo()) << tr("Documentul 'Raport ecografic' cu nr.%1 a fost creat cu succes in baza de date.")
+                            .arg(ui->editDocNumber->text());
     } else {
 
         if (! updatingDocumentDataIntoTables(details_error)){
@@ -3802,7 +3804,7 @@ bool DocReportEcho::onWritingData()
             popUp->show();
             setItNew(false);
         }
-        qInfo(logInfo()) << tr("Document 'Raport ecografic' - modificarea: id='%1', nr.='%2', id_patient='%3', pacientul='%4'")
+        qInfo(logInfo()) << tr("Documentul 'Raport ecografic' nr.%2 a fost actualizat cu succes in baza de date.")
                             .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
     }
 
@@ -4707,6 +4709,19 @@ bool DocReportEcho::insertMainDocument(QSqlQuery &qry, QString &err)
         err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'reportEcho' - %2")
               .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
         return false;
+    } else {
+        // introducem date in structura pu syncronizare
+        m_tagDoc_sync.id_doc = m_id;
+        m_tagDoc_sync.organs_internal = m_organs_internal;
+        m_tagDoc_sync.urinary_system  = m_urinary_system;
+        m_tagDoc_sync.prostate        = m_prostate;
+        m_tagDoc_sync.gynecology      = m_gynecology;
+        m_tagDoc_sync.breast          = m_breast;
+        m_tagDoc_sync.thyroide        = m_thyroide;
+        m_tagDoc_sync.gestation0      = m_gestation0;
+        m_tagDoc_sync.gestation1      = m_gestation1;
+        m_tagDoc_sync.gestation2      = m_gestation2;
+        m_tagDoc_sync.gestation3      = m_gestation3;
     }
     return true;
 }

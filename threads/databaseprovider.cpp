@@ -21,10 +21,10 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         db.setUserName(globals().mySQLuser);
         db.setPassword(globals().mySQLpasswdUser);
         if (! db.open()) {
-            qWarning(logWarning()) << this->metaObject()->className()
-                                   << "[getDatabaseThread()]"
-                                   << prefixConn + " Eroare la deschiderea bazei de date(MYSQL):"
-                                   << db.lastError().text();
+            qCritical(logCritical()) << this->metaObject()->className()
+                                     << "[getDatabaseThread()]"
+                                     << prefixConn + " Eroare la deschiderea bazei de date(MYSQL):"
+                                     << db.lastError().text();
         } else {
             qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
                              << connectionName;
@@ -33,10 +33,10 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         db.setHostName(globals().sqliteNameBase);
         db.setDatabaseName(globals().sqlitePathBase);
         if (! db.open()) {
-            qWarning(logWarning()) << this->metaObject()->className()
-                                   << "[getDatabaseThread()]"
-                                   << prefixConn + " Eroare la deschiderea bazei de date(sqlite):"
-                                   << db.lastError().text();
+            qCritical(logCritical()) << this->metaObject()->className()
+                                     << "[getDatabaseThread()]"
+                                     << prefixConn + " Eroare la deschiderea bazei de date(sqlite):"
+                                     << db.lastError().text();
         } else {
             qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
                              << connectionName;
