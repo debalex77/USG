@@ -434,6 +434,8 @@ void AppSettings::initConnections()
     connect(ui->btnOK, &QAbstractButton::clicked, this, &AppSettings::onBtnOKSettings);
     connect(ui->btnWrite, &QAbstractButton::clicked, this, &AppSettings::onBtnWriteSettings);
     connect(ui->btnCancel, &QAbstractButton::clicked, this, &AppSettings::onBtnCancelSettings);
+
+    connect(ui->btnLogLevel, &LogLevelButton::selectedLevel, this, &AppSettings::selectedLevelLog);
 }
 
 // *******************************************************************
@@ -914,6 +916,79 @@ void AppSettings::loadDataFromTableSettingsUsers()
     db->updateVariableFromTableSettingsUser();
 }
 
+void AppSettings::updateTableLog(QString level_log, QStringList level_exclude)
+{
+    const QModelIndex index = ui->tableViewLogs->currentIndex();
+
+    QDir dir;
+    int row = index.row();
+    QString m_file_log = model_logs->data(model_logs->index(row, 0), Qt::DisplayRole).toString();
+    QFile file(dir.toNativeSeparators(m_file_log));
+    if (!file.exists())
+        return;
+
+    ui->textLog->clear();
+
+    if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
+        qInfo(logInfo()) << tr("Vizualizarea fisierului de logare '%1'.").arg(dir.toNativeSeparators(m_file_log));
+
+        QTextStream in(&file);
+        QString html;
+        html.append("<p style='color:#a6a6a6'>");
+
+        while (!in.atEnd()) {
+            QString line = in.readLine().trimmed();
+
+            // controlam nivelul log-lui
+            if (! level_log.isEmpty() && ! line.contains(level_log))
+                continue;
+
+            // exludem nivel ce este introdus in lista
+            bool shouldExclude = false;
+            for (const QString &exclude : level_exclude) {
+                if (line.contains(exclude)) {
+                    shouldExclude = true;
+                    break;
+                }
+            }
+
+            if (shouldExclude)
+                continue;
+
+            QString icon;
+            if (line.contains("SYNC"))
+                icon = ":/img/sync.png";
+            else if (line.contains("THREAD"))
+                icon = ":/img/thread.png";
+            else if (line.contains("WRN"))
+                icon = ":/img/warning.png";
+            else if (line.contains("INF"))
+                icon = ":/img/info_x32.png";
+            else if (line.contains("CRT"))
+                icon = ":/img/critical.png";
+            else if (line.contains("FTL"))
+                icon = ":/img/error.png";
+            else if (line.contains("DBG"))
+                icon = ":/img/bug.png";
+            else
+                icon = ""; // sau "" dacă nu vrei nimic
+
+            if (!icon.isEmpty()) {
+                html += QString("<img src='%1' width='16' height='16'> ").arg(icon);
+            }
+
+            html += line.toHtmlEscaped() + "<br>";
+        }
+
+        html.append("</p>");
+
+        ui->textLog->setHtml(html);
+        ui->textLog->setStyleSheet("font-size: 13px;");
+    }
+
+    file.close();
+}
+
 void AppSettings::loadSettings()
 {
     settApp = new QSettings(globals().pathAppSettings, QSettings::IniFormat, this);
@@ -1192,26 +1267,7 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
 
 void AppSettings::slot_clickedTableLogs(const QModelIndex &index)
 {
-    // if (! index.isValid())
-    //     return;
-
-    // QDir dir;
-    // int row = index.row();
-    // QString m_file_log = model_logs->data(model_logs->index(row, 0), Qt::DisplayRole).toString();
-    // QFile file(dir.toNativeSeparators(m_file_log));
-    // if(! file.exists())
-    //     return;
-
-    // ui->textLog->clear();
-
-    // if (file.open(QIODevice::ReadOnly | QIODevice::Text)){
-    //     qInfo(logInfo()) << tr("Vizualizarea fisierului de logare '%1'.").arg(dir.toNativeSeparators(m_file_log));
-    //     ui->textLog->setPlainText(file.readAll());
-    // }
-    // file.close();
-    // ui->textLog->setStyleSheet("font-size: 13px;");
-
-    if (!index.isValid())
+    if (! index.isValid())
         return;
 
     QDir dir;
@@ -1752,6 +1808,24 @@ void AppSettings::setPathAppSettings()
 void AppSettings::setPathGlobalVariableAppSettings()
 {
     globals().pathAppSettings = ui->txtPathAppSettings->text();
+}
+
+void AppSettings::selectedLevelLog(const QString level)
+{
+    if (level == "Filtrare [ALL]")
+        updateTableLog(nullptr, QStringList());
+    if (level == "Filtrare [THREAD]")
+        updateTableLog("THREAD", QStringList());
+    if (level == "Filtrare [SYNC]")
+        updateTableLog("SYNC", QStringList());
+    if (level == "Filtrare [INFO]")
+        updateTableLog("INF", {"THREAD", "SYNC"});
+    if (level == "Filtrare [CRITICAL]")
+        updateTableLog("CRT", {"THREAD", "SYNC"});
+    if (level == "Filtrare [WARNING]")
+        updateTableLog("WRN", {"THREAD", "SYNC"});
+    if (level == "Filtrare [DEBUG]")
+        updateTableLog("DBG", {"THREAD", "SYNC"});
 }
 
 // *******************************************************************

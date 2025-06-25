@@ -1,3 +1,19 @@
+## USG v3.0.4
+* întrodusă forma <b><u>Asistentul de configurare inițială</u></b>, care are rolul de a facilita completarea corectă a bazei de date și de a preveni apariția erorilor de configurare inițială.
+* <b><u>Jurnalul de logare</u></b> – a fost implementată filtrarea mesajelor în funcție de nivelul de informație:
+    * Info     - informații generale
+    * Warning  - mesaje de atenționare
+    * Critical - mesaje critice
+    * Debug    - informații pentru depanare
+    * THREAD   - mesaje provenite din fire de execuție diferite
+    * SYNC     - informații privind sincronizarea
+* adăugată forma <b><u>Configurare (setare) cloud server</u></b>, care conține datele necesare pentru conectarea și sincronizarea cu <b><u>serverul cloud</u></b>, atunci când este necesar.
+* implementată sincronizarea în fundal la validarea datelor pacientului din forma documentului <b><u>Comanda ecografică</u></b>.
+* optimizat stilul și fontul aplicației pentru tema <b>„DARK”</b>.
+* corectată funcția de trimitere a e-mailului către pacient.
+* optimizată funcția de inserare a imaginilor atașate documentelor (cu îmbunătățirea calității acestora).
+* fixarea bag-lor minore
+
 ## USG v3.0.3
 * corectarea erorii din modulele de cautare a pacientilor cu corectarea performantei solicitarilor
 * implementarea agentului <b><u>sendEmail</u></b> cu următoarele functionalități de atașare a documentelor:   

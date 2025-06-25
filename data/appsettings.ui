@@ -785,6 +785,22 @@ QToolButton:pressed
        <string>Fișiere de logare</string>
       </attribute>
       <layout class="QGridLayout" name="gridLayout_6">
+       <item row="1" column="1">
+        <widget class="QLabel" name="label_17">
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(193, 125, 17);</string>
+         </property>
+         <property name="text">
+          <string>... de păstrat ultimele</string>
+         </property>
+        </widget>
+       </item>
        <item row="1" column="2">
         <widget class="QSpinBox" name="numberLogFile"/>
        </item>
@@ -804,23 +820,27 @@ QToolButton:pressed
          </property>
         </widget>
        </item>
-       <item row="1" column="1">
-        <widget class="QLabel" name="label_17">
-         <property name="font">
-          <font>
-           <family>Cantarell</family>
-           <bold>true</bold>
-          </font>
+       <item row="2" column="5">
+        <spacer name="horizontalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
          </property>
-         <property name="styleSheet">
-          <string notr="true">color: rgb(193, 125, 17);</string>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
          </property>
+        </spacer>
+       </item>
+       <item row="2" column="6">
+        <widget class="LogLevelButton" name="btnLogLevel">
          <property name="text">
-          <string>... de păstrat ultimele</string>
+          <string>Filtrează după nivel de logare</string>
          </property>
         </widget>
        </item>
-       <item row="1" column="4">
+       <item row="1" column="4" colspan="3">
         <spacer name="horizontalSpacer_6">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -833,7 +853,7 @@ QToolButton:pressed
          </property>
         </spacer>
        </item>
-       <item row="3" column="0" colspan="5">
+       <item row="3" column="0" colspan="7">
         <widget class="QSplitter" name="splitter">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
@@ -889,6 +909,13 @@ QToolButton:pressed
    </item>
   </layout>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LogLevelButton</class>
+   <extends>QToolButton</extends>
+   <header>customs/loglevelbutton.h</header>
+  </customwidget>
+ </customwidgets>
  <tabstops>
   <tabstop>comboBoxLangApp</tabstop>
   <tabstop>comboBoxTypeSQL</tabstop>

@@ -2,6 +2,7 @@
 #define SPLASHMANAGER_H
 
 #include <QObject>
+#include <common/version.h>
 
 class QWidget;
 

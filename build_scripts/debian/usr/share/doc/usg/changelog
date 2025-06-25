@@ -1,3 +1,19 @@
+3.0.4 (June 25th, 2025)
+  * Introduced the <b><u>Initial Setup Assistant</u></b>, designed to facilitate correct database completion and prevent initial configuration errors.
+  * <b><u>Logging Journal</u></b> – implemented message filtering based on information level:
+    * Info – general information
+    * Warning – attention messages
+    * Critical – critical messages
+    * Debug – debugging information
+    * THREAD – messages from other threads
+    * SYNC – synchronization-related information
+  * Added the <b><u>Cloud Server Configuration</u></b> form, which holds the necessary data for connecting to and synchronizing with the <b><u>cloud server</u></b>, when needed.
+  * Implemented background synchronization upon patient data validation in the <b><u>Ultrasound Order</u></b> document form.
+  * Optimized application style and font for the <b>“DARK”</b> theme.
+  * Fixed the email sending function to patients.
+  * Optimized the image insertion function for attached documents (with improved image quality).
+  * Fixed minor bugs.
+
 3.0.3 (May 1st, 2025)
   * Fixed errors in the patient search modules, including improved request performance.
   * Implemented the <b><u>sendEmail</u></b> agent with the following document attachment functionalities:

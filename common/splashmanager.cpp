@@ -59,9 +59,9 @@ void SplashManager::show(QWidget &mainWindow, int durationMs)
             p.drawText(96, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
             f.setPointSize(11);
             p.setFont(f);
-            p.drawText(464, 74, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
+            p.drawText(464, 74, QCoreApplication::tr("versiunea ") + VERSION_FULL);
             p.drawText(536, 242, QCoreApplication::tr("autor:"));
-            p.drawText(400, 259, USG_COMPANY_EMAIL);
+            p.drawText(400, 259, COMPANY_EMAIL);
             f.setPointSize(9);
             p.setFont(f);
             p.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year())
@@ -72,9 +72,9 @@ void SplashManager::show(QWidget &mainWindow, int durationMs)
             p.drawText(132, 48, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
             f.setPointSize(11);
             p.setFont(f);
-            p.drawText(464, 68, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
+            p.drawText(464, 68, QCoreApplication::tr("versiunea ") + VERSION_FULL);
             p.drawText(534, 242, QCoreApplication::tr("autor:"));
-            p.drawText(400, 259, USG_COMPANY_EMAIL);
+            p.drawText(400, 259, COMPANY_EMAIL);
             f.setPointSize(9);
             p.setFont(f);
             p.drawText(290,310, "2021 - " + QString::number(QDate::currentDate().year())
@@ -85,9 +85,9 @@ void SplashManager::show(QWidget &mainWindow, int durationMs)
             p.drawText(182, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
             f.setPointSize(13);
             p.setFont(f);
-            p.drawText(468, 74, QCoreApplication::tr("versiunea ") + USG_VERSION_FULL);
+            p.drawText(468, 74, QCoreApplication::tr("versiunea ") + VERSION_FULL);
             p.drawText(530, 242, QCoreApplication::tr("autor:"));
-            p.drawText(408, 259, USG_COMPANY_EMAIL);
+            p.drawText(408, 259, COMPANY_EMAIL);
             f.setPointSize(10);
             p.setFont(f);
             p.drawText(290,310,"2021 - " + QString::number(QDate::currentDate().year())

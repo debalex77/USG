@@ -41,7 +41,7 @@ CONFIG  -= qml_debug
 # Definim componentele versiunii
 USG_VERSION_MAJOR   = 3
 USG_VERSION_MINOR   = 0
-USG_VERSION_RELEASE = 3
+USG_VERSION_RELEASE = 4
 USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
 VERSION             = "$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE"
 DEFINES += USG_VERSION_MAJOR=$$USG_VERSION_MAJOR
@@ -107,6 +107,7 @@ SOURCES += \
     customs/lineeditcustom.cpp \
     customs/lineeditopen.cpp \
     customs/lineeditpassword.cpp \
+    customs/loglevelbutton.cpp \
     customs/searchlineedit.cpp \
     data/about.cpp \
     data/appsettings.cpp \
@@ -182,11 +183,13 @@ HEADERS += \
     common/splashmanager.h \
     common/structvariable.h \
     common/thememanager.h \
+    common/version.h \
     common/windowmanager.h \
     customs/custommessage.h \
     customs/lineeditcustom.h \
     customs/lineeditopen.h \
     customs/lineeditpassword.h \
+    customs/loglevelbutton.h \
     customs/searchlineedit.h \
     data/about.h \
     data/appsettings.h \

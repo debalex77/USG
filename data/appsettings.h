@@ -25,6 +25,7 @@
 #include <data/globals.h>
 #include "database.h"
 #include "popup.h"
+#include <customs/loglevelbutton.h>
 
 // ***********************************
 
@@ -89,6 +90,8 @@ private:
     void saveSettings();
     void loadDataFromTableSettingsUsers();
 
+    void updateTableLog(QString level_log, QStringList level_exclude);
+
 private slots:
     void dataWasModified();
 
@@ -134,6 +137,9 @@ private slots:
 
     void setPathAppSettings(); // setam drumul spre setariile aplicatiei
     void setPathGlobalVariableAppSettings();
+
+    void selectedLevelLog(const QString level);
+
 private:
     Ui::AppSettings *ui;
     QSettings       *settApp;
