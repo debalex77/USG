@@ -4711,17 +4711,7 @@ bool DocReportEcho::insertMainDocument(QSqlQuery &qry, QString &err)
         return false;
     } else {
         // introducem date in structura pu syncronizare
-        m_tagDoc_sync.id_doc = m_id;
-        m_tagDoc_sync.organs_internal = m_organs_internal;
-        m_tagDoc_sync.urinary_system  = m_urinary_system;
-        m_tagDoc_sync.prostate        = m_prostate;
-        m_tagDoc_sync.gynecology      = m_gynecology;
-        m_tagDoc_sync.breast          = m_breast;
-        m_tagDoc_sync.thyroide        = m_thyroide;
-        m_tagDoc_sync.gestation0      = m_gestation0;
-        m_tagDoc_sync.gestation1      = m_gestation1;
-        m_tagDoc_sync.gestation2      = m_gestation2;
-        m_tagDoc_sync.gestation3      = m_gestation3;
+
     }
     return true;
 }

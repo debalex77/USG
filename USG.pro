@@ -150,6 +150,7 @@ SOURCES += \
     threads/databaseprovider.cpp \
     threads/dataconstantsworker.cpp \
     threads/docemailexporterworker.cpp \
+    threads/docsyncworker.cpp \
     threads/patientdatasaverworker.cpp \
     threads/syncpatientdataworker.cpp
 
@@ -234,6 +235,7 @@ HEADERS += \
     threads/databaseprovider.h \
     threads/dataconstantsworker.h \
     threads/docemailexporterworker.h \
+    threads/docsyncworker.h \
     threads/patientdatasaverworker.h \
     threads/syncpatientdataworker.h
 

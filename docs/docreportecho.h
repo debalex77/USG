@@ -501,8 +501,6 @@ private:
 
     DataPercentage *data_percentage;
 
-    TagsSystemDocument m_tagDoc_sync;
-
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor
     bool eventFilter(QObject *obj, QEvent *event);

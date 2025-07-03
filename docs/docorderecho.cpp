@@ -689,6 +689,7 @@ void DocOrderEcho::onClickNewPacient()
     data_patient.birthday      = ui->dateEditBirthday->date();
     data_patient.address       = ui->editAddress->text();
     data_patient.phone         = ui->editPhone->text();
+    data_patient.email         = ui->editEmail->text();
     data_patient.comment       = ui->editComment->toPlainText();
     data_patient.thisMySQL     = globals().thisMySQL;
 
