@@ -1235,7 +1235,15 @@ int DataBase::getLastIdForTableByDatabase(const QString nameTable, QSqlDatabase 
 int DataBase::getLastNumberDoc(const QString nameTable) const
 {
     QString lastNumberDoc;
-    QString strQry = QString("SELECT numberDoc FROM %1 ORDER BY id DESC LIMIT 1;").arg(nameTable);
+    QString strQry = QString(R"(
+        SELECT
+            numberDoc
+        FROM
+            %1
+        ORDER BY
+            id
+        DESC LIMIT 1;
+    )").arg(nameTable);
     QMap<QString, QString> _items;
     if (getDataFromQueryByRecord(strQry, _items)){
         if (_items.count() != 0){

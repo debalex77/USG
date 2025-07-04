@@ -19,9 +19,11 @@ signals:
     void finished();
 
 private:
+    int getLastNumberDoc(const QString name_table, QSqlDatabase &dbConn);
     void setIDdoctor(QSqlDatabase &dbConn_sync);
     void setIDpacient(QSqlDatabase &dbConn_sync);
     void syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
 
 private:
     DatabaseProvider *m_db{nullptr};

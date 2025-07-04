@@ -58,7 +58,9 @@ struct DatesDocsOrderReportSync
 {
     bool thisMySQL = false;
     int id_order = 0;
+    QString nr_order;
     int id_report = 0;
+    QString nr_report;
     int id_patient = 0;
     QString name_parient;
     QString fname_patient;
