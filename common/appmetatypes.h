@@ -58,25 +58,17 @@ struct DatesDocsOrderReportSync
 {
     bool thisMySQL = false;
     int id_order = 0;
-    QString nr_order;
+    QString nr_order = nullptr;
     int id_report = 0;
-    QString nr_report;
+    QString nr_report = nullptr;
     int id_patient = 0;
-    QString name_parient;
-    QString fname_patient;
-    QString idnp_patient;
-    QString name_doctor;
-    QString fname_doctor;
-    bool organs_internal;
-    bool urinary_system;
-    bool prostate;
-    bool gynecology;
-    bool breast;
-    bool thyroide;
-    bool gestation0;
-    bool gestation1;
-    bool gestation2;
-    bool gestation3;
+    QString name_parient = nullptr;
+    QString fname_patient = nullptr;
+    QString idnp_patient = nullptr;
+    QDate birthday_patient;
+    int id_doctor = 0;
+    QString name_doctor = nullptr;
+    QString fname_doctor = nullptr;
 };
 
 //------ declaratii metatype

@@ -414,6 +414,9 @@ private:
     void setDataFromTableGestation1();
     void setDataFromTableGestation2();
 
+    DatabaseProvider *dbProvider();
+    void initSyncDocs();
+
 private:
     Ui::DocReportEcho *ui;
 
@@ -438,6 +441,7 @@ private:
     int m_count_images = 0;
 
     DataBase *db;
+    DatabaseProvider m_dbProvider;
     PopUp    *popUp;
     QTimer   *timer;
 

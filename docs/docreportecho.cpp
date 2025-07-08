@@ -36,6 +36,8 @@
 
 #include <customs/custommessage.h>
 
+#include <threads/docsyncworker.h>
+
 DocReportEcho::DocReportEcho(QWidget *parent) :
     QDialog(parent),
     ui(new Ui::DocReportEcho)
@@ -638,13 +640,15 @@ void DocReportEcho::insertImageIntoTableimagesReports(const QByteArray &imageDat
         popUp->setPopupText(tr("Imaginea a fost salvată cu succes în baza de date."));
         popUp->show();
         qInfo(logInfo()) << QStringLiteral("Documentului 'Raport ecografic' nr.%1 a fost atasata imaginea %2.")
-                            .arg(ui->editDocNumber->text(), numberImage);
+                            .arg(ui->editDocNumber->text(),
+                                 QString::number(numberImage));
     } else {
         QMessageBox::warning(this, tr("Inserarea imaginei"),
                              tr("Imaginea nu a fost salvată în baza de date!"),
                              QMessageBox::Ok);
-        qCritical(logCritical()) << QStringLiteral("Eroare de atasare a imaginei %1 la documentul 'Raport ecografic' nr.%2")
-                                    .arg(qry.lastError().text(), ui->editDocNumber->text());
+        qCritical(logCritical()) << QStringLiteral("Eroare de atasare a imaginei la documentul 'Raport ecografic' nr.%1")
+                                    .arg(ui->editDocNumber->text())
+                                 << qry.lastError().text();
     }
 
 }
@@ -3804,8 +3808,8 @@ bool DocReportEcho::onWritingData()
             popUp->show();
             setItNew(false);
         }
-        qInfo(logInfo()) << tr("Documentul 'Raport ecografic' nr.%2 a fost actualizat cu succes in baza de date.")
-                            .arg(QString::number(m_id), ui->editDocNumber->text(), QString::number(m_idPacient), ui->comboPatient->currentText());
+        qInfo(logInfo()) << tr("Documentul 'Raport ecografic' nr.%1 a fost actualizat cu succes in baza de date.")
+                            .arg(QString::number(m_id));
     }
 
     updateDataDocOrderEcho(); // actualizarea datelor doc.Comanda ecografica - inserarea valorii atasarii imaginei
@@ -3815,6 +3819,11 @@ bool DocReportEcho::onWritingData()
     updateCommentIntoTableimagesReports();
 
     emit PostDocument(); // pu actualizarea listei documentelor
+
+    // initierea syncronizarii
+    if (globals().cloud_srv_exist)
+        initSyncDocs();
+
     return true;
 }
 
@@ -4265,6 +4274,8 @@ void DocReportEcho::setDefaultDataGestation0()
 {
     if (! m_gestation0)
         return;
+
+    ui->gestation0_LMP->setDate(QDate::currentDate());
 
     if (ui->gestation0_antecedent->text().isEmpty())
         ui->gestation0_antecedent->setText("abs.");
@@ -5107,8 +5118,9 @@ bool DocReportEcho::insertGestation0(QSqlQuery &qry, QString &err)
             cervix,
             ovary,
             concluzion,
-            recommendation)
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+            recommendation,
+            lmp)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?);
     )");
     qry.addBindValue(m_id);
     qry.addBindValue(group_btn_gestation0->checkedId());
@@ -5125,6 +5137,7 @@ bool DocReportEcho::insertGestation0(QSqlQuery &qry, QString &err)
     qry.addBindValue(ui->gestation0_ovary->text());
     qry.addBindValue(ui->gestation0_concluzion->toPlainText());
     qry.addBindValue((ui->gestation0_recommendation->text().isEmpty()) ? QVariant() : ui->gestation0_recommendation->text());
+    qry.addBindValue(ui->gestation0_LMP->date().toString("yyyy-MM-dd"));
     if (! qry.exec()) {
         err = tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableGestation0' - %2")
               .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? tr("eroare indisponibilă") : qry.lastError().text());
@@ -6119,7 +6132,8 @@ bool DocReportEcho::updateGestation0(QSqlQuery &qry, QString &err)
             cervix = ?,
             ovary = ?,
             concluzion = ?,
-            recommendation = ?
+            recommendation = ?,
+            lmp = ?
         WHERE
             id_reportEcho = ?;
     )");
@@ -6141,6 +6155,7 @@ bool DocReportEcho::updateGestation0(QSqlQuery &qry, QString &err)
     qry.addBindValue(ui->gestation0_recommendation->text().isEmpty()
                      ? QVariant()
                      : ui->gestation0_recommendation->text());
+    qry.addBindValue(ui->gestation0_LMP->date().toString("yyyy-MM-dd"));
     qry.addBindValue(m_id);
     if (! qry.exec()) {
         err = tr("Eroarea actualizarii datelor documentului nr.%1 în tabela 'tableGestation0' - %2")
@@ -7000,7 +7015,7 @@ void DocReportEcho::setDataFromTableGestation0()
             ui->gestation0_view_difficult->setChecked(qry.value(record.indexOf("view_examination")).toInt() == 2);
 
             ui->gestation0_antecedent->setText(qry.value(record.indexOf("antecedent")).toString());
-            if (db->existColumnInTable("gestation0", "lmp")){
+            if (db->existColumnInTable("tableGestation0", "lmp")){
                 ui->gestation0_LMP->setDate(QDate::fromString(qry.value(record.indexOf("lmp")).toString(), "yyyy-MM-dd"));
                 calculateGestationalAge(ui->gestation0_LMP->date());
                 calculateDueDate(ui->gestation0_LMP->date());
@@ -7354,6 +7369,45 @@ void DocReportEcho::setDataFromTableGestation2()
             updateTextDescriptionDoppler();
         }
     }
+}
+
+DatabaseProvider *DocReportEcho::dbProvider()
+{
+    return &m_dbProvider;
+}
+
+void DocReportEcho::initSyncDocs()
+{
+    // 1. pregatim date
+    DatesDocsOrderReportSync data;
+    data.thisMySQL     = globals().thisMySQL;
+    data.id_order      = m_id_docOrderEcho;
+    data.id_report     = m_id;
+    data.nr_report     = ui->editDocNumber->text();
+    data.id_patient    = m_idPacient;
+
+    // 2. Creăm thread-ul pentru trimiterea
+    QThread *thread = new QThread();
+
+    // 3. alocam memoria worker-lui si mutam in flux nou
+    auto worker = new docSyncWorker(dbProvider(), data);
+    worker->moveToThread(thread);
+
+    // 4. conectarea - lansarea procesului de syncronizare
+    connect(thread, &QThread::started, worker, &docSyncWorker::process);
+
+    // 5. conectarea - procesarea finisarii syncronizarii
+
+    // 6. conectarea - distrugea workerului
+    connect(worker, &docSyncWorker::finished, thread, &QThread::quit);
+    connect(worker, &docSyncWorker::finished, worker, &docSyncWorker::deleteLater);
+
+    // 7. distrugerea thread-lui
+    connect(thread, &QThread::finished, thread, &QObject::deleteLater);
+
+    // 8. lansarea thread-lui
+    thread->start();
+
 }
 
 // *******************************************************************

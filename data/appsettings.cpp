@@ -930,7 +930,6 @@ void AppSettings::updateTableLog(QString level_log, QStringList level_exclude)
     ui->textLog->clear();
 
     if (file.open(QIODevice::ReadOnly | QIODevice::Text)) {
-        qInfo(logInfo()) << tr("Vizualizarea fisierului de logare '%1'.").arg(dir.toNativeSeparators(m_file_log));
 
         QTextStream in(&file);
         QString html;

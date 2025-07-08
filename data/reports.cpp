@@ -296,8 +296,9 @@ QString Reports::getMainQry()
     const QDateTime m_dateStart = QDateTime(ui->dateStart->date(), QTime(00,00,00));
     const QDateTime m_dateEnd   = QDateTime(ui->dateEnd->date(), QTime(23,59,59));
 
-    qInfo(logInfo()) << tr("Generarea raportului '%1' pe perioada %2 - %3")
-                            .arg(name_report, m_dateStart.toString("dd.MM.yyyy hh:mm:ss"), m_dateEnd.toString("dd.MM.yyyy hh:mm:ss"));
+    qInfo(logInfo()) << tr("Generarea raportului '%1' perioada %2-%3")
+                            .arg(name_report, m_dateStart.toString("dd.MM.yyyy"),
+                                 m_dateEnd.toString("dd.MM.yyyy"));
 
     if (name_report == "Lista pacientilor (filtru - organizatii)"){
 
@@ -951,7 +952,6 @@ void Reports::openDesignerReport()
     // *************************************************************************************
     // main table
     QSqlQueryModel* print_model_main = new QSqlQueryModel(this);
-    qDebug() << getMainQry();
     print_model_main->setQuery(getMainQry());
     m_report->dataManager()->addModel("main_table", print_model_main, false);
 
