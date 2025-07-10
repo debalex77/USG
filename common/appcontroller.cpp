@@ -60,9 +60,9 @@ int AppController::run(int &argc, char **argv)
     m_appSettings = new AppSettings();
 
     // 2. Inițializăm fișierul de log (dacă nu suntem în /debug)
-    // if (argc < 2 || QString(argv[1]).compare("/debug", Qt::CaseInsensitive) != 0) { // !=
-    //     LogManager::init(globals().pathLogAppSettings);
-    // }
+    if (argc < 2 || QString(argv[1]).compare("/debug", Qt::CaseInsensitive) != 0) { // !=
+        LogManager::init(globals().pathLogAppSettings);
+    }
 
     // 3. Gestionăm fluxul primei lansări / mutării / normal
     int code = handleLaunchFlow(argv);

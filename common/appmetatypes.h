@@ -57,6 +57,7 @@ struct DatesDocForExportEmail
 struct DatesDocsOrderReportSync
 {
     bool thisMySQL = false;
+    QDateTime dateTime_doc;
     int id_order = 0;
     QString nr_order = nullptr;
     int id_report = 0;

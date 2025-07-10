@@ -7381,6 +7381,7 @@ void DocReportEcho::initSyncDocs()
     // 1. pregatim date
     DatesDocsOrderReportSync data;
     data.thisMySQL     = globals().thisMySQL;
+    data.dateTime_doc  = ui->editDocDate->dateTime(); // report
     data.id_order      = m_id_docOrderEcho;
     data.id_report     = m_id;
     data.nr_report     = ui->editDocNumber->text();

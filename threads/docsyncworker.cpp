@@ -10,6 +10,8 @@ void docSyncWorker::process()
                                  .arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
     const QString connName_local = QStringLiteral("connection_local_%1")
                                       .arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
+    const QString connName_img = QStringLiteral("connection_img_%1")
+                                       .arg(reinterpret_cast<quintptr>(QThread::currentThreadId()));
 
     if (m_data.id_order <= 0 ||
         m_data.id_report <= 0 ||
@@ -35,14 +37,29 @@ void docSyncWorker::process()
                         << dbConn_local.lastError().text();
         }
 
+        // efectuam conectarea la bd (db_image) intr-un alt thread
+        QSqlDatabase dbConnImg = m_db->getDatabaseImagesThread(connName_img);
+        if (! dbConnImg.isOpen() &&
+            ! dbConnImg.open()) {
+            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (db_image):")
+                               .arg(this->metaObject()->className())
+                        << dbConnImg.lastError().text();
+        }
+
         // 2. determinam ID pacientului din BD (sync)
         setIDpacient(dbConn_sync, dbConn_local);
+
+        // if (existreportDoc(dbConn_sync))
+        //     return;
 
         // 3. sincronizarea orderEcho
         syncOrder(dbConn_sync, dbConn_local);
 
         // 4. sincronizarea Raportului
         syncReport(dbConn_sync, dbConn_local);
+
+        // 5. sincronizam imaginile
+        syncImages(dbConn_sync, dbConnImg);
 
         // inchidem conexiunea cu BD
         if (dbConn_sync.isOpen())
@@ -55,6 +72,8 @@ void docSyncWorker::process()
         m_db->removeDatabaseThread(connName_sync, "[SYNC]");
     if (m_db->containConnection(connName_local))
         m_db->removeDatabaseThread(connName_local, "[SYNC]");
+    if (m_db->containConnection(connName_img))
+        m_db->removeDatabaseThread(connName_img, "[SYNC]");
 
     emit finished();
 }
@@ -165,6 +184,41 @@ void docSyncWorker::setIDpacient(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn
     } else {
         qCritical(logCritical()) << "[SYNC] Nu este determinat ID pacientului din BD (sync)";
     }
+}
+
+bool docSyncWorker::existreportDoc(QSqlDatabase &dbConn_sync)
+{
+    QSqlQuery qry(dbConn_sync);
+    qry.prepare(R"(
+        SELECT
+            reportEcho.id           AS id_report,
+            reportEcho.id_orderEcho AS id_order,
+            reportEcho.numberDoc    AS nr_report,
+            orderEcho.numberDoc     AS nr_order,
+            orderEcho.id_doctors    AS id_doctor,
+            orderEcho.id_doctors_execute AS id_doctor_execut
+        FROM
+            reportEcho
+        INNER JOIN
+            orderEcho ON orderEcho.id = reportEcho.id_orderEcho
+        WHERE
+            reportEcho.dateDoc = ? AND
+            reportEcho.id_pacients = ?
+        )");
+    qry.addBindValue(m_data.dateTime_doc);
+    qry.addBindValue(m_datesSync.id_patient);
+    if (qry.exec() && qry.next()) {
+        QSqlRecord rec = qry.record();
+        m_datesSync.existDoc  = true;
+        m_datesSync.id_report = qry.value(rec.indexOf("id_report")).toInt();
+        m_datesSync.id_order  = qry.value(rec.indexOf("id_order")).toInt();
+        m_datesSync.nr_report = qry.value(rec.indexOf("nr_report")).toString();
+        m_datesSync.nr_order  = qry.value(rec.indexOf("nr_order")).toString();
+        m_datesSync.id_doctor = qry.value(rec.indexOf("id_doctor")).toInt();
+        m_datesSync.id_doctor_execut = qry.value(rec.indexOf("id_doctor_execut")).toInt();
+        return true;
+    }
+    return false;
 }
 
 void docSyncWorker::syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local)
@@ -431,7 +485,7 @@ void docSyncWorker::syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_l
         dbConn_sync.rollback();
     } else {
         qInfo(logInfo()) << "[SYNC] Tranzacție finalizată cu succes pentru documentul 'Raport ecografic' nr."
-                         << m_data.nr_report;
+                         << m_datesSync.nr_report;
     }
 }
 
@@ -1481,5 +1535,26 @@ void docSyncWorker::syncGestation2(QSqlDatabase &dbConn_sync, QSqlDatabase &dbCo
         qCritical(logCritical()) << "[SYNC] Eroare la sincronizarea sarcina II si III sapt.:"
                                  << qry.lastError().text();
         dbConn_sync.rollback();
+    }
+}
+
+void docSyncWorker::syncImages(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConnImg)
+{
+    if (m_data.id_report <= 0 ||
+        m_data.id_order <= 0 ||
+        m_datesSync.id_report <= 0)
+        return;
+
+    QSqlQuery qry(dbConnImg);
+    qry.prepare(R"(
+        SELECT * FROM imagesReports WHERE id_orderEcho = ? AND id_reportEcho = ?
+    )");
+    qry.addBindValue(m_data.id_order);
+    qry.addBindValue(m_data.id_report);
+    if (qry.exec() && qry.next()) {
+
+
+    } else {
+
     }
 }

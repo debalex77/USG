@@ -24,6 +24,8 @@ private:
     int getIDdoctor(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local, const int m_ID);
     void setIDpacient(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
 
+    bool existreportDoc(QSqlDatabase &dbConn_sync);
+
     void syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
     void syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
     void syncOrgansInternal(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
@@ -35,12 +37,14 @@ private:
     void syncGestation0(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
     void syncGestation1(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
     void syncGestation2(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncImages(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConnImg);
 
 private:
     DatabaseProvider *m_db{nullptr};
     DatesDocsOrderReportSync m_data; // datele transmise
 
     struct Dates_Sync {
+        bool existDoc     = false;
         int id_order      = 0;
         QString nr_order  = nullptr;
         int id_report     = 0;
