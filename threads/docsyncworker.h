@@ -28,15 +28,34 @@ private:
 
     void syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
     void syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncOrgansInternal(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncUrinarySystem(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncProstate(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncGynecology(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncBreast(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncThyroid(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncGestation0(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncGestation1(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
-    void syncGestation2(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertOrgansInternal(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateOrgansInternal(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertUrinarySystem(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateUrinarySystem(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertProstate(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateProstate(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertGynecology(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateGynecology(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertBreast(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateBreast(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertThyroid(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateThyroid(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertGestation0(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateGestation0(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertGestation1(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateGestation1(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
+    void syncInsertGestation2(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+    void syncUpdateGestation2(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_local);
+
     void syncImages(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConnImg);
 
 private:
