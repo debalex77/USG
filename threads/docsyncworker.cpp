@@ -49,8 +49,7 @@ void docSyncWorker::process()
         // 2. determinam ID pacientului din BD (sync)
         setIDpacient(dbConn_sync, dbConn_local);
 
-        // if (existreportDoc(dbConn_sync))
-        //     return;
+        existreportDoc(dbConn_sync);
 
         // 3. sincronizarea orderEcho
         syncOrder(dbConn_sync, dbConn_local);
@@ -194,6 +193,7 @@ bool docSyncWorker::existreportDoc(QSqlDatabase &dbConn_sync)
             reportEcho.id           AS id_report,
             reportEcho.id_orderEcho AS id_order,
             reportEcho.numberDoc    AS nr_report,
+            reportEcho.id_pacients  AS id_patient,
             orderEcho.numberDoc     AS nr_order,
             orderEcho.id_doctors    AS id_doctor,
             orderEcho.id_doctors_execute AS id_doctor_execut
@@ -215,6 +215,7 @@ bool docSyncWorker::existreportDoc(QSqlDatabase &dbConn_sync)
         m_datesSync.nr_report = qry.value(rec.indexOf("nr_report")).toString();
         m_datesSync.nr_order  = qry.value(rec.indexOf("nr_order")).toString();
         m_datesSync.id_doctor = qry.value(rec.indexOf("id_doctor")).toInt();
+        m_datesSync.id_patient = qry.value(rec.indexOf("id_patient")).toInt();
         m_datesSync.id_doctor_execut = qry.value(rec.indexOf("id_doctor_execut")).toInt();
         return true;
     }
@@ -2748,6 +2749,15 @@ void docSyncWorker::syncImages(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConnIm
         m_datesSync.id_report <= 0)
         return;
 
+    bool existImage = false;
+    QSqlQuery qry_image(dbConn_sync);
+    qry_image.prepare(R"(
+        SELECT COUNT(id) FROM imagesReports WHERE id_reportEcho = ?
+    )");
+    qry_image.addBindValue(m_datesSync.id_report);
+    if (qry_image.exec() && qry_image.next())
+        existImage = (qry_image.value(0).toInt() > 0);
+
     if (! dbConn_sync.transaction()) {
         qCritical(logCritical()) << "[SYNC] Nu s-a putut porni tranzactia:"
                                  << dbConn_sync.lastError().text();
@@ -2770,39 +2780,79 @@ void docSyncWorker::syncImages(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConnIm
 
         QSqlRecord rec = qry.record();
 
-        // ges2
-        qry_sync.prepare(R"(
-            INSERT INTO imagesReports (
-                id_reportEcho,
-                id_orderEcho,
-                id_patients,
-                image_1,
-                image_2,
-                image_3,
-                image_4,
-                image_5,
-                comment_1,
-                comment_2,
-                comment_3,
-                comment_4,
-                comment_5,
-                id_user)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);
-        )");
-        qry_sync.addBindValue(m_datesSync.id_report);
-        qry_sync.addBindValue(m_datesSync.id_order);
-        qry_sync.addBindValue(m_datesSync.id_patient);
-        qry_sync.addBindValue(qry.value(rec.indexOf("image_1")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("image_2")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("image_3")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("image_4")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("image_5")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("comment_1")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("comment_2")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("comment_3")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("comment_4")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("comment_5")));
-        qry_sync.addBindValue(qry.value(rec.indexOf("id_user")));
+        // insert
+        if (! existImage) {
+
+            qry_sync.prepare(R"(
+                INSERT INTO imagesReports (
+                    id_reportEcho,
+                    id_orderEcho,
+                    id_patients,
+                    image_1,
+                    image_2,
+                    image_3,
+                    image_4,
+                    image_5,
+                    comment_1,
+                    comment_2,
+                    comment_3,
+                    comment_4,
+                    comment_5,
+                    id_user)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?);
+            )");
+            qry_sync.addBindValue(m_datesSync.id_report);
+            qry_sync.addBindValue(m_datesSync.id_order);
+            qry_sync.addBindValue(m_datesSync.id_patient);
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_1")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_2")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_3")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_4")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_5")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_1")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_2")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_3")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_4")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_5")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("id_user")));
+
+        } else {
+
+            qry_sync.prepare(R"(
+                UPDATE imagesReports SET
+                    id_orderEcho  = ?,
+                    id_patients   = ?,
+                    image_1       = ?,
+                    image_2       = ?,
+                    image_3       = ?,
+                    image_4       = ?,
+                    image_5       = ?,
+                    comment_1     = ?,
+                    comment_2     = ?,
+                    comment_3     = ?,
+                    comment_4     = ?,
+                    comment_5     = ?,
+                    id_user       = ?
+                WHERE
+                    id_reportEcho = ?
+            )");
+            qry_sync.addBindValue(m_datesSync.id_order);
+            qry_sync.addBindValue(m_datesSync.id_patient);
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_1")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_2")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_3")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_4")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("image_5")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_1")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_2")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_3")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_4")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("comment_5")));
+            qry_sync.addBindValue(qry.value(rec.indexOf("id_user")));
+            qry_sync.addBindValue(m_datesSync.id_report);
+
+        }
+
         if (! qry_sync.exec()) {
             qCritical(logCritical()) << "[SYNC] Eroare la sincronizarea tabelei imagesReports:"
                                      << qry_sync.lastError().text();
