@@ -7,11 +7,30 @@ QPushButton {
     font-size: 13px;
     padding: 4px 10px;
 }
+
+/* Hover - ușor mai luminos și cu border accentuat */
 QPushButton:hover {
     background-color: #3b3b3b;
+    border: 1px solid rgba(255, 255, 255, 0.35);
 }
+
+/* Pressed - contrast mai puternic */
 QPushButton:pressed {
-    background-color: #4b4b4b;
+    background-color: #1e1e1e;
+    border: 1px solid rgba(255, 255, 255, 0.5);
+}
+
+/* Focus - contur discret, dar vizibil */
+QPushButton:focus {
+    outline: none;
+    border: 1px solid #2d5a6b;
+}
+
+/* Disabled - estompat */
+QPushButton:disabled {
+    background-color: #2b2b2b;
+    color: rgba(255, 255, 255, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 /* --------------------- QLineEdit --------------------- */
@@ -287,38 +306,66 @@ QCheckBox::indicator:unchecked:hover {
 
 /* -------------------------- QListWidget ---------------------- */
 QListWidget {
-    color: white;
+    background-color: #1e1e1e;     /* Fundal mai întunecat pentru listă */
+    color: #ffffff;                /* Text alb */
     spacing: 5px;
+    border: 1px solid #333;        /* Linie discretă de contur */
+    border-radius: 4px;
 }
+
+QListWidget::item:selected {
+    background-color: #2d5a6b;     /* Highlight la selecție */
+    color: #ffffff;
+}
+
+QListWidget::item:selected:!active {
+    background-color: #2d5a6b;
+}
+
+QListWidget::item:hover {
+    background-color: #2b2b2b;     /* Gri mai deschis la hover pe item */
+}
+
+QListWidget:disabled {
+    color: rgba(255,255,255,0.4);  /* Text estompat */
+}
+
 QListWidget::focus {
     border: 1px solid #2d5a6b;
     border-radius: 4px;
 }
+
+/* Indicator (checkbox) */
 QListWidget::indicator {
     width: 14px;
     height: 14px;
     border-radius: 3px;
-    background-color: #2b2b2b; /* Fundal gri-închis */
+    background-color: #2b2b2b;
     border: 1px solid #666;
 }
 
 QListWidget::indicator:hover {
-    background-color: #3b3b3b; /* Gri mediu la hover */
+    background-color: #3b3b3b;
     border: 1px solid #888;
 }
 
 QListWidget::indicator:checked {
-    background-color: #2b2b2b; /* Fundal rămâne gri-închis */
+    background-color: #2b2b2b;
     border: 1px solid #aaa;
-    image: url(:/img/check-mark.png); /* Imagine albă pentru bifă */
+    image: url(:/img/check-mark.png);
 }
 
 QListWidget::indicator:checked:hover {
-    background-color: #3b3b3b; /* Gri puțin mai deschis la hover */
+    background-color: #3b3b3b;
 }
 
 QListWidget::indicator:unchecked:hover {
     background-color: #3b3b3b;
+}
+
+QListWidget::indicator:disabled {
+    background-color: #1e1e1e;
+    border: 1px solid #444;
 }
 /* -------------------------- QTableView ---------------------- */
 QTableView {

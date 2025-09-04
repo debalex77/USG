@@ -210,5 +210,7 @@
         <file>img/error.png</file>
         <file>img/sync.png</file>
         <file>img/thread.png</file>
+        <file>img/archive.png</file>
+        <file>img/firstWizard.png</file>
     </qresource>
 </RCC>

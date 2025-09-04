@@ -41,7 +41,7 @@ CONFIG  -= qml_debug
 # Definim componentele versiunii
 USG_VERSION_MAJOR   = 3
 USG_VERSION_MINOR   = 0
-USG_VERSION_RELEASE = 4
+USG_VERSION_RELEASE = 5
 USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
 VERSION             = "$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE"
 DEFINES += USG_VERSION_MAJOR=$$USG_VERSION_MAJOR
@@ -91,6 +91,7 @@ SOURCES += \
     catalogs/patienthistory.cpp \
     common/agentsendemail.cpp \
     common/appcontroller.cpp \
+    common/archivecreationhandler.cpp \
     common/cloudserverconfig.cpp \
     common/contonline.cpp \
     common/cryptomanager.cpp \
@@ -171,6 +172,7 @@ HEADERS += \
     common/agentsendemail.h \
     common/appcontroller.h \
     common/appmetatypes.h \
+    common/archivecreationhandler.h \
     common/cloudserverconfig.h \
     common/contonline.h \
     common/cryptomanager.h \
@@ -267,6 +269,7 @@ FORMS += \
     catalogs/normograms.ui \
     catalogs/patienthistory.ui \
     common/agentsendemail.ui \
+    common/archivecreationhandler.ui \
     common/cloudserverconfig.ui \
     common/contonline.ui \
     common/firstrunwizard.ui \

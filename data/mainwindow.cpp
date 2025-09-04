@@ -356,7 +356,8 @@ void MainWindow::initActions()
     QAction *actionUserSettings     = new QAction(QIcon(":/img/user_preferences.png"), tr("Preferințele utilizatorului"), this);
     QAction *actionAgentEmail       = new QAction(QIcon(":/img/email.png"), tr("Cont online"), this);
     QAction *actionCloudServer      = new QAction(QIcon(":/img/cloud-server.png"), tr("Configurarea cloud server"), this);
-    QAction *actionFirstWizard      = new QAction(QIcon(""), tr("Asistent primei lansari"), this);
+    QAction *actionFirstWizard      = new QAction(QIcon(":/img/firstWizard.png"), tr("Asistent primei lansari"), this);
+    QAction *actionCreationArchive  = new QAction(QIcon(":/img/archive.png"), tr("Creeaza arhiva"), this);
 
     QAction *actionOpenPricing      = new QAction(QIcon(":/img/price_x32.png"), tr("Formarea prețurilor"), this);
     QAction *actionOpenAppointments = new QAction(QIcon(":/img/registration_patients.png"), tr("Programarea pacienților"), this);
@@ -390,6 +391,7 @@ void MainWindow::initActions()
     connect(actionAgentEmail, &QAction::triggered, this, &MainWindow::openAgentContOnline);
     connect(actionCloudServer, &QAction::triggered, this, &MainWindow::openCloudServerConfig);
     connect(actionFirstWizard, &QAction::triggered, this, &MainWindow::openFirstRunWizard);
+    connect(actionCreationArchive, &QAction::triggered, this, &MainWindow::openArchiveHandler);
 
     connect(actionOpenPricing, &QAction::triggered, this, &MainWindow::openPricing);
     connect(actionOpenAppointments, &QAction::triggered, this, &MainWindow::openPatientAppointments);
@@ -446,6 +448,8 @@ void MainWindow::initActions()
     ui->menuService->addAction(actionCloudServer);
     ui->menuService->addSeparator();
     ui->menuService->addAction(actionFirstWizard);
+    ui->menuService->addSeparator();
+    ui->menuService->addAction(actionCreationArchive);
 
     QAction *actionSourceCode = new QAction(QIcon(":/img/github.png"), tr("Cod sursă"), this);
     ui->menuAssistance->addAction(actionSourceCode);
@@ -996,6 +1000,12 @@ void MainWindow::openFirstRunWizard()
     FirstRunWizard *first_wizard = new FirstRunWizard(this);
     connect(first_wizard, &FirstRunWizard::finishLoadClassifier, this, &MainWindow::mDockWidgetShowTex);
     first_wizard->exec();
+}
+
+void MainWindow::openArchiveHandler()
+{
+    auto archive_handler = new ArchiveCreationHandler(this);
+    archive_handler->exec();
 }
 
 // **********************************************************************************

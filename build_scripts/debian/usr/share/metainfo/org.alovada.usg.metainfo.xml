@@ -6,6 +6,7 @@
   <name>USG</name>
   <summary>USG - Records of ultrasound examinations</summary>
   <releases>
+    <release version="3.0.5" date="2025-09-04"/>
     <release version="3.0.4" date="2025-06-25"/>
     <release version="3.0.3" date="2025-05-01"/>
     <release version="3.0.2" date="2025-02-06"/>

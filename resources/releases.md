@@ -1,3 +1,11 @@
+## USG v3.0.5
+* implementată sincronizarea (cu serverul cloud) în fundal a următoarelor documente:
+    * Comanda ecografică
+    * Raport ecografic
+    * Imagini asociate
+* adaugată forma pentru crearea arhivului bazei de date <b>.sqlite</b>
+* corectat stilul aplicației pentru tema <b>„DARK”</b>.
+
 ## USG v3.0.4
 * întrodusă forma <b><u>Asistentul de configurare inițială</u></b>, care are rolul de a facilita completarea corectă a bazei de date și de a preveni apariția erorilor de configurare inițială.
 * <b><u>Jurnalul de logare</u></b> – a fost implementată filtrarea mesajelor în funcție de nivelul de informație:

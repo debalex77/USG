@@ -37,6 +37,7 @@
 #include "data/downloader.h"
 #include <common/contonline.h>
 #include <common/cloudserverconfig.h>
+#include <common/archivecreationhandler.h>
 
 //=============================================================
 #define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
@@ -100,6 +101,7 @@ private slots:
     void openAgentContOnline();
     void openCloudServerConfig();
     void openFirstRunWizard();
+    void openArchiveHandler();
 
     void downloadNewVersionApp(const QString str_new_version);
     void onUpdateProgress(qint64 bytesReceived, qint64 bytesTotal);
@@ -165,6 +167,7 @@ private:
     AsistantTipApp           *asistant_tip;
     InfoWindow               *info_window;
     AuthorizationUser        *autorization;
+    ArchiveCreationHandler   *archive_handler;
 
     QLabel *txt_title_bar = nullptr;
 

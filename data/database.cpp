@@ -6204,14 +6204,16 @@ QString DataBase::getStyleForToolButton()
                 font-size: 13px;
                 padding: 4px 4px;
             }
-            QToolButton:hover
-            {
-                background-color: #3b3b3b;
-                border: 1px solid rgba(255, 255, 255, 0.8);
+            QToolButton:disabled {
+                color: rgba(255, 255, 255, 0.4);
+                border-color: rgba(255, 255, 255, 0.25);
+                background-color: #2b2b2b; /* menține fundalul */
             }
-            QToolButton:pressed
-            {
-                background-color: #4b4b4b;
+            QToolButton:disabled:hover,
+            QToolButton:disabled:pressed {
+                color: rgba(255, 255, 255, 0.4);
+                border-color: rgba(255, 255, 255, 0.25);
+                background-color: #2b2b2b;
             }
         )");
     else
@@ -6225,13 +6227,16 @@ QString DataBase::getStyleForToolButton()
                 font-size: 13px;
                 padding: 4px 4px;
             }
-            QToolButton:hover
-            {
-                background-color: #e0e0e0;
+            QToolButton:disabled {
+                color: rgba(0, 0, 0, 0.35);
+                border-color: rgba(0, 0, 0, 0.15);
+                background-color: #f1f1f1;
             }
-            QToolButton:pressed
-            {
-                background-color: #d0d0d0;
+            QToolButton:disabled:hover,
+            QToolButton:disabled:pressed {
+                color: rgba(0, 0, 0, 0.35);
+                border-color: rgba(0, 0, 0, 0.15);
+                background-color: #f1f1f1;
             }
         )");
 }
