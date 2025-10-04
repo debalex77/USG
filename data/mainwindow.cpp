@@ -575,7 +575,7 @@ void MainWindow::setVersionAppInTableSettingsUsers()
             id_users = ? AND
             versionApp IS NOT NULL
     )");
-    qry.addBindValue(USG_VERSION_FULL);
+    qry.addBindValue(VERSION_FULL);
     qry.addBindValue(globals().idUserApp);
     if (! qry.exec() && qry.next())
         qCritical(logCritical()) << tr("%1 - setVersionAppInTableSettingsUsers()").arg(metaObject()->className())
@@ -627,14 +627,14 @@ void MainWindow::updateTimer()
 
         // setam titlu aplicatiei
         if (globals().thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
                            tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
                            globals().nameUserApp + ")");
         else if (globals().thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
                            tr(" (.sqlite3): utilizator (") + globals().nameUserApp + ")");
         else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
+            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
                            tr(": utilizator (") + globals().nameUserApp + ")");
 
         // daca prima lansare prezentam asistentul de configurare
@@ -653,13 +653,13 @@ void MainWindow::updateTimer()
         QString version_app = getVersionAppInTableSettingsUsers();
 
         // verificam daca versiunea aplicatiei e actuala
-        if (version_app != USG_VERSION_FULL){
+        if (version_app != VERSION_FULL){
             if (update_app->execUpdateCurrentRelease(version_app)){
                 setVersionAppInTableSettingsUsers();
                 openDescriptionRealease();
                 // prezentam informatia de actualizarea in panoul informativ
                 // textEdit_dockWidget->clear();
-                textEdit_dockWidget->append(tr("%1  Aplicația a fost actualizată până la versiunea: USG v" USG_VERSION_FULL)
+                textEdit_dockWidget->append(tr("%1  Aplicația a fost actualizată până la versiunea: USG v" VERSION_FULL)
                                                  .arg(db->getHTMLImageInfo()));
                 textEdit_dockWidget->setFixedHeight(100);
                 dock_widget->show();

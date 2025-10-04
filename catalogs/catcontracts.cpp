@@ -77,7 +77,7 @@ void CatContracts::initConnections()
 
     connect(ui->editName, &QLineEdit::textChanged, this, &CatContracts::dataWasModified);
     connect(ui->dateInit, &QDateEdit::dateChanged, this, &CatContracts::dataWasModified);
-    connect(ui->checkBoxNotValid, &QCheckBox::stateChanged, this, &CatContracts::dataWasModified);
+    connect(ui->checkBoxNotValid, &QCheckBox::checkStateChanged, this, &CatContracts::dataWasModified);
     connect(ui->editComment, &QPlainTextEdit::textChanged, this, &CatContracts::dataWasModified);
 
     connect(ui->btnOK, &QAbstractButton::clicked, this, &CatContracts::onWritingDataClose);
@@ -102,7 +102,7 @@ void CatContracts::connectionModified()
 
     connect(ui->editName, &QLineEdit::textChanged, this, &CatContracts::dataWasModified);
     connect(ui->dateInit, &QDateEdit::dateChanged, this, &CatContracts::dataWasModified);
-    connect(ui->checkBoxNotValid, &QCheckBox::stateChanged, this, &CatContracts::dataWasModified);
+    connect(ui->checkBoxNotValid, &QCheckBox::checkStateChanged, this, &CatContracts::dataWasModified);
     connect(ui->editComment, &QPlainTextEdit::textChanged, this, &CatContracts::dataWasModified);
 }
 
@@ -118,7 +118,7 @@ void CatContracts::disconnectionModified()
 
     disconnect(ui->editName, &QLineEdit::textChanged, this, &CatContracts::dataWasModified);
     disconnect(ui->dateInit, &QDateEdit::dateChanged, this, &CatContracts::dataWasModified);
-    disconnect(ui->checkBoxNotValid, &QCheckBox::stateChanged, this, &CatContracts::dataWasModified);
+    disconnect(ui->checkBoxNotValid, &QCheckBox::checkStateChanged, this, &CatContracts::dataWasModified);
     disconnect(ui->editComment, &QPlainTextEdit::textChanged, this, &CatContracts::dataWasModified);
 }
 

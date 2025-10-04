@@ -1,3 +1,13 @@
+## USG v3.0.6
+* <b>Migrare tehnică:</b> 
+    * actualizarea aplicației la Qt v6.9.3.
+    * actualizarea [LimeReport](http://limereport.ru/en/index.php) la versiunea 1.7.14
+* <b>Raport ecografic:</b> codul documentului a fost reorganizat modular, pentru a facilita dezvoltarea și întreținerea ulterioară.
+* <b>Funcționalitate nouă:</b> adăugarea sistemului „Examinarea țesuturilor moi și a ganglionilor limfatici” în formularul documentului Raport ecografic.
+* <b>Tipărire:</b> introducerea șablonului de tipar pentru noul sistem de examinare (vezi punctul de mai sus).
+* <b>Bug fix:</b> corectarea erorii la adăugarea descrierilor formațiunilor renale.
+* <b>Interfață:</b> ajustarea stilului aplicației pentru tema <u>„DARK”</u>.
+
 ## USG v3.0.5
 * implementată sincronizarea (cu serverul cloud) în fundal a următoarelor documente:
     * Comanda ecografică

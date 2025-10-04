@@ -90,6 +90,9 @@ void CustomDialogInvestig::save()
         case t_gestation2:
             m_gestation2 = isChecked;
             break;
+        case t_lymphNodes:
+            m_lymphNodes = isChecked;
+            break;
         default:
             qDebug() << tr("Nu a fost determinat indexul din clasa '%1' !!!").arg(metaObject()->className());
         }
@@ -102,7 +105,8 @@ void CustomDialogInvestig::save()
         m_gynecology == false &&
         m_gestation0 == false &&
         m_gestation1 == false &&
-        m_gestation2 == false){
+        m_gestation2 == false &&
+        m_lymphNodes == false){
         CustomMessage *msgBox = new CustomMessage(this);
         msgBox->setWindowTitle(tr("Selectarea sistemului"));
         msgBox->setTextTitle(tr("Nu este selectat nici un sistem !!!<br> Bifati sistemul necesar."));
@@ -125,7 +129,8 @@ void CustomDialogInvestig::createListWidget()
             << tr("tiroida")
             << tr("sarcina până la 11 săptămâni")
             << tr("sarcina 11-14 săptămâni")
-            << tr("sarcina 15-40 săptămâni");
+            << tr("sarcina 15-40 săptămâni")
+            << tr("țes.moi și gangl.limfatici");
 
     widget->addItems(strList);
 
@@ -220,6 +225,9 @@ void CustomDialogInvestig::createLayout()
             case t_gestation2:
                 item->setCheckState(Qt::Checked);
                 break;
+            case t_lymphNodes:
+                item->setCheckState(Qt::Checked);
+                break;
             default:
                 qDebug() << tr("Nu a fost determinat indexul din clasa '%1' !!!").arg(metaObject()->className());
             }
@@ -259,6 +267,9 @@ void CustomDialogInvestig::createLayout()
             case t_gestation2:
                 item->setCheckState(Qt::Unchecked);
                 break;
+            case t_lymphNodes:
+                item->setCheckState(Qt::Unchecked);
+                break;
             default:
                 qDebug() << tr("Nu a fost determinat indexul din clasa '%1' !!!").arg(metaObject()->className());
             }
@@ -277,6 +288,7 @@ void CustomDialogInvestig::createConnections()
     connect(this, &CustomDialogInvestig::t_gestation0Changed, this, &CustomDialogInvestig::setListWidget);
     connect(this, &CustomDialogInvestig::t_gestation1Changed, this, &CustomDialogInvestig::setListWidget);
     connect(this, &CustomDialogInvestig::t_gestation2Changed, this, &CustomDialogInvestig::setListWidget);
+    connect(this, &CustomDialogInvestig::t_lymphNodesChanged, this, &CustomDialogInvestig::setListWidget);
 
     connect(btnOK, &QPushButton::clicked, this, &CustomDialogInvestig::save);
     connect(btnClose, &QPushButton::clicked, this, &CustomDialogInvestig::close);
@@ -314,6 +326,9 @@ void CustomDialogInvestig::setListWidget()
             break;
         case t_gestation2:
             item->setCheckState((m_gestation2) ? Qt::Checked : Qt::Unchecked);
+            break;
+        case t_lymphNodes:
+            item->setCheckState((m_lymphNodes) ? Qt::Checked : Qt::Unchecked);
             break;
         default:
             qDebug() << tr("Nu a fost determinat indexul din clasa '%1' !!!").arg(metaObject()->className());

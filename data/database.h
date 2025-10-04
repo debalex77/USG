@@ -246,6 +246,7 @@ public:
     bool createTableGestation2_urinarySystem();
     bool createTableGestation2_other();
     bool createTableGestation2_doppler();
+    bool createTableSofTissuesLymphNodes();
 
     bool createTableNormograms();
 
@@ -287,6 +288,7 @@ public:
     QString getQryForTableGestation0dById(const int id_doc) const;
     QString getQryForTableGestation1dById(const int id_doc) const;
     QString getQryForTableGestation2(const int id_doc) const;
+    QString getQryForTableLymphNodes(const int id_doc) const;
 
     QString getQryForTableOrderById(const int id_doc, const QString str_price) const;
 

@@ -1,3 +1,11 @@
+3.0.6 (September 26th, 2025)
+  * Technical migration: application updated to Qt v6.9.3.
+  * Ultrasound report: the document code was reorganized into modules to simplify continuous development and maintenance.
+  * New feature: added the “Soft tissues and lymph nodes examination” system to the Ultrasound report form.
+  * Printing: introduced a new print template for the added examination system.
+  * Bug fix: resolved the issue with adding kidney formations descriptions.
+  * UI: improved styling for the Dark theme.
+
 3.0.5 (September 04th, 2025)
   * Implemented background synchronization (with the cloud server) for the following documents:
     * Ultrasound order

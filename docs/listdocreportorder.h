@@ -296,6 +296,11 @@ private:
             "1029.1.1.", "1029.1.2.", "1029.2.", "1029.3.", "1029.4.", "1029.31.",
         };
 
+    const QSet<QString> code_lymphNodes =
+        {
+            "1048", "1050.52.", "1050.53.",
+        };
+
     DataBase *db;
     DatabaseProvider m_dbProvider;
 

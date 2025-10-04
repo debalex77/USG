@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "updatereleasesapp.h"
+#include <common/version.h>
 
 UpdateReleasesApp::UpdateReleasesApp(QObject *parent) : QObject(parent)
 {
@@ -56,21 +57,21 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString current_release)
         return false;
     }
 
-    if (version_major != USG_VERSION_MAJOR) {
+    if (version_major != VERSION_MAJOR) {
         qWarning(logWarning()) << "Versiunea majoră curentă este diferită de cea suportată!";
         updateRelease_3_0_1(); // cum corect de organizat
         return true;
     }
 
-    if (version_major == USG_VERSION_MAJOR &&
-        version_minor == USG_VERSION_MINOR) {
+    if (version_major == VERSION_MAJOR &&
+        version_minor == VERSION_MINOR) {
 
-        if (version_release < USG_VERSION_RELEASE) {
+        if (version_release < VERSION_RELEASE) {
             // Apelăm funcțiile de actualizare necesare
-            for (int i = version_release + 1; i <= USG_VERSION_RELEASE; ++i) {
+            for (int i = version_release + 1; i <= VERSION_RELEASE; ++i) {
                 if (updateFunctions[version_major][version_minor].contains(i)) {
                     qInfo(logInfo()) << "Se executa actualizare pana la versiunea:"
-                                     << QString("%1.%2.%3").arg(version_major, version_minor, version_release);
+                                     << VERSION_FULL;
                     updateFunctions[version_major][version_minor][i](); // Apelăm funcția de actualizare
                 } else {
                     qInfo(logInfo()) << QString("Functia de actualizare pentru versiunea ""%1.%2.%3"" nu este definita !!!")
@@ -97,6 +98,8 @@ void UpdateReleasesApp::initializeUpdateFunctions()
     // Inițializarea pentru 3.0.X
     updateFunctions[3][0].insert(1, [this]() { this->updateRelease_3_0_1(); });
     updateFunctions[3][0].insert(3, [this]() { this->updateRelease_3_0_3(); });
+    updateFunctions[3][0].insert(6, [this]() { this->updateRelease_3_0_6(); });
+    updateFunctions[3][0].insert(7, [this]() { this->updateRelease_3_0_7(); });
 }
 
 void UpdateReleasesApp::updateRelease_2_0_4()
@@ -811,4 +814,147 @@ void UpdateReleasesApp::updateRelease_3_0_3()
             qCritical(logCritical()) << "Eroare actualizarii la versiunea '3.0.3': nu s-a efectuat modifcarea tabelei 'tableGestation1' sectia 'lmp' (bd MySQL).";
 
     }
+}
+
+bool UpdateReleasesApp::existErrFormationsSystemTemplates()
+{
+    QSqlQuery qry;
+    QString ddl;
+
+    if (globals().thisMySQL) {
+
+        qry.prepare(R"(
+            SHOW CREATE TABLE formationsSystemTemplates
+        )");
+        if (qry.exec() && qry.next())
+            ddl = qry.value(0).toString();
+
+        if (ddl.isEmpty()) {
+            qry.prepare(R"(
+                SELECT COLUMN_TYPE
+                FROM INFORMATION_SCHEMA.COLUMNS
+                WHERE TABLE_SCHEMA = DATABASE()
+                  AND TABLE_NAME = 'formationsSystemTemplates'
+                  AND COLUMN_NAME = 'typeSystem'
+            )");
+            if (qry.exec() && qry.next())
+                ddl = qry.value(0).toString();
+        }
+
+    } else {
+
+        qry.prepare(R"(
+            SELECT sql
+              FROM sqlite_master
+             WHERE type = 'table' AND
+                   name = 'formationsSystemTemplates';
+        )");
+        if (qry.exec() && qry.next())
+            ddl = qry.value(0).toString();
+
+    }
+
+    if (ddl.isEmpty())
+        return false;
+
+    if (ddl.contains("Rinici", Qt::CaseSensitive))
+        return true;
+    else
+        return false;
+
+}
+
+void UpdateReleasesApp::updateRelease_3_0_6()
+{
+    QSqlQuery qry;
+
+    if (globals().thisSqlite) {
+
+        /** 1. gasim si corectam eroarea in tabela 'formationsSystemTemplates' */
+        if (existErrFormationsSystemTemplates()) {
+
+            // Redenumim tabela veche
+            qry.exec("ALTER TABLE formationsSystemTemplates RENAME TO formationsSystemTemplates_old;");
+
+            // Cream din nou tabela cu denumirea corecta
+            db->createTableFormationsSystemTemplates();
+
+            // Mutam datele
+            qry.exec(R"(
+                INSERT INTO formationsSystemTemplates (id, deletionMark, name, typeSystem)
+                SELECT id, deletionMark, name,
+                       CASE WHEN typeSystem='Rinici' THEN 'Rinichi' ELSE typeSystem END
+                FROM formationsSystemTemplates_old;
+            )");
+
+            // Stergem tabela veche
+            qry.exec("DROP TABLE formationsSystemTemplates_old;");
+
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: s-a corectat enumerarea in tabela 'formationsSystemTemplates'.";
+        }
+
+        /** 2. cream tabela noua 'tableSofTissuesLymphNodes' */
+        if (db->createTableSofTissuesLymphNodes())
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: a fost creata tabela 'tableSofTissuesLymphNodes'.";
+
+        /** 3. Modificam tabela 'reportEcho' - adaugam coloana 't_lymphNodes' */
+        if (qry.exec("ALTER TABLE reportEcho ADD COLUMN t_lymphNodes INTEGER DEFAULT 0;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: adaugata sectia noua 't_lymphNodes' in tabela 'reportEcho'.";
+
+
+    } else {
+
+        /** 1. gasim si corectam eroarea in tabela 'formationsSystemTemplates' */
+        if (existErrFormationsSystemTemplates()) {
+
+            // Modificam doar coloana
+            if (! qry.exec(R"(
+                ALTER TABLE formationsSystemTemplates
+                MODIFY COLUMN typeSystem ENUM(
+                    'Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)',
+                    'Rinichi', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
+                    'Prostata', 'Recomandari (prostata)',
+                    'Tiroida', 'Recomandari (tiroida)',
+                    'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',
+                    'Ginecologia (uter)', 'Ginecologia (ovar stang)', 'Ginecologia (ovar drept)', 'Recomandari (ginecologia)',
+                    'Recomandari (gestatation0)', 'Recomandari (gestatation1)', 'Recomandari (gestatation2)'
+                ) NOT NULL DEFAULT 'Unknow';
+            )")) {
+                qCritical(logCritical()) << "Eroare ALTER TABLE MySQL:" << qry.lastError().text();
+            }
+
+            // Corectăm eventualele valori greșite deja introduse
+            if (! qry.exec("UPDATE formationsSystemTemplates SET typeSystem='Rinichi' WHERE typeSystem='Rinici';")) {
+                qCritical(logCritical()) << "Eroare UPDATE MySQL:" << qry.lastError().text();
+            } else {
+                qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: s-a corectat valori greșite din tabela 'formationsSystemTemplates'.";
+            }
+        }
+
+        /** 2. cream tabela noua 'tableSofTissuesLymphNodes' */
+        if (db->createTableSofTissuesLymphNodes())
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: a fost creata tabela 'tableSofTissuesLymphNodes'.";
+
+        /** 3. Modificam tabela 'reportEcho' - adaugam coloana 't_lymphNodes' */
+        if (qry.exec("ALTER TABLE `reportEcho` ADD COLUMN `t_lymphNodes` BOOLEAN;"))
+            qInfo(logInfo()) << "Actualizarea la versiunea 3.0.6: adaugata sectia noua 't_lymphNodes' in tabela 'reportEcho'.";
+    }
+
+    qInfo(logInfo()) << "Actualizarea pana la versiunea 3.0.6 s-a finisat.";
+}
+
+void UpdateReleasesApp::updateRelease_3_0_7()
+{
+    /** Cerinte pentru release:
+     **
+     ** 1. Modularea documentului 'Comanda ecografica'
+     ** 2. Crearea formei de 'Parametri' pentru documentul 'Comanda ecografica':
+     **    - vizualizarea/ascunderea in tabel a investigatiilor unde este indicat
+     **      costul si nu este indicat costul
+     ** 3. Procesarea:
+     **    -> selectarea mai multor documente
+     **    -> export PDF
+     **    -> transmiterea prin e-mail.
+     **
+     ******************************************************************************/
 }

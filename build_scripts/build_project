@@ -2,12 +2,12 @@
 
 #-----------------------------------------------------
 # Determinam variabile dosarelor
-RELEASE_DIR="build/Desktop_Qt_6_5_3_GCC_64bit-Release"
+RELEASE_DIR="build/Desktop_Qt_6_9_3-Release"
 PREBUILD_DIR="build/prebuild_project"
 BUILD_DIR="build/build_project"
-QT_LIB_DIR="$HOME/Qt/6.5.3/gcc_64/lib"
-QT_PLUGINS_DIR="$HOME/Qt/6.5.3/gcc_64/plugins"
-QT_QIF_DIR="$HOME/Qt/Tools/QtInstallerFramework/4.8/bin"
+QT_LIB_DIR="$HOME/Qt/6.9.3/gcc_64/lib"
+QT_PLUGINS_DIR="$HOME/Qt/6.9.3/gcc_64/plugins"
+QT_QIF_DIR="$HOME/Qt/Tools/QtInstallerFramework/4.10/bin"
 
 #-----------------------------------------------------
 # 1. Verificam daca sunt directorii
@@ -32,8 +32,6 @@ fi
 cp ../"$RELEASE_DIR"/* ../"$PREBUILD_DIR"
 cp -r ../resources/icons ../"$PREBUILD_DIR"
 cp -r ../resources/templets ../"$PREBUILD_DIR"
-#cp -r LimeReport "$PREBUILD_DIR"
-#cp -r openssl "$PREBUILD_DIR"
 cp -r ../3rdparty ../"$PREBUILD_DIR"
 cp -f ../version.txt ../"$PREBUILD_DIR"
 echo "Sunt copiate fisierele pentru 'prebuild' ..."
@@ -78,19 +76,19 @@ cp -f ../3rdparty/LimeReport/release/libQtZint.so ../"$BUILD_DIR"/lib/libQtZint.
 echo "Sunt copiate librariile 'LimeReport' ..."
 # -- libQt6Designer
 cp -f "$QT_LIB_DIR"/libQt6Designer.so.6 ../"$BUILD_DIR"/lib/libQt6Designer.so.6
-cp -f "$QT_LIB_DIR"/libQt6Designer.so.6.5.3 ../"$BUILD_DIR"/lib/libQt6Designer.so.6.5.3
+cp -f "$QT_LIB_DIR"/libQt6Designer.so.6.9.3 ../"$BUILD_DIR"/lib/libQt6Designer.so.6.9.3
 # -- libQt6DesignerComponents
 cp -f "$QT_LIB_DIR"/libQt6DesignerComponents.so.6 ../"$BUILD_DIR"/lib/libQt6DesignerComponents.so.6
-cp -f "$QT_LIB_DIR"/libQt6DesignerComponents.so.6.5.3 ../"$BUILD_DIR"/lib/libQt6DesignerComponents.so.6.5.3
+cp -f "$QT_LIB_DIR"/libQt6DesignerComponents.so.6.9.3 ../"$BUILD_DIR"/lib/libQt6DesignerComponents.so.6.9.3
 # -- libQt6OpenGLWidgets
 cp -f "$QT_LIB_DIR"/libQt6OpenGLWidgets.so.6 ../"$BUILD_DIR"/lib/libQt6OpenGLWidgets.so.6
-cp -f "$QT_LIB_DIR"/libQt6OpenGLWidgets.so.6.5.3 ../"$BUILD_DIR"/lib/libQt6OpenGLWidgets.so.6.5.3
+cp -f "$QT_LIB_DIR"/libQt6OpenGLWidgets.so.6.9.3 ../"$BUILD_DIR"/lib/libQt6OpenGLWidgets.so.6.9.3
 # -- libQt6PrintSupport
 cp -f "$QT_LIB_DIR"/libQt6PrintSupport.so.6 ../"$BUILD_DIR"/lib/libQt6PrintSupport.so.6
-cp -f "$QT_LIB_DIR"/libQt6PrintSupport.so.6.5.3 ../"$BUILD_DIR"/lib/libQt6PrintSupport.so.6.5.3
+cp -f "$QT_LIB_DIR"/libQt6PrintSupport.so.6.9.3 ../"$BUILD_DIR"/lib/libQt6PrintSupport.so.6.9.3
 # -- libQt6UiTools
 cp -f "$QT_LIB_DIR"/libQt6UiTools.so.6 ../"$BUILD_DIR"/lib/libQt6UiTools.so.6
-cp -f "$QT_LIB_DIR"/libQt6UiTools.so.6.5.3 ../"$BUILD_DIR"/lib/libQt6UiTools.so.6.5.3
+cp -f "$QT_LIB_DIR"/libQt6UiTools.so.6.9.3 ../"$BUILD_DIR"/lib/libQt6UiTools.so.6.9.3
 
 if [ ! -d ../"$BUILD_DIR"/plugins/printsupport ]; then
     mkdir ../"$BUILD_DIR"/plugins/printsupport
@@ -168,28 +166,6 @@ mkdir ../"$BUILD_DEB_DIR"/opt
 mkdir ../"$BUILD_DEB_DIR"/opt/USG
 cp -rf ../"$BUILD_DIR"/* ../"$BUILD_DEB_DIR"/opt/USG/
 
-# inseram descrierea versiunei in changelog.Debian
-#sed -i "1i\
-#usg (3.0.4) UNRELEASED; urgency=medium
-
-#  * Introduced the <b><u>Initial Setup Assistant</u></b>, designed to facilitate correct database completion and prevent initial configuration errors.
-#  * <b><u>Logging Journal</u></b> – implemented message filtering based on information level:
-#    * Info – general information
-#    * Warning – attention messages
-#    * Critical – critical messages
-#    * Debug – debugging information
-#    * THREAD – messages from other threads
-#    * SYNC – synchronization-related information
-#  * Added the <b><u>Cloud Server Configuration</u></b> form, which holds the necessary data for connecting to and synchronizing with the <b><u>cloud server</u></b>, when needed.
-#  * Implemented background synchronization upon patient data validation in the <b><u>Ultrasound Order</u></b> document form.
-#  * Optimized application style and font for the <b>“DARK”</b> theme.
-#  * Fixed the email sending function to patients.
-#  * Optimized the image insertion function for attached documents (with improved image quality).
-#  * Fixed minor bugs.
-
-#-- Codreanu Alexandru <alovada.med@gmail.com>  $(LC_TIME=en_US.UTF-8 date +"%a, %d %b%Y %H:%M:%S %z")
-#"
-
 # aflam marimea proiectului
 SIZE_PROJECT=$(du -sk ../"$BUILD_DEB_DIR"/opt/USG | awk '{print $1}')
 # setam marimrea
@@ -202,18 +178,27 @@ chmod 775 ../"$BUILD_DEB_DIR"/DEBIAN/postinst
 chmod 775 ../"$BUILD_DEB_DIR"/DEBIAN/prerm
 
 echo "Se calculeaza suma MD5 a fisierelor proiectului ..."
-md5deep -r ../"$BUILD_DEB_DIR"/opt >> ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
-md5deep -r ../"$BUILD_DEB_DIR"/usr >> ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
-sed -i "s|$HOME/Qt_projects/USG/"$BUILD_DEB_DIR"||g" ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
-chmod 775 ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
+# pu-- Debian 12
+#md5deep -r ../"$BUILD_DEB_DIR"/opt >> ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
+#md5deep -r ../"$BUILD_DEB_DIR"/usr >> ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
+#sed -i "s|$HOME/Qt_projects/USG/"$BUILD_DEB_DIR"||g" ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
+#chmod 0644 ../"$BUILD_DEB_DIR"/DEBIAN/md5sums
+
+# pu-- Debian 13
+cd ../"$BUILD_DEB_DIR"
+find opt usr -type f -print0 \
+  | LC_ALL=C sort -z \
+  | xargs -0 md5sum > DEBIAN/md5sums
+chmod 0644 DEBIAN/md5sums
 
 # arhivam changelog
+cd ..
 gzip -9 ../"$BUILD_DEB_DIR"/usr/share/doc/usg/changelog
 gzip -9 ../"$BUILD_DEB_DIR"/usr/share/doc/usg/changelog.Debian
 gzip -9 ../"$BUILD_DEB_DIR"/usr/share/doc/usg/copyright
 
 echo "Se creeaza pachetul de instalare $FILENAME_DEB ..."
-dpkg-deb --build ../"$BUILD_DEB_DIR"
+dpkg-deb -Zxz -z9 --build --root-owner-group ../"$BUILD_DEB_DIR"
 
 echo "Se calculeaza suma SHA256 a fisierului $FILENAME_DEB ..."
 SHA256_SUM_DEB=$(sha256sum ../build/"$FILENAME_DEB" | awk '{print $1}')
@@ -221,15 +206,41 @@ echo "$SHA256_SUM_DEB" > ../build/"$FILENAME_DEB_SHA256"
 echo "Fisierului $FILENAME_DEB creat cu succes !!!"
 
 echo "-------------------------------------------------------------------------"
+echo "Initierea crearii pachetului .appimage ..."
+# sudo apt install -y squashfs-tools fuse
+# wget -O ~/App/AppImageTool/appimagetool https://github.com/AppImage/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage
+# chmod +x ~/App/AppImageTool/appimagetool
+# export PATH="$HOME/App/AppImageTool:$PATH"
+mkdir -p ../build/deploy/AppDir
+cp -rf ../build/build_project/* ../build/deploy/AppDir
+
+mv ../build/deploy/AppDir/USG.sh ../build/deploy/AppDir/AppRun
+chmod +x ../build/deploy/AppDir/AppRun
+
+cat > ../build/deploy/AppDir/USG.desktop << 'EOF'
+[Desktop Entry]
+Name=USG
+Exec=USG
+Icon=usg
+Type=Application
+Categories=Science;MedicalSoftware;
+EOF
+echo "Creat fisierul usg.desktop pentru pachetul AppImage"
+
+cp ../$BUILD_DIR/icons/eco_512x512.png ../build/deploy/AppDir/usg.png
+echo "Copierea imaginei aplicatiei pentru pachetul AppImage"
+
+echo "Initierea build-lui AppImage"
+appimagetool ../build/deploy/AppDir ../build/USG_v${VERSION}-x86_64.AppImage
+echo "Build AppImage creat."
+
+SHA256_SUM_APPIMAGE=$(sha256sum ../build/USG_v${VERSION}-x86_64.AppImage | awk '{print $1}')
+echo "$SHA256_SUM_APPIMAGE" > ../build/USG_v${VERSION}-x86_64_AppImage.SHA256
+
+echo "-------------------------------------------------------------------------"
 echo "Se elimina fisiere si directoriile: prebuild_project, build_project, usg_installer ..."
 rm -r ../$INSTALLER_DIR
 rm -r ../$PREBUILD_DIR
 rm -r ../$BUILD_DIR
 rm -r ../$BUILD_DEB_DIR
-
-#echo "-------------------------------------------------------------------------"
-#read -p "Doriți să lansati fisierul de instalare? (y/n): " response
-#if [[ "$response" == "y" || "$response" == "Y" ]]; then
-#    echo "Se lanseaza fisierul de instalare..."
-#    ./build/USG_v$VERSION.run
-#fi
+rm -r ../build/deploy

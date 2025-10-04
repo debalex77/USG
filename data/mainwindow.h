@@ -38,12 +38,8 @@
 #include <common/contonline.h>
 #include <common/cloudserverconfig.h>
 #include <common/archivecreationhandler.h>
+#include <common/version.h>
 
-//=============================================================
-#define APPLICATION_NAME_SHORT  QCoreApplication::tr("USG")
-#define ORGANIZATION_NAME       "SC 'Alovada-Med' SRL"
-#define APPLICATION_NAME        QCoreApplication::tr("USG - Evidența examinărilor ecografice")
-#define GITHUB_URL_DOWNLOAD     "https://github.com/debalex77/USG/releases/download"
 //=============================================================
 
 QT_BEGIN_NAMESPACE

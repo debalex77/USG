@@ -1,0 +1,326 @@
+#!/usr/bin/env bash
+# Build USG: .run (Qt IFW), .deb, .AppImage – cu verificări, logare și cleanup.
+# Testat pe Debian 12/13. Rulează din „scripts/” (sau ajustează ROOT).
+# 2024 - 2025
+
+set -Eeuo pipefail
+IFS=$'\n\t'
+
+#==============================#
+# Config – editează aici ușor  #
+#==============================#
+
+# Versiuni/locații Qt
+QT_VERSION="${QT_VERSION:-6.9.3}"
+QT_BASE="${QT_BASE:-$HOME/Qt}"
+QT_LIB_DIR="${QT_LIB_DIR:-$QT_BASE/${QT_VERSION}/gcc_64/lib}"
+QT_PLUGINS_DIR="${QT_PLUGINS_DIR:-$QT_BASE/${QT_VERSION}/gcc_64/plugins}"
+QT_QIF_DIR="${QT_QIF_DIR:-$QT_BASE/Tools/QtInstallerFramework/4.10/bin}"
+
+# Structură proiect
+ROOT="$(readlink -f "$(dirname "$0")/..")"
+RELEASE_DIR="${RELEASE_DIR:-build/Desktop_Qt_${QT_VERSION//./_}-Release}"
+PREBUILD_DIR="build/prebuild_project"
+BUILD_DIR="build/build_project"
+INSTALLER_DIR="build/usg_installer"
+DEPLOY_DIR="build/deploy"
+APPDIR="$DEPLOY_DIR/AppDir"
+
+# Executabile
+CQTDEPLOYER="${CQTDEPLOYER:-cqtdeployer}"
+BINARYCREATOR="${BINARYCREATOR:-$QT_QIF_DIR/binarycreator}"
+APPIMAGETOOL="${APPIMAGETOOL:-appimagetool}"
+
+# Alte
+ARCH="$(dpkg --print-architecture 2>/dev/null || echo 'amd64')"
+ARCH_TAG="${ARCH_TAG:-Linux_amd64}"   # pentru numele artefactelor
+KEEP_BUILD="${KEEP_BUILD:-0}"         # 1 = nu șterge directoarele intermediare la final
+
+#==============================#
+# Utilitare                    #
+#==============================#
+
+log()  { printf "\033[1;34m[INFO]\033[0m %s\n" "$*"; }
+warn() { printf "\033[1;33m[WARN]\033[0m %s\n" "$*" >&2; }
+err()  { printf "\033[1;31m[ERR ]\033[0m %s\n" "$*" >&2; }
+
+die() { err "$*"; exit 1; }
+
+require_cmd() {
+  for c in "$@"; do
+    command -v "$c" >/dev/null 2>&1 || die "Lipsă unealtă: $c"
+  done
+}
+
+safe_rm() {
+  # rm sigur pe directoare relative la ROOT
+  local p
+  for p in "$@"; do
+    [[ -z "$p" ]] && continue
+    [[ "$p" == "/" ]] && die "Refuz ștergere la rădăcină."
+    rm -rf -- "$ROOT/$p"
+  done
+}
+
+cleanup() {
+  if [[ "$KEEP_BUILD" != "1" ]]; then
+    log "Curățim directoriile temporare: $PREBUILD_DIR, $BUILD_DIR, $INSTALLER_DIR, $DEPLOY_DIR și folderul .deb temporar"
+    safe_rm "$INSTALLER_DIR" "$PREBUILD_DIR" "$BUILD_DIR" "$DEPLOY_DIR" "$BUILD_DEB_DIR"
+  else
+    warn "KEEP_BUILD=1 setat – păstrăm directoarele intermediare."
+  fi
+}
+trap 'err "Execuție întreruptă la linia $LINENO"; cleanup' ERR
+trap 'cleanup' EXIT
+
+#==============================#
+# Pre-flight checks            #
+#==============================#
+
+cd "$ROOT"
+
+require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "sha256sum" "md5sum" "gzip" "dpkg-deb" "find" "xargs" "awk" "rsync"
+command -v "$APPIMAGETOOL" >/dev/null 2>&1 || warn "appimagetool nu este în PATH. Etapa AppImage va eșua."
+
+[[ -d "$QT_LIB_DIR" ]]     || die "QT_LIB_DIR inexistent: $QT_LIB_DIR"
+[[ -d "$QT_PLUGINS_DIR" ]] || die "QT_PLUGINS_DIR inexistent: $QT_PLUGINS_DIR"
+
+# Versiune aplicație
+[[ -f "$ROOT/version.txt" ]] || die "Lipsește version.txt în rădăcina proiectului."
+VERSION="$(< "$ROOT/version.txt")"
+
+# Artefacte – denumiri
+FILENAME_RUN="USG_v${VERSION}_${ARCH_TAG}.run"
+FILENAME_RUN_SHA256="USG_v${VERSION}_${ARCH_TAG}_run.sha256"
+FILENAME_DEB="USG_v${VERSION}_${ARCH_TAG}.deb"
+FILENAME_DEB_SHA256="USG_v${VERSION}_${ARCH_TAG}_deb.sha256"
+FILENAME_APPIMG="USG_v${VERSION}-x86_64.AppImage"
+FILENAME_APPIMG_SHA256="USG_v${VERSION}-x86_64_AppImage.sha256"
+
+#==============================#
+# 1) Pregătirea directoarelor  #
+#==============================#
+
+log "Pregătim directoarele..."
+mkdir -p "$ROOT/$PREBUILD_DIR" "$ROOT/$BUILD_DIR" "$ROOT/build"
+# golire controlată
+rm -rf "$ROOT/$PREBUILD_DIR"/* "$ROOT/$BUILD_DIR"/*
+
+#==============================#
+# 2) Copiere fișiere (prebuild)#
+#==============================#
+
+log "Copiem fișierele în prebuild..."
+[[ -d "$ROOT/$RELEASE_DIR" ]] || die "Nu este găsit $RELEASE_DIR (ai build-uit USG?)"
+
+rsync -a --delete "$ROOT/$RELEASE_DIR"/ "$ROOT/$PREBUILD_DIR"/
+
+for d in resources/icons resources/templets 3rdparty; do
+  [[ -e "$ROOT/$d" ]] || die "Lipsește: $d"
+  rsync -a "$ROOT/$d" "$ROOT/$PREBUILD_DIR"/
+done
+
+cp -f "$ROOT/version.txt" "$ROOT/$PREBUILD_DIR"/
+
+#==============================#
+# 3) Ștergere fișiere moc_*    #
+#==============================#
+
+log "Ștergem fișierele 'moc_*' din prebuild..."
+find "$ROOT/$PREBUILD_DIR" -type f -name "moc_*" -delete
+
+#==============================#
+# 4) cqtdeployer               #
+#==============================#
+
+log "Rulăm cqtdeployer..."
+"$CQTDEPLOYER" clear \
+  -bin "$ROOT/$PREBUILD_DIR/USG" \
+  -qmake qmake \
+  -libDir "$QT_LIB_DIR" \
+  -extraData "$ROOT/resources/templets,$ROOT/resources/icons" \
+  -targetDir "$ROOT/$BUILD_DIR"
+
+[[ -d "$ROOT/$BUILD_DIR/plugins" ]] || die "cqtdeployer nu a populat plugins/ – verificați logul anterior."
+
+#==============================#
+# 5) Copiere librării extra    #
+#==============================#
+
+log "Copiem librăriile suplimentare (OpenSSL, LimeReport, Qt* adiționale)..."
+
+mkdir -p "$ROOT/$BUILD_DIR/lib" "$ROOT/$BUILD_DIR/plugins/printsupport"
+
+copy_checked() {
+  local src="$1" dst="$2"
+  [[ -f "$src" ]] || die "Lipsește fișierul sursă: $src"
+  install -m 0644 "$src" "$dst"
+}
+
+# OpenSSL (din 3rdparty)
+copy_checked "$ROOT/3rdparty/openssl/libcrypto.so.3" "$ROOT/$BUILD_DIR/lib/libcrypto.so.3"
+copy_checked "$ROOT/3rdparty/openssl/libssl.so.3"    "$ROOT/$BUILD_DIR/lib/libssl.so.3"
+
+# LimeReport (din 3rdparty)
+for f in \
+  "$ROOT/3rdparty/LimeReport/release/liblimereport.so" \
+  "$ROOT/3rdparty/LimeReport/release/liblimereport.so.1" \
+  "$ROOT/3rdparty/LimeReport/release/liblimereport.so.1.0" \
+  "$ROOT/3rdparty/LimeReport/release/liblimereport.so.1.0.0" \
+  "$ROOT/3rdparty/LimeReport/release/libQtZint.so"
+do
+  copy_checked "$f" "$ROOT/$BUILD_DIR/lib/$(basename "$f")"
+done
+
+# Qt add-ons necesare la runtime (designer/ui tools/printsupport/openglwidgets)
+for f in \
+  "$QT_LIB_DIR/libQt6Designer.so.6" \
+  "$QT_LIB_DIR/libQt6Designer.so.${QT_VERSION}" \
+  "$QT_LIB_DIR/libQt6DesignerComponents.so.6" \
+  "$QT_LIB_DIR/libQt6DesignerComponents.so.${QT_VERSION}" \
+  "$QT_LIB_DIR/libQt6OpenGLWidgets.so.6" \
+  "$QT_LIB_DIR/libQt6OpenGLWidgets.so.${QT_VERSION}" \
+  "$QT_LIB_DIR/libQt6PrintSupport.so.6" \
+  "$QT_LIB_DIR/libQt6PrintSupport.so.${QT_VERSION}" \
+  "$QT_LIB_DIR/libQt6UiTools.so.6" \
+  "$QT_LIB_DIR/libQt6UiTools.so.${QT_VERSION}"
+do
+  copy_checked "$f" "$ROOT/$BUILD_DIR/lib/$(basename "$f")"
+done
+
+# Plugin printsupport
+copy_checked "$QT_PLUGINS_DIR/printsupport/libcupsprintersupport.so" \
+             "$ROOT/$BUILD_DIR/plugins/printsupport/libcupsprintersupport.so"
+
+log "Fisierele proiectului sunt gata pentru pachete."
+
+#==============================#
+# 6) Pachet .run (Qt IFW)      #
+#==============================#
+
+log "Pregătim structura installer (.run)..."
+if [[ -d "$ROOT/$INSTALLER_DIR" ]]; then
+  rm -rf "$ROOT/$INSTALLER_DIR"
+fi
+mkdir -p "$ROOT/$INSTALLER_DIR"
+
+mkdir -p "$ROOT/$INSTALLER_DIR/config"
+rsync -a "$ROOT/installer/linux/config"   "$ROOT/$INSTALLER_DIR"/
+rsync -a "$ROOT/installer/linux/packages" "$ROOT/$INSTALLER_DIR"/
+rsync -a "$ROOT/$BUILD_DIR"/              "$ROOT/$INSTALLER_DIR/packages/com.alovada.usg/data"/
+
+log "Generez $FILENAME_RUN ..."
+rm -f "$ROOT/build/$FILENAME_RUN" "$ROOT/build/$FILENAME_RUN_SHA256"
+"$BINARYCREATOR" -c "$ROOT/$INSTALLER_DIR/config/config.xml" \
+                 -p "$ROOT/$INSTALLER_DIR/packages" \
+                 "$ROOT/build/$FILENAME_RUN"
+
+log "Calculez SHA256 pentru .run..."
+sha256sum "$ROOT/build/$FILENAME_RUN" | awk '{print $1}' > "$ROOT/build/$FILENAME_RUN_SHA256"
+
+#==============================#
+# 7) Pachet .deb               #
+#==============================#
+
+log "Inițiez crearea pachetului .deb..."
+BUILD_DEB_DIR="build/USG_v${VERSION}_${ARCH_TAG}"
+rm -rf "$ROOT/$BUILD_DEB_DIR"
+mkdir -p "$ROOT/$BUILD_DEB_DIR/DEBIAN"
+
+# Control scripts & layout
+for f in control postinst preinst prerm; do
+  [[ -f "$ROOT/build_scripts/debian/$f" ]] || die "Lipsește build_scripts/debian/$f"
+  install -m 0644 "$ROOT/build_scripts/debian/$f" "$ROOT/$BUILD_DEB_DIR/DEBIAN/$f"
+done
+
+rsync -a "$ROOT/build_scripts/debian/usr" "$ROOT/$BUILD_DEB_DIR"/
+mkdir -p "$ROOT/$BUILD_DEB_DIR/opt/USG"
+rsync -a "$ROOT/$BUILD_DIR"/ "$ROOT/$BUILD_DEB_DIR/opt/USG/"
+
+# Installed-Size (kB)
+SIZE_PROJECT="$(du -sk "$ROOT/$BUILD_DEB_DIR/opt/USG" | awk '{print $1}')"
+sed -i "s/^Installed-Size: [0-9]\+/Installed-Size: $SIZE_PROJECT/" "$ROOT/$BUILD_DEB_DIR/DEBIAN/control"
+
+# permisiuni
+chmod 755 "$ROOT/$BUILD_DEB_DIR/DEBIAN"
+chmod 644 "$ROOT/$BUILD_DEB_DIR/DEBIAN/control"
+chmod 755 "$ROOT/$BUILD_DEB_DIR/DEBIAN/preinst" "$ROOT/$BUILD_DEB_DIR/DEBIAN/postinst" "$ROOT/$BUILD_DEB_DIR/DEBIAN/prerm"
+
+# md5sums (Debian 13)
+(
+  cd "$ROOT/$BUILD_DEB_DIR"
+  find opt usr -type f -print0 | LC_ALL=C sort -z | xargs -0 md5sum > DEBIAN/md5sums
+  chmod 0644 DEBIAN/md5sums
+)
+
+# gz changelog (dacă există)
+for f in usr/share/doc/usg/changelog usr/share/doc/usg/changelog.Debian usr/share/doc/usg/copyright; do
+  if [[ -f "$ROOT/$BUILD_DEB_DIR/$f" ]]; then
+    gzip -9 "$ROOT/$BUILD_DEB_DIR/$f"
+  fi
+done
+
+log "Construim .deb: $FILENAME_DEB ..."
+rm -f "$ROOT/build/$FILENAME_DEB" "$ROOT/build/$FILENAME_DEB_SHA256"
+dpkg-deb -Zxz -z9 --build --root-owner-group "$ROOT/$BUILD_DEB_DIR" "$ROOT/build/$FILENAME_DEB"
+
+log "Calculez SHA256 pentru .deb..."
+sha256sum "$ROOT/build/$FILENAME_DEB" | awk '{print $1}' > "$ROOT/build/$FILENAME_DEB_SHA256"
+
+#==============================#
+# 8) Pachet .AppImage          #
+#==============================#
+
+log "Inițiez crearea .AppImage..."
+mkdir -p "$ROOT/$APPDIR"
+rsync -a --delete "$ROOT/$BUILD_DIR"/ "$ROOT/$APPDIR"/
+
+# AppRun – dacă există USG.sh (cqtdeployer creează de obicei un launcher)
+if [[ -f "$ROOT/$APPDIR/USG.sh" ]]; then
+  mv -f "$ROOT/$APPDIR/USG.sh" "$ROOT/$APPDIR/AppRun"
+  chmod +x "$ROOT/$APPDIR/AppRun"
+elif [[ -x "$ROOT/$APPDIR/USG" ]]; then
+  # fallback: creez un AppRun simplu
+  cat > "$ROOT/$APPDIR/AppRun" << 'EOF'
+#!/usr/bin/env bash
+HERE="$(dirname "$(readlink -f "$0")")"
+exec "$HERE/USG" "$@"
+EOF
+  chmod +x "$ROOT/$APPDIR/AppRun"
+else
+  warn "Nu găsesc USG.sh sau binarul USG în AppDir – verifică cqtdeployer."
+fi
+
+# .desktop
+cat > "$ROOT/$APPDIR/USG.desktop" << 'EOF'
+[Desktop Entry]
+Name=USG
+Exec=USG
+Icon=usg
+Type=Application
+Categories=Science;MedicalSoftware;
+EOF
+
+# icon
+if [[ -f "$ROOT/$BUILD_DIR/icons/eco_512x512.png" ]]; then
+  cp -f "$ROOT/$BUILD_DIR/icons/eco_512x512.png" "$ROOT/$APPDIR/usg.png"
+else
+  warn "Lipsește eco_512x512.png – icoana AppImage va fi generică."
+fi
+
+if command -v "$APPIMAGETOOL" >/dev/null 2>&1; then
+  log "Construim AppImage: $FILENAME_APPIMG ..."
+  "$APPIMAGETOOL" "$ROOT/$APPDIR" "$ROOT/build/$FILENAME_APPIMG"
+  sha256sum "$ROOT/build/$FILENAME_APPIMG" | awk '{print $1}' > "$ROOT/build/$FILENAME_APPIMG_SHA256"
+else
+  warn "Sari peste AppImage: appimagetool nu este disponibil."
+fi
+
+log "Toate etapele au fost finalizate cu succes."
+echo "Artefacte:"
+echo "  - $ROOT/build/$FILENAME_RUN (+ $FILENAME_RUN_SHA256)"
+echo "  - $ROOT/build/$FILENAME_DEB (+ $FILENAME_DEB_SHA256)"
+[[ -f "$ROOT/build/$FILENAME_APPIMG" ]] && echo "  - $ROOT/build/$FILENAME_APPIMG (+ $FILENAME_APPIMG_SHA256)"
+
+# cleanup se execută via trap
+

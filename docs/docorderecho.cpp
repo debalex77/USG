@@ -368,12 +368,12 @@ void DocOrderEcho::slot_IdChanged()
         ui->editComment->setPlainText(qry.value(rec.indexOf("comment")).toString());
 
         // setam achitarea cu card
-        disconnect(ui->cardPayment, &QCheckBox::stateChanged, this, &DocOrderEcho::dataWasModified);
+        disconnect(ui->cardPayment, &QCheckBox::checkStateChanged, this, &DocOrderEcho::dataWasModified);
         if (qry.value(rec.indexOf("cardPayment")).toInt() == Enums::PAYMENT_CARD)
             ui->cardPayment->setCheckState(Qt::Checked);
         else
             ui->cardPayment->setCheckState(Qt::Unchecked);
-        connect(ui->cardPayment, &QCheckBox::stateChanged, this, &DocOrderEcho::dataWasModified);
+        connect(ui->cardPayment, &QCheckBox::checkStateChanged, this, &DocOrderEcho::dataWasModified);
 
         // determinam daca sunt atasate imaginile
         if (qry.value(rec.indexOf("attachedImages")).toInt() == 0)
@@ -1040,15 +1040,35 @@ void DocOrderEcho::onOpenReport()
     // deschidem documentul -> 'raport ecografic' nou
     DocReportEcho* doc_report = new DocReportEcho(this);
     doc_report->setAttribute(Qt::WA_DeleteOnClose);
-    doc_report->set_t_organs_internal(dialogInvestig->get_t_organs_internal());
-    doc_report->set_t_urinary_system(dialogInvestig->get_t_urinary_system());
-    doc_report->set_t_prostate(dialogInvestig->get_t_prostate());
-    doc_report->set_t_gynecology(dialogInvestig->get_t_gynecology());
-    doc_report->set_t_breast(dialogInvestig->get_t_breast());
-    doc_report->set_t_thyroide(dialogInvestig->get_t_thyroide());
-    doc_report->set_t_gestation0(dialogInvestig->get_t_gestation0());
-    doc_report->set_t_gestation1(dialogInvestig->get_t_gestation1());
-    doc_report->set_t_gestation2(dialogInvestig->get_t_gestation2());
+    // doc_report->set_t_organs_internal(dialogInvestig->get_t_organs_internal());
+    // doc_report->set_t_urinary_system(dialogInvestig->get_t_urinary_system());
+    // doc_report->set_t_prostate(dialogInvestig->get_t_prostate());
+    // doc_report->set_t_gynecology(dialogInvestig->get_t_gynecology());
+    // doc_report->set_t_breast(dialogInvestig->get_t_breast());
+    // doc_report->set_t_thyroide(dialogInvestig->get_t_thyroide());
+    // doc_report->set_t_gestation0(dialogInvestig->get_t_gestation0());
+    // doc_report->set_t_gestation1(dialogInvestig->get_t_gestation1());
+    // doc_report->set_t_gestation2(dialogInvestig->get_t_gestation2());
+    if (dialogInvestig->get_t_organs_internal())
+        doc_report->appendSectionSystem(doc_report->OrgansInternal);
+    if (dialogInvestig->get_t_urinary_system())
+        doc_report->appendSectionSystem(doc_report->UrinarySystem);
+    if (dialogInvestig->get_t_prostate())
+        doc_report->appendSectionSystem(doc_report->Prostate);
+    if (dialogInvestig->get_t_gynecology())
+        doc_report->appendSectionSystem(doc_report->Gynecology);
+    if (dialogInvestig->get_t_breast())
+        doc_report->appendSectionSystem(doc_report->Breast);
+    if (dialogInvestig->get_t_thyroide())
+        doc_report->appendSectionSystem(doc_report->Thyroid);
+    if (dialogInvestig->get_t_gestation0())
+        doc_report->appendSectionSystem(doc_report->Gestation0);
+    if (dialogInvestig->get_t_gestation1())
+        doc_report->appendSectionSystem(doc_report->Gestation1);
+    if (dialogInvestig->get_t_gestation2())
+        doc_report->appendSectionSystem(doc_report->Gestation2);
+    if (dialogInvestig->get_t_lymphNodes())
+        doc_report->appendSectionSystem(doc_report->LymphNodes);
     doc_report->setProperty("ItNew", true);
     doc_report->setProperty("IdPacient", m_idPacient);
     doc_report->setProperty("IdDocOrderEcho", m_id);
@@ -1356,9 +1376,9 @@ void DocOrderEcho::initConnections()
     connect(ui->btnCreateCatDoctor, &QPushButton::clicked, this, &DocOrderEcho::createCatDoctor);
     connect(ui->btnOpenCatDoctor, &QPushButton::clicked, this, &DocOrderEcho::openCatDoctor);
 
-    connect(ui->checkBox, QOverload<const int>::of(&QCheckBox::stateChanged), this, QOverload<const int>::of(&DocOrderEcho::stateChangedCheckBox));
+    connect(ui->checkBox, &QCheckBox::checkStateChanged, this, &DocOrderEcho::stateChangedCheckBox);
 
-    connect(ui->cardPayment, &QCheckBox::stateChanged, this, &DocOrderEcho::dataWasModified);
+    connect(ui->cardPayment, &QCheckBox::checkStateChanged, this, &DocOrderEcho::dataWasModified);
 
     connect(ui->btnNewPacient, &QAbstractButton::clicked, this, &DocOrderEcho::onClickNewPacient);
     connect(ui->btnEditPacient, &QAbstractButton::clicked, this, &DocOrderEcho::onClikEditPacient);
@@ -1866,7 +1886,7 @@ void DocOrderEcho::updateTableSources()
     if (modelTableSource->rowCount() > 0)
         modelTableSource->clear();
     modelTableSource->setTable("pricingsTable");
-    modelTableSource->setFilter(QString("id_pricings=%1").arg(lastIdPricings));
+    modelTableSource->setFilter(QString("id_pricings=%1 AND price > 0").arg(lastIdPricings));
     modelTableSource->setSort(Enums::PRICING_COLUMN::PRICING_COLUMN_COD, Qt::AscendingOrder);
     modelTableSource->setEditStrategy(QSqlTableModel::OnManualSubmit);
     proxy->setSourceModel(modelTableSource);

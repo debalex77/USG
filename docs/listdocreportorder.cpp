@@ -342,15 +342,27 @@ void ListDocReportOrder::onClickBtnAdd()
             return;
         DocReportEcho* docReport = new DocReportEcho(this);
         docReport->setAttribute(Qt::WA_DeleteOnClose);
-        docReport->set_t_organs_internal(dialogInvestig->get_t_organs_internal());
-        docReport->set_t_urinary_system(dialogInvestig->get_t_urinary_system());
-        docReport->set_t_prostate(dialogInvestig->get_t_prostate());
-        docReport->set_t_gynecology(dialogInvestig->get_t_gynecology());
-        docReport->set_t_breast(dialogInvestig->get_t_breast());
-        docReport->set_t_thyroide(dialogInvestig->get_t_thyroide());
-        docReport->set_t_gestation0(dialogInvestig->get_t_gestation0());
-        docReport->set_t_gestation1(dialogInvestig->get_t_gestation1());
-        docReport->set_t_gestation2(dialogInvestig->get_t_gestation2());
+        if (dialogInvestig->get_t_organs_internal())
+            docReport->appendSectionSystem(docReport->OrgansInternal);
+        if (dialogInvestig->get_t_urinary_system())
+            docReport->appendSectionSystem(docReport->UrinarySystem);
+        if (dialogInvestig->get_t_prostate())
+            docReport->appendSectionSystem(docReport->Prostate);
+        if (dialogInvestig->get_t_gynecology())
+            docReport->appendSectionSystem(docReport->Gynecology);
+        if (dialogInvestig->get_t_breast())
+            docReport->appendSectionSystem(docReport->Breast);
+        if (dialogInvestig->get_t_thyroide())
+            docReport->appendSectionSystem(docReport->Thyroid);
+        if (dialogInvestig->get_t_gestation0())
+            docReport->appendSectionSystem(docReport->Gestation0);
+        if (dialogInvestig->get_t_gestation1())
+            docReport->appendSectionSystem(docReport->Gestation1);
+        if (dialogInvestig->get_t_gestation2())
+            docReport->appendSectionSystem(docReport->Gestation2);
+        if (dialogInvestig->get_t_lymphNodes())
+            docReport->appendSectionSystem(docReport->LymphNodes);
+
         docReport->setProperty("ItNew", true);
         docReport->show();
         connect(docReport, &DocReportEcho::PostDocument, this, &ListDocReportOrder::updateTableView);
@@ -609,11 +621,13 @@ void ListDocReportOrder::onClickBtnSendEmail()
 
 void ListDocReportOrder::onClickBtnReport()
 {
+    // determinam indexul
     if (ui->tableView->currentIndex().row() == Enums::IDX::IDX_UNKNOW){
         QMessageBox::warning(this, tr("Informa\310\233ie"), tr("Nu este marcat randul !!!."), QMessageBox::Ok);
         return;
     }
 
+    // determinam ID documentului 'Comanda ecografica'
     int _id = Enums::IDX::IDX_UNKNOW;
     if (m_typeDoc == TypeDoc::orderEcho)
         _id = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_id), Qt::DisplayRole).toInt();
@@ -623,20 +637,26 @@ void ListDocReportOrder::onClickBtnReport()
         qInfo(logWarning()) << tr("%1 - onClickBtnReport()").arg(metaObject()->className())
                             << tr("Nu a fost setata(sau setata incorect) variabila 'm_typeDoc'.");
 
+    // verificam ID doc. 'Comanda ecografica'
     if (_id == Enums::IDX::IDX_UNKNOW || _id == Enums::IDX::IDX_WRITE){
         qInfo(logWarning()) << tr("%1 - openPrintDesignerPreviewOrder()").arg(metaObject()->className())
-                            << tr("Nu a fost identificat 'id' documentului pentru printare.");
+                            << tr("Nu a fost identificat 'ID' documentului 'Comanda ecografica'.");
         return;
     }
 
+    // solicitarea pu Raport ecografic
     int _id_report = 0;
     QSqlQuery qry;
-    qry.prepare("SELECT id FROM reportEcho WHERE id_orderEcho = :id_orderEcho;");
-    qry.bindValue(":id_orderEcho", _id);
+    qry.prepare(R"(
+        SELECT id FROM reportEcho WHERE id_orderEcho = ?
+    )");
+    qry.addBindValue(_id);
     if (qry.exec() && qry.next())
         _id_report = qry.value(0).toInt();
 
     if (_id_report != 0){
+
+        // daca detrminat ID doc.'Raport ecografic' deschidem document gasit
         DocReportEcho *report = new DocReportEcho(this);
         report->setAttribute(Qt::WA_DeleteOnClose);
         report->setProperty("ItNew", false);
@@ -644,14 +664,17 @@ void ListDocReportOrder::onClickBtnReport()
         report->setProperty("IdDocOrderEcho", _id);
         report->show();
         connect(report, &DocReportEcho::PostDocument, this, &ListDocReportOrder::updateTableView);
+
     } else {
 
         const int _idPacient = proxyTable->data(proxyTable->index(ui->tableView->currentIndex().row(), section_idPacient), Qt::DisplayRole).toInt();
 
         // daca nu afost gasit documentul subaltern -> deschidem selectarea investigatiilor   
         CustomDialogInvestig* dialogInvestig = new CustomDialogInvestig(this);
-        qry.prepare("SELECT cod FROM orderEchoTable WHERE id_orderEcho = :idOrderEcho;");
-        qry.bindValue(":idOrderEcho", _id);
+        qry.prepare(R"(
+            SELECT cod FROM orderEchoTable WHERE id_orderEcho = ?
+        )");
+        qry.addBindValue(_id);
         if (qry.exec()){
             while (qry.next()) {
                 QString _cod = qry.value(0).toString();
@@ -674,6 +697,8 @@ void ListDocReportOrder::onClickBtnReport()
                     dialogInvestig->set_t_gestation1(code_gestation1.contains(_cod));
                 if (! dialogInvestig->get_t_gestation2())
                     dialogInvestig->set_t_gestation2(code_gestation2.contains(_cod));
+                if (! dialogInvestig->get_t_lymphNodes())
+                    dialogInvestig->set_t_lymphNodes(code_lymphNodes.contains(_cod));
             }
         }
         if (dialogInvestig->exec() != QDialog::Accepted)
@@ -682,15 +707,26 @@ void ListDocReportOrder::onClickBtnReport()
         // deschidem documentul -> 'raport ecografic' nou
         DocReportEcho* doc_report = new DocReportEcho(this);
         doc_report->setAttribute(Qt::WA_DeleteOnClose);
-        doc_report->set_t_organs_internal(dialogInvestig->get_t_organs_internal());
-        doc_report->set_t_urinary_system(dialogInvestig->get_t_urinary_system());
-        doc_report->set_t_prostate(dialogInvestig->get_t_prostate());
-        doc_report->set_t_gynecology(dialogInvestig->get_t_gynecology());
-        doc_report->set_t_breast(dialogInvestig->get_t_breast());
-        doc_report->set_t_thyroide(dialogInvestig->get_t_thyroide());
-        doc_report->set_t_gestation0(dialogInvestig->get_t_gestation0());
-        doc_report->set_t_gestation1(dialogInvestig->get_t_gestation1());
-        doc_report->set_t_gestation2(dialogInvestig->get_t_gestation2());
+        if (dialogInvestig->get_t_organs_internal())
+            doc_report->appendSectionSystem(doc_report->OrgansInternal);
+        if (dialogInvestig->get_t_urinary_system())
+            doc_report->appendSectionSystem(doc_report->UrinarySystem);
+        if (dialogInvestig->get_t_prostate())
+            doc_report->appendSectionSystem(doc_report->Prostate);
+        if (dialogInvestig->get_t_gynecology())
+            doc_report->appendSectionSystem(doc_report->Gynecology);
+        if (dialogInvestig->get_t_breast())
+            doc_report->appendSectionSystem(doc_report->Breast);
+        if (dialogInvestig->get_t_thyroide())
+            doc_report->appendSectionSystem(doc_report->Thyroid);
+        if (dialogInvestig->get_t_gestation0())
+            doc_report->appendSectionSystem(doc_report->Gestation0);
+        if (dialogInvestig->get_t_gestation1())
+            doc_report->appendSectionSystem(doc_report->Gestation1);
+        if (dialogInvestig->get_t_gestation2())
+            doc_report->appendSectionSystem(doc_report->Gestation2);
+        if (dialogInvestig->get_t_lymphNodes())
+            doc_report->appendSectionSystem(doc_report->LymphNodes);
         doc_report->setProperty("ItNew", true);
         doc_report->setProperty("IdPacient", _idPacient);
         doc_report->setProperty("IdDocOrderEcho", _id);

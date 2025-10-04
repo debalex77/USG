@@ -12,22 +12,21 @@ QT       += core \
             concurrent
 
 #-----------------------------------------------------------------------
-#------ Verifică dacă versiunea de Qt este cel puțin 6.5.3
-greaterThan(QT_MAJOR_VERSION, 6) {
-    message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
+#------ Verifică dacă versiunea de Qt este cel puțin 6.9.2
+
+lessThan(QT_MAJOR_VERSION, 6) {
+    error("This project requires Qt version 6.9.2 or higher.")
 } else:equals(QT_MAJOR_VERSION, 6) {
-    greaterThan(QT_MINOR_VERSION, 5) {
-        message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
-    } else:equals(QT_MINOR_VERSION, 5) {
-        greaterThan(QT_PATCH_VERSION, 2) {
-            message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION"")
-        } else {
-            error("This project requires Qt version 6.5.3 or higher.")
+    lessThan(QT_MINOR_VERSION, 9) {
+        error("This project requires Qt version 6.9.2 or higher.")
+    } else:equals(QT_MINOR_VERSION, 9) {
+        lessThan(QT_PATCH_VERSION, 2) {
+            error("This project requires Qt version 6.9.2 or higher.")
         }
     }
-} else {
-    error("This project requires Qt version 6.5.3 or higher.")
 }
+
+message("Qt version is sufficient: "$$QT_MAJOR_VERSION"."$$QT_MINOR_VERSION"."$$QT_PATCH_VERSION)
 
 
 #greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
@@ -41,7 +40,9 @@ CONFIG  -= qml_debug
 # Definim componentele versiunii
 USG_VERSION_MAJOR   = 3
 USG_VERSION_MINOR   = 0
-USG_VERSION_RELEASE = 5
+USG_VERSION_RELEASE = 6
+
+
 USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
 VERSION             = "$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE"
 DEFINES += USG_VERSION_MAJOR=$$USG_VERSION_MAJOR
@@ -135,6 +136,14 @@ SOURCES += \
     docs/docorderecho.cpp \
     docs/docpricing.cpp \
     docs/docreportecho.cpp \
+    docs/docreportechohandler.cpp \
+    docs/docreportechohandler_connect.cpp \
+    docs/docreportechohandler_dataInsert.cpp \
+    docs/docreportechohandler_dataUpdate.cpp \
+    docs/docreportechohandler_default.cpp \
+    docs/docreportechohandler_maxlength.cpp \
+    docs/docreportechohandler_print.cpp \
+    docs/docreportechohandler_setdata.cpp \
     docs/listdoc.cpp \
     docs/listdocreportorder.cpp \
     common/infowindow.cpp \
@@ -222,6 +231,8 @@ HEADERS += \
     docs/docorderecho.h \
     docs/docpricing.h \
     docs/docreportecho.h \
+    docs/docreportechohandler.h \
+    docs/docreportechohandler_p.h \
     docs/listdoc.h \
     docs/listdocreportorder.h \
     common/infowindow.h \
@@ -307,6 +318,7 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     build_scripts/build_maosx \
     build_scripts/build_maosx \
+    build_scripts/build_new \
     build_scripts/build_project \
     resources/fonts/Cantarell Bold.ttf \
     resources/fonts/Cantarell-Bold.otf \

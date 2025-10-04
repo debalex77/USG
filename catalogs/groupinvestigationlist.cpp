@@ -39,7 +39,7 @@ GroupInvestigationList::GroupInvestigationList(QWidget *parent)
     updateTable();
 
     connect(ui->btnPrint, &QAbstractButton::clicked, this, &GroupInvestigationList::onPrint);
-    connect(ui->hideNotGroup, QOverload<int>::of(&QCheckBox::stateChanged), this, QOverload<int>::of(&GroupInvestigationList::onHideNotGroupStateChanged));
+    connect(ui->hideNotGroup, &QCheckBox::checkStateChanged, this, &GroupInvestigationList::onHideNotGroupStateChanged);
     connect(ui->btnAdd, &QAbstractButton::clicked, this, &GroupInvestigationList::onCreateNewGroup);
     connect(ui->btnClose, &QAbstractButton::clicked, this, &GroupInvestigationList::close);
 

@@ -13,12 +13,12 @@ Component.prototype.createOperations = function() {
     // content pentru desktop file
     var content = [
         "[Desktop Entry]",
-        "Version=3.0.4",
+        "Version=3.0.6",
         "Type=Application",
-        "Name=USG-Evidența investigațiilor ecografice v3.0.4",
-        "Comment[en]=USG-Evidence of ultrasound investigations v3.0.4",
-        "Comment[ru]=УЗИ-Учёт ультразвуковых исследований v3.0.4",
-        "Comment[ro]=USG-Evidența investigațiilor ecografice v3.0.4",
+        "Name=USG-Evidența investigațiilor ecografice v3.0.6",
+        "Comment[en]=USG-Evidence of ultrasound investigations v3.0.6",
+        "Comment[ru]=УЗИ-Учёт ультразвуковых исследований v3.0.6",
+        "Comment[ro]=USG-Evidența investigațiilor ecografice v3.0.6",
         "Exec=@TargetDir@/USG.sh",
         "Icon=@TargetDir@/icons/eco_248x248.ico",
         "Terminal=false",

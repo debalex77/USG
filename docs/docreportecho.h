@@ -5,8 +5,6 @@
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QCompleter>
-#include <QStandardItemModel>
-#include <QSqlQueryModel>
 #include <LimeReport>
 #include <QFileDialog>
 #include <QMediaPlayer>
@@ -16,6 +14,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsVideoItem>
 #include <QGraphicsView>
+#include <customs/lineeditcustom.h>
 
 #include "data/popup.h"
 #include "data/database.h"
@@ -29,9 +28,14 @@
 #include <common/datapercentage.h>
 #include <common/appmetatypes.h>
 
+#include <QPlainTextEdit>
+#include <memory> // pentru std::unique_ptr
+
 namespace Ui {
 class DocReportEcho;
 }
+
+class DocReportEchoHandler; // forward declaration
 
 class DocReportEcho : public QDialog
 {
@@ -43,20 +47,48 @@ class DocReportEcho : public QDialog
     Q_PROPERTY(int IdUser READ getIdUser WRITE setIdUser NOTIFY IdUserChanged)
     Q_PROPERTY(int Post READ getPost WRITE setPost NOTIFY PostChanged)
 
-    Q_PROPERTY(bool t_organs_internal READ get_t_organs_internal WRITE set_t_organs_internal NOTIFY t_organs_internalChanged)
-    Q_PROPERTY(bool t_urinary_system READ get_t_urinary_system WRITE set_t_urinary_system NOTIFY t_urinary_systemChanged)
-    Q_PROPERTY(bool t_prostate READ get_t_prostate WRITE set_t_prostate NOTIFY t_prostateChanged)
-    Q_PROPERTY(bool t_gynecology READ get_t_gynecology WRITE set_t_gynecology NOTIFY t_gynecologyChanged)
-    Q_PROPERTY(bool t_breast READ get_t_breast WRITE set_t_breast NOTIFY t_breastChanged)
-    Q_PROPERTY(bool t_thyroide READ get_t_thyroide WRITE set_t_thyroide NOTIFY t_thyroideChanged)
-    Q_PROPERTY(bool t_gestation0 READ get_t_gestation0 WRITE set_t_gestation0 NOTIFY t_gestation0Changed)
-    Q_PROPERTY(bool t_gestation1 READ get_t_gestation1 WRITE set_t_gestation1 NOTIFY t_gestation1Changed)
-    Q_PROPERTY(bool t_gestation2 READ get_t_gestation2 WRITE set_t_gestation2 NOTIFY t_gestation2Changed)
+    Q_PROPERTY(SectionsSystem sectionsSystem READ getSectionsSystem WRITE setSectionsSystem NOTIFY sectionsSystemChanged)
 
     Q_PROPERTY(bool CountImages READ getCountImages WRITE setCountImages NOTIFY CountImagesChanged)
     Q_PROPERTY(bool CountVideo READ getCountVideo WRITE setCountVideo NOTIFY CountVideoChanged)
 
 public:
+
+    enum SectionSystem {
+        OrgansInternal = 0x1,
+        UrinarySystem  = 0x2,
+        Prostate       = 0x4,
+        Gynecology     = 0x8,
+        Breast         = 0x10,
+        Thyroid        = 0x20,
+        Gestation0     = 0x40,
+        Gestation1     = 0x80,
+        Gestation2     = 0x100,
+        LymphNodes     = 0x200
+    };
+    Q_DECLARE_FLAGS(SectionsSystem, SectionSystem)
+    Q_FLAG(SectionSystem)
+
+    enum PageReport
+    {
+        page_unknow          = -1,
+        page_organs_internal = 0,
+        page_urinary_system  = 1,
+        page_prostate        = 2,
+        page_gynecology      = 3,
+        page_breast          = 4,
+        page_thyroid         = 5,
+        page_gestation0      = 6,
+        page_gestation1      = 7,
+        page_gestation2      = 8,
+        page_LymphNodes      = 9,
+        page_images          = 10,
+        page_video           = 11
+    };
+    Q_ENUM(PageReport)
+
+    /**--------------------------------------------------------------------------------------*/
+
     explicit DocReportEcho(QWidget *parent = nullptr);
     ~DocReportEcho();
 
@@ -72,100 +104,10 @@ public:
     void setIdDocOrderEcho(int IdDocOrderEcho) {m_id_docOrderEcho = IdDocOrderEcho; emit IdDocOrderEchoChanged();}
     int getIdDocOrderEcho() const {return m_id_docOrderEcho;}
 
-    void set_t_organs_internal(bool t_organs_internal)
-    {
-        m_organs_internal = t_organs_internal;
-        disconnections_organs_internal();
-        setDefaultDataTableLiver();
-        setDefaultDataTableCholecist();
-        setDefaultDataTablePancreas();
-        setDefaultDataTableSpleen();
-        setDefaultDataTableIntestinalLoop();
-        connections_organs_internal();
-        emit t_organs_internalChanged();
-    }
-    bool get_t_organs_internal() const {return m_organs_internal;}
-
-    void set_t_urinary_system(bool t_urinary_system)
-    {
-        m_urinary_system = t_urinary_system;
-        disconnections_urinary_system();
-        setDefaultDataKidney();
-        setDefaultDataBladder();
-        connections_urinary_system();
-        emit t_urinary_systemChanged();
-    }
-    bool get_t_urinary_system() const {return m_urinary_system;}
-
-    void set_t_prostate(bool t_prostate)
-    {
-        m_prostate = t_prostate;
-        disconnections_prostate();
-        setDefaultDataProstate();
-        connections_prostate();
-        emit t_prostateChanged();
-    }
-    bool get_t_prostate() const {return m_prostate;}
-
-    void set_t_gynecology(bool t_gynecology)
-    {
-        m_gynecology = t_gynecology;
-        disconnections_gynecology();
-        setDefaultDataGynecology();
-        connections_gynecology();
-        emit t_gynecologyChanged();
-    }
-    bool get_t_gynecology() const {return m_gynecology;}
-
-    void set_t_breast(bool t_breast)
-    {
-        m_breast = t_breast;
-        disconnections_breast();
-        setDefaultDataBreast();
-        connections_breast();
-        emit t_breastChanged();
-    }
-    bool get_t_breast() const {return m_breast;}
-
-    void set_t_thyroide(bool t_thyroide)
-    {
-        m_thyroide = t_thyroide;
-        disconnections_thyroid();
-        setDefaultDataThyroid();
-        connections_thyroid();
-        emit t_thyroideChanged();
-    }
-    bool get_t_thyroide() const {return m_thyroide;}
-
-    void set_t_gestation0(bool t_gestation0)
-    {
-        m_gestation0 = t_gestation0;
-        disconnections_gestation0();
-        setDefaultDataGestation0();
-        connections_gestation0();
-        emit t_gestation0Changed();
-    }
-    bool get_t_gestation0() const {return m_gestation0;}
-
-    void set_t_gestation1(bool t_gestation1)
-    {
-        m_gestation1 = t_gestation1;
-        disconnections_gestation1();
-        setDefaultDataGestation1();
-        connections_gestation1();
-        emit t_gestation1Changed();
-    }
-    bool get_t_gestation1() const {return m_gestation1;}
-
-    void set_t_gestation2(bool t_gestation2)
-    {
-        m_gestation2 = t_gestation2;
-        disconnections_gestation2();
-        setDefaultDataGestation2();
-        connections_gestation2();
-        emit t_gestation2Changed();
-    }
-    bool get_t_gestation2() const {return m_gestation2;}
+    SectionsSystem getSectionsSystem() const;
+    void appendSectionSystem(SectionSystem f);    // adaugam doar un flag
+    void appendSectionSystem(SectionsSystem f);   // adaugă mai multe flag-uri
+    void setSectionsSystem(SectionsSystem s);  //
 
     void setIdUser(int IdUser) {m_idUser = IdUser; emit IdUserChanged();}
     int getIdUser() const {return m_idUser;}
@@ -185,20 +127,31 @@ public:
 
     void m_onWritingData();
 
+    // acces controlat la UI
+    Ui::DocReportEcho* uiPtr();
+    const Ui::DocReportEcho* uiPtr() const;
+
+    // slot pu modificarea formei
+    Q_SLOT void markModified();
+
+    int getViewExaminationGestation(const int gest) const; // returneaza viewExamination (gestation0)
+
+    void updateTextDescriptionDoppler();
+    void updateDescriptionFetusWeight();
+    QString getPercentageByDopplerUmbelicalArtery();
+    QString getPercentageByDopplerUterineArteryLeft();
+    QString getPercentageByDopplerUterineArteryRight();
+    QString getPercentageByDopplerCMA();
+
+    QStringList getAllRecommandation() const;
+    void appendAllRecomandation(const QString text);
+
 signals:
     void ItNewChanged();
     void IdChanged();
     void IdPacientChanged();
     void IdDocOrderEchoChanged();
-    void t_organs_internalChanged();
-    void t_urinary_systemChanged();
-    void t_prostateChanged();
-    void t_gynecologyChanged();
-    void t_breastChanged();
-    void t_thyroideChanged();
-    void t_gestation0Changed();
-    void t_gestation1Changed();
-    void t_gestation2Changed();
+    void sectionsSystemChanged();
     void IdUserChanged();
     void PostChanged();
     void PostDocument(); // pu actualizarea listei documentelor
@@ -206,60 +159,56 @@ signals:
     void CountImagesChanged(); // pu determinarea cantitatii imiginilor
     void CountVideoChanged();
 
+public slots:
+    void enforceMaxForSender(); // fn universala pu limitarea lungimei textului
+    void updateTextConcluzionBySystem();
+
 private slots:
+    void slot_sectionsSystemChanged();
+
     void dataWasModified();    // modificarea datelor formei
     void updateTimer();        // actualizarea datei si orei in regim real
     void onDateTimeChanged();
 
     void onDateLMPChanged(QDate m_date); // pentru calcularea varstei gestationale
 
+    //------------------------------------------------------------------------------------------
+    /** functiile de inserare/eliminare a imaginelor*/
     bool loadFile(const QString &fileName, const int numberImage); // atasarea imaginilor
-    void loadImageOpeningDocument();
+    void loadImageOpeningDocument();                               // extragerea imaginilor din BD
 
-    void onLinkActivatedForOpenImage1(const QString &link);
-    void onLinkActivatedForOpenImage2(const QString &link);
-    void onLinkActivatedForOpenImage3(const QString &link);
-    void onLinkActivatedForOpenImage4(const QString &link);
-    void onLinkActivatedForOpenImage5(const QString &link);
+    void onLinkActivatedForOpenImg(const QString &link); // dialogul pu atasarea imaginilor
+    void clickClearImage();                              // eliminarea imaginilor (universala)
 
     void insertImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage);
     void updateImageIntoTableimagesReports(const QByteArray &imageData, const int numberImage);
     void removeImageIntoTableimagesReports(const int numberImage);
     void updateCommentIntoTableimagesReports();
+    //...-------------------------------------
 
     void initConnections();  // initierea conectarilor + setarea stylului
+    void connectionTemplateConcluzion();
+
     void openParameters();
     void openCatPatient();
     void openHistoryPatient();
     void openDocOrderEcho();
 
-    void openTempletsBySystem(const QString name_system);
-    void openCatalogWithSystemTamplets(const QString name_system);
-    void addDescriptionFormation(const QString name_system);
+    void handlerOpenSelectTemplate();
+    void insertTemplateIntoDB(const QString text, const QString name_system);
+    void handlerAddTemplate();
+    void insertTemplateConcluzionIntoDB(const QString text, const QString name_system);
+    void handlerSelectTemplateConcluzion();
+    void handlerAddTemplateConcluzion();
 
-    void clickBtnOrgansInternal();
-    void clickBtnUrinarySystem();
-    void clickBtnProstate();
-    void clickBtnGynecology();
-    void clickBtnBreast();
-    void clickBtnThyroid();
-    void clickBtnGestation0();
-    void clickBtnGestation1();
-    void clickBtnGestation2();
+    /** Procesarea btn - navigare paginelor */
+    void clickNavSystem(); // functia universala pu navigare paginilor
     void clickBtnComment();
-    void clickBtnImages();
-    void clickBtnVideo();
     void clickBtnNormograms();
+
     void createMenuPrint();         // meniu print
     void clickOpenDesignerReport(); // deschidem designer
     void clickOpenPreviewReport();  // deschidem preview
-    void clickBtnClearImage1();
-    void clickBtnClearImage2();
-    void clickBtnClearImage3();
-    void clickBtnClearImage4();
-    void clickBtnClearImage5();
-    void clickBtnAddConcluzionTemplates();
-    void clickBtnSelectConcluzionTemplates();
 
     void clickAddVideo();
     void clickRemoveVideo();
@@ -273,37 +222,7 @@ private slots:
     void handleError();
     void changedCurrentRowPlayList(int row);
 
-    void connections_tags();               // conexiunea la tag
-    void disconnections_tags();
-    void connections_organs_internal();    // conexiunea la bloc 'organs_internal'
-    void disconnections_organs_internal();
-    void connections_urinary_system();     // conexiunea la bloc 'urinary_system'
-    void disconnections_urinary_system();
-    void connections_prostate();           // conexiunea la bloc 'prostate'
-    void disconnections_prostate();
-    void connections_gynecology();         // conexiunea la bloc 'gynecology'
-    void disconnections_gynecology();
-    void connections_breast();             // conexiunea la bloc 'breast'
-    void disconnections_breast();
-    void connections_thyroid();            // conexiunea la bloc 'thyroid'
-    void disconnections_thyroid();
-    void connections_gestation0();         // conexiunea la bloc 'gestation 0'
-    void disconnections_gestation0();
-    void connections_gestation1();         // conexiunea la bloc 'gestation 1'
-    void disconnections_gestation1();
-    void connections_gestation2();         // conexiunea la bloc 'gestation 2'
-    void disconnections_gestation2();
-
     void clickedGestation2Trimestru(const int id_button);
-
-    void updateTextDescriptionDoppler();
-    void updateDescriptionFetusWeight();
-    QString getPercentageByDopplerUmbelicalArtery();
-    QString getPercentageByDopplerUterineArteryLeft();
-    QString getPercentageByDopplerUterineArteryRight();
-    QString getPercentageByDopplerCMA();
-
-    void updateTextConcluzionBySystem();
 
     void slot_ItNewChanged();
     void slot_IdChanged();
@@ -324,21 +243,10 @@ private slots:
     void onClose();                      // 'btnClose'
 
 private:
-    enum IndexPage
-    {
-        page_unknow          = -1,
-        page_organs_internal = 0,
-        page_urinary_system  = 1,
-        page_prostate        = 2,
-        page_gynecology      = 3,
-        page_breast          = 4,
-        page_thyroid         = 5,
-        page_gestation0      = 6,
-        page_gestation1      = 7,
-        page_gestation2      = 8,
-        page_images          = 9,
-        page_video           = 10
-    };
+    void initInstallEventFilter();
+    void initRequiredStructure();
+    void initGroupRadioButton();
+    void initSetStyleFrame();
 
     enum IndexNumImage
     {
@@ -348,7 +256,6 @@ private:
         n_image4 = 4,
         n_image5 = 5
     };
-
     QString calculateGestationalAge(const QDate &lmp);
     QDate calculateDueDate(const QDate &lmp);
     QDate calculateDueDateFromFetalAge(int fetalAgeWeeks, int fetalAgeDays = 0);
@@ -358,67 +265,20 @@ private:
     void constructionFormVideo();
     void findVideoFiles();
 
-    void setDefaultDataTableLiver();      // setarea datelor implicite initial
-    void setDefaultDataTableCholecist();  // in dependenta de bloc + tag ale documentului
-    void setDefaultDataTablePancreas();
-    void setDefaultDataTableSpleen();
-    void setDefaultDataTableIntestinalLoop();
-    void setDefaultDataKidney();
-    void setDefaultDataBladder();
-    void setDefaultDataProstate();
-    void setDefaultDataGynecology();
-    void setDefaultDataBreast();
-    void setDefaultDataThyroid();
-    void setDefaultDataGestation0();
-    void setDefaultDataGestation1();
-    void setDefaultDataGestation2();
-
     void initEnableBtn();                  // initierea accesului la btn + setarea focusului + paginei
     void updateStyleBtnInvestigations();
     void initSetCompleter();               // initierea completarului
     void initFooterDoc();                  // initierea btn + setarea textului autorului
 
-    bool insertingDocumentDataIntoTables(QString &details_error); // inserarea datelor pe sisteme
-    bool insertMainDocument(QSqlQuery &qry, QString &err);
-    bool insertOrgansInternal(QSqlQuery &qry, QString &err);
-    bool insertUrinarySystem(QSqlQuery &qry, QString &err);
-    bool insertProstate(QSqlQuery &qry, QString &err);
-    bool insertGynecology(QSqlQuery &qry, QString &err);
-    bool insertBreast(QSqlQuery &qry, QString &err);
-    bool insertThyroid(QSqlQuery &qry, QString &err);
-    bool insertGestation0(QSqlQuery &qry, QString &err);
-    bool insertGestation1(QSqlQuery &qry, QString &err);
-    bool insertGestation2(QSqlQuery &qry, QString &err);
-
-    bool updatingDocumentDataIntoTables(QString &details_error);  // actualizarea datelor pe sisteme
-    bool updateMainDocument(QSqlQuery &qry, QString &err);
-    bool updateOrgansInternal(QSqlQuery &qry, QString &err);
-    bool updateUrinarySystem(QSqlQuery &qry, QString &err);
-    bool updateProstate(QSqlQuery &qry, QString &err);
-    bool updateGynecology(QSqlQuery &qry, QString &err);
-    bool updateBreast(QSqlQuery &qry, QString &err);
-    bool updateThyroid(QSqlQuery &qry, QString &err);
-    bool updateGestation0(QSqlQuery &qry, QString &err);
-    bool updateGestation1(QSqlQuery &qry, QString &err);
-    bool updateGestation2(QSqlQuery &qry, QString &err);
-
     void updateDataDocOrderEcho(); // actualizarea datelor doc.Comanda ecografica - inserarea valorii atasarii imaginei
-
-    void setDataFromSystemOrgansInternal(); // inserarea datelor in forma din tabele
-    void setDataFromSystemUrinary();
-    void setDataFromTableProstate();
-    void setDataFromTableGynecology();
-    void setDataFromTableBreast();
-    void setDataFromTableThyroid();
-    void setDataFromTableGestation0();
-    void setDataFromTableGestation1();
-    void setDataFromTableGestation2();
 
     DatabaseProvider *dbProvider();
     void initSyncDocs();
 
 private:
     Ui::DocReportEcho *ui;
+
+    std::unique_ptr<DocReportEchoHandler> m_handler;
 
     bool m_itNew          = false;
     int m_id              = Enums::IDX::IDX_UNKNOW;
@@ -427,16 +287,99 @@ private:
     int m_idUser          = Enums::IDX::IDX_UNKNOW;
     int m_post            = Enums::IDX::IDX_UNKNOW;
 
-    bool m_organs_internal = false;
-    bool m_urinary_system  = false;
-    bool m_prostate        = false;
-    bool m_gynecology      = false;
-    bool m_breast          = false;
-    bool m_thyroide        = false;
-    bool m_gestation0      = false;
-    bool m_gestation1      = false;
-    bool m_gestation2      = false;
-    bool m_gestation3      = false;
+    bool m_organs_internal;
+    bool m_urinary_system;
+    bool m_prostate;
+    bool m_gynecology;
+    bool m_breast;
+    bool m_thyroide;
+    bool m_gestation0;
+    bool m_gestation1;
+    bool m_gestation2;
+    bool m_gestation3;
+    bool m_lymphNodes;
+
+    //---------------------------------------------------
+    /** structura pu legatura btn si tab-pagina */
+    struct TabPageRow {
+        QAbstractButton* btn;
+        PageReport pageIndex;
+    };
+    /** se completaeza prin functia setRowsForNavPage()*/
+    std::vector<TabPageRow> rows_btn_page; // lista cu btn + index page
+
+    //---------------------------------------------------
+    /** structura atasarea/eliminarea imaginilor */
+    struct Idx_Img {
+        QToolButton* btn;
+        QLabel* label_img;
+        QPlainTextEdit* comment_img;
+        int nr_img;
+    };
+    std::vector<Idx_Img> rows_items_images;
+
+    //---------------------------------------------------
+    /** structura pu legatura cu butone de 'adaugare' si 'selectare'
+     ** a sabloanelor de descrierea a formatiunilor
+     ** - QAction
+     ** - LineEditCustom */
+    struct TemplateSystemActions {
+        //--- for LineEditCustom
+        QAction*        action_select = nullptr;
+        QAction*        action_add = nullptr;
+        LineEditCustom* item_edit = nullptr;
+        QString         name_system;
+        SectionSystem   section_system;
+    };
+    std::vector<TemplateSystemActions> rows_templateSystem_action;
+
+    //---------------------------------------------------
+    /** structura pu legatura cu butone de 'adaugare' si 'selectare'
+     ** a sabloanelor de descrierea a formatiunilor
+     ** - QAbstractButton
+     ** - QPlainTextEdit */
+    struct TemplateSystemBtn {
+        QAbstractButton* btn_select = nullptr;
+        QAbstractButton* btn_add = nullptr;
+        QPlainTextEdit*  item_edit = nullptr;
+        QString          name_system;
+        SectionSystem    section_system;
+    };
+    std::vector<TemplateSystemBtn> rows_templateSystem_btn;
+
+    //---------------------------------------------------
+    /** structura sabloanelor concluziilor ecografice
+     ** pu legatura cu butoane + nume sistemului */
+    struct TemplateConcluzions {
+        QAbstractButton* btn_select = nullptr;
+        QAbstractButton* btn_add = nullptr;
+        QPlainTextEdit*  item_edit = nullptr;
+        QString          name_system;
+        SectionSystem    section_system;
+    };
+    std::vector<TemplateConcluzions> rows_template_concluzion;
+
+    //---------------------------------------------------
+    /** structura pu gruparea tuturor recomendatiilor
+     ** item_edit + nume section_system */
+    struct RecommandSystem {
+        QLineEdit*    item_edit;
+        SectionSystem section_system;
+    };
+    std::vector<RecommandSystem> rows_all_recommandation;
+
+    /** structura pu grupe radiobutton */
+    struct RadioBtnGroup {
+        QButtonGroup* group;
+        QRadioButton* btn_1 = nullptr;
+        QRadioButton* btn_2 = nullptr;
+        QRadioButton* btn_3 = nullptr;
+        QRadioButton* btn_checked = nullptr;
+    };
+    std::vector<RadioBtnGroup> rows_radionBtn;
+
+    /** lista Flag-lor documentului ce contine systeme ale organizmului */
+    SectionsSystem m_sectionsSystem; // lista cu Flags (SectionSystem)
 
     int m_count_images = 0;
 
@@ -449,36 +392,18 @@ private:
     QStandardItemModel       *modelPatients;
     BaseSortFilterProxyModel *proxyPatient;
 
+    /** variabila pu determinarea stilului btn
+     **  - selectare
+     **  - adaugarea descrierilor formatiunilor si a concluziilor */
+    QString style_toolButton;
+
     PatientHistory *history_patient;
 
-    QStandardItemModel *model_img;
-    QSqlQueryModel     *modelOrganization;      // modele pu instalarea datelor
-    QSqlQueryModel     *modelPatient_print;
-    QSqlQueryModel     *modelOrgansInternal;
-    QSqlQueryModel     *modelUrinarySystem;
-    QSqlQueryModel     *modelProstate;
-    QSqlQueryModel     *modelGynecology;
-    QSqlQueryModel     *modelBreast;
-    QSqlQueryModel     *modelThyroid;
-    QSqlQueryModel     *modelGestationO;
-    QSqlQueryModel     *modelGestation1;
-    QSqlQueryModel     *modelGestation2;
-
-    QButtonGroup *group_btn_prostate;       // instalarea grupelor RadioButton pe blocuri
-    QButtonGroup *group_btn_gynecology;
-    QButtonGroup *group_btn_gestation0;
-    QButtonGroup *group_btn_gestation1;
-    QButtonGroup *group_btn_gestation2;
-
-    QString str_concluzion_organs_internal; // pentru concluziile pe blocuri
-    QString str_concluzion_urinary_system;
-    QString str_concluzion_prostate;
-    QString str_concluzion_gynecology;
-    QString str_concluzion_brest;
-    QString str_concluzion_thyroid;
-    QString str_concluzion_gestation0;
-    QString str_concluzion_gestation1;
-    QString str_concluzion_gestation2;
+    QButtonGroup* group_btn_prostate;       // instalarea grupelor RadioButton pe blocuri
+    QButtonGroup* group_btn_gynecology;
+    QButtonGroup* group_btn_gestation0;
+    QButtonGroup* group_btn_gestation1;
+    QButtonGroup* group_btn_gestation2;
 
     LimeReport::ReportEngine *m_report;
     Normograms *normograms;
@@ -501,6 +426,7 @@ private:
     int            m_count_video     = 0;
 
     QStringList err;
+    QStringList all_recommandation;
     InfoWindow *info_win;
 
     DataPercentage *data_percentage;
@@ -512,5 +438,7 @@ protected:
     void keyPressEvent(QKeyEvent *event);  // procedura de bypass a elementelor
                                            // (Qt::Key_Return | Qt::Key_Enter)
 };
+
+Q_DECLARE_OPERATORS_FOR_FLAGS(DocReportEcho::SectionsSystem)
 
 #endif // DOCREPORTECHO_H

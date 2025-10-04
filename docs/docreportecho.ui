@@ -389,6 +389,17 @@ QToolButton:pressed
         </widget>
        </item>
        <item>
+        <widget class="QCommandLinkButton" name="btnLymphNodes">
+         <property name="text">
+          <string>Țesuturi moi și gangl.limfatici</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../resources/resource.qrc">
+           <normaloff>:/img/lymph-nodes.png</normaloff>:/img/lymph-nodes.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
         <widget class="Line" name="line">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -544,7 +555,7 @@ QToolButton:pressed
               <property name="geometry">
                <rect>
                 <x>0</x>
-                <y>0</y>
+                <y>-307</y>
                 <width>727</width>
                 <height>856</height>
                </rect>
@@ -1413,28 +1424,6 @@ QToolButton:pressed
                   <string>A.intestinale</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_80">
-                  <item row="0" column="1" rowspan="3">
-                   <widget class="QTextEdit" name="intestinalHandles">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>64</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="0" column="0" rowspan="3">
                    <widget class="QLabel" name="label_153">
                     <property name="font">
@@ -1505,6 +1494,28 @@ QToolButton:pressed
                     <property name="icon">
                      <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="1" rowspan="3">
+                   <widget class="QPlainTextEdit" name="intestinalHandles">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>64</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
                     </property>
                    </widget>
                   </item>
@@ -1914,28 +1925,6 @@ QToolButton:pressed
                   <string>Glandele suprarenale</string>
                  </property>
                  <layout class="QGridLayout" name="gridLayout_14">
-                  <item row="0" column="0" rowspan="2">
-                   <widget class="QTextEdit" name="adrenalGlands">
-                    <property name="sizePolicy">
-                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
-                      <horstretch>0</horstretch>
-                      <verstretch>0</verstretch>
-                     </sizepolicy>
-                    </property>
-                    <property name="maximumSize">
-                     <size>
-                      <width>16777215</width>
-                      <height>64</height>
-                     </size>
-                    </property>
-                    <property name="font">
-                     <font>
-                      <family>Segoe UI</family>
-                      <bold>false</bold>
-                     </font>
-                    </property>
-                   </widget>
-                  </item>
                   <item row="0" column="1">
                    <widget class="QToolButton" name="btnSelectTempletsAdrenalGlands">
                     <property name="styleSheet">
@@ -1993,6 +1982,28 @@ QToolButton:pressed
                     <property name="icon">
                      <iconset resource="../resources/resource.qrc">
                       <normaloff>:/img/add_x32.png</normaloff>:/img/add_x32.png</iconset>
+                    </property>
+                   </widget>
+                  </item>
+                  <item row="0" column="0" rowspan="2">
+                   <widget class="QPlainTextEdit" name="adrenalGlands">
+                    <property name="sizePolicy">
+                     <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                      <horstretch>0</horstretch>
+                      <verstretch>0</verstretch>
+                     </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                     <size>
+                      <width>16777215</width>
+                      <height>64</height>
+                     </size>
+                    </property>
+                    <property name="font">
+                     <font>
+                      <family>Segoe UI</family>
+                      <bold>false</bold>
+                     </font>
                     </property>
                    </widget>
                   </item>
@@ -8646,6 +8657,607 @@ QToolButton:pressed
            </item>
           </layout>
          </widget>
+         <widget class="QWidget" name="pageLymphNodes">
+          <layout class="QGridLayout" name="gridLayout_85">
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="ln_zoneArea">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_230">
+             <property name="text">
+              <string>Tipul investigației:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_231">
+             <property name="text">
+              <string>Indicație clinică:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0" colspan="3">
+            <widget class="QGroupBox" name="groupBox_36">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(0, 137, 255);</string>
+             </property>
+             <property name="title">
+              <string>Concluzie (ecoscopic):</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_84">
+              <item row="0" column="0" colspan="2">
+               <widget class="QPlainTextEdit" name="ln_conluzion">
+                <property name="maximumSize">
+                 <size>
+                  <width>16777215</width>
+                  <height>56</height>
+                 </size>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QLabel" name="label_232">
+                <property name="text">
+                 <string>Recomandări:</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QLineEdit" name="ln_recommand"/>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_229">
+             <property name="text">
+              <string>Zona examinată:</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <spacer name="horizontalSpacer_33">
+             <property name="orientation">
+              <enum>Qt::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>338</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="1">
+            <widget class="QComboBox" name="ln_typeInvestig">
+             <item>
+              <property name="text">
+               <string>Țesuturile moi și gangl.limfatici</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Țesuturi moi</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>Ganglioni limfatici</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="1" colspan="2">
+            <widget class="QLineEdit" name="ln_indications">
+             <property name="text">
+              <string/>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0" colspan="3">
+            <widget class="QTabWidget" name="tabWidget_LymphNodes">
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="tabSoftTissues">
+              <attribute name="title">
+               <string>Țesuturi moi</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_86">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_234">
+                 <property name="text">
+                  <string>Localizarea:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_238">
+                 <property name="text">
+                  <string>Vascularizarea:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_235">
+                 <property name="text">
+                  <string>Dimensiuni:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_239">
+                 <property name="text">
+                  <string>Alte modificări:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1" colspan="4">
+                <widget class="QPlainTextEdit" name="ln_otherChangeTissue">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="plainText">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="ln_skinStructureTissue">
+                 <item>
+                  <property name="text">
+                   <string>normală</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>îngroșată</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>infiltrată</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>edem</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QComboBox" name="ln_DopplerTissue">
+                 <item>
+                  <property name="text">
+                   <string>absentă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>periferică</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>centrală</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>intensă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>mixtă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>patologică</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="ln_conturTissue">
+                 <item>
+                  <property name="text">
+                   <string>regulat</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>neregulat</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QLineEdit" name="ln_sizeTissue"/>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLabel" name="label_236">
+                 <property name="text">
+                  <string>Ecogenitatea: </string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="3" colspan="2">
+                <widget class="QComboBox" name="ln_subcutanTissue">
+                 <item>
+                  <property name="text">
+                   <string>omogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>heterogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>prezența colecții</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>edem</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_233">
+                 <property name="text">
+                  <string>Țesut subcutanat:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_237">
+                 <property name="text">
+                  <string>Contur:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_249">
+                 <property name="text">
+                  <string>Structura tegumentară:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1" colspan="4">
+                <widget class="QLineEdit" name="ln_localizationTissue"/>
+               </item>
+               <item row="2" column="3">
+                <widget class="QComboBox" name="ln_ecogenityTissue">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>hipoecogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>hiperecogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>mixtă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>izoecogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>medie</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tabLympNodes">
+              <attribute name="title">
+               <string>Ganglioni limfatici</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_87">
+               <item row="2" column="4">
+                <widget class="QLabel" name="label_246">
+                 <property name="text">
+                  <string>Contur:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1" colspan="5">
+                <widget class="QPlainTextEdit" name="ln_otherChangeNode">
+                 <property name="maximumSize">
+                  <size>
+                   <width>16777215</width>
+                   <height>64</height>
+                  </size>
+                 </property>
+                 <property name="plainText">
+                  <string/>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1" colspan="3">
+                <widget class="QComboBox" name="ln_dopplerNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>absentă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>periferică</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>centrală</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>intensă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>mixtă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>patologică</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_248">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="text">
+                  <string>Modificări&lt;br&gt;asociate:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="5">
+                <widget class="QComboBox" name="ln_formNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>ovalară</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>rotundă</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_245">
+                 <property name="text">
+                  <string>Structura:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="5">
+                <widget class="QComboBox" name="ln_contourNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>regulat</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>neregulat</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_243">
+                 <property name="text">
+                  <string>Hil ecogen:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1" colspan="3">
+                <widget class="QComboBox" name="ln_hillNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>prezent</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>absent</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QLineEdit" name="ln_nrNodes">
+                 <property name="maximumSize">
+                  <size>
+                   <width>50</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_247">
+                 <property name="text">
+                  <string>Vascularizare:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QLabel" name="label_241">
+                 <property name="text">
+                  <string>Dimensiuni:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="5">
+                <widget class="QComboBox" name="ln_corticalNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>subțire</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>îngroșată</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>asimetrică</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="3">
+                <widget class="QLineEdit" name="ln_sizeNode"/>
+               </item>
+               <item row="1" column="4">
+                <widget class="QLabel" name="label_244">
+                 <property name="text">
+                  <string>Corticala:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1" colspan="3">
+                <widget class="QComboBox" name="ln_structureNode">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <item>
+                  <property name="text">
+                   <string>omogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>heterogenă</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_240">
+                 <property name="text">
+                  <string>Număr:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="4">
+                <widget class="QLabel" name="label_242">
+                 <property name="text">
+                  <string>Forma:</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <spacer name="verticalSpacer_14">
+                 <property name="orientation">
+                  <enum>Qt::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
          <widget class="QWidget" name="pageImage">
           <layout class="QGridLayout" name="gridLayout_48">
            <item row="0" column="0">
@@ -9669,6 +10281,31 @@ QToolButton:pressed
   <tabstop>gestation0_view_medium</tabstop>
   <tabstop>gestation1_view_medium</tabstop>
   <tabstop>gestation1_view_good</tabstop>
+  <tabstop>btnLymphNodes</tabstop>
+  <tabstop>gestation2_infoDoppler</tabstop>
+  <tabstop>ln_zoneArea</tabstop>
+  <tabstop>ln_indications</tabstop>
+  <tabstop>ln_skinStructureTissue</tabstop>
+  <tabstop>ln_subcutanTissue</tabstop>
+  <tabstop>ln_localizationTissue</tabstop>
+  <tabstop>ln_sizeTissue</tabstop>
+  <tabstop>ln_ecogenityTissue</tabstop>
+  <tabstop>ln_conturTissue</tabstop>
+  <tabstop>ln_DopplerTissue</tabstop>
+  <tabstop>ln_otherChangeTissue</tabstop>
+  <tabstop>ln_nrNodes</tabstop>
+  <tabstop>ln_sizeNode</tabstop>
+  <tabstop>ln_formNode</tabstop>
+  <tabstop>ln_hillNode</tabstop>
+  <tabstop>ln_corticalNode</tabstop>
+  <tabstop>ln_structureNode</tabstop>
+  <tabstop>ln_contourNode</tabstop>
+  <tabstop>ln_dopplerNode</tabstop>
+  <tabstop>ln_otherChangeNode</tabstop>
+  <tabstop>ln_conluzion</tabstop>
+  <tabstop>ln_recommand</tabstop>
+  <tabstop>ln_typeInvestig</tabstop>
+  <tabstop>tabWidget_LymphNodes</tabstop>
  </tabstops>
  <resources>
   <include location="../resources/resource.qrc"/>

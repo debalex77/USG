@@ -24,6 +24,7 @@ class CustomDialogInvestig : public QDialog
     Q_PROPERTY(bool t_gestation0 READ get_t_gestation0 WRITE set_t_gestation0 NOTIFY t_gestation0Changed)
     Q_PROPERTY(bool t_gestation1 READ get_t_gestation1 WRITE set_t_gestation1 NOTIFY t_gestation1Changed)
     Q_PROPERTY(bool t_gestation2 READ get_t_gestation2 WRITE set_t_gestation2 NOTIFY t_gestation2Changed)
+    Q_PROPERTY(bool t_lymphNodes READ get_t_lymphNodes WRITE set_t_lymphNodes NOTIFY t_lymphNodesChanged)
 
 public:
     CustomDialogInvestig(QWidget *parent = nullptr);
@@ -55,6 +56,9 @@ public:
     void set_t_gestation2(bool t_gestation2) {m_gestation2 = t_gestation2; emit t_gestation2Changed();}
     bool get_t_gestation2() const {return m_gestation2;}
 
+    void set_t_lymphNodes(bool t_lymphNodes) {m_lymphNodes = t_lymphNodes; emit t_lymphNodesChanged();}
+    bool get_t_lymphNodes() const {return m_lymphNodes;}
+
 signals:
     void t_organs_internalChanged();
     void t_urinary_systemChanged();
@@ -65,6 +69,7 @@ signals:
     void t_gestation0Changed();
     void t_gestation1Changed();
     void t_gestation2Changed();
+    void t_lymphNodesChanged();
 
 public slots:
     void highlightChecked(QListWidgetItem* item);
@@ -82,7 +87,8 @@ private:
         t_thyroide       = 5,
         t_gestation0     = 6,
         t_gestation1     = 7,
-        t_gestation2     = 8
+        t_gestation2     = 8,
+        t_lymphNodes     = 9
     };
     void createListWidget();
     void createOtherWidgets();
@@ -100,6 +106,7 @@ private:
     bool m_gestation0      = false;
     bool m_gestation1      = false;
     bool m_gestation2      = false;
+    bool m_lymphNodes      = false;
 
     QListWidget      *widget;
     QGroupBox        *viewBox;

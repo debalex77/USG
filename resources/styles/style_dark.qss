@@ -61,16 +61,18 @@ QComboBox {
     color: #ffffff;
     font-size: 13px;
     background-color: #2b2b2b;
+    selection-background-color: #2d5a6b;  /* Highlight pentru selecție în widget */
+    selection-color: #ffffff;
 }
 QComboBox:hover {
     border-color: rgba(255, 255, 255, 0.4);
 }
 QComboBox:focus {
-    border-color: #00baff;
+    border-color: #00baff;  /* Accent de focus */
 }
 QComboBox::drop-down {
     border-left: 1px solid rgba(255, 255, 255, 0.2);
-    width: 20px;
+    width: 22px;
     background-color: #3b3b3b;
 }
 QComboBox::down-arrow {
@@ -80,7 +82,7 @@ QComboBox::down-arrow {
 }
 QComboBox QAbstractItemView {
     border: 1px solid rgba(255, 255, 255, 0.2);
-    selection-background-color: #00baff;
+    selection-background-color: #2d5a6b;
     selection-color: #ffffff;
     background-color: #2b2b2b;
     color: #ffffff;
@@ -91,10 +93,15 @@ QComboBox QAbstractItemView::item {
     border: none;
 }
 QComboBox QAbstractItemView::item:selected {
-    background-color: #00baff;
+    background-color: #2d5a6b;     /* Highlight la selecție */
     color: #ffffff;
 }
-
+QComboBox:!enabled {
+    border: 1px inset gray;
+    border-radius: 4px;
+    background-color: #3b3b3b;
+    color: #808080;
+}
 /* --------------------- QDateEdit --------------------- */
 QDateEdit {
     border: 1px solid rgba(255, 255, 255, 0.2);
@@ -177,12 +184,16 @@ QPlainTextEdit {
     font-size: 14px;
     color: #ffffff;
 }
-
 QPlainTextEdit:focus {
     border: 1px solid #00baff;
     background-color: #333333;
 }
-
+QPlainTextEdit:!enabled {
+    border: 1px inset gray;
+    border-radius: 4px;
+    background-color: #3b3b3b;
+    color: #808080;
+}
 QPlainTextEdit[readOnly="true"] {
     background-color: #3b3b3b;
     color: #808080;

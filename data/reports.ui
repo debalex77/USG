@@ -38,10 +38,10 @@
       </sizepolicy>
      </property>
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout">
       <property name="topMargin">
@@ -66,17 +66,17 @@
           <normaloff>:/img/print.png</normaloff>:/img/print.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
       <item row="0" column="15">
        <spacer name="horizontalSpacer">
         <property name="orientation">
-         <enum>Qt::Horizontal</enum>
+         <enum>Qt::Orientation::Horizontal</enum>
         </property>
         <property name="sizeType">
-         <enum>QSizePolicy::Expanding</enum>
+         <enum>QSizePolicy::Policy::Expanding</enum>
         </property>
         <property name="sizeHint" stdset="0">
          <size>
@@ -102,14 +102,14 @@
           <normaloff>:/img/export_pdf.png</normaloff>:/img/export_pdf.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
       <item row="0" column="9">
        <widget class="Line" name="line_3">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Orientation::Vertical</enum>
         </property>
        </widget>
       </item>
@@ -162,7 +162,7 @@
           <normaloff>:/img/right-arrow.png</normaloff>:/img/right-arrow.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
@@ -182,14 +182,14 @@
           <normaloff>:/img/settings_x32.png</normaloff>:/img/settings_x32.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
       <item row="0" column="5">
        <widget class="Line" name="line_2">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Orientation::Vertical</enum>
         </property>
        </widget>
       </item>
@@ -240,7 +240,7 @@
          </size>
         </property>
         <property name="sizeAdjustPolicy">
-         <enum>QComboBox::AdjustToContentsOnFirstShow</enum>
+         <enum>QComboBox::SizeAdjustPolicy::AdjustToContentsOnFirstShow</enum>
         </property>
        </widget>
       </item>
@@ -260,7 +260,7 @@
           <normaloff>:/images/design.png</normaloff>:/images/design.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
@@ -306,7 +306,7 @@
       <item row="0" column="1">
        <widget class="Line" name="line">
         <property name="orientation">
-         <enum>Qt::Vertical</enum>
+         <enum>Qt::Orientation::Vertical</enum>
         </property>
        </widget>
       </item>
@@ -337,7 +337,7 @@
           <normaloff>:/img/email.png</normaloff>:/img/email.png</iconset>
         </property>
         <property name="toolButtonStyle">
-         <enum>Qt::ToolButtonTextBesideIcon</enum>
+         <enum>Qt::ToolButtonStyle::ToolButtonTextBesideIcon</enum>
         </property>
        </widget>
       </item>
@@ -347,7 +347,7 @@
    <item row="1" column="0">
     <widget class="QSplitter" name="splitter">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <widget class="QFrame" name="frame_preview">
       <property name="sizePolicy">
@@ -357,10 +357,10 @@
        </sizepolicy>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Shape::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_5"/>
      </widget>
@@ -372,10 +372,10 @@
        </sizepolicy>
       </property>
       <property name="frameShape">
-       <enum>QFrame::StyledPanel</enum>
+       <enum>QFrame::Shape::StyledPanel</enum>
       </property>
       <property name="frameShadow">
-       <enum>QFrame::Raised</enum>
+       <enum>QFrame::Shadow::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="6" column="0" colspan="2">
@@ -385,12 +385,12 @@
         <widget class="QDateEdit" name="dateEnd">
          <property name="dateTime">
           <datetime>
-           <hour>9</hour>
+           <hour>23</hour>
            <minute>59</minute>
            <second>59</second>
-           <year>2000</year>
-           <month>1</month>
-           <day>1</day>
+           <year>1999</year>
+           <month>12</month>
+           <day>31</day>
           </datetime>
          </property>
          <property name="minimumDate">
@@ -496,7 +496,7 @@
         <widget class="QDateEdit" name="dateStart">
          <property name="dateTime">
           <datetime>
-           <hour>19</hour>
+           <hour>13</hour>
            <minute>59</minute>
            <second>59</second>
            <year>2000</year>
@@ -515,7 +515,7 @@
           <bool>true</bool>
          </property>
          <property name="timeSpec">
-          <enum>Qt::LocalTime</enum>
+          <enum>Qt::TimeSpec::UTC</enum>
          </property>
         </widget>
        </item>
@@ -550,7 +550,7 @@
        <item row="15" column="1">
         <spacer name="verticalSpacer">
          <property name="orientation">
-          <enum>Qt::Vertical</enum>
+          <enum>Qt::Orientation::Vertical</enum>
          </property>
          <property name="sizeHint" stdset="0">
           <size>

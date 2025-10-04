@@ -1,1 +1,1 @@
-#define VER "3.0.5"
+#define VER "3.0.6"

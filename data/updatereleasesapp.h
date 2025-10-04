@@ -34,6 +34,10 @@ private:
 
     void updateRelease_3_0_3();
 
+    bool existErrFormationsSystemTemplates();
+    void updateRelease_3_0_6();
+    void updateRelease_3_0_7();
+
 private:
     DataBase* db;
     QMap<int, QMap<int, QMap<int, std::function<void()>>>> updateFunctions;

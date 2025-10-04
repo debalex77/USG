@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>'USG-Evidența examinărilor ecografice'</Name>
-    <Version>3.0.4</Version>
+    <Version>3.0.6</Version>
     <Title>USG-Evidența examinărilor ecografice</Title>
     <Publisher>Alovada-Med SRL</Publisher>
-    <StartMenuDir>USG-Evidența examinărilor ecografice v3.0.4</StartMenuDir>
+    <StartMenuDir>USG-Evidența examinărilor ecografice v3.0.6</StartMenuDir>
     <InstallerWindowIcon>eco_256x256.png</InstallerWindowIcon>
     <Logo>logo.png</Logo>
     <Watermark>eco.png</Watermark>

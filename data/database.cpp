@@ -693,6 +693,9 @@ void DataBase::creatingTables()
     if (createTableGestation2_doppler())
         qInfo(logInfo()) << tr("A fost creata tabela 'tableGestation2_doppler'.");
 
+    if (createTableSofTissuesLymphNodes())
+        qInfo(logInfo()) << tr("A fost creata tabela 'tableSofTissuesLymphNodes'.");
+
     if (createTableNormograms())
         qInfo(logInfo()) << tr("A fost creata tabela 'normograms'.");
 
@@ -2886,6 +2889,7 @@ bool DataBase::createTableReportEcho()
                 `t_gestation1`      BOOLEAN,
                 `t_gestation2`      BOOLEAN,
                 `t_gestation3`      BOOLEAN,
+                `t_lymphNodes`      BOOLEAN,
                 `id_users`          INT NOT NULL,
                 `concluzion`        VARCHAR (700),
                 `comment`           VARCHAR (255),
@@ -2920,6 +2924,7 @@ bool DataBase::createTableReportEcho()
                 t_gestation1      INTEGER,
                 t_gestation2      INTEGER,
                 t_gestation3      INTEGER,
+                t_lymphNodes      INTEGER,
                 id_users          INTEGER NOT NULL,
                 concluzion        TEXT,
                 comment           TEXT,
@@ -4371,6 +4376,85 @@ bool DataBase::createTableGestation2_doppler()
     }
 }
 
+bool DataBase::createTableSofTissuesLymphNodes()
+{
+    QSqlQuery qry;
+    if (globals().connectionMade == "MySQL")
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableSofTissuesLymphNodes (
+                `id`             INT NOT NULL AUTO_INCREMENT,
+                `id_reportEcho`  INT NOT NULL,
+                `section_type`   ENUM ('soft_tissues','lymph_nodes','tissues_nodes') DEFAULT 'lymph_nodes',
+                `examinedArea`        VARCHAR(50) DEFAULT NULL,
+                `clinicalIndications` VARCHAR(100) DEFAULT NULL,
+                `skin_structure`         VARCHAR(50) DEFAULT NULL,
+                `subcutaneous_tissue`    VARCHAR(100) DEFAULT NULL,
+                `lesion_location`        VARCHAR(100) DEFAULT NULL,
+                `lesion_size`            VARCHAR(50) DEFAULT NULL,
+                `lesion_echogenicity`    VARCHAR(50) DEFAULT NULL,
+                `lesion_contour`         VARCHAR(30) DEFAULT NULL,
+                `lesion_vascularization` VARCHAR(30) DEFAULT NULL,
+                `ln_number`              INT,
+                `ln_size_mm`             VARCHAR(50) DEFAULT NULL,
+                `ln_shape`               VARCHAR(50) DEFAULT NULL,
+                `ln_echogenic_hilum`     VARCHAR(50) DEFAULT NULL,
+                `ln_cortex`              VARCHAR(50) DEFAULT NULL,
+                `ln_structure`           VARCHAR(100) DEFAULT NULL,
+                `ln_contour`             VARCHAR(30) DEFAULT NULL,
+                `ln_vascularization`     VARCHAR(30) DEFAULT NULL,
+                `ln_associated_changes`  VARCHAR(150) DEFAULT NULL,
+                `other_changes`        VARCHAR(250) DEFAULT NULL,
+                `concluzion`           VARCHAR(500) DEFAULT NULL,
+                `recommendation`       VARCHAR(250) DEFAULT NULL,
+                PRIMARY KEY (`id`),
+                KEY `tableSofTissuesLymphNodes_reportEcho_id_idx` (`id_reportEcho`),
+                CONSTRAINT `tableSofTissuesLymphNodes_reportEcho_id` FOREIGN KEY (`id_reportEcho`)
+                    REFERENCES `reportEcho` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
+    else if (globals().connectionMade == "Sqlite")
+        qry.prepare(R"(
+            CREATE TABLE IF NOT EXISTS tableSofTissuesLymphNodes (
+                id             INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                id_reportEcho  INTEGER NOT NULL,
+                section_type   TEXT NOT NULL CHECK (section_type IN ('soft_tissues','lymph_nodes','tissues_nodes')) DEFAULT 'lymph_nodes',
+                examinedArea        TEXT,
+                clinicalIndications TEXT,
+                skin_structure         TEXT,
+                subcutaneous_tissue    TEXT,
+                lesion_location        TEXT,
+                lesion_size            TEXT,
+                lesion_echogenicity    TEXT,
+                lesion_contour         TEXT,
+                lesion_vascularization TEXT,
+                ln_number              INTEGER,
+                ln_size_nodes          TEXT,
+                ln_shape               TEXT,
+                ln_echogenic_hilum     TEXT,
+                ln_cortex              TEXT,
+                ln_structure           TEXT,
+                ln_contour             TEXT,
+                ln_vascularization     TEXT,
+                ln_associated_changes  TEXT,
+                other_changes          TEXT,
+                concluzion             TEXT,
+                recommendation         TEXT,
+                CONSTRAINT tableSofTissuesLymphNodes_reportEcho_id FOREIGN KEY (id_reportEcho)
+                    REFERENCES reportEcho (id) ON DELETE CASCADE ON UPDATE RESTRICT
+            );
+        )");
+    else
+        return false;
+
+    if (qry.exec()){
+        return true;
+    } else {
+        qWarning(logWarning()) << tr("%1 - createTableSofTissuesLymphNodes()").arg(metaObject()->className())
+                               << tr("Nu a fost creata tabela 'tableSofTissuesLymphNodes'.") + qry.lastError().text();
+        return false;
+    }
+}
+
 bool DataBase::createTableNormograms()
 {
     QSqlQuery qry;
@@ -4621,7 +4705,7 @@ bool DataBase::createTableFormationsSystemTemplates()
                 `deletionMark` INT NOT Null,
                 `name`         VARCHAR (500) NOT Null,
                 `typeSystem`   ENUM('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)',
-                                    'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
+                                    'Rinichi', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
                                     'Prostata', 'Recomandari (prostata)',
                                     'Tiroida', 'Recomandari (tiroida)',
                                     'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',
@@ -4636,7 +4720,7 @@ bool DataBase::createTableFormationsSystemTemplates()
                 deletionMark INT NOT NULL,
                 name         TEXT NOT NULL,
                 typeSystem   TEXT CHECK(typeSystem IN ('Unknow', 'Ficat', 'Colecist', 'Pancreas', 'Splina', 'Intestine', 'Recomandari (org.interne)',
-                                   'Rinici', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
+                                   'Rinichi', 'V.urinara', 'Gl.suprarenale', 'Recomandari (s.urinar)',
                                    'Prostata', 'Recomandari (prostata)',
                                    'Tiroida', 'Recomandari (tiroida)',
                                    'Gl.mamara (stanga)', 'Gl.mamara (dreapta)', 'Recomandari (gl.mamare)',
@@ -6023,6 +6107,44 @@ QString DataBase::getQryForTableGestation2(const int id_doc) const
     return str;
 }
 
+QString DataBase::getQryForTableLymphNodes(const int id_doc) const
+{
+    return QString(R"(
+        SELECT
+            reportEchoPresentation.docPresentationDate AS title_report,
+            tableSofTissuesLymphNodes.section_type,
+            tableSofTissuesLymphNodes.examinedArea,
+            tableSofTissuesLymphNodes.clinicalIndications,
+            tableSofTissuesLymphNodes.skin_structure,
+            tableSofTissuesLymphNodes.subcutaneous_tissue,
+            tableSofTissuesLymphNodes.lesion_location,
+            tableSofTissuesLymphNodes.lesion_size,
+            tableSofTissuesLymphNodes.lesion_echogenicity,
+            tableSofTissuesLymphNodes.lesion_contour,
+            tableSofTissuesLymphNodes.lesion_vascularization,
+            tableSofTissuesLymphNodes.ln_number,
+            tableSofTissuesLymphNodes.ln_size_nodes,
+            tableSofTissuesLymphNodes.ln_shape,
+            tableSofTissuesLymphNodes.ln_echogenic_hilum,
+            tableSofTissuesLymphNodes.ln_cortex,
+            tableSofTissuesLymphNodes.ln_structure,
+            tableSofTissuesLymphNodes.ln_contour,
+            tableSofTissuesLymphNodes.ln_vascularization,
+            tableSofTissuesLymphNodes.ln_associated_changes,
+            tableSofTissuesLymphNodes.other_changes,
+            tableSofTissuesLymphNodes.concluzion,
+            tableSofTissuesLymphNodes.recommendation
+        FROM
+            reportEcho
+        INNER JOIN reportEchoPresentation ON
+            reportEcho.id = reportEchoPresentation.id_reportEcho
+        INNER JOIN tableSofTissuesLymphNodes ON
+            reportEcho.id = tableSofTissuesLymphNodes.id_reportEcho
+        WHERE
+            reportEcho.id = '%1'
+    )").arg(QString::number(id_doc));
+}
+
 QString DataBase::getQryForTableOrderById(const int id_doc, const QString str_price) const
 {
     QString str_qry;
@@ -6193,27 +6315,62 @@ QString DataBase::getStyleForButtonMessageBox()
 
 QString DataBase::getStyleForToolButton()
 {
+
+    // QToolButton
+    // {
+    //     border: 1px solid rgba(255, 255, 255, 0.6);
+    //     border-radius: 8px;
+    //     background-color: #2b2b2b;
+    //     color: #ffffff;
+    //     font-size: 13px;
+    //     padding: 4px 4px;
+    // }
+    // QToolButton:disabled {
+    //     color: rgba(255, 255, 255, 0.4);
+    //     border-color: rgba(255, 255, 255, 0.25);
+    //     background-color: #2b2b2b; /* menține fundalul */
+    // }
+    // QToolButton:disabled:hover,
+    // QToolButton:disabled:pressed {
+    //     color: rgba(255, 255, 255, 0.4);
+    //     border-color: rgba(255, 255, 255, 0.25);
+    //     background-color: #2b2b2b;
+    // }
+
     if (globals().isSystemThemeDark)
         return QString(R"(
-            QToolButton
-            {
-                border: 1px solid rgba(255, 255, 255, 0.6);
+            QToolButton {
+                border: 1px solid rgba(255, 255, 255, 0.2);
                 border-radius: 8px;
                 background-color: #2b2b2b;
                 color: #ffffff;
                 font-size: 13px;
                 padding: 4px 4px;
             }
-            QToolButton:disabled {
-                color: rgba(255, 255, 255, 0.4);
-                border-color: rgba(255, 255, 255, 0.25);
-                background-color: #2b2b2b; /* menține fundalul */
+
+            /* Hover - ușor mai luminos și cu border accentuat */
+            QToolButton:hover {
+                background-color: #3b3b3b;
+                border: 1px solid rgba(255, 255, 255, 0.35);
             }
-            QToolButton:disabled:hover,
-            QToolButton:disabled:pressed {
-                color: rgba(255, 255, 255, 0.4);
-                border-color: rgba(255, 255, 255, 0.25);
+
+            /* Pressed - contrast mai puternic */
+            QToolButton:pressed {
+                background-color: #1e1e1e;
+                border: 1px solid rgba(255, 255, 255, 0.5);
+            }
+
+            /* Focus - contur discret, dar vizibil */
+            QToolButton:focus {
+                outline: none;
+                border: 1px solid #2d5a6b;
+            }
+
+            /* Disabled - estompat */
+            QToolButton:disabled {
                 background-color: #2b2b2b;
+                color: rgba(255, 255, 255, 0.4);
+                border: 1px solid rgba(255, 255, 255, 0.1);
             }
         )");
     else
