@@ -91,7 +91,7 @@ AppSettings::AppSettings(QWidget *parent) :
 
     QDir dir;
 
-    QFileInfo info_file_config(pathAppSettings);
+    QFileInfo info_file_config(globals().pathAppSettings);
     const QString baseName_file_config = info_file_config.baseName();
     const QString nameMatches = baseName_file_config + ".log";
     fileLogPath = dir.toNativeSeparators(dirLogPath + "/" + nameMatches);
@@ -113,11 +113,11 @@ AppSettings::AppSettings(QWidget *parent) :
     //********************************************
     // setam variabile globale si alocam memoria pu
     // setarile aplicatiei
-    pathLogAppSettings = dir.toNativeSeparators(fileLogPath);
+    globals().pathLogAppSettings = dir.toNativeSeparators(fileLogPath);
 
     //********************************************
     // setam variabile globale
-    if (! QFile(pathAppSettings).exists())
+    if (! QFile(globals().pathAppSettings).exists())
         globals().unknowModeLaunch = true;
 
 

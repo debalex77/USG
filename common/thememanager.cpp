@@ -33,8 +33,23 @@ extern bool isDarkModeEnabledMacOS();
 bool ThemeManager::isDark()
 {
 #ifdef Q_OS_WIN
-    QSettings set("HKEY_CURRENT_USER/Software/Microsoft/Windows/CurrentVersion/Themes/Personalize", QSettings::NativeFormat);
-    return set.value("AppsUseLightTheme", 1).toInt() == 0;
+    // Cheile de registry:
+    //  - AppsUseLightTheme      = 0 → dark mode pentru aplicații
+    //  - SystemUsesLightTheme   = 0 → dark mode pentru shell (taskbar etc.)
+    QSettings set(
+        "HKEY_CURRENT_USER\\Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+        QSettings::NativeFormat);
+
+    // Citim valoarea pentru aplicații (AppsUseLightTheme)
+    QVariant appsLight = set.value("AppsUseLightTheme");
+    QVariant systemLight = set.value("SystemUsesLightTheme");
+
+    // Dacă cheia lipsește, presupunem că tema este "light"
+    bool isAppsDark = appsLight.isValid() ? (appsLight.toInt() == 0) : false;
+    bool isSystemDark = systemLight.isValid() ? (systemLight.toInt() == 0) : false;
+
+    // Unele sisteme Windows 11 au doar una dintre chei
+    return isAppsDark || isSystemDark;
 #elif defined(Q_OS_MACOS)
     return isDarkModeEnabledMacOS();
 #else

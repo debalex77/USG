@@ -1,8 +1,6 @@
 #ifndef CRYPTOMANAGER_H
 #define CRYPTOMANAGER_H
 
-#include <openssl/evp.h>
-#include <openssl/rand.h>
 #include <data/loggingcategories.h>
 #include <QFile>
 #include <QDir>
@@ -12,6 +10,11 @@
 
 #if defined(Q_OS_WIN)
     #include <QStandardPaths>
+    #include <3rdparty/openssl/include/openssl/evp.h>
+    #include <3rdparty/openssl/include/openssl/rand.h>
+#elif defined(Q_OS_LINUX)
+    #include <openssl/evp.h>
+    #include <openssl/rand.h>
 #endif
 
 class CryptoManager

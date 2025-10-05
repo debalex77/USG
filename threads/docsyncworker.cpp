@@ -369,7 +369,7 @@ void docSyncWorker::syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_lo
                         deletionMark, id_orderEcho, cod, name, price)
                     VALUES(?,?,?,?,?)
                 )");
-                qry_sync.addBindValue(0);
+                qry_sync.addBindValue(2); // 2 - post
                 qry_sync.addBindValue(m_datesSync.id_order);
                 qry_sync.addBindValue(qry.value(rec.indexOf("cod")));
                 qry_sync.addBindValue(qry.value(rec.indexOf("name")));
@@ -383,7 +383,7 @@ void docSyncWorker::syncOrder(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_lo
                     WHERE
                         id_orderEcho = ?
                 )");
-                qry_sync.addBindValue(0);
+                qry_sync.addBindValue(2); // 2 - post
                 qry_sync.addBindValue(qry.value(rec.indexOf("cod")));
                 qry_sync.addBindValue(qry.value(rec.indexOf("name")));
                 qry_sync.addBindValue(qry.value(rec.indexOf("price")));
@@ -477,7 +477,7 @@ void docSyncWorker::syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_l
                     attachedImages)
                 VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             )");
-            qry_sync.addBindValue(0);
+            qry_sync.addBindValue(2); // 2 - post
             qry_sync.addBindValue(m_datesSync.nr_report);
             qry_sync.addBindValue(qry.value(rec.indexOf("dateDoc")));
             qry_sync.addBindValue(m_datesSync.id_patient);
@@ -523,7 +523,7 @@ void docSyncWorker::syncReport(QSqlDatabase &dbConn_sync, QSqlDatabase &dbConn_l
                 WHERE
                     id = ?
             )");
-            qry_sync.addBindValue(0);
+            qry_sync.addBindValue(2);  // 2 - post
             qry_sync.addBindValue(m_datesSync.nr_report);
             qry_sync.addBindValue(qry.value(rec.indexOf("dateDoc")));
             qry_sync.addBindValue(m_datesSync.id_patient);

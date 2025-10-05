@@ -61,8 +61,8 @@ QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
 QMAKE_TARGET_COPYRIGHT   = Codreanu Alexandru
-RC_ICONS = img/eco_512x512.ico
-ICON = img/eco_512x512.icns
+RC_ICONS = resources/img/eco_512x512.ico
+ICON = resources/img/eco_512x512.icns
 
 #-----------------------------------------------------------------------
 #------ CONFIG APP
@@ -320,6 +320,7 @@ DISTFILES += \
     build_scripts/build_maosx \
     build_scripts/build_new \
     build_scripts/build_project \
+    build_scripts/build_win \
     resources/fonts/Cantarell Bold.ttf \
     resources/fonts/Cantarell-Bold.otf \
     resources/fonts/Cantarell-BoldOblique.ttf \
@@ -330,7 +331,6 @@ DISTFILES += \
     translate/USG_ro_RO.qm \
     translate/USG_ru_RU.qm \
     build_scripts/ripts/build_project.sh \
-    build_scripts/build_win \
     build_scripts/debian/control \
     build_scripts/debian/postinst \
     build_scripts/debian/preinst \
@@ -409,11 +409,14 @@ macx {
 #----------------------------------------------------------------------------------------
 #------------------------------------- OPENSSL ------------------------------------------
 
+OPENSSL_DIR = $$PWD/3rdparty/openssl
+
 INCLUDEPATH += $$PWD/3rdparty/openssl
 
 # Linkare librării OpenSSL specifice platformelor
 win32 {
-    LIBS += -L$$PWD/3rdparty/openssl -llibssl -llibcrypto
+    INCLUDEPATH += $$OPENSSL_DIR/include
+    LIBS += /LIBPATH:$$OPENSSL_DIR/lib libssl.lib libcrypto.lib
 }
 
 unix:!macx {

@@ -6,10 +6,10 @@ setlocal
 set PROJECT_PATH=C:\Qt_projects\USG
 set BUILD_PATH=%PROJECT_PATH%\build
 set PREBUILD_PATH=%BUILD_PATH%\prebuild
-set QT_PATH=C:\Qt\6.5.3\msvc2019_64
-set QIF_PATH=C:\Qt\Tools\QtInstallerFramework\4.8\bin
+set QT_PATH=C:\Qt\6.9.3\msvc2019_64
+set QIF_PATH=C:\Qt\Tools\QtInstallerFramework\4.10\bin
 set WDEPLOY=%QT_PATH%\bin\windeployqt6.exe
-set BUILD_EXE=%BUILD_PATH%\Desktop_Qt_6_5_3_MSVC2019_64bit-Release\release\USG.exe
+set BUILD_EXE=%BUILD_PATH%\Desktop_Qt_6_9_3_MSVC2022_64bit-Release\release\USG.exe
 
 ::------------------------------------------
 :: Ștergem și recreăm folderul de build
@@ -39,18 +39,18 @@ for %%F in (
 
 ::------------------------------------------
 :: Copiem biblioteci externe
-copy "%PROJECT_PATH%\LimeReport\release\limereport.dll" "%PREBUILD_PATH%\limereport.dll"
-copy "%PROJECT_PATH%\LimeReport\release\QtZint.dll" "%PREBUILD_PATH%\QtZint.dll"
-copy "%PROJECT_PATH%\LimeReport\debug\limereport.dll" "%PREBUILD_PATH%\limereportd.dll"
-copy "%PROJECT_PATH%\LimeReport\debug\QtZint.dll" "%PREBUILD_PATH%\QtZintd.dll"
+copy "%PROJECT_PATH%\3rdparty\LimeReport\release\limereport.dll" "%PREBUILD_PATH%\limereport.dll"
+copy "%PROJECT_PATH%\3rdparty\LimeReport\release\QtZint.dll" "%PREBUILD_PATH%\QtZint.dll"
+copy "%PROJECT_PATH%\3rdparty\LimeReport\debug\limereport.dll" "%PREBUILD_PATH%\limereportd.dll"
+copy "%PROJECT_PATH%\3rdparty\LimeReport\debug\QtZint.dll" "%PREBUILD_PATH%\QtZintd.dll"
 echo Au fost copiate librariile LimeReport ...
 
 ::------------------------------------------
 :: Copiem directoarele recursive
-xcopy "%PROJECT_PATH%\LimeReport" "%PREBUILD_PATH%\LimeReport" /S /Y /I
-xcopy "%PROJECT_PATH%\openssl" "%PREBUILD_PATH%\openssl" /S /Y /I
-xcopy "%PROJECT_PATH%\icons" "%PREBUILD_PATH%\icons" /S /Y /I
-xcopy "%PROJECT_PATH%\templets" "%PREBUILD_PATH%\templets" /S /Y /I
+xcopy "%PROJECT_PATH%\3rdparty\LimeReport" "%PREBUILD_PATH%\LimeReport" /S /Y /I
+xcopy "%PROJECT_PATH%\3rdparty\openssl" "%PREBUILD_PATH%\openssl" /S /Y /I
+xcopy "%PROJECT_PATH%\resources\icons" "%PREBUILD_PATH%\icons" /S /Y /I
+xcopy "%PROJECT_PATH%\resources\templets" "%PREBUILD_PATH%\templets" /S /Y /I
 echo Au fost copiate librariile openssl si templets ...
 
 ::------------------------------------------
@@ -151,8 +151,8 @@ echo S-a calculat suma SHA256 fiserului de instalare ...
 ::------------------------------------------
 :: Stergem directoriile
 echo Se elimina dosare ...
-if exist "%INSTALLER_PATH%" rd /s /q "%INSTALLER_PATH%"
-if exist "%PREBUILD_PATH%" rd /s /q "%PREBUILD_PATH%"
+::if exist "%INSTALLER_PATH%" rd /s /q "%INSTALLER_PATH%"
+::if exist "%PREBUILD_PATH%" rd /s /q "%PREBUILD_PATH%"
 
 ::------------------------------------------
 :: Finalizare
