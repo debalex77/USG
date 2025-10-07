@@ -515,7 +515,7 @@
           <bool>true</bool>
          </property>
          <property name="timeSpec">
-          <enum>Qt::TimeSpec::UTC</enum>
+          <enum>QTimeZone::utc()</enum>
          </property>
         </widget>
        </item>
