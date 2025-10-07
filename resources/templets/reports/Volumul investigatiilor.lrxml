@@ -2395,7 +2395,7 @@ $V{v_presentation_period}</content>
           <printable Type="bool" Value="1"/>
           <printerName Type="QString"></printerName>
           <units Type="enumAndFlags" Value="0"/>
-          <printBehavior Type="enumAndFlags" Value="1"/>
+          <printBehavior Type="enumAndFlags" Value="0"/>
           <dropPrinterMargins Type="bool" Value="0"/>
           <notPrintIfEmpty Type="bool" Value="0"/>
           <mixWithPriorPage Type="bool" Value="0"/>
