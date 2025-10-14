@@ -127,10 +127,10 @@ static bool insertOrgansInternal(DocReportEcho*o, QSqlQuery &qry, QString &err)
     )");
     qry.addBindValue(o->getId());
     qry.addBindValue(ui->cholecist_form->text());
-    qry.addBindValue(ui->cholecist_dimens->text());
-    qry.addBindValue(ui->cholecist_walls->text());
-    qry.addBindValue(ui->cholecist_coledoc->text());
-    qry.addBindValue(ui->cholecist_formations->text());
+    qry.addBindValue(ui->cholecist_dimens->text().isEmpty() ? QVariant() : ui->cholecist_dimens->text());
+    qry.addBindValue(ui->cholecist_walls->text().isEmpty() ? QVariant() : ui->cholecist_walls->text());
+    qry.addBindValue(ui->cholecist_coledoc->text().isEmpty() ? QVariant() : ui->cholecist_coledoc->text());
+    qry.addBindValue(ui->cholecist_formations->text().isEmpty() ? QVariant() : ui->cholecist_formations->text());
     if (! qry.exec()) {
         err = QObject::tr("Eroarea inserării datelor documentului nr.%1 în tabela 'tableCholecist' - %2")
                   .arg(ui->editDocNumber->text(), qry.lastError().text().isEmpty() ? QObject::tr("eroare indisponibilă") : qry.lastError().text());
@@ -354,16 +354,16 @@ static bool insertGynecology(DocReportEcho*o, QSqlQuery &qry, QString &err)
                          : QVariant(int(ui->gynecology_btn_transvaginal->isChecked())));
     qry.addBindValue(ui->gynecology_dateMenstruation->date().toString("yyyy-MM-dd"));
     qry.addBindValue((ui->gynecology_antecedent->text().isEmpty()) ? QVariant() : ui->gynecology_antecedent->text());
-    qry.addBindValue(ui->gynecology_uterus_dimens->text());
-    qry.addBindValue(ui->gynecology_uterus_pozition->text());
-    qry.addBindValue(ui->gynecology_uterus_ecostructure->text());
-    qry.addBindValue(ui->gynecology_uterus_formations->toPlainText());
+    qry.addBindValue(ui->gynecology_uterus_dimens->text().isEmpty() ? QVariant() : ui->gynecology_uterus_dimens->text());
+    qry.addBindValue(ui->gynecology_uterus_pozition->text().isEmpty() ? QVariant() : ui->gynecology_uterus_pozition->text());
+    qry.addBindValue(ui->gynecology_uterus_ecostructure->text().isEmpty() ? QVariant() : ui->gynecology_uterus_ecostructure->text());
+    qry.addBindValue(ui->gynecology_uterus_formations->toPlainText().isEmpty() ? QVariant() : ui->gynecology_uterus_formations->toPlainText());
     qry.addBindValue(ui->gynecology_combo_jonctional_zone->currentText());
     qry.addBindValue((ui->gynecology_jonctional_zone_description->text().isEmpty()) ? QVariant() : ui->gynecology_jonctional_zone_description->text());
-    qry.addBindValue(ui->gynecology_ecou_dimens->text());
-    qry.addBindValue(ui->gynecology_ecou_ecostructure->text());
-    qry.addBindValue(ui->gynecology_cervix_dimens->text());
-    qry.addBindValue(ui->gynecology_cervix_ecostructure->text());
+    qry.addBindValue(ui->gynecology_ecou_dimens->text().isEmpty() ? QVariant() : ui->gynecology_ecou_dimens->text());
+    qry.addBindValue(ui->gynecology_ecou_ecostructure->text().isEmpty() ? QVariant() : ui->gynecology_ecou_ecostructure->text());
+    qry.addBindValue(ui->gynecology_cervix_dimens->text().isEmpty() ? QVariant() : ui->gynecology_cervix_dimens->text());
+    qry.addBindValue(ui->gynecology_cervix_ecostructure->text().isEmpty() ? QVariant() : ui->gynecology_cervix_ecostructure->text());
     qry.addBindValue(ui->gynecology_combo_canal_cervical->currentText());
     qry.addBindValue((ui->gynecology_canal_cervical_formations->text().isEmpty()) ? QVariant() : ui->gynecology_canal_cervical_formations->text());
     qry.addBindValue(ui->gynecology_douglas->text());
@@ -501,7 +501,7 @@ static bool insertGestation0(DocReportEcho*o, QSqlQuery &qry, QString &err)
     qry.addBindValue(o->getId());
     qry.addBindValue(o->getViewExaminationGestation(0));
     qry.addBindValue((ui->gestation0_antecedent->text().isEmpty()) ? QVariant() : ui->gestation0_antecedent->text());
-    qry.addBindValue(ui->gestation0_gestation->text());
+    qry.addBindValue(ui->gestation0_gestation->text().isEmpty() ? QVariant() : ui->gestation0_gestation->text());
     qry.addBindValue(ui->gestation0_GS_dimens->text());
     qry.addBindValue(ui->gestation0_GS_age->text());
     qry.addBindValue(ui->gestation0_CRL_dimens->text());

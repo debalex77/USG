@@ -127,12 +127,10 @@ public:
 
     void m_onWritingData();
 
-    // acces controlat la UI
-    Ui::DocReportEcho* uiPtr();
+    Ui::DocReportEcho* uiPtr();              // acces controlat la UI
     const Ui::DocReportEcho* uiPtr() const;
 
-    // slot pu modificarea formei
-    Q_SLOT void markModified();
+    Q_SLOT void markModified(); // slot pu modificarea formei
 
     int getViewExaminationGestation(const int gest) const; // returneaza viewExamination (gestation0)
 
@@ -399,11 +397,11 @@ private:
 
     PatientHistory *history_patient;
 
-    QButtonGroup* group_btn_prostate;       // instalarea grupelor RadioButton pe blocuri
-    QButtonGroup* group_btn_gynecology;
-    QButtonGroup* group_btn_gestation0;
-    QButtonGroup* group_btn_gestation1;
-    QButtonGroup* group_btn_gestation2;
+    QPointer<QButtonGroup> group_btn_prostate;
+    QPointer<QButtonGroup> group_btn_gynecology;
+    QPointer<QButtonGroup> group_btn_gestation0;
+    QPointer<QButtonGroup> group_btn_gestation1;
+    QPointer<QButtonGroup> group_btn_gestation2;
 
     LimeReport::ReportEngine *m_report;
     Normograms *normograms;

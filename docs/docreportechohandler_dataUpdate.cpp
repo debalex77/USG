@@ -153,10 +153,10 @@ static bool updateOrgansInternal(DocReportEcho*o, QSqlQuery &qry, QString &err)
             id_reportEcho = ?;
     )");
     qry.addBindValue(ui->cholecist_form->text());
-    qry.addBindValue(ui->cholecist_dimens->text());
-    qry.addBindValue(ui->cholecist_walls->text());
-    qry.addBindValue(ui->cholecist_coledoc->text());
-    qry.addBindValue(ui->cholecist_formations->text());
+    qry.addBindValue(ui->cholecist_dimens->text().isEmpty() ? QVariant() : ui->cholecist_dimens->text());
+    qry.addBindValue(ui->cholecist_walls->text().isEmpty() ? QVariant() : ui->cholecist_walls->text());
+    qry.addBindValue(ui->cholecist_coledoc->text().isEmpty() ? QVariant() : ui->cholecist_coledoc->text());
+    qry.addBindValue(ui->cholecist_formations->text().isEmpty() ? QVariant() : ui->cholecist_formations->text());
     qry.addBindValue(o->getId());
     if (! qry.exec()) {
         err = QObject::tr("Eroarea actualizarii datelor documentului nr.%1 în tabela 'tableCholecist' - %2")

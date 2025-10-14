@@ -12,16 +12,16 @@ QT       += core \
             concurrent
 
 #-----------------------------------------------------------------------
-#------ Verifică dacă versiunea de Qt este cel puțin 6.9.2
+#------ Verifică dacă versiunea de Qt este cel puțin 6.9.3
 
 lessThan(QT_MAJOR_VERSION, 6) {
-    error("This project requires Qt version 6.9.2 or higher.")
+    error("This project requires Qt version 6.9.3 or higher.")
 } else:equals(QT_MAJOR_VERSION, 6) {
     lessThan(QT_MINOR_VERSION, 9) {
-        error("This project requires Qt version 6.9.2 or higher.")
+        error("This project requires Qt version 6.9.3 or higher.")
     } else:equals(QT_MINOR_VERSION, 9) {
-        lessThan(QT_PATCH_VERSION, 2) {
-            error("This project requires Qt version 6.9.2 or higher.")
+        lessThan(QT_PATCH_VERSION, 3) {
+            error("This project requires Qt version 6.9.3 or higher.")
         }
     }
 }
@@ -134,6 +134,8 @@ SOURCES += \
     docs/choicecolumns.cpp \
     docs/docappointmentspatients.cpp \
     docs/docorderecho.cpp \
+    docs/docorderechohandler.cpp \
+    docs/docorderechohandler_cat.cpp \
     docs/docpricing.cpp \
     docs/docreportecho.cpp \
     docs/docreportechohandler.cpp \
@@ -229,6 +231,8 @@ HEADERS += \
     docs/choicecolumns.h \
     docs/docappointmentspatients.h \
     docs/docorderecho.h \
+    docs/docorderechohandler.h \
+    docs/docorderechohandler_p.h \
     docs/docpricing.h \
     docs/docreportecho.h \
     docs/docreportechohandler.h \

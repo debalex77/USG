@@ -43,6 +43,15 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->liver_duct_hepatic->setMaxLength(50);
         ui->liver_porta->setMaxLength(5);
         ui->liver_lienalis->setMaxLength(5);
+        ui->liver_left->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->liver_right->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->liver_contour->setPlaceholderText(QObject::tr("...maximum 20 caractere"));
+        ui->liver_parenchyma->setPlaceholderText(QObject::tr("...maximum 20 caractere"));
+        ui->liver_ecogenity->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->liver_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
+        ui->liver_duct_hepatic->setPlaceholderText(QObject::tr("...maximum 50 caractere"));
+        ui->liver_porta->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->liver_lienalis->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
 
         //--- cholecist
         ui->cholecist_dimens->setMaxLength(15);
@@ -50,6 +59,11 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->cholecist_formations->setMaxLength(300);
         ui->cholecist_walls->setMaxLength(5);
         ui->cholecist_coledoc->setMaxLength(5);
+        ui->cholecist_dimens->setPlaceholderText(QObject::tr("...maximum 15 caractere"));
+        ui->cholecist_form->setPlaceholderText(QObject::tr("...maximum 150 caractere"));
+        ui->cholecist_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
+        ui->cholecist_walls->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->cholecist_coledoc->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
 
         //--- pancreas
         ui->pancreas_cefal->setMaxLength(5);
@@ -58,12 +72,22 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->pancreas_parenchyma->setMaxLength(20);
         ui->pancreas_ecogenity->setMaxLength(30);
         ui->pancreas_formations->setMaxLength(300);
+        ui->pancreas_cefal->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->pancreas_corp->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->pancreas_tail->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->pancreas_parenchyma->setPlaceholderText(QObject::tr("...maximum 20 caractere"));
+        ui->pancreas_ecogenity->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->pancreas_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
 
         //--- spleen
         ui->spleen_dimens->setMaxLength(15);
         ui->spleen_contour->setMaxLength(20);
         ui->spleen_parenchyma->setMaxLength(30);
         ui->spleen_formations->setMaxLength(300);
+        ui->spleen_dimens->setPlaceholderText(QObject::tr("...maximum 15 caractere"));
+        ui->spleen_contour->setPlaceholderText(QObject::tr("...maximum 20 caractere"));
+        ui->spleen_parenchyma->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->spleen_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
 
         //--- intestinal loop
         ui->intestinalHandles->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
@@ -86,6 +110,13 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->kidney_pielocaliceal_left->setMaxLength(30);
         ui->kidney_pielocaliceal_right->setMaxLength(30);
         ui->kidney_formations->setMaxLength(500);
+        ui->kidney_right->setPlaceholderText(QObject::tr("...maximum 15 caractere"));
+        ui->kidney_left->setPlaceholderText(QObject::tr("...maximum 15 caractere"));
+        ui->kidney_corticomed_left->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->kidney_corticomed_right->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->kidney_pielocaliceal_left->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->kidney_pielocaliceal_right->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->kidney_formations->setPlaceholderText(QObject::tr("...maximum 500 caractere"));
 
         //--- adrenal glands
         ui->adrenalGlands->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -94,6 +125,9 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->bladder_volum->setMaxLength(5);
         ui->bladder_walls->setMaxLength(5);
         ui->bladder_formations->setMaxLength(300);
+        ui->bladder_volum->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->bladder_walls->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->bladder_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
 
         //--- concluzion
         ui->urinary_system_concluzion->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -112,6 +146,12 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->prostate_contur->setMaxLength(20);
         ui->prostate_ecogency->setMaxLength(30);
         ui->prostate_formations->setMaxLength(300);
+        ui->prostate_dimens->setPlaceholderText(QObject::tr("...maximum 25 caractere"));
+        ui->prostate_volum->setPlaceholderText(QObject::tr("...maximum 5 caractere"));
+        ui->prostate_ecostructure->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->prostate_contur->setPlaceholderText(QObject::tr("...maximum 20 caractere"));
+        ui->prostate_ecogency->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->prostate_formations->setPlaceholderText(QObject::tr("...maximum 300 caractere"));
 
         //--- concluzion
         ui->prostate_concluzion->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -128,11 +168,17 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gynecology_uterus_dimens->setMaxLength(25);
         ui->gynecology_uterus_pozition->setMaxLength(30);
         ui->gynecology_uterus_ecostructure->setMaxLength(30);
+        ui->gynecology_antecedent->setPlaceholderText(QObject::tr("...maximum 150 caractere"));
+        ui->gynecology_uterus_dimens->setPlaceholderText(QObject::tr("...maximum 25 caractere"));
+        ui->gynecology_uterus_pozition->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+        ui->gynecology_uterus_ecostructure->setPlaceholderText(QObject::tr("...maximum 30 caractere"));
+
         ui->gynecology_uterus_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
         ui->gynecology_jonctional_zone_description->setMaxLength(256);
         ui->gynecology_jonctional_zone_description->setPlaceholderText(QObject::tr("... maximum 256 caractere"));
         ui->gynecology_canal_cervical_formations->setMaxLength(256);
         ui->gynecology_canal_cervical_formations->setPlaceholderText(QObject::tr("... maximum 256 caractere"));
+
         ui->gynecology_ecou_dimens->setMaxLength(5);
         ui->gynecology_ecou_ecostructure->setMaxLength(100);
         ui->gynecology_douglas->setMaxLength(100);
@@ -143,6 +189,17 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gynecology_ovary_right_volum->setMaxLength(5);
         ui->gynecology_follicule_left->setMaxLength(100);
         ui->gynecology_follicule_right->setMaxLength(100);
+        ui->gynecology_ecou_dimens->setPlaceholderText(QObject::tr("... maximum 5 caractere"));
+        ui->gynecology_ecou_ecostructure->setPlaceholderText(QObject::tr("... maximum 100 caractere"));
+        ui->gynecology_douglas->setPlaceholderText(QObject::tr("... maximum 100 caractere"));
+        ui->gynecology_plex_venos->setPlaceholderText(QObject::tr("... maximum 150 caractere"));
+        ui->gynecology_ovary_left_dimens->setPlaceholderText(QObject::tr("... maximum 25 caractere"));
+        ui->gynecology_ovary_right_dimens->setPlaceholderText(QObject::tr("... maximum 25 caractere"));
+        ui->gynecology_ovary_left_volum->setPlaceholderText(QObject::tr("... maximum 5 caractere"));
+        ui->gynecology_ovary_right_volum->setPlaceholderText(QObject::tr("... maximum 5 caractere"));
+        ui->gynecology_follicule_left->setPlaceholderText(QObject::tr("... maximum 100 caractere"));
+        ui->gynecology_follicule_right->setPlaceholderText(QObject::tr("... maximum 100 caractere"));
+
         ui->gynecology_fallopian_tubes_formations->setMaxLength(256);
         ui->gynecology_fallopian_tubes_formations->setPlaceholderText(QObject::tr("... maximum 256 caractere"));
         ui->gynecology_ovary_formations_left->setPlaceholderText(QObject::tr("... maximum 300 caractere"));
@@ -160,17 +217,25 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
     if (s & DocReportEcho::Breast) {
         //--- left
         ui->breast_left_ecostructure->setMaxLength(255);
+        ui->breast_left_ecostructure->setPlaceholderText(QObject::tr("... maximum 255 caractere"));
         ui->breast_left_duct->setMaxLength(20);
+        ui->breast_left_duct->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->breast_left_ligament->setMaxLength(20);
-        ui->breast_left_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
+        ui->breast_left_ligament->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->breast_left_ganglions->setMaxLength(300);
+        ui->breast_left_ganglions->setPlaceholderText(QObject::tr("... maximum 300 caractere"));
+        ui->breast_left_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
 
         //--- right
         ui->breast_right_ecostructure->setMaxLength(255);
+        ui->breast_right_ecostructure->setPlaceholderText(QObject::tr("... maximum 255 caractere"));
         ui->breast_right_duct->setMaxLength(20);
+        ui->breast_right_duct->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->breast_right_ligament->setMaxLength(20);
-        ui->breast_right_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
+        ui->breast_right_ligament->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->breast_right_ganglions->setMaxLength(300);
+        ui->breast_right_ganglions->setPlaceholderText(QObject::tr("... maximum 300 caractere"));
+        ui->breast_right_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
 
         //--- concluzion
         ui->breast_concluzion->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -184,14 +249,20 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
     if (s & DocReportEcho::Thyroid) {
         //--- items
         ui->thyroid_left_dimens->setMaxLength(20);
+        ui->thyroid_left_dimens->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->thyroid_left_volum->setMaxLength(5);
+        ui->thyroid_left_volum->setPlaceholderText(QObject::tr("... maximum 5 caractere"));
         ui->thyroid_right_dimens->setMaxLength(20);
+        ui->thyroid_right_dimens->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->thyroid_right_volum->setMaxLength(5);
+        ui->thyroid_right_volum->setPlaceholderText(QObject::tr("... maximum 5 caractere"));
         ui->thyroid_istm->setMaxLength(4);
+        ui->thyroid_istm->setPlaceholderText(QObject::tr("... maximum 4 caractere"));
         ui->thyroid_ecostructure->setMaxLength(20);
-        ui->thyroid_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
-        ui->thyroid_ganglions->setPlaceholderText(QObject::tr("... maximum 300 caractere"));
+        ui->thyroid_ecostructure->setPlaceholderText(QObject::tr("... maximum 20 caractere"));
         ui->thyroid_ganglions->setMaxLength(300);
+        ui->thyroid_ganglions->setPlaceholderText(QObject::tr("... maximum 300 caractere"));
+        ui->thyroid_formations->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
 
         //--- concluzion
         ui->thyroid_concluzion->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -209,6 +280,7 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gestation0_CRL_age->setInputMask("99s. 9z.");
 
         ui->gestation0_antecedent->setMaxLength(150);
+        ui->gestation0_antecedent->setPlaceholderText(QObject::tr("... maximum 150 caractere"));
         ui->gestation0_gestation->setMaxLength(20);
         ui->gestation0_GS_dimens->setMaxLength(5);
         ui->gestation0_GS_age->setMaxLength(20);
@@ -216,9 +288,13 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gestation0_CRL_age->setMaxLength(20);
         ui->gestation0_BCF->setMaxLength(30);
         ui->gestation0_liquid_amniotic->setMaxLength(40);
+        ui->gestation0_liquid_amniotic->setPlaceholderText(QObject::tr("... maximum 40 caractere"));
         ui->gestation0_miometer->setMaxLength(200);
+        ui->gestation0_miometer->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
         ui->gestation0_cervix->setMaxLength(200);
+        ui->gestation0_cervix->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
         ui->gestation0_ovary->setMaxLength(200);
+        ui->gestation0_ovary->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
 
         //--- concluzion
         ui->gestation0_concluzion->setPlaceholderText(QObject::tr("... maximum 500 caractere"));
@@ -237,6 +313,7 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gestation1_FL_age->setInputMask("99s. 9z.");
 
         ui->gestation1_antecedent->setMaxLength(150);
+        ui->gestation1_antecedent->setPlaceholderText(QObject::tr("... maximum 150 caractere"));
         ui->gestation1_gestation->setMaxLength(20);
         ui->gestation1_CRL_dimens->setMaxLength(5);
         ui->gestation1_CRL_age->setMaxLength(20);
@@ -250,18 +327,31 @@ void DocReportEchoHandler::Impl::setPropertyMaxLengthText()
         ui->gestation1_FL_dimens->setMaxLength(5);
         ui->gestation1_FL_age->setMaxLength(20);
         ui->gestation1_callote_cranium->setMaxLength(50);
+        ui->gestation1_callote_cranium->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_plex_choroid->setMaxLength(50);
+        ui->gestation1_plex_choroid->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_vertebral_column->setMaxLength(50);
+        ui->gestation1_vertebral_column->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_stomach->setMaxLength(50);
+        ui->gestation1_stomach->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_diaphragm->setMaxLength(50);
+        ui->gestation1_diaphragm->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_bladder->setMaxLength(50);
+        ui->gestation1_bladder->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_abdominal_wall->setMaxLength(50);
+        ui->gestation1_abdominal_wall->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_location_placenta->setMaxLength(50);
+        ui->gestation1_location_placenta->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_sac_vitelin->setMaxLength(50);
+        ui->gestation1_sac_vitelin->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
         ui->gestation1_amniotic_liquid->setMaxLength(40);
+        ui->gestation1_amniotic_liquid->setPlaceholderText(QObject::tr("... maximum 40 caractere"));
         ui->gestation1_miometer->setMaxLength(200);
+        ui->gestation1_miometer->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
         ui->gestation1_cervix->setMaxLength(200);
+        ui->gestation1_cervix->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
         ui->gestation1_ovary->setMaxLength(200);
+        ui->gestation1_ovary->setPlaceholderText(QObject::tr("... maximum 200 caractere"));
         ui->gestation1_sac_vitelin->setMaxLength(50);
         ui->gestation1_sac_vitelin->setPlaceholderText(QObject::tr("... maximum 50 caractere"));
 

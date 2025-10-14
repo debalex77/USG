@@ -161,10 +161,14 @@ void DocReportEcho::markModified()
 
 int DocReportEcho::getViewExaminationGestation(const int gest) const
 {
-    if (gest == 0 && group_btn_gestation0) return group_btn_gestation0->checkedId();
-    else if (gest == 1 && group_btn_gestation1) return group_btn_gestation1->checkedId();
-    else if (gest == 2 && group_btn_gestation2) return group_btn_gestation2->checkedId();
-    else return -1;
+    QButtonGroup *group = nullptr;
+    if (gest == 0) group = group_btn_gestation0;
+    else if (gest == 1) group = group_btn_gestation1;
+    else if (gest == 2) group = group_btn_gestation2;
+
+    if (group && group->checkedButton())
+        return group->checkedId();
+    return -1;
 }
 
 // *******************************************************************
@@ -349,6 +353,12 @@ void DocReportEcho::slot_sectionsSystemChanged()
     m_gestation2      = (m_sectionsSystem & Gestation2);
     m_gestation3      = false;
     m_lymphNodes      = (m_sectionsSystem & LymphNodes);
+
+    // initial
+    if (m_sectionsSystem & m_gynecology) {
+        ui->gynecology_dateMenstruation->setDate(QDate::currentDate());
+        updateTextDateMenstruation();
+    }
 }
 
 void DocReportEcho::dataWasModified()
@@ -958,7 +968,9 @@ void DocReportEcho::initConnections()
         connect(r.comment_img, &QPlainTextEdit::textChanged, this, &DocReportEcho::dataWasModified, Qt::UniqueConnection);
     }
 
-    // calculate gestation age
+    connect(ui->gynecology_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::updateTextDateMenstruation, Qt::UniqueConnection);
+
+    /** calculate gestation age */
     connect(ui->gestation0_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged, Qt::UniqueConnection);
     connect(ui->gestation1_LMP, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged, Qt::UniqueConnection);
     connect(ui->gestation2_dateMenstruation, &QDateEdit::dateChanged, this, &DocReportEcho::onDateLMPChanged, Qt::UniqueConnection);
@@ -968,9 +980,10 @@ void DocReportEcho::initConnections()
     connect(this, &DocReportEcho::CountImagesChanged, this, &DocReportEcho::dataWasModified, Qt::UniqueConnection);
     connect(this, &DocReportEcho::CountVideoChanged, this, &DocReportEcho::slot_CountVideoChanged, Qt::UniqueConnection);
 
+    /** crearea meniului de printare */
     createMenuPrint();
 
-    // descrierea doppler
+    /** descrierea doppler */
     connect(ui->gestation2_fetusMass, &QLineEdit::editingFinished, this, &DocReportEcho::updateDescriptionFetusWeight, Qt::UniqueConnection);
     connect(ui->gestation2_ombilic_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler, Qt::UniqueConnection);
     connect(ui->gestation2_uterLeft_PI, &QLineEdit::editingFinished, this, &DocReportEcho::updateTextDescriptionDoppler, Qt::UniqueConnection);
@@ -1710,22 +1723,23 @@ void DocReportEcho::slot_ItNewChanged()
 {
     if (m_itNew){
 
-        setWindowTitle(tr("Raport ecografic (crearea) %1").arg("[*]"));
+        setWindowTitle(tr("Raport ecografic (crearea) %1").arg("[*]")); // setam titlul documentului
+        ui->editDocDate->setDateTime(QDateTime::currentDateTime());     // setam data si timpul initial
 
         connect(timer, &QTimer::timeout, this, &DocReportEcho::updateTimer);
         timer->start(1000);                    // inițierea timerului pu data docum.
 
-        setIdUser(globals().idUserApp);
+        setIdUser(globals().idUserApp);          // setam ID utilizatorului
 
         m_handler->applyPropertyMaxLengthText(); // limitarea lungimei textului + placeholder
         m_handler->applyDefaultsForSelected();   // textul implicit/initial
         m_handler->appleConnections(m_itNew);    // conectarile la modificarea formei
-        connectionTemplateConcluzion();
+        connectionTemplateConcluzion();          // conectarile la modificarea sabloanelor si a concluziilor
 
-        ui->comment->setHidden(true);
+        ui->comment->setHidden(true);            // ascundem comentariu
     }
-    initEnableBtn();
-    updateStyleBtnInvestigations();
+    initEnableBtn();                             // accesibilitatea butoanelor sistemelor
+    updateStyleBtnInvestigations();              // stilul butoanelor
 }
 
 void DocReportEcho::slot_IdChanged()
@@ -1853,7 +1867,9 @@ void DocReportEcho::updateTextDateMenstruation()
 
     QString strText;
     int resultDay = d2.daysTo(d1);
-    if (resultDay > 90 && birthdayPatient != QDate(1970, 01, 01) && d3.daysTo(d1) > 48)
+    if (ui->editDocDate->date() == ui->gynecology_dateMenstruation->date())
+        strText = QString(tr(" 0 zile de la ciclul menstrual"));
+    else if (resultDay > 90 && birthdayPatient != QDate(1970, 01, 01) && d3.daysTo(d1) > 48)
         if (resultDay / 365 == 0)
             strText = QString(tr("menopauza < 1 an."));
         else

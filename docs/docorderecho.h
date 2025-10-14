@@ -29,6 +29,8 @@
 #include <threads/patientdatasaverworker.h>
 #include <threads/syncpatientdataworker.h>
 
+#include <memory> // pentru std::unique_ptr
+
 // https://qtexcel.github.io/QXlsx/Example.html
 //#include <QXlsx/header/xlsxdocument.h>
 //#include <QXlsx/header/xlsxformat.h>
@@ -38,6 +40,8 @@
 namespace Ui {
 class DocOrderEcho;
 }
+
+class DocOrderEchoHandler; // forward declaration
 
 class DocOrderEcho : public QDialog
 {
@@ -101,6 +105,10 @@ public:
 
     void m_OnOpenReport();  // ex.: 'ListDocWebOrder'
     void m_onWritingData();
+
+    // acces controlat la UI
+    Ui::DocOrderEcho* uiPtr();
+    const Ui::DocOrderEcho* uiPtr() const;
 
 signals:
     void mCloseThisForm();   // pu eliberarea memoriei la inchiderea paginei vezi 'MainWindow'
@@ -186,6 +194,7 @@ private:
     enum IndexToolBox {box_organization = 0,box_patient = 1,box_commnet = 2};
 
     void setTitleDoc();                           // setarea titlului documentului
+    void setStyleMaxVisibleItemsComboBox();
     void initConnections();                       // initierea conectarilor
     void connectionsToIndexChangedCombobox();     // conectarea la modificarea indexului comboboxurlor
     void disconnectionsToIndexChangedCombobox();  // conectarea la modificarea indexului comboboxurlor -> modificarea formei
@@ -225,6 +234,7 @@ private:
 
 private:
     Ui::DocOrderEcho *ui;
+    std::unique_ptr<DocOrderEchoHandler> m_handler;
 
     bool m_itNew           = false;
     int m_id               = Enums::IDX::IDX_UNKNOW;

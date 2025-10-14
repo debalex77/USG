@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "docorderecho.h"
+#include "docorderechohandler.h"
 #include <data/mainwindow.h>
 #include "ui_docorderecho.h"
 #include "docs/docreportecho.h"
@@ -31,7 +32,8 @@ static const int max_length_comment = 255;
 
 DocOrderEcho::DocOrderEcho(QWidget *parent) :
     QDialog(parent),
-    ui(new Ui::DocOrderEcho)
+    ui(new Ui::DocOrderEcho),
+    m_handler(std::make_unique<DocOrderEchoHandler>(*this))
 {
     ui->setupUi(this);
 
@@ -104,43 +106,7 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
     ui->comboDoctor->setModel(modelDoctors);
     ui->comboDoctorExecute->setModel(modelDoctorsExecute);
 
-    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
-    ui->comboContract->setStyleSheet("combobox-popup: 0;");
-    ui->comboTypesPricing->setStyleSheet("combobox-popup: 0;");
-    ui->comboNurse->setStyleSheet("combobox-popup: 0;");
-    ui->comboDoctor->setStyleSheet("combobox-popup: 0;");
-    ui->comboDoctorExecute->setStyleSheet("combobox-popup: 0;");
-    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
-
-    if (modelOrganizations->rowCount() > 20) {
-        ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboOrganization->setMaxVisibleItems(15);
-    }
-
-    if (modelContracts->rowCount() > 20) {
-        ui->comboContract->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboContract->setMaxVisibleItems(15);
-    }
-
-    if (modelNurses->rowCount() > 20){
-        ui->comboNurse->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded); 
-        ui->comboNurse->setMaxVisibleItems(15);
-    }
-
-    if (modelDoctors->rowCount() > 20){
-        ui->comboDoctor->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboDoctor->setMaxVisibleItems(15);
-    }
-
-    if (modelDoctorsExecute->rowCount() > 20){
-        ui->comboDoctorExecute->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboDoctorExecute->setMaxVisibleItems(15);
-    }
-
-    if (modelOrganizations->rowCount() > 20){
-        ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
-        ui->comboOrganization->setMaxVisibleItems(15);
-    }
+    setStyleMaxVisibleItemsComboBox();   // setam stilul si elemente maxime visibile la combobox
 
     initSetCompleter();                  // initiam completerul
     connectionsToIndexChangedCombobox(); // conectarea la modificarea indexului combobox-urilor
@@ -159,24 +125,24 @@ DocOrderEcho::DocOrderEcho(QWidget *parent) :
 
 DocOrderEcho::~DocOrderEcho()
 {
-    delete modelOrganizations;
-    delete modelContracts;
-    delete modelTypesPrices;
-    delete modelPacients;
-    delete modelNurses;
-    delete modelDoctors;
-    delete modelDoctorsExecute;
-    delete completer;
-    delete city_completer;
-    delete modelTableSource;
-    delete modelTableOrder;
-    delete proxy;
-    delete proxyPacient;
-    delete timer;
-    delete popUp;
-    delete menu;
-    delete setUpMenu;
-    delete db;
+    // delete modelOrganizations;
+    // delete modelContracts;
+    // delete modelTypesPrices;
+    // delete modelPacients;
+    // delete modelNurses;
+    // delete modelDoctors;
+    // delete modelDoctorsExecute;
+    // delete completer;
+    // delete city_completer;
+    // delete modelTableSource;
+    // delete modelTableOrder;
+    // delete proxy;
+    // delete proxyPacient;
+    // delete timer;
+    // delete popUp;
+    // delete menu;
+    // delete setUpMenu;
+    // delete db;
     delete ui;
 }
 
@@ -200,6 +166,16 @@ void DocOrderEcho::m_onWritingData()
     onWritingData(); // pu validarea din forma de lista 'ListDocWebOrder'
 }
 
+Ui::DocOrderEcho *DocOrderEcho::uiPtr()
+{
+    return ui;
+}
+
+const Ui::DocOrderEcho *DocOrderEcho::uiPtr() const
+{
+    return ui;
+}
+
 void DocOrderEcho::controlLengthComment()
 {
     if (ui->editComment->toPlainText().length() > max_length_comment)
@@ -216,7 +192,8 @@ void DocOrderEcho::updateTimer()
     disconnect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::dataWasModified);
     disconnect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::onDateTimeChanged);
     disconnect(timer, &QTimer::timeout, this, &DocOrderEcho::updateTimer);
-    ui->dateTimeDoc->setDateTime(QDateTime::currentDateTime());
+    QDateTime time = QDateTime::currentDateTime();
+    ui->dateTimeDoc->setDateTime(time);
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::dataWasModified);
     connect(ui->dateTimeDoc, &QDateTimeEdit::dateTimeChanged, this, &DocOrderEcho::onDateTimeChanged);
     connect(timer, &QTimer::timeout, this, &DocOrderEcho::updateTimer);
@@ -249,7 +226,8 @@ void DocOrderEcho::createCatDoctor()
     catDoctors->show();
     connect(catDoctors, &CatGeneral::createCatGeneral, this, [this]()
     {
-        delete modelDoctors;
+        if (modelDoctors)
+            delete modelDoctors;
         QString strQryDoctors;
         strQryDoctors = "SELECT doctors.id, fullNameDoctors.name FROM doctors "
                         "INNER JOIN fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors "
@@ -267,19 +245,7 @@ void DocOrderEcho::createCatDoctor()
 
 void DocOrderEcho::openCatDoctor()
 {
-    int id_doctor = ui->comboDoctor->itemData(ui->comboDoctor->currentIndex(), Qt::UserRole).toInt();
-    if (id_doctor == 0)
-        return;
-
-    qInfo(logInfo()) << tr("Editarea datelor doctorului '%1' cu id='%2'.")
-                        .arg(ui->comboDoctor->currentText(), QString::number(m_idDoctor));
-
-    CatGeneral* catDoctors = new CatGeneral(this);
-    catDoctors->setAttribute(Qt::WA_DeleteOnClose);
-    catDoctors->setProperty("typeCatalog", CatGeneral::TypeCatalog::Doctors);
-    catDoctors->setProperty("itNew", false);
-    catDoctors->setProperty("Id", id_doctor);
-    catDoctors->show();
+    m_handler->openCatDoctor();
 }
 
 // **********************************************************************************
@@ -290,13 +256,11 @@ void DocOrderEcho::slot_ItNewChanged()
     if (m_itNew){
 
         setWindowTitle(tr("Comanda ecografica (crearea) %1").arg("[*]"));
+        setIdUser(globals().idUserApp);
 
-        if (m_idUser == Enums::Enums::IDX_UNKNOW)
-            setIdUser(globals().idUserApp);
-
+        ui->dateTimeDoc->setDateTime(QDateTime::currentDateTime());
         connect(timer, &QTimer::timeout, this, &DocOrderEcho::updateTimer); // actualizam ora reala cu secunde
         timer->start(1000);
-        ui->dateTimeDoc->setDateTime(QDateTime::currentDateTime());
 
         int lastNumberDoc = db->getLastNumberDoc("orderEcho");                        // determinam ultimul numar a documentului
         ui->editNumberDoc->setText(QString::number(lastNumberDoc + 1));               // setam numarul documentului
@@ -307,13 +271,9 @@ void DocOrderEcho::slot_ItNewChanged()
         m_attachedImages = 0;
         changeIconForItemToolBox(0);
 
-        QSqlQuery qry;
-        qry.prepare("SELECT id_doctors, id_nurses FROM constants WHERE id_users = :id_users;");
-        qry.bindValue(":id_users", globals().idUserApp);
-        if (qry.exec() && qry.next()){
-            setIdDoctorExecute(qry.value(0).toInt());
-            setIdNurse(qry.value(1).toInt());
-        }
+        setIdDoctorExecute(globals().c_id_doctor);
+        setIdNurse(globals().c_id_nurse);
+
     } else {
         ui->toolBox->setCurrentIndex(box_patient); // setam index=1 - 'datele pacientului'
     }
@@ -321,8 +281,9 @@ void DocOrderEcho::slot_ItNewChanged()
 
 void DocOrderEcho::slot_IdChanged()
 {
-    if (m_id == Enums::Enums::IDX_UNKNOW)
+    if (m_id < 0)
         return;
+
     disconnectionsToIndexChangedCombobox(); // deconectarea de la modificarea indexului combobox-urilor
                                             // ca sa nu fie activata modificarea formei - dataWasModified()
 
@@ -393,8 +354,9 @@ void DocOrderEcho::slot_IdChanged()
 
 void DocOrderEcho::slot_IdOrganizationChanged()
 {
-    if (m_idOrganization == Enums::IDX_UNKNOW)
+    if (m_idOrganization < 0)
         return;
+
     auto startOrganization = modelOrganizations->index(0, 0);
     auto indexOrganization = modelOrganizations->match(startOrganization, Qt::UserRole, m_idOrganization, 1, Qt::MatchExactly);
     if (!indexOrganization.isEmpty())
@@ -403,8 +365,9 @@ void DocOrderEcho::slot_IdOrganizationChanged()
 
 void DocOrderEcho::slot_IdContractChanged()
 {
-    if (m_idContract == Enums::IDX_UNKNOW)
+    if (m_idContract < 0)
         return;
+
     auto indexContract = modelContracts->match(modelContracts->index(0,0), Qt::UserRole, m_idContract, 1, Qt::MatchExactly);
     if (!indexContract.isEmpty())
         ui->comboContract->setCurrentIndex(indexContract.first().row());
@@ -412,14 +375,15 @@ void DocOrderEcho::slot_IdContractChanged()
 
 void DocOrderEcho::slot_IdTypePriceChanged()
 {
-    if (m_idTypePrice == Enums::IDX_UNKNOW)
+    if (m_idTypePrice < 0)
         return;
 
     auto indexTypePrice = modelTypesPrices->match(modelTypesPrices->index(0,0), Qt::UserRole, m_idTypePrice, 1, Qt::MatchExactly);
     if (!indexTypePrice.isEmpty())
         ui->comboTypesPricing->setCurrentIndex(indexTypePrice.first().row());
 
-    if (m_idOrganization == Enums::IDX_UNKNOW || m_idContract == Enums::IDX_UNKNOW)
+    if (m_idOrganization < 0 ||
+        m_idContract < 0)
         return;
 
     QString strQry;
@@ -438,7 +402,7 @@ void DocOrderEcho::slot_IdTypePriceChanged()
 
 void DocOrderEcho::slot_IdPacientChanged()
 {
-    if (m_idPacient == Enums::IDX_UNKNOW)
+    if (m_idPacient < 0)
         return;
 
     auto indexPacient = modelPacients->match(modelPacients->index(0,0), Qt::UserRole, m_idPacient, 1, Qt::MatchExactly);
@@ -464,8 +428,9 @@ void DocOrderEcho::slot_IdPacientChanged()
 
 void DocOrderEcho::slot_IdNurseChanged()
 {
-    if (m_idNurse == Enums::IDX_UNKNOW)
+    if (m_idNurse < 0)
         return;
+
     auto index_nurse = modelNurses->match(modelNurses->index(0,0), Qt::UserRole, m_idNurse, 1, Qt::MatchExactly);
     if (! index_nurse.isEmpty())
         ui->comboNurse->setCurrentIndex(index_nurse.first().row());
@@ -473,8 +438,9 @@ void DocOrderEcho::slot_IdNurseChanged()
 
 void DocOrderEcho::slot_IdDoctorChanged()
 {
-    if (m_idDoctor == Enums::IDX_UNKNOW)
+    if (m_idDoctor < 0)
         return;
+
     auto indexDoctor = modelDoctors->match(modelDoctors->index(0, 0), Qt::UserRole, m_idDoctor, 1, Qt::MatchExactly);
     if (!indexDoctor.isEmpty())
         ui->comboDoctor->setCurrentIndex(indexDoctor.first().row());
@@ -482,8 +448,9 @@ void DocOrderEcho::slot_IdDoctorChanged()
 
 void DocOrderEcho::slot_IdDoctorExecuteChanged()
 {
-    if (m_idDoctor_execute == Enums::IDX_UNKNOW)
+    if (m_idDoctor_execute < 0)
         return;
+
     auto index_doctore_execute = modelDoctorsExecute->match(modelDoctorsExecute->index(0,0), Qt::UserRole, m_idDoctor_execute, 1, Qt::MatchExactly);
     if (! index_doctore_execute.isEmpty())
         ui->comboDoctorExecute->setCurrentIndex(index_doctore_execute.first().row());
@@ -491,7 +458,7 @@ void DocOrderEcho::slot_IdDoctorExecuteChanged()
 
 void DocOrderEcho::slot_IdUserChanged()
 {
-    if (m_idUser == Enums::IDX_UNKNOW)
+    if (m_idUser < 0)
         return;
 }
 
@@ -499,6 +466,7 @@ void DocOrderEcho::slot_NamePatientChanged()
 {
     if (m_name_patient.isEmpty())
         return;
+
     ui->comboPacient->setCurrentText(m_name_patient);
 
     while (this->isVisible())
@@ -655,7 +623,7 @@ void DocOrderEcho::indexChangedComboNurse(const int index)
 
 void DocOrderEcho::onClickNewPacient()
 {
-    // 1. Verificam daca este completat combo pacientului
+    /** 1. Verificam daca este completat combo pacientului */
     if (ui->comboPacient->currentText().isEmpty()){
         QMessageBox::warning(this,
                              tr("Verificarea datelor"),
@@ -665,19 +633,19 @@ void DocOrderEcho::onClickNewPacient()
     }
 
 
-    // 2. Anuntam variabile necesare
+    /** 2. Anuntam variabile necesare */
     QString patient_name;
     QString patient_fName;
 
-    // 3. Despartim nume, prenume
+    /** 3. Despartim nume, prenume */
     if (! splitFullNamePacient(patient_name, patient_fName))
         return;
 
-    // 4. Verificam daca sunt completate variabile
+    /** 4. Verificam daca sunt completate variabile */
     if (patient_name.isEmpty() || patient_fName.isEmpty())
         return;
 
-    // 5. setam structura
+    /** 5. setam structura */
     DatesCatPatient data_patient;
     data_patient.id = (ui->checkBox->isChecked() && m_idPacient <= 0)
                           ? (db->getLastIdForTable("pacients") + 1)
@@ -693,41 +661,41 @@ void DocOrderEcho::onClickNewPacient()
     data_patient.comment       = ui->editComment->toPlainText();
     data_patient.thisMySQL     = globals().thisMySQL;
 
-    // 6. Creăm thread-ul pentru trimiterea
+    /** 6. Creăm thread-ul pentru trimiterea */
     QThread *thread = new QThread();
 
-    // 7. alocam memoria worker-lui si mutam in flux nou
+    /** 7. alocam memoria worker-lui si mutam in flux nou */
     auto worker = new PatientDataSaverWorker(dbProvider(), data_patient);
     worker->moveToThread(thread);
 
-    // 8. conectarea - lansarea procesului inserarii sau actualizarii datelor
+    /** 8. conectarea - lansarea procesului inserarii sau actualizarii datelor */
     if (ui->checkBox->isChecked() && m_idPacient <= 0){
         connect(thread, &QThread::started, worker, &PatientDataSaverWorker::processInsert);
     } else {
         connect(thread, &QThread::started, worker, &PatientDataSaverWorker::processUpdate);
     }
 
-    // 9. conectarea - procesarea daca exista pacient in bd si daca exista erori la inserare sau actualizare datelor
+    /** 9. conectarea - procesarea daca exista pacient in bd si daca exista erori la inserare sau actualizare datelor */
     connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, this, &DocOrderEcho::handlerExistPatientInBD, Qt::QueuedConnection);
     connect(worker, &PatientDataSaverWorker::finishedError, this, &DocOrderEcho::handlerErrorSavePatient, Qt::QueuedConnection);
     connect(worker, &PatientDataSaverWorker::finished, this, &DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD, Qt::QueuedConnection);
 
-    // 10. conectarea - distrugerea daca a fost emis ca exista pacient
+    /** 10. conectarea - distrugerea daca a fost emis ca exista pacient */
     connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, thread, &QThread::quit);
     connect(worker, &PatientDataSaverWorker::finishedPatientExistInBD, worker, &PatientDataSaverWorker::deleteLater);
 
-    // 11. conectarea - distrugerea daca a fost emis ca sunt erori
+    /** 11. conectarea - distrugerea daca a fost emis ca sunt erori */
     connect(worker, &PatientDataSaverWorker::finishedError, thread, &QThread::quit);
     connect(worker, &PatientDataSaverWorker::finishedError, worker, &PatientDataSaverWorker::deleteLater);
 
-    // 12. conectarea - distrugerea daca inserate/actualizate datele cu succes
+    /** 12. conectarea - distrugerea daca inserate/actualizate datele cu succes */
     connect(worker, &PatientDataSaverWorker::finished, thread, &QThread::quit);
     connect(worker, &PatientDataSaverWorker::finished, worker, &PatientDataSaverWorker::deleteLater);
 
-    // 13. conectarea distrugerea thread-lui
+    /** 13. conectarea distrugerea thread-lui */
     connect(thread, &QThread::finished, thread, &QObject::deleteLater);
 
-    // 14. start thread
+    /** 14. start thread */
     thread->start();
 
 }
@@ -749,22 +717,24 @@ void DocOrderEcho::handlerExistPatientInBD(const QVariantMap &map_data)
 
 void DocOrderEcho::handlerAfterInsertUpdateDataPatientInBD(const QVariantMap &map_data)
 {
-    // prezentam mesaj ca au fost salvate datele pacientului
+    /** 1. prezentam mesaj ca au fost salvate datele pacientului */
     popUp->setPopupText(tr("Datele pacientului <b>%1</b><br> "
                            "au fost inserate/modificate in baza de date cu succes.")
                             .arg(map_data.value("fullName").toString()));
     popUp->show();
 
-    // actualizam modelul comboPacient
+    /** 2. actualizam modelul comboPacient */
     QTimer::singleShot(100, this, &DocOrderEcho::updateModelPacients);
 
+    /** 3. setam ID pacientului si emitem signal */
     setIdPacient(map_data.value("id").toInt()); // setam 'id' pacientului
     emit mCreateNewPacient();                   // emitem signal pu conectarea din alte clase
 
+    /** 4. aplicam checkBox */
     if (ui->checkBox->isChecked())        // dupa validarea datelor pacientului
         ui->checkBox->setChecked(false);  // obiectul(pacientul) nu este nou
 
-    // initierea syncronizarii
+    /** 5. initierea syncronizarii */
     if (globals().cloud_srv_exist)
         initSyncPatientData();
 }
@@ -1040,15 +1010,6 @@ void DocOrderEcho::onOpenReport()
     // deschidem documentul -> 'raport ecografic' nou
     DocReportEcho* doc_report = new DocReportEcho(this);
     doc_report->setAttribute(Qt::WA_DeleteOnClose);
-    // doc_report->set_t_organs_internal(dialogInvestig->get_t_organs_internal());
-    // doc_report->set_t_urinary_system(dialogInvestig->get_t_urinary_system());
-    // doc_report->set_t_prostate(dialogInvestig->get_t_prostate());
-    // doc_report->set_t_gynecology(dialogInvestig->get_t_gynecology());
-    // doc_report->set_t_breast(dialogInvestig->get_t_breast());
-    // doc_report->set_t_thyroide(dialogInvestig->get_t_thyroide());
-    // doc_report->set_t_gestation0(dialogInvestig->get_t_gestation0());
-    // doc_report->set_t_gestation1(dialogInvestig->get_t_gestation1());
-    // doc_report->set_t_gestation2(dialogInvestig->get_t_gestation2());
     if (dialogInvestig->get_t_organs_internal())
         doc_report->appendSectionSystem(doc_report->OrgansInternal);
     if (dialogInvestig->get_t_urinary_system())
@@ -1346,6 +1307,47 @@ void DocOrderEcho::setTitleDoc()
     setWindowTitle(tr("Comanda ecografic\304\203 %1").arg("[*]"));
 }
 
+void DocOrderEcho::setStyleMaxVisibleItemsComboBox()
+{
+    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
+    ui->comboContract->setStyleSheet("combobox-popup: 0;");
+    ui->comboTypesPricing->setStyleSheet("combobox-popup: 0;");
+    ui->comboNurse->setStyleSheet("combobox-popup: 0;");
+    ui->comboDoctor->setStyleSheet("combobox-popup: 0;");
+    ui->comboDoctorExecute->setStyleSheet("combobox-popup: 0;");
+    ui->comboOrganization->setStyleSheet("combobox-popup: 0;");
+
+    if (modelOrganizations->rowCount() > 20) {
+        ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboOrganization->setMaxVisibleItems(15);
+    }
+
+    if (modelContracts->rowCount() > 20) {
+        ui->comboContract->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboContract->setMaxVisibleItems(15);
+    }
+
+    if (modelNurses->rowCount() > 20){
+        ui->comboNurse->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboNurse->setMaxVisibleItems(15);
+    }
+
+    if (modelDoctors->rowCount() > 20){
+        ui->comboDoctor->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboDoctor->setMaxVisibleItems(15);
+    }
+
+    if (modelDoctorsExecute->rowCount() > 20){
+        ui->comboDoctorExecute->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboDoctorExecute->setMaxVisibleItems(15);
+    }
+
+    if (modelOrganizations->rowCount() > 20){
+        ui->comboOrganization->view()->setVerticalScrollBarPolicy(Qt::ScrollBarAsNeeded);
+        ui->comboOrganization->setMaxVisibleItems(15);
+    }
+}
+
 // **********************************************************************************
 // --- conexiunilie
 
@@ -1473,52 +1475,7 @@ void DocOrderEcho::disconnectionsToIndexChangedCombobox()
 
 void DocOrderEcho::updateModelPacients()
 {
-    modelPacients->clear();
-
-    const QString strQuery =
-        globals().thisMySQL ?
-            QStringLiteral(R"(
-            SELECT
-                pacients.id,
-                CONCAT(pacients.name, ' ', pacients.fName, ', ',
-                DATE_FORMAT(pacients.birthday, '%d.%m.%Y'), ', idnp: ',
-                IFNULL(pacients.IDNP, '')) AS FullName
-            FROM pacients
-            WHERE pacients.deletionMark = 0
-            ORDER BY FullName ASC;
-        )")
-        :
-            QStringLiteral(R"(
-            SELECT
-                pacients.id,
-                pacients.name || ' ' || pacients.fName || ', ' ||
-                strftime('%d.%m.%Y', pacients.birthday) || ', idnp: ' ||
-                IFNULL(pacients.IDNP, '') AS FullName
-            FROM pacients
-            WHERE pacients.deletionMark = 0
-            ORDER BY FullName ASC;
-        )");
-    QSqlQuery qry;
-    if (! qry.exec(strQuery)) {
-        qWarning() << "Eroare exec query:" << qry.lastError().text();
-        return;
-    }
-
-    // pu performanta cream container
-    QList<QStandardItem*> items;
-
-    // prelucrarea solicitarii si completarea containerului 'items'
-    if (qry.exec()) {
-        while (qry.next()) {
-            QStandardItem *item = new QStandardItem;
-            item->setData(qry.value(0).toInt(), Qt::UserRole);
-            item->setData(qry.value(1).toString(), Qt::DisplayRole);
-            items.append(item);
-        }
-    }
-
-    // adaugam toate randurile printr-o tranzactie/simultan (eficient si rapid)
-    modelPacients->invisibleRootItem()->appendRows(items);
+    m_handler->updateModelPatients(*modelPacients);
 }
 
 void DocOrderEcho::initSetCompleter()
@@ -1872,13 +1829,7 @@ QString DocOrderEcho::existPacientByIDNP() const
 
 void DocOrderEcho::updateModelDoctors()
 {
-    if (modelDoctors->rowCount() > 0)
-        modelDoctors->clear();
-
-    QString strQryDoctors = "SELECT doctors.id, fullNameDoctors.name FROM doctors "
-                            "INNER JOIN fullNameDoctors ON doctors.id = fullNameDoctors.id_doctors "
-                            "WHERE deletionMark = 0 ORDER BY fullNameDoctors.name;";
-    modelDoctors->setQuery(strQryDoctors);
+    m_handler->updateModelDoctor(*modelDoctors);
 }
 
 void DocOrderEcho::updateTableSources()
