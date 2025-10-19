@@ -26,6 +26,7 @@
 #include <QToolButton>
 #include <QMessageBox>
 #include <QScreen>
+#include <QCheckBox>
 #include <customs/custommessage.h>
 
 CustomDialogInvestig::CustomDialogInvestig(QWidget *parent):
@@ -279,19 +280,19 @@ void CustomDialogInvestig::createLayout()
 
 void CustomDialogInvestig::createConnections()
 {
-    connect(this, &CustomDialogInvestig::t_organs_internalChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_urinary_systemChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_prostateChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_gynecologyChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_breastChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_thyroideChanged, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_gestation0Changed, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_gestation1Changed, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_gestation2Changed, this, &CustomDialogInvestig::setListWidget);
-    connect(this, &CustomDialogInvestig::t_lymphNodesChanged, this, &CustomDialogInvestig::setListWidget);
+    connect(this, &CustomDialogInvestig::t_organs_internalChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_urinary_systemChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_prostateChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_gynecologyChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_breastChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_thyroideChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_gestation0Changed, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_gestation1Changed, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_gestation2Changed, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
+    connect(this, &CustomDialogInvestig::t_lymphNodesChanged, this, &CustomDialogInvestig::setListWidget, Qt::UniqueConnection);
 
-    connect(btnOK, &QPushButton::clicked, this, &CustomDialogInvestig::save);
-    connect(btnClose, &QPushButton::clicked, this, &CustomDialogInvestig::close);
+    connect(btnOK, &QPushButton::clicked, this, &CustomDialogInvestig::save, Qt::UniqueConnection);
+    connect(btnClose, &QPushButton::clicked, this, &CustomDialogInvestig::close, Qt::UniqueConnection);
 }
 
 void CustomDialogInvestig::setListWidget()

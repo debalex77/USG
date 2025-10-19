@@ -298,21 +298,7 @@ void DocOrderEcho::slot_IdChanged()
         ui->editNumberDoc->setText(qry.value(rec.indexOf("numberDoc")).toString());
         ui->editNumberDoc->setDisabled(ui->editNumberDoc->text().isEmpty());
 
-        if (globals().thisMySQL){
-            static const QRegularExpression replaceT("T");
-            static const QRegularExpression removeMilliseconds("\\.000");
-            ui->dateTimeDoc->setDateTime(
-                QDateTime::fromString(
-                    qry.value(rec.indexOf("dateDoc"))
-                        .toString()
-                        .replace(replaceT, " ")
-                        .replace(removeMilliseconds, ""),
-                    "yyyy-MM-dd hh:mm:ss"
-                    )
-                );
-        } else {
-            ui->dateTimeDoc->setDateTime(QDateTime::fromString(qry.value(rec.indexOf("dateDoc")).toString(), "yyyy-MM-dd hh:mm:ss"));
-        }
+        ui->dateTimeDoc->setDateTime(QDateTime::fromString(qry.value(rec.indexOf("dateDoc")).toString(), Qt::ISODate));
         m_post = qry.value(rec.indexOf("deletionMark")).toInt();
         setIdOrganization(qry.value(rec.indexOf("id_organizations")).toInt());
         setIdContract(qry.value(rec.indexOf("id_contracts")).toInt());

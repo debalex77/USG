@@ -167,13 +167,7 @@ void DocReportEchoHandler::Impl::setMainTableDoc()
         ui->editDocNumber->setDisabled(!ui->editDocNumber->text().isEmpty());
         //--- data doc.
         QString str_date = qry.value(record.indexOf("dateDoc")).toString();
-        if (globals().thisMySQL){
-            static const QRegularExpression replaceT("T");
-            static const QRegularExpression removeMilliseconds("\\.000");
-            str_date = str_date.replace(replaceT, " ").replace(removeMilliseconds,"");
-            ui->editDocDate->setDateTime(QDateTime::fromString(str_date, "yyyy-MM-dd hh:mm:ss"));
-        } else
-            ui->editDocDate->setDateTime(QDateTime::fromString(str_date, "yyyy-MM-dd hh:mm:ss"));
+        ui->editDocDate->setDateTime(QDateTime::fromString(str_date, Qt::ISODate));
         //--- setam titlul documentului
         o.setWindowTitle(QObject::tr("Raport ecografic (validat) %1 %2")
                            .arg("nr." + ui->editDocNumber->text() + " din " +

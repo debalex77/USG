@@ -29,11 +29,7 @@ void DocOrderEchoHandler::Impl::openCatDoctor()
 
 void DocOrderEchoHandler::Impl::updateModelDoctor(BaseSqlQueryModel &modelDoctors)
 {
-    /** golim modelul */
-    if (modelDoctors.rowCount() > 0)
-        modelDoctors.clear();
-
-    /** setam solicitarea */
+    /** setam solicitarea - prin setQuery (golește conținutul anterior) */
     modelDoctors.setQuery(R"(
         SELECT
             doctors.id,
@@ -52,11 +48,7 @@ void DocOrderEchoHandler::Impl::updateModelDoctor(BaseSqlQueryModel &modelDoctor
 
 void DocOrderEchoHandler::Impl::updateModelNurse(BaseSqlQueryModel &modelNurses)
 {
-    /** golim modelul */
-    if (modelNurses.rowCount() > 0)
-        modelNurses.clear();
-
-    /** setam solicitarea */
+    /** setam solicitarea - prin setQuery (golește conținutul anterior) */
     modelNurses.setQuery(R"(
         SELECT
             nurses.id,

@@ -197,17 +197,10 @@ void ListDoc::loadSizeSectionPeriodTable(bool only_period)
             qry.next();
             QString str_date_start;
             QString str_date_end;
-            if (globals().thisMySQL){
-                static const QRegularExpression replaceT("T");
-                static const QRegularExpression removeMilliseconds("\\.000");
-                str_date_start = qry.value(0).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
-                str_date_end   = qry.value(1).toString().replace(replaceT, " ").replace(removeMilliseconds,"");
-            } else {
-                str_date_start = qry.value(0).toString();
-                str_date_end   = qry.value(1).toString();
-            }
-            ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_date_start, "yyyy-MM-dd hh:mm:ss"));
-            ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_date_end, "yyyy-MM-dd hh:mm:ss"));
+            str_date_start = qry.value(0).toString();
+            str_date_end   = qry.value(1).toString();
+            ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_date_start, Qt::ISODate));
+            ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_date_end, Qt::ISODate));
         } else {
             ui->filterStartDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 01, 01), QTime(00,00,00)));
             ui->filterEndDateTime->setDateTime(QDateTime(QDate(QDate::currentDate().year(), 12, 31), QTime(23,59,59)));

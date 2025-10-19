@@ -944,17 +944,12 @@ void ListDocReportOrder::slotContextMenuRequested(QPoint pos)
         if (qry.exec()){
             qry.next();
             _id_report = qry.value(0).toInt();
-            if (globals().thisMySQL){
-                static const QRegularExpression replaceT("T");
-                static const QRegularExpression removeMilliseconds("\\.000");
-                presentationDoc = tr("Raport ecografic nr.%1 din %2")
-                                      .arg(qry.value(1).toString(),
-                                           qry.value(2).toString()
-                                               .replace(replaceT, " ")
-                                               .replace(removeMilliseconds,""));
-            } else {
-                presentationDoc = tr("Raport ecografic nr.%1 din %2").arg(qry.value(1).toString(), qry.value(2).toString());
-            }
+            const QString dateStr = qry.value(2).toString();
+            const QDateTime dt = QDateTime::fromString(dateStr, Qt::ISODate);
+            const QString formattedDate = dt.toLocalTime().toString("dd.MM.yyyy hh:mm:ss");
+
+            presentationDoc = tr("Raport ecografic nr.%1 din %2")
+                                  .arg(qry.value(1).toString(), formattedDate);
         } else {
             qDebug() << qry.lastError().text();
         }
@@ -2102,13 +2097,11 @@ void ListDocReportOrder::loadFilterData()
     // extragem datele din fisier
 
     // perioada
-    static const QRegularExpression replaceT("T");
-    static const QRegularExpression removeMilliseconds("\\.000");
-    QString str_start = settings.getValue(type_doc, "startDate").toString().replace(replaceT, " ").replace(removeMilliseconds, "");
-    QString str_end = settings.getValue(type_doc, "endDate").toString().replace(replaceT, " ").replace(removeMilliseconds, "");
+    QString str_start = settings.getValue(type_doc, "startDate").toString();
+    QString str_end = settings.getValue(type_doc, "endDate").toString();
 
-    ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_start,"yyyy-MM-dd hh:mm:ss"));
-    ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_end,"yyyy-MM-dd hh:mm:ss"));
+    ui->filterStartDateTime->setDateTime(QDateTime::fromString(str_start, Qt::ISODate));
+    ui->filterEndDateTime->setDateTime(QDateTime::fromString(str_end, Qt::ISODate));
 
     // filtru
     const int _id_organization = settings.getValue(type_doc, "filter_id_organization").toInt();

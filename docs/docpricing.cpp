@@ -175,14 +175,8 @@ void DocPricing::slot_IdChanged()
     if (db->getObjectDataById("pricings", m_id, items)){
         ui->editNumberDoc->setText(items.constFind("numberDoc").value());
         ui->editNumberDoc->setDisabled(!ui->editNumberDoc->text().isEmpty());
-        if (globals().thisMySQL){
-            QString str_date = items.constFind("dateDoc").value();
-            static const QRegularExpression replaceT("T");
-            static const QRegularExpression removeMilliseconds("\\.000");
-            str_date = str_date.replace(replaceT, " ").replace(removeMilliseconds,"");
-            ui->dateTimeDoc->setDateTime(QDateTime::fromString(str_date, "yyyy-MM-dd hh:mm:ss"));
-        } else
-            ui->dateTimeDoc->setDateTime(QDateTime::fromString(items.constFind("dateDoc").value(), "yyyy-MM-dd hh:mm:ss"));
+        QString str_date = items.constFind("dateDoc").value();
+        ui->dateTimeDoc->setDateTime(QDateTime::fromString(str_date, Qt::ISODate));
         int id_organization = items.constFind("id_organizations").value().toInt();
         int id_contract     = items.constFind("id_contracts").value().toInt();
         int id_typesPrices  = items.constFind("id_typesPrices").value().toInt();

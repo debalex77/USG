@@ -1805,19 +1805,10 @@ void DocReportEcho::slot_IdDocOrderEchoChanged()
 
     QMap<QString, QString> items;
     if (db->getObjectDataById("orderEcho", m_id_docOrderEcho, items)){
-        if (globals().thisMySQL){
-            QString str_date = items.constFind("dateDoc").value();
-            static const QRegularExpression replaceT("T");
-            static const QRegularExpression removeMilliseconds("\\.000");
-            str_date = str_date.replace(replaceT, " ").replace(removeMilliseconds,"");
-            ui->labelOrderEcho->setText(tr("Comanda ecografica nr.%1 din %2")
-                                            .arg(items.constFind("numberDoc").value(),
-                                                 QDateTime::fromString(str_date, "yyyy-MM-dd hh:mm:ss").toString("dd-MM-yyyy hh:mm:ss")));
-        } else {
-            ui->labelOrderEcho->setText(tr("Comanda ecografica nr.%1 din %2")
-                                            .arg(items.constFind("numberDoc").value(),
-                                                 QDateTime::fromString(items.constFind("dateDoc").value(), "yyyy-MM-dd hh:mm:ss").toString("dd-MM-yyyy hh:mm:ss")));
-        }
+        QString str_date = items.constFind("dateDoc").value();
+        ui->labelOrderEcho->setText(tr("Comanda ecografica nr.%1 din %2")
+                                        .arg(items.constFind("numberDoc").value(),
+                                             QDateTime::fromString(str_date, Qt::ISODate).toString("dd-MM-yyyy hh:mm:ss")));
         ui->editDocNumber->setText(items.constFind("numberDoc").value());     // setam nr.documentului
         ui->editDocNumber->setDisabled(!ui->editDocNumber->text().isEmpty()); // setam editarea nr.
         if (m_idPacient == Enums::IDX::IDX_UNKNOW)
