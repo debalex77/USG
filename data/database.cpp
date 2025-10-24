@@ -4395,7 +4395,7 @@ bool DataBase::createTableSofTissuesLymphNodes()
                 `lesion_contour`         VARCHAR(30) DEFAULT NULL,
                 `lesion_vascularization` VARCHAR(30) DEFAULT NULL,
                 `ln_number`              INT,
-                `ln_size_mm`             VARCHAR(50) DEFAULT NULL,
+                `ln_size_nodes`          VARCHAR(50) DEFAULT NULL,
                 `ln_shape`               VARCHAR(50) DEFAULT NULL,
                 `ln_echogenic_hilum`     VARCHAR(50) DEFAULT NULL,
                 `ln_cortex`              VARCHAR(50) DEFAULT NULL,
