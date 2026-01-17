@@ -332,6 +332,7 @@ DISTFILES += \
     resources/fonts/Cantarell-Regular.ttf \
     resources/fonts/freefontsdownload.txt \
     resources/fonts/www.freefontsdownload.net.url \
+    site/index.html \
     translate/USG_ro_RO.qm \
     translate/USG_ru_RU.qm \
     build_scripts/ripts/build_project.sh \
