@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="USG – aplicație desktop pentru evidența investigațiilor ecografice și managementul pacienților. Offline, rapoarte, formulare tipărite." />
+  <title>USG – Evidența investigațiilor ecografice</title>
+
+  <style>
+    :root{
+      --bg:#0b1020;
+      --card:#111a33;
+      --text:#eaf0ff;
+      --muted:#b9c6ea;
+      --accent:#6aa8ff;
+      --accent2:#7ee787;
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --max: 1100px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Apple Color Emoji","Segoe UI Emoji";
+      background: radial-gradient(900px 500px at 10% 10%, rgba(106,168,255,.25), transparent 60%),
+                  radial-gradient(900px 500px at 90% 15%, rgba(126,231,135,.16), transparent 60%),
+                  var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+    }
+    a{color:var(--accent); text-decoration:none}
+    a:hover{text-decoration:underline}
+
+    .wrap{max-width:var(--max); margin:0 auto; padding:24px}
+    header{
+      position: sticky;
+      top:0;
+      backdrop-filter: blur(12px);
+      background: rgba(11,16,32,.65);
+      border-bottom: 1px solid var(--border);
+      z-index: 10;
+    }
+    .nav{
+      max-width: var(--max);
+      margin: 0 auto;
+      padding: 14px 24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{display:flex; align-items:center; gap:10px; font-weight:700}
+    .logo{
+      width:36px; height:36px; border-radius:12px;
+      background: linear-gradient(135deg, rgba(106,168,255,.9), rgba(126,231,135,.9));
+      box-shadow: var(--shadow);
+    }
+    .navlinks{display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:flex-end}
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:8px 12px; border:1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(17,26,51,.55);
+      color: var(--text);
+      font-size: 14px;
+      white-space:nowrap;
+    }
+    .pill strong{font-weight:700}
+    .btn{
+      display:inline-flex; align-items:center; justify-content:center;
+      padding: 10px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: rgba(17,26,51,.9);
+      color: var(--text);
+      box-shadow: var(--shadow);
+      font-weight: 600;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, rgba(106,168,255,.95), rgba(106,168,255,.65));
+      border-color: rgba(106,168,255,.45);
+    }
+    .btn.success{
+      background: linear-gradient(135deg, rgba(126,231,135,.95), rgba(126,231,135,.65));
+      border-color: rgba(126,231,135,.45);
+      color:#07130a;
+    }
+    .btn:hover{transform: translateY(-1px); text-decoration:none}
+
+    .hero{padding: 28px 0 10px}
+    .grid{
+      display:grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 18px;
+      align-items: start;
+    }
+    @media (max-width: 920px){
+      .grid{grid-template-columns:1fr}
+      .nav{flex-direction:column; align-items:flex-start}
+      .navlinks{justify-content:flex-start}
+    }
+    .card{
+      background: rgba(17,26,51,.75);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+    h1{margin:0 0 10px; font-size: 34px; letter-spacing:.2px}
+    h2{margin:0 0 10px; font-size: 22px}
+    h3{margin: 18px 0 8px; font-size: 16px; color: var(--muted); font-weight:700; text-transform: uppercase; letter-spacing:.08em}
+    p{margin:0 0 12px; color: var(--muted)}
+    ul{margin: 8px 0 0 18px; color: var(--muted)}
+    li{margin: 6px 0}
+    .badges{display:flex; flex-wrap:wrap; gap:8px; margin-top:12px}
+    .badgeimg{height: 22px}
+    .actions{display:flex; flex-wrap:wrap; gap:10px; margin-top: 14px}
+
+    .shots{display:grid; grid-template-columns:1fr 1fr; gap:10px}
+    @media (max-width: 640px){ .shots{grid-template-columns:1fr} }
+    .shot{
+      border-radius: 14px;
+      border: 1px solid var(--border);
+      overflow:hidden;
+      background: rgba(255,255,255,.04);
+    }
+    .shot img{width:100%; height:auto; display:block}
+
+    footer{padding: 28px 0 40px; color: var(--muted)}
+    .small{font-size: 13px; color: var(--muted)}
+    .hr{height:1px; background: var(--border); margin: 18px 0}
+    .kpi{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:12px}
+    .kpi .pill{justify-content:flex-start}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo" aria-hidden="true"></div>
+        <div>USG</div>
+      </div>
+
+      <div class="navlinks">
+        <span class="pill">Platformă: <strong>Windows x64</strong></span>
+        <span class="pill">Qt: <strong>6.9.3</strong></span>
+        <a class="btn" href="https://github.com/debalex77/USG" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn primary" href="https://github.com/debalex77/USG/releases" target="_blank" rel="noopener">Releases</a>
+        <a class="btn" href="https://github.com/debalex77/USG/wiki/User-manual-(ro)" target="_blank" rel="noopener">Manual (RO)</a>
+        <a class="btn success" href="https://github.com/sponsors/debalex77" target="_blank" rel="noopener">Sponsor</a>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <div class="grid">
+        <div class="card">
+          <h1>🩺 USG – Evidența investigațiilor ecografice</h1>
+          <p>
+            <strong>USG</strong> este o aplicație desktop open-source pentru gestionarea
+            <strong>investigațiilor ecografice</strong> și a <strong>datelor pacienților</strong>.
+            Accent pe <strong>stocare locală</strong>, <strong>structurarea informațiilor medicale</strong>
+            și <strong>rapoarte/formulare tipărite</strong>.
+          </p>
+
+          <div class="badges" aria-label="Badges">
+            <img class="badgeimg" alt="Platform" src="https://img.shields.io/badge/platform-Windows%20x64-blue" />
+            <img class="badgeimg" alt="Qt" src="https://img.shields.io/badge/Qt-6.9.3-brightgreen" />
+            <img class="badgeimg" alt="Latest Release" src="https://img.shields.io/github/v/release/debalex77/USG" />
+            <img class="badgeimg" alt="Downloads" src="https://img.shields.io/github/downloads/debalex77/USG/total" />
+            <img class="badgeimg" alt="Status" src="https://img.shields.io/badge/status-active-success" />
+            <img class="badgeimg" alt="Installer" src="https://img.shields.io/badge/installer-Inno%20Setup-lightblue" />
+          </div>
+
+          <div class="actions">
+            <a class="btn primary" href="https://github.com/debalex77/USG/releases" target="_blank" rel="noopener">⬇️ Descarcă (Releases)</a>
+            <a class="btn" href="https://github.com/debalex77/USG" target="_blank" rel="noopener">📦 Cod sursă</a>
+            <a class="btn" href="README.md">🇬🇧 README (EN)</a>
+            <a class="btn" href="README-RO.md">🇷🇴 README (RO)</a>
+          </div>
+
+          <div class="hr"></div>
+
+          <h2>🎯 Scop</h2>
+          <ul>
+            <li>Crearea unei baze de date independente de pacienți (ecografie)</li>
+            <li>Stocarea datelor investigațiilor ecografice</li>
+            <li>Atașare imagini (formațiuni, calculi etc.)</li>
+            <li>Istoric al pacientului pentru investigații repetate</li>
+            <li>Generare buletine / formulare tipărite personalizate</li>
+            <li>Rapoarte statistice și financiare (în funcție de utilizare)</li>
+          </ul>
+
+          <h3>🌐 Limbi</h3>
+          <p class="small">
+            <a href="README.md">🇬🇧 English</a> ·
+            <a href="README-RO.md">🇷🇴 Română</a>
+          </p>
+        </div>
+
+        <div class="card">
+          <h2>📸 Capturi de ecran</h2>
+          <p>Interfața aplicației (exemple):</p>
+
+          <div class="shots">
+            <div class="shot">
+              <img alt="Screenshot 1"
+                   src="https://github.com/user-attachments/assets/89b3964d-31d1-44ed-bf22-5c2b13642851" />
+            </div>
+            <div class="shot">
+              <img alt="Screenshot 2"
+                   src="https://github.com/user-attachments/assets/667abdf9-c456-49e2-91bc-4981ce476da9" />
+            </div>
+          </div>
+
+          <h3>🛠 Tehnologii</h3>
+          <div class="kpi">
+            <span class="pill">C++</span>
+            <span class="pill">Qt Framework</span>
+            <span class="pill">LimeReport (rapoarte)</span>
+            <span class="pill">Installer: Inno Setup</span>
+          </div>
+
+          <h3>🔗 Linkuri utile</h3>
+          <ul>
+            <li><a href="https://github.com/debalex77/USG/releases" target="_blank" rel="noopener">Releases / Descărcări</a></li>
+            <li><a href="https://github.com/debalex77/USG/wiki/User-manual-(ro)" target="_blank" rel="noopener">Manual utilizator (RO)</a></li>
+            <li><a href="https://github.com/debalex77/USG/issues" target="_blank" rel="noopener">Raportează o problemă (Issues)</a></li>
+            <li><a href="https://github.com/sponsors/debalex77" target="_blank" rel="noopener">Sponsor pe GitHub</a></li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🚀 Funcționalități principale</h2>
+      <ul>
+        <li>Gestionare pacienți (creare / editare / căutare)</li>
+        <li>Evidența investigațiilor ecografice</li>
+        <li>Stocare locală a datelor</li>
+        <li>Atașare imagini ecografice</li>
+        <li>Rapoarte medicale, administrative și (opțional) financiare</li>
+        <li>Formulare tipăribile și șabloane personalizate prin LimeReport</li>
+      </ul>
+    </section>
+
+    <section class="card" style="margin-top:18px">
+      <h2>⚠️ Declarație medicală (Disclaimer)</h2>
+      <p class="small">
+        Software-ul este furnizat „așa cum este” și reprezintă un instrument de suport.
+        Nu înlocuiește judecata medicală profesională și trebuie utilizat în conformitate
+        cu legislația și standardele locale.
+      </p>
+    </section>
+
+    <footer class="wrap">
+      <div class="hr"></div>
+      <div class="small">
+        © <span id="y"></span> USG · Autor: <a href="https://github.com/debalex77" target="_blank" rel="noopener">debalex77</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    document.getElementById("y").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
