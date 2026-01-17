@@ -1,3 +1,13 @@
+![Platform](https://img.shields.io/badge/platform-Windows%20x64-blue)
+![Qt](https://img.shields.io/badge/Qt-6.9.3-brightgreen)
+![Latest Release](https://img.shields.io/github/v/release/debalex77/USG)
+![Downloads](https://img.shields.io/github/downloads/debalex77/USG/total)
+![Status](https://img.shields.io/badge/status-active-success)
+![Installer](https://img.shields.io/badge/installer-Inno%20Setup-lightblue)
+[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/debalex77)
+
+---
+
 ## USG - Records of ultrasound examinations
 The application for the records of patients who have passed ultrasound investigations, with the memory of contact   
 details and identity documents. 
