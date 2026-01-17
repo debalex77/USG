@@ -8,6 +8,11 @@
 
 ---
 
+## 🌐 Language / Limba
+[🇬🇧 English](README.md) | [🇷🇴 Română](README-RO.md)
+
+---
+
 # 🩺 USG – Records of Ultrasound Examinations
 
 **USG** is an open-source desktop application for managing **ultrasound examinations and patient records**.  
