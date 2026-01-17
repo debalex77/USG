@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://debalex77.github.io/USG/sitemap.xml
