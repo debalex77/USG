@@ -16,6 +16,7 @@ QPushButton:pressed
 {
     background-color: #d0d0d0;
 }
+
 /* --------------------- QLineEdit --------------------- */
 QLineEdit
 {
@@ -64,7 +65,7 @@ QComboBox::drop-down
 }
 QComboBox::down-arrow
 {
-    image: url(://img/drop-down-arrow.png);
+    image: url(:/img/common/arrow_combo_dark.png);
     width: 12px;
     height: 12px;
 }

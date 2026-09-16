@@ -1,0 +1,60 @@
+diff --git a/limereport/base/lrsingleton.h b/limereport/base/lrsingleton.h
+--- a/limereport/base/lrsingleton.h
++++ b/limereport/base/lrsingleton.h
+@@ -31,28 +31,49 @@
+ #define LRSINGLETON_H
+ 
+ #include <cstdlib>
++#include <QCoreApplication>
++#include <QObject>
+ 
+ namespace LimeReport {
+ 
+-template <typename T> class Singleton {
++template <typename T>
++class Singleton
++{
+ public:
+     static T& instance()
+     {
+-        if (0 == inst) {
++        if (inst == nullptr) {
+             inst = new T();
++
++            if (QCoreApplication::instance()) {
++                QObject::connect(
++                    QCoreApplication::instance(),
++                    &QCoreApplication::aboutToQuit,
++                    QCoreApplication::instance(),
++                    []() { destroy(); },
++                    Qt::DirectConnection);
++            }
++
+             ::atexit(destroy);
+-        } else {
+-        };
++        }
++
+         return *inst;
+     }
+ 
+ private:
+     static T* inst;
+ 
+-private:
+-    static void destroy() { delete inst; }
++    static void destroy()
++    {
++        T* oldInstance = inst;
++        inst = nullptr;
++        delete oldInstance;
++    }
+ };
+ 
+-template <typename T> T* Singleton<T>::inst = 0;
++template <typename T>
++T* Singleton<T>::inst = nullptr;
++
+ } // namespace LimeReport
++
+ #endif // LRSINGLETON_H

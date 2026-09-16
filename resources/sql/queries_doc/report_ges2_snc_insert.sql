@@ -1,0 +1,29 @@
+INSERT INTO tableGestation2_SNC (
+    id_reportEcho,
+    hemispheres,
+    fissureSilvius,
+    corpCalos,
+    ventricularSystem,
+    ventricularSystem_description,
+    cavityPellucidSeptum,
+    choroidalPlex,
+    choroidalPlex_description,
+    cerebellum,
+    cerebellum_description,
+    vertebralColumn,
+    vertebralColumn_description
+) VALUES (
+    :id_reportEcho,
+    :hemispheres,
+    :fissureSilvius,
+    :corpCalos,
+    :ventricularSystem,
+    :ventricularSystem_description,
+    :cavityPellucidSeptum,
+    :choroidalPlex,
+    :choroidalPlex_description,
+    :cerebellum,
+    :cerebellum_description,
+    :vertebralColumn,
+    :vertebralColumn_description
+)

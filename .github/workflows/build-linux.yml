@@ -1,0 +1,131 @@
+name: Linux qmake build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  QT_VERSION: 6.9.3
+  LIMEREPORT_COMMIT: e6210b58a46ab14c0ff8a409b5fa5d339937ea7c
+
+jobs:
+  build:
+    name: Qt 6.9.3 / Ubuntu
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+
+    steps:
+      - name: Check out USG
+        uses: actions/checkout@v4
+
+      - name: Install Linux build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential \
+            libgl1-mesa-dev \
+            libpulse-dev \
+            libssl-dev \
+            lld \
+            libxkbcommon-x11-0 \
+            libxcb-cursor0 \
+            libxcb-xinerama0
+
+      - name: Install Qt
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qtmultimedia qtpositioning qtsvg qttools qtwebchannel qtwebengine
+          cache: true
+
+      - name: Fetch the pinned LimeReport source
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_source="${RUNNER_TEMP}/LimeReport"
+          git init "${lime_source}"
+          git -C "${lime_source}" remote add origin https://github.com/fralx/LimeReport.git
+          git -C "${lime_source}" fetch --depth=1 origin "${LIMEREPORT_COMMIT}"
+          git -C "${lime_source}" checkout --detach FETCH_HEAD
+          test "$(git -C "${lime_source}" rev-parse HEAD)" = "${LIMEREPORT_COMMIT}"
+          git -C "${lime_source}" apply \
+            "${GITHUB_WORKSPACE}/patches/limereport/1.7.23/0001-make-singleton-destruction-idempotent.patch"
+
+      - name: Build LimeReport with qmake
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_source="${RUNNER_TEMP}/LimeReport"
+          lime_build="${RUNNER_TEMP}/LimeReport-build"
+          mkdir -p "${lime_build}"
+          cd "${lime_build}"
+          qmake "${lime_source}/limereport.pro" \
+            CONFIG+=release \
+            CONFIG+=no_build_translations
+          make -j2 sub-limereport-all-ordered
+
+      - name: Prepare LimeReport for the USG build
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_source="${RUNNER_TEMP}/LimeReport"
+          lime_lib="${lime_source}/build/${QT_VERSION}/linux64/release/lib"
+          usg_lime="${GITHUB_WORKSPACE}/3rdparty/LimeReport"
+
+          test -f "${lime_lib}/liblimereport.so.1.0.0"
+          test -f "${lime_lib}/libQtZint.so"
+          test -d "${lime_source}/include"
+
+          mkdir -p "${usg_lime}/include" "${usg_lime}/release"
+          cp -a "${lime_source}/include/." "${usg_lime}/include/"
+          cp -a "${lime_lib}/liblimereport.so"* "${usg_lime}/release/"
+          cp -a "${lime_lib}/libQtZint.so"* "${usg_lime}/release/"
+
+      - name: Build USG with qmake
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "${GITHUB_WORKSPACE}/build-ci"
+          cd "${GITHUB_WORKSPACE}/build-ci"
+          qmake "${GITHUB_WORKSPACE}/USG.pro" CONFIG+=release
+          make -j2
+          test -x USG
+          if ldd USG | grep -F "not found"; then
+            exit 1
+          fi
+
+      - name: Assemble build artifact
+        shell: bash
+        run: |
+          set -euo pipefail
+          artifact="${RUNNER_TEMP}/USG-linux-build"
+          mkdir -p "${artifact}/lib" "${artifact}/licenses/LimeReport"
+          cp "${GITHUB_WORKSPACE}/build-ci/USG" "${artifact}/"
+          cp -a "${GITHUB_WORKSPACE}/3rdparty/LimeReport/release/liblimereport.so"* "${artifact}/lib/"
+          cp -a "${GITHUB_WORKSPACE}/3rdparty/LimeReport/release/libQtZint.so"* "${artifact}/lib/"
+          cp "${RUNNER_TEMP}/LimeReport/LICENSE" "${artifact}/licenses/LimeReport/"
+          cp "${RUNNER_TEMP}/LimeReport/COPYING" "${artifact}/licenses/LimeReport/"
+          git -C "${RUNNER_TEMP}/LimeReport" archive \
+            --format=tar.gz \
+            --prefix=LimeReport-1.7.23/ \
+            --output="${artifact}/licenses/LimeReport/LimeReport-1.7.23-source.tar.gz" \
+            HEAD
+          cp \
+            "${GITHUB_WORKSPACE}/patches/limereport/1.7.23/0001-make-singleton-destruction-idempotent.patch" \
+            "${artifact}/licenses/LimeReport/"
+          cp "${GITHUB_WORKSPACE}/LICENSE.txt" "${artifact}/"
+          mkdir -p "${artifact}/third_party"
+          cp "${GITHUB_WORKSPACE}/third_party/THIRD_PARTY_ICONS.md" "${artifact}/third_party/"
+          cp "${GITHUB_WORKSPACE}/third_party/LIMEREPORT.md" "${artifact}/third_party/"
+
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: USG-linux-Qt-${{ env.QT_VERSION }}
+          path: ${{ runner.temp }}/USG-linux-build
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,1072 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageGestation1</class>
+ <widget class="QWidget" name="ReportPageGestation1">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>920</width>
+    <height>860</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_46">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_gestation1">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>886</width>
+        <height>944</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_45">
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox_27">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Miometru, colul uterin, ovare</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_43">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_112">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ovare:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_113">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Miometriul:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_114">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Colul uterin:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLineEdit" name="gestation1_cervix">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="gestation1_miometer">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="gestation1_ovary">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="groupBox_28">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzia (sarcina 11-14 săptămâni)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_44">
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_115">
+            <property name="text">
+             <string>Recomandări:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btn_add_template_gestation1">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="3" colspan="2">
+           <widget class="QPlainTextEdit" name="gestation1_concluzion">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btn_template_gestation1">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="LineEditCustom" name="gestation1_recommendation"/>
+          </item>
+          <item row="3" column="2">
+           <spacer name="verticalSpacer_13">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>40</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_25">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Varsta gestationala, antecedente</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_41">
+          <item row="2" column="1">
+           <widget class="QDateEdit" name="gestation1_LMP">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3" colspan="3">
+           <widget class="QLineEdit" name="gestation1_gestation">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Ignored">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>28</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="9">
+           <widget class="QLineEdit" name="gestation1_antecedent">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <spacer name="horizontalSpacer_20">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_105">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Vârsta gest.:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_174">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ziua ultim.menstr.:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_104">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Antec.obstetricale:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="8" colspan="2">
+           <widget class="QDateEdit" name="gestation1_probableDateBirth">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_103">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Vizualizarea:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLabel" name="label_161">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Data probabilă a nașterii:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Numărul de feț</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="5">
+           <widget class="QComboBox" name="comboMultiplePregnancy">
+            <item>
+             <property name="text">
+              <string>Sarcina monofetală</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sarcina gemelară</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sarcina trifetală</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>Sarcina tetrafetală</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="9">
+           <layout class="QHBoxLayout" name="horizontalLayout">
+            <item>
+             <widget class="QRadioButton" name="gestation1_view_good">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>bună</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="gestation1_view_medium">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>medie</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <widget class="QRadioButton" name="gestation1_view_difficult">
+              <property name="font">
+               <font>
+                <family>Segoe UI</family>
+                <bold>false</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>dificilă</string>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_26">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Biometria fetală</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_42">
+          <item row="1" column="7">
+           <widget class="QLineEdit" name="gestation1_BN_percent">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLabel" name="label_117">
+            <property name="text">
+             <string>BN :</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="3">
+           <widget class="QLineEdit" name="gestation1_BCF">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_118">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>, percentile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_109">
+            <property name="text">
+             <string>BCF:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLineEdit" name="gestation1_BPD_age">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="5">
+           <widget class="QLineEdit" name="gestation1_FL_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="gestation1_NT_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="gestation1_CRL_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label_106">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>, corespunde</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_99">
+            <property name="text">
+             <string>BPD:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_116">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>, percentile</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="5">
+           <widget class="QLineEdit" name="gestation1_BN_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="7">
+           <widget class="QLineEdit" name="gestation1_FL_age">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="gestation1_CRL_age">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_110">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>, corespunde:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLabel" name="label_111">
+            <property name="text">
+             <string>FL:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_108">
+            <property name="text">
+             <string>CRL:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLineEdit" name="gestation1_BPD_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_107">
+            <property name="text">
+             <string>NT:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLabel" name="label_119">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>, corespunde</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="gestation1_NT_percent">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0" colspan="8">
+           <widget class="QLabel" name="interpretationNT">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(255, 120, 0);</string>
+            </property>
+            <property name="text">
+             <string>interpretation NT</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_29">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Morfologia fetală</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_47">
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="gestation1_vertebral_column">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_120">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Calota craniană:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" colspan="3">
+           <widget class="QLineEdit" name="gestation1_location_placenta">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_127">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Localizarea placentei:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_121">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Plexurile coroidale:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_122">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Coloana vertebrală:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="gestation1_callote_cranium">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_124">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Vezica urinară:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_126">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Peretele abdominal:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_125">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Diafragma:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="3">
+           <widget class="QLineEdit" name="gestation1_abdominal_wall">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="gestation1_bladder">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0" colspan="4">
+           <widget class="Line" name="line_2">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="gestation1_stomach">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="gestation1_diaphragm">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_123">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Stomac:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="gestation1_plex_choroid">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="0">
+           <widget class="QLabel" name="label_128">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Sac vitelin:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="1">
+           <widget class="QLineEdit" name="gestation1_sac_vitelin">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="2">
+           <widget class="QLabel" name="label_129">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Lichid amniotic:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="3">
+           <widget class="QLineEdit" name="gestation1_amniotic_liquid">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>gestation1_antecedent</tabstop>
+  <tabstop>gestation1_LMP</tabstop>
+  <tabstop>gestation1_gestation</tabstop>
+  <tabstop>gestation1_probableDateBirth</tabstop>
+  <tabstop>comboMultiplePregnancy</tabstop>
+  <tabstop>gestation1_CRL_dimens</tabstop>
+  <tabstop>gestation1_CRL_age</tabstop>
+  <tabstop>gestation1_BPD_dimens</tabstop>
+  <tabstop>gestation1_BPD_age</tabstop>
+  <tabstop>gestation1_NT_dimens</tabstop>
+  <tabstop>gestation1_NT_percent</tabstop>
+  <tabstop>gestation1_BN_dimens</tabstop>
+  <tabstop>gestation1_BN_percent</tabstop>
+  <tabstop>gestation1_BCF</tabstop>
+  <tabstop>gestation1_FL_dimens</tabstop>
+  <tabstop>gestation1_FL_age</tabstop>
+  <tabstop>gestation1_callote_cranium</tabstop>
+  <tabstop>gestation1_plex_choroid</tabstop>
+  <tabstop>gestation1_vertebral_column</tabstop>
+  <tabstop>gestation1_stomach</tabstop>
+  <tabstop>gestation1_bladder</tabstop>
+  <tabstop>gestation1_diaphragm</tabstop>
+  <tabstop>gestation1_abdominal_wall</tabstop>
+  <tabstop>gestation1_location_placenta</tabstop>
+  <tabstop>gestation1_sac_vitelin</tabstop>
+  <tabstop>gestation1_amniotic_liquid</tabstop>
+  <tabstop>gestation1_miometer</tabstop>
+  <tabstop>gestation1_cervix</tabstop>
+  <tabstop>gestation1_ovary</tabstop>
+  <tabstop>gestation1_concluzion</tabstop>
+  <tabstop>gestation1_recommendation</tabstop>
+  <tabstop>scrollArea_gestation1</tabstop>
+  <tabstop>btn_add_template_gestation1</tabstop>
+  <tabstop>btn_template_gestation1</tabstop>
+  <tabstop>gestation1_view_difficult</tabstop>
+  <tabstop>gestation1_view_good</tabstop>
+  <tabstop>gestation1_view_medium</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

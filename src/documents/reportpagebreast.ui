@@ -1,0 +1,613 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageBreast</class>
+ <widget class="QWidget" name="ReportPageBreast">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>860</width>
+    <height>650</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_20">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_breast">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents_breast">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>840</width>
+        <height>630</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_31">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_12">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Glanda mamară dreapta</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_29">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_67">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="4">
+           <widget class="QLineEdit" name="breast_right_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_68">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ducturile galactofore:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="breast_right_duct">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_69">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>lig.Cooper:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="2">
+           <widget class="QLineEdit" name="breast_right_ligament">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_70">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formațiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" rowspan="2" colspan="3">
+           <widget class="QPlainTextEdit" name="breast_right_formations">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QToolButton" name="btnSelectTempletsBreastRight">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QToolButton" name="btnAddTempletsBreastRight">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_71">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Gangl. limfatici :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="4">
+           <widget class="QLineEdit" name="breast_right_ganglions">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_13">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Glanda mamară stânga</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_28">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_75">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="4">
+           <widget class="QLineEdit" name="breast_left_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_73">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ducturile galactofore:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="breast_left_duct">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_74">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>lig.Cooper:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="2">
+           <widget class="QLineEdit" name="breast_left_ligament">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_76">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formațiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" rowspan="2" colspan="3">
+           <widget class="QPlainTextEdit" name="breast_left_formations">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QToolButton" name="btnSelectTempletsBreastLeft">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QToolButton" name="btnAddTempletsBreastLeft">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_72">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Gangl. limfatici :</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="4">
+           <widget class="QLineEdit" name="breast_left_ganglions">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_19">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzia (gl.mamare)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_30">
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btn_template_breast">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_137">
+            <property name="text">
+             <string>Recomandări:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" rowspan="2">
+           <spacer name="verticalSpacer_10">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>39</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="0" column="0" rowspan="4" colspan="2">
+           <widget class="QPlainTextEdit" name="breast_concluzion">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="LineEditCustom" name="breast_recommendation"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btn_add_template_breast">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <spacer name="verticalSpacer_6">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>breast_right_ecostructure</tabstop>
+  <tabstop>breast_right_duct</tabstop>
+  <tabstop>breast_right_ligament</tabstop>
+  <tabstop>breast_right_formations</tabstop>
+  <tabstop>breast_right_ganglions</tabstop>
+  <tabstop>breast_left_ecostructure</tabstop>
+  <tabstop>breast_left_duct</tabstop>
+  <tabstop>breast_left_ligament</tabstop>
+  <tabstop>breast_left_formations</tabstop>
+  <tabstop>breast_left_ganglions</tabstop>
+  <tabstop>breast_concluzion</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

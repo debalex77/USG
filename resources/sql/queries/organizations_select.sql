@@ -1,0 +1,14 @@
+SELECT
+    id,
+    deletionMark,
+    name,
+    IDNP,
+    address,
+    telephone,
+    email,
+    comment,
+    id_contracts,
+    stamp,
+    uuid
+FROM
+    organizations

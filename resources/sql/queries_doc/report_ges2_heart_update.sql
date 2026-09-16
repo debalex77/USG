@@ -1,0 +1,20 @@
+UPDATE tableGestation2_heart SET
+    `position`                  = :position,
+    heartBeat                   = :heartBeat,
+    heartBeat_frequency         = :heartBeat_frequency,
+    heartBeat_rhythm            = :heartBeat_rhythm,
+    pericordialCollections      = :pericordialCollections,
+    planPatruCamere             = :planPatruCamere,
+    planPatruCamere_description = :planPatruCamere_description,
+    ventricularEjectionPathLeft              = :ventricularEjectionPathLeft,
+    ventricularEjectionPathLeft_description  = :ventricularEjectionPathLeft_description,
+    ventricularEjectionPathRight             = :ventricularEjectionPathRight,
+    ventricularEjectionPathRight_description = :ventricularEjectionPathRight_description,
+    intersectionVesselMagistral              = :intersectionVesselMagistral,
+    intersectionVesselMagistral_description  = :intersectionVesselMagistral_description,
+    planTreiVase             = :planTreiVase,
+    planTreiVase_description = :planTreiVase_description,
+    archAorta                = :archAorta,
+    planBicav                = :planBicav
+WHERE
+    id_reportEcho = :id_reportEcho

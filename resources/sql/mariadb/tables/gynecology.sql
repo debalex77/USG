@@ -1,0 +1,40 @@
+CREATE TABLE IF NOT EXISTS `tableGynecology` (
+    `id`                          BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_reportEcho`               BIGINT UNSIGNED NOT NULL,
+    `transvaginal`                BOOLEAN,
+    `dateMenstruation`            DATE DEFAULT NULL,
+    `antecedent`                  VARCHAR(150) DEFAULT NULL,
+    `uterus_dimens`               VARCHAR(25) DEFAULT NULL,
+    `uterus_pozition`             VARCHAR(30) DEFAULT NULL,
+    `uterus_ecostructure`         VARCHAR(30) DEFAULT NULL,
+    `uterus_formations`           VARCHAR(500) DEFAULT NULL,
+    `ecou_dimens`                 VARCHAR(5) DEFAULT NULL,
+    `ecou_ecostructure`           VARCHAR(100) DEFAULT NULL,
+    `cervix_dimens`               VARCHAR(25) DEFAULT NULL,
+    `cervix_ecostructure`         VARCHAR(100) DEFAULT NULL,
+    `douglas`                     VARCHAR(100) DEFAULT NULL,
+    `plex_venos`                  VARCHAR(150) DEFAULT NULL,
+    `ovary_right_dimens`          VARCHAR(25) DEFAULT NULL,
+    `ovary_left_dimens`           VARCHAR(25) DEFAULT NULL,
+    `ovary_right_volum`           VARCHAR(5) DEFAULT NULL,
+    `ovary_left_volum`            VARCHAR(5) DEFAULT NULL,
+    `ovary_right_follicle`        VARCHAR(100) DEFAULT NULL,
+    `ovary_left_follicle`         VARCHAR(100) DEFAULT NULL,
+    `ovary_right_formations`      VARCHAR(300) DEFAULT NULL,
+    `ovary_left_formations`       VARCHAR(300) DEFAULT NULL,
+    `junctional_zone`             enum('contur clar','contur sters') DEFAULT 'contur clar',
+    `junctional_zone_description` VARCHAR(256) DEFAULT NULL,
+    `cervical_canal`              enum('nedilatat','dilatat') DEFAULT 'nedilatat',
+    `cervical_canal_formations`   VARCHAR(256) DEFAULT NULL,
+    `fallopian_tubes`             enum('nonvizibile','vizibile') DEFAULT 'nonvizibile',
+    `fallopian_tubes_formations`  VARCHAR(256) DEFAULT NULL,
+    `concluzion`                  VARCHAR(500) DEFAULT NULL,
+    `recommendation`              VARCHAR(255) DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `idx_tableGynecology_reportEcho` (`id_reportEcho`),
+    CONSTRAINT `fk_tableGynecology_reportEcho`
+        FOREIGN KEY (`id_reportEcho`)
+        REFERENCES `reportEcho` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
+) ENGINE=InnoDB;

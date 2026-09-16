@@ -1,4 +1,21 @@
-LimeReport
-build
-openssl
+# Local third-party build outputs
+/3rdparty/LimeReport/
+/3rdparty/LimeReport_*/
+/3rdparty/openssl/
+
+# qmake/Qt Creator build outputs
+/build/
+/build-*/
+/qmake_qmake_qm_files.qrc
 USG.pro.user
+*.pro.user
+
+# Local tests and databases (may contain confidential data)
+/test/
+*.sqlite
+*.sqlite3
+*.db
+
+# Local logs and temporary archives
+*.log
+/resources/img.zip

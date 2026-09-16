@@ -1,13 +1,13 @@
 [Desktop Entry]
 Name=USG-Evidența investigațiilor ecografice
-Comment[en]=USG Evidence of ultrasound investigations v3.0.6
-Comment[ru]=УЗИ-учёт ультразвуковых исследований v3.0.6
-Comment[ro]=USG-Evidența investigațiilor ecografice v3.0.6
-Version=3.0.6
+Comment=Gestionarea pacienților și a rapoartelor ecografice
+Comment[en]=Manage patients and ultrasound examination reports
+Comment[ru]=Управление пациентами и протоколами УЗИ
+Comment[ro]=Gestionarea pacienților și a rapoartelor ecografice
+Version=1.0
 Exec=/opt/USG/USG.sh
 Icon=/opt/USG/icons/eco_248x248.ico
 Type=Application
-Categories=Utility;Database;MedicalSoftware;Qt;
+Categories=Science;MedicalSoftware;Qt;
 StartupWMClass=USG
 Terminal=false
-Encoding=UTF-8

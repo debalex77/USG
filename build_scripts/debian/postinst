@@ -2,24 +2,23 @@
 
 set -e
 
-SRC_FILE=/opt/USG/USG.sh
-LOG_DIR=/var/log/usg
-TEMPLETS_DIR=/opt/USG/templets
-SYMLINK=/usr/bin/usg
+SRC_FILE="/opt/USG/USG.sh"
+LOG_DIR="/var/log/usg"
+TEMPLETS_DIR="/opt/USG/templets"
+SYMLINK="/usr/bin/usg"
 
-if [ "$1" = "configure" ] ; then
-    
-    ln -s $SRC_FILE $SYMLINK
-    
-    mkdir $LOG_DIR
-    echo "Create directory $LOG_DIR"
-    
-    chmod 777 $LOG_DIR
-    echo "File permissions $LOG_DIR"
-    
-    chmod 777 $TEMPLETS_DIR
-    echo "File permissions $TEMPLETS_DIR"
+if [ "${1:-}" = "configure" ]; then
+    ln -sfn -- "$SRC_FILE" "$SYMLINK"
 
+    # USG rulează cu drepturile utilizatorului și scrie logurile în acest
+    # director comun. Sticky bit împiedică ștergerea fișierelor altui utilizator.
+    install -d -m 1777 "$LOG_DIR"
+
+    # Șabloanele sunt redactabile din LimeReport Designer. Păstrăm directoarele
+    # traversabile și permitem salvarea șabloanelor în instalarea sistem-wide.
+    if [ -d "$TEMPLETS_DIR" ]; then
+        chmod -R a+rwX "$TEMPLETS_DIR"
+    fi
 fi
 
 exit 0

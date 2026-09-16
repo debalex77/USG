@@ -393,7 +393,7 @@
                           <itemLocation Type="enumAndFlags" Value="0"/>
                           <stretchToMaxHeight Type="bool" Value="0"/>
                           <itemAlign Type="enumAndFlags" Value="4"/>
-                          <content Type="QString">&lt;span style="font-weight: bold ">IDNP: &lt;/span>&lt;span>$D{table_patient.IDNP}&lt;/span></content>
+                          <content Type="QString">&lt;span style="font-weight: bold ">IDNP: &lt;/span>&lt;span>$D{table_patient.idnp}&lt;/span></content>
                           <margin Type="int" Value="4"/>
                           <alignment Type="enumAndFlags" Value="129"/>
                           <autoWidth Type="enumAndFlags" Value="0"/>
@@ -508,7 +508,7 @@
                           <itemLocation Type="enumAndFlags" Value="0"/>
                           <stretchToMaxHeight Type="bool" Value="0"/>
                           <itemAlign Type="enumAndFlags" Value="4"/>
-                          <content Type="QString">&lt;span style="font-weight: bold ">Polita medicala: &lt;/span>&lt;span>$D{table_patient.medicalPolicy}&lt;/span></content>
+                          <content Type="QString">&lt;span style="font-weight: bold ">Polita medicala: &lt;/span>&lt;span>$D{table_patient.medical_policy}&lt;/span></content>
                           <margin Type="int" Value="4"/>
                           <alignment Type="enumAndFlags" Value="129"/>
                           <autoWidth Type="enumAndFlags" Value="0"/>
@@ -4096,6 +4096,7 @@ Reportpage1_signature_doctor.isVisible = parseInt(getVariable("v_export_pdf"), 1
 true</initScript>
     </scriptContext>
     <suppressFieldAndVarError Type="bool" Value="0"/>
+    <baseItemPadding Type="int" Value="0"/>
     <translation Type="Translation"/>
   </object>
 </Report>

@@ -1,0 +1,9 @@
+SELECT
+    id,
+    name,
+    contract_owner,
+    contract_dateInit,
+    name_typePrice,
+    id_typesPrices
+FROM
+    v_contracts_listView_active

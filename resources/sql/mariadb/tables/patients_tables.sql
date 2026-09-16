@@ -1,0 +1,21 @@
+CREATE TABLE IF NOT EXISTS `patients` (
+    `id`             BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `deletion_mark`  TINYINT(1) NOT NULL DEFAULT 0,
+    `idnp`           VARCHAR (20),
+    `last_name`      VARCHAR (80) NOT NULL,
+    `first_name`     VARCHAR (50),
+    `middle_name`    VARCHAR (50),
+    `medical_policy` VARCHAR (20),
+    `birthday`       DATE NOT NULL,
+    `address`        VARCHAR (255),
+    `telephone`      VARCHAR (100),
+    `email`          VARCHAR (100),
+    `comment`        VARCHAR (255),
+    `uuid`           BINARY(16) NOT NULL,
+    PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_patients_uuid` (`uuid`),
+    KEY `idx_patients_idnp` (`idnp`),
+    KEY `idx_patients_medical_policy` (`medical_policy`),
+    KEY `idx_patients_name` (`last_name`, `first_name`),
+    KEY `idx_patients_telephone` (`telephone`)
+) ENGINE=InnoDB;

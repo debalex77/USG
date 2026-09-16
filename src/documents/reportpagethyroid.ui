@@ -1,0 +1,549 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageThyroid</class>
+ <widget class="QWidget" name="ReportPageThyroid">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>840</width>
+    <height>600</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_22">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_thyroid">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents_thyroid">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>820</width>
+        <height>580</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_35">
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_14">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Galnda tiroidă</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_34">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_77">
+            <property name="text">
+             <string>Dimensiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="5">
+           <spacer name="horizontalSpacer_17">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>708</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_78">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>l.drept:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QLineEdit" name="thyroid_right_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="label_80">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>volum:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLineEdit" name="thyroid_right_volum">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>84</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>84</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4" colspan="2">
+           <spacer name="horizontalSpacer_15">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeType">
+             <enum>QSizePolicy::Policy::Preferred</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>317</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_79">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>l.stâng:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QLineEdit" name="thyroid_left_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLabel" name="label_81">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>volum:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLineEdit" name="thyroid_left_volum">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="minimumSize">
+             <size>
+              <width>84</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>84</width>
+              <height>16777215</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_82">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>istmul</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QLineEdit" name="thyroid_istm">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="4">
+           <spacer name="horizontalSpacer_16">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>429</width>
+              <height>23</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_83">
+            <property name="text">
+             <string>Ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1" colspan="5">
+           <widget class="QLineEdit" name="thyroid_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="0">
+           <widget class="QLabel" name="label_84">
+            <property name="text">
+             <string>Formațiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="1" rowspan="2" colspan="4">
+           <widget class="QPlainTextEdit" name="thyroid_formations">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Maximum">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="5" column="5">
+           <widget class="QToolButton" name="btnSelectTempletsThyroid">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="6" column="5">
+           <widget class="QToolButton" name="btnAddTempletsThyroid">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="0">
+           <widget class="QLabel" name="label_85">
+            <property name="text">
+             <string>Galgl.limfat.</string>
+            </property>
+           </widget>
+          </item>
+          <item row="7" column="1" colspan="5">
+           <widget class="QLineEdit" name="thyroid_ganglions">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_20">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzia (gl.tiroidă)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_32">
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btn_template_thyroid">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="4" colspan="2">
+           <widget class="QPlainTextEdit" name="thyroid_concluzion">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" rowspan="2">
+           <spacer name="verticalSpacer_11">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>30</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="1">
+           <widget class="LineEditCustom" name="thyroid_recommendation"/>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_101">
+            <property name="text">
+             <string>Recomandări:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btn_add_template_thyroid">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <spacer name="verticalSpacer_5">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>thyroid_right_dimens</tabstop>
+  <tabstop>thyroid_right_volum</tabstop>
+  <tabstop>thyroid_left_dimens</tabstop>
+  <tabstop>thyroid_left_volum</tabstop>
+  <tabstop>thyroid_istm</tabstop>
+  <tabstop>thyroid_ecostructure</tabstop>
+  <tabstop>thyroid_formations</tabstop>
+  <tabstop>thyroid_ganglions</tabstop>
+  <tabstop>thyroid_concluzion</tabstop>
+  <tabstop>thyroid_recommendation</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

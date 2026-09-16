@@ -1,0 +1,1045 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageOrgansInternal</class>
+ <widget class="QWidget" name="ReportPageOrgansInternal">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>840</width>
+    <height>878</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_7">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_organs_internal">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents_organs_internal">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>820</width>
+        <height>858</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_4">
+       <item row="1" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Colecistul</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_5">
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_16">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formatiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_13">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Forma:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLineEdit" name="cholecist_walls">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_14">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>dimens:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLineEdit" name="cholecist_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label_15">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>peretii:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_43">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>coledoc:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="5">
+           <widget class="LineEditCustom" name="cholecist_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="8">
+           <widget class="QLineEdit" name="cholecist_coledoc">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="3">
+           <widget class="QLineEdit" name="cholecist_form">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_16">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzia (organe interne)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_24">
+          <item row="3" column="2" rowspan="2">
+           <spacer name="verticalSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>9</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_135">
+            <property name="text">
+             <string>Recomandări:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="4" colspan="2">
+           <widget class="QPlainTextEdit" name="organsInternal_concluzion">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btnSelectTemplatesConclusion">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="LineEditCustom" name="organsInternal_recommendation"/>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btnAddTemplatesConclusion">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>Adaugă</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Pancreas</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_6">
+          <item row="1" column="8">
+           <widget class="QLineEdit" name="pancreas_ecogenity">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_20">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formatiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
+           <widget class="QLabel" name="label_19">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ecogenitatea:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLabel" name="label_18">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>parenchima:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLineEdit" name="pancreas_corp">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLineEdit" name="pancreas_parenchyma">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_44">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>corp:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5">
+           <widget class="QLabel" name="label_45">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>coada:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_17">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Cefal:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="pancreas_cefal">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLineEdit" name="pancreas_tail"/>
+          </item>
+          <item row="1" column="1" colspan="6">
+           <widget class="LineEditCustom" name="pancreas_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Ficatul</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_9">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>formatiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" colspan="2">
+           <widget class="QLineEdit" name="liver_left">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="liver_porta">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_6">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>contur:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7" colspan="2">
+           <spacer name="horizontalSpacer_4">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="1" column="5" colspan="2">
+           <widget class="QLineEdit" name="liver_parenchyma">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" colspan="2">
+           <widget class="QLabel" name="label_5">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>l.stang</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3">
+           <widget class="QLabel" name="label_11">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>v.lienalis</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_7">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>parenchima:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_12">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>duct.i/hepatice:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" colspan="2">
+           <widget class="QLineEdit" name="liver_right">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_10">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>v.porta</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="2">
+           <widget class="QLineEdit" name="liver_contour">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="8">
+           <widget class="QLineEdit" name="liver_ecogenity">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="5">
+           <widget class="QLineEdit" name="liver_lienalis">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1" colspan="8">
+           <widget class="QLineEdit" name="liver_duct_hepatic">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="8">
+           <widget class="LineEditCustom" name="liver_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7">
+           <widget class="QLabel" name="label_8">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ecogenitatea :</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_4">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dimensiuni: l.drept</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_4">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Splina</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_10">
+          <item row="0" column="5">
+           <widget class="QLabel" name="label_23">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>parenchima:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_21">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dimensiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4" rowspan="2">
+           <widget class="QLineEdit" name="spleen_contour">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3" rowspan="2">
+           <widget class="QLabel" name="label_22">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>contur:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2" rowspan="2">
+           <widget class="QLineEdit" name="spleen_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6" rowspan="2">
+           <widget class="QLineEdit" name="spleen_parenchyma">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_24">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formatiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2" colspan="5">
+           <widget class="LineEditCustom" name="spleen_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="2">
+        <widget class="QGroupBox" name="groupBox_32">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>A.intestinale</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_80">
+          <item row="0" column="0" rowspan="3">
+           <widget class="QLabel" name="label_153">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formațiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btnSelectTemplatesIntestin">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btnAddTemplatesIntestin">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1" rowspan="3">
+           <widget class="QPlainTextEdit" name="intestinalHandles">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>liver_right</tabstop>
+  <tabstop>liver_left</tabstop>
+  <tabstop>liver_contour</tabstop>
+  <tabstop>liver_parenchyma</tabstop>
+  <tabstop>liver_ecogenity</tabstop>
+  <tabstop>liver_formations</tabstop>
+  <tabstop>liver_duct_hepatic</tabstop>
+  <tabstop>liver_porta</tabstop>
+  <tabstop>liver_lienalis</tabstop>
+  <tabstop>cholecist_form</tabstop>
+  <tabstop>cholecist_dimens</tabstop>
+  <tabstop>cholecist_walls</tabstop>
+  <tabstop>cholecist_formations</tabstop>
+  <tabstop>cholecist_coledoc</tabstop>
+  <tabstop>pancreas_cefal</tabstop>
+  <tabstop>pancreas_corp</tabstop>
+  <tabstop>pancreas_tail</tabstop>
+  <tabstop>pancreas_parenchyma</tabstop>
+  <tabstop>pancreas_formations</tabstop>
+  <tabstop>pancreas_ecogenity</tabstop>
+  <tabstop>spleen_dimens</tabstop>
+  <tabstop>spleen_contour</tabstop>
+  <tabstop>spleen_parenchyma</tabstop>
+  <tabstop>spleen_formations</tabstop>
+  <tabstop>intestinalHandles</tabstop>
+  <tabstop>organsInternal_concluzion</tabstop>
+  <tabstop>organsInternal_recommendation</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

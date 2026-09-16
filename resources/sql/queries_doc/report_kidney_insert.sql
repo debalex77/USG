@@ -1,0 +1,29 @@
+INSERT INTO tableKidney (
+    id_reportEcho,
+    contour_right,
+    contour_left,
+    dimens_right,
+    dimens_left,
+    corticomed_right,
+    corticomed_left,
+    pielocaliceal_right,
+    pielocaliceal_left,
+    formations,
+    suprarenal_formations,
+    concluzion,
+    recommendation
+) VALUES (
+    :id_reportEcho,
+    :contour_right,
+    :contour_left,
+    :dimens_right,
+    :dimens_left,
+    :corticomed_right,
+    :corticomed_left,
+    :pielocaliceal_right,
+    :pielocaliceal_left,
+    :formations,
+    :suprarenal_formations,
+    :concluzion,
+    :recommendation
+)

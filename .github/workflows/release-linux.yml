@@ -1,0 +1,256 @@
+name: Linux release packages
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: linux-release-${{ github.ref }}
+  cancel-in-progress: false
+
+env:
+  QT_VERSION: 6.9.3
+  LIMEREPORT_VERSION: 1.7.23
+  LIMEREPORT_COMMIT: e6210b58a46ab14c0ff8a409b5fa5d339937ea7c
+
+jobs:
+  packages:
+    name: Qt 6.9.3 / Linux x86_64 packages
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+
+    steps:
+      - name: Check out the release source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Validate the release version
+        shell: bash
+        run: |
+          set -euo pipefail
+          version="$(tr -d '[:space:]' < version.txt)"
+          test -n "${version}"
+          echo "RELEASE_VERSION=${version}" >> "${GITHUB_ENV}"
+
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            tag_version="${GITHUB_REF_NAME#v}"
+            if [[ "${tag_version}" != "${version}" ]]; then
+              echo "Tagul ${GITHUB_REF_NAME} nu corespunde cu version.txt (${version})." >&2
+              exit 1
+            fi
+          fi
+
+      - name: Install Linux build and packaging dependencies
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update
+          sudo apt-get install --yes --no-install-recommends \
+            build-essential \
+            curl \
+            desktop-file-utils \
+            file \
+            libgl1-mesa-dev \
+            libpulse-dev \
+            libssl-dev \
+            libxkbcommon-x11-0 \
+            libxcb-cursor0 \
+            libxcb-xinerama0 \
+            lld \
+            rsync
+
+      - name: Install Qt and Qt Installer Framework
+        uses: jurplel/install-qt-action@v4
+        with:
+          version: ${{ env.QT_VERSION }}
+          modules: qtmultimedia qtpositioning qtsvg qttools qtwebchannel qtwebengine
+          tools: tools_ifw,4.10.0,qt.tools.ifw.410
+          cache: true
+
+      - name: Install CQtDeployer
+        uses: QuasarApp/cqtdeployer-install-action@v1.0.0
+
+      - name: Install AppImageTool
+        shell: bash
+        run: |
+          set -euo pipefail
+          appimagetool="${RUNNER_TEMP}/appimagetool-x86_64.AppImage"
+          curl --fail --location --retry 3 \
+            --output "${appimagetool}" \
+            https://github.com/AppImage/appimagetool/releases/download/continuous/appimagetool-x86_64.AppImage
+          chmod +x "${appimagetool}"
+          echo "APPIMAGETOOL=${appimagetool}" >> "${GITHUB_ENV}"
+
+      - name: Fetch the pinned LimeReport source
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_source="${RUNNER_TEMP}/LimeReport-${LIMEREPORT_VERSION}"
+          git init "${lime_source}"
+          git -C "${lime_source}" remote add origin https://github.com/fralx/LimeReport.git
+          git -C "${lime_source}" fetch --depth=1 origin "${LIMEREPORT_COMMIT}"
+          git -C "${lime_source}" checkout --detach FETCH_HEAD
+          test "$(git -C "${lime_source}" rev-parse HEAD)" = "${LIMEREPORT_COMMIT}"
+          git -C "${lime_source}" apply \
+            "${GITHUB_WORKSPACE}/patches/limereport/${LIMEREPORT_VERSION}/0001-make-singleton-destruction-idempotent.patch"
+          echo "LIMEREPORT_SOURCE_DIR=${lime_source}" >> "${GITHUB_ENV}"
+
+      - name: Build LimeReport with qmake
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_build="${RUNNER_TEMP}/LimeReport-build"
+          mkdir -p "${lime_build}"
+          cd "${lime_build}"
+          qmake "${LIMEREPORT_SOURCE_DIR}/limereport.pro" \
+            CONFIG+=release \
+            CONFIG+=no_build_translations
+          make -j2 sub-limereport-all-ordered
+
+      - name: Prepare third-party runtime files
+        shell: bash
+        run: |
+          set -euo pipefail
+          lime_lib="${LIMEREPORT_SOURCE_DIR}/build/${QT_VERSION}/linux64/release/lib"
+          usg_lime="${GITHUB_WORKSPACE}/3rdparty/LimeReport"
+
+          test -f "${lime_lib}/liblimereport.so.1.0.0"
+          test -f "${lime_lib}/libQtZint.so"
+          test -d "${LIMEREPORT_SOURCE_DIR}/include"
+
+          mkdir -p "${usg_lime}/include" "${usg_lime}/release"
+          cp -a "${LIMEREPORT_SOURCE_DIR}/include/." "${usg_lime}/include/"
+          cp -a "${lime_lib}/liblimereport.so"* "${usg_lime}/release/"
+          cp -a "${lime_lib}/libQtZint.so"* "${usg_lime}/release/"
+
+          mkdir -p "${GITHUB_WORKSPACE}/3rdparty/openssl"
+          cp /usr/lib/x86_64-linux-gnu/libcrypto.so.3 \
+            "${GITHUB_WORKSPACE}/3rdparty/openssl/"
+          cp /usr/lib/x86_64-linux-gnu/libssl.so.3 \
+            "${GITHUB_WORKSPACE}/3rdparty/openssl/"
+
+      - name: Build USG Release with qmake
+        shell: bash
+        run: |
+          set -euo pipefail
+          release_dir="${GITHUB_WORKSPACE}/build/Desktop_Qt_6_9_3-Release"
+          mkdir -p "${release_dir}"
+          cd "${release_dir}"
+          qmake "${GITHUB_WORKSPACE}/USG.pro" CONFIG+=release
+          make -j2
+          test -x USG
+          if ldd USG | grep -F "not found"; then
+            exit 1
+          fi
+
+      - name: Create Linux packages
+        shell: bash
+        env:
+          APPIMAGE_EXTRACT_AND_RUN: "1"
+        run: |
+          set -euo pipefail
+          binarycreator="$(command -v binarycreator)"
+          test -n "${binarycreator}"
+          export QT_BIN_DIR="${QT_ROOT_DIR}/bin"
+          export QT_LIB_DIR="${QT_ROOT_DIR}/lib"
+          export QT_PLUGINS_DIR="${QT_ROOT_DIR}/plugins"
+          BINARYCREATOR="${binarycreator}" \
+          QMAKE="$(command -v qmake)" \
+          LIMEREPORT_SOURCE_DIR="${LIMEREPORT_SOURCE_DIR}" \
+          APPIMAGETOOL="${APPIMAGETOOL}" \
+          KEEP_BUILD=0 \
+            ./build_scripts/build_new
+
+      - name: Verify packages and checksums
+        shell: bash
+        run: |
+          set -euo pipefail
+          cd build
+          artifacts=(
+            "USG_v${RELEASE_VERSION}_Linux_amd64.run"
+            "USG_v${RELEASE_VERSION}_Linux_amd64.deb"
+            "USG_v${RELEASE_VERSION}-x86_64.AppImage"
+            "LimeReport_v${LIMEREPORT_VERSION}_USG_source.tar.gz"
+          )
+          checksum_files=(
+            "USG_v${RELEASE_VERSION}_Linux_amd64_run.sha256"
+            "USG_v${RELEASE_VERSION}_Linux_amd64_deb.sha256"
+            "USG_v${RELEASE_VERSION}-x86_64_AppImage.sha256"
+            "LimeReport_v${LIMEREPORT_VERSION}_USG_source.sha256"
+          )
+
+          for index in "${!artifacts[@]}"; do
+            artifact="${artifacts[$index]}"
+            checksum_file="${checksum_files[$index]}"
+            test -s "${artifact}"
+            test -s "${checksum_file}"
+            expected="$(tr -d '[:space:]' < "${checksum_file}")"
+            actual="$(sha256sum "${artifact}" | awk '{print $1}')"
+            test "${expected}" = "${actual}"
+          done
+
+          dpkg-deb --info "USG_v${RELEASE_VERSION}_Linux_amd64.deb" >/dev/null
+          offset="$("./USG_v${RELEASE_VERSION}-x86_64.AppImage" --appimage-offset)"
+          test "${offset}" -gt 0
+
+      - name: Upload packages for workflow verification
+        uses: actions/upload-artifact@v4
+        with:
+          name: USG-Linux-packages
+          path: |
+            build/USG_v*_Linux_amd64.run
+            build/USG_v*_Linux_amd64.deb
+            build/USG_v*-x86_64.AppImage
+            build/USG_v*_Linux_amd64_run.sha256
+            build/USG_v*_Linux_amd64_deb.sha256
+            build/USG_v*-x86_64_AppImage.sha256
+            build/LimeReport_v*_USG_source.tar.gz
+            build/LimeReport_v*_USG_source.sha256
+            release.md
+          if-no-files-found: error
+          retention-days: 14
+
+      - name: Create draft GitHub Release and upload packages
+        if: github.ref_type == 'tag'
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          artifacts=(
+            "build/USG_v${RELEASE_VERSION}_Linux_amd64.run"
+            "build/USG_v${RELEASE_VERSION}_Linux_amd64.deb"
+            "build/USG_v${RELEASE_VERSION}-x86_64.AppImage"
+            "build/USG_v${RELEASE_VERSION}_Linux_amd64_run.sha256"
+            "build/USG_v${RELEASE_VERSION}_Linux_amd64_deb.sha256"
+            "build/USG_v${RELEASE_VERSION}-x86_64_AppImage.sha256"
+            "build/LimeReport_v${LIMEREPORT_VERSION}_USG_source.tar.gz"
+            "build/LimeReport_v${LIMEREPORT_VERSION}_USG_source.sha256"
+          )
+
+          if gh release view "${GITHUB_REF_NAME}" >/dev/null 2>&1; then
+            is_draft="$(gh api \
+              "repos/${GITHUB_REPOSITORY}/releases/tags/${GITHUB_REF_NAME}" \
+              --jq '.draft')"
+            if [[ "${is_draft}" != "true" ]]; then
+              echo "Release-ul ${GITHUB_REF_NAME} este deja publicat; nu este suprascris automat." >&2
+              exit 1
+            fi
+
+            gh release edit "${GITHUB_REF_NAME}" \
+              --title "USG ${GITHUB_REF_NAME}" \
+              --notes-file release.md
+            gh release upload "${GITHUB_REF_NAME}" "${artifacts[@]}" --clobber
+          else
+            gh release create "${GITHUB_REF_NAME}" "${artifacts[@]}" \
+              --draft \
+              --verify-tag \
+              --title "USG ${GITHUB_REF_NAME}" \
+              --notes-file release.md
+          fi

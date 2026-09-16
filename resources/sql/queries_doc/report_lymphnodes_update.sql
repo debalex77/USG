@@ -1,0 +1,25 @@
+UPDATE tableSofTissuesLymphNodes SET
+    section_type           = :section_type,
+    examinedArea           = :examinedArea,
+    clinicalIndications    = :clinicalIndications,
+    skin_structure         = :skin_structure,
+    subcutaneous_tissue    = :subcutaneous_tissue,
+    lesion_location        = :lesion_location,
+    lesion_size            = :lesion_size,
+    lesion_echogenicity    = :lesion_echogenicity,
+    lesion_contour         = :lesion_contour,
+    lesion_vascularization = :lesion_vascularization,
+    ln_number              = :ln_number,
+    ln_size_nodes          = :ln_size_nodes,
+    ln_shape               = :ln_shape,
+    ln_echogenic_hilum     = :ln_echogenic_hilum,
+    ln_cortex              = :ln_cortex,
+    ln_structure           = :ln_structure,
+    ln_contour             = :ln_contour,
+    ln_vascularization     = :ln_vascularization,
+    ln_associated_changes  = :ln_associated_changes,
+    other_changes          = :other_changes,
+    concluzion             = :concluzion,
+    recommendation         = :recommendation
+WHERE
+    id_reportEcho = :id_reportEcho

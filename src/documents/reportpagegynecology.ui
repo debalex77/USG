@@ -1,0 +1,1196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageGynecology</class>
+ <widget class="QWidget" name="ReportPageGynecology">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>960</width>
+    <height>840</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_21">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_gynecology">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContents_gynecology">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>926</width>
+        <height>918</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_27">
+       <item row="0" column="0">
+        <widget class="QGroupBox" name="groupBox_8">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Metoda de examinare, antecedente ginecologice ...</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_19">
+          <item row="0" column="1">
+           <widget class="QRadioButton" name="gynecology_btn_transabdom">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>transabdominal</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_47">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ziua ultimei menstruației:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QRadioButton" name="gynecology_btn_transvaginal">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>transvaginal</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1">
+           <widget class="QDateEdit" name="gynecology_dateMenstruation">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="calendarPopup">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QLabel" name="gynecology_text_date_menstruation">
+            <property name="font">
+             <font>
+              <family>Cantarell</family>
+              <bold>true</bold>
+              <underline>true</underline>
+             </font>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">padding-left: 2px; color: rgb(245, 121, 0); </string>
+            </property>
+            <property name="text">
+             <string>TextLabel</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="4">
+           <widget class="QLineEdit" name="gynecology_antecedent">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_46">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Metoda de examinare:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3">
+           <widget class="QLabel" name="label_48">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Antecedente:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QGroupBox" name="groupBox_10">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Colul uterin</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_18">
+          <item row="0" column="2">
+           <widget class="QLineEdit" name="gynecology_cervix_dimens">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QLineEdit" name="gynecology_plex_venos"/>
+          </item>
+          <item row="2" column="3">
+           <widget class="QLabel" name="label_66">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>plex.venoase:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLabel" name="label_56">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLineEdit" name="gynecology_cervix_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_55">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dimensiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QLineEdit" name="gynecology_douglas">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_65">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Sp.Douglas:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_158">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Canal cervical:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="3" colspan="2">
+           <widget class="QLineEdit" name="gynecology_canal_cervical_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QComboBox" name="gynecology_combo_canal_cervical">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>nedilatat</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>dilatat</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Uterul</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_16">
+          <item row="4" column="2">
+           <widget class="QLabel" name="label_54">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="QLineEdit" name="gynecology_ecou_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QToolButton" name="btnAddTempletsUter">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" colspan="2">
+           <widget class="QLineEdit" name="gynecology_uterus_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="gynecology_uterus_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QToolButton" name="btnSelectTempletsUter">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_49">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Dimensiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="gynecology_uterus_pozition">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_52">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Formațiuni:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="4">
+           <widget class="QLabel" name="label_51">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>ecostructura:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" rowspan="2" colspan="5">
+           <widget class="QPlainTextEdit" name="gynecology_uterus_formations">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_53">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Ecou median:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="3" colspan="4">
+           <widget class="QLineEdit" name="gynecology_ecou_ecostructure">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_50">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>poziția:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="0">
+           <widget class="QLabel" name="label_159">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>Zona de joncț.:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="1">
+           <widget class="QComboBox" name="gynecology_combo_jonctional_zone">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>contur clar</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>contur sters</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="3" column="2" colspan="5">
+           <widget class="QLineEdit" name="gynecology_jonctional_zone_description">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0">
+        <widget class="QGroupBox" name="groupBox_11">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Ovare</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_17">
+          <item row="2" column="7" rowspan="2" colspan="3">
+           <widget class="QPlainTextEdit" name="gynecology_ovary_formations_left">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="6">
+           <widget class="QLabel" name="label_58">
+            <property name="text">
+             <string>Ovarul stâng:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="7" colspan="3">
+           <widget class="QLineEdit" name="gynecology_follicule_left">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="6">
+           <widget class="QLabel" name="label_62">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>foliculi:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="1" colspan="3">
+           <widget class="QLineEdit" name="gynecology_follicule_right">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="0">
+           <widget class="QLabel" name="label_61">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>foliculi:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="gynecology_ovary_right_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_63">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>formațiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="5" rowspan="4">
+           <widget class="Line" name="line_4">
+            <property name="frameShadow">
+             <enum>QFrame::Shadow::Sunken</enum>
+            </property>
+            <property name="lineWidth">
+             <number>2</number>
+            </property>
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="4">
+           <widget class="QToolButton" name="btnSelectTempletsOvarRight">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="7">
+           <widget class="QLineEdit" name="gynecology_ovary_left_dimens">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" rowspan="2" colspan="3">
+           <widget class="QPlainTextEdit" name="gynecology_ovary_formations_right">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="10">
+           <widget class="QToolButton" name="btnAddTempletsOvarLeft">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QLabel" name="label_59">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>volum:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="6">
+           <widget class="QLabel" name="label_64">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>formațiuni:</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="10">
+           <widget class="QToolButton" name="btnSelectTempletsOvarLeft">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_57">
+            <property name="text">
+             <string>Ovarul drept:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="3">
+           <widget class="QLineEdit" name="gynecology_ovary_right_volum">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="8">
+           <widget class="QLabel" name="label_60">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="text">
+             <string>volum:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="9">
+           <widget class="QLineEdit" name="gynecology_ovary_left_volum">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="4">
+           <widget class="QToolButton" name="btnAddTempletsOvarRight">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <widget class="QGroupBox" name="groupBox_15">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzia ginecologică</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_23">
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btn_template_gynecology">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="4" colspan="2">
+           <widget class="QPlainTextEdit" name="gynecology_concluzion">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <widget class="QToolButton" name="btn_add_template_gynecology">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="3" column="2" rowspan="2">
+           <spacer name="verticalSpacer_9">
+            <property name="orientation">
+             <enum>Qt::Orientation::Vertical</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>20</width>
+              <height>30</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+          <item row="4" column="0">
+           <widget class="QLabel" name="label_100">
+            <property name="text">
+             <string>Recomandări:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="4" column="1">
+           <widget class="LineEditCustom" name="gynecology_recommendation">
+            <property name="font">
+             <font>
+              <bold>false</bold>
+             </font>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="4" column="0">
+        <widget class="QGroupBox" name="groupBox_34">
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Trompe uterine</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_82">
+          <item row="0" column="0">
+           <widget class="QComboBox" name="gynecology_combo_fallopian_tubes">
+            <property name="minimumSize">
+             <size>
+              <width>150</width>
+              <height>0</height>
+             </size>
+            </property>
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <item>
+             <property name="text">
+              <string>nonvizibile</string>
+             </property>
+            </item>
+            <item>
+             <property name="text">
+              <string>vizibile</string>
+             </property>
+            </item>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLineEdit" name="gynecology_fallopian_tubes_formations">
+            <property name="font">
+             <font>
+              <family>Segoe UI</family>
+              <bold>false</bold>
+             </font>
+            </property>
+            <property name="clearButtonEnabled">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>gynecology_btn_transabdom</tabstop>
+  <tabstop>gynecology_btn_transvaginal</tabstop>
+  <tabstop>gynecology_dateMenstruation</tabstop>
+  <tabstop>gynecology_antecedent</tabstop>
+  <tabstop>gynecology_uterus_dimens</tabstop>
+  <tabstop>gynecology_uterus_pozition</tabstop>
+  <tabstop>gynecology_uterus_ecostructure</tabstop>
+  <tabstop>gynecology_uterus_formations</tabstop>
+  <tabstop>gynecology_combo_jonctional_zone</tabstop>
+  <tabstop>gynecology_jonctional_zone_description</tabstop>
+  <tabstop>gynecology_ecou_dimens</tabstop>
+  <tabstop>gynecology_ecou_ecostructure</tabstop>
+  <tabstop>gynecology_cervix_dimens</tabstop>
+  <tabstop>gynecology_cervix_ecostructure</tabstop>
+  <tabstop>gynecology_combo_canal_cervical</tabstop>
+  <tabstop>gynecology_canal_cervical_formations</tabstop>
+  <tabstop>gynecology_douglas</tabstop>
+  <tabstop>gynecology_plex_venos</tabstop>
+  <tabstop>gynecology_ovary_right_dimens</tabstop>
+  <tabstop>gynecology_ovary_right_volum</tabstop>
+  <tabstop>gynecology_ovary_left_dimens</tabstop>
+  <tabstop>gynecology_ovary_left_volum</tabstop>
+  <tabstop>gynecology_follicule_right</tabstop>
+  <tabstop>gynecology_follicule_left</tabstop>
+  <tabstop>gynecology_ovary_formations_right</tabstop>
+  <tabstop>gynecology_ovary_formations_left</tabstop>
+  <tabstop>gynecology_combo_fallopian_tubes</tabstop>
+  <tabstop>gynecology_fallopian_tubes_formations</tabstop>
+  <tabstop>gynecology_concluzion</tabstop>
+  <tabstop>gynecology_recommendation</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

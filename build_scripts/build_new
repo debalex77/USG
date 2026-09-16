@@ -13,12 +13,15 @@ IFS=$'\n\t'
 # Versiuni/locații Qt
 QT_VERSION="${QT_VERSION:-6.9.3}"
 QT_BASE="${QT_BASE:-$HOME/Qt}"
+QT_BIN_DIR="${QT_BIN_DIR:-$QT_BASE/${QT_VERSION}/gcc_64/bin}"
 QT_LIB_DIR="${QT_LIB_DIR:-$QT_BASE/${QT_VERSION}/gcc_64/lib}"
 QT_PLUGINS_DIR="${QT_PLUGINS_DIR:-$QT_BASE/${QT_VERSION}/gcc_64/plugins}"
 QT_QIF_DIR="${QT_QIF_DIR:-$QT_BASE/Tools/QtInstallerFramework/4.10/bin}"
+LIMEREPORT_VERSION="1.7.23"
 
 # Structură proiect
 ROOT="$(readlink -f "$(dirname "$0")/..")"
+LIMEREPORT_SOURCE_DIR="${LIMEREPORT_SOURCE_DIR:-$ROOT/../LimeReport-${LIMEREPORT_VERSION}}"
 RELEASE_DIR="${RELEASE_DIR:-build/Desktop_Qt_${QT_VERSION//./_}-Release}"
 PREBUILD_DIR="build/prebuild_project"
 BUILD_DIR="build/build_project"
@@ -30,6 +33,13 @@ APPDIR="$DEPLOY_DIR/AppDir"
 CQTDEPLOYER="${CQTDEPLOYER:-cqtdeployer}"
 BINARYCREATOR="${BINARYCREATOR:-$QT_QIF_DIR/binarycreator}"
 APPIMAGETOOL="${APPIMAGETOOL:-appimagetool}"
+QMAKE="${QMAKE:-$QT_BIN_DIR/qmake}"
+
+if ! command -v "$APPIMAGETOOL" >/dev/null 2>&1 \
+   && [[ "$APPIMAGETOOL" == "appimagetool" ]] \
+   && [[ -x "$HOME/App/AppImageTool/appimagetool" ]]; then
+  APPIMAGETOOL="$HOME/App/AppImageTool/appimagetool"
+fi
 
 # Alte
 ARCH="$(dpkg --print-architecture 2>/dev/null || echo 'amd64')"
@@ -79,11 +89,14 @@ trap 'cleanup' EXIT
 
 cd "$ROOT"
 
-require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "sha256sum" "md5sum" "gzip" "dpkg-deb" "find" "xargs" "awk" "rsync"
-command -v "$APPIMAGETOOL" >/dev/null 2>&1 || warn "appimagetool nu este în PATH. Etapa AppImage va eșua."
+require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "$QMAKE" "sha256sum" "md5sum" "gzip" "tar" "dpkg-deb" "find" "xargs" "awk" "rsync"
+command -v "$APPIMAGETOOL" >/dev/null 2>&1 || warn "appimagetool nu este în PATH. Etapa AppImage va fi omisă."
 
 [[ -d "$QT_LIB_DIR" ]]     || die "QT_LIB_DIR inexistent: $QT_LIB_DIR"
 [[ -d "$QT_PLUGINS_DIR" ]] || die "QT_PLUGINS_DIR inexistent: $QT_PLUGINS_DIR"
+[[ -d "$LIMEREPORT_SOURCE_DIR" ]] || die "Sursa LimeReport lipsește: $LIMEREPORT_SOURCE_DIR"
+[[ -f "$LIMEREPORT_SOURCE_DIR/LICENSE" ]] || die "Licența LimeReport lipsește: $LIMEREPORT_SOURCE_DIR/LICENSE"
+[[ -f "$LIMEREPORT_SOURCE_DIR/COPYING" ]] || die "Notificarea LimeReport lipsește: $LIMEREPORT_SOURCE_DIR/COPYING"
 
 # Versiune aplicație
 [[ -f "$ROOT/version.txt" ]] || die "Lipsește version.txt în rădăcina proiectului."
@@ -96,6 +109,8 @@ FILENAME_DEB="USG_v${VERSION}_${ARCH_TAG}.deb"
 FILENAME_DEB_SHA256="USG_v${VERSION}_${ARCH_TAG}_deb.sha256"
 FILENAME_APPIMG="USG_v${VERSION}-x86_64.AppImage"
 FILENAME_APPIMG_SHA256="USG_v${VERSION}-x86_64_AppImage.sha256"
+FILENAME_LIME_SOURCE="LimeReport_v${LIMEREPORT_VERSION}_USG_source.tar.gz"
+FILENAME_LIME_SOURCE_SHA256="LimeReport_v${LIMEREPORT_VERSION}_USG_source.sha256"
 
 #==============================#
 # 1) Pregătirea directoarelor  #
@@ -115,7 +130,7 @@ log "Copiem fișierele în prebuild..."
 
 rsync -a --delete "$ROOT/$RELEASE_DIR"/ "$ROOT/$PREBUILD_DIR"/
 
-for d in resources/icons resources/templets 3rdparty; do
+for d in resources/icons resources/templets; do
   [[ -e "$ROOT/$d" ]] || die "Lipsește: $d"
   rsync -a "$ROOT/$d" "$ROOT/$PREBUILD_DIR"/
 done
@@ -136,7 +151,7 @@ find "$ROOT/$PREBUILD_DIR" -type f -name "moc_*" -delete
 log "Rulăm cqtdeployer..."
 "$CQTDEPLOYER" clear \
   -bin "$ROOT/$PREBUILD_DIR/USG" \
-  -qmake qmake \
+  -qmake "$QMAKE" \
   -libDir "$QT_LIB_DIR" \
   -extraData "$ROOT/resources/templets,$ROOT/resources/icons" \
   -targetDir "$ROOT/$BUILD_DIR"
@@ -192,6 +207,35 @@ done
 copy_checked "$QT_PLUGINS_DIR/printsupport/libcupsprintersupport.so" \
              "$ROOT/$BUILD_DIR/plugins/printsupport/libcupsprintersupport.so"
 
+# Licențe, proveniență și sursa corespunzătoare LimeReport
+LICENSES_DIR="$ROOT/$BUILD_DIR/licenses"
+mkdir -p "$LICENSES_DIR/LimeReport"
+copy_checked "$ROOT/LICENSE.txt" "$LICENSES_DIR/LICENSE.txt"
+copy_checked "$ROOT/README.md" "$ROOT/$BUILD_DIR/README.md"
+copy_checked "$ROOT/README-RO.md" "$ROOT/$BUILD_DIR/README-RO.md"
+copy_checked "$ROOT/resources/RELEASES.md" "$ROOT/$BUILD_DIR/RELEASES.md"
+copy_checked "$ROOT/third_party/THIRD_PARTY_ICONS.md" "$LICENSES_DIR/THIRD_PARTY_ICONS.md"
+copy_checked "$ROOT/third_party/LIMEREPORT.md" "$LICENSES_DIR/LimeReport/README.md"
+copy_checked "$ROOT/patches/limereport/${LIMEREPORT_VERSION}/0001-make-singleton-destruction-idempotent.patch" \
+             "$LICENSES_DIR/LimeReport/0001-make-singleton-destruction-idempotent.patch"
+copy_checked "$LIMEREPORT_SOURCE_DIR/LICENSE" "$LICENSES_DIR/LimeReport/LICENSE"
+copy_checked "$LIMEREPORT_SOURCE_DIR/COPYING" "$LICENSES_DIR/LimeReport/COPYING"
+
+# Eliminăm permisiunile de scriere pentru group/other moștenite din surse,
+# păstrând biții de execuție existenți pentru launchere și helper-ele Qt.
+chmod -R go-w "$ROOT/$BUILD_DIR"
+
+log "Arhivăm sursa corespunzătoare LimeReport ${LIMEREPORT_VERSION}..."
+rm -f "$ROOT/build/$FILENAME_LIME_SOURCE" "$ROOT/build/$FILENAME_LIME_SOURCE_SHA256"
+tar \
+  --exclude='.git' \
+  --exclude='build' \
+  --exclude='*.pro.user' \
+  -czf "$ROOT/build/$FILENAME_LIME_SOURCE" \
+  -C "$(dirname "$LIMEREPORT_SOURCE_DIR")" \
+  "$(basename "$LIMEREPORT_SOURCE_DIR")"
+sha256sum "$ROOT/build/$FILENAME_LIME_SOURCE" | awk '{print $1}' > "$ROOT/build/$FILENAME_LIME_SOURCE_SHA256"
+
 log "Fisierele proiectului sunt gata pentru pachete."
 
 #==============================#
@@ -236,6 +280,9 @@ done
 rsync -a "$ROOT/build_scripts/debian/usr" "$ROOT/$BUILD_DEB_DIR"/
 mkdir -p "$ROOT/$BUILD_DEB_DIR/opt/USG"
 rsync -a "$ROOT/$BUILD_DIR"/ "$ROOT/$BUILD_DEB_DIR/opt/USG/"
+
+# Metadatele din /usr și runtime-ul din /opt nu trebuie instalate world-writable.
+chmod -R go-w "$ROOT/$BUILD_DEB_DIR/usr" "$ROOT/$BUILD_DEB_DIR/opt/USG"
 
 # Installed-Size (kB)
 SIZE_PROJECT="$(du -sk "$ROOT/$BUILD_DEB_DIR/opt/USG" | awk '{print $1}')"
@@ -292,7 +339,7 @@ else
 fi
 
 # .desktop
-cat > "$ROOT/$APPDIR/USG.desktop" << 'EOF'
+cat > "$ROOT/$APPDIR/org.alovada.usg.desktop" << 'EOF'
 [Desktop Entry]
 Name=USG
 Exec=USG
@@ -300,6 +347,13 @@ Icon=usg
 Type=Application
 Categories=Science;MedicalSoftware;
 EOF
+
+# Metadate AppStream pentru validarea și catalogarea AppImage.
+mkdir -p "$ROOT/$APPDIR/usr/share/applications" "$ROOT/$APPDIR/usr/share/metainfo"
+copy_checked "$ROOT/$APPDIR/org.alovada.usg.desktop" \
+             "$ROOT/$APPDIR/usr/share/applications/org.alovada.usg.desktop"
+copy_checked "$ROOT/build_scripts/debian/usr/share/metainfo/org.alovada.usg.metainfo.xml" \
+             "$ROOT/$APPDIR/usr/share/metainfo/org.alovada.usg.appdata.xml"
 
 # icon
 if [[ -f "$ROOT/$BUILD_DIR/icons/eco_512x512.png" ]]; then
@@ -310,7 +364,9 @@ fi
 
 if command -v "$APPIMAGETOOL" >/dev/null 2>&1; then
   log "Construim AppImage: $FILENAME_APPIMG ..."
-  "$APPIMAGETOOL" "$ROOT/$APPDIR" "$ROOT/build/$FILENAME_APPIMG"
+  APPIMAGE_EXTRACT_AND_RUN="${APPIMAGE_EXTRACT_AND_RUN:-1}" \
+    ARCH="${ARCH_APPIMAGE:-x86_64}" \
+    "$APPIMAGETOOL" --no-appstream "$ROOT/$APPDIR" "$ROOT/build/$FILENAME_APPIMG"
   sha256sum "$ROOT/build/$FILENAME_APPIMG" | awk '{print $1}' > "$ROOT/build/$FILENAME_APPIMG_SHA256"
 else
   warn "Sari peste AppImage: appimagetool nu este disponibil."
@@ -321,6 +377,6 @@ echo "Artefacte:"
 echo "  - $ROOT/build/$FILENAME_RUN (+ $FILENAME_RUN_SHA256)"
 echo "  - $ROOT/build/$FILENAME_DEB (+ $FILENAME_DEB_SHA256)"
 [[ -f "$ROOT/build/$FILENAME_APPIMG" ]] && echo "  - $ROOT/build/$FILENAME_APPIMG (+ $FILENAME_APPIMG_SHA256)"
+echo "  - $ROOT/build/$FILENAME_LIME_SOURCE (+ $FILENAME_LIME_SOURCE_SHA256)"
 
 # cleanup se execută via trap
-

@@ -1,3 +1,13 @@
+4.1.0 (September 15th, 2026)
+  * Migrated the patient schema and related document references.
+  * Added resumable SQLite and MariaDB migrations with UUID synchronization.
+  * Replaced the legacy order/report lists with OrderView and ReportView.
+  * Added multi-investigation patient appointments.
+  * Improved cloud synchronization, PDF, e-mail and attached-image handling.
+  * Hardened application settings, logging and first-run database setup.
+  * Updated LimeReport from 1.7.14 to 1.7.23 for Qt 6.9.3.
+  * Added third-party visual-asset provenance and licensing documentation.
+
 3.0.6 (September 26th, 2025)
   * Technical migration: application updated to Qt v6.9.3.
   * Ultrasound report: the document code was reorganized into modules to simplify continuous development and maintenance.

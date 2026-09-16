@@ -38,9 +38,9 @@ CONFIG  -= qml_debug
 #------ INFO APP
 
 # Definim componentele versiunii
-USG_VERSION_MAJOR   = 3
-USG_VERSION_MINOR   = 0
-USG_VERSION_RELEASE = 6
+USG_VERSION_MAJOR   = 4
+USG_VERSION_MINOR   = 1
+USG_VERSION_RELEASE = 0
 
 
 USG_VERSION_FULL    = ""$$USG_VERSION_MAJOR"."$$USG_VERSION_MINOR"."$$USG_VERSION_RELEASE""
@@ -61,8 +61,8 @@ QMAKE_TARGET_COMPANY     = SC 'Alovada-Med' SRL
 QMAKE_TARGET_PRODUCT     = USG project
 QMAKE_TARGET_DESCRIPTION = Evidenta examinarilor ecografice
 QMAKE_TARGET_COPYRIGHT   = Codreanu Alexandru
-RC_ICONS = resources/img/eco_512x512.ico
-ICON = resources/img/eco_512x512.icns
+RC_ICONS = resources/img/app_ico/eco_512x512.ico
+ICON = resources/img/app_ico/eco_512x512.icns
 
 #-----------------------------------------------------------------------
 #------ CONFIG APP
@@ -72,189 +72,261 @@ CONFIG += c++20
 #-----------------------------------------------------------------------
 #------ SOURCES, HEADERS, FORMS, TRANSLATIONS
 
+INCLUDEPATH += src
+
 mac {
-    SOURCES += others/AppDelegate.mm
+    SOURCES += src/others/AppDelegate.mm
 }
 
 SOURCES += \
-    catalogs/asistanttipapp.cpp \
-    catalogs/catcontracts.cpp \
-    catalogs/catforsqltablemodel.cpp \
-    catalogs/catgeneral.cpp \
-    catalogs/catorganizations.cpp \
-    catalogs/catusers.cpp \
-    catalogs/chooseformprint.cpp \
-    catalogs/customperiod.cpp \
-    catalogs/groupinvestigation.cpp \
-    catalogs/groupinvestigationlist.cpp \
-    catalogs/listform.cpp \
-    catalogs/normograms.cpp \
-    catalogs/patienthistory.cpp \
-    common/agentsendemail.cpp \
-    common/appcontroller.cpp \
-    common/archivecreationhandler.cpp \
-    common/cloudserverconfig.cpp \
-    common/contonline.cpp \
-    common/cryptomanager.cpp \
-    common/datapercentage.cpp \
-    common/emailcore.cpp \
-    common/firstrunwizard.cpp \
-    common/handlerfunctionthread.cpp \
-    common/logmanager.cpp \
-    common/processingaction.cpp \
-    common/splashmanager.cpp \
-    common/thememanager.cpp \
-    common/windowmanager.cpp \
-    customs/custommessage.cpp \
-    customs/lineeditcustom.cpp \
-    customs/lineeditopen.cpp \
-    customs/lineeditpassword.cpp \
-    customs/loglevelbutton.cpp \
-    customs/searchlineedit.cpp \
-    data/about.cpp \
-    data/appsettings.cpp \
-    data/authorizationuser.cpp \
-    data/customdialoginvestig.cpp \
-    data/database.cpp \
-    data/databaseselection.cpp \
-    data/downloader.cpp \
-    data/downloaderversion.cpp \
-    data/globals.cpp \
-    data/initlaunch.cpp \
-    data/loggingcategories.cpp \
-    data/mainwindow.cpp \
-    data/mdiareacontainer.cpp \
-    data/popup.cpp \
-    data/reports.cpp \
-    data/updatereleasesapp.cpp \
-    data/userpreferences.cpp \
-    delegates/checkboxdelegate.cpp \
-    delegates/combodelegate.cpp \
-    delegates/doublespinboxdelegate.cpp \
-    docs/choicecolumns.cpp \
-    docs/docappointmentspatients.cpp \
-    docs/docorderecho.cpp \
-    docs/docorderechohandler.cpp \
-    docs/docorderechohandler_cat.cpp \
-    docs/docpricing.cpp \
-    docs/docreportecho.cpp \
-    docs/docreportechohandler.cpp \
-    docs/docreportechohandler_connect.cpp \
-    docs/docreportechohandler_dataInsert.cpp \
-    docs/docreportechohandler_dataUpdate.cpp \
-    docs/docreportechohandler_default.cpp \
-    docs/docreportechohandler_maxlength.cpp \
-    docs/docreportechohandler_print.cpp \
-    docs/docreportechohandler_setdata.cpp \
-    docs/listdoc.cpp \
-    docs/listdocreportorder.cpp \
-    common/infowindow.cpp \
+    src/catalogs/asistanttipapp.cpp \
+    src/catalogs/catalogdialog.cpp \
+    src/catalogs/onlineaccountdialog.cpp \
+    src/catalogs/userdialog.cpp \
+    src/common/tablecolumnscontroller.cpp \
+    src/data/fetalreferenceranges.cpp \
+    src/documents/orderdialog.cpp \
+    src/documents/pricingdialog.cpp \
+    src/documents/reportdialog.cpp \
+    src/documents/reportpagebreast.cpp \
+    src/documents/reportpagegestation0.cpp \
+    src/documents/reportpagegestation1.cpp \
+    src/documents/reportpagegestation2.cpp \
+    src/documents/reportpagegynecology.cpp \
+    src/documents/reportpageimage.cpp \
+    src/documents/reportpagelymphnodes.cpp \
+    src/documents/reportpageorgansinternal.cpp \
+    src/documents/reportpageprostate.cpp \
+    src/documents/reportpagethyroid.cpp \
+    src/documents/reportpageurinarysystem.cpp \
+    src/documents/reportpagevideo.cpp \
+    src/threads/patientsaverworker.cpp \
+    src/threads/syncdocsworker.cpp \
+    src/threads/syncorderworker.cpp \
+    src/threads/syncpatientworker.cpp \
+    src/threads/syncreportworker.cpp \
+    src/views/catalogtableeditor.cpp \
+    src/views/catalogview.cpp \
+    src/catalogs/catforsqltablemodel.cpp \
+    src/catalogs/chooseformprint.cpp \
+    src/catalogs/contractdialog.cpp \
+    src/catalogs/customperiod.cpp \
+    src/catalogs/groupinvestigation.cpp \
+    src/catalogs/groupinvestigationlist.cpp \
+    src/catalogs/normograms.cpp \
+    src/catalogs/organizationdialog.cpp \
+    src/catalogs/patienthistory.cpp \
+    src/catalogs/agentsendemail.cpp \
+    src/common/appcontroller.cpp \
+    src/common/archivecreationhandler.cpp \
+    src/common/balloontip.cpp \
+    src/common/cloudserverconfig.cpp \
+    src/common/contonline.cpp \
+    src/common/cryptomanager.cpp \
+    src/common/globals.cpp \
+    src/common/emailcore.cpp \
+    src/common/firstrunwizard.cpp \
+    src/common/handlerfunctionthread.cpp \
+    src/common/logmanager.cpp \
+    src/common/processingaction.cpp \
+    src/common/splashmanager.cpp \
+    src/common/thememanager.cpp \
+    src/common/windowmanager.cpp \
+    src/customs/custommessage.cpp \
+    src/customs/lineeditcustom.cpp \
+    src/customs/lineeditopen.cpp \
+    src/customs/lineeditpassword.cpp \
+    src/customs/loglevelbutton.cpp \
+    src/customs/searchlineedit.cpp \
+    src/customs/customdialoginvestig.cpp \
+    src/customs/toolbarcustom.cpp \
+    src/data/about.cpp \
+    src/data/appsettings.cpp \
+    src/data/appsettingsstore.cpp \
+    src/data/appsettingsvalidator.cpp \
+    src/data/authorizationuser.cpp \
+    src/data/database.cpp \
+    src/data/database_common.cpp \
+    src/data/databaseselection.cpp \
+    src/data/downloader.cpp \
+    src/data/downloaderversion.cpp \
+    src/data/initlaunch.cpp \
+    src/data/loggingcategories.cpp \
+    src/data/legacysettingscodec.cpp \
+    src/data/mainwindow.cpp \
+    src/data/mdiareacontainer.cpp \
+    src/data/popup.cpp \
+    src/data/reports.cpp \
+    src/data/updatereleasesapp.cpp \
+    src/data/userpreferences.cpp \
+    src/delegates/centericondelegate.cpp \
+    src/delegates/checkboxdelegate.cpp \
+    src/delegates/combodelegate.cpp \
+    src/delegates/doublespinboxdelegate.cpp \
+    src/documents/appointmentdialog.cpp \
+    src/common/infowindow.cpp \
     main.cpp \
-    models/basecombomodel.cpp \
-    models/basesortfilterproxymodel.cpp \
-    models/basesqlquerymodel.cpp \
-    models/basesqltablemodel.cpp \
-    models/paginatedsqlmodel.cpp \
-    models/registrationtablemodel.cpp \
-    models/treeitem.cpp \
-    models/treemodel.cpp \
-    models/variantmaptablemodel.cpp \
-    threads/databaseprovider.cpp \
-    threads/dataconstantsworker.cpp \
-    threads/docemailexporterworker.cpp \
-    threads/docsyncworker.cpp \
-    threads/patientdatasaverworker.cpp \
-    threads/syncpatientdataworker.cpp
+    src/views/onlineaccountview.cpp \
+    src/views/orderview.cpp \
+    src/views/reportview.cpp \
+    src/views/pricingview.cpp \
+    src/models/baseabstractmodel.cpp \
+    src/models/basesqlquerymodel.cpp \
+    src/models/basesqltablemodel.cpp \
+    src/models/catalogsloader.cpp \
+    src/models/catalogsmodel.cpp \
+    src/models/orderjournalloader.cpp \
+    src/models/orderjournalmodel.cpp \
+    src/models/orderinvestigationmodel.cpp \
+    src/models/onlineaccountmodel.cpp \
+    src/models/organizationcontractmodel.cpp \
+    src/models/reportjournalloader.cpp \
+    src/models/reportjournalmodel.cpp \
+    src/models/pricingmodel.cpp \
+    src/models/pricingsortmodel.cpp \
+    src/models/queryrolesmodel.cpp \
+    src/models/registrationtablemodel.cpp \
+    src/models/sortmodel.cpp \
+    src/models/tabledocmodel.cpp \
+    src/models/treeitem.cpp \
+    src/models/treemodel.cpp \
+    src/models/variantmaptablemodel.cpp \
+    src/reports/reportdashboard.cpp \
+    src/threads/databaseprovider.cpp \
+    src/threads/dataconstantsworker.cpp \
+    src/threads/docemailexporterworker.cpp \
+    src/threads/docsyncworker.cpp \
+    src/threads/patientdatasaverworker.cpp \
+    src/threads/syncpatientdataworker.cpp
 
 HEADERS += \
-    catalogs/asistanttipapp.h \
-    catalogs/catcontracts.h \
-    catalogs/catforsqltablemodel.h \
-    catalogs/catgeneral.h \
-    catalogs/catorganizations.h \
-    catalogs/catusers.h \
-    catalogs/chooseformprint.h \
-    catalogs/customperiod.h \
-    catalogs/groupinvestigation.h \
-    catalogs/groupinvestigationlist.h \
-    catalogs/listform.h \
-    catalogs/normograms.h \
-    catalogs/patienthistory.h \
-    common/agentsendemail.h \
-    common/appcontroller.h \
-    common/appmetatypes.h \
-    common/archivecreationhandler.h \
-    common/cloudserverconfig.h \
-    common/contonline.h \
-    common/cryptomanager.h \
-    common/datapercentage.h \
-    common/emailcore.h \
-    common/firstrunwizard.h \
-    common/handlerfunctionthread.h \
-    common/logmanager.h \
-    common/processingaction.h \
-    common/reportsettingsmanager.h \
-    common/splashmanager.h \
-    common/structvariable.h \
-    common/thememanager.h \
-    common/version.h \
-    common/windowmanager.h \
-    customs/custommessage.h \
-    customs/lineeditcustom.h \
-    customs/lineeditopen.h \
-    customs/lineeditpassword.h \
-    customs/loglevelbutton.h \
-    customs/searchlineedit.h \
-    data/about.h \
-    data/appsettings.h \
-    data/authorizationuser.h \
-    data/customdialoginvestig.h \
-    data/database.h \
-    data/databaseselection.h \
-    data/downloader.h \
-    data/downloaderversion.h \
-    data/enums.h \
-    data/globals.h \
-    data/initlaunch.h \
-    data/loggingcategories.h \
-    data/mainwindow.h \
-    data/mdiareacontainer.h \
-    data/popup.h \
-    data/reports.h \
-    data/updatereleasesapp.h \
-    data/userpreferences.h \
-    data/version.h \
-    common/databaseinit.h \
-    delegates/checkboxdelegate.h \
-    delegates/combodelegate.h \
-    delegates/doublespinboxdelegate.h \
-    docs/choicecolumns.h \
-    docs/docappointmentspatients.h \
-    docs/docorderecho.h \
-    docs/docorderechohandler.h \
-    docs/docorderechohandler_p.h \
-    docs/docpricing.h \
-    docs/docreportecho.h \
-    docs/docreportechohandler.h \
-    docs/docreportechohandler_p.h \
-    docs/listdoc.h \
-    docs/listdocreportorder.h \
-    common/infowindow.h \
-    models/basecombomodel.h \
-    models/basesortfilterproxymodel.h \
-    models/basesqlquerymodel.h \
-    models/basesqltablemodel.h \
-    models/paginatedsqlmodel.h \
-    models/registrationtablemodel.h \
-    models/treeitem.h \
-    models/treemodel.h \
-    models/variantmaptablemodel.h \
-    threads/databaseprovider.h \
-    threads/dataconstantsworker.h \
-    threads/docemailexporterworker.h \
-    threads/docsyncworker.h \
-    threads/patientdatasaverworker.h \
-    threads/syncpatientdataworker.h
+    src/catalogs/asistanttipapp.h \
+    src/catalogs/catalogdialog.h \
+    src/catalogs/onlineaccountdialog.h \
+    src/catalogs/userdialog.h \
+    src/common/tablecolumnscontroller.h \
+    src/data/fetalreferenceranges.h \
+    src/documents/orderdialog.h \
+    src/documents/pricingdialog.h \
+    src/documents/reportdialog.h \
+    src/documents/reportpagebase.h \
+    src/documents/reportpagebreast.h \
+    src/documents/reportpagegestation0.h \
+    src/documents/reportpagegestation1.h \
+    src/documents/reportpagegestation2.h \
+    src/documents/reportpagegynecology.h \
+    src/documents/reportpageimage.h \
+    src/documents/reportpagelymphnodes.h \
+    src/documents/reportpageorgansinternal.h \
+    src/documents/reportpageprostate.h \
+    src/documents/reportpagethyroid.h \
+    src/documents/reportpageurinarysystem.h \
+    src/documents/reportpagevideo.h \
+    src/threads/patientsaverworker.h \
+    src/threads/syncdocsworker.h \
+    src/threads/syncorderworker.h \
+    src/threads/syncpatientworker.h \
+    src/threads/syncreportworker.h \
+    src/views/catalogtableeditor.h \
+    src/views/catalogview.h \
+    src/catalogs/catforsqltablemodel.h \
+    src/catalogs/chooseformprint.h \
+    src/catalogs/contractdialog.h \
+    src/catalogs/customperiod.h \
+    src/catalogs/groupinvestigation.h \
+    src/catalogs/groupinvestigationlist.h \
+    src/catalogs/normograms.h \
+    src/catalogs/organizationdialog.h \
+    src/catalogs/patienthistory.h \
+    src/catalogs/agentsendemail.h \
+    src/common/appcontroller.h \
+    src/common/appmetatypes.h \
+    src/common/archivecreationhandler.h \
+    src/common/balloontip.h \
+    src/common/cloudserverconfig.h \
+    src/common/contonline.h \
+    src/common/cryptomanager.h \
+    src/common/globals.h \
+    src/common/emailcore.h \
+    src/common/firstrunwizard.h \
+    src/common/handlerfunctionthread.h \
+    src/common/logmanager.h \
+    src/common/processingaction.h \
+    src/common/property_macros.h \
+    src/common/reportsettingsmanager.h \
+    src/common/splashmanager.h \
+    src/common/structvariable.h \
+    src/common/table_sections.h \
+    src/common/thememanager.h \
+    src/common/version.h \
+    src/common/windowmanager.h \
+    src/customs/custommessage.h \
+    src/customs/lineeditcustom.h \
+    src/customs/lineeditopen.h \
+    src/customs/lineeditpassword.h \
+    src/customs/loglevelbutton.h \
+    src/customs/searchlineedit.h \
+    src/customs/customdialoginvestig.h \
+    src/customs/toolbarcustom.h \
+    src/data/about.h \
+    src/data/appsettings.h \
+    src/data/appsettingsstore.h \
+    src/data/appsettingsvalidator.h \
+    src/data/authorizationuser.h \
+    src/data/database.h \
+    src/data/database_common.h \
+    src/data/databaseselection.h \
+    src/data/downloader.h \
+    src/data/downloaderversion.h \
+    src/data/enums.h \
+    src/data/initlaunch.h \
+    src/data/loggingcategories.h \
+    src/data/legacysettingscodec.h \
+    src/data/mainwindow.h \
+    src/data/mdiareacontainer.h \
+    src/data/popup.h \
+    src/data/reports.h \
+    src/data/updatereleasesapp.h \
+    src/data/userpreferences.h \
+    src/common/databaseinit.h \
+    src/delegates/centericondelegate.h \
+    src/delegates/checkboxdelegate.h \
+    src/delegates/combodelegate.h \
+    src/delegates/doublespinboxdelegate.h \
+    src/documents/appointmentdialog.h \
+    src/common/infowindow.h \
+    src/views/onlineaccountview.h \
+    src/views/orderview.h \
+    src/views/reportview.h \
+    src/views/pricingview.h \
+    src/models/baseabstractmodel.h \
+    src/models/basesqlquerymodel.h \
+    src/models/basesqltablemodel.h \
+    src/models/catalogsloader.h \
+    src/models/catalogsmodel.h \
+    src/models/orderjournalloader.h \
+    src/models/orderjournalmodel.h \
+    src/models/orderinvestigationmodel.h \
+    src/models/onlineaccountmodel.h \
+    src/models/organizationcontractmodel.h \
+    src/models/reportjournalloader.h \
+    src/models/reportjournalmodel.h \
+    src/models/pricingmodel.h \
+    src/models/pricingsortmodel.h \
+    src/models/queryrolesmodel.h \
+    src/models/registrationtablemodel.h \
+    src/models/sortmodel.h \
+    src/models/tabledocmodel.h \
+    src/models/treeitem.h \
+    src/models/treemodel.h \
+    src/models/variantmaptablemodel.h \
+    src/reports/reportdashboard.h \
+    src/threads/databaseprovider.h \
+    src/threads/dataconstantsworker.h \
+    src/threads/docemailexporterworker.h \
+    src/threads/docsyncworker.h \
+    src/threads/patientdatasaverworker.h \
+    src/threads/syncpatientdataworker.h
 
 win32 {
 # pentru eroarea numai pe Windows:
@@ -270,41 +342,58 @@ win32 {
 }
 
 FORMS += \
-    catalogs/asistanttipapp.ui \
-    catalogs/catcontracts.ui \
-    catalogs/catforsqltablemodel.ui \
-    catalogs/catgeneral.ui \
-    catalogs/catorganizations.ui \
-    catalogs/catusers.ui \
-    catalogs/chooseformprint.ui \
-    catalogs/customperiod.ui \
-    catalogs/groupinvestigation.ui \
-    catalogs/groupinvestigationlist.ui \
-    catalogs/listform.ui \
-    catalogs/normograms.ui \
-    catalogs/patienthistory.ui \
-    common/agentsendemail.ui \
-    common/archivecreationhandler.ui \
-    common/cloudserverconfig.ui \
-    common/contonline.ui \
-    common/firstrunwizard.ui \
-    common/processingaction.ui \
-    customs/custommessage.ui \
-    data/about.ui \
-    data/appsettings.ui \
-    data/authorizationuser.ui \
-    data/databaseselection.ui \
-    data/initlaunch.ui \
-    data/mainwindow.ui \
-    data/reports.ui \
-    data/userpreferences.ui \
-    docs/docappointmentspatients.ui \
-    docs/docorderecho.ui \
-    docs/docpricing.ui \
-    docs/docreportecho.ui \
-    docs/listdoc.ui \
-    docs/listdocreportorder.ui \
-    common/infowindow.ui
+    src/catalogs/asistanttipapp.ui \
+    src/catalogs/catalogdialog.ui \
+    src/catalogs/onlineaccountdialog.ui \
+    src/catalogs/userdialog.ui \
+    src/documents/orderdialog.ui \
+    src/documents/pricingdialog.ui \
+    src/documents/reportdialog.ui \
+    src/documents/reportpagebreast.ui \
+    src/documents/reportpagegestation0.ui \
+    src/documents/reportpagegestation1.ui \
+    src/documents/reportpagegestation2.ui \
+    src/documents/reportpagegynecology.ui \
+    src/documents/reportpageimage.ui \
+    src/documents/reportpagelymphnodes.ui \
+    src/documents/reportpageorgansinternal.ui \
+    src/documents/reportpageprostate.ui \
+    src/documents/reportpagethyroid.ui \
+    src/documents/reportpageurinarysystem.ui \
+    src/documents/reportpagevideo.ui \
+    src/views/catalogtableeditor.ui \
+    src/views/catalogview.ui \
+    src/catalogs/catforsqltablemodel.ui \
+    src/catalogs/chooseformprint.ui \
+    src/catalogs/contractdialog.ui \
+    src/catalogs/customperiod.ui \
+    src/catalogs/groupinvestigation.ui \
+    src/catalogs/groupinvestigationlist.ui \
+    src/catalogs/normograms.ui \
+    src/catalogs/organizationdialog.ui \
+    src/catalogs/patienthistory.ui \
+    src/catalogs/agentsendemail.ui \
+    src/common/archivecreationhandler.ui \
+    src/common/cloudserverconfig.ui \
+    src/common/contonline.ui \
+    src/common/firstrunwizard.ui \
+    src/common/processingaction.ui \
+    src/customs/custommessage.ui \
+    src/data/about.ui \
+    src/data/appsettings.ui \
+    src/data/authorizationuser.ui \
+    src/data/databaseselection.ui \
+    src/data/initlaunch.ui \
+    src/data/mainwindow.ui \
+    src/data/reports.ui \
+    src/data/userpreferences.ui \
+    src/documents/appointmentdialog.ui \
+    src/common/infowindow.ui \
+    src/views/onlineaccountview.ui \
+    src/views/orderview.ui \
+    src/views/pricingview.ui \
+    src/reports/reportdashboard.ui \
+    src/views/reportview.ui
 
 TRANSLATIONS += \
     translate/USG_ro_RO.ts \
@@ -320,23 +409,27 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
-    build_scripts/build_maosx \
+    LICENSE.txt \
+    README.md \
+    README-RO.md \
+    release.md \
+    index.html \
+    privacy.html \
+    robots.txt \
+    sitemap.xml \
+    third_party/THIRD_PARTY_ICONS.md \
+    third_party/LIMEREPORT.md \
+    patches/limereport/1.7.23/0001-make-singleton-destruction-idempotent.patch \
+    .github/workflows/build-linux.yml \
+    .github/workflows/release-linux.yml \
+    TODO.md \
     build_scripts/build_maosx \
     build_scripts/build_new \
-    build_scripts/build_project \
     build_scripts/build_win \
-    resources/fonts/Cantarell Bold.ttf \
-    resources/fonts/Cantarell-Bold.otf \
-    resources/fonts/Cantarell-BoldOblique.ttf \
-    resources/fonts/Cantarell-Oblique.ttf \
-    resources/fonts/Cantarell-Regular.ttf \
     resources/fonts/freefontsdownload.txt \
     resources/fonts/www.freefontsdownload.net.url \
-    site/index.html \
-    site/index.html \
     translate/USG_ro_RO.qm \
     translate/USG_ru_RU.qm \
-    build_scripts/ripts/build_project.sh \
     build_scripts/debian/control \
     build_scripts/debian/postinst \
     build_scripts/debian/preinst \
@@ -377,9 +470,13 @@ INCLUDEPATH += $$PWD/3rdparty/LimeReport/debug
 INCLUDEPATH += $$PWD/3rdparty/LimeReport/release
 
 unix:!macx {
-    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN
-    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN/3rdparty/LimeReport/debug
-    QMAKE_LFLAGS += -Wl,--rpath=\$$ORIGIN/3rdparty/LimeReport/release
+    # În build-ul shadow al Qt Creator bibliotecile rămân în proiect,
+    # nu în directorul în care este generat executabilul.
+    # DT_RPATH este necesar și pentru dependențele indirecte LimeReport
+    # (în special libQtZint.so).
+    QMAKE_LFLAGS += -Wl,--disable-new-dtags
+    QMAKE_RPATHDIR += $$PWD/3rdparty/LimeReport/debug
+    QMAKE_RPATHDIR += $$PWD/3rdparty/LimeReport/release
 }
 
 # LimeReport Library
@@ -391,9 +488,17 @@ CONFIG(debug, debug|release) {
 
 # QtZint Library
 CONFIG(debug, debug|release) {
-    LIBS += -L$$PWD/3rdparty/LimeReport/debug/ -lQtZintd
+    unix:!macx {
+        LIBS += -Wl,--no-as-needed -L$$PWD/3rdparty/LimeReport/debug/ -lQtZintd -Wl,--as-needed
+    } else {
+        LIBS += -L$$PWD/3rdparty/LimeReport/debug/ -lQtZintd
+    }
 } else {
-    LIBS += -L$$PWD/3rdparty/LimeReport/release/ -lQtZint
+    unix:!macx {
+        LIBS += -Wl,--no-as-needed -L$$PWD/3rdparty/LimeReport/release/ -lQtZint -Wl,--as-needed
+    } else {
+        LIBS += -L$$PWD/3rdparty/LimeReport/release/ -lQtZint
+    }
 }
 
 # macOS specific

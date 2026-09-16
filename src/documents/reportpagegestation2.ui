@@ -1,0 +1,2584 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportPageGestation2</class>
+ <widget class="QWidget" name="ReportPageGestation2">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>980</width>
+    <height>827</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_65">
+   <item row="0" column="0">
+    <widget class="QScrollArea" name="scrollArea_gestation2">
+     <property name="widgetResizable">
+      <bool>true</bool>
+     </property>
+     <widget class="QWidget" name="scrollAreaWidgetContent_gestation2">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>960</width>
+        <height>807</height>
+       </rect>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="0" column="0">
+        <widget class="QLabel" name="label_139">
+         <property name="text">
+          <string>Ziua ultimei menstruației</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QDateEdit" name="gestation2_dateMenstruation">
+         <property name="calendarPopup">
+          <bool>true</bool>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2" colspan="2">
+        <widget class="QLabel" name="label_138">
+         <property name="layoutDirection">
+          <enum>Qt::LayoutDirection::LeftToRight</enum>
+         </property>
+         <property name="text">
+          <string>Vârsta gestațională</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="4">
+        <widget class="QLineEdit" name="gestation2_gestation_age">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="5">
+        <widget class="QLabel" name="label">
+         <property name="text">
+          <string>Prezentația fătului</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="6">
+        <widget class="QComboBox" name="comboFetalPrezentation">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <item>
+          <property name="text">
+           <string>craniană</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>pelviană</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="label_140">
+         <property name="text">
+          <string>Vizibilitatea</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="gestation2_view_examination">
+         <item>
+          <property name="text">
+           <string>adecvată</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>limitată</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>dificilă</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <widget class="QRadioButton" name="gestation2_trimestru2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>trimestru II</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="3">
+        <widget class="QRadioButton" name="gestation2_trimestru3">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>trimestru III</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="label_141">
+         <property name="text">
+          <string>Sarcina</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="gestation2_pregnancy">
+         <item>
+          <property name="text">
+           <string>monofetală</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>multiplă</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="7">
+        <widget class="QTabWidget" name="tabWidget_biometry_morfology">
+         <property name="currentIndex">
+          <number>0</number>
+         </property>
+         <widget class="QWidget" name="tab">
+          <attribute name="title">
+           <string>Biometria fetală</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_66">
+           <item row="1" column="2">
+            <widget class="QLabel" name="label_148">
+             <property name="text">
+              <string>corespunde</string>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="0">
+            <widget class="QLabel" name="label_227">
+             <property name="text">
+              <string>Sex</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLabel" name="label_147">
+             <property name="text">
+              <string>corespunde</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_145">
+             <property name="text">
+              <string>FL</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="3">
+            <widget class="QLabel" name="label_178">
+             <property name="text">
+              <string>Data probabilă a nașterii :</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLabel" name="label_149">
+             <property name="text">
+              <string>corespunde</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="4">
+            <widget class="QDateEdit" name="gestation2_probabilDateBirth">
+             <property name="calendarPopup">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3" rowspan="2">
+            <widget class="QLineEdit" name="gestation2_hc_age">
+             <property name="maximumSize">
+              <size>
+               <width>170</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLineEdit" name="gestation2_bpd">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1">
+            <widget class="QLineEdit" name="gestation2_fl">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0">
+            <widget class="QLabel" name="label_146">
+             <property name="text">
+              <string>Fătul corespunde</string>
+             </property>
+            </widget>
+           </item>
+           <item row="9" column="2">
+            <spacer name="verticalSpacer_15">
+             <property name="orientation">
+              <enum>Qt::Orientation::Vertical</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>20</width>
+               <height>40</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLineEdit" name="gestation2_ac_age">
+             <property name="maximumSize">
+              <size>
+               <width>170</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLineEdit" name="gestation2_hc">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <spacer name="horizontalSpacer_26">
+             <property name="orientation">
+              <enum>Qt::Orientation::Horizontal</enum>
+             </property>
+             <property name="sizeHint" stdset="0">
+              <size>
+               <width>40</width>
+               <height>20</height>
+              </size>
+             </property>
+            </spacer>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLineEdit" name="gestation2_bpd_age">
+             <property name="maximumSize">
+              <size>
+               <width>170</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_143">
+             <property name="text">
+              <string>HC</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="3">
+            <widget class="QLineEdit" name="gestation2_fl_age">
+             <property name="maximumSize">
+              <size>
+               <width>170</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1" rowspan="2">
+            <widget class="QLineEdit" name="gestation2_ac">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>80</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="7" column="1">
+            <widget class="QComboBox" name="gestation2_fetusSex">
+             <item>
+              <property name="text">
+               <string>masc.</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>fem.</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>dificil</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="0" rowspan="2">
+            <widget class="QLabel" name="label_144">
+             <property name="text">
+              <string>AC</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="1" colspan="2">
+            <widget class="QLineEdit" name="gestation2_fetus_age">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="maximumSize">
+              <size>
+               <width>16777215</width>
+               <height>16777215</height>
+              </size>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="0">
+            <widget class="QLabel" name="label_192">
+             <property name="text">
+              <string>Masa fătului</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="2">
+            <widget class="QLabel" name="label_150">
+             <property name="text">
+              <string>corespunde</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_142">
+             <property name="text">
+              <string>BPD</string>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="1" colspan="2">
+            <widget class="QLineEdit" name="gestation2_fetusMass">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+            </widget>
+           </item>
+           <item row="6" column="3" colspan="3">
+            <widget class="QLabel" name="gestation2_descriptionFetusWeight">
+             <property name="sizePolicy">
+              <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+               <horstretch>0</horstretch>
+               <verstretch>0</verstretch>
+              </sizepolicy>
+             </property>
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="styleSheet">
+              <string notr="true">color: rgb(255, 120, 0);</string>
+             </property>
+             <property name="lineWidth">
+              <number>2</number>
+             </property>
+             <property name="text">
+              <string>Masa fătului corespunde percentilei 50</string>
+             </property>
+             <property name="wordWrap">
+              <bool>true</bool>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_2">
+          <attribute name="title">
+           <string>Morfologia fetală</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_69">
+           <item row="1" column="0">
+            <widget class="QTabWidget" name="tabWidget_morfology">
+             <property name="tabPosition">
+              <enum>QTabWidget::TabPosition::North</enum>
+             </property>
+             <property name="currentIndex">
+              <number>0</number>
+             </property>
+             <widget class="QWidget" name="tab_4">
+              <attribute name="title">
+               <string>Craniu</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_68">
+               <item row="3" column="4" colspan="4">
+                <widget class="QLineEdit" name="gestation2_eyeball_desciption"/>
+               </item>
+               <item row="4" column="4" colspan="4">
+                <widget class="QLineEdit" name="gestation2_nasolabialTriangle_description"/>
+               </item>
+               <item row="2" column="7">
+                <spacer name="horizontalSpacer_28">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="5">
+                <widget class="QLineEdit" name="gestation2_nasalBones_dimens"/>
+               </item>
+               <item row="2" column="6">
+                <widget class="QLabel" name="label_gestation2_nasalBones_mm">
+                 <property name="text">
+                  <string>mm</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="4">
+                <widget class="QLabel" name="label_gestation2_nasalBones_dimens">
+                 <property name="text">
+                  <string>, lungimea</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_156">
+                 <property name="text">
+                  <string>Orbite și globii oculari</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_151">
+                 <property name="text">
+                  <string>Calota craniană</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_157">
+                 <property name="text">
+                  <string>Triunghiul nazo-labial</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="3">
+                <spacer name="verticalSpacer_16">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_152">
+                 <property name="text">
+                  <string>Profil facial</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_gestation2_nasalBones">
+                 <property name="text">
+                  <string>Oasele nazale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_gestation2_nasalFold">
+                 <property name="text">
+                  <string>Pliul nazal</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="4">
+                <widget class="QLabel" name="label_gestation2_nasalFold_mm">
+                 <property name="text">
+                  <string>mm</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_nasalFold"/>
+               </item>
+               <item row="4" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_nasolabialTriangle">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_eyeball">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_nasalBones">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="4" colspan="4">
+                <spacer name="horizontalSpacer_27">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>47</width>
+                   <height>22</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_facialeProfile">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_calloteCranium">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_5">
+              <attribute name="title">
+               <string>SNC</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_70">
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_166">
+                 <property name="text">
+                  <string>Cerebel și fosa posterioară</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_gestation2_cavityPellucidSeptum">
+                 <property name="text">
+                  <string>Cavitatea septului pellucid</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_162">
+                 <property name="text">
+                  <string>Corp calos</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_167">
+                 <property name="text">
+                  <string>Coloana vertebrală</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="gestation2_hemispheres">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QComboBox" name="gestation2_choroidalPlex">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_160">
+                 <property name="text">
+                  <string>Emisferele cerebrale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_ventricularSystem_description"/>
+               </item>
+               <item row="6" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_cerebellum_description"/>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_gestation2_fissureSilvius">
+                 <property name="text">
+                  <string>Fisura Silvius</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QComboBox" name="gestation2_cavityPellucidSeptum">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="5" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_choroidalPlex_description"/>
+               </item>
+               <item row="7" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_vertebralColumn_description"/>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="gestation2_corpCalos">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_163">
+                 <property name="text">
+                  <string>Sistemul ventricular</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QComboBox" name="gestation2_cerebellum">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_165">
+                 <property name="text">
+                  <string>Plexuri coroidale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QComboBox" name="gestation2_vertebralColumn">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="gestation2_ventricularSystem">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="gestation2_fissureSilvius">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <spacer name="verticalSpacer_17">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>40</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_6">
+              <attribute name="title">
+               <string>Cord</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_71">
+               <item row="5" column="2" colspan="4">
+                <widget class="QLineEdit" name="gestation2_ventricularEjectionPathRight_description"/>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_168">
+                 <property name="text">
+                  <string>Poziție</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2" colspan="4">
+                <widget class="QLineEdit" name="gestation2_intersectionVesselMagistral_description"/>
+               </item>
+               <item row="9" column="2">
+                <spacer name="verticalSpacer_18">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>1</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="6" column="0">
+                <widget class="QLabel" name="label_175">
+                 <property name="text">
+                  <string>Inserție vase magistrale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_170">
+                 <property name="text">
+                  <string>frecveța</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QComboBox" name="gestation2_ventricularEjectionPathRight">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_172">
+                 <property name="text">
+                  <string>Planul patru camere</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_169">
+                 <property name="text">
+                  <string>Mișcări cord fetal</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="gestation2_heartBeat">
+                 <item>
+                  <property name="text">
+                   <string>prezente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>absente</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLineEdit" name="gestation2_heartBeat_frequency">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                 <property name="maximumSize">
+                  <size>
+                   <width>60</width>
+                   <height>16777215</height>
+                  </size>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="4">
+                <widget class="QComboBox" name="gestation2_heartBeat_rhythm">
+                 <item>
+                  <property name="text">
+                   <string>ritmice</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>aritmice</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="7" column="1">
+                <widget class="QComboBox" name="gestation2_planTreiVase">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QComboBox" name="gestation2_ventricularEjectionPathLeft">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="1">
+                <widget class="QComboBox" name="gestation2_intersectionVesselMagistral">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="7" column="0">
+                <widget class="QLabel" name="label_176">
+                 <property name="text">
+                  <string>Planul trei vase (traheia)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_171">
+                 <property name="text">
+                  <string>Colecții pericardiale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_gestation2_ventricularEjectionPathRight">
+                 <property name="text">
+                  <string>Cale de ejecție ventr.drept</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_gestation2_ventricularEjectionPathLeft">
+                 <property name="text">
+                  <string>Cale de ejecție ventr.stâng</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2" colspan="4">
+                <widget class="QLineEdit" name="gestation2_planTreiVase_description"/>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="gestation2_planPatruCamere">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="2" colspan="4">
+                <widget class="QLineEdit" name="gestation2_ventricularEjectionPathLeft_description"/>
+               </item>
+               <item row="1" column="5">
+                <spacer name="horizontalSpacer_29">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>157</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="gestation2_pericordialCollections">
+                 <item>
+                  <property name="text">
+                   <string>absente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>prezente</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="8" column="0">
+                <widget class="QLabel" name="label_177">
+                 <property name="text">
+                  <string>Arcul aortei</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="1">
+                <widget class="QComboBox" name="gestation2_archAorta">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="8" column="2" colspan="2">
+                <widget class="QLabel" name="label_gestation2_planBicav">
+                 <property name="text">
+                  <string>Planul bicav</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="8" column="4">
+                <widget class="QComboBox" name="gestation2_planBicav">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="4" colspan="2">
+                <spacer name="horizontalSpacer_30">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeType">
+                  <enum>QSizePolicy::Policy::Preferred</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>249</width>
+                   <height>24</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="1" colspan="3">
+                <widget class="QLineEdit" name="gestation2_heartPosition"/>
+               </item>
+               <item row="3" column="2" colspan="4">
+                <widget class="QLineEdit" name="gestation2_planPatruCamere_description"/>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_7">
+              <attribute name="title">
+               <string>Torace</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_72">
+               <item row="1" column="0" colspan="2">
+                <widget class="QLabel" name="label_180">
+                 <property name="text">
+                  <string>Colecții pleurale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_pleuralCollections">
+                 <item>
+                  <property name="text">
+                   <string>absente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>prezente</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="4">
+                <widget class="QLineEdit" name="gestation2_diaphragm_description"/>
+               </item>
+               <item row="3" column="4">
+                <spacer name="verticalSpacer_19">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>199</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="0" column="4">
+                <widget class="QLineEdit" name="gestation2_pulmonaryAreas_description"/>
+               </item>
+               <item row="0" column="0" colspan="2">
+                <widget class="QLabel" name="label_179">
+                 <property name="text">
+                  <string>Arii pulmonare</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_diaphragm">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_pulmonaryAreas">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QLabel" name="label_181">
+                 <property name="text">
+                  <string>Diafragma</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_8">
+              <attribute name="title">
+               <string>Abdomen</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_73">
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_182">
+                 <property name="text">
+                  <string>Perete abdominal</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="gestation2_abdominalWall">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_183">
+                 <property name="text">
+                  <string>Colecții abdominale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="gestation2_abdominalCollections">
+                 <item>
+                  <property name="text">
+                   <string>absente</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>prezente</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="0">
+                <widget class="QLabel" name="label_184">
+                 <property name="text">
+                  <string>Stomac</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="1">
+                <widget class="QComboBox" name="gestation2_stomach">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QLineEdit" name="gestation2_stomach_description"/>
+               </item>
+               <item row="3" column="0">
+                <widget class="QLabel" name="label_185">
+                 <property name="text">
+                  <string>Organe abdominale</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="1">
+                <widget class="QComboBox" name="gestation2_abdominalOrgans">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="0">
+                <widget class="QLabel" name="label_186">
+                 <property name="text">
+                  <string>Colecist</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="1">
+                <widget class="QComboBox" name="gestation2_cholecist">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="2">
+                <widget class="QLineEdit" name="gestation2_cholecist_description"/>
+               </item>
+               <item row="5" column="0">
+                <widget class="QLabel" name="label_187">
+                 <property name="text">
+                  <string>Intestin</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="1">
+                <widget class="QComboBox" name="gestation2_intestine">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="5" column="2">
+                <widget class="QLineEdit" name="gestation2_intestine_description"/>
+               </item>
+               <item row="6" column="2">
+                <spacer name="verticalSpacer_20">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>100</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_9">
+              <attribute name="title">
+               <string>S.urinar</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_74">
+               <item row="0" column="3">
+                <widget class="QLineEdit" name="gestation2_kidneys_description"/>
+               </item>
+               <item row="1" column="3">
+                <widget class="QLineEdit" name="gestation2_ureter_description"/>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QLabel" name="label_190">
+                 <property name="text">
+                  <string>Vezica urinară</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="2">
+                <widget class="QComboBox" name="gestation2_bladder">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="3" column="3">
+                <spacer name="verticalSpacer_21">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>199</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="1" column="2">
+                <widget class="QComboBox" name="gestation2_ureter">
+                 <item>
+                  <property name="text">
+                   <string>nonvizibile</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>vizibile</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="2">
+                <widget class="QComboBox" name="gestation2_kidneys">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="0" colspan="2">
+                <widget class="QLabel" name="label_189">
+                 <property name="text">
+                  <string>Uretere</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="0" colspan="2">
+                <widget class="QLabel" name="label_188">
+                 <property name="text">
+                  <string>Rinichii</string>
+                 </property>
+                </widget>
+               </item>
+              </layout>
+             </widget>
+             <widget class="QWidget" name="tab_10">
+              <attribute name="title">
+               <string>Alte</string>
+              </attribute>
+              <layout class="QGridLayout" name="gridLayout_75">
+               <item row="1" column="0">
+                <widget class="QLabel" name="label_193">
+                 <property name="text">
+                  <string>Placenta</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="1" column="2">
+                <widget class="QLabel" name="label_194">
+                 <property name="text">
+                  <string>, localizarea</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="5" column="0" colspan="2">
+                <widget class="QLabel" name="label_200">
+                 <property name="text">
+                  <string>Inserție cordonului</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="1">
+                <widget class="QComboBox" name="gestation2_extremities">
+                 <item>
+                  <property name="text">
+                   <string>normal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>anormal</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>dificil</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="6" column="7">
+                <widget class="QLabel" name="label_203">
+                 <property name="text">
+                  <string>adâncimea</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="2" column="8">
+                <spacer name="horizontalSpacer_31">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Horizontal</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>40</width>
+                   <height>20</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="2" colspan="2">
+                <widget class="QLineEdit" name="gestation2_placentaDegreeMaturation">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="0" colspan="2">
+                <widget class="QLabel" name="label_198">
+                 <property name="text">
+                  <string>Placenta ecostructura</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="0" column="2" colspan="7">
+                <widget class="QLineEdit" name="gestation2_extremities_description"/>
+               </item>
+               <item row="6" column="8">
+                <widget class="QLineEdit" name="gestation2_amnioticBedDepth"/>
+               </item>
+               <item row="5" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_insertionPlacenta">
+                 <item>
+                  <property name="text">
+                   <string>centrală</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>excentrică</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>periferică</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>marginală</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>velamentoasă</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="4" colspan="5">
+                <widget class="QLineEdit" name="gestation2_umbilicalCordon_description"/>
+               </item>
+               <item row="2" column="6">
+                <widget class="QLineEdit" name="gestation2_placentaDepth">
+                 <property name="sizePolicy">
+                  <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                   <horstretch>0</horstretch>
+                   <verstretch>0</verstretch>
+                  </sizepolicy>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="0" colspan="2">
+                <widget class="QLabel" name="label_201">
+                 <property name="text">
+                  <string>Lichid amniotic (index)</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="2">
+                <widget class="QLineEdit" name="gestation2_amnioticIndex"/>
+               </item>
+               <item row="2" column="7">
+                <widget class="QLabel" name="label_197">
+                 <property name="text">
+                  <string>mm</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="4">
+                <widget class="QLabel" name="label_202">
+                 <property name="text">
+                  <string>mm</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_placentaStructure">
+                 <item>
+                  <property name="text">
+                   <string>omogenă</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>neomogenă</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="0" column="0">
+                <widget class="QLabel" name="label_191">
+                 <property name="text">
+                  <string>Membrele</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="4" column="2" colspan="2">
+                <widget class="QComboBox" name="gestation2_umbilicalCordon">
+                 <item>
+                  <property name="text">
+                   <string>trei vase</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>două vase</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="1">
+                <widget class="QComboBox" name="gestation2_placenta">
+                 <item>
+                  <property name="text">
+                   <string>nonprevia</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>previa</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="4" column="0" colspan="2">
+                <widget class="QLabel" name="label_199">
+                 <property name="text">
+                  <string>Cordon ombilical</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="6" column="5" colspan="2">
+                <widget class="QComboBox" name="gestation2_amnioticIndexAspect">
+                 <item>
+                  <property name="text">
+                   <string>omogen</string>
+                  </property>
+                 </item>
+                 <item>
+                  <property name="text">
+                   <string>neomogen</string>
+                  </property>
+                 </item>
+                </widget>
+               </item>
+               <item row="1" column="3" colspan="6">
+                <widget class="QLineEdit" name="gestation2_placenta_localization"/>
+               </item>
+               <item row="2" column="0" colspan="2">
+                <widget class="QLabel" name="label_195">
+                 <property name="text">
+                  <string>Placenta maturizare</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="3" column="4" colspan="5">
+                <widget class="QLineEdit" name="gestation2_placentaStructure_description"/>
+               </item>
+               <item row="8" column="6">
+                <spacer name="verticalSpacer_22">
+                 <property name="orientation">
+                  <enum>Qt::Orientation::Vertical</enum>
+                 </property>
+                 <property name="sizeHint" stdset="0">
+                  <size>
+                   <width>20</width>
+                   <height>34</height>
+                  </size>
+                 </property>
+                </spacer>
+               </item>
+               <item row="2" column="4" colspan="2">
+                <widget class="QLabel" name="label_196">
+                 <property name="text">
+                  <string>grosimea</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="0" colspan="2">
+                <widget class="QLabel" name="label_204">
+                 <property name="text">
+                  <string>Colul uterin</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="2">
+                <widget class="QLineEdit" name="gestation2_cervix"/>
+               </item>
+               <item row="7" column="4">
+                <widget class="QLabel" name="label_205">
+                 <property name="text">
+                  <string>mm</string>
+                 </property>
+                </widget>
+               </item>
+               <item row="7" column="5" colspan="4">
+                <widget class="QLineEdit" name="gestation2_cervix_description"/>
+               </item>
+              </layout>
+             </widget>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+         <widget class="QWidget" name="tab_3">
+          <attribute name="title">
+           <string>Velocimetrie Doppler</string>
+          </attribute>
+          <layout class="QGridLayout" name="gridLayout_76">
+           <item row="2" column="6">
+            <widget class="QLabel" name="label_221">
+             <property name="text">
+              <string>S/D</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="6">
+            <widget class="QLabel" name="label_225">
+             <property name="text">
+              <string>S/D</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="0">
+            <widget class="QLabel" name="label_207">
+             <property name="text">
+              <string>Artera cerebrală medie</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="7">
+            <widget class="QLineEdit" name="gestation2_cerebral_SD"/>
+           </item>
+           <item row="0" column="7">
+            <widget class="QLineEdit" name="gestation2_ombilic_SD"/>
+           </item>
+           <item row="1" column="9">
+            <widget class="QComboBox" name="gestation2_cerebral_flux">
+             <item>
+              <property name="text">
+               <string>&lt;&lt;-alege-&gt;&gt;</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="3">
+            <widget class="QLabel" name="label_220">
+             <property name="text">
+              <string>RI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="1">
+            <widget class="QLabel" name="label_223">
+             <property name="text">
+              <string>PI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="0">
+            <widget class="QLabel" name="label_209">
+             <property name="text">
+              <string>Artera uterină stânga</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="6">
+            <widget class="QLabel" name="label_217">
+             <property name="text">
+              <string>S/D</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="5">
+            <widget class="QLineEdit" name="gestation2_uterRight_RI"/>
+           </item>
+           <item row="0" column="3">
+            <widget class="QLabel" name="label_212">
+             <property name="text">
+              <string>RI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="5">
+            <widget class="QLineEdit" name="gestation2_uterLeft_RI"/>
+           </item>
+           <item row="3" column="3">
+            <widget class="QLabel" name="label_224">
+             <property name="text">
+              <string>RI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="0">
+            <widget class="QLabel" name="label_208">
+             <property name="text">
+              <string>Artera uterină dreapta</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="7">
+            <widget class="QLineEdit" name="gestation2_uterRight_SD"/>
+           </item>
+           <item row="3" column="7">
+            <widget class="QLineEdit" name="gestation2_uterLeft_SD"/>
+           </item>
+           <item row="0" column="1">
+            <widget class="QLabel" name="label_211">
+             <property name="text">
+              <string>PI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="9">
+            <widget class="QComboBox" name="gestation2_uterRight_flux">
+             <item>
+              <property name="text">
+               <string>&lt;&lt;-alege-&gt;&gt;</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="2" column="8">
+            <widget class="QLabel" name="label_222">
+             <property name="text">
+              <string>flux</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="8">
+            <widget class="QLabel" name="label_218">
+             <property name="text">
+              <string>flux</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="0">
+            <widget class="QLabel" name="label_210">
+             <property name="text">
+              <string>Ductus venos</string>
+             </property>
+            </widget>
+           </item>
+           <item row="4" column="1" colspan="3">
+            <widget class="QComboBox" name="gestation2_ductVenos">
+             <item>
+              <property name="text">
+               <string>&lt;&lt;-alege-&gt;&gt;</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal redus</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal nul</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal revers</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>dificil</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="1" column="5">
+            <widget class="QLineEdit" name="gestation2_cerebral_RI"/>
+           </item>
+           <item row="0" column="9">
+            <widget class="QComboBox" name="gestation2_ombilic_flux">
+             <item>
+              <property name="text">
+               <string>&lt;&lt;-alege-&gt;&gt;</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="3" column="8">
+            <widget class="QLabel" name="label_226">
+             <property name="text">
+              <string>flux</string>
+             </property>
+            </widget>
+           </item>
+           <item row="3" column="9">
+            <widget class="QComboBox" name="gestation2_uterLeft_flux">
+             <item>
+              <property name="text">
+               <string>&lt;&lt;-alege-&gt;&gt;</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>normal</string>
+              </property>
+             </item>
+             <item>
+              <property name="text">
+               <string>anormal</string>
+              </property>
+             </item>
+            </widget>
+           </item>
+           <item row="0" column="5">
+            <widget class="QLineEdit" name="gestation2_ombilic_RI"/>
+           </item>
+           <item row="0" column="0">
+            <widget class="QLabel" name="label_206">
+             <property name="text">
+              <string>Artera ombilicală</string>
+             </property>
+            </widget>
+           </item>
+           <item row="2" column="1">
+            <widget class="QLabel" name="label_219">
+             <property name="text">
+              <string>PI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="0" column="6">
+            <widget class="QLabel" name="label_213">
+             <property name="text">
+              <string>S/D</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="1">
+            <widget class="QLabel" name="label_215">
+             <property name="text">
+              <string>PI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="1" column="3">
+            <widget class="QLabel" name="label_216">
+             <property name="text">
+              <string>RI</string>
+             </property>
+            </widget>
+           </item>
+           <item row="5" column="0" colspan="10">
+            <widget class="QGroupBox" name="groupBox_35">
+             <property name="font">
+              <font>
+               <family>Segoe UI</family>
+               <bold>true</bold>
+              </font>
+             </property>
+             <property name="title">
+              <string>Descifrarea DOPPLER</string>
+             </property>
+             <layout class="QGridLayout" name="gridLayout_83">
+              <item row="0" column="0">
+               <widget class="QTextEdit" name="gestation2_infoDoppler">
+                <property name="font">
+                 <font>
+                  <family>Segoe UI</family>
+                  <bold>false</bold>
+                 </font>
+                </property>
+                <property name="readOnly">
+                 <bool>true</bool>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item row="3" column="2">
+            <widget class="QLineEdit" name="gestation2_uterLeft_PI"/>
+           </item>
+           <item row="2" column="2">
+            <widget class="QLineEdit" name="gestation2_uterRight_PI"/>
+           </item>
+           <item row="1" column="2">
+            <widget class="QLineEdit" name="gestation2_cerebral_PI"/>
+           </item>
+           <item row="0" column="2">
+            <widget class="QLineEdit" name="gestation2_ombilic_PI"/>
+           </item>
+           <item row="0" column="8">
+            <widget class="QLabel" name="label_214">
+             <property name="text">
+              <string>flux</string>
+             </property>
+            </widget>
+           </item>
+          </layout>
+         </widget>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="7">
+        <widget class="QGroupBox" name="groupBox_30">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string>Comentarii</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_77">
+          <item row="0" column="0">
+           <widget class="QPlainTextEdit" name="gestation2_comment">
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>64</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="7">
+        <widget class="QGroupBox" name="groupBox_31">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="font">
+          <font>
+           <family>Cantarell</family>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="styleSheet">
+          <string notr="true">color: rgb(0, 137, 255);</string>
+         </property>
+         <property name="title">
+          <string>Concluzie (ecoscopic)</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0" rowspan="2" colspan="2">
+           <widget class="QPlainTextEdit" name="gestation2_concluzion">
+            <property name="minimumSize">
+             <size>
+              <width>0</width>
+              <height>92</height>
+             </size>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>16777215</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="2">
+           <widget class="QToolButton" name="btnSelectTemplate">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/actions/select.png</normaloff>:/img/actions/select.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="1" column="2">
+           <widget class="QToolButton" name="btnAddTemplate">
+            <property name="styleSheet">
+             <string notr="true">QToolButton
+{
+border: 1px solid rgba(0, 0, 0, 0.1);
+border-radius: 8px;
+background-color: #f1f1f1;
+color: #000000;
+font-size: 13px;
+padding: 4px 4px;
+}
+QToolButton:hover
+{
+background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+background-color: #d0d0d0;
+}</string>
+            </property>
+            <property name="text">
+             <string>...</string>
+            </property>
+            <property name="icon">
+             <iconset resource="../../resources/resource.qrc">
+              <normaloff>:/img/toolBar/add.png</normaloff>:/img/toolBar/add.png</iconset>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="0">
+           <widget class="QLabel" name="label_228">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="text">
+             <string>Recomandări</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1" colspan="2">
+           <widget class="LineEditCustom" name="gestation2_recommendation"/>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="2" column="2" colspan="5">
+        <widget class="QLineEdit" name="gestation2_pregnancy_description"/>
+       </item>
+       <item row="1" column="6">
+        <widget class="QComboBox" name="comboMultiplePregnancy">
+         <item>
+          <property name="text">
+           <string>Sarcina monofetală</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sarcina gemelară</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sarcina trifetală</string>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>Sarcina tetrafetală</string>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="1" column="5">
+        <widget class="QLabel" name="label_2">
+         <property name="text">
+          <string>Numărul de feți</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>LineEditCustom</class>
+   <extends>QLineEdit</extends>
+   <header>customs/lineeditcustom.h</header>
+  </customwidget>
+ </customwidgets>
+ <tabstops>
+  <tabstop>gestation2_dateMenstruation</tabstop>
+  <tabstop>gestation2_gestation_age</tabstop>
+  <tabstop>comboFetalPrezentation</tabstop>
+  <tabstop>gestation2_view_examination</tabstop>
+  <tabstop>comboMultiplePregnancy</tabstop>
+  <tabstop>gestation2_pregnancy</tabstop>
+  <tabstop>gestation2_pregnancy_description</tabstop>
+  <tabstop>gestation2_bpd</tabstop>
+  <tabstop>gestation2_bpd_age</tabstop>
+  <tabstop>gestation2_hc</tabstop>
+  <tabstop>gestation2_hc_age</tabstop>
+  <tabstop>gestation2_ac</tabstop>
+  <tabstop>gestation2_ac_age</tabstop>
+  <tabstop>gestation2_fl</tabstop>
+  <tabstop>gestation2_fl_age</tabstop>
+  <tabstop>gestation2_fetus_age</tabstop>
+  <tabstop>gestation2_probabilDateBirth</tabstop>
+  <tabstop>gestation2_fetusMass</tabstop>
+  <tabstop>gestation2_fetusSex</tabstop>
+  <tabstop>gestation2_calloteCranium</tabstop>
+  <tabstop>gestation2_facialeProfile</tabstop>
+  <tabstop>gestation2_nasalBones</tabstop>
+  <tabstop>gestation2_nasalBones_dimens</tabstop>
+  <tabstop>gestation2_eyeball</tabstop>
+  <tabstop>gestation2_eyeball_desciption</tabstop>
+  <tabstop>gestation2_nasolabialTriangle</tabstop>
+  <tabstop>gestation2_nasolabialTriangle_description</tabstop>
+  <tabstop>gestation2_nasalFold</tabstop>
+  <tabstop>gestation2_hemispheres</tabstop>
+  <tabstop>gestation2_fissureSilvius</tabstop>
+  <tabstop>gestation2_corpCalos</tabstop>
+  <tabstop>gestation2_ventricularSystem</tabstop>
+  <tabstop>gestation2_ventricularSystem_description</tabstop>
+  <tabstop>gestation2_cavityPellucidSeptum</tabstop>
+  <tabstop>gestation2_choroidalPlex</tabstop>
+  <tabstop>gestation2_choroidalPlex_description</tabstop>
+  <tabstop>gestation2_cerebellum</tabstop>
+  <tabstop>gestation2_cerebellum_description</tabstop>
+  <tabstop>gestation2_vertebralColumn</tabstop>
+  <tabstop>gestation2_vertebralColumn_description</tabstop>
+  <tabstop>gestation2_heartPosition</tabstop>
+  <tabstop>gestation2_heartBeat</tabstop>
+  <tabstop>gestation2_heartBeat_frequency</tabstop>
+  <tabstop>gestation2_heartBeat_rhythm</tabstop>
+  <tabstop>gestation2_pericordialCollections</tabstop>
+  <tabstop>gestation2_planPatruCamere</tabstop>
+  <tabstop>gestation2_planPatruCamere_description</tabstop>
+  <tabstop>gestation2_ventricularEjectionPathLeft</tabstop>
+  <tabstop>gestation2_ventricularEjectionPathLeft_description</tabstop>
+  <tabstop>gestation2_ventricularEjectionPathRight</tabstop>
+  <tabstop>gestation2_ventricularEjectionPathRight_description</tabstop>
+  <tabstop>gestation2_intersectionVesselMagistral</tabstop>
+  <tabstop>gestation2_intersectionVesselMagistral_description</tabstop>
+  <tabstop>gestation2_planTreiVase</tabstop>
+  <tabstop>gestation2_planTreiVase_description</tabstop>
+  <tabstop>gestation2_archAorta</tabstop>
+  <tabstop>gestation2_planBicav</tabstop>
+  <tabstop>gestation2_pulmonaryAreas</tabstop>
+  <tabstop>gestation2_pulmonaryAreas_description</tabstop>
+  <tabstop>gestation2_pleuralCollections</tabstop>
+  <tabstop>gestation2_diaphragm</tabstop>
+  <tabstop>gestation2_diaphragm_description</tabstop>
+  <tabstop>gestation2_abdominalWall</tabstop>
+  <tabstop>gestation2_abdominalCollections</tabstop>
+  <tabstop>gestation2_stomach</tabstop>
+  <tabstop>gestation2_stomach_description</tabstop>
+  <tabstop>gestation2_abdominalOrgans</tabstop>
+  <tabstop>gestation2_cholecist</tabstop>
+  <tabstop>gestation2_cholecist_description</tabstop>
+  <tabstop>gestation2_intestine</tabstop>
+  <tabstop>gestation2_intestine_description</tabstop>
+  <tabstop>gestation2_kidneys</tabstop>
+  <tabstop>gestation2_kidneys_description</tabstop>
+  <tabstop>gestation2_ureter</tabstop>
+  <tabstop>gestation2_ureter_description</tabstop>
+  <tabstop>gestation2_bladder</tabstop>
+  <tabstop>gestation2_extremities</tabstop>
+  <tabstop>gestation2_extremities_description</tabstop>
+  <tabstop>gestation2_placenta</tabstop>
+  <tabstop>gestation2_placenta_localization</tabstop>
+  <tabstop>gestation2_placentaDegreeMaturation</tabstop>
+  <tabstop>gestation2_placentaDepth</tabstop>
+  <tabstop>gestation2_placentaStructure</tabstop>
+  <tabstop>gestation2_placentaStructure_description</tabstop>
+  <tabstop>gestation2_umbilicalCordon</tabstop>
+  <tabstop>gestation2_umbilicalCordon_description</tabstop>
+  <tabstop>gestation2_insertionPlacenta</tabstop>
+  <tabstop>gestation2_amnioticIndex</tabstop>
+  <tabstop>gestation2_amnioticIndexAspect</tabstop>
+  <tabstop>gestation2_amnioticBedDepth</tabstop>
+  <tabstop>gestation2_cervix</tabstop>
+  <tabstop>gestation2_cervix_description</tabstop>
+  <tabstop>gestation2_ombilic_PI</tabstop>
+  <tabstop>gestation2_ombilic_RI</tabstop>
+  <tabstop>gestation2_ombilic_SD</tabstop>
+  <tabstop>gestation2_ombilic_flux</tabstop>
+  <tabstop>gestation2_cerebral_PI</tabstop>
+  <tabstop>gestation2_cerebral_RI</tabstop>
+  <tabstop>gestation2_cerebral_SD</tabstop>
+  <tabstop>gestation2_cerebral_flux</tabstop>
+  <tabstop>gestation2_uterRight_PI</tabstop>
+  <tabstop>gestation2_uterRight_RI</tabstop>
+  <tabstop>gestation2_uterRight_SD</tabstop>
+  <tabstop>gestation2_uterRight_flux</tabstop>
+  <tabstop>gestation2_uterLeft_PI</tabstop>
+  <tabstop>gestation2_uterLeft_RI</tabstop>
+  <tabstop>gestation2_uterLeft_SD</tabstop>
+  <tabstop>gestation2_uterLeft_flux</tabstop>
+  <tabstop>gestation2_ductVenos</tabstop>
+  <tabstop>gestation2_infoDoppler</tabstop>
+  <tabstop>gestation2_comment</tabstop>
+  <tabstop>gestation2_concluzion</tabstop>
+  <tabstop>gestation2_recommendation</tabstop>
+  <tabstop>tabWidget_biometry_morfology</tabstop>
+  <tabstop>tabWidget_morfology</tabstop>
+  <tabstop>btnSelectTemplate</tabstop>
+  <tabstop>btnAddTemplate</tabstop>
+  <tabstop>gestation2_trimestru3</tabstop>
+  <tabstop>gestation2_trimestru2</tabstop>
+  <tabstop>scrollArea_gestation2</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

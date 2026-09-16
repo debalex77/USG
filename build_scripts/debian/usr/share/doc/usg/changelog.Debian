@@ -1,3 +1,15 @@
+usg (4.1.0) UNRELEASED; urgency=medium
+  * Migrated the patient schema and related document references.
+  * Added resumable SQLite and MariaDB migrations with UUID synchronization.
+  * Replaced the legacy order/report lists with OrderView and ReportView.
+  * Added multi-investigation patient appointments.
+  * Improved cloud synchronization, PDF, e-mail and attached-image handling.
+  * Hardened application settings, logging and first-run database setup.
+  * Updated LimeReport from 1.7.14 to 1.7.23 for Qt 6.9.3.
+  * Added third-party visual-asset provenance and licensing documentation.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Tue, 15 Sep 2026 19:35:34 +0300
+
 usg (3.0.6) UNRELEASED; urgency=medium
   * Technical migration: application updated to Qt v6.9.3.
   * Ultrasound report: the document code was reorganized into modules to simplify continuous development and maintenance.
@@ -6,7 +18,7 @@ usg (3.0.6) UNRELEASED; urgency=medium
   * Bug fix: resolved the issue with adding kidney formations descriptions.
   * UI: improved styling for the Dark theme.
 
--- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 25 September 2025 20:24:34 +0300
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 25 September 2025 20:24:34 +0300
 
 usg (3.0.5) UNRELEASED; urgency=medium
   * Implemented background synchronization (with the cloud server) for the following documents:
@@ -16,7 +28,7 @@ usg (3.0.5) UNRELEASED; urgency=medium
   * Added a form for creating a <b>.sqlite</b> database archive
   * Fixed application style for the <b>“DARK”</b> theme.
 
--- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 04 September 2025 20:24:34 +0300
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 04 September 2025 20:24:34 +0300
 
 usg (3.0.4) UNRELEASED; urgency=medium
   * Introduced the <b><u>Initial Setup Assistant</u></b>, designed to facilitate correct database completion and prevent initial configuration errors.
@@ -34,7 +46,7 @@ usg (3.0.4) UNRELEASED; urgency=medium
   * Optimized the image insertion function for attached documents (with improved image quality).
   * Fixed minor bugs.
 
--- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 25 May 2025 21:09:34 +0300
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 25 May 2025 21:09:34 +0300
 
 usg (3.0.3) UNRELEASED; urgency=medium
   * Fixed errors in the patient search modules, including improved request performance.

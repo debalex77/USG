@@ -1,0 +1,9 @@
+SELECT
+    id,
+    name,
+    id_contracts,
+    id_typePrice,
+    name_contract,
+    name_typePrice
+FROM
+    v_organizations_active

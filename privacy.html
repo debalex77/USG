@@ -2,75 +2,138 @@
 <html lang="ro">
 <head>
   <meta charset="utf-8">
-  <title>Politica de confidențialitate – USG</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="Politica de confidențialitate pentru aplicația USG – evidența investigațiilor ecografice.">
+  <meta name="description" content="Politica de confidențialitate pentru aplicația desktop și site-ul USG.">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://debalex77.github.io/USG/privacy.html">
+  <title>Politica de confidențialitate – USG</title>
   <style>
+    :root { color-scheme: light dark; }
     body {
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial;
       max-width: 900px;
       margin: 40px auto;
-      padding: 0 16px;
-      line-height: 1.6;
-      color: #222;
+      padding: 0 20px;
+      font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+      line-height: 1.65;
     }
-    h1, h2 { color: #111; }
-    a { color: #0066cc; }
-    .muted { color: #666; font-size: 14px; }
+    h1, h2 { line-height: 1.25; }
+    a { color: #4c8dde; }
+    .notice { padding: 14px 16px; border-left: 4px solid #4c8dde; background: color-mix(in srgb, CanvasText 7%, Canvas); }
+    .muted { opacity: .72; font-size: 14px; }
   </style>
 </head>
 <body>
+  <main>
+    <h1>Politica de confidențialitate USG</h1>
 
-<h1>Politica de confidențialitate</h1>
+    <p class="notice">
+      Această pagină descrie separat funcționarea aplicației desktop USG și a
+      site-ului public de prezentare. Operatorul cabinetului sau organizației
+      care folosește USG este responsabil pentru datele pacienților introduse
+      în propria instalare.
+    </p>
 
-<p>
-Aplicația <strong>USG</strong> este o aplicație desktop destinată evidenței investigațiilor ecografice și a datelor pacienților.
-Confidențialitatea și securitatea datelor sunt priorități esențiale.
-</p>
+    <h2>1. Datele din aplicația desktop</h2>
+    <p>
+      USG păstrează datele pacienților, documentele ecografice și configurația
+      în baza de date aleasă de utilizator: SQLite local sau MariaDB. Imaginile
+      asociate pot fi păstrate într-o bază separată. Dezvoltatorul USG nu
+      primește automat aceste baze de date.
+    </p>
 
-<h2>1. Colectarea datelor</h2>
-<p>
-Aplicația USG <strong>nu colectează date prin internet</strong> și <strong>nu transmite informații către servere externe</strong>.
-Toate datele introduse (date pacienți, investigații, imagini) sunt stocate <strong>local</strong> pe calculatorul utilizatorului.
-</p>
+    <h2>2. Funcții care pot transmite date</h2>
+    <p>
+      <strong>În configurația locală implicită, USG nu transmite datele
+      pacienților prin internet.</strong> Transmiterea are loc numai dacă
+      utilizatorul configurează și inițiază o funcție care necesită rețeaua.
+    </p>
+    <p>
+      Proiectul USG și dezvoltatorul său nu colectează, nu vând și nu transmit
+      datele pacienților către terți. O transmitere către un sistem extern are
+      loc numai la decizia utilizatorului, către serverul, contul de e-mail sau
+      destinatarul configurat și controlat ori ales de acesta.
+    </p>
+    <p>
+      În funcție de opțiunile activate de utilizator, aplicația poate comunica
+      prin rețea pentru:
+    </p>
+    <ul>
+      <li>conectarea directă la o bază MariaDB;</li>
+      <li>sincronizarea cu un server MariaDB/cloud configurat de utilizator;</li>
+      <li>expedierea prin e-mail a documentelor și imaginilor selectate;</li>
+      <li>verificarea și descărcarea actualizărilor aplicației.</li>
+    </ul>
+    <p>
+      Aceste operații folosesc exclusiv serverele, conturile și destinatarii
+      configurați sau aleși de utilizator. Politicile respectivilor furnizori
+      se aplică separat. USG nu activează automat sincronizarea sau expedierea
+      prin e-mail fără configurare și acțiune din partea utilizatorului.
+    </p>
 
-<h2>2. Stocarea datelor</h2>
-<p>
-Datele sunt stocate local într-o bază de date controlată de utilizator.
-Responsabilitatea pentru securitatea fizică și logică a sistemului revine utilizatorului aplicației.
-</p>
+    <h2>3. Loguri, copii de siguranță și exporturi</h2>
+    <p>
+      Logurile, copiile de siguranță, fișierele PDF și imaginile exportate sunt
+      create pe sistemul controlat de utilizator. Ele pot conține informații
+      personale sau medicale. Utilizatorul trebuie să stabilească accesul,
+      retenția, criptarea, transmiterea și ștergerea lor conform legislației și
+      politicilor organizației sale.
+    </p>
 
-<h2>3. Partajarea datelor</h2>
-<p>
-USG <strong>nu partajează</strong> datele cu terți și <strong>nu utilizează servicii cloud</strong>.
-Datele nu părăsesc sistemul local decât prin acțiuni explicite ale utilizatorului (export, tipărire).
-</p>
+    <h2>4. Securitatea și credențialele</h2>
+    <p>
+      Utilizatorul este responsabil pentru securitatea calculatorului, a
+      serverului de baze de date, a conturilor, a parolelor și a copiilor de
+      siguranță. Actualizările trebuie testate pe copii anonimizate înainte de
+      utilizarea cu date de producție.
+    </p>
 
-<h2>4. Cookie-uri și tracking</h2>
-<p>
-Aplicația USG nu utilizează cookie-uri, tehnologii de tracking sau servicii de analiză.
-Site-ul de prezentare folosește doar fișiere statice.
-</p>
+    <h2>5. Site-ul public</h2>
+    <p>
+      Site-ul este static și nu folosește formulare proprii, conturi sau
+      instrumente de analiză introduse de proiect. Este găzduit prin GitHub
+      Pages, iar GitHub poate prelucra date tehnice de acces conform propriei
+      politici. Pagina încarcă insigne de la shields.io și capturi găzduite de
+      GitHub; solicitarea acestor resurse transmite furnizorilor informații
+      tehnice obișnuite, precum adresa IP și antetul browserului.
+    </p>
+    <p>
+      Linkurile către GitHub, GitHub Sponsors și alte servicii externe deschid
+      site-uri administrate de terți, care au politici proprii.
+    </p>
 
-<h2>5. Drepturile utilizatorului</h2>
-<p>
-Utilizatorul are control deplin asupra datelor stocate local, inclusiv dreptul de acces, modificare și ștergere a acestora,
-în conformitate cu legislația aplicabilă (GDPR).
-</p>
+    <h2>6. Cookie-uri</h2>
+    <p>
+      Proiectul USG nu setează direct cookie-uri pe acest site static. Furnizorul
+      de găzduire sau serviciile externe accesate pot utiliza tehnologii
+      proprii conform politicilor lor.
+    </p>
 
-<h2>6. Responsabilitate</h2>
-<p>
-USG este furnizat ca instrument de suport și nu înlocuiește judecata medicală profesională.
-Utilizarea aplicației trebuie să respecte legislația locală privind protecția datelor și actul medical.
-</p>
+    <h2>7. Accesul, corectarea și ștergerea datelor</h2>
+    <p>
+      Datele medicale dintr-o instalare USG sunt controlate de utilizatorul sau
+      organizația care operează acea instalare. Solicitările persoanelor vizate
+      trebuie adresate operatorului respectiv, care poate accesa, corecta,
+      exporta sau șterge datele folosind aplicația și instrumentele bazei de
+      date, în limitele obligațiilor legale aplicabile.
+    </p>
 
-<p class="muted">
-Ultima actualizare: 17 ianuarie 2026
-</p>
+    <h2>8. Raportarea problemelor</h2>
+    <p>
+      Nu publicați baze de date reale, date despre pacienți, parole sau loguri
+      neanonimizate în GitHub Issues. Pentru raportarea unei erori folosiți o
+      copie de test anonimizată și numai fragmentele tehnice necesare.
+    </p>
 
-<p>
-<a href="index.html">← Înapoi la pagina principală</a>
-</p>
+    <h2>9. Contact</h2>
+    <p>
+      Întrebările despre proiect pot fi transmise la
+      <a href="mailto:alovada.med@gmail.com">alovada.med@gmail.com</a> sau prin
+      <a href="https://github.com/debalex77/USG/issues">GitHub Issues</a>, fără
+      includerea datelor medicale confidențiale.
+    </p>
 
+    <p class="muted">Ultima actualizare: 15 septembrie 2026</p>
+    <p><a href="index.html">← Înapoi la pagina principală</a></p>
+  </main>
 </body>
 </html>

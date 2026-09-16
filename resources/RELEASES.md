@@ -1,0 +1,206 @@
+## USG v4.1.0
+* <b>Actualizare tehnică:</b>
+    * generatorul de rapoarte [LimeReport](https://github.com/fralx/LimeReport) a fost actualizat de la versiunea 1.7.14 la versiunea 1.7.23;
+    * integrarea a fost recompilată pentru Qt v6.9.3.
+    * sursa LimeReport și corecția locală sunt fixate și documentate pentru build-uri reproductibile.
+* <b>Migrarea pacienților:</b>
+    * tabela <code>pacients</code> a fost redenumită în <code>patients</code>;
+    * coloanele pacienților și referințele din documente au fost uniformizate;
+    * migrarea include verificări de consistență și protecții pentru relansarea din stări deja actualizate.
+* <b>Compatibilitate SQLite și MariaDB:</b>
+    * schemele, view-urile, indexurile și cheile externe necesare aplicației au fost revizuite;
+    * UUID-urile create în SQLite sunt transferate și păstrate identic în MariaDB;
+    * au fost corectate interogările dependente de motorul SQL și încărcarea datelor istorice.
+* <b>Comenzi și rapoarte ecografice:</b>
+    * jurnalele vechi au fost înlocuite cu ferestrele dedicate <code>OrderView</code> și <code>ReportView</code>;
+    * au fost îmbunătățite filtrarea, păstrarea perioadei, previzualizarea documentelor și indicarea imaginilor atașate;
+    * salvarea și validarea sunt separate: validarea poate solicita tipărirea documentului;
+    * au fost corectate redeschiderea, revalidarea și tipărirea secțiunilor raportului ecografic.
+* <b>Programarea pacienților:</b>
+    * documentul a fost reorganizat în <code>AppointmentDialog</code>;
+    * poate fi selectat un pacient existent sau introdus un nume liber;
+    * o programare poate conține mai multe investigații, păstrate într-o tabelă copil;
+    * investigațiile selectate sunt transferate automat la crearea Comenzii ecografice.
+* <b>Sincronizare cloud:</b>
+    * sincronizarea pacientului, comenzii, raportului și imaginilor folosește UUID-uri;
+    * au fost corectate maparea relațiilor, evitarea duplicatelor și compatibilizarea bazelor istorice;
+    * erorile de sincronizare sunt raportate fără pierderea datelor salvate local.
+* <b>Tipărire și e-mail:</b>
+    * exportul PDF include corect semnătura și ștampila doctorului;
+    * atașamentele PDF și imaginile pot fi deschise prin aplicația implicită a sistemului de operare;
+    * au fost eliminate crashurile și coruperea memoriei din fluxul de pregătire a e-mailului.
+* <b>Setările aplicației:</b>
+    * citirea, validarea și salvarea profilurilor au fost consolidate;
+    * setările SQLite și MariaDB sunt păstrate separat în același profil;
+    * parolele cloud sunt protejate, iar configurațiile vechi sau invalide sunt tratate explicit;
+    * șabloanele sunt încărcate din directorul în care este instalată aplicația.
+* <b>Lansare și bază de date nouă:</b>
+    * fluxul selectare bază → creare schemă → administrator → autorizare → fereastră principală → configurare inițială a fost serializat și verificat;
+    * inițializarea incompletă poate fi reluată, iar obiectele SQL create sunt prezentate în jurnal.
+* <b>Jurnalizare:</b>
+    * scrierea logurilor este sigură între firele de execuție;
+    * rotația zilnică, retenția, numele fișierelor și schimbarea căii au fost corectate;
+    * mesajele Debug rămân vizibile și în ieșirea Qt Creator.
+* <b>Interfață și mentenanță:</b>
+    * au fost eliminate clase și modele vechi care nu mai erau utilizate;
+    * au fost uniformizate stilurile, meniurile de tipărire și comportamentul ferestrelor;
+    * a fost documentată proveniența și licențierea iconurilor distribuite cu aplicația.
+* <b>Actualizare importantă:</b> înainte de migrare se recomandă copierea de siguranță a bazei principale, a bazei de imagini și a configurației aplicației. Bazele partajate trebuie actualizate de un singur client, fără utilizarea simultană a versiunilor vechi și noi.
+
+## USG v4.0.1
+* <b>Numerotarea documentelor:</b> numerele comenzilor și rapoartelor ecografice sunt alocate separat pentru fiecare an, în formatul <code>n/YYYY</code>.
+* <b>Migrarea bazei de date:</b> numerele istorice numerice sunt convertite la formatul <code>n/YYYY</code>, secvențele anuale sunt inițializate din documentele existente, iar unicitatea numerelor include anul documentului.
+
+## USG v3.0.6
+* <b>Migrare tehnică:</b> 
+    * actualizarea aplicației la Qt v6.9.3.
+    * actualizarea [LimeReport](http://limereport.ru/en/index.php) la versiunea 1.7.14
+* <b>Raport ecografic:</b> codul documentului a fost reorganizat modular, pentru a facilita dezvoltarea și întreținerea ulterioară.
+* <b>Funcționalitate nouă:</b> adăugarea sistemului „Examinarea țesuturilor moi și a ganglionilor limfatici” în formularul documentului Raport ecografic.
+* <b>Tipărire:</b> introducerea șablonului de tipar pentru noul sistem de examinare (vezi punctul de mai sus).
+* <b>Bug fix:</b> corectarea erorii la adăugarea descrierilor formațiunilor renale.
+* <b>Interfață:</b> ajustarea stilului aplicației pentru tema <u>„DARK”</u>.
+
+## USG v3.0.5
+* implementată sincronizarea (cu serverul cloud) în fundal a următoarelor documente:
+    * Comanda ecografică
+    * Raport ecografic
+    * Imagini asociate
+* adaugată forma pentru crearea arhivului bazei de date <b>.sqlite</b>
+* corectat stilul aplicației pentru tema <b>„DARK”</b>.
+
+## USG v3.0.4
+* întrodusă forma <b><u>Asistentul de configurare inițială</u></b>, care are rolul de a facilita completarea corectă a bazei de date și de a preveni apariția erorilor de configurare inițială.
+* <b><u>Jurnalul de logare</u></b> – a fost implementată filtrarea mesajelor în funcție de nivelul de informație:
+    * Info     - informații generale
+    * Warning  - mesaje de atenționare
+    * Critical - mesaje critice
+    * Debug    - informații pentru depanare
+    * THREAD   - mesaje provenite din fire de execuție diferite
+    * SYNC     - informații privind sincronizarea
+* adăugată forma <b><u>Configurare (setare) cloud server</u></b>, care conține datele necesare pentru conectarea și sincronizarea cu <b><u>serverul cloud</u></b>, atunci când este necesar.
+* implementată sincronizarea în fundal la validarea datelor pacientului din forma documentului <b><u>Comanda ecografică</u></b>.
+* optimizat stilul și fontul aplicației pentru tema <b>„DARK”</b>.
+* corectată funcția de trimitere a e-mailului către pacient.
+* optimizată funcția de inserare a imaginilor atașate documentelor (cu îmbunătățirea calității acestora).
+* fixarea bag-lor minore
+
+## USG v3.0.3
+* corectarea erorii din modulele de cautare a pacientilor cu corectarea performantei solicitarilor
+* implementarea agentului <b><u>sendEmail</u></b> cu următoarele functionalități de atașare a documentelor:   
+    * Comanda ecografică
+    * Raport ecografic
+    * Imaginile asociate
+* ajustarea tabelelor <b><u>tableGestation0</u></b> și <b><u>tableGestation1</u></b>: adaugarea câmpului LMP pentru fixarea datei și calculul automat a vârstei.
+* trecerea la standard limbajului C++20
+* fixarea bag-lor minore
+
+## USG v3.0.2
+* normograme - au fost adaugate datele percentilelor(5,10,25,50,75,90,95):
+    * a.uterine 
+    * a.ombelicale
+    * a.cerebrală medie
+    * masa fătului
+* document 'Raport ecografic':
+    * adaugată descifrarea doppler-ului în dependeță de valoarea a percentilei
+    * realizată calcularea automată vârstei gestaționale și a datei probabile a nașterii
+* blocarea programei -  a fost implementat mecanismul de blocare a aplicației de către utilizator în timpul pauzei
+* fixate bug-rile minore
+
+## USG v3.0.1
+* migrarea aplicatiei de la versiunea Qt:5.15.2 la versiunea Qt:6.5.3
+* integrarea compatibilității aplicației cu sistemul de operare MacOS (începând cu MacOS Ventura și ulterioare)
+* revizuirea radicală a stilului aplicației
+* adaugate imaginile de pornire (splash) a aplicației noi 
+* în forma lista documentelor <b><u>'Comanda ecografica'</u></b> a fost adaugată colonița '<u>Trimis de ...</u>'
+* în documentul 'Raport ecografic' modificate următoarele compartimente:
+    * <b><u>organele interne</u></b> - adaugată descrierea <u>anselor intestinale</u>
+    * <b><u>sistemul urinar</u></b> - adaugata descrierea <u>glandelor suprarenale</u>
+* actualizat <u>generatorul de rapoarte</u> [LimeReport](https://github.com/fralx/LimeReport) până la <U>versiunea 1.7.7</U>
+* actualizat driverul [OpenSSL](https://openssl.org/) până la <u>versiunea 3.0.7</u> (este o biblioteca de software pentru criptografie de uz general 
+și comunicare sigură ce ţine cont de securitate și confidențialitate a datelor)
+* optimizat codul solicitărilor de validarea și completare a documentului 'Raport ecografic'.
+* pentru a micșora durata de execuție a interogărilor solicitărilor cu baza de date au fost create indexurile specifice.
+* a fost realizata paginarea prezentarii listei de documente <b><u>'Comanda ecografica'</u></b>.
+* adaugata posibilitatea pastrarii in sablon a descrierii formatiunilor
+* optimizat fontul sabloanelor de tipar 
+* a fost adaugat clasificator localităților Republicii Moldova (pentru autocompletarea la întroducerea adresei pacienților).
+* adaugată forma de tipar a documentului 'Formarea prețurilor'.
+
+## USG v2.0.9
+* realizată descărcarea versiunii noi a aplicației cu prezentarea progress bar-ului în status bar
+* adăugată opțiunea de a lansa documente (Formarea prețurilor, Comanda ecografică și Raport ecografic) în fereastra aparte de aplicația (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
+* realizată minimizarea aplicației în tray (opțiunea în <b><u>'Preferințele utilizatorului'</u></b>)
+* corectată întroducerea termenului în sistemul ginecologic și sarcinile (în caz când termenul conține cifre întregi - exemplu: sarcina 10 săptămâni)
+* corectată funcția de redactare în documentul <b><u>'Programarea pacienților'</u></b>
+* în catalogul <b><u>'Clasificatorul investigațiilor'</u></b> adaugat rechizit nou 'Grupa' pentru gruparea investigațiilor și prezentarea în catalogul <b><u>'Arbore investigațiilor'</u></b>
+* adaugată forma catalogului <b><u>'Arbore investigațiilor'</u></b> cu forma liberă de tipar a arborelui
+* in catalogul <b><u>'Pacienți'</u></b> modificată lungimea rechizitului <u>'Polița medicală'</u> de la 12 simboluiri până la 20.
+* în documentul <b><u>'Raport ecografic'</u></b> corectată masca întroducerii datelor la sistemul obstetrical (vârsta gestațională, fătul corespunde vârstei etc.)
+
+## USG v2.0.8
+* fixat bug-ul la prezentarea <b><u>'User Manual'</u></b> (lansarea programei)
+* adaugată funcția de prezentare logării prin interpretorul liniei de comandă (cmd) - <b><u>'USG /debug'</u></b>
+* documentul <b><u>'Raport ecogrfic'</u></b> - optimizat codul la atașare fișierelor video
+* optimizat fontul în lista documentelor (OS Windows)
+* fixată problema cu caracterele și simbolurile pentru limba română (OS Windows)
+* adaugate imagini pentru metadate (package Linux)
+* fixate bug-urile minore
+
+## USG v2.0.7
+* fixat bug-ul la printarea formelor de tipar în trimestrul II și III a sarcinei din baza de date MySQL
+* realizată vizualizarea istoriei versiunilor (offline)
+* adaugată funcția nouă de atașare a fișierelor video la documentul <b><u>'Raport ecografic'</u></b>
+* adaugată prezentarea informației suplimentare despre lucrul cu fișiere video și descrierea rapoartelor
+* în preferințele utilizatorului adaugată tabela cu alegerea prezentării mesajelor informaționale suplimentare (fișiere video și descrierea rapoartelor)
+* modificate datele normogramei de evaluare a translucenței nucale (sursa - <a href="https://fetalmedicine.org/research/assess/nt"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+* adaugate normograme obstetricale noi:
+    * doppler a.uterine (sursa - <a href="https://fetalmedicine.org/research/utp"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+    * doppler a.ombelicale (sursa - <a href="https://fetalmedicine.org/research/doppler"><span style=" text-decoration: underline; color:#8ab4f8;">fetalmedicine.org</span></a>)
+
+## USG v2.0.6
+* adaugat catalogul cu normograme obstetricale:
+    * normograma translucența nucală
+    * normograma oasele nazale
+    * index lichidului amniotic
+* în documentul <b><u>'Raport ecografic'</u></b> este posibil de consultat normogramele
+
+## USG v2.0.5
+* modificat documentul <b><u>'Raport ecografic'</u></b> - în document a fost adaugat examen ecografic în trimestru II și III de sarcină
+* adaugată forma de tipar trimestru II și III de sarcină (blancul corespunde raportului ecografic al IMSP Institutul Mamei şi Copilului)
+* fixarea bug-lui la inchiderea <b><u>'Rapoarte'</u></b> - crash application
+* adaugată informație suplimentară în asistentul sfaturlor aplicației
+* fixate bug-urile minore
+
+## USG v2.0.4  
+* verificarea versiunei noi a aplicației la lansarea aplicației 
+* corectarea drumului spre șabloanele de tipar la prima lansare (pentru OS Windows)
+* revăzută forma setărilor/preferințelor utilizatorului
+* în baza de date adaugată tabela nouă 'userPreferences' pentru păstrarea setărilor utilizatorilor
+* adaugat asistentul sfaturlor aplicației cu posibilitatea prezentării la lansarea aplicației 
+
+## USG v2.0.3
+* adaugat raport nou <b><u>Structura patologiilor</u></b>  
+* optimizată prezentarea elementelor generatorului de rapoarte în dependență de tipul raportului 
+* adaugată informația despre licență  
+* adaugată raportarea bug-urilor aplicației (online GitHub) în meniu principal a aplicației
+* traducerea finală interfeței aplicației în limbra rusă
+* adăugat fișierul splash     
+* fixate bug-urile minore
+
+## USG v2.0.2  
+* redenumirea fișierelor de logare după denumirea bazei de date.
+* vizualizarea fișierului de logare în timpul conectării la baza de date MySQL.
+* transferarea istoriei versiunilor aplicației online (GitHub).
+* lista de documente: Comanda ecografică - realizată prezentarea/ascunderea secțiilor.
+* fixarea bug-ului în timpul previzualizării șablonului de tipar în caz când nu este prezentat logotipul, ștampila, semnătura.
+
+## USG v2.0.1
+Optimizat codul aplicației compatibil cu [Qt5](https://doc.qt.io/qt-5/qt5-intro.html) / [Qt6](https://doc.qt.io/qt-6/whatsnewqt6.html) cu suportul 
+multi-platformă atât în OS Linux cât și OS Windows.  
+* Adaugate fonturi (OS Windows):
+* Cantarell Bold.ttf  
+* Cantarell BoldOblique.ttf  
+* Cantarell Oblique.ttf  
+* Cantarell Regular.ttf  
+... pentru stilul unic de prezentare a formelor de tipar și rapoartelor.

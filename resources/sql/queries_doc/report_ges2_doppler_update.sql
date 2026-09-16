@@ -1,0 +1,20 @@
+UPDATE tableGestation2_doppler SET
+    ombilic_PI     = :ombilic_PI,
+    ombilic_RI     = :ombilic_RI,
+    ombilic_SD     = :ombilic_SD,
+    ombilic_flux   = :ombilic_flux,
+    cerebral_PI    = :cerebral_PI,
+    cerebral_RI    = :cerebral_RI,
+    cerebral_SD    = :cerebral_SD,
+    cerebral_flux  = :cerebral_flux,
+    uterRight_PI   = :uterRight_PI,
+    uterRight_RI   = :uterRight_RI,
+    uterRight_SD   = :uterRight_SD,
+    uterRight_flux = :uterRight_flux,
+    uterLeft_PI    = :uterLeft_PI,
+    uterLeft_RI    = :uterLeft_RI,
+    uterLeft_SD    = :uterLeft_SD,
+    uterLeft_flux  = :uterLeft_flux,
+    ductVenos      = :ductVenos
+WHERE
+    id_reportEcho = :id_reportEcho

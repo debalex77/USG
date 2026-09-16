@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS doc_sequences (
+    name VARCHAR(255) NOT NULL,
+    year SMALLINT NOT NULL,
+    value BIGINT UNSIGNED NOT NULL DEFAULT 0,
+    PRIMARY KEY (name, year)
+) ENGINE=InnoDB;

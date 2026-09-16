@@ -1,0 +1,22 @@
+UPDATE tableGestation2_other SET
+    externalGenitalOrgans          = :externalGenitalOrgans,
+    externalGenitalOrgans_aspect   = :externalGenitalOrgans_aspect,
+    extremities                    = :extremities,
+    extremities_descriptions       = :extremities_descriptions,
+    fetusMass                      = :fetusMass,
+    placenta                       = :placenta,
+    placentaLocalization           = :placentaLocalization,
+    placentaDegreeMaturation       = :placentaDegreeMaturation,
+    placentaDepth                  = :placentaDepth,
+    placentaStructure              = :placentaStructure,
+    placentaStructure_descriptions = :placentaStructure_descriptions,
+    umbilicalCordon                = :umbilicalCordon,
+    umbilicalCordon_description    = :umbilicalCordon_description,
+    insertionPlacenta              = :insertionPlacenta,
+    amnioticIndex                  = :amnioticIndex,
+    amnioticIndexAspect            = :amnioticIndexAspect,
+    amnioticBedDepth               = :amnioticBedDepth,
+    cervix                         = :cervix,
+    cervix_description             = :cervix_description
+WHERE
+    id_reportEcho = :id_reportEcho

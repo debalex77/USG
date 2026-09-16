@@ -1,0 +1,29 @@
+INSERT INTO tableGestation2 (
+    id_reportEcho,
+    gestation_age,
+    trimestru,
+    dateMenstruation,
+    view_examination,
+    single_multiple_pregnancy,
+    single_multiple_pregnancy_description,
+    antecedent,
+    comment,
+    concluzion,
+    recommendation,
+    fetalPrezentation,
+    multiplePregnancy
+) VALUES (
+    :id_reportEcho,
+    :gestation_age,
+    :trimestru,
+    :dateMenstruation,
+    :view_examination,
+    :single_multiple_pregnancy,
+    :single_multiple_pregnancy_description,
+    :antecedent,
+    :comment,
+    :concluzion,
+    :recommendation,
+    :fetalPrezentation,
+    :multiplePregnancy
+)

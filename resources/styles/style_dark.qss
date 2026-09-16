@@ -76,7 +76,7 @@ QComboBox::drop-down {
     background-color: #3b3b3b;
 }
 QComboBox::down-arrow {
-    image: url(://img/down-chevron.png);
+    image: url(:/img/common/arrow_combo_light.png);
     width: 12px;
     height: 12px;
 }
@@ -304,7 +304,7 @@ QCheckBox::indicator:hover {
 QCheckBox::indicator:checked {
     background-color: #2b2b2b; /* Fundal rămâne gri-închis */
     border: 1px solid #aaa;
-    image: url(:/img/check-mark.png); /* Imagine albă pentru bifă */
+    image: url(:/img/common/mark.png);
 }
 
 QCheckBox::indicator:checked:hover {
@@ -363,7 +363,7 @@ QListWidget::indicator:hover {
 QListWidget::indicator:checked {
     background-color: #2b2b2b;
     border: 1px solid #aaa;
-    image: url(:/img/check-mark.png);
+    image: url(:/img/common/mark.png);
 }
 
 QListWidget::indicator:checked:hover {
@@ -400,7 +400,40 @@ QToolTip {
 }
 /* -------------------------- QRadioButton ---------------------- */
 QRadioButton {
-    color: #ffffff;
-    background-color: transparent;
+    color: white;
     spacing: 5px;
+}
+
+QRadioButton::focus {
+    border: 1px solid #00baff;
+    border-radius: 4px;
+}
+
+QRadioButton::indicator {
+    width: 14px;
+    height: 14px;
+    border-radius: 7px;
+
+    background-color: #2b2b2b;
+    border: 1px solid #666;
+}
+
+QRadioButton::indicator:hover {
+    background-color: #3b3b3b;
+    border: 1px solid #888;
+}
+
+QRadioButton::indicator:checked {
+    background-color: #2b2b2b;
+    border: 1px solid #aaa;
+
+    image: url(:/img/common/mark.png);
+}
+
+QRadioButton::indicator:checked:hover {
+    background-color: #3b3b3b;
+}
+
+QRadioButton::indicator:unchecked:hover {
+    background-color: #3b3b3b;
 }

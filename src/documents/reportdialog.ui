@@ -1,0 +1,686 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>ReportDialog</class>
+ <widget class="QDialog" name="ReportDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1088</width>
+    <height>834</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Maximum" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="font">
+   <font>
+    <family>Segoe UI</family>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Dialog</string>
+  </property>
+  <property name="windowIcon">
+   <iconset resource="../../resources/resource.qrc">
+    <normaloff>:/img/documents/reportEcho.png</normaloff>:/img/documents/reportEcho.png</iconset>
+  </property>
+  <property name="sizeGripEnabled">
+   <bool>true</bool>
+  </property>
+  <layout class="QGridLayout" name="gridLayout_8">
+   <item row="1" column="9">
+    <widget class="QToolButton" name="btnOpenOrder">
+     <property name="styleSheet">
+      <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/catalogs/open_catalog.png</normaloff>:/img/catalogs/open_catalog.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="3" column="0" colspan="10">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <layout class="QHBoxLayout" name="layoutAuthor"/>
+     </item>
+     <item>
+      <spacer name="horizontalSpacer_3">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+       <property name="sizeHint" stdset="0">
+        <size>
+         <width>40</width>
+         <height>20</height>
+        </size>
+       </property>
+      </spacer>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnPrint">
+       <property name="toolTip">
+        <string>Printare (Ctrl + P)</string>
+       </property>
+       <property name="text">
+        <string>Printeaza</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources/resource.qrc">
+         <normaloff>:/img/actions/print.png</normaloff>:/img/actions/print.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+P</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnOk">
+       <property name="toolTip">
+        <string>Validare (Ctrl + Enter)</string>
+       </property>
+       <property name="text">
+        <string>Valideaza</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources/resource.qrc">
+         <normaloff>:/img/btns/valide.png</normaloff>:/img/btns/valide.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+Return</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnWrite">
+       <property name="toolTip">
+        <string>Salvare (Ctrl + S)</string>
+       </property>
+       <property name="text">
+        <string>Salveaza</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources/resource.qrc">
+         <normaloff>:/img/btns/save.png</normaloff>:/img/btns/save.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Ctrl+S</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="btnClose">
+       <property name="toolTip">
+        <string>Inchiderea (Esc)</string>
+       </property>
+       <property name="text">
+        <string>Inchide</string>
+       </property>
+       <property name="icon">
+        <iconset resource="../../resources/resource.qrc">
+         <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
+       </property>
+       <property name="shortcut">
+        <string>Esc</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item row="0" column="4">
+    <widget class="QLabel" name="label_2">
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>din</string>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="7">
+    <widget class="QToolButton" name="btnOpenPatient">
+     <property name="styleSheet">
+      <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+     </property>
+     <property name="text">
+      <string>...</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/catalogs/open_catalog.png</normaloff>:/img/catalogs/open_catalog.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="1">
+    <spacer name="horizontalSpacer_2">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Preferred</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>111</width>
+       <height>24</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="0" column="5">
+    <widget class="QDateTimeEdit" name="dateTimeDoc">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="displayFormat">
+      <string>dd.MM.yyyy HH:mm:ss</string>
+     </property>
+     <property name="calendarPopup">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="2">
+    <widget class="QLabel" name="label">
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <bold>true</bold>
+      </font>
+     </property>
+     <property name="text">
+      <string>Raport ecografic nr.</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="0" colspan="2">
+    <spacer name="horizontalSpacer_5">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Preferred</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>276</width>
+       <height>20</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="2">
+    <widget class="QLabel" name="label_3">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="text">
+      <string>Pacient</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="0" colspan="10">
+    <widget class="QSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <widget class="QFrame" name="frame_btn">
+      <property name="maximumSize">
+       <size>
+        <width>300</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QVBoxLayout" name="verticalLayout">
+       <item>
+        <widget class="QCommandLinkButton" name="btnOrgansInternal">
+         <property name="text">
+          <string>Organe interne</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/liver.png</normaloff>:/img/medicine/liver.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnUrinarySystem">
+         <property name="text">
+          <string>Sistemul urinar</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/kidney.png</normaloff>:/img/medicine/kidney.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnProstate">
+         <property name="text">
+          <string>Prostata</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/prostate.png</normaloff>:/img/medicine/prostate.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnGynecology">
+         <property name="text">
+          <string>Ginecologic</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/pubis.png</normaloff>:/img/medicine/pubis.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnBreast">
+         <property name="text">
+          <string>Glandele mamare</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/breast.png</normaloff>:/img/medicine/breast.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnThyroid">
+         <property name="text">
+          <string>Glanda tiroida</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/thyroide.png</normaloff>:/img/medicine/thyroide.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnGestation0">
+         <property name="text">
+          <string>Sarcina până la 11 săptămâni</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/pregnant0.png</normaloff>:/img/medicine/pregnant0.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnGestation1">
+         <property name="text">
+          <string>Sarcina 11-14 săptămâni</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/pregnant1.png</normaloff>:/img/medicine/pregnant1.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnGestation2">
+         <property name="text">
+          <string>Sarcina 14-40 săptămâni</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/pregnant2.png</normaloff>:/img/medicine/pregnant2.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnLymphNodes">
+         <property name="text">
+          <string>Țesuturi moi și gangl.limfatici</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/lymph-nodes.png</normaloff>:/img/medicine/lymph-nodes.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnImages">
+         <property name="text">
+          <string>Imagini</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/common/image.png</normaloff>:/img/common/image.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnVideo">
+         <property name="text">
+          <string>Video</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/common/video.png</normaloff>:/img/common/video.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnNormograms">
+         <property name="text">
+          <string>Normograme</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/medicine/normograma.png</normaloff>:/img/medicine/normograma.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCommandLinkButton" name="btnComment">
+         <property name="text">
+          <string>Comentariu</string>
+         </property>
+         <property name="icon">
+          <iconset resource="../../resources/resource.qrc">
+           <normaloff>:/img/documents/comment.png</normaloff>:/img/documents/comment.png</iconset>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPlainTextEdit" name="comment"/>
+       </item>
+       <item>
+        <spacer name="verticalSpacer_7">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QFrame" name="frame_table">
+      <property name="frameShape">
+       <enum>QFrame::Shape::StyledPanel</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Shadow::Raised</enum>
+      </property>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0">
+        <widget class="QGroupBox" name="groupBox_5">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="maximumSize">
+          <size>
+           <width>16777215</width>
+           <height>121</height>
+          </size>
+         </property>
+         <property name="font">
+          <font>
+           <family>Segoe UI</family>
+           <pointsize>12</pointsize>
+           <bold>true</bold>
+          </font>
+         </property>
+         <property name="title">
+          <string>Concluzia</string>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="0" column="0">
+           <widget class="QPlainTextEdit" name="concluzion">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Expanding" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>16777215</width>
+              <height>84</height>
+             </size>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="QStackedWidget" name="stackedWidget">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="currentIndex">
+          <number>-1</number>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item row="1" column="3" colspan="3">
+    <widget class="QComboBox" name="comboPatient">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="editable">
+      <bool>true</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="0">
+    <widget class="QPushButton" name="btnParameters">
+     <property name="text">
+      <string>Parametrii</string>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/catalogs/investigations.png</normaloff>:/img/catalogs/investigations.png</iconset>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="3">
+    <widget class="QLineEdit" name="numberDoc"/>
+   </item>
+   <item row="1" column="8">
+    <widget class="QLabel" name="labelOrderEcho">
+     <property name="font">
+      <font>
+       <family>Segoe UI</family>
+       <pointsize>10</pointsize>
+       <italic>true</italic>
+       <bold>false</bold>
+      </font>
+     </property>
+     <property name="styleSheet">
+      <string notr="true">color: rgb(0, 137, 255);
+font: italic 10pt &quot;Segoe UI&quot;;</string>
+     </property>
+     <property name="text">
+      <string>Comanda ecografica nr.34 din 12.11.2021</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="0" column="6" colspan="4">
+    <spacer name="horizontalSpacer">
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="sizeType">
+      <enum>QSizePolicy::Policy::Fixed</enum>
+     </property>
+     <property name="sizeHint" stdset="0">
+      <size>
+       <width>424</width>
+       <height>24</height>
+      </size>
+     </property>
+    </spacer>
+   </item>
+   <item row="1" column="6">
+    <widget class="QToolButton" name="btnPatientHistory">
+     <property name="styleSheet">
+      <string notr="true">QToolButton
+{
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    background-color: #f1f1f1;
+    color: #000000;
+    font-size: 13px;
+    padding: 4px 4px;
+}
+QToolButton:hover
+{
+    background-color: #e0e0e0;
+}
+QToolButton:pressed
+{
+    background-color: #d0d0d0;
+}</string>
+     </property>
+     <property name="text">
+      <string/>
+     </property>
+     <property name="icon">
+      <iconset resource="../../resources/resource.qrc">
+       <normaloff>:/img/documents/medical_history.png</normaloff>:/img/documents/medical_history.png</iconset>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <tabstops>
+  <tabstop>btnWrite</tabstop>
+  <tabstop>btnParameters</tabstop>
+  <tabstop>numberDoc</tabstop>
+  <tabstop>btnBreast</tabstop>
+  <tabstop>btnOpenPatient</tabstop>
+  <tabstop>btnGynecology</tabstop>
+  <tabstop>btnThyroid</tabstop>
+  <tabstop>comboPatient</tabstop>
+  <tabstop>concluzion</tabstop>
+  <tabstop>btnOk</tabstop>
+  <tabstop>btnGestation0</tabstop>
+  <tabstop>dateTimeDoc</tabstop>
+  <tabstop>btnProstate</tabstop>
+  <tabstop>btnPrint</tabstop>
+  <tabstop>btnOpenOrder</tabstop>
+  <tabstop>btnClose</tabstop>
+  <tabstop>btnOrgansInternal</tabstop>
+  <tabstop>btnUrinarySystem</tabstop>
+  <tabstop>btnGestation1</tabstop>
+  <tabstop>btnComment</tabstop>
+  <tabstop>comment</tabstop>
+  <tabstop>btnPatientHistory</tabstop>
+  <tabstop>btnImages</tabstop>
+  <tabstop>btnGestation2</tabstop>
+  <tabstop>btnVideo</tabstop>
+  <tabstop>btnNormograms</tabstop>
+  <tabstop>btnLymphNodes</tabstop>
+ </tabstops>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

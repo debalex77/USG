@@ -1,0 +1,42 @@
+CREATE TABLE IF NOT EXISTS `tableGestation1` (
+    multiplePregnancy INTEGER NOT NULL DEFAULT 0,
+    `id`                BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
+    `id_reportEcho`     BIGINT UNSIGNED NOT NULL,
+    `view_examination`  INT,
+    `antecedent`        VARCHAR (150),
+    `lmp`               VARCHAR (10),
+    `gestation_age`     VARCHAR (20),
+    `CRL`               VARCHAR (5),
+    `CRL_age`           VARCHAR (20),
+    `BPD`               VARCHAR (5),
+    `BPD_age`           VARCHAR (20),
+    `NT`                VARCHAR (5),
+    `NT_percent`        VARCHAR (20),
+    `BN`                VARCHAR (5),
+    `BN_percent`        VARCHAR (20),
+    `BCF`               VARCHAR (30),
+    `FL`                VARCHAR (5),
+    `FL_age`            VARCHAR (20),
+    `callote_cranium`   VARCHAR (50),
+    `plex_choroid`      VARCHAR (50),
+    `vertebral_column`  VARCHAR (50),
+    `stomach`           VARCHAR (50),
+    `bladder`           VARCHAR (50),
+    `diaphragm`         VARCHAR (50),
+    `abdominal_wall`    VARCHAR (50),
+    `location_placenta` VARCHAR (50),
+    `sac_vitelin`       VARCHAR (50),
+    `amniotic_liquid`   VARCHAR (50),
+    `miometer`          VARCHAR (200),
+    `cervix`            VARCHAR (200),
+    `ovary`             VARCHAR (200),
+    `concluzion`        VARCHAR (500),
+    `recommendation`    VARCHAR (255),
+    PRIMARY KEY (`id`),
+    KEY `idx_tableGestation1_reportEcho` (`id_reportEcho`),
+    CONSTRAINT `fk_tableGestation1_reportEcho`
+        FOREIGN KEY (`id_reportEcho`)
+        REFERENCES `reportEcho` (`id`)
+        ON DELETE CASCADE
+        ON UPDATE RESTRICT
+) ENGINE=InnoDB;

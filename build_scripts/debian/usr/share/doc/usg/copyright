@@ -3,12 +3,25 @@ Upstream-Name: usg
 Source: https://github.com/debalex77/USG
 
 Files: *
-Copyright: 2021-2025 Codreanu Alexandru <alovada.med@gmail.com>
+Copyright: 2021-2026 Codreanu Alexandru <alovada.med@gmail.com>
 
 License: GPL-3.0+
 
 Files: debian/*
 License: GPL-3.0+
+
+Files: resources/images/*
+Copyright: LimeReport contributors
+License: LGPL-3.0+ or GPL-3.0+
+Comment: The exact upstream source, version, patch and license handling are
+ documented in third_party/LIMEREPORT.md and
+ third_party/THIRD_PARTY_ICONS.md.
+
+Files: resources/img/* resources/icons/*
+Copyright: See third_party/THIRD_PARTY_ICONS.md
+License: GPL-3.0+ and third-party licenses
+Comment: Individual provenance, authors and license obligations are recorded
+ in third_party/THIRD_PARTY_ICONS.md.
 
 License: GPL-3.0+
  This package is free software; you can redistribute it and/or modify

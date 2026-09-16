@@ -2,13 +2,10 @@
 
 set -e
 
-SYMLINK=/usr/bin/usg
+SYMLINK="/usr/bin/usg"
 
-if [ "$1" = "upgrade" ] ; then
-    rm -f $SYMLINK
-    if [ -f "$SYMLINK" ] ; then
-        rm $SYMLINK
-    fi
+if [ "${1:-}" = "upgrade" ]; then
+    rm -f -- "$SYMLINK"
 fi
 
 exit 0
