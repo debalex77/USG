@@ -141,9 +141,9 @@ private:
     QLabel *labelAuthor = nullptr;
     QTimer* timer;
 
-    LimeReport::ReportEngine *m_report;
-    QSqlQuery *m_owner;
-    QSqlQuery *m_investigations;
+    LimeReport::ReportEngine *m_report = nullptr;
+    QSqlQuery *m_owner = nullptr;
+    QSqlQuery *m_investigations = nullptr;
 
     QString styleForButtonMessageBox;
 

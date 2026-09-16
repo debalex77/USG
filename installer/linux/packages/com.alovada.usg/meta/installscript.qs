@@ -18,7 +18,7 @@ Component.prototype.createOperations = function() {
         "[Desktop Entry]",
         "Version=1.0",
         "Type=Application",
-        "Name=USG-Evidența investigațiilor ecografice v4.1.0",
+        "Name=USG-Evidența investigațiilor ecografice v4.1.1",
         "Comment=Gestionarea pacienților și a rapoartelor ecografice",
         "Comment[en]=Manage patients and ultrasound examination reports",
         "Comment[ru]=Управление пациентами и протоколами УЗИ",

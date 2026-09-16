@@ -502,17 +502,16 @@ pentru $V{organization}</content>
         <item ClassName="LimeReport::QueryDesc" Type="Object">
           <objectName Type="QString"></objectName>
           <queryName Type="QString">list_owner</queryName>
-          <queryText Type="QString">SELECT 
-  investigations.owner,
+          <queryText Type="QString">SELECT DISTINCT
+  investigationsGroup.id AS group_id,
+  investigationsGroup.name AS owner,
   investigationsGroup.cod 
 FROM 
   investigations 
 INNER JOIN 
-  investigationsGroup ON investigations.owner = investigationsGroup.name 
+  investigationsGroup ON investigations.owner = investigationsGroup.id
 WHERE 
-  investigations.owner NOT NULL OR investigations.owner &lt;> ''
-GROUP BY 
-  investigationsGroup.cod 
+  investigations.owner IS NOT NULL
 ORDER BY 
   investigationsGroup.cod ASC;</queryText>
           <connectionName Type="QString">qt_sql_default_connection</connectionName>
@@ -536,7 +535,7 @@ INNER JOIN
 WHERE 
   pricingsTable.id_pricings = $V{id_pricing} AND 
   pricingsTable.price > 0 AND 
-  owner = $D{list_owner.owner};</queryText>
+  investigations.owner = $D{list_owner.group_id};</queryText>
           <connectionName Type="QString">qt_sql_default_connection</connectionName>
           <master Type="QString">list_owner</master>
         </item>

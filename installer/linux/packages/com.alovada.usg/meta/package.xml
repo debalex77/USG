@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Package>
-    <DisplayName>USG - Evidența examinărilor ecografice v4.1.0</DisplayName>
-    <Description>Instalarea aplicației 'USG-Evidența examinărilor ecografice v4.1.0' este o soluție modernă și eficientă destinată gestionării pacienților supuși investigațiilor ecografice</Description>
-    <Version>4.1.0</Version>
-    <ReleaseDate>2026-09-15</ReleaseDate>
+    <DisplayName>USG - Evidența examinărilor ecografice v4.1.1</DisplayName>
+    <Description>Instalarea aplicației 'USG-Evidența examinărilor ecografice v4.1.1' este o soluție modernă și eficientă destinată gestionării pacienților supuși investigațiilor ecografice</Description>
+    <Version>4.1.1</Version>
+    <ReleaseDate>2026-09-16</ReleaseDate>
     <Default>true</Default>
     <Script>installscript.qs</Script>
     <Licenses>

@@ -1,3 +1,8 @@
+4.1.1 (September 16th, 2026)
+  * Fixed price-list printing with numeric investigation group IDs on SQLite and MariaDB.
+  * Distinguished empty investigation groups from SQL errors during printing.
+  * Corrected A4 landscape order printing and centered the separator.
+
 4.1.0 (September 15th, 2026)
   * Migrated the patient schema and related document references.
   * Added resumable SQLite and MariaDB migrations with UUID synchronization.

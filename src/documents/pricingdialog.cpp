@@ -1,5 +1,6 @@
 #include "pricingdialog.h"
 #include "ui_pricingdialog.h"
+#include <QScopeGuard>
 
 PricingDialog::PricingDialog(DataBase &db, QWidget *parent)
     : QDialog(parent)
@@ -442,31 +443,45 @@ void PricingDialog::onPrint(PrintType::Column type_print)
     // *************************************************************************************
     // alocam memoria
     m_report = new LimeReport::ReportEngine(this);
+    const auto cleanup = qScopeGuard([this] {
+        m_report->deleteLater();
+        m_report = nullptr;
+        delete m_owner;
+        m_owner = nullptr;
+        delete m_investigations;
+        m_investigations = nullptr;
+    });
 
     m_report->setPreviewWindowTitle(tr("Lista pre\310\233urilor nr.") + ui->editNumberDoc->text() +
                                     tr(" din ") + ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss"));
 
     // solicitarea pentru grupe
-    m_owner = new QSqlQuery(
+    m_owner = new QSqlQuery(m_db.getDatabase());
+    if (!m_owner->exec(
         R"(
-        SELECT
-            investigations.owner,
+        SELECT DISTINCT
+            investigationsGroup.id AS group_id,
+            investigationsGroup.name AS owner,
             investigationsGroup.cod
         FROM
             investigations
         INNER JOIN
-            investigationsGroup ON investigations.owner = investigationsGroup.name
+            investigationsGroup ON investigations.owner = investigationsGroup.id
         WHERE
-            investigations.owner IS NOT NULL AND investigations.owner <> ''
-        GROUP BY
-            investigations.owner, investigationsGroup.cod
+            investigations.owner IS NOT NULL
         ORDER BY
             investigationsGroup.cod ASC;
-        )");
-    if (! m_owner->first()) {
-        qCritical() << "Error: Unable to fetch investigationsGroup data:"
-                    << m_owner->lastError().text();
-        delete m_report;
+        )")) {
+        qCritical(logCritical()) << "PricingDialog: citirea grupelor pentru printare a eșuat:"
+                                 << m_owner->lastError().text();
+        QMessageBox::warning(this, tr("Printarea documentului"),
+                             tr("Grupele de investigații nu au putut fi citite. Verificați jurnalul."));
+        return;
+    }
+    if (!m_owner->first()) {
+        qInfo(logInfo()) << "PricingDialog: nu există grupe de investigații pentru printare.";
+        QMessageBox::information(this, tr("Printarea documentului"),
+                                 tr("Nu există investigații asociate grupelor pentru printare."));
         return;
     }
 
@@ -526,13 +541,20 @@ void PricingDialog::onPrint(PrintType::Column type_print)
 
     }
 
-    m_investigations = new QSqlQuery(str_investigations);
+    if (str_investigations.isEmpty())
+        return;
+
+    m_investigations = new QSqlQuery(m_db.getDatabase());
+    if (!m_investigations->prepare(str_investigations)) {
+        qCritical(logCritical()) << "PricingDialog: pregătirea investigațiilor pentru printare a eșuat:"
+                                 << m_investigations->lastError().text();
+        return;
+    }
     m_investigations->bindValue(0, m_id);
-    m_investigations->bindValue(1, "Org.interne"); // initial
+    m_investigations->bindValue(1, m_owner->value("group_id"));
     if ( !m_investigations->exec()) {
         qCritical() << "Error: Unable to execute investigations query:"
                     << m_investigations->lastError().text();
-        delete m_report;
         return;
     }
 
@@ -572,8 +594,6 @@ void PricingDialog::onPrint(PrintType::Column type_print)
         msgBox->exec();
         msgBox->deleteLater();
 
-        delete m_report;
-
         return;
     }
 
@@ -587,12 +607,6 @@ void PricingDialog::onPrint(PrintType::Column type_print)
         m_report->previewReport();
     }
 #endif
-
-    // eliberarea memoriei
-    delete m_owner;
-    delete m_investigations;
-
-    m_report->deleteLater();
 
 }
 
@@ -795,6 +809,7 @@ void PricingDialog::prepareData(QSqlQuery *qry, LimeReport::CallbackInfo info, Q
 
 void PricingDialog::slotChangePos(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
 {
+    result = false;
     QSqlQuery *ds = m_owner;
     if (!ds)
         return;
@@ -805,11 +820,11 @@ void PricingDialog::slotChangePos(const LimeReport::CallbackInfo::ChangePosType 
 
     if (result){
         m_investigations->bindValue(0, m_id);
-        m_investigations->bindValue(1, m_owner->value(m_owner->record().indexOf("owner")));
+        m_investigations->bindValue(1, m_owner->value("group_id"));
         if (!m_investigations->exec()) {
             qCritical() << "Error: Unable to execute investigations query (slotChangePos):"
                         << m_investigations->lastError().text();
-            delete m_report;
+            result = false;
             return;
         }
     }
@@ -817,6 +832,7 @@ void PricingDialog::slotChangePos(const LimeReport::CallbackInfo::ChangePosType 
 
 void PricingDialog::slotChangePosItems(const LimeReport::CallbackInfo::ChangePosType &type, bool &result)
 {
+    result = false;
     QSqlQuery *ds = m_investigations;
     if (!ds)
         return;

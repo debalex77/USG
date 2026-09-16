@@ -1,3 +1,10 @@
+## USG v4.1.1
+
+- Corectat șablonul `Order.lrxml`: geometrie A4 landscape, separator central la 148,5 mm și printare la dimensiunea paginii, fără scalare la zona imprimabilă.
+- Actualizat identificatorul A4 din `Order.lrxml` pentru Qt 6 (`pageSize=7`); vechea valoare `0` era interpretată ca Letter și suprascria geometria la încărcare.
+- Corectată printarea listei prețurilor după migrarea `investigations.owner` la ID numeric, pentru SQLite și MariaDB.
+- Lipsa grupelor pentru printare este afișată separat de erorile SQL.
+
 ## USG v4.1.0
 * <b>Actualizare tehnică:</b>
     * generatorul de rapoarte [LimeReport](https://github.com/fralx/LimeReport) a fost actualizat de la versiunea 1.7.14 la versiunea 1.7.23;

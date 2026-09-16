@@ -1,9 +1,12 @@
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-blue)
-![Qt](https://img.shields.io/badge/Qt-6.9.3-brightgreen)
-![Latest Release](https://img.shields.io/github/v/release/debalex77/USG)
-![Downloads](https://img.shields.io/github/downloads/debalex77/USG/total)
-![License](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/debalex77)
+<p align="center">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows-blue">
+  <img alt="Qt" src="https://img.shields.io/badge/Qt-6.9.3-brightgreen">
+  <img alt="Latest Release" src="https://img.shields.io/github/v/release/debalex77/USG">
+  <img alt="Downloads" src="https://img.shields.io/github/downloads/debalex77/USG/total">
+  <img alt="License" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue">
+  <a href="https://github.com/debalex77/USG/actions/workflows/build-linux.yml"><img alt="Linux build" src="https://github.com/debalex77/USG/actions/workflows/build-linux.yml/badge.svg?branch=master"></a>
+  <a href="https://github.com/sponsors/debalex77"><img alt="Sponsor" src="https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github"></a>
+</p>
 
 # USG – Records of Ultrasound Examinations
 
@@ -41,7 +44,10 @@ Official website: <https://debalex77.github.io/USG/>
 - optional UUID-based background synchronization to MariaDB;
 - Romanian, English and Russian user interfaces.
 
-## Version 4.1.0
+## Version 4.1.1
+
+Version 4.1.1 fixes price-list printing on SQLite and MariaDB and corrects
+the A4 landscape order layout, including the central separator.
 
 Version 4.1.0 includes the patient-schema migration, revised SQLite/MariaDB
 compatibility, UUID synchronization, the new `OrderView` and `ReportView`,
@@ -82,14 +88,14 @@ runtime library with:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.1.0-x86_64.AppImage
-./USG_v4.1.0-x86_64.AppImage
+chmod +x USG_v4.1.1-x86_64.AppImage
+./USG_v4.1.1-x86_64.AppImage
 ```
 
 If FUSE cannot be installed, use the AppImage runtime's extraction fallback:
 
 ```bash
-./USG_v4.1.0-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.1.1-x86_64.AppImage --appimage-extract-and-run
 ```
 
 The fallback extracts the package temporarily and is therefore slower to
@@ -97,7 +103,7 @@ start. It does not require FUSE.
 
 ## Building from source
 
-The supported reference configuration for version 4.1.0 is:
+The supported reference configuration for version 4.1.1 is:
 
 | Component | Version / requirement |
 |---|---|

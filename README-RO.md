@@ -1,9 +1,12 @@
-![Platform](https://img.shields.io/badge/platform-Linux%20%7C%20Windows-blue)
-![Qt](https://img.shields.io/badge/Qt-6.9.3-brightgreen)
-![Ultima versiune](https://img.shields.io/github/v/release/debalex77/USG)
-![Descărcări](https://img.shields.io/github/downloads/debalex77/USG/total)
-![Licență](https://img.shields.io/badge/license-GPL--3.0--or--later-blue)
-[![Sponsor](https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github)](https://github.com/sponsors/debalex77)
+<p align="center">
+  <img alt="Platform" src="https://img.shields.io/badge/platform-Linux%20%7C%20Windows-blue">
+  <img alt="Qt" src="https://img.shields.io/badge/Qt-6.9.3-brightgreen">
+  <img alt="Ultima versiune" src="https://img.shields.io/github/v/release/debalex77/USG">
+  <img alt="Descărcări" src="https://img.shields.io/github/downloads/debalex77/USG/total">
+  <img alt="Licență" src="https://img.shields.io/badge/license-GPL--3.0--or--later-blue">
+  <a href="https://github.com/debalex77/USG/actions/workflows/build-linux.yml"><img alt="Linux build" src="https://github.com/debalex77/USG/actions/workflows/build-linux.yml/badge.svg?branch=master"></a>
+  <a href="https://github.com/sponsors/debalex77"><img alt="Sponsor" src="https://img.shields.io/badge/Sponsor-GitHub-ea4aaa?logo=github"></a>
+</p>
 
 # USG – Evidența investigațiilor ecografice
 
@@ -40,7 +43,10 @@ Site oficial: <https://debalex77.github.io/USG/>
 - sincronizare opțională în fundal cu MariaDB, pe bază de UUID;
 - interfață în limbile română, engleză și rusă.
 
-## Versiunea 4.1.0
+## Versiunea 4.1.1
+
+Versiunea 4.1.1 corectează tipărirea listei de prețuri pe SQLite și MariaDB
+și aranjarea comenzii pe A4 landscape, inclusiv separatorul central.
 
 Versiunea 4.1.0 include migrarea schemei pacienților, compatibilitate revizuită
 SQLite/MariaDB, sincronizare prin UUID, noile ferestre `OrderView` și
@@ -82,15 +88,15 @@ biblioteca compatibilă astfel:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.1.0-x86_64.AppImage
-./USG_v4.1.0-x86_64.AppImage
+chmod +x USG_v4.1.1-x86_64.AppImage
+./USG_v4.1.1-x86_64.AppImage
 ```
 
 Dacă FUSE nu poate fi instalat, folosiți modul de extragere oferit de runtime-ul
 AppImage:
 
 ```bash
-./USG_v4.1.0-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.1.1-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Această variantă extrage temporar pachetul și pornește mai lent, dar nu necesită
@@ -98,7 +104,7 @@ FUSE.
 
 ## Compilarea din sursă
 
-Configurația de referință pentru versiunea 4.1.0 este:
+Configurația de referință pentru versiunea 4.1.1 este:
 
 | Componentă | Versiune / cerință |
 |---|---|
