@@ -71,7 +71,8 @@ jobs:
           version: ${{ env.QT_VERSION }}
           # qtsvg and qttools are included in the desktop package, not add-ons.
           modules: qtmultimedia qtpositioning qtwebchannel qtwebengine
-          tools: tools_ifw,qt.tools.ifw.410
+          # The public tools_ifw repository provides IFW 4.7 as qt.tools.ifw.47.
+          tools: tools_ifw,qt.tools.ifw.47
           cache: true
 
       - name: Install CQtDeployer
