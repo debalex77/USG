@@ -955,10 +955,13 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString currentRelease)
         return false;
     }
 
-    QVersionNumber current = QVersionNumber::fromString(currentRelease);
+    const QString versionText = currentRelease.trimmed();
+    qsizetype suffixIndex = 0;
+    QVersionNumber current = QVersionNumber::fromString(versionText, &suffixIndex);
     QVersionNumber target(VERSION_MAJOR, VERSION_MINOR, VERSION_RELEASE);
 
-    if (!current.isNormalized()) {
+    // A trailing zero (e.g. 4.1.0) is valid, although not "normalized" in Qt.
+    if (current.isNull() || suffixIndex != versionText.size()) {
         qCritical(logCritical()) << "Versiune invalida:" << currentRelease;
         return false;
     }

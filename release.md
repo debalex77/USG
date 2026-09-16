@@ -5,6 +5,8 @@ of ultrasound orders.
 
 ## Fixes
 
+- Fixed database version validation rejecting valid versions ending in zero,
+  such as `4.1.0`, during updates on SQLite and MariaDB.
 - Fixed price-list printing in `PricingDialog` on SQLite and MariaDB after the
   migration to numeric investigation group IDs.
 - Distinguished empty investigation groups from SQL query failures and improved
