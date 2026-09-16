@@ -69,7 +69,8 @@ jobs:
         uses: jurplel/install-qt-action@v4
         with:
           version: ${{ env.QT_VERSION }}
-          modules: qtmultimedia qtpositioning qtsvg qttools qtwebchannel qtwebengine
+          # qtsvg and qttools are included in the desktop package, not add-ons.
+          modules: qtmultimedia qtpositioning qtwebchannel qtwebengine
           tools: tools_ifw,4.10.0,qt.tools.ifw.410
           cache: true
 
