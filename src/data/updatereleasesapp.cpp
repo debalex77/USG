@@ -988,7 +988,8 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString currentRelease)
         {QVersionNumber(3, 0, 6), &UpdateReleasesApp::update_3_0_6},
         {QVersionNumber(3, 0, 7), &UpdateReleasesApp::update_3_0_7},
         {QVersionNumber(4, 0, 1), &UpdateReleasesApp::update_4_0_1},
-        {QVersionNumber(4, 1, 0), &UpdateReleasesApp::update_4_1_0}
+        {QVersionNumber(4, 1, 0), &UpdateReleasesApp::update_4_1_0},
+        {QVersionNumber(4, 1, 2), &UpdateReleasesApp::update_4_1_2}
     };
 
     for (const MigrationStep &migration : migrations) {
@@ -1031,8 +1032,8 @@ bool UpdateReleasesApp::update_2_0_4()
             return false;
         }
     } else if (globals().thisMySQL){
-        if (db_common.execFileBatch(":/sql/mariadb/tables/user_preferences.sql",
-                                    "user_preferences")) {
+        if (!db_common.execFileBatch(":/sql/mariadb/tables/user_preferences.sql",
+                                     "user_preferences")) {
             db->getDatabase().rollback();
             return false;
         }
@@ -1040,8 +1041,6 @@ bool UpdateReleasesApp::update_2_0_4()
 
     //-------------------------------------------------
     // inserarea datelor
-    db->updateVariableFromTableSettingsUser();
-
     QVector<QVariant> data;
     data.append(1); // id
     data.append(globals().idUserApp); // id utilizatorullui
@@ -2980,5 +2979,115 @@ bool UpdateReleasesApp::update_4_1_0()
 
     emit migrationProgress(8, 8, tr("Migrarea pacienților la versiunea 4.1.0 s-a finalizat."));
     qInfo(logInfo()) << "Actualizarea schemei pacienților pentru versiunea 4.1.0 s-a finalizat.";
+    return true;
+}
+
+
+bool UpdateReleasesApp::update_4_1_2()
+{
+    const QSqlDatabase currentDb = db->getDatabase();
+    if (!currentDb.isOpen()
+        || !currentDb.tables(QSql::Tables).contains(QStringLiteral("organizations"), Qt::CaseInsensitive)
+        || !currentDb.tables(QSql::Tables).contains(QStringLiteral("constants"), Qt::CaseInsensitive)
+        || !currentDb.tables(QSql::Tables).contains(QStringLiteral("userPreferences"), Qt::CaseInsensitive)) {
+        qCritical(logCritical())
+            << "Migrarea 4.1.2: una dintre tabelele organizations, constants sau userPreferences lipsește.";
+        return false;
+    }
+
+    const bool existed = hasColumn(currentDb, QStringLiteral("organizations"), QStringLiteral("site"));
+    emit migrationProgress(0, 3, tr("4.1.2: se verifică site-ul organizațiilor..."));
+    const QString definition = currentDb.driverName() == QStringLiteral("QSQLITE")
+        ? QStringLiteral("TEXT DEFAULT NULL") : QStringLiteral("VARCHAR(255) DEFAULT NULL");
+    if (!addColumnIfMissing(currentDb, QStringLiteral("organizations"), QStringLiteral("site"),
+                            definition, QStringLiteral("4.1.2"))
+        || !hasColumn(currentDb, QStringLiteral("organizations"), QStringLiteral("site")))
+        return false;
+
+    emit migrationProgress(1, 3, existed
+        ? tr("4.1.2: coloana organizations.site există deja; valorile au fost păstrate.")
+        : tr("4.1.2: a fost adăugată coloana site în tabela organizations."));
+
+    auto ensureUniqueUserIndex = [&](const QString &tableName,
+                                     const QString &indexName,
+                                     int progress) -> bool {
+        QSqlQuery duplicateQuery(currentDb);
+        duplicateQuery.prepare(QStringLiteral(
+            "SELECT id_users, COUNT(*) FROM %1 GROUP BY id_users HAVING COUNT(*) > 1 LIMIT 1")
+                                   .arg(tableName));
+        if (!duplicateQuery.exec()) {
+            qCritical(logCritical()) << "Migrarea 4.1.2: verificarea duplicatelor din"
+                                     << tableName << "a eșuat:" << duplicateQuery.lastError().text();
+            return false;
+        }
+        if (duplicateQuery.next()) {
+            qCritical(logCritical())
+                << QStringLiteral("Migrarea 4.1.2: tabela %1 conține %2 rânduri pentru id_users=%3. "
+                                  "Datele trebuie verificate înainte de crearea indexului unic.")
+                       .arg(tableName)
+                       .arg(duplicateQuery.value(1).toInt())
+                       .arg(duplicateQuery.value(0).toInt());
+            return false;
+        }
+
+        bool indexExists = false;
+        QSqlQuery indexQuery(currentDb);
+        if (currentDb.driverName() == QStringLiteral("QSQLITE")) {
+            if (!indexQuery.exec(QStringLiteral("PRAGMA index_list(%1)").arg(tableName))) {
+                qCritical(logCritical()) << "Migrarea 4.1.2: citirea indexurilor SQLite a eșuat:"
+                                         << indexQuery.lastError().text();
+                return false;
+            }
+            while (indexQuery.next()) {
+                if (indexQuery.value(1).toString().compare(indexName, Qt::CaseInsensitive) == 0) {
+                    indexExists = true;
+                    break;
+                }
+            }
+        } else {
+            indexQuery.prepare(R"(
+                SELECT COUNT(*)
+                FROM information_schema.statistics
+                WHERE table_schema = DATABASE()
+                  AND table_name = ?
+                  AND index_name = ?
+            )");
+            indexQuery.addBindValue(tableName);
+            indexQuery.addBindValue(indexName);
+            if (!indexQuery.exec() || !indexQuery.next()) {
+                qCritical(logCritical()) << "Migrarea 4.1.2: citirea indexurilor MariaDB a eșuat:"
+                                         << indexQuery.lastError().text();
+                return false;
+            }
+            indexExists = indexQuery.value(0).toInt() > 0;
+        }
+
+        if (!indexExists) {
+            QSqlQuery createIndex(currentDb);
+            const QString sql = QStringLiteral("CREATE UNIQUE INDEX %1 ON %2(id_users)")
+                                    .arg(indexName, tableName);
+            if (!createIndex.exec(sql)) {
+                qCritical(logCritical()) << "Migrarea 4.1.2: crearea indexului"
+                                         << indexName << "a eșuat:"
+                                         << createIndex.lastError().text();
+                return false;
+            }
+            qInfo(logInfo()) << "Migrarea 4.1.2: index unic creat:" << indexName;
+        } else {
+            qInfo(logInfo()) << "Migrarea 4.1.2: indexul există deja:" << indexName;
+        }
+
+        emit migrationProgress(progress, 3,
+                               tr("4.1.2: verificată unicitatea %1.id_users.").arg(tableName));
+        return true;
+    };
+
+    if (!ensureUniqueUserIndex(QStringLiteral("userPreferences"),
+                               QStringLiteral("uq_userPreferences_users"), 2))
+        return false;
+    if (!ensureUniqueUserIndex(QStringLiteral("constants"),
+                               QStringLiteral("uq_constants_users"), 3))
+        return false;
+
     return true;
 }

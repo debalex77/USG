@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS `organizations` (
     `address`      VARCHAR (255),
     `telephone`    VARCHAR (100),
     `email`        VARCHAR (100),
+    `site`         VARCHAR (255) DEFAULT NULL,
     `comment`      VARCHAR (255),
     `id_contracts` BIGINT UNSIGNED,
     `stamp`        LONGBLOB,

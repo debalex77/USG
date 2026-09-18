@@ -86,6 +86,7 @@ MainWindow::MainWindow(DataBase &db, QWidget *parent)
                 progress->setValue(value);
                 progress->setVisible(true);
                 progress->raise();
+                appendMigrationMessage(message);
                 txt_title_bar->setText(message);
                 txt_title_bar->show();
                 qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -552,17 +553,7 @@ void MainWindow::updateTimer()
         }
         timer->stop(); // oprim timerul
 
-        // setam titlu aplicatiei
-        if (globals().thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
-                           tr(" (MySQL: %1@%2): utilizator (").arg(globals().mySQLnameBase, globals().mySQLhost) +
-                           globals().nameUserApp + ")");
-        else if (globals().thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
-                           tr(" (.sqlite3): utilizator (") + globals().nameUserApp + ")");
-        else
-            setWindowTitle(APPLICATION_NAME + " v." + VERSION_FULL +
-                           tr(": utilizator (") + globals().nameUserApp + ")");
+        updateWindowTitle();
 
         // daca prima lansare prezentam asistentul de configurare
         if (globals().firstLaunch){
@@ -578,6 +569,8 @@ void MainWindow::updateTimer()
 
         // determinam versiunea aplicatiei din BD
         QString version_app = getVersionAppInTableSettingsUsers();
+        confirmedDatabaseVersion = version_app.trimmed();
+        updateWindowTitle();
 
         // verificam daca versiunea aplicatiei e actuala
         if (version_app != VERSION_FULL){
@@ -589,7 +582,7 @@ void MainWindow::updateTimer()
             // Dacă există configurația, dar parola veche nu mai poate fi
             // decriptată cu cheia actuală, cerem resalvarea ei înaintea migrării.
             if (globals().thisSqlite
-                && databaseVersion.isNormalized()
+                && !databaseVersion.isNull()
                 && databaseVersion < QVersionNumber(4, 0, 1)
                 && globals().cloud_configured
                 && !globals().cloud_srv_exist) {
@@ -601,7 +594,7 @@ void MainWindow::updateTimer()
                 CloudServerConfig cloudServer(this);
                 cloudServer.setProperty("ID_user", globals().idUserApp);
                 cloudServer.setProperty("ID_Organization",
-                                        globals().c_id_organizations);
+                                        globals().organizationID);
                 migrationCredentialsReady =
                     cloudServer.exec() == QDialog::Accepted
                     && globals().cloud_srv_exist;
@@ -610,6 +603,7 @@ void MainWindow::updateTimer()
             txt_title_bar->setText(tr("Se actualizează baza de date de la versiunea %1 la %2...")
                                        .arg(version_app, VERSION_FULL));
             txt_title_bar->show();
+            appendMigrationMessage(txt_title_bar->text());
             progress->setRange(0, 0);
             progress->show();
             qApp->processEvents(QEventLoop::ExcludeUserInputEvents);
@@ -617,10 +611,13 @@ void MainWindow::updateTimer()
             if (migrationCredentialsReady
                 && update_app->execUpdateCurrentRelease(version_app)
                 && setVersionAppInTableSettingsUsers()) {
+                confirmedDatabaseVersion = VERSION_FULL;
+                updateWindowTitle();
                 progress->setRange(0, 100);
                 progress->setValue(100);
                 txt_title_bar->setText(tr("Actualizarea bazei de date la versiunea %1 s-a finalizat.")
                                            .arg(VERSION_FULL));
+                appendMigrationMessage(txt_title_bar->text());
                 openDescriptionRealease();
                 // prezentam informatia de actualizarea in panoul informativ
                 // textEdit_dockWidget->clear();
@@ -635,7 +632,7 @@ void MainWindow::updateTimer()
                            "și baza de date MariaDB/MySQL la versiunea 4.0.1 sau mai nouă.")
                             .arg(m_db.getHTMLImageInfo()));
                 }
-                textEdit_dockWidget->setFixedHeight(100);
+                textEdit_dockWidget->setFixedHeight(220);
                 dock_widget->show();
                 // Păstrăm rezultatul suficient pentru a putea fi observat și
                 // când ultimele etape ale migrării se execută rapid.
@@ -648,6 +645,9 @@ void MainWindow::updateTimer()
                     migrationCredentialsReady
                         ? tr("Actualizarea bazei de date a eșuat. Verificați jurnalul aplicației.")
                         : tr("Actualizarea a fost amânată: parola cloud nu a fost resalvată."));
+                appendMigrationMessage(txt_title_bar->text());
+                if (migrationCredentialsReady)
+                    appendMigrationMessage(tr("Actualizarea nu este confirmată integral. Etapele din tranzacțiile anulate nu au fost păstrate."));
             }
         }
 
@@ -1040,7 +1040,7 @@ void MainWindow::openCloudServerConfig()
     CloudServerConfig *cloud_server = new CloudServerConfig(this);
     cloud_server->setAttribute(Qt::WA_DeleteOnClose);
     cloud_server->setProperty("ID_user", globals().idUserApp);
-    cloud_server->setProperty("ID_Organization", globals().c_id_organizations);
+    cloud_server->setProperty("ID_Organization", globals().organizationID);
     cloud_server->show();
 }
 
@@ -1369,36 +1369,40 @@ bool MainWindow::eventFilter(QObject *obj, QEvent *event)
     return false;
 }
 
+void MainWindow::appendMigrationMessage(const QString &message)
+{
+    if (message.isEmpty())
+        return;
+    textEdit_dockWidget->append(QStringLiteral("%1 %2").arg(m_db.getHTMLImageInfo(), message.toHtmlEscaped()));
+    textEdit_dockWidget->setFixedHeight(220);
+    dock_widget->show();
+    textEdit_dockWidget->ensureCursorVisible();
+}
+
+void MainWindow::updateWindowTitle()
+{
+    QString title = APPLICATION_NAME;
+    // Change the displayed version only after migration and version persistence succeed.
+    if (!confirmedDatabaseVersion.isEmpty())
+        title += " v." + confirmedDatabaseVersion;
+
+    if (globals().thisMySQL)
+        title += tr(" (MySQL: %1@%2): utilizator (%3)")
+                     .arg(globals().mySQLnameBase, globals().mySQLhost, globals().nameUserApp);
+    else if (globals().thisSqlite)
+        title += tr(" (.sqlite3): base - '%1', utilizator (%2)")
+                     .arg(globals().sqliteDatabaseName, globals().nameUserApp);
+    else
+        title += tr(": utilizator (%1)").arg(globals().nameUserApp);
+    setWindowTitle(title);
+}
+
 void MainWindow::changeEvent(QEvent *event)
 {
     if (event->type() == QEvent::LanguageChange) {
         ui->retranslateUi(this);    // traducem
-        if (globals().thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(" (MySQL: %1@%2): utilizator (")
-                               .arg(globals().mySQLnameBase, globals().mySQLhost) +
-                           globals().nameUserApp + ")");
-        else if (globals().thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(" (.sqlite3): base - '%1', utilizator (")
-                               .arg(globals().sqliteNameBase) + globals().nameUserApp + ")");
-        else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(": utilizator (") + globals().nameUserApp + ")");
+        updateWindowTitle();
         updateTextBtn();
-    } else if (event->type() == QEvent::WindowTitleChange){
-        if (globals().thisMySQL)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(" (MySQL: %1@%2): utilizator (")
-                               .arg(globals().mySQLnameBase, globals().mySQLhost) +
-                           globals().nameUserApp + ")");
-        else if (globals().thisSqlite)
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(" (.sqlite3): base - '%1', utilizator (")
-                               .arg(globals().sqliteNameBase) +
-                           globals().nameUserApp + ")");
-        else
-            setWindowTitle(APPLICATION_NAME + " v." + USG_VERSION_FULL +
-                           tr(": utilizator (") + globals().nameUserApp + ")");
     }
+    QMainWindow::changeEvent(event);
 }

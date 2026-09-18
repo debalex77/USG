@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS `userPreferences` (
     `showDocumentsInSeparatWindow` BOOLEAN,
     `minimizeAppToTray`     BOOLEAN,
     PRIMARY KEY (`id`),
-    KEY `idx_userPreferences_users` (`id_users`),
+    UNIQUE KEY `uq_userPreferences_users` (`id_users`),
     CONSTRAINT `fk_userPreferences_users`
         FOREIGN KEY (`id_users`)
         REFERENCES `users` (`id`)

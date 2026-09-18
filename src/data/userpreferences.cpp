@@ -24,9 +24,9 @@
 #include "userpreferences.h"
 #include "ui_userpreferences.h"
 
-#include <QBuffer>
 #include <QImageReader>
 #include <QImageWriter>
+#include <QSignalBlocker>
 
 #include <customs/custommessage.h>
 
@@ -34,7 +34,6 @@ UserPreferences::UserPreferences(DataBase &db, QWidget *parent) :
     QDialog(parent),
     ui(new Ui::UserPreferences)
     , m_db(db)
-    , popUp(new PopUp(this))
 {
     ui->setupUi(this);
 
@@ -54,6 +53,10 @@ UserPreferences::UserPreferences(DataBase &db, QWidget *parent) :
     ui->dockWidget->close(); // ascundem panel pu informatii
 
     initSetModels();            // setam modelurile
+    m_showVideoMessage = globals().show_content_info_video;
+    m_showReportsMessage = globals().show_info_reports;
+    m_initialShowVideoMessage = m_showVideoMessage;
+    m_initialShowReportsMessage = m_showReportsMessage;
     setValueIntoTableMessage(); // setam prezentarea mesajelor
 
     initConnections(); // connection
@@ -91,6 +94,7 @@ UserPreferences::UserPreferences(DataBase &db, QWidget *parent) :
 UserPreferences::~UserPreferences()
 {
     delete ui;
+    delete style_fusion;
 }
 
 // **********************************************************************************
@@ -98,7 +102,8 @@ UserPreferences::~UserPreferences()
 
 void UserPreferences::dataWasModified()
 {
-    setWindowModified(true);
+    if (!m_loading)
+        setWindowModified(true);
 }
 
 bool UserPreferences::onWritingData()
@@ -135,44 +140,85 @@ bool UserPreferences::onWritingData()
         message->deleteLater();
     };
 
+    QSqlDatabase database = m_db.getDatabase();
+    if (!database.isValid() || !database.isOpen() || !database.transaction()) {
+        err << tr("Nu a putut fi inițiată tranzacția pentru salvarea preferințelor: %1")
+                   .arg(database.lastError().text());
+        showError(tr("Preferințele utilizatorului '%1' nu pot fi salvate !!!"));
+        return false;
+    }
+
+    auto rollbackAndShow = [&](const QString &title) {
+        database.rollback();
+        showError(title);
+        return false;
+    };
+
+    bool constantsExists = false;
+    if (!recordExists(QStringLiteral("constants"), constantsExists, err))
+        return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi verificate !!!"));
+
     // inserarea/actualizarea datelor in tabela 'constants'
-    if (! existRecordInTableConstants()){
+    if (!constantsExists) {
         if (! insertDataIntoTableConstants(err)){
-            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
-            return false;
+            return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi salvate !!!"));
         }
     } else {
         if (! updateDataIntoTableConstants(err)) {
-            showError(tr("Preferintele utilizatorului '%1' nu pot fi actualizate !!!"));
-            return false;
+            return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi actualizate !!!"));
         }
     }
 
-    // insrarea/actualizarea datelor in tabela 'userPreferences'
-    if (! existRecordInTableUserPreferences()) {
-        if (! insertDataIntoTableUserPreferences(err)) {
-            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
-            return false;
-        } else {
+    bool preferencesExists = false;
+    if (!recordExists(QStringLiteral("userPreferences"), preferencesExists, err))
+        return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi verificate !!!"));
 
+    // inserarea/actualizarea datelor in tabela 'userPreferences'
+    if (!preferencesExists) {
+        if (! insertDataIntoTableUserPreferences(err)) {
+            return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi salvate !!!"));
         }
     } else {
         if (! updateDataIntoTableUserPreferences(err)) {
-            showError(tr("Preferintele utilizatorului '%1' nu pot fi salvate !!!"));
-            return false;
+            return rollbackAndShow(tr("Preferințele utilizatorului '%1' nu pot fi salvate !!!"));
         }
     }
 
+    if (!saveLocalMessagePreferences(err))
+        return rollbackAndShow(tr("Preferințele locale nu pot fi salvate pentru utilizatorul '%1' !!!"));
+
+    if (!database.commit()) {
+        err << tr("Confirmarea tranzacției a eșuat: %1").arg(database.lastError().text());
+        database.rollback();
+        // Restabilim best-effort setările locale deja scrise.
+        AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Video,
+                                               m_initialShowVideoMessage);
+        AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Reports,
+                                               m_initialShowReportsMessage);
+        showError(tr("Preferințele utilizatorului '%1' nu pot fi salvate !!!"));
+        return false;
+    }
+
     // dupa validare actualizam variabile globale
-    globals().showUserManual = ui->check_showUserManual->isChecked();
-    globals().databasesArchiving = ui->check_databasesArchiving->isChecked();
-    globals().showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
-    emit showDesignerMenuPrintChanged(globals().showDesignerMenuPrint);
-    globals().minimizeAppToTray = ui->minimizeAppToTray->isChecked();
-    globals().showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
-    globals().showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
-    globals().checkNewVersionApp = ui->check_newVersion->isChecked();
-    globals().order_splitFullName = ui->check_splitFullNamePatient->isChecked();
+    if (m_Id == globals().idUserApp) {
+        globals().showUserManual = ui->check_showUserManual->isChecked();
+        globals().databasesArchiving = ui->check_databasesArchiving->isChecked();
+        globals().showDesignerMenuPrint = ui->check_showDesignerMenuPrint->isChecked();
+        emit showDesignerMenuPrintChanged(globals().showDesignerMenuPrint);
+        globals().minimizeAppToTray = ui->minimizeAppToTray->isChecked();
+        globals().showQuestionCloseApp = ui->check_showQuestionClosingApp->isChecked();
+        globals().showDocumentsInSeparatWindow = ui->showDocumentsInSeparatWindow->isChecked();
+        globals().checkNewVersionApp = ui->check_newVersion->isChecked();
+        globals().order_splitFullName = ui->check_splitFullNamePatient->isChecked();
+        globals().showAsistantHelper = ui->showAsistantHelper->isChecked();
+        globals().updateIntervalListDoc = ui->updateListDoc->value();
+        globals().organizationLogoData = m_logoData;
+    }
+    globals().show_content_info_video = m_showVideoMessage;
+    globals().show_info_reports = m_showReportsMessage;
+    m_initialShowVideoMessage = m_showVideoMessage;
+    m_initialShowReportsMessage = m_showReportsMessage;
+    setWindowModified(false);
 
     return true;
 }
@@ -191,11 +237,8 @@ void UserPreferences::slot_IdChanged()
     if (m_Id == idx_unknow)
         return;
 
-    //--------------------------------------------------------------
-    // deconectarea pu a nu modifica forma
-
-    disconnectCombo();
-    disconnectionCheckBox();
+    m_loading = true;
+    resetFormForUser();
 
     //--------------------------------------------------------------
     // setam 'comboUsers' dupa ID
@@ -207,7 +250,13 @@ void UserPreferences::slot_IdChanged()
     //--------------------------------------------------------------
     // tabela 'constants' + 'userPreferences'
 
-    QVariantMap map = m_db.selectJoinConstantsUserPreferencesByUserId(m_Id);
+    QString loadError;
+    QVariantMap map = m_db.selectJoinConstantsUserPreferencesByUserId(m_Id, &loadError);
+
+    if (!loadError.isEmpty()) {
+        qWarning(logWarning()) << metaObject()->className()
+                               << "[slot_IdChanged]:" << loadError;
+    }
 
     if (map.count() > 0) {
 
@@ -225,8 +274,7 @@ void UserPreferences::slot_IdChanged()
 
         // -- brand
         QString brandUSG = map["brandUSG"].toString();
-        if (! brandUSG.isEmpty())
-            ui->brandUSG->setText(brandUSG);
+        ui->brandUSG->setText(brandUSG);
 
         // -- preferintele
         ui->minimizeAppToTray->setChecked(map["minimizeAppToTray"].toBool());
@@ -245,26 +293,15 @@ void UserPreferences::slot_IdChanged()
          * 2. Extragem din baza de date (daca nu este in variabila globala)
          *************************************************************************/
 
-        QPixmap outPixmap = QPixmap();
-        if (! globals().c_logo_byteArray.isEmpty() && outPixmap.loadFromData(globals().c_logo_byteArray)){
+        QPixmap outPixmap;
+        m_logoData = QByteArray::fromBase64(map["logo"].toByteArray());
+        if (!m_logoData.isEmpty() && outPixmap.loadFromData(m_logoData)) {
             ui->btnClearLogo->setVisible(true);
             ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-        } else {
-            QByteArray outByteArray = QByteArray::fromBase64(map["logo"].toByteArray());
-            if (! outByteArray.isEmpty() && outPixmap.loadFromData(outByteArray)) {
-                ui->btnClearLogo->setVisible(true);
-                ui->image_logo->setPixmap(outPixmap.scaled(400, 50, Qt::KeepAspectRatio, Qt::SmoothTransformation));
-            } else {
-                ui->btnClearLogo->setVisible(false);
-            }
         }
     }
-
-    //--------------------------------------------------------------
-    // conectarea
-
-    connectionsCombo();
-    connectionCheckBox();
+    m_loading = false;
+    setWindowModified(false);
 }
 
 void UserPreferences::slot_IdDoctorChanged()
@@ -295,8 +332,28 @@ void UserPreferences::slot_IdChangedOrganization()
 void UserPreferences::activatedComboUsers(const int index)
 {
     const int id_user = ui->comboUsers->itemData(index, Qt::UserRole).toInt();
+    if (id_user == m_Id)
+        return;
+
+    if (isWindowModified()) {
+        const QMessageBox::StandardButton answer = QMessageBox::question(
+            this, tr("Modificarea datelor"),
+            tr("Preferințele utilizatorului curent au fost modificate. Doriți să le salvați?"),
+            QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
+            QMessageBox::Save);
+        if (answer == QMessageBox::Cancel
+            || (answer == QMessageBox::Save && !onWritingData())) {
+            restoreSelectedUserInCombo();
+            return;
+        }
+        if (answer == QMessageBox::Discard) {
+            m_showVideoMessage = m_initialShowVideoMessage;
+            m_showReportsMessage = m_initialShowReportsMessage;
+            setValueIntoTableMessage();
+        }
+        setWindowModified(false);
+    }
     setId(id_user);
-    dataWasModified();
 }
 
 void UserPreferences::activatedComboDoctors(const int index)
@@ -339,33 +396,13 @@ bool UserPreferences::loadFile(const QString &fileName)
     ui->btnClearLogo->setVisible(true);
 
     QFile file(fileName);
-    if (! file.open(QIODevice::ReadOnly))
-        return true;
-    QByteArray inByteArray = file.readAll();
-
-    QSqlQuery qry;
-    qry.prepare(R"(
-        UPDATE constants SET
-            logo = ?
-        WHERE
-            id_users = ?
-    )");
-    qry.addBindValue(m_Id);
-    qry.addBindValue(inByteArray.toBase64());
-    if (qry.exec()){
-        // prezentam mesaj informativ
-        popUp->setPopupText(tr("Logotipul este salvat cu succes în baza de date."));
-        popUp->show();
-        // adaugam date in variabila globala
-        globals().c_logo_byteArray = QByteArray::fromBase64(inByteArray.toBase64());
-    } else {
-        qWarning(logWarning()) << this->metaObject()->className()
-                               << "[loadFile]:"
-                               << tr("Eroare de inserare a logotipului in baza de date:")
-                               << qry.lastError().text();
+    if (!file.open(QIODevice::ReadOnly)) {
+        qWarning(logWarning()) << metaObject()->className() << "[loadFile]:"
+                               << tr("Fișierul logo nu poate fi deschis: %1").arg(file.errorString());
+        return false;
     }
-    file.close();
-
+    m_logoData = file.readAll();
+    dataWasModified();
     return true;
 }
 
@@ -431,32 +468,14 @@ void UserPreferences::clearImageLogo()
     if (messange_box.exec() == QMessageBox::No)
         return;
 
-    QSqlQuery qry;
-    qry.prepare(R"(
-        UPDATE constants SET
-            logo = NULL
-        WHERE
-            id_users = ?
-    )");
-    qry.addBindValue(m_Id);
-    if (qry.exec()){
-        // setam textul initial in interfata
-        ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea"
-                                "<br>(se recomanda 400x50 px)</a>");
-        ui->image_logo->setTextFormat(Qt::RichText);
-        ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
-        // prezentam mesaj informativ
-        popUp->setPopupText(tr("Logotipul este eliminat din baza de date."));
-        popUp->show();
-        // golim variabila globala
-        globals().c_logo_byteArray = nullptr;
-    } else {
-        qCritical(logCritical()) << this->metaObject()->className()
-                                 << "[clearImageLogo]:"
-                                 << tr("Eroare la eliminarea logotipului din baza de date %1")
-                                        .arg((qry.lastError().text().isEmpty()) ? "" : "- " + qry.lastError().text());
-    }
+    m_logoData.clear();
+    ui->image_logo->clear();
+    ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea"
+                            "<br>(se recomanda 400x50 px)</a>");
+    ui->image_logo->setTextFormat(Qt::RichText);
+    ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
     ui->btnClearLogo->setVisible(false);
+    dataWasModified();
 }
 
 // **********************************************************************************
@@ -534,22 +553,18 @@ void UserPreferences::onOpenCatOrganizations()
 
 void UserPreferences::changeDataItemTabelMessege(QTableWidgetItem *item)
 {
-    int current_row = item->row();
-    if (current_row == row_video){
-        if (item->checkState() == Qt::Checked)
-            globals().show_content_info_video = true;
-        else
-            globals().show_content_info_video = false;
-        AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Video,
-                                               globals().show_content_info_video);
-    } else if (current_row == row_report){
-        if (item->checkState() == Qt::Checked)
-            globals().show_info_reports = true;
-        else
-            globals().show_info_reports = false;
-        AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Reports,
-                                               globals().show_info_reports);
-    }
+    if (!item || m_loading)
+        return;
+
+    const bool checked = item->checkState() == Qt::Checked;
+    if (item->row() == row_video)
+        m_showVideoMessage = checked;
+    else if (item->row() == row_report)
+        m_showReportsMessage = checked;
+    else
+        return;
+
+    dataWasModified();
 }
 
 // **********************************************************************************
@@ -617,14 +632,14 @@ void UserPreferences::setValueIntoTableMessage()
 
     //-- info video
     QTableWidgetItem *itm = ui->tableWidget->item(row_video, column_presentation);
-    if (globals().show_content_info_video)
+    if (m_showVideoMessage)
         itm->setCheckState(Qt::Checked);
     else
         itm->setCheckState(Qt::Unchecked);
 
     //-- info reports
     itm = ui->tableWidget->item(row_report, column_presentation);
-    if (globals().show_info_reports)
+    if (m_showReportsMessage)
         itm->setCheckState(Qt::Checked);
     else
         itm->setCheckState(Qt::Unchecked);
@@ -729,16 +744,6 @@ void UserPreferences::connectionsCombo()
     connect(ui->brandUSG, &QLineEdit::textChanged, this, &UserPreferences::dataWasModified);
 }
 
-void UserPreferences::disconnectCombo()
-{
-    disconnect(ui->comboUsers, QOverload<int>::of(&QComboBox::activated), this, QOverload<int>::of(&UserPreferences::activatedComboUsers));
-    disconnect(ui->comboDoctors, QOverload<int>::of(&QComboBox::activated), this, QOverload<int>::of(&UserPreferences::activatedComboDoctors));
-    disconnect(ui->comboNurses, QOverload<int>::of(&QComboBox::activated), this, QOverload<int>::of(&UserPreferences::activatedComboNurses));
-    disconnect(ui->comboOrganizations, QOverload<int>::of(&QComboBox::activated), this, QOverload<int>::of(&UserPreferences::activatedComboOrganizations));
-
-    disconnect(ui->brandUSG, &QLineEdit::textChanged, this, &UserPreferences::dataWasModified);
-}
-
 void UserPreferences::connectionCheckBox()
 {
     QList<QCheckBox*> list = this->findChildren<QCheckBox*>();
@@ -750,15 +755,69 @@ void UserPreferences::connectionCheckBox()
             this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
 }
 
-void UserPreferences::disconnectionCheckBox()
+void UserPreferences::resetFormForUser()
 {
-    QList<QCheckBox*> list = this->findChildren<QCheckBox*>();
-    for (int n = 0; n < list.count(); n++) {
-        disconnect(list[n], &QCheckBox::clicked, this, &UserPreferences::dataWasModified);
+    m_IdOrganization = idx_unknow;
+    m_idDoctor = idx_unknow;
+    m_idNurse = idx_unknow;
+    m_logoData.clear();
+
+    ui->comboOrganizations->setCurrentIndex(0);
+    ui->comboDoctors->setCurrentIndex(0);
+    ui->comboNurses->setCurrentIndex(0);
+    ui->brandUSG->clear();
+
+    ui->minimizeAppToTray->setChecked(false);
+    ui->check_showQuestionClosingApp->setChecked(true);
+    ui->check_showDesignerMenuPrint->setChecked(false);
+    ui->check_showUserManual->setChecked(false);
+    ui->showDocumentsInSeparatWindow->setChecked(false);
+    ui->check_splitFullNamePatient->setChecked(false);
+    ui->check_newVersion->setChecked(true);
+    ui->check_databasesArchiving->setChecked(false);
+    ui->showAsistantHelper->setChecked(true);
+    ui->updateListDoc->setValue(0);
+
+    ui->image_logo->clear();
+    ui->image_logo->setText("<a href=\"#LoadImage\">Apasa pentru a alege imaginea"
+                            "<br>(se recomanda 400x50 px)</a>");
+    ui->image_logo->setTextFormat(Qt::RichText);
+    ui->image_logo->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
+    ui->btnClearLogo->setVisible(false);
+}
+
+void UserPreferences::restoreSelectedUserInCombo()
+{
+    const QSignalBlocker blocker(ui->comboUsers);
+    const auto matches = model_users->match(model_users->index(0, 0), Qt::UserRole,
+                                            m_Id, 1, Qt::MatchExactly);
+    if (!matches.isEmpty())
+        ui->comboUsers->setCurrentIndex(matches.constFirst().row());
+}
+
+bool UserPreferences::saveLocalMessagePreferences(QStringList &err)
+{
+    const bool videoChanged = m_showVideoMessage != m_initialShowVideoMessage;
+    const bool reportsChanged = m_showReportsMessage != m_initialShowReportsMessage;
+
+    if (videoChanged
+        && !AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Video,
+                                                   m_showVideoMessage)) {
+        err << tr("Preferința locală pentru mesajul video nu a putut fi salvată.");
+        return false;
     }
 
-    disconnect(ui->updateListDoc, QOverload<int>::of(&QSpinBox::valueChanged),
-               this, QOverload<int>::of(&UserPreferences::onChangedValueUpdateListDoc));
+    if (reportsChanged
+        && !AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Reports,
+                                                   m_showReportsMessage)) {
+        if (videoChanged)
+            AppSettings::saveInfoMessageVisibility(AppSettings::InfoMessage::Video,
+                                                   m_initialShowVideoMessage);
+        err << tr("Preferința locală pentru mesajul rapoartelor nu a putut fi salvată.");
+        return false;
+    }
+
+    return true;
 }
 
 // **********************************************************************************
@@ -777,45 +836,35 @@ bool UserPreferences::controlRequiredObjects()
     return true;
 }
 
-bool UserPreferences::existRecordInTableConstants()
+bool UserPreferences::recordExists(const QString &tableName, bool &exists, QStringList &err) const
 {
-    QSqlQuery qry;
-    qry.prepare(R"(
-        SELECT
-            COUNT(id_users)
-        FROM
-            constants
-        WHERE
-            id_users = ?
-    )");
-    qry.addBindValue(m_Id);
-    if (qry.exec() && qry.next()) {
-        int count = qry.value(0).toInt();
-        return (count > 0);
+    exists = false;
+    if (tableName != QStringLiteral("constants")
+        && tableName != QStringLiteral("userPreferences")) {
+        err << tr("Tabela '%1' nu este acceptată pentru verificarea preferințelor.").arg(tableName);
+        return false;
     }
 
-    return false;
-}
-
-bool UserPreferences::existRecordInTableUserPreferences()
-{
-    QSqlQuery qry;
-    qry.prepare(R"(
-        SELECT
-            COUNT(id)
-        FROM
-            userPreferences
-        WHERE
-            id_users = ?
-
-    )");
+    QSqlQuery qry(m_db.getDatabase());
+    if (!qry.prepare(QStringLiteral("SELECT COUNT(*) FROM %1 WHERE id_users = ?").arg(tableName))) {
+        err << qry.lastError().text();
+        return false;
+    }
     qry.addBindValue(m_Id);
-    if (qry.exec() && qry.next()) {
-        int count = qry.value(0).toInt();
-        return (count > 0);
+    if (!qry.exec() || !qry.next()) {
+        err << tr("Verificarea tabelei '%1' a eșuat: %2").arg(tableName, qry.lastError().text());
+        return false;
     }
 
-    return false;
+    const int count = qry.value(0).toInt();
+    if (count > 1) {
+        err << tr("Tabela '%1' conține %2 înregistrări pentru utilizatorul cu ID %3. "
+                  "Salvarea a fost oprită pentru a evita modificarea ambiguă a datelor.")
+                   .arg(tableName).arg(count).arg(m_Id);
+        return false;
+    }
+    exists = count == 1;
+    return true;
 }
 
 bool UserPreferences::insertDataIntoTableConstants(QStringList &err)
@@ -837,18 +886,9 @@ bool UserPreferences::insertDataIntoTableConstants(QStringList &err)
     map["id_nurses"]        = (m_idNurse == idx_unknow) ? QVariant() : m_idNurse;
     map["brandUSG"]         = (ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text();
 
-    // logotipul
-    QByteArray image_data;
-    QPixmap pix = ui->image_logo->pixmap();
-
-    if (! pix.isNull()) {
-        QBuffer buffer(&image_data);
-        buffer.open(QIODevice::WriteOnly);
-        pix.save(&buffer, "PNG");
-    }
-    map["logo"] = image_data.isEmpty()
+    map["logo"] = m_logoData.isEmpty()
                       ? QVariant(QMetaType(QMetaType::QByteArray))
-                      : image_data.toBase64();
+                      : m_logoData.toBase64();
 
     // inseram datele prin functia universala
     return m_db.insertIntoTable(this->metaObject()->className(), "constants", map, err);
@@ -872,7 +912,6 @@ bool UserPreferences::insertDataIntoTableUserPreferences(QStringList &err)
 
     // pregatim datele
     QVariantMap map;
-    map["id"]                    = m_db.getLastIdForTable("userPreferences") + 1;
     map["id_users"]              = m_Id;
     map["versionApp"]            = USG_VERSION_FULL;
     map["showQuestionCloseApp"]  = toDbBool(ui->check_showQuestionClosingApp->isChecked());
@@ -910,18 +949,9 @@ bool UserPreferences::updateDataIntoTableConstants(QStringList &err)
     map["id_nurses"]        = (m_idNurse == idx_unknow) ? QVariant() : m_idNurse;
     map["brandUSG"]         = (ui->brandUSG->text().isEmpty()) ? QVariant() : ui->brandUSG->text();
 
-    // logotipul
-    QByteArray image_data;
-    QPixmap pix = ui->image_logo->pixmap();
-
-    if (! pix.isNull()) {
-        QBuffer buffer(&image_data);
-        buffer.open(QIODevice::WriteOnly);
-        pix.save(&buffer, "PNG");
-    }
-    map["logo"] = image_data.isEmpty()
+    map["logo"] = m_logoData.isEmpty()
                       ? QVariant(QMetaType(QMetaType::QByteArray))
-                      : image_data.toBase64();
+                      : m_logoData.toBase64();
 
     // pregatim conditia
     QMap<QString, QVariant> where;
@@ -949,8 +979,6 @@ bool UserPreferences::updateDataIntoTableUserPreferences(QStringList &err)
 
     // pregatim datele
     QVariantMap map;
-    map["id"]                    = m_Id;
-    map["id_users"]              = m_Id;
     map["versionApp"]            = USG_VERSION_FULL;
     map["showQuestionCloseApp"]  = toDbBool(ui->check_showQuestionClosingApp->isChecked());
     map["showUserManual"]        = toDbBool(ui->check_showUserManual->isChecked());
@@ -995,7 +1023,7 @@ void UserPreferences::closeEvent(QCloseEvent *event)
             else
                 event->ignore();
         } else if (messange_box.clickedButton() == noButton) {
-
+            event->accept();
         }
     } else {
         event->accept();
@@ -1015,5 +1043,8 @@ void UserPreferences::keyPressEvent(QKeyEvent *event)
 {
     if(event->key()==Qt::Key_Return || event->key() == Qt::Key_Enter){
         this->focusNextChild();
+        event->accept();
+        return;
     }
+    QDialog::keyPressEvent(event);
 }

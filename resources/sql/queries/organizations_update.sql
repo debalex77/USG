@@ -6,6 +6,7 @@ UPDATE organizations SET
     address      = ?,
     telephone    = ?,
     email        = ?,
+    site         = ?,
     comment      = ?,
     id_contracts = ?,
     stamp        = ?

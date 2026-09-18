@@ -134,10 +134,10 @@ private:
     int exist_signature = 0;
 
     QString m_unitMeasure = nullptr;
-    QByteArray m_logo_byteArray = nullptr;
-    QByteArray m_stamp_main_organization = nullptr;
-    QByteArray m_stamp_main_doctor = nullptr;
-    QByteArray m_signature_main_doctor= nullptr;
+    QByteArray m_organizationLogoData = nullptr;
+    QByteArray m_organizationStampData = nullptr;
+    QByteArray m_organizationDoctorStampData = nullptr;
+    QByteArray m_organizationDoctorSignatureData= nullptr;
     QString m_pathTemplatesDocs = nullptr;
     QString m_filePDF = nullptr;
 

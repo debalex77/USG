@@ -18,13 +18,13 @@ ArchiveCreationHandler::ArchiveCreationHandler(QWidget *parent)
     //--- Drum spre arhiva ---
     ui->archivePath->setText(QDir::homePath() +
                              "/Database_usg/" +
-                             globals().sqliteNameBase + "_" +
+                             globals().sqliteDatabaseName + "_" +
                              QDateTime::currentDateTime().toString("yyyyMMdd-HHmmss"));
 
     //--- Lista cu BD ---
     ui->list_files->setSelectionMode(QAbstractItemView::ExtendedSelection);
-    ui->list_files->addItem(globals().sqlitePathBase);
-    ui->list_files->addItem(globals().pathImageBaseAppSettings);
+    ui->list_files->addItem(globals().sqliteDatabasePath);
+    ui->list_files->addItem(globals().imageDatabasePath);
 
     //--- compresia ---
     ui->compression->setValue(9);
@@ -129,7 +129,7 @@ void ArchiveCreationHandler::onAddFiles()
     }
 
     if (ui->archivePath->text().trimmed().isEmpty())
-        ui->archivePath->setText(globals().main_name_organization);
+        ui->archivePath->setText(globals().organizationName);
 }
 
 void ArchiveCreationHandler::onRemoveSelected()
@@ -151,7 +151,7 @@ void ArchiveCreationHandler::onBrowseArchive()
         this,
         tr("Alege arhiva 7z"),
         ui->archivePath->text().trimmed().isEmpty()
-            ? globals().main_name_organization
+            ? globals().organizationName
             : ui->archivePath->text(),
         tr("Arhive 7z (*.7z)"));
 
@@ -179,7 +179,7 @@ void ArchiveCreationHandler::onStart()
     }
     QString outArchive = ui->archivePath->text().trimmed();
     if (outArchive.isEmpty()) {
-        outArchive = globals().main_name_organization;
+        outArchive = globals().organizationName;
         ui->archivePath->setText(outArchive);
     }
 

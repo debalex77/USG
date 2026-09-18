@@ -46,7 +46,7 @@ AppSettings::AppSettings(QWidget *parent) :
 
     ui->numberLogFile->setValue(ConfigDefault::retainedLogFiles);
 
-    const QFileInfo profileInfo(globals().pathAppSettings);
+    const QFileInfo profileInfo(globals().settingsPath);
     const QString profileBaseName = profileInfo.completeBaseName();
     if (!profileBaseName.isEmpty()) {
         const QString logFileName = profileBaseName + QStringLiteral(".log");
@@ -84,7 +84,7 @@ AppSettings::~AppSettings()
 void AppSettings::captureSettingsState()
 {
     m_initialProfile = profileFromGlobals();
-    m_initialSettingsPath = globals().pathAppSettings;
+    m_initialSettingsPath = globals().settingsPath;
 }
 
 void AppSettings::restoreSettingsState()
@@ -108,9 +108,9 @@ AppSettingsStore::ProfileData AppSettings::profileFromGlobals() const
                                 ? 1 : 0;
 
     // paths
-    data.pathTemplates = globals().pathTemplatesDocs;
-    data.pathReports   = globals().pathReports;
-    data.pathVideo     = globals().pathDirectoryVideo;
+    data.pathTemplates = globals().docsTemplatesPath;
+    data.pathReports   = globals().reportsPath;
+    data.pathVideo     = globals().videoDirectory;
 
     // mysql/nariadb
     data.mysqlHost     = globals().mySQLhost;
@@ -124,10 +124,10 @@ AppSettingsStore::ProfileData AppSettings::profileFromGlobals() const
     data.mysqlOptions  = globals().mySQLoptionConnect;
 
     // sqlite
-    data.sqliteDatabase    = globals().sqliteNameBase;
-    data.sqlitePath        = globals().sqlitePathBase;
-    data.imageDatabasePath = globals().pathImageBaseAppSettings;
-    data.logPath           = globals().pathLogAppSettings;
+    data.sqliteDatabase    = globals().sqliteDatabaseName;
+    data.sqlitePath        = globals().sqliteDatabasePath;
+    data.imageDatabasePath = globals().imageDatabasePath;
+    data.logPath           = globals().logPath;
 
     // remember
     data.rememberUser       = globals().memoryUser;
@@ -187,7 +187,7 @@ void AppSettings::applyProfileToForm(const AppSettingsStore::ProfileData &data)
     ui->comboBoxTypeSQL->setCurrentIndex(data.databaseIndex);
     changeIndexTypeSQL(data.databaseIndex);
     ui->comboBoxUnitMeasure->setCurrentIndex(data.unitMeasureIndex);
-    ui->txtPathAppSettings->setText(globals().pathAppSettings);
+    ui->txtPathAppSettings->setText(globals().settingsPath);
 
     // Profilul păstrează configurațiile ambelor motoare. Comutarea motorului activ
     // trebuie să schimbe doar disponibilitatea taburilor, nu să golească datele
@@ -232,12 +232,12 @@ void AppSettings::applyProfileToGlobals(const AppSettingsStore::ProfileData &dat
                                                       : QString();
 
     if (!settingsPath.isEmpty())
-        globals().pathAppSettings = QDir::toNativeSeparators(settingsPath);
+        globals().settingsPath = QDir::toNativeSeparators(settingsPath);
 
-    globals().pathLogAppSettings = QDir::toNativeSeparators(data.logPath);
-    globals().pathTemplatesDocs  = data.pathTemplates;
-    globals().pathReports        = data.pathReports;
-    globals().pathDirectoryVideo = data.pathVideo;
+    globals().logPath = QDir::toNativeSeparators(data.logPath);
+    globals().docsTemplatesPath  = data.pathTemplates;
+    globals().reportsPath        = data.pathReports;
+    globals().videoDirectory     = data.pathVideo;
 
     globals().numSavedFilesLog = data.retainedLogFiles;
     globals().memoryUser       = data.rememberUser;
@@ -253,9 +253,9 @@ void AppSettings::applyProfileToGlobals(const AppSettingsStore::ProfileData &dat
     globals().mySQLuser          = data.mysqlUser;
     globals().mySQLpasswdUser    = data.mysqlPassword;
 
-    globals().sqliteNameBase           = data.sqliteDatabase;
-    globals().sqlitePathBase           = data.sqlitePath;
-    globals().pathImageBaseAppSettings = data.imageDatabasePath;
+    globals().sqliteDatabaseName = data.sqliteDatabase;
+    globals().sqliteDatabasePath = data.sqlitePath;
+    globals().imageDatabasePath  = data.imageDatabasePath;
 
     globals().firstLaunch = !data.initialSetupComplete;
 }
@@ -594,11 +594,11 @@ void AppSettings::setLanguageApp()
 void AppSettings::setDefaultPath()
 {
     if (ui->txtPathAppSettings->text().isEmpty())
-        ui->txtPathAppSettings->setText(globals().pathAppSettings);
+        ui->txtPathAppSettings->setText(globals().settingsPath);
 
-    ui->txtPathLog->setText(globals().pathLogAppSettings.isEmpty()
+    ui->txtPathLog->setText(globals().logPath.isEmpty()
                                 ? fileLogPath
-                                : globals().pathLogAppSettings);
+                                : globals().logPath);
 
     // Șabloanele instalate sunt localizate relativ la executabil, independent
     // de directorul curent din care a fost pornită aplicația.
@@ -608,12 +608,12 @@ void AppSettings::setDefaultPath()
     const QString defaultReportsPath = QDir::toNativeSeparators(
         QDir(defaultTemplatesPath).filePath(QStringLiteral("reports")));
 
-    lineEditPathTemplatesPrint->setText(globals().pathTemplatesDocs.isEmpty()
+    lineEditPathTemplatesPrint->setText(globals().docsTemplatesPath.isEmpty()
                                             ? defaultTemplatesPath
-                                            : globals().pathTemplatesDocs);
-    lineEditPathReports->setText(globals().pathReports.isEmpty()
+                                            : globals().docsTemplatesPath);
+    lineEditPathReports->setText(globals().reportsPath.isEmpty()
                                      ? defaultReportsPath
-                                     : globals().pathReports);
+                                     : globals().reportsPath);
 }
 
 void AppSettings::setDefaultPathSqlite()
@@ -919,26 +919,26 @@ void AppSettings::updateTableLog(QString level_log, QStringList level_exclude)
 bool AppSettings::loadSettings()
 {
     // verificam existenta fisierului si il citim
-    const QFileInfo settingsFileInfo(globals().pathAppSettings);
-    if (globals().pathAppSettings.isEmpty() ||
+    const QFileInfo settingsFileInfo(globals().settingsPath);
+    if (globals().settingsPath.isEmpty() ||
         !settingsFileInfo.isFile() ||
         !settingsFileInfo.isReadable()) {
         const QString reason = tr("Fișierul de configurare lipsește sau nu poate fi citit:\n%1")
-                                   .arg(globals().pathAppSettings);
+                                   .arg(globals().settingsPath);
         qCritical(logCritical()) << reason;
         QMessageBox::critical(this, tr("Citirea setărilor"), reason);
         return false;
     }
 
     // verificam formatul corect a fisierului
-    const AppSettingsStore::ReadResult readResult = AppSettingsStore::readProfile(globals().pathAppSettings, fileLogPath);
+    const AppSettingsStore::ReadResult readResult = AppSettingsStore::readProfile(globals().settingsPath, fileLogPath);
     if (readResult.error == AppSettingsStore::ReadError::Access ||
         readResult.error == AppSettingsStore::ReadError::Format) {
         const QString reason = readResult.error == AppSettingsStore::ReadError::Format
                                    ? tr("Fișierul de configurare are un format invalid:\n%1")
-                                         .arg(globals().pathAppSettings)
+                                         .arg(globals().settingsPath)
                                    : tr("Fișierul de configurare nu poate fi accesat:\n%1")
-                                         .arg(globals().pathAppSettings);
+                                         .arg(globals().settingsPath);
         qCritical(logCritical()) << reason;
         QMessageBox::critical(this, tr("Citirea setărilor"), reason);
         return false;
@@ -961,7 +961,7 @@ bool AppSettings::loadSettings()
     // În acest caz rămâne valabilă calea calculată anterior din numele profilului.
     if (data.logPath.isEmpty())
         data.logPath = fileLogPath;
-    applyProfileToGlobals(data, globals().pathAppSettings);
+    applyProfileToGlobals(data, globals().settingsPath);
     m_loadedProfile = data;
     if (data.rememberedUserDataIncomplete)
         qWarning(logWarning())
@@ -987,7 +987,7 @@ bool AppSettings::saveRememberedUser(int userId, const QString &userName, bool r
         return false;
     }
 
-    return AppSettingsStore::writeGroup(globals().pathAppSettings, ConfigKey::groupStartup,
+    return AppSettingsStore::writeGroup(globals().settingsPath, ConfigKey::groupStartup,
         {
             {
                 ConfigKey::rememberedUserId,
@@ -1004,7 +1004,7 @@ bool AppSettings::saveRememberedUser(int userId, const QString &userName, bool r
 bool AppSettings::saveInitialSetupComplete(bool complete)
 {
     const bool saved = AppSettingsStore::writeGroup(
-        globals().pathAppSettings,
+        globals().settingsPath,
         ConfigKey::groupStartup,
         {{ConfigKey::initialSetupComplete, complete}});
     if (saved)
@@ -1017,7 +1017,7 @@ bool AppSettings::saveInfoMessageVisibility(InfoMessage message, bool visible)
     const QString &key = message == InfoMessage::Video
                              ? ConfigKey::showVideoMessage
                              : ConfigKey::showReportsMessage;
-    return AppSettingsStore::writeGroup(globals().pathAppSettings,
+    return AppSettingsStore::writeGroup(globals().settingsPath,
                                         ConfigKey::groupMessages, {{key, visible}});
 }
 
@@ -1040,7 +1040,7 @@ void AppSettings::slot_currentIndexChangedTab(const int index)
 
     m_logModel.clear();
 
-    const QFileInfo activeLogInfo(globals().pathLogAppSettings);
+    const QFileInfo activeLogInfo(globals().logPath);
     const QString baseName = activeLogInfo.completeBaseName();
     if (baseName.isEmpty())
         return;

@@ -6,13 +6,13 @@
 #include <QMessageBox>
 #include <QStyleFactory>
 #include <QTableWidgetItem>
+#include <QByteArray>
 
 #include <catalogs/catalogdialog.h>
 #include <catalogs/userdialog.h>
 #include <catalogs/organizationdialog.h>
 #include "data/database.h"
 #include "models/basesqlquerymodel.h"
-#include "popup.h"
 
 namespace Ui {
 class UserPreferences;
@@ -93,13 +93,13 @@ private:
     void initSetModels();
     void initConnections();
     void connectionsCombo();
-    void disconnectCombo();
     void connectionCheckBox();
-    void disconnectionCheckBox();
+    void resetFormForUser();
+    void restoreSelectedUserInCombo();
+    bool saveLocalMessagePreferences(QStringList &err);
 
     bool controlRequiredObjects();
-    bool existRecordInTableConstants();
-    bool existRecordInTableUserPreferences();
+    bool recordExists(const QString &tableName, bool &exists, QStringList &err) const;
     bool insertDataIntoTableConstants(QStringList &err);
     bool insertDataIntoTableUserPreferences(QStringList &err);
     bool updateDataIntoTableConstants(QStringList &err);
@@ -139,8 +139,14 @@ private:
     int m_idDoctor       = idx_unknow;
     int m_idNurse        = idx_unknow;
 
+    QByteArray m_logoData;
+    bool m_showVideoMessage = true;
+    bool m_showReportsMessage = true;
+    bool m_initialShowVideoMessage = true;
+    bool m_initialShowReportsMessage = true;
+    bool m_loading = false;
+
     DataBase &m_db;
-    PopUp    *popUp;
 
     BaseSqlQueryModel *model_users;
     BaseSqlQueryModel *model_doctors;

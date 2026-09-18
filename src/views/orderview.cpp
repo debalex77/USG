@@ -313,7 +313,7 @@ void OrderView::onSendEmail()
         return;
     }
 
-    const QString exportDirectory = globals().main_path_save_documents;
+    const QString exportDirectory = globals().exportDirectory;
     if (!QDir().mkpath(exportDirectory)) {
         QMessageBox::warning(this,
                              tr("Transmiterea prin e-mail"),
@@ -338,11 +338,11 @@ void OrderView::onSendEmail()
     data.id_report                    = -1;
     data.id_patient                   = item.patientId;
     data.unitMeasure                  = globals().unitMeasure;
-    data.logo_byteArray               = globals().c_logo_byteArray;
-    data.stamp_organization_byteArray = globals().main_stamp_organization;
-    data.stamp_doctor_byteArray       = globals().stamp_main_doctor;
-    data.signature_doctor_byteArray   = globals().signature_main_doctor;
-    data.pathTemplatesDocs            = globals().pathTemplatesDocs;
+    data.logo_byteArray               = globals().organizationLogoData;
+    data.stamp_organization_byteArray = globals().organizationStampData;
+    data.stamp_doctor_byteArray       = globals().organizationDoctorStampData;
+    data.signature_doctor_byteArray   = globals().organizationDoctorSignatureData;
+    data.pathTemplatesDocs            = globals().docsTemplatesPath;
     data.filePDF                      = exportDirectory;
 
     // LimeReport utilizeaza un ScriptEngineManager global bazat pe QJSEngine.
@@ -387,7 +387,7 @@ void OrderView::launchEmailAgent(const QVector<DatesForAgentEmail> &exportedData
     context.thisReports       = false;
     context.nrOrder           = data.nr_order;
     context.nrReport          = data.nr_report;
-    context.emailFrom         = globals().main_email_organization;
+    context.emailFrom         = globals().organizationEmail;
     context.emailTo           = data.emailTo;
     context.namePatient       = data.name_patient;
     context.nameDoctor        = data.name_doctor_execute;

@@ -83,7 +83,7 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
 
     QSqlDatabase base = m_db.getDatabase();
     if (!CryptoManager::loadOrCreateSplitKey(base,
-                                             globals().c_id_organizations,
+                                             globals().organizationID,
                                              &realKey,
                                              &error)) {
         qWarning(logWarning()) << "Nu s-a putut incarca cheia split:" << error;
@@ -108,7 +108,7 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
             email = :email
         LIMIT 1
     )");
-    qry.bindValue(":id_organizations", globals().c_id_organizations);
+    qry.bindValue(":id_organizations", globals().organizationID);
     qry.bindValue(":id_users", globals().idUserApp);
     qry.bindValue(":email", m_ctx.emailFrom.trimmed());
 
@@ -185,15 +185,15 @@ void AgentSendEmail::buildMessage()
         lines << tr("Vă rugăm să confirmați primirea acestuia și să ne contactați pentru orice informații suplimentare.");
         lines << "";
         lines << tr("Cu stimă,");
-        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, globals().main_name_organization);
-        lines << tr("Telefon: %1").arg(globals().main_phone_organization);
-        lines << tr("E-mail: %1").arg(globals().main_email_organization);
+        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, globals().organizationName);
+        lines << tr("Telefon: %1").arg(globals().organizationPhone);
+        lines << tr("E-mail: %1").arg(globals().organizationEmail);
     } else {
         m_ctx.subject = tr("Rezultatul investigației ecografice");
 
         lines << tr("Stimate/Stimată %1.").arg(m_ctx.namePatient);
         lines << tr("Vă transmitem raportul ecografic în urma investigației efectuate la %1 pe data de %2.")
-                     .arg(globals().main_name_organization,
+                     .arg(globals().organizationName,
                           m_ctx.dateInvestigation.toString("dd.MM.yyyy"));
         lines << tr("Documente atașate:");
         lines << tr(" - Comanda ecografică în format PDF.");
@@ -202,14 +202,14 @@ void AgentSendEmail::buildMessage()
         lines << tr("Observații importante:");
         lines << tr("Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară,");
         lines << tr("vă rugăm să ne contactați la %1 sau să ne scrieți la %2.")
-                     .arg(globals().main_phone_organization,
-                          globals().main_email_organization);
+                     .arg(globals().organizationPhone,
+                          globals().organizationEmail);
         lines << "";
         lines << tr("Vă mulțumim pentru încrederea acordată!");
         lines << tr("Cu stimă,");
-        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, globals().main_name_organization);
-        lines << tr("Telefon: %1").arg(globals().main_phone_organization);
-        lines << tr("E-mail: %1").arg(globals().main_email_organization);
+        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, globals().organizationName);
+        lines << tr("Telefon: %1").arg(globals().organizationPhone);
+        lines << tr("E-mail: %1").arg(globals().organizationEmail);
     }
 
     m_ctx.body = lines.join('\n');
@@ -231,7 +231,7 @@ void AgentSendEmail::collectAttachments()
         fileNumber.replace('\\', '_');
         fileNumber.replace(':', '_');
         const QString fileOrder =
-            globals().main_path_save_documents + "/Comanda_ecografica_nr_" + fileNumber + ".pdf";
+            globals().exportDirectory + "/Comanda_ecografica_nr_" + fileNumber + ".pdf";
 
         if (QFile::exists(fileOrder)) {
             ui->attached_file1->setText(fileOrder);
@@ -241,7 +241,7 @@ void AgentSendEmail::collectAttachments()
 
     if (!m_ctx.nameReport.isEmpty()) {
         const QString fileReport =
-            globals().main_path_save_documents + "/" + m_ctx.nameReport + ".pdf";
+            globals().exportDirectory + "/" + m_ctx.nameReport + ".pdf";
 
         if (QFile::exists(fileReport)) {
             if (ui->attached_file1->text().isEmpty())
@@ -262,7 +262,7 @@ void AgentSendEmail::collectAttachments()
     reportFileNumber.replace('\\', '_');
     reportFileNumber.replace(':', '_');
 
-    QDir dir(globals().main_path_save_documents);
+    QDir dir(globals().exportDirectory);
     dir.setFilter(QDir::Files | QDir::NoSymLinks);
     const QFileInfoList listFiles = dir.entryInfoList();
 
@@ -506,15 +506,15 @@ void AgentSendEmail::onEmailSent(bool success)
 
 void AgentSendEmail::onClose()
 {
-    QDir dir(globals().main_path_save_documents);
+    QDir dir(globals().exportDirectory);
     if (dir.exists()) {
         if (dir.removeRecursively()) {
             qInfo(logInfo()) << "[THREAD] Directorul"
-                             << globals().main_path_save_documents
+                             << globals().exportDirectory
                              << "a fost sters cu succes!";
         } else {
             qWarning(logWarning()) << "[THREAD] Nu s-a putut sterge directorul:"
-                                   << globals().main_path_save_documents;
+                                   << globals().exportDirectory;
         }
     }
 
@@ -540,7 +540,7 @@ void AgentSendEmail::initModelAccount()
         ORDER BY
             username
     )");
-    query.addBindValue(globals().c_id_organizations);
+    query.addBindValue(globals().organizationID);
     query.addBindValue(globals().idUserApp);
 
     if (!query.exec()) {

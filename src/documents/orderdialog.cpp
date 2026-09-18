@@ -169,8 +169,8 @@ void OrderDialog::slot_IsNewChanged()
         setPatientDataEnabled(false);
 
         // setam date din variabile globale
-        setIdPerformingDoctor(globals().c_id_doctor);
-        setIdNurse(globals().c_id_nurse);
+        setIdPerformingDoctor(globals().organizationDoctorID);
+        setIdNurse(globals().organizationNurseID);
         setIdUser(globals().idUserApp);
 
         ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_organization);
@@ -331,10 +331,14 @@ void OrderDialog::slot_IdPerformingDoctorChanged()
 
 void OrderDialog::slot_IdRefferingDoctorChanged()
 {
-    if (m_idRefferingDoctor < 0)
+    if (!modelRefferingDoctors)
         return;
 
-    ui->comboReferringDoctor->setCurrentIndex(modelRefferingDoctors->rowById("id", m_idRefferingDoctor));
+    const int row = m_idRefferingDoctor > 0
+                        ? modelRefferingDoctors->rowById("id", m_idRefferingDoctor)
+                        : 0;
+    QSignalBlocker blocker(ui->comboReferringDoctor);
+    ui->comboReferringDoctor->setCurrentIndex(row >= 0 ? row : 0);
 }
 
 void OrderDialog::slot_IdUserChanged()
@@ -390,8 +394,24 @@ void OrderDialog::onCreateNewDoctor()
             {
                 if (id_doctor <= 0)
                     return;
+
                 updateModelRefferingDoctors();
+                const int row = modelRefferingDoctors
+                                    ? modelRefferingDoctors->rowById("id", id_doctor)
+                                    : -1;
+                if (row < 0) {
+                    qWarning(logWarning())
+                        << "OrderDialog: doctorul nou creat nu a fost găsit în model, id="
+                        << id_doctor;
+                    QMessageBox::warning(
+                        this,
+                        tr("Doctori"),
+                        tr("Doctorul a fost creat, dar nu a putut fi selectat în listă."));
+                    return;
+                }
+
                 setIdRefferingDoctor(id_doctor);
+                ui->comboReferringDoctor->setCurrentIndex(row);
             });
     catalog->show();
 }
@@ -406,7 +426,17 @@ void OrderDialog::onOpenCatalogDoctor()
     catalog->setProperty("id", m_idRefferingDoctor);
     catalog->setWindowModality(Qt::ApplicationModal);
     connect(catalog, &CatalogDialog::catalogDialogChanged,
-            this, &OrderDialog::updateModelRefferingDoctors, Qt::UniqueConnection);
+            this, [this]()
+            {
+                const int editedDoctorId = m_idRefferingDoctor;
+                updateModelRefferingDoctors();
+
+                const int row = modelRefferingDoctors
+                                    ? modelRefferingDoctors->rowById("id", editedDoctorId)
+                                    : -1;
+                if (row >= 0)
+                    ui->comboReferringDoctor->setCurrentIndex(row);
+            });
     catalog->show();
 }
 
@@ -491,8 +521,7 @@ void OrderDialog::indexChangedCombo(int index)
         const int id_doctor = ui->comboReferringDoctor->currentData(roleID).toInt();
 
         // setam ID doctorului
-        if (id_doctor > 0)
-            setIdRefferingDoctor(id_doctor);
+        setIdRefferingDoctor(id_doctor > 0 ? id_doctor : 0);
 
         dataWasModified(); // modificam forma
 
@@ -869,7 +898,7 @@ void OrderDialog::setImageForDocPrint()
 
     // --- verifiam cache
     if (! globals().cache_img.find(name_key_logo, &pix_logo)){
-        if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
+        if (! globals().organizationLogoData.isEmpty() && pix_logo.loadFromData(globals().organizationLogoData)){
             globals().cache_img.insert(name_key_logo, pix_logo);
         }
     }
@@ -884,11 +913,11 @@ void OrderDialog::setImageForDocPrint()
     // ----- 2. stampila organizatiei
     QPixmap pix_stamp_organization = QPixmap();
     QStandardItem* img_item_stamp_organization = new QStandardItem();
-    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
+    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().organizationID) + "_" + globals().nameUserApp;
 
     // --- verifiam cache
     if (! globals().cache_img.find(name_key_stamp_organization, &pix_stamp_organization)) {
-        if (! globals().main_stamp_organization.isEmpty() && pix_stamp_organization.loadFromData(globals().main_stamp_organization)){
+        if (! globals().organizationStampData.isEmpty() && pix_stamp_organization.loadFromData(globals().organizationStampData)){
             globals().cache_img.insert(name_key_stamp_organization, pix_stamp_organization);
         }
     }
@@ -903,11 +932,11 @@ void OrderDialog::setImageForDocPrint()
     // ----- 3. stampila doctorului
     QPixmap pix_stamp_doctor = QPixmap();
     QStandardItem* img_item_stamp_doctor = new QStandardItem();
-    QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+    QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(globals().organizationDoctorID) + "_" + globals().nameUserApp;
 
     // --- verifiam cache
     if (! globals().cache_img.find(name_key_stamp_doctor, &pix_stamp_doctor)) {
-        if (! globals().stamp_main_doctor.isEmpty() && pix_stamp_doctor.loadFromData(globals().stamp_main_doctor)){
+        if (! globals().organizationDoctorStampData.isEmpty() && pix_stamp_doctor.loadFromData(globals().organizationDoctorStampData)){
             globals().cache_img.insert(name_key_stamp_doctor, pix_stamp_doctor);
         }
     }
@@ -922,11 +951,11 @@ void OrderDialog::setImageForDocPrint()
     // ----- 4. semnatura doctorului
     QPixmap pix_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
-    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().organizationDoctorID) + "_" + globals().nameUserApp;
 
     // --- verificam cache
     if (! globals().cache_img.find(name_key_signature, &pix_signature)) {
-        if(! globals().signature_main_doctor.isEmpty() && pix_signature.loadFromData(globals().signature_main_doctor)) {
+        if(! globals().organizationDoctorSignatureData.isEmpty() && pix_signature.loadFromData(globals().organizationDoctorSignatureData)) {
             globals().cache_img.insert(name_key_signature, pix_signature);
         }
     }
@@ -1028,13 +1057,13 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     // *************************************************************************************
     // verificam drumul spre forme de tipar
     QDir dir;
-    if (! QFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml")).exists()){
+    if (! QFile(dir.toNativeSeparators(globals().docsTemplatesPath + "/Order.lrxml")).exists()){
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Printarea documentului"));
         msgBox.setIcon(QMessageBox::Warning);
         msgBox.setText(tr("Documentul nu poate fi printat."));
         msgBox.setDetailedText(tr("Nu a fost gasit fisierul sablon formei de tipar:\n%1")
-                                   .arg(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml")));
+                                   .arg(dir.toNativeSeparators(globals().docsTemplatesPath + "/Order.lrxml")));
         msgBox.setStandardButtons(QMessageBox::Ok);
         msgBox.setStyleSheet(m_db.getStyleForButtonMessageBox());
         msgBox.exec();
@@ -1046,7 +1075,7 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 
         return;
     }
-    m_report->loadFromFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Order.lrxml"));
+    m_report->loadFromFile(dir.toNativeSeparators(globals().docsTemplatesPath + "/Order.lrxml"));
 
     // *************************************************************************************
     // prezentam forma de tipar
@@ -1742,6 +1771,9 @@ void OrderDialog::updateModelNurses()
 
 void OrderDialog::updateModelRefferingDoctors()
 {
+    const int selectedDoctorId = m_idRefferingDoctor;
+    QSignalBlocker blocker(ui->comboReferringDoctor);
+
     if (modelRefferingDoctors)
         delete modelRefferingDoctors;
 
@@ -1750,6 +1782,11 @@ void OrderDialog::updateModelRefferingDoctors()
     modelRefferingDoctors->setEmptyRowEnabled(true);
     ui->comboReferringDoctor->setModel(modelRefferingDoctors);
     ui->comboReferringDoctor->setModelColumn(modelRefferingDoctors->columnIndex("display"));
+
+    const int row = selectedDoctorId > 0
+                        ? modelRefferingDoctors->rowById("id", selectedDoctorId)
+                        : 0;
+    ui->comboReferringDoctor->setCurrentIndex(row >= 0 ? row : 0);
 }
 
 void OrderDialog::setStyleMaxVisibleItemsComboBox()
@@ -1800,6 +1837,10 @@ void OrderDialog::initConnections()
             this, &OrderDialog::onClearDataPatient, Qt::UniqueConnection);
     connect(ui->btnPatientHistory, &QToolButton::clicked,
             this, &OrderDialog::onOpenPatientHistory, Qt::UniqueConnection);
+    connect(ui->btnCreateNewDoctor, &QToolButton::clicked,
+            this, &OrderDialog::onCreateNewDoctor, Qt::UniqueConnection);
+    connect(ui->btnOpenDoctor, &QToolButton::clicked,
+            this, &OrderDialog::onOpenCatalogDoctor, Qt::UniqueConnection);
 
     // --- toolBox
     connect(ui->toolBox, QOverload<int>::of(&QToolBox::currentChanged),

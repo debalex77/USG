@@ -30,8 +30,8 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
                              << connectionName;
         }
     } else {
-        db.setHostName(globals().sqliteNameBase);
-        db.setDatabaseName(globals().sqlitePathBase);
+        db.setHostName(globals().sqliteDatabaseName);
+        db.setDatabaseName(globals().sqliteDatabasePath);
         if (! db.open()) {
             qCritical(logCritical()) << this->metaObject()->className()
                                      << "[getDatabaseThread()]"
@@ -53,7 +53,7 @@ QSqlDatabase DatabaseProvider::getDatabaseImagesThread(const QString &connection
 
     QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
     db.setHostName("db_image");
-    db.setDatabaseName(globals().pathImageBaseAppSettings);
+    db.setDatabaseName(globals().imageDatabasePath);
     if (! db.open()) {
         qWarning(logWarning()) << this->metaObject()->className()
                                << "[getDatabaseThread()]"

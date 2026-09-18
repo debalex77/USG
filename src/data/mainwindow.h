@@ -66,6 +66,9 @@ private:
     void updateTextBtn(); // pu traducerea dinamica
     QString getVersionAppInTableSettingsUsers();
     bool setVersionAppInTableSettingsUsers();
+    void updateWindowTitle();
+    void appendMigrationMessage(const QString &message);
+    QString confirmedDatabaseVersion;
     void closeDatabases();
     void closeAndSaveSettingsSubwindows();
 

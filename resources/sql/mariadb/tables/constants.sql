@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS `constants` (
     `id_nurses`	       BIGINT UNSIGNED,
     `brandUSG`	       VARCHAR (200),
     `logo`             LONGBLOB,
-    KEY `idx_constants_users` (`id_users`),
+    UNIQUE KEY `uq_constants_users` (`id_users`),
     KEY `idx_constants_organizations` (`id_organizations`),
     KEY `idx_constants_doctors` (`id_doctors`),
     KEY `idx_constants_nurses` (`id_nurses`),

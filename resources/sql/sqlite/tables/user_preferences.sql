@@ -18,5 +18,5 @@ CREATE TABLE IF NOT EXISTS userPreferences (
         ON DELETE CASCADE
 );
 
-CREATE INDEX IF NOT EXISTS idx_userPreferences_users
+CREATE UNIQUE INDEX IF NOT EXISTS uq_userPreferences_users
 ON userPreferences(id_users);

@@ -78,7 +78,8 @@ public:
                                 QStringList &err);
 
     /** Selectează datele prin unirea tabelelor 'constants' și 'userPreferences'.*/
-    QVariantMap selectJoinConstantsUserPreferencesByUserId(const int id_user);
+    QVariantMap selectJoinConstantsUserPreferencesByUserId(int id_user,
+                                                           QString *error = nullptr);
 
     /** Șterge rânduri dintr-un tabel pe baza unor condiții WHERE.*/
     bool deleteFromTable(const QString class_name,

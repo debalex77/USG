@@ -6,7 +6,8 @@ SELECT
     org.telephone,
     fd.nameAbbreviated AS doctor,
     fn.nameAbbreviated AS nurse,
-    org.email
+    org.email,
+    org.site
 FROM
     constants c
 LEFT JOIN

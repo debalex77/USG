@@ -7,6 +7,7 @@ CREATE TABLE IF NOT EXISTS organizations (
     address       TEXT,
     telephone     TEXT,
     email         TEXT,
+    site          TEXT DEFAULT NULL,
     comment       TEXT,
     id_contracts  INTEGER,
     stamp         BLOB,

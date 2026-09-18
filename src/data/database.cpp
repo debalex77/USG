@@ -57,7 +57,7 @@ bool DataBase::connectToDataBase()
     if (globals().connectionMade == "MySQL"){
         return openDataBase();
     } else {
-        if (QFile(globals().sqlitePathBase).exists()) {
+        if (QFile(globals().sqliteDatabasePath).exists()) {
             return openDataBase();
         } else {
             return restoreDataDase();
@@ -68,8 +68,8 @@ bool DataBase::connectToDataBase()
 
 bool DataBase::createConnectBaseSqlite(QString &txtMessage)
 {
-    return createConnectBaseSqlite(globals().sqliteNameBase,
-                                   globals().sqlitePathBase,
+    return createConnectBaseSqlite(globals().sqliteDatabaseName,
+                                   globals().sqliteDatabasePath,
                                    globals().firstLaunch,
                                    txtMessage);
 }
@@ -140,8 +140,8 @@ QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, con
             return db_thread;
         } else {
             QSqlDatabase db_thread = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
-            db_thread.setHostName(globals().sqliteNameBase);
-            db_thread.setDatabaseName(globals().sqlitePathBase);
+            db_thread.setHostName(globals().sqliteDatabaseName);
+            db_thread.setDatabaseName(globals().sqliteDatabasePath);
             if (! db_thread.open()) {
                 qWarning(logWarning()) << "Eroare <thread> la deschiderea bazei de date(sqlite):"
                                        << db_thread.lastError().text();
@@ -181,7 +181,7 @@ QSqlDatabase DataBase::getDatabaseImageThread(const QString threadConnectionName
 
         QSqlDatabase db_threadImage = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
         db_threadImage.setHostName("db_image");
-        db_threadImage.setDatabaseName(globals().pathImageBaseAppSettings);
+        db_threadImage.setDatabaseName(globals().imageDatabasePath);
         if (! db_threadImage.open()) {
             qWarning(logWarning()) << "Eroare la deschiderea bazei de date în thread:"
                                    << db_threadImage.lastError().text();
@@ -634,24 +634,44 @@ QVariantMap DataBase::selectSingleRow(const QString class_name,
     return result;
 }
 
-QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(const int id_user)
+QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(int id_user, QString *error)
 {
     QVariantMap result;
+
+    if (error)
+        error->clear();
 
     if (id_user == -1 || id_user == 0)
         return result;
 
-    QSqlQuery qry;
+    QSqlQuery qry(getDatabase());
     qry.prepare(R"(
         SELECT
-            c.*,
-            u.*
+            c.id_organizations AS id_organizations,
+            c.id_doctors AS id_doctors,
+            c.id_nurses AS id_nurses,
+            c.brandUSG AS brandUSG,
+            c.logo AS logo,
+            u.versionApp AS versionApp,
+            u.showQuestionCloseApp AS showQuestionCloseApp,
+            u.showUserManual AS showUserManual,
+            u.showHistoryVersion AS showHistoryVersion,
+            u.order_splitFullName AS order_splitFullName,
+            u.updateListDoc AS updateListDoc,
+            u.showDesignerMenuPrint AS showDesignerMenuPrint,
+            u.checkNewVersionApp AS checkNewVersionApp,
+            u.databasesArchiving AS databasesArchiving,
+            u.showAsistantHelper AS showAsistantHelper,
+            u.showDocumentsInSeparatWindow AS showDocumentsInSeparatWindow,
+            u.minimizeAppToTray AS minimizeAppToTray
         FROM
-            userPreferences AS u
+            users AS base_user
         LEFT JOIN
-            constants AS c ON c.id_users = u.id_users
+            constants AS c ON c.id_users = base_user.id
+        LEFT JOIN
+            userPreferences AS u ON u.id_users = base_user.id
         WHERE
-            u.id_users = ?
+            base_user.id = ?
     )");
     qry.addBindValue(id_user);
     if (qry.exec()) {
@@ -660,8 +680,20 @@ QVariantMap DataBase::selectJoinConstantsUserPreferencesByUserId(const int id_us
             for (int i = 0; i < rec.count(); ++i) {
                 result.insert(rec.fieldName(i), qry.value(i));
             }
+            if (qry.next()) {
+                const QString duplicateError = tr("Au fost găsite mai multe seturi de preferințe "
+                                                  "pentru utilizatorul cu ID %1.").arg(id_user);
+                if (error)
+                    *error = duplicateError;
+                qWarning(logWarning()) << metaObject()->className()
+                                       << "[selectJoinConstantsUserPreferencesByUserId]:"
+                                       << duplicateError;
+                result.clear();
+            }
         }
     } else {
+        if (error)
+            *error = qry.lastError().text();
         qWarning(logWarning()) << this->metaObject()->className()
                                << "[selectJoinConstantsUserPreferencesByUserId]:"
                                << "Eroare SELECT:" << qry.lastError().text();
@@ -913,8 +945,7 @@ bool DataBase::verifyNewDatabaseSchema() const
         QStringLiteral("tableGestation2_other"),
         QStringLiteral("tableGestation2_doppler"),
         QStringLiteral("tableSofTissuesLymphNodes"),
-        QStringLiteral("normograms"), QStringLiteral("settingsUsers"),
-        QStringLiteral("userPreferences"),
+        QStringLiteral("normograms"), QStringLiteral("userPreferences"),
         QStringLiteral("patientAppointments"),
         QStringLiteral("patientAppointmentInvestigations"),
         QStringLiteral("conclusionTemplates"),
@@ -2332,12 +2363,24 @@ QString DataBase::getVersionMySQL()
 
 QString DataBase::getHTMLImageInfo()
 {
-    return QString("<img src=\"qrc:///img/info_x32.png\" alt=\"info\" width=\"20\" height=\"20\" style=\"vertical-align:middle; margin-right:5px;\" />");
+    return QString(R"(
+    <img src=":/img/common/info.png"
+         alt="info"
+         width="20"
+         height="20"
+         style="vertical-align:middle; margin-right:5px;" />
+    )");
 }
 
 QString DataBase::getHTMLImageWarning()
 {
-    return QString("<img src = \"qrc:///img/warning.png\" alt = \"info\" width=\"20\" height=\"20\" style=\"vertical-align:middle; margin-right:5px;\"  />");
+    return QString(R"(
+    <img src=":/img/common/warning.png"
+         alt="info"
+         width="20"
+         height="20"
+         style="vertical-align:middle; margin-right:5px;" />
+    )");
 }
 
 QString DataBase::getStyleForButtonMessageBox()
@@ -2599,27 +2642,41 @@ void DataBase::ensureUUIDs()
             if (!alter.exec(sql)) {
                 qWarning() << "Failed to add uuid column:"
                            << table << alter.lastError();
+                emit uuidProgress(static_cast<int>(tableIndex),
+                                  static_cast<int>(rootTablesWithUUID.size()),
+                                  tr("Eroare la adăugarea coloanei UUID în %1.").arg(table));
                 continue;
             }
 
             qDebug() << "uuid column added:" << table;
+            emit uuidProgress(static_cast<int>(tableIndex),
+                              static_cast<int>(rootTablesWithUUID.size()),
+                              tr("A fost adăugată coloana UUID în tabela %1.").arg(table));
         }
 
         /* ===============================
          * 3️ completam UUID unde este NULL
          * =============================== */
         QSqlQuery select(getDatabase());
-        select.exec(
-            QString("SELECT id FROM %1 WHERE uuid IS NULL").arg(table)
-            );
+        if (!select.exec(QString("SELECT id FROM %1 WHERE uuid IS NULL").arg(table))) {
+            qWarning() << "UUID selection failed:" << table << select.lastError();
+            emit uuidProgress(static_cast<int>(tableIndex),
+                              static_cast<int>(rootTablesWithUUID.size()),
+                              tr("Eroare la citirea înregistrărilor fără UUID din %1.").arg(table));
+            continue;
+        }
 
         QList<qint64> ids;
         while (select.next()) {
             ids << select.value(0).toLongLong();
         }
 
-        if (ids.isEmpty())
+        if (ids.isEmpty()) {
+            emit uuidProgress(static_cast<int>(tableIndex + 1),
+                              static_cast<int>(rootTablesWithUUID.size()),
+                              tr("UUID în %1: nu sunt înregistrări de completat.").arg(table));
             continue;
+        }
 
         QSqlQuery update(getDatabase());
         update.prepare(
@@ -2627,6 +2684,8 @@ void DataBase::ensureUUIDs()
             );
 
         qsizetype processed = 0;
+        qint64 completed = 0;
+        qsizetype failed = 0;
         for (qint64 id : std::as_const(ids)) {
             update.addBindValue(
                 QUuid::createUuid().toRfc4122()   // RFC4122 only
@@ -2634,9 +2693,12 @@ void DataBase::ensureUUIDs()
             update.addBindValue(id);
 
             if (!update.exec()) {
+                ++failed;
                 qWarning() << "UUID update failed:"
                            << table << "id=" << id
                            << update.lastError();
+            } else {
+                completed += qMax(qint64(0), update.numRowsAffected());
             }
 
             ++processed;
@@ -2650,10 +2712,30 @@ void DataBase::ensureUUIDs()
             }
         }
 
-        qDebug() << "UUID filled:" << table << ids.count();
+        const QString label = table == QStringLiteral("contracts") ? tr("contracte")
+            : table == QStringLiteral("doctors") ? tr("doctori")
+            : table == patientTable ? tr("pacienți")
+            : table == QStringLiteral("nurses") ? tr("asistenți medicali")
+            : table == QStringLiteral("orderEcho") ? tr("comenzi ecografice")
+            : table == QStringLiteral("reportEcho") ? tr("rapoarte ecografice")
+            : table == QStringLiteral("organizations") ? tr("organizații")
+            : table == QStringLiteral("investigations") ? tr("investigații")
+            : table == QStringLiteral("investigationsGroup") ? tr("grupe de investigații")
+            : table == QStringLiteral("pricings") ? tr("liste de prețuri")
+            : table == QStringLiteral("typesPrices") ? tr("tipuri de prețuri")
+            : table == QStringLiteral("users") ? tr("utilizatori")
+            : table == QStringLiteral("imagesReports") ? tr("imagini") : table;
+        emit uuidProgress(static_cast<int>(tableIndex + 1),
+                          static_cast<int>(rootTablesWithUUID.size()),
+                          tr("Au fost completate UUID la %1: %2. Erori: %3.")
+                              .arg(label).arg(completed).arg(failed));
+        qDebug() << "UUID filled:" << table << completed << "errors:" << failed;
     }
 
-    getDatabase().commit();
+    if (!getDatabase().commit()) {
+        qWarning() << "UUID commit failed:" << getDatabase().lastError();
+        emit uuidProgress(0, 0, tr("Salvarea tranzacției UUID a eșuat; rezultatele etapelor nu sunt confirmate."));
+    }
 }
 
 void DataBase::ensureIndexUUIDs()
@@ -2814,6 +2896,9 @@ void DataBase::ensureIndexUUIDs()
             }
 
             qDebug() << "Created unique(uuid):" << table;
+            emit uuidProgress(static_cast<int>(tableIndex + 1),
+                              static_cast<int>(rootTablesWithUUID.size()),
+                              tr("A fost creat indexul unic UUID pentru %1.").arg(table));
         }
 
         emit uuidProgress(static_cast<int>(tableIndex + 1),
@@ -2851,30 +2936,30 @@ bool DataBase::openDataBase()
 
         //----------------------------------------------------------------------------------------------------
         // baza de date implicita
-        if (globals().sqlitePathBase.isEmpty() || globals().sqlitePathBase.isNull()){
-            qCritical(logCritical()) << tr("Nu este indicata variabila globala 'sqlitePathBase'.");
+        if (globals().sqliteDatabasePath.isEmpty() || globals().sqliteDatabasePath.isNull()){
+            qCritical(logCritical()) << tr("Nu este indicata variabila globala 'sqliteDatabasePath'.");
             return false;
         }
         db = QSqlDatabase::addDatabase("QSQLITE");
-        db.setHostName(globals().sqliteNameBase);
-        db.setDatabaseName(globals().sqlitePathBase);
+        db.setHostName(globals().sqliteDatabaseName);
+        db.setDatabaseName(globals().sqliteDatabasePath);
         if(db.open()){
             qInfo(logInfo()) << "";
             qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~= LANSARE NOUA =~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
-            qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals().sqliteNameBase);
+            qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(globals().sqliteDatabaseName);
             if (! enableForeignKeys())
                 qWarning(logWarning()) << "Nu a fost activata suportul cheii externe";
         } else {
-            qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals().sqliteNameBase)
+            qWarning(logWarning()) << tr("Conectarea la baza de date '%1' nu a fost instalata.").arg(globals().sqliteDatabaseName)
                                    << db.lastError().text();
             return false;
         }
 
         //----------------------------------------------------------------------------------------------------
         // baza de date image
-        if (globals().pathImageBaseAppSettings.isEmpty() ||
-            globals().pathImageBaseAppSettings.isNull()){
-            qWarning(logWarning()) << tr("Nu este indicata variabila globala 'pathImageBaseAppSettings'.");
+        if (globals().imageDatabasePath.isEmpty() ||
+            globals().imageDatabasePath.isNull()){
+            qWarning(logWarning()) << tr("Nu este indicata variabila globala 'imageDatabasePath'.");
 
         } else {
             // if (db_image.isOpen())
@@ -2882,7 +2967,7 @@ bool DataBase::openDataBase()
 
             db_image = QSqlDatabase::addDatabase("QSQLITE", "db_image");
             db_image.setHostName("db_image");
-            db_image.setDatabaseName(globals().pathImageBaseAppSettings);
+            db_image.setDatabaseName(globals().imageDatabasePath);
             if (db_image.open()){
                 qInfo(logInfo()) << tr("Conectarea la baza de date 'db_image' este instalata cu succes.");
 

@@ -13,23 +13,25 @@ struct GlobalVariable {
     QPixmapCache cache_img;
 
     // QByteArray-uri
-    QByteArray c_logo_byteArray        = nullptr;  // constanta logotipilui
-    QByteArray main_stamp_organization = nullptr;  // stampila organizatiei
-    QByteArray stamp_main_doctor       = nullptr;  // stampila doctorului implicit
-    QByteArray signature_main_doctor   = nullptr;  // semnatura doctorului implicit
+    QByteArray organizationLogoData  = nullptr;  // constanta logotipilui
+    QByteArray organizationStampData = nullptr;  // stampila organizatiei
+    QByteArray organizationDoctorStampData = nullptr;     // stampila doctorului implicit
+    QByteArray organizationDoctorSignatureData = nullptr; // semnatura doctorului implicit
 
     // QString-uri lungi (texte mari, HTML)
     QString str_content_message_video;
     QString str_content_message_report;
 
-    // QString-uri pentru setări și căi
-    QString pathImageBaseAppSettings = nullptr;
-    QString pathTemplatesDocs        = nullptr;
-    QString pathReports              = nullptr;
-    QString pathAppSettings          = nullptr;
-    QString pathLogAppSettings       = nullptr;
-    QString sqliteNameBase           = nullptr;
-    QString sqlitePathBase           = nullptr;
+    // path
+    QString imageDatabasePath = nullptr;
+    QString docsTemplatesPath = nullptr;
+    QString reportsPath       = nullptr;
+    QString settingsPath      = nullptr;
+    QString logPath           = nullptr;
+
+    // sqlite
+    QString sqliteDatabaseName = nullptr;
+    QString sqliteDatabasePath = nullptr;
 
     // setarile dimensiunilor ferestrelor, sectiilor tabelelor si setarile rapoartelor
     QString config_dir = QDir::toNativeSeparators(
@@ -56,26 +58,29 @@ struct GlobalVariable {
     QString langApp     = nullptr;
     QString unitMeasure = nullptr;
     QString nameUserApp = nullptr;
-    QString c_brandUSG  = nullptr;
 
-    QString main_name_organization   = nullptr;
-    QString main_email_organization  = nullptr;
-    QString main_phone_organization  = nullptr;
-    QString main_addres_organization = nullptr;
-    QString main_path_save_documents = QDir::toNativeSeparators(QDir::tempPath() + "/USG");
-    QString main_name_doctor         = nullptr;
-    QString main_name_abbreviat_doctor = nullptr;
+    QString organizationName    = nullptr;
+    QString organizationEmail   = nullptr;
+    QString organizationSite    = nullptr;
+    QString organizationPhone   = nullptr;
+    QString organizationAddress = nullptr;
+    QString organizationBrandUSG = nullptr;
+    QString organizationDoctorName = nullptr;
+    QString organizationDoctorAbbreviatedName = nullptr;
 
-    QString connectionMade     = nullptr;
-    QString pathDirectoryVideo = nullptr;
+    // directory
+    QString exportDirectory = QDir::toNativeSeparators(QDir::tempPath() + "/USG");
+    QString videoDirectory  = nullptr;
+
+    QString connectionMade = nullptr;
 
     // int-uri
-    int moveApp            = -1;
-    int indexTypeSQL       = -1;
-    int idUserApp          = -1;
-    int c_id_organizations = -1;
-    int c_id_doctor        = -1;
-    int c_id_nurse         = -1;
+    int moveApp              = -1;
+    int indexTypeSQL         = -1;
+    int idUserApp            = -1;
+    int organizationID       = -1;
+    int organizationDoctorID = -1;
+    int organizationNurseID  = -1;
 
     int updateIntervalListDoc = 0;
     int numSavedFilesLog      = -1;

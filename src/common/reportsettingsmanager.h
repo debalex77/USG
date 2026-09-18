@@ -124,7 +124,7 @@ public:
     QStringList getListReportsFromDirectory()
     {
         QStringList list;
-        QDir dir(globals().pathReports);
+        QDir dir(globals().reportsPath);
         dir.setFilter(QDir::Files | QDir::NoSymLinks);
         QFileInfoList listFiles = dir.entryInfoList();
         for (int n = 0; n < listFiles.size(); n++) {

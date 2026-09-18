@@ -43,7 +43,7 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
     QString txt_path_config = file_path.toNativeSeparators(dirConfigPath);
     if (! QFile(txt_path_config).exists()){
         if (QDir().mkpath(txt_path_config)){
-            globals().pathAppSettings = file_path.toNativeSeparators(fileConfigPath);
+            globals().settingsPath = file_path.toNativeSeparators(fileConfigPath);
             connect(timer, &QTimer::timeout,
                     this, &DatabaseSelection::updateTimer);
             timer->start(1000);
@@ -141,7 +141,7 @@ void DatabaseSelection::onConnectToBase()
     QDir file_conf;
     QString str_name_file = ui->listWidget->item(ui->listWidget->currentRow())->data(Qt::DisplayRole).toString();
     QString file_name = dirConfigPath + "/" + str_name_file + ".conf";
-    globals().pathAppSettings = file_conf.toNativeSeparators(file_name);
+    globals().settingsPath = file_conf.toNativeSeparators(file_name);
     globals().unknowModeLaunch = false;
     globals().firstLaunch = false;
     globals().moveApp = -1;

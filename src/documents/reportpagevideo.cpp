@@ -254,7 +254,7 @@ void ReportPageVideo::onEditVideo()
         return;
 
     const QString fullPath = QDir::cleanPath(finalUrl.toLocalFile());
-    const QString basePath = QDir::cleanPath(globals().pathDirectoryVideo);
+    const QString basePath = QDir::cleanPath(globals().videoDirectory);
 
     QString newRelativePath;
     if (!fullPath.startsWith(basePath + QDir::separator()))
@@ -268,9 +268,9 @@ void ReportPageVideo::onEditVideo()
     item->setData(Qt::UserRole, newRelativePath);
     item->setToolTip(newRelativePath);
 
-    const QString oldFullPath = QDir(globals().pathDirectoryVideo).filePath(oldRelativePath);
+    const QString oldFullPath = QDir(globals().videoDirectory).filePath(oldRelativePath);
     if (oldRelativePath != newRelativePath) {
-        const QString oldFullPath = QDir(globals().pathDirectoryVideo).filePath(oldRelativePath);
+        const QString oldFullPath = QDir(globals().videoDirectory).filePath(oldRelativePath);
         QFile::remove(oldFullPath);
     }
 }
@@ -293,7 +293,7 @@ void ReportPageVideo::onDeleteVideo()
         return;
     }
 
-    const QString fullPath = QDir(globals().pathDirectoryVideo).filePath(relativePath);
+    const QString fullPath = QDir(globals().videoDirectory).filePath(relativePath);
     const QUrl fileUrl = QUrl::fromLocalFile(fullPath);
 
     if (player && player->source() == fileUrl) {
@@ -327,7 +327,7 @@ void ReportPageVideo::onCurrentItemChanged(QListWidgetItem *current,
     if (relativePath.isEmpty())
         return;
 
-    const QString fullPath = QDir(globals().pathDirectoryVideo).filePath(relativePath);
+    const QString fullPath = QDir(globals().videoDirectory).filePath(relativePath);
 
     if (player->source() == QUrl::fromLocalFile(fullPath))
         return;
@@ -427,7 +427,7 @@ void ReportPageVideo::setUrl(const QUrl &url)
         return;
 
     const QString fullPath = QDir::cleanPath(url.toLocalFile());
-    const QString basePath = QDir::cleanPath(globals().pathDirectoryVideo);
+    const QString basePath = QDir::cleanPath(globals().videoDirectory);
 
     QString relativePath;
     if (!fullPath.startsWith(basePath + QDir::separator()))
@@ -477,7 +477,7 @@ QUrl ReportPageVideo::ensureVideoInStorage(const QUrl &url)
     if (reportDirName.isEmpty())
         return {};
 
-    QDir baseDir(globals().pathDirectoryVideo);
+    QDir baseDir(globals().videoDirectory);
     if (!baseDir.exists() && !baseDir.mkpath(".")) {
         qWarning(logWarning()) << "Nu s-a putut crea directorul de bază:"
                                << baseDir.absolutePath();

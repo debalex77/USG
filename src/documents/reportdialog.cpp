@@ -425,7 +425,7 @@ void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     if (allTemplates) { /** Ca o idee - de creat un sablon cu toate sisteme */
         this->hide();
         m_report.setShowProgressDialog(true);
-        if (m_report.loadFromFile(globals().pathTemplatesDocs + "/AllTemplates.lrxml")) {
+        if (m_report.loadFromFile(globals().docsTemplatesPath + "/AllTemplates.lrxml")) {
             if (type_print == PrintType::Designer)
                 m_report.designReport();
             else if (type_print == PrintType::Preview)
@@ -1506,25 +1506,25 @@ void ReportDialog::setLogoStampOrganization(QStandardItemModel *model_img)
 {
     /** 1. logo */
     const QString keyLogo = QStringLiteral("logo_%1").arg(globals().nameUserApp);
-    QStandardItem* itLogo = mkImageItem(keyLogo, globals().c_logo_byteArray, k_LogoSize);
+    QStandardItem* itLogo = mkImageItem(keyLogo, globals().organizationLogoData, k_LogoSize);
     exist_logo = itLogo->data(Qt::DisplayRole).isValid() ? 1 : 0;
 
     /** 2. stampila organizației */
     const QString keyOrg = QStringLiteral("stamp_organization_id-%1_%2")
-                               .arg(globals().c_id_organizations).arg(globals().nameUserApp);
-    QStandardItem* itOrg = mkImageItem(keyOrg, globals().main_stamp_organization, k_StampSize);
+                               .arg(globals().organizationID).arg(globals().nameUserApp);
+    QStandardItem* itOrg = mkImageItem(keyOrg, globals().organizationStampData, k_StampSize);
     exist_stam_organization = itOrg->data(Qt::DisplayRole).isValid() ? 1 : 0;
 
     /** 3. semnătura doctorului */
     const QString keySig = QStringLiteral("signature_doctor_id-%1_%2")
-                               .arg(globals().c_id_doctor).arg(globals().nameUserApp);
-    QStandardItem* itSig = mkImageItem(keySig, globals().signature_main_doctor, k_StampSize);
+                               .arg(globals().organizationDoctorID).arg(globals().nameUserApp);
+    QStandardItem* itSig = mkImageItem(keySig, globals().organizationDoctorSignatureData, k_StampSize);
     exist_signature_doctor = itSig->data(Qt::DisplayRole).isValid() ? 1 : 0;
 
     /** 4. ștampila doctorului */
     const QString keyDoc = QStringLiteral("stamp_doctor_id-%1_%2")
-                               .arg(globals().c_id_doctor).arg(globals().nameUserApp);
-    QStandardItem* itDoc = mkImageItem(keyDoc, globals().stamp_main_doctor, k_StampSize);
+                               .arg(globals().organizationDoctorID).arg(globals().nameUserApp);
+    QStandardItem* itDoc = mkImageItem(keyDoc, globals().organizationDoctorStampData, k_StampSize);
     exist_stamp_doctor = itDoc->data(Qt::DisplayRole).isValid() ? 1 : 0;
 
     /** set în model (o singură linie, 4 coloane) */
@@ -1581,12 +1581,12 @@ void ReportDialog::showTemplateComplex(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Complex.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Complex.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Complex.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Complex.lrxml"));
         msg.exec();
         return;
     }
@@ -1629,12 +1629,12 @@ void ReportDialog::showTemplateOrgansInternal(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Organs internal.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Organs internal.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Organs internal.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Organs internal.lrxml"));
         msg.exec();
         return;
     }
@@ -1677,12 +1677,12 @@ void ReportDialog::showTemplateUrinarySystem(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Urinary system.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Urinary system.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Urinary system.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Urinary system.lrxml"));
         msg.exec();
         return;
     }
@@ -1732,12 +1732,12 @@ void ReportDialog::showTemplateProstate(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Prostate.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Prostate.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Prostate.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Prostate.lrxml"));
         msg.exec();
         return;
     }
@@ -1787,12 +1787,12 @@ void ReportDialog::showTemplateGynecology(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Gynecology.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Gynecology.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Gynecology.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Gynecology.lrxml"));
         msg.exec();
         return;
     }
@@ -1834,12 +1834,12 @@ void ReportDialog::showTemplateBreast(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Breast.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Breast.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Breast.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Breast.lrxml"));
         msg.exec();
         return;
     }
@@ -1882,12 +1882,12 @@ void ReportDialog::showTemplateThyroid(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Thyroid.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Thyroid.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Thyroid.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Thyroid.lrxml"));
         msg.exec();
         return;
     }
@@ -1939,12 +1939,12 @@ void ReportDialog::showTemplateGestation0(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Gestation0.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Gestation0.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Gestation0.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Gestation0.lrxml"));
         msg.exec();
         return;
     }
@@ -1996,12 +1996,12 @@ void ReportDialog::showTemplateGestation1(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/Gestation1.lrxml")){
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/Gestation1.lrxml")){
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/Gestation1.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/Gestation1.lrxml"));
         msg.exec();
         return;
     }
@@ -2051,7 +2051,7 @@ void ReportDialog::showTemplateGestation2(LimeReport::ReportEngine &report,
     if (allTemplates)
         return;
 
-    const QString templatePath = globals().pathTemplatesDocs + "/Gestation2.lrxml";
+    const QString templatePath = globals().docsTemplatesPath + "/Gestation2.lrxml";
     qInfo(logInfo()) << "[Gestation print] template:" << templatePath
                      << "PDF export:" << (typePrint == PrintType::ExportToPDF)
                      << "rows:" << modelGestation2.rowCount();
@@ -2126,12 +2126,12 @@ void ReportDialog::showTemplateLymphNodes(LimeReport::ReportEngine &report,
         return;
 
     /** completam sablonul */
-    if (! report.loadFromFile(globals().pathTemplatesDocs + "/LymphNodes.lrxml")) {
+    if (! report.loadFromFile(globals().docsTemplatesPath + "/LymphNodes.lrxml")) {
         CustomMessage msg(this);
         msg.setWindowTitle(QGuiApplication::applicationDisplayName());
         msg.setTextTitle(tr("Printare nu este posibilă !!!"));
         msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(globals().pathTemplatesDocs + "/LymphNodes.lrxml"));
+                                .arg(globals().docsTemplatesPath + "/LymphNodes.lrxml"));
         msg.exec();
         return;
     }

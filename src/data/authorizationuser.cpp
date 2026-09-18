@@ -114,8 +114,8 @@ void AuthorizationUser::setDataConstants()
     DataConstantsWorker::GeneralData data;
     data.thisMySQL       = globals().thisMySQL;
     data.id_user         = globals().idUserApp;
-    data.id_doctor       = globals().c_id_doctor;
-    data.id_organization = globals().c_id_organizations;
+    data.id_doctor       = globals().organizationDoctorID;
+    data.id_organization = globals().organizationID;
 
     auto worker = new DataConstantsWorker(dbProvider(), data);
 

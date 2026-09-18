@@ -617,7 +617,7 @@ void CatForSqlTableModel::printCatalogCost()
     m_report->dataManager()->addModel("print_model", print_model, false);
     m_report->setShowProgressDialog(true);
     m_report->setPreviewWindowTitle(tr("Catalogul tarifelor unice (modificat 2024)"));
-    if (! m_report->loadFromFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/CatalogCost.lrxml"))) {
+    if (! m_report->loadFromFile(dir.toNativeSeparators(globals().docsTemplatesPath + "/CatalogCost.lrxml"))) {
         QMessageBox::warning(this,
                              tr("Verificarea \310\231ablonului"),
                              tr("Nu a fost g\304\203sit formular de tipar !!!<br>"

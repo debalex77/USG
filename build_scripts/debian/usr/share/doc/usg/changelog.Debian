@@ -1,3 +1,14 @@
+usg (4.1.2) UNRELEASED; urgency=medium
+
+  * Added organization websites and an idempotent SQLite/MariaDB schema migration.
+  * Added the organization website to the printed ultrasound order.
+  * Made user-preference updates transactional and safer for multiple users.
+  * Added referring-doctor creation and editing directly from the ultrasound order.
+  * Preserved the previous window-title version when an update fails.
+  * Added migration progress and UUID counts to the information panel.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Fri, 18 Sep 2026 12:00:00 +0300
+
 usg (4.1.1) UNRELEASED; urgency=medium
 
   * Fixed price-list printing with numeric investigation group IDs on SQLite and MariaDB.

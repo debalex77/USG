@@ -4,6 +4,7 @@
 #include "loggingcategories.h"
 
 #include <QSettings>
+#include <QFile>
 
 namespace AppSettingsStore {
 
@@ -27,9 +28,9 @@ namespace Key {
     const QString indexDatabase    = QStringLiteral("indexTypeSQL");
     const QString indexUnitMeasure = QStringLiteral("indexUnitMeasure");
 
-    const QString pathTemplates    = QStringLiteral("pathTemplatesDocs");
-    const QString pathReports      = QStringLiteral("pathReports");
-    const QString pathVideo        = QStringLiteral("pathVideo");
+    const QString pathTemplates    = QStringLiteral("docsTemplatesPath");
+    const QString pathReports      = QStringLiteral("reportsPath");
+    const QString pathVideo        = QStringLiteral("videoDirectory");
 
     const QString mysqlHost        = QStringLiteral("MySQL_host");
     const QString mysqlDatabase    = QStringLiteral("MySQL_name_base");
@@ -38,10 +39,10 @@ namespace Key {
     const QString mysqlPassword    = QStringLiteral("MySQL_passwd_user");
     const QString mysqlOptions     = QStringLiteral("MySQL_option_connect");
 
-    const QString sqliteDatabase     = QStringLiteral("sqliteNameBase");
-    const QString sqlitePath         = QStringLiteral("sqlitePathBase");
-    const QString imageDatabasePath  = QStringLiteral("pathDBImage");
-    const QString logPath            = QStringLiteral("pathLogApp");
+    const QString sqliteDatabase     = QStringLiteral("sqliteDatabaseName");
+    const QString sqlitePath         = QStringLiteral("sqliteDatabasePath");
+    const QString imageDatabasePath  = QStringLiteral("imageDatabasePath");
+    const QString logPath            = QStringLiteral("logPath");
 
     const QString rememberedUserId   = QStringLiteral("idUserApp");
     const QString rememberedUserName = QStringLiteral("nameUserApp");
@@ -54,6 +55,54 @@ namespace Key {
 }
 
 namespace {
+
+struct RenamedKey {
+    const char *oldKey;
+    const char *newKey;
+};
+
+const RenamedKey renamedKeys[] = {
+    {"connect/sqliteNameBase",     "connect/sqliteDatabaseName"},
+    {"connect/sqlitePathBase",     "connect/sqliteDatabasePath"},
+    {"connect/pathDBImage",        "connect/imageDatabasePath"},
+    {"connect/pathLogApp",         "connect/logPath"},
+    {"path_app/pathTemplatesDocs", "path_app/docsTemplatesPath"},
+    {"path_app/pathReports",       "path_app/reportsPath"},
+    {"path_app/pathVideo",         "path_app/videoDirectory"}
+};
+
+bool migrateProfileKeys(QSettings &settings)
+{
+    bool needsMigration = false;
+    for (const auto &key : renamedKeys)
+        needsMigration |= settings.contains(QLatin1String(key.oldKey));
+    if (!needsMigration)
+        return true;
+
+    // Keep the original profile (including unknown keys) before removing aliases.
+    const QString backupPath = settings.fileName() + QStringLiteral(".pre-4.1.2.bak");
+    if (!settings.isWritable()
+        || (!QFile::exists(backupPath) && !QFile::copy(settings.fileName(), backupPath))) {
+        qWarning(logWarning()) << "Migrarea cheilor profilului 4.1.2: copia de siguranță nu poate fi pregătită.";
+        return false;
+    }
+    for (const auto &key : renamedKeys) {
+        const QString oldKey = QLatin1String(key.oldKey);
+        const QString newKey = QLatin1String(key.newKey);
+        if (!settings.contains(oldKey))
+            continue;
+        if (!settings.contains(newKey))
+            settings.setValue(newKey, settings.value(oldKey));
+        settings.remove(oldKey);
+    }
+    settings.sync();
+    if (settings.status() != QSettings::NoError) {
+        qWarning(logWarning()) << "Migrarea cheilor profilului 4.1.2 nu a putut fi salvată.";
+        return false;
+    }
+    qInfo(logInfo()) << "Cheile profilului .conf au fost actualizate pentru 4.1.2; copia originală a fost păstrată.";
+    return true;
+}
 
 int readBoundedInt(QSettings &settings, const QString &key, int defaultValue,
                    int minimum, int maximum)
@@ -136,6 +185,11 @@ ReadResult readProfile(const QString &settingsPath, const QString &defaultLogPat
         return result;
     }
 
+    if (!migrateProfileKeys(settings)) {
+        result.error = ReadError::Access;
+        return result;
+    }
+
     ProfileData &data = result.data;
     // index
     settings.beginGroup(Key::groupIndex);
@@ -199,6 +253,11 @@ WriteError writeProfile(const QString &settingsPath, const ProfileData &data)
         return WriteError::Access;
 
     QSettings settings(settingsPath, QSettings::IniFormat);
+    settings.allKeys();
+    if (settings.status() == QSettings::FormatError)
+        return WriteError::Format;
+    if (settings.status() != QSettings::NoError || !migrateProfileKeys(settings))
+        return WriteError::Access;
 
     settings.beginGroup(Key::groupIndex);
     settings.setValue(Key::indexLanguage,    data.languageIndex);

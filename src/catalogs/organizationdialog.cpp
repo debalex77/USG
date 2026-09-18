@@ -91,6 +91,7 @@ void OrganizationDialog::slot_IdChanged()
         ui->editAddress->setText(record.value("address").toString());
         ui->editTelephone->setText(record.value("telephone").toString());
         ui->editEmail->setText(record.value("email").toString());
+        ui->editSite->setText(record.value("site").toString());
         ui->editComment->setText(record.value("comment").toString());
 
         // contract
@@ -353,7 +354,7 @@ void OrganizationDialog::clearImageStamp()
         ui->img_stamp->setTextInteractionFlags(Qt::LinksAccessibleByMouse);
         popUp->setPopupText(tr("Imaginea este eliminată din baza de date."));
         popUp->show();
-        globals().main_stamp_organization = nullptr;
+        globals().organizationStampData = nullptr;
     } else {
         // formam textul erorii
         err.clear();
@@ -420,7 +421,7 @@ bool OrganizationDialog::loadFile(const QString &fileName)
     if (qry.exec()){
         popUp->setPopupText(tr("Imaginea este salvat cu succes în baza de date."));
         popUp->show();
-        globals().main_stamp_organization = QByteArray::fromBase64(inByteArray.toBase64());
+        globals().organizationStampData = QByteArray::fromBase64(inByteArray.toBase64());
         qInfo(logInfo())
             << QStringLiteral("A fost inserata imaginea organizatiei %1")
                    .arg(ui->editName->text());
@@ -808,6 +809,9 @@ bool OrganizationDialog::handleInsert()
     data.append(ui->editEmail->text().isEmpty()
                     ? QVariant()
                     : ui->editEmail->text());
+    data.append(ui->editSite->text().isEmpty()
+                    ? QVariant()
+                    : ui->editSite->text());
     data.append(ui->editComment->toPlainText().isEmpty()
                     ? QVariant()
                     : ui->editComment->toPlainText());
@@ -870,6 +874,9 @@ bool OrganizationDialog::handleUpdate()
     data.append(ui->editEmail->text().isEmpty()
                     ? QVariant()
                     : ui->editEmail->text());
+    data.append(ui->editSite->text().isEmpty()
+                    ? QVariant()
+                    : ui->editSite->text());
     data.append(ui->editComment->toPlainText().isEmpty()
                     ? QVariant()
                     : ui->editComment->toPlainText());

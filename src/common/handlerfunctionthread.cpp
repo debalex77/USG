@@ -80,18 +80,19 @@ void HandlerFunctionThread::setDataConstants()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().c_id_organizations = qry.value(rec.indexOf("id_organizations")).toInt();
-                    globals().c_id_doctor        = qry.value(rec.indexOf("id_doctors")).toInt();
-                    globals().c_id_nurse         = qry.value(rec.indexOf("id_nurses")).toInt();
-                    globals().c_brandUSG         = qry.value(rec.indexOf("brandUSG")).toString();
-                    globals().c_logo_byteArray   = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
+                    globals().organizationID = qry.value(rec.indexOf("id_organizations")).toInt();
+                    globals().organizationDoctorID = qry.value(rec.indexOf("id_doctors")).toInt();
+                    globals().organizationNurseID  = qry.value(rec.indexOf("id_nurses")).toInt();
+                    globals().organizationBrandUSG = qry.value(rec.indexOf("brandUSG")).toString();
+                    globals().organizationLogoData = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
                 }
             }
 
             // organizations
-            qry.prepare(db->getTextSQL(":/sql/queries/organizations_byID_select.sql"));
+            // Constants may be loaded before the database migration runs.
+            qry.prepare(QStringLiteral("SELECT * FROM organizations WHERE id = ?"));
             if (m_GeneralData.id_organization == -1)
-                qry.addBindValue(globals().c_id_organizations);
+                qry.addBindValue(globals().organizationID);
             else
                 qry.addBindValue(m_GeneralData.id_organization);
             if (! qry.exec()) {
@@ -99,18 +100,20 @@ void HandlerFunctionThread::setDataConstants()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().main_name_organization   = qry.value(rec.indexOf("name")).toString();
-                    globals().main_addres_organization = qry.value(rec.indexOf("address")).toString();
-                    globals().main_phone_organization  = qry.value(rec.indexOf("telephone")).toString();
-                    globals().main_email_organization  = qry.value(rec.indexOf("email")).toString();
-                    globals().main_stamp_organization  = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().organizationName   = qry.value(rec.indexOf("name")).toString();
+                    globals().organizationAddress = qry.value(rec.indexOf("address")).toString();
+                    globals().organizationPhone  = qry.value(rec.indexOf("telephone")).toString();
+                    globals().organizationEmail  = qry.value(rec.indexOf("email")).toString();
+                    globals().organizationSite   = rec.contains("site")
+                        ? qry.value(rec.indexOf("site")).toString() : QString();
+                    globals().organizationStampData  = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
                 }
             }
 
             // doctor
             qry.prepare(db->getTextSQL(":/sql/queries/doctors_byID_select.sql"));
             if (m_GeneralData.id_doctor == -1)
-                qry.addBindValue(globals().c_id_doctor);
+                qry.addBindValue(globals().organizationDoctorID);
             else
                 qry.addBindValue(m_GeneralData.id_doctor);
             if (! qry.exec()) {
@@ -118,17 +121,17 @@ void HandlerFunctionThread::setDataConstants()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().main_name_doctor           = qry.value(rec.indexOf("fullName")).toString();
-                    globals().main_name_abbreviat_doctor = qry.value(rec.indexOf("nameAbbreviated")).toString();
-                    globals().stamp_main_doctor          = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
-                    globals().signature_main_doctor      = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
+                    globals().organizationDoctorName            = qry.value(rec.indexOf("fullName")).toString();
+                    globals().organizationDoctorAbbreviatedName = qry.value(rec.indexOf("nameAbbreviated")).toString();
+                    globals().organizationDoctorStampData       = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().organizationDoctorSignatureData      = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
                 }
             }
 
             // cloudServer
             QSqlQuery qry_cloud(dbConnection);
             qry_cloud.prepare(db->getTextSQL(":/sql/queries/cloudServer_select.sql"));
-            qry_cloud.addBindValue(globals().c_id_organizations);
+            qry_cloud.addBindValue(globals().organizationID);
             qry_cloud.addBindValue(m_GeneralData.id_user);
             if (! qry_cloud.exec()) {
                 qWarning(logWarning()) << "SQL Error:" << qry.lastError().text();
@@ -458,7 +461,7 @@ void HandlerFunctionThread::setModelImgForPrint()
     // 1. logotip
     QPixmap pix_logo = QPixmap();
     QStandardItem *img_item_logo = new QStandardItem();
-    if (! m_logo_byteArray.isEmpty() && pix_logo.loadFromData(m_logo_byteArray)) {
+    if (! m_organizationLogoData.isEmpty() && pix_logo.loadFromData(m_organizationLogoData)) {
         img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
         exist_logo = 1;
     }
@@ -466,7 +469,7 @@ void HandlerFunctionThread::setModelImgForPrint()
     // 2. stampila organizatiei
     QPixmap pix_stamp_organization = QPixmap();
     QStandardItem* img_item_stamp_organization = new QStandardItem();
-    if (! m_stamp_main_organization.isEmpty() && pix_stamp_organization.loadFromData(m_stamp_main_organization)) {
+    if (! m_organizationStampData.isEmpty() && pix_stamp_organization.loadFromData(m_organizationStampData)) {
         img_item_stamp_organization->setData(pix_stamp_organization.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
         exist_stamp_organization = 1;
     }
@@ -474,7 +477,7 @@ void HandlerFunctionThread::setModelImgForPrint()
     // 3. stampila doctorului
     QPixmap pix_stamp_doctor = QPixmap();
     QStandardItem* img_item_stamp_doctor = new QStandardItem();
-    if (! m_stamp_main_doctor.isEmpty() && pix_stamp_doctor.loadFromData(m_stamp_main_doctor)) {
+    if (! m_organizationDoctorStampData.isEmpty() && pix_stamp_doctor.loadFromData(m_organizationDoctorStampData)) {
         img_item_stamp_doctor->setData(pix_stamp_doctor.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
         exist_stamp_doctor = 1;
     }
@@ -482,7 +485,7 @@ void HandlerFunctionThread::setModelImgForPrint()
     // 4. semnatura doctorului
     QPixmap pix_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
-    if (! m_signature_main_doctor.isEmpty() && pix_signature.loadFromData(m_signature_main_doctor)) {
+    if (! m_organizationDoctorSignatureData.isEmpty() && pix_signature.loadFromData(m_organizationDoctorSignatureData)) {
         img_item_signature->setData(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
         exist_signature = 1;
     }

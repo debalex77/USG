@@ -1,3 +1,20 @@
+## USG v4.1.2 (18.09.2026)
+
+- Redenumite variabilele globale și cheile de căi din `.conf`; profilurile vechi sunt migrate automat cu backup `.pre-4.1.2.bak`, păstrând valorile și cheile necunoscute.
+- Corectată afișarea marcajelor de listă în istoricul actualizării.
+
+- Adăugat site-ul organizației și migrarea reluabilă a coloanei `organizations.site` pentru SQLite și MariaDB; valorile existente sunt păstrate.
+- Site-ul organizației este inclus în șablonul tipărit al Comenzii ecografice.
+- Citirea datelor organizației la autorizare rămâne compatibilă cu bazele anterioare migrării.
+
+- Revizuită salvarea preferințelor utilizatorului: modificările sunt aplicate tranzacțional, selecția utilizatorului este păstrată, iar logo-ul și opțiunile locale nu mai sunt salvate înainte de confirmare.
+- Adăugată crearea și modificarea medicului trimițător direct din Comanda ecografică, cu actualizarea listei și selectarea automată a medicului nou.
+
+- Etapele actualizării sunt afișate și în panoul informativ, cu numărul real de UUID-uri completate pe tabelă, erorile și rezultatul final.
+
+- Titlul ferestrei principale păstrează versiunea de la care pornește actualizarea și afișează versiunea nouă numai după finalizarea migrării și salvarea versiunii. La eșec sau amânare, versiunea anterioară rămâne afișată, inclusiv după schimbarea limbii.
+- Corectată verificarea versiunilor terminate în zero la solicitarea credențialelor cloud înainte de migrare.
+
 ## USG v4.1.1
 
 - Corectată validarea versiunilor bazei de date terminate în zero (de exemplu `4.1.0`), care blocau actualizarea pe SQLite și MariaDB.

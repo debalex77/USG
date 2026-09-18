@@ -1,3 +1,11 @@
+4.1.2 (September 18th, 2026)
+  * Added organization websites and an idempotent SQLite/MariaDB schema migration.
+  * Added the organization website to the printed ultrasound order.
+  * Made user-preference updates transactional and safer for multiple users.
+  * Added referring-doctor creation and editing directly from the ultrasound order.
+  * Preserved the previous window-title version when an update fails.
+  * Added migration progress and UUID counts to the information panel.
+
 4.1.1 (September 16th, 2026)
   * Fixed price-list printing with numeric investigation group IDs on SQLite and MariaDB.
   * Distinguished empty investigation groups from SQL errors during printing.

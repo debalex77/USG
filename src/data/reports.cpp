@@ -575,7 +575,7 @@ void Reports::setImageForReports()
     QString name_key_logo = "logo_" + globals().nameUserApp;
     // --- verifiam cache
     if (! globals().cache_img.find(name_key_logo, &pix_logo)){
-        if (! globals().c_logo_byteArray.isEmpty() && pix_logo.loadFromData(globals().c_logo_byteArray)){
+        if (! globals().organizationLogoData.isEmpty() && pix_logo.loadFromData(globals().organizationLogoData)){
             globals().cache_img.insert(name_key_logo, pix_logo);
             exist_logo = 1;
         }
@@ -593,10 +593,10 @@ void Reports::setImageForReports()
     // ----- stampila organizatiei
     QPixmap outPixmap_stamp = QPixmap();
     QStandardItem *img_item_stamp = new QStandardItem();
-    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().c_id_organizations) + "_" + globals().nameUserApp;
+    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(globals().organizationID) + "_" + globals().nameUserApp;
     // --- verifiam cache
     if (! globals().cache_img.find(name_key_stamp_organization, &outPixmap_stamp)) {
-        if (! globals().main_stamp_organization.isEmpty() && outPixmap_stamp.loadFromData(globals().main_stamp_organization)){
+        if (! globals().organizationStampData.isEmpty() && outPixmap_stamp.loadFromData(globals().organizationStampData)){
             globals().cache_img.insert(name_key_stamp_organization, outPixmap_stamp);
             exist_stamp_organization = 1;
         }
@@ -610,10 +610,10 @@ void Reports::setImageForReports()
     // ----- semnatura doctorului
     QPixmap outPixmap_signature = QPixmap();
     QStandardItem* img_item_signature = new QStandardItem();
-    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().c_id_doctor) + "_" + globals().nameUserApp;
+    QString name_key_signature = "signature_doctor_id-" + QString::number(globals().organizationDoctorID) + "_" + globals().nameUserApp;
     // --- verificam cache
     if (! globals().cache_img.find(name_key_signature, &outPixmap_signature)) {
-        if(! globals().signature_main_doctor.isEmpty() && outPixmap_signature.loadFromData(globals().signature_main_doctor)) {
+        if(! globals().organizationDoctorSignatureData.isEmpty() && outPixmap_signature.loadFromData(globals().organizationDoctorSignatureData)) {
             globals().cache_img.insert(name_key_signature, outPixmap_signature);
             exist_signature_doctore = 1;
         }
@@ -936,24 +936,24 @@ void Reports::generateReport()
 
     //-----------------------------------------------------------------------------
     // 📌 9 incarcam fisierul si actualizam pagina
-    m_report->loadFromFile(globals().pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
+    m_report->loadFromFile(globals().reportsPath + "/" + ui->comboTypeReport->currentText() + ".lrxml");
     m_preview->refreshPages();
 
     //-----------------------------------------------------------------------------
     // 📌 10 verificam daca trebuie de exportat in tmp/USG
     if (send_email) {
-        QDir dir(globals().main_path_save_documents);
+        QDir dir(globals().exportDirectory);
         if (! dir.exists()) {
-            QDir().mkpath(globals().main_path_save_documents);
-            qInfo(logInfo()) << "A fost creat directorul" << globals().main_path_save_documents;
+            QDir().mkpath(globals().exportDirectory);
+            qInfo(logInfo()) << "A fost creat directorul" << globals().exportDirectory;
         } else {
             if (dir.removeRecursively()) {
-                qInfo(logInfo()) << "Directorul" << globals().main_path_save_documents << " a fost șters cu succes !";
+                qInfo(logInfo()) << "Directorul" << globals().exportDirectory << " a fost șters cu succes !";
             } else {
-                qWarning(logWarning()) << "Eroare: Nu s-a putut șterge directorul - " << globals().main_path_save_documents;
+                qWarning(logWarning()) << "Eroare: Nu s-a putut șterge directorul - " << globals().exportDirectory;
             }
         }
-        m_report->printToPDF(QDir::toNativeSeparators(globals().main_path_save_documents + "/" + ui->comboTypeReport->currentText() + ".pdf")); // pu transmiterea prin email
+        m_report->printToPDF(QDir::toNativeSeparators(globals().exportDirectory + "/" + ui->comboTypeReport->currentText() + ".pdf")); // pu transmiterea prin email
     }
 
     // *************************************************************************************
@@ -1008,7 +1008,7 @@ void Reports::openDesignerReport()
     if (ui->comboTypeReport->currentText() == tr("<<- selectează raport ->>"))
         m_report->loadFromFile("");
     else
-        m_report->loadFromFile(globals().pathReports + "/" + ui->comboTypeReport->currentText() + ".lrxml");
+        m_report->loadFromFile(globals().reportsPath + "/" + ui->comboTypeReport->currentText() + ".lrxml");
 
     m_report->designReport();
     m_preview->refreshPages();
@@ -1250,10 +1250,10 @@ void Reports::sendReportToEmail()
     agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
     agent_sendEmail->setProperty("ThisReports", true);
     agent_sendEmail->setProperty("NameReport",  ui->comboTypeReport->currentText());
-    agent_sendEmail->setProperty("EmailFrom",   globals().main_email_organization);
+    agent_sendEmail->setProperty("EmailFrom",   globals().organizationEmail);
     agent_sendEmail->setProperty("EmailTo",     m_emailTo);
     agent_sendEmail->setProperty("NamePatient", ui->comboOrganizations->currentText());
-    agent_sendEmail->setProperty("NameDoctor",  globals().main_name_abbreviat_doctor);
+    agent_sendEmail->setProperty("NameDoctor",  globals().organizationDoctorAbbreviatedName);
     agent_sendEmail->setProperty("DateInvestigation", QVariant());
     agent_sendEmail->show();
 

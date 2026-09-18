@@ -33,8 +33,8 @@ void OnlineAccountDialog::slot_IsNewChanged()
     if (m_isNew){
         setStatusCatalog(StatusObject::Unknow);
         slot_StatusCatalogChanged(); // fortam apelarea din cauza ca in macro:
-        if (globals().c_id_organizations > 0)
-            setIdOrganization(globals().c_id_organizations);
+        if (globals().organizationID > 0)
+            setIdOrganization(globals().organizationID);
     } else {
         setStatusCatalog(StatusObject::ZeroWrite);
         slot_StatusCatalogChanged();

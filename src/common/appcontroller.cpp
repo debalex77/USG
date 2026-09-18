@@ -128,7 +128,7 @@ bool AppController::ensureMainDatabaseConnected()
                                             ? tr("host: %1, baza: %2")
                                                   .arg(globals().mySQLhost,
                                                        globals().mySQLnameBase)
-                                            : globals().sqlitePathBase;
+                                            : globals().sqliteDatabasePath;
     const QString errorText = failedDatabase.lastError().text();
 
     qCritical(logCritical())
@@ -258,7 +258,7 @@ int AppController::handleLaunchFlow(AppSettings &appSettings, char **/*argv*/, b
 
     // Calea logului devine cunoscuta numai dupa citirea/salvarea profilului.
     if (!isDebug) {
-        (void) LogManager::init(globals().pathLogAppSettings,
+        (void) LogManager::init(globals().logPath,
                                 globals().numSavedFilesLog);
     }
 

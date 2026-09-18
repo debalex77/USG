@@ -32,11 +32,11 @@ void DataConstantsWorker::process()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().c_id_organizations = qry.value(rec.indexOf("id_organizations")).toInt();
-                    globals().c_id_doctor        = qry.value(rec.indexOf("id_doctors")).toInt();
-                    globals().c_id_nurse         = qry.value(rec.indexOf("id_nurses")).toInt();
-                    globals().c_brandUSG         = qry.value(rec.indexOf("brandUSG")).toString();
-                    globals().c_logo_byteArray   = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
+                    globals().organizationID = qry.value(rec.indexOf("id_organizations")).toInt();
+                    globals().organizationDoctorID = qry.value(rec.indexOf("id_doctors")).toInt();
+                    globals().organizationNurseID  = qry.value(rec.indexOf("id_nurses")).toInt();
+                    globals().organizationBrandUSG = qry.value(rec.indexOf("brandUSG")).toString();
+                    globals().organizationLogoData = QByteArray::fromBase64(qry.value(rec.indexOf("logo")).toString().toUtf8());
                     qInfo(logInfo()) << "[THREAD] Actualizate variabile globale din tabela 'constants'";
                 }
             }
@@ -44,14 +44,14 @@ void DataConstantsWorker::process()
             // datele organizatiei implicite
             qry.prepare(R"(
                 SELECT
-                    name,address,telephone,email,stamp
+                    *
                 FROM
                     organizations
                 WHERE
                     id = ?
             )");
             if (m_data.id_organization == -1)
-                qry.addBindValue(globals().c_id_organizations);
+                qry.addBindValue(globals().organizationID);
             else
                 qry.addBindValue(m_data.id_organization);
             if (! qry.exec()) {
@@ -62,11 +62,13 @@ void DataConstantsWorker::process()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().main_name_organization   = qry.value(rec.indexOf("name")).toString();
-                    globals().main_addres_organization = qry.value(rec.indexOf("address")).toString();
-                    globals().main_phone_organization  = qry.value(rec.indexOf("telephone")).toString();
-                    globals().main_email_organization  = qry.value(rec.indexOf("email")).toString();
-                    globals().main_stamp_organization  = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().organizationName   = qry.value(rec.indexOf("name")).toString();
+                    globals().organizationAddress = qry.value(rec.indexOf("address")).toString();
+                    globals().organizationPhone  = qry.value(rec.indexOf("telephone")).toString();
+                    globals().organizationEmail  = qry.value(rec.indexOf("email")).toString();
+                    globals().organizationSite   = rec.contains("site")
+                        ? qry.value(rec.indexOf("site")).toString() : QString();
+                    globals().organizationStampData  = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
                     qInfo(logInfo()) << "[THREAD] Actualizate variabile globale cu date a organizatiei implicite";
                 }
             }
@@ -88,7 +90,7 @@ void DataConstantsWorker::process()
                     doctors.id = ?
             )");
             if (m_data.id_doctor == -1)
-                qry.addBindValue(globals().c_id_doctor);
+                qry.addBindValue(globals().organizationDoctorID);
             else
                 qry.addBindValue(m_data.id_doctor);
             if (! qry.exec()) {
@@ -99,10 +101,10 @@ void DataConstantsWorker::process()
             } else {
                 while (qry.next()) {
                     QSqlRecord rec = qry.record();
-                    globals().main_name_doctor           = qry.value(rec.indexOf("fullName")).toString();
-                    globals().main_name_abbreviat_doctor = qry.value(rec.indexOf("nameAbbreviated")).toString();
-                    globals().stamp_main_doctor          = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
-                    globals().signature_main_doctor      = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
+                    globals().organizationDoctorName            = qry.value(rec.indexOf("fullName")).toString();
+                    globals().organizationDoctorAbbreviatedName = qry.value(rec.indexOf("nameAbbreviated")).toString();
+                    globals().organizationDoctorStampData       = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
+                    globals().organizationDoctorSignatureData   = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
                     qInfo(logInfo()) << "[THREAD] Actualizate variabile globale cu date doctorului implicit";
                 }
             }
@@ -122,7 +124,7 @@ void DataConstantsWorker::process()
                     cloudServer.id_organizations = ? AND
                     cloudServer.id_users = ?
                 )");
-            qry.addBindValue(globals().c_id_organizations);
+            qry.addBindValue(globals().organizationID);
             qry.addBindValue(m_data.id_user);
             if (! qry.exec()) {
                 success = false;

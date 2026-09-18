@@ -584,13 +584,13 @@ void PricingDialog::onPrint(PrintType::Column type_print)
     m_report->dataManager()->setReportVariable("date", ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy"));
 
     // incarcarea fisierului
-    if (! m_report->loadFromFile(globals().pathTemplatesDocs + "/Pricing.lrxml")){
+    if (! m_report->loadFromFile(globals().docsTemplatesPath + "/Pricing.lrxml")){
         QDir dir;
         CustomMessage *msgBox = new CustomMessage(this);
         msgBox->setWindowTitle(tr("Printarea documentului"));
         msgBox->setTextTitle(tr("Documentul nu poate fi printat."));
         msgBox->setDetailedText(tr("Nu a fost gasit fi\310\231ierul formei de tipar:\n%1")
-                                    .arg(dir.toNativeSeparators(globals().pathTemplatesDocs + "/Pricing.lrxml")));
+                                    .arg(dir.toNativeSeparators(globals().docsTemplatesPath + "/Pricing.lrxml")));
         msgBox->exec();
         msgBox->deleteLater();
 

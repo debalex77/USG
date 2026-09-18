@@ -238,7 +238,7 @@ void CatalogTableEditor::onOpenUltrasoundTariffClassifier()
     report->setPreviewWindowTitle(tr("Ultrasound Tariff Classifier (updated 2024)"));
 
     QDir dir;
-    if (!report->loadFromFile(dir.toNativeSeparators(globals().pathTemplatesDocs + "/CatalogCost.lrxml"))) {
+    if (!report->loadFromFile(dir.toNativeSeparators(globals().docsTemplatesPath + "/CatalogCost.lrxml"))) {
         QMessageBox::warning(this,
                              tr("Verificarea șablonului"),
                              tr("Nu a fost găsit formular de tipar !!!<br>"
