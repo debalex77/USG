@@ -4,8 +4,8 @@
 > icons distributed with USG. Third-party licenses continue to apply to their
 > respective assets and are not replaced by the application's GPLv3 license.
 
-Audit date: 2026-09-15. Scope: `resources/img`, `resources/icons` and
-`resources/images`. This is a technical provenance and licensing audit, not
+Audit date: 2026-09-15. Scope: `resources/img` and `resources/icons` (including
+`resources/img/limereport`). This is a technical provenance and licensing audit, not
 legal advice.
 
 ## Legend
@@ -62,7 +62,7 @@ copies of all applicable licenses.
 - The other three files under `resources/icons` are byte-identical copies of
   the corresponding audited `resources/img/app_ico` files and retain the same
   provenance and licensing status.
-- All 17 files under `resources/images` were matched byte-for-byte to the
+- All 17 files under `resources/img/limereport` were matched byte-for-byte to the
   `demo_r2/images` directory of LimeReport 1.7.23, commit
   `e6210b58a46ab14c0ff8a409b5fa5d339937ea7c`.
 
@@ -78,7 +78,7 @@ copies of all applicable licenses.
 | `usg_splash.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP. |
 | `usg_splash_.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP; currently not listed in `resources/resource.qrc`. |
 
-## Inventory — `resources/images`
+## Inventory — `resources/img/limereport`
 
 All files below are byte-identical to files distributed in
 [`fralx/LimeReport`](https://github.com/fralx/LimeReport), release 1.7.23,
@@ -248,7 +248,7 @@ the pinned corresponding source are handled as described in
 4. For `app_ico/eco_*`, the original is credited to **Goran Babic** and the identified ShareIcon page states **“Free for commercial use.”** Retain that page as provenance and licensing evidence. No named standard license such as CC, MIT, or GPL was identified. The derivative files and conversions were created by **Alexandru Codreanu** from `eco_512x512.png`.
 5. For Oxygen assets, retain the KDE attribution and license and the modifiable form/source as required by upstream guidance. Review `qrc` packaging if the application is distributed under a proprietary license.
 6. For `catalogs/item.png` and its derivative `catalogs/item_delete.png`, retain the Icon-Icons / Crystal Clear Icons source, the original author **Everaldo**, and the **LGPL** license. For the derivative, also retain the notice that it was modified using OpenAI image generation.
-7. For `resources/images`, distribute the LimeReport license notices and keep
+7. For `resources/img/limereport`, distribute the LimeReport license notices and keep
    the corresponding pinned source and the USG patch available as documented
    in `third_party/LIMEREPORT.md`.
 8. Retain the authorship notice for the four original splash images. Their

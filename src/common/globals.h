@@ -2,6 +2,7 @@
 #define GLOBALS_H
 
 #include <QHash>
+#include <common/maindatabaseconnectioncontext.h>
 #include <common/structvariable.h>
 
 // Container global unic accesibil din orice loc al aplicației

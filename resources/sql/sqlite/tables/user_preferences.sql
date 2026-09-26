@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS userPreferences (
     showQuestionCloseApp  INT,
     showUserManual        INT,
     showHistoryVersion    INT,
-    order_splitFullName   INT,
     updateListDoc         TEXT,
     showDesignerMenuPrint INT,
     checkNewVersionApp    INT,

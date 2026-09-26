@@ -5,7 +5,7 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QSqlQueryModel>
-#include <data/enums.h>
+#include <core/enums.h>
 
 class BaseSqlQueryModel : public QSqlQueryModel
 {

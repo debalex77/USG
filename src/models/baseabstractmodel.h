@@ -13,7 +13,7 @@
 #include <functional>
 #include <memory>
 
-#include <data/database.h>
+#include <database/database.h>
 
 class AbstractColumn
 {

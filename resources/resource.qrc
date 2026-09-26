@@ -1,25 +1,25 @@
 <RCC>
     <qresource prefix="/">
-        <file>style.qss</file>
-        <file>style.css</file>
+        <file alias="style.qss">styles/application.qss</file>
+        <file alias="style.css">styles/report.css</file>
         <file>styles/style_btn.css</file>
-        <file>images/design.png</file>
-        <file>images/First.png</file>
-        <file>images/FitPage.png</file>
-        <file>images/FitWidth.png</file>
-        <file>images/folder3.png</file>
-        <file>images/Last.png</file>
-        <file>images/logo.png</file>
-        <file>images/logo1.png</file>
-        <file>images/lr.png</file>
-        <file>images/new_leaf1.png</file>
-        <file>images/Next.png</file>
-        <file>images/OneToOne.png</file>
-        <file>images/PDF.png</file>
-        <file>images/Prev.png</file>
-        <file>images/Print.png</file>
-        <file>images/ZoomIn.png</file>
-        <file>images/ZoomOut.png</file>
+        <file alias="images/design.png">img/limereport/design.png</file>
+        <file alias="images/First.png">img/limereport/First.png</file>
+        <file alias="images/FitPage.png">img/limereport/FitPage.png</file>
+        <file alias="images/FitWidth.png">img/limereport/FitWidth.png</file>
+        <file alias="images/folder3.png">img/limereport/folder3.png</file>
+        <file alias="images/Last.png">img/limereport/Last.png</file>
+        <file alias="images/logo.png">img/limereport/logo.png</file>
+        <file alias="images/logo1.png">img/limereport/logo1.png</file>
+        <file alias="images/lr.png">img/limereport/lr.png</file>
+        <file alias="images/new_leaf1.png">img/limereport/new_leaf1.png</file>
+        <file alias="images/Next.png">img/limereport/Next.png</file>
+        <file alias="images/OneToOne.png">img/limereport/OneToOne.png</file>
+        <file alias="images/PDF.png">img/limereport/PDF.png</file>
+        <file alias="images/Prev.png">img/limereport/Prev.png</file>
+        <file alias="images/Print.png">img/limereport/Print.png</file>
+        <file alias="images/ZoomIn.png">img/limereport/ZoomIn.png</file>
+        <file alias="images/ZoomOut.png">img/limereport/ZoomOut.png</file>
         <file>templets/Breast.lrxml</file>
         <file>templets/Complex.lrxml</file>
         <file>templets/Gynecology.lrxml</file>
@@ -80,7 +80,9 @@
         <file>templets/LymphNodes.lrxml</file>
         <file>sql/queries/patients_insert.sql</file>
         <file>sql/queries/doctors_fullName_select.sql</file>
+        <file>sql/queries/doctors_fullName_select_mariadb.sql</file>
         <file>sql/queries/nurses_fullName_select.sql</file>
+        <file>sql/queries/nurses_fullName_select_mariadb.sql</file>
         <file>sql/queries/organizations_select.sql</file>
         <file>sql/queries/users_listForm_select_sqlite.sql</file>
         <file>sql/queries/investigations_select.sql</file>
@@ -98,6 +100,7 @@
         <file>sql/queries/patients_fullName_select_sqlite.sql</file>
         <file>sql/queries/organizations_combo_view.sql</file>
         <file>sql/mariadb/tables/breast.sql</file>
+        <file>sql/mariadb/tables/application_settings.sql</file>
         <file>sql/mariadb/tables/cloud_server.sql</file>
         <file>sql/mariadb/tables/conclusion_formations_templates.sql</file>
         <file>sql/mariadb/tables/constants.sql</file>
@@ -117,16 +120,18 @@
         <file>sql/mariadb/tables/normograms.sql</file>
         <file>sql/mariadb/tables/nurses_tables.sql</file>
         <file>sql/mariadb/tables/organizations.sql</file>
+        <file>sql/mariadb/tables/organization_settings.sql</file>
         <file>sql/mariadb/tables/organs_internal.sql</file>
         <file>sql/mariadb/tables/patients_tables.sql</file>
         <file>sql/mariadb/tables/pricings.sql</file>
         <file>sql/mariadb/tables/prostate.sql</file>
         <file>sql/mariadb/tables/patient_appointments.sql</file>
-        <file>sql/mariadb/tables/settings_users.sql</file>
+        <file>sql/mariadb/tables/database_metadata.sql</file>
         <file>sql/mariadb/tables/thyroid.sql</file>
         <file>sql/mariadb/tables/types_prices.sql</file>
         <file>sql/mariadb/tables/urinary_system.sql</file>
         <file>sql/mariadb/tables/user_preferences.sql</file>
+        <file>sql/mariadb/tables/user_settings.sql</file>
         <file>sql/mariadb/tables/users.sql</file>
         <file>sql/mariadb/triggers/doc_order_echo_triggers.sql</file>
         <file>sql/mariadb/triggers/doc_report_echo_triggers.sql</file>
@@ -135,6 +140,7 @@
         <file>sql/mariadb/triggers/pricings_triggers.sql</file>
         <file>sql/mariadb/views/organizations_combo_view.sql</file>
         <file>sql/sqlite/tables/breast.sql</file>
+        <file>sql/sqlite/tables/application_settings.sql</file>
         <file>sql/sqlite/tables/cloud_server.sql</file>
         <file>sql/sqlite/tables/conclusion_formations_templates.sql</file>
         <file>sql/sqlite/tables/constants.sql</file>
@@ -154,16 +160,18 @@
         <file>sql/sqlite/tables/normograms.sql</file>
         <file>sql/sqlite/tables/nurses_tables.sql</file>
         <file>sql/sqlite/tables/organizations.sql</file>
+        <file>sql/sqlite/tables/organization_settings.sql</file>
         <file>sql/sqlite/tables/organs_internal.sql</file>
         <file>sql/sqlite/tables/patients_tables.sql</file>
         <file>sql/sqlite/tables/pricings.sql</file>
         <file>sql/sqlite/tables/prostate.sql</file>
         <file>sql/sqlite/tables/patient_appointments.sql</file>
-        <file>sql/sqlite/tables/settings_users.sql</file>
+        <file>sql/sqlite/tables/database_metadata.sql</file>
         <file>sql/sqlite/tables/thyroid.sql</file>
         <file>sql/sqlite/tables/types_prices.sql</file>
         <file>sql/sqlite/tables/urinary_system.sql</file>
         <file>sql/sqlite/tables/user_preferences.sql</file>
+        <file>sql/sqlite/tables/user_settings.sql</file>
         <file>sql/sqlite/tables/users.sql</file>
         <file>sql/sqlite/triggers/doc_order_echo_triggers_insert.sql</file>
         <file>sql/sqlite/triggers/doc_order_echo_triggers_update.sql</file>
@@ -215,8 +223,6 @@
         <file>sql/queries/cloudServer_select.sql</file>
         <file>sql/queries/organizations_byID_select.sql</file>
         <file>sql/queries/doctors_byID_select.sql</file>
-        <file>sql/queries/versionApp_get.sql</file>
-        <file>sql/queries/versionApp_update.sql</file>
         <file>sql/queries_print/tablePatientByID.sql</file>
         <file>sql/queries_print/tablesOrgansInternal.sql</file>
         <file>sql/queries_print/tablesUrinarySystem.sql</file>

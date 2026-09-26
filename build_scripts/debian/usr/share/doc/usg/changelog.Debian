@@ -1,3 +1,16 @@
+usg (4.2.0) UNRELEASED; urgency=medium
+
+  * Migrated application, organization and user settings to dedicated tables.
+  * Reorganized settings and runtime state into dedicated services and contexts.
+  * Reorganized source modules, qmake fragments, dependencies and the Windows build script.
+  * Added four-category informed-consent generation for selected investigations.
+  * Added report options for additional investigations and doctor stamp/signature printing.
+  * Fixed e-mail account password saving on upgraded databases (cryptoSplitKey).
+  * Added the SMTP connection check and visible save errors for online accounts.
+  * Unified required-field hints with balloon tips.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Sat, 26 Sep 2026 12:00:00 +0300
+
 usg (4.1.2) UNRELEASED; urgency=medium
 
   * Added organization websites and an idempotent SQLite/MariaDB schema migration.

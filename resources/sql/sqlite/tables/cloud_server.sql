@@ -9,6 +9,7 @@ CREATE TABLE IF NOT EXISTS cloudServer (
     username         TEXT NOT NULL,
     password         TEXT NOT NULL,
     iv               TEXT NOT NULL,
+    UNIQUE (id_organizations, id_users),
     FOREIGN KEY (id_organizations)
         REFERENCES organizations (id)
         ON DELETE CASCADE,

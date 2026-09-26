@@ -10,6 +10,7 @@ CREATE TABLE IF NOT EXISTS `cloudServer` (
     `password`         VARCHAR(255) NOT NULL,
     `iv`               VARCHAR(24) NOT NULL,
     PRIMARY KEY (`id`),
+    UNIQUE KEY `uq_cloudServer_organization_user` (`id_organizations`, `id_users`),
     KEY `idx_contsOnline_organizations` (`id_organizations`),
     KEY `idx_contsOnline_users` (`id_users`),
     CONSTRAINT `fk_cloudServer_organizations`

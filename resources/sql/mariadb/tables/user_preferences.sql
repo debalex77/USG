@@ -5,7 +5,6 @@ CREATE TABLE IF NOT EXISTS `userPreferences` (
     `showQuestionCloseApp`  BOOLEAN,
     `showUserManual`        BOOLEAN,
     `showHistoryVersion`    BOOLEAN,
-    `order_splitFullName`   BOOLEAN,
     `updateListDoc`         VARCHAR (3),
     `showDesignerMenuPrint` BOOLEAN,
     `checkNewVersionApp`    BOOLEAN,

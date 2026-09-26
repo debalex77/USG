@@ -2,6 +2,7 @@
 
 #include <QDateTime>
 #include <QHash>
+#include <QSet>
 #include <QString>
 
 namespace StatusObject {
@@ -689,6 +690,115 @@ namespace ReportSections {
         {"1050.69.",   {ReportSystem::Gynecology}}
     };
 
+    enum class ConsentType {
+        NonInvasive         = 0x1,
+        Endocavitary        = 0x2,
+        ObstetricScreening  = 0x4,
+        Invasive            = 0x8
+    };
+
+    Q_DECLARE_FLAGS(ConsentTypes, ConsentType)
+    Q_DECLARE_OPERATORS_FOR_FLAGS(ConsentTypes)
+
+    // Clasificarea codurilor din investig_2024.xml pentru textul consimțământului.
+    // Valorile păstrează sistemele de raport asociate codului, dacă acestea există.
+    inline const QHash<QString, ReportSystems> InvasiveConsentCodeMap =
+    {
+        {"1050.2.", {ReportSystem::Prostate}},
+        {"1050.3.", {ReportSystem::UrinarySystem}},
+        {"1050.4.", {ReportSystem::UrinarySystem}},
+        {"1050.5.", {ReportSystem::UrinarySystem}},
+        {"1050.6.", {ReportSystem::Prostate}},
+        {"1050.8.", {ReportSystem::UrinarySystem}}
+    };
+
+    inline const QHash<QString, ReportSystems> EndocavitaryConsentCodeMap =
+    {
+        {"1027.5.1.", {ReportSystem::Gestation1}},
+        {"1028.5.1.", {ReportSystem::Gestation1}},
+        {"1038.", {ReportSystem::Prostate}},
+        {"1039.", {ReportSystem::Prostate}},
+        {"1050.25.", {ReportSystem::Gynecology}},
+        {"1050.26.", {ReportSystem::Gynecology}},
+        {"1050.37.", {ReportSystem::Prostate}},
+        {"1050.38.", {ReportSystem::Prostate}},
+        {"1050.39.", {ReportSystem::Prostate}},
+        {"1050.63.", {ReportSystem::OrgansInternal,
+                       ReportSystem::UrinarySystem,
+                       ReportSystem::Gynecology}},
+        {"1050.67.", {ReportSystem::Gestation0}},
+        {"1050.69.", {ReportSystem::Gynecology}}
+    };
+
+    inline const QHash<QString, ReportSystems> ObstetricScreeningConsentCodeMap =
+    {
+        {"1027.4.1.", {ReportSystem::Gestation1}},
+        {"1027.5.1.", {ReportSystem::Gestation1}},
+        {"1028.4.1.", {ReportSystem::Gestation1}},
+        {"1028.5.1.", {ReportSystem::Gestation1}},
+        {"1029.1.1.", {ReportSystem::Gestation2}},
+        {"1029.1.2.", {ReportSystem::Gestation2}},
+        {"1029.2.", {ReportSystem::Gestation2}},
+        {"1029.3.", {ReportSystem::Gestation2}},
+        {"1029.4.", {ReportSystem::Gestation0}},
+        {"1030.1.", {ReportSystem::Gestation2}},
+        {"1049.1.", {ReportSystem::Gestation2}},
+        {"1050.66.", {ReportSystem::Gestation0}},
+        {"1050.67.", {ReportSystem::Gestation0}}
+    };
+
+    inline const QHash<QString, ReportSystems> NonInvasiveConsentCodeMap =
+    {
+        {"1041.", {}}, {"1041.1.", {}}, {"1044.", {}}, {"1045.", {}},
+        {"1046.", {}}, {"1047.", {}}, {"1048.", {}}, {"1049.", {}},
+        {"1049.2.", {}}, {"1050.", {}}, {"1050.10.", {ReportSystem::OrgansInternal}},
+        {"1050.11.", {ReportSystem::OrgansInternal}},
+        {"1050.12.", {ReportSystem::OrgansInternal}},
+        {"1050.14.", {ReportSystem::OrgansInternal}},
+        {"1050.15.", {ReportSystem::OrgansInternal}},
+        {"1050.17.", {ReportSystem::OrgansInternal}},
+        {"1050.18.", {ReportSystem::OrgansInternal}},
+        {"1050.19.", {ReportSystem::UrinarySystem}},
+        {"1050.20.", {ReportSystem::UrinarySystem}},
+        {"1050.21.", {ReportSystem::UrinarySystem}},
+        {"1050.22.", {ReportSystem::Gynecology}},
+        {"1050.23.", {ReportSystem::Gynecology}},
+        {"1050.24.", {ReportSystem::Gynecology}},
+        {"1050.27.", {ReportSystem::Gynecology}},
+        {"1050.29.", {ReportSystem::UrinarySystem}},
+        {"1050.30.", {ReportSystem::UrinarySystem}},
+        {"1050.31.", {ReportSystem::Thyroid}},
+        {"1050.32.", {ReportSystem::Thyroid}},
+        {"1050.33.", {ReportSystem::Thyroid}},
+        {"1050.34.", {ReportSystem::Breast}},
+        {"1050.35.", {ReportSystem::Breast}},
+        {"1050.36.", {ReportSystem::Breast}},
+        {"1050.40.", {}}, {"1050.41.", {}}, {"1050.43.", {}},
+        {"1050.44.", {}}, {"1050.45.", {}}, {"1050.46.", {}},
+        {"1050.47.", {}}, {"1050.49.", {}}, {"1050.50.", {}},
+        {"1050.51.", {}}, {"1050.52.", {ReportSystem::LymphNodes}},
+        {"1050.53.", {ReportSystem::LymphNodes}},
+        {"1050.54.", {ReportSystem::LymphNodes}},
+        {"1050.55.", {ReportSystem::Prostate}},
+        {"1050.56.", {ReportSystem::UrinarySystem}}, {"1050.59.", {}},
+        {"1050.60.", {ReportSystem::OrgansInternal}},
+        {"1050.61.", {ReportSystem::OrgansInternal, ReportSystem::UrinarySystem}},
+        {"1050.62.", {ReportSystem::OrgansInternal,
+                       ReportSystem::UrinarySystem,
+                       ReportSystem::Gynecology}},
+        {"1050.68.", {ReportSystem::Gynecology}}, {"1050.70.", {}},
+        {"1050.71.", {}}
+    };
+
+    inline const QSet<QString> TransvaginalConsentCodes = {
+        "1027.5.1.", "1028.5.1.", "1050.25.", "1050.26.",
+        "1050.63.", "1050.67.", "1050.69."
+    };
+
+    inline const QSet<QString> TransrectalConsentCodes = {
+        "1038.", "1039.", "1050.37.", "1050.38.", "1050.39."
+    };
+
     inline uint qHash(ReportSections::ReportSystem key, uint seed = 0)
     {
         return ::qHash(static_cast<int>(key), seed);
@@ -708,6 +818,33 @@ namespace ReportSections {
 
         for (const QString &code : codes)
             result |= systemsByCode(code);
+
+        return result;
+    }
+
+    inline ConsentTypes consentTypesByCodes(const QStringList &codes)
+    {
+        ConsentTypes result;
+
+        for (const QString &code : codes) {
+            const QString normalizedCode = code.trimmed();
+            bool classified = false;
+
+            if (InvasiveConsentCodeMap.contains(normalizedCode)) {
+                result |= ConsentType::Invasive;
+                classified = true;
+            }
+            if (EndocavitaryConsentCodeMap.contains(normalizedCode)) {
+                result |= ConsentType::Endocavitary;
+                classified = true;
+            }
+            if (ObstetricScreeningConsentCodeMap.contains(normalizedCode)) {
+                result |= ConsentType::ObstetricScreening;
+                classified = true;
+            }
+            if (NonInvasiveConsentCodeMap.contains(normalizedCode) || !classified)
+                result |= ConsentType::NonInvasive;
+        }
 
         return result;
     }

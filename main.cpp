@@ -1,4 +1,4 @@
-#include <common/appcontroller.h>
+#include <app/appcontroller.h>
 #include <common/appmetatypes.h>
 
 int main(int argc, char *argv[])

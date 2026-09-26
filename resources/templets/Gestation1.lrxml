@@ -275,6 +275,64 @@
                   <hideEmptyItems Type="bool" Value="0"/>
                   <layoutSpacing Type="int" Value="0"/>
                 </item>
+                <item ClassName="ImageItem" Type="Object">
+                  <objectName Type="QString">stamp_doctor</objectName>
+                  <geometry Type="QRect" height="200" width="360" x="1100" y="1705"/>
+                  <children Type="Collection"/>
+                  <zOrder Type="qreal" Value="0"/>
+                  <borders Type="enumAndFlags" Value="0"/>
+                  <parentName Type="QString">DataBand1</parentName>
+                  <borderLineSize Type="qreal" Value="1"/>
+                  <isVisible Type="bool" Value="1"/>
+                  <shadow Type="bool" Value="0"/>
+                  <borderColor Type="QColor" Value="#000000"/>
+                  <geometryLocked Type="bool" Value="0"/>
+                  <borderStyle Type="enumAndFlags" Value="1"/>
+                  <itemLocation Type="enumAndFlags" Value="0"/>
+                  <itemAlign Type="enumAndFlags" Value="4"/>
+                  <image Type="QImage"></image>
+                  <opacity Type="int" Value="100"/>
+                  <datasource Type="QString">table_logo</datasource>
+                  <field Type="QString">3</field>
+                  <format Type="enumAndFlags" Value="0"/>
+                  <autoSize Type="bool" Value="0"/>
+                  <scale Type="bool" Value="1"/>
+                  <keepAspectRatio Type="bool" Value="1"/>
+                  <center Type="bool" Value="1"/>
+                  <resourcePath Type="QString"></resourcePath>
+                  <variable Type="QString"></variable>
+                  <watermark Type="bool" Value="0"/>
+                  <useExternalPainter Type="bool" Value="0"/>
+                </item>
+                <item ClassName="ImageItem" Type="Object">
+                  <objectName Type="QString">signature_doctor</objectName>
+                  <geometry Type="QRect" height="200" width="360" x="1480" y="1705"/>
+                  <children Type="Collection"/>
+                  <zOrder Type="qreal" Value="0"/>
+                  <borders Type="enumAndFlags" Value="0"/>
+                  <parentName Type="QString">DataBand1</parentName>
+                  <borderLineSize Type="qreal" Value="1"/>
+                  <isVisible Type="bool" Value="1"/>
+                  <shadow Type="bool" Value="0"/>
+                  <borderColor Type="QColor" Value="#000000"/>
+                  <geometryLocked Type="bool" Value="0"/>
+                  <borderStyle Type="enumAndFlags" Value="1"/>
+                  <itemLocation Type="enumAndFlags" Value="0"/>
+                  <itemAlign Type="enumAndFlags" Value="4"/>
+                  <image Type="QImage"></image>
+                  <opacity Type="int" Value="100"/>
+                  <datasource Type="QString">table_logo</datasource>
+                  <field Type="QString">4</field>
+                  <format Type="enumAndFlags" Value="0"/>
+                  <autoSize Type="bool" Value="0"/>
+                  <scale Type="bool" Value="1"/>
+                  <keepAspectRatio Type="bool" Value="1"/>
+                  <center Type="bool" Value="1"/>
+                  <resourcePath Type="QString"></resourcePath>
+                  <variable Type="QString"></variable>
+                  <watermark Type="bool" Value="0"/>
+                  <useExternalPainter Type="bool" Value="0"/>
+                </item>
                 <item ClassName="TextItem" Type="Object">
                   <objectName Type="QString">TextItem76</objectName>
                   <geometry Type="QRect" height="40" width="1902" x="52" y="1915"/>
@@ -4528,6 +4586,8 @@
       <dialogs Type="Collection"/>
       <initScript Type="QString">Reportpage1_DataBand_Logo.isVisible = getVariable("v_exist_logo");
 Reportpage1_DataBand_nameOrganization.isVisible = !getVariable("v_exist_logo");
+Reportpage1_stamp_doctor.isVisible = parseInt(getVariable("v_export_pdf"), 10) === 1 || parseInt(getVariable("v_show_stamp_doctor"), 10) === 1;
+Reportpage1_signature_doctor.isVisible = parseInt(getVariable("v_export_pdf"), 10) === 1 || parseInt(getVariable("v_show_signature_doctor"), 10) === 1;
 true</initScript>
     </scriptContext>
     <suppressFieldAndVarError Type="bool" Value="0"/>

@@ -1,3 +1,18 @@
+## USG v4.2.0 (26.09.2026)
+
+- Setările aplicației, organizației și utilizatorului au fost separate în tabele dedicate, cu migrarea și verificarea datelor păstrate anterior în `constants` și `userPreferences`.
+- Reorganizate setările aplicației și starea utilizată în timpul execuției prin servicii și contexte dedicate pentru căi, conexiunea principală, conexiunea cloud, sesiune, organizație și doctor.
+- Reorganizate directoarele sursă și fișierele qmake pe componente și funcționalități; au fost revizuite dependențele și scriptul de compilare pentru Windows.
+
+- Textul consimțământului informat al Comenzii ecografice este generat în funcție de investigațiile selectate, separat pe patru categorii: invazive, neinvazive, endocavitare și screening obstetrical.
+- În Raportul ecografic, butonul „Opțiuni” permite adăugarea investigațiilor în timpul examinării și configurarea prezentării ștampilei și semnăturii doctorului la previzualizare și tipărire.
+- A fost păstrat comportamentul existent al exportului PDF pentru ștampila și semnătura doctorului.
+
+- Corectată salvarea parolelor conturilor de e-mail în bazele actualizate: tabela lipsă `cryptoSplitKey` este creată de migrarea 4.2.0 și reparată la lansare pentru bazele deja marcate 4.2.0.
+- Butonul „Verificarea conectării” din contul online verifică conexiunea și autentificarea SMTP fără a trimite mesaj; rezultatul este afișat printr-o notificare.
+- La eșecul salvării contului online este afișat motivul, nu doar scris în jurnal.
+- Câmpurile obligatorii necompletate sunt indicate uniform prin baloane de informare în prețuri, cataloage, configurarea cloud, trimiterea e-mail, autorizare și rapoartele statistice.
+
 ## USG v4.1.2 (18.09.2026)
 
 - Redenumite variabilele globale și cheile de căi din `.conf`; profilurile vechi sunt migrate automat cu backup `.pre-4.1.2.bak`, păstrând valorile și cheile necunoscute.

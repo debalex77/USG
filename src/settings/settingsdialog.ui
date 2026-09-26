@@ -1,0 +1,543 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>SettingsDialog</class>
+ <widget class="QDialog" name="SettingsDialog">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>720</width>
+    <height>458</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Setări</string>
+  </property>
+  <property name="windowModified">
+   <bool>false</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="userLayout">
+     <item>
+      <widget class="QLabel" name="labelUser">
+       <property name="text">
+        <string>Utilizator:</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QComboBox" name="comboUsers">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+         <horstretch>1</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="QTabWidget" name="tabWidget">
+     <property name="currentIndex">
+      <number>0</number>
+     </property>
+     <widget class="QWidget" name="tabApplication">
+      <attribute name="icon">
+       <iconset resource="../../resources/resource.qrc">
+        <normaloff>:/icons/eco_248x248.ico</normaloff>:/icons/eco_248x248.ico</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Aplicație</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="applicationLayout">
+       <item>
+        <widget class="QGroupBox" name="groupStartup">
+         <property name="title">
+          <string>La lansarea aplicației</string>
+         </property>
+         <layout class="QVBoxLayout" name="startupLayout">
+          <item>
+           <widget class="QCheckBox" name="checkUpdates">
+            <property name="text">
+             <string>Verifică automat existența unei versiuni noi</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkUserManual">
+            <property name="text">
+             <string>Prezintă automat manualul utilizatorului</string>
+            </property>
+           </widget>
+          </item>
+          <item>
+           <widget class="QCheckBox" name="checkAssistant">
+            <property name="text">
+             <string>Prezintă asistentul aplicației</string>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupJournal">
+         <property name="title">
+          <string>Jurnalele documentelor</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+         <layout class="QFormLayout" name="journalLayout">
+          <property name="labelAlignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+          </property>
+          <property name="formAlignment">
+           <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignTop</set>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="labelRefreshInterval">
+            <property name="text">
+             <string>Interval de actualizare automată:</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QSpinBox" name="spinJournalRefresh">
+            <property name="toolTip">
+             <string>Valoarea 0 dezactivează actualizarea periodică.</string>
+            </property>
+            <property name="suffix">
+             <string> sec.</string>
+            </property>
+            <property name="maximum">
+             <number>86400</number>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <layout class="QFormLayout" name="versionLayout">
+         <property name="labelAlignment">
+          <set>Qt::AlignmentFlag::AlignLeading|Qt::AlignmentFlag::AlignLeft|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+         <property name="formAlignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTop|Qt::AlignmentFlag::AlignTrailing</set>
+         </property>
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelVersion">
+           <property name="text">
+            <string>Versiunea aplicației:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QLineEdit" name="editVersion">
+           <property name="sizePolicy">
+            <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+             <horstretch>0</horstretch>
+             <verstretch>0</verstretch>
+            </sizepolicy>
+           </property>
+           <property name="readOnly">
+            <bool>true</bool>
+           </property>
+          </widget>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <spacer name="applicationSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabOrganization">
+      <attribute name="icon">
+       <iconset resource="../../resources/resource.qrc">
+        <normaloff>:/img/catalogs/company.png</normaloff>:/img/catalogs/company.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Organizație</string>
+      </attribute>
+      <layout class="QGridLayout" name="organizationLayout">
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboOrganization"/>
+       </item>
+       <item row="3" column="0">
+        <widget class="QLabel" name="labelDevice">
+         <property name="text">
+          <string>Marca aparatului:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="1">
+        <widget class="QComboBox" name="comboDoctor"/>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelOrganization">
+         <property name="text">
+          <string>Organizația implicită:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0">
+        <widget class="QLabel" name="labelNurse">
+         <property name="text">
+          <string>As. medicală implicită:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="2">
+        <spacer name="horizontalSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>40</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="3" column="1">
+        <widget class="QLineEdit" name="editDevice">
+         <property name="maxLength">
+          <number>200</number>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
+        <widget class="QLabel" name="labelDoctor">
+         <property name="text">
+          <string>Doctor implicit:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="1">
+        <widget class="QComboBox" name="comboNurse"/>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QGroupBox" name="groupBox">
+         <property name="title">
+          <string>Logotip</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+         </property>
+         <layout class="QGridLayout" name="gridLayout">
+          <item row="2" column="0">
+           <widget class="QPushButton" name="buttonChooseLogo">
+            <property name="text">
+             <string>Alege...</string>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="1">
+           <widget class="QPushButton" name="buttonClearLogo">
+            <property name="text">
+             <string>Elimină</string>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="0" rowspan="2" colspan="4">
+           <widget class="QLabel" name="logoPreview">
+            <property name="minimumSize">
+             <size>
+              <width>400</width>
+              <height>70</height>
+             </size>
+            </property>
+            <property name="frameShape">
+             <enum>QFrame::Shape::StyledPanel</enum>
+            </property>
+            <property name="text">
+             <string>Niciun logotip</string>
+            </property>
+            <property name="alignment">
+             <set>Qt::AlignmentFlag::AlignCenter</set>
+            </property>
+           </widget>
+          </item>
+          <item row="2" column="2">
+           <spacer name="logoButtonSpacer">
+            <property name="orientation">
+             <enum>Qt::Orientation::Horizontal</enum>
+            </property>
+            <property name="sizeHint" stdset="0">
+             <size>
+              <width>40</width>
+              <height>20</height>
+             </size>
+            </property>
+           </spacer>
+          </item>
+         </layout>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabUser">
+      <attribute name="icon">
+       <iconset resource="../../resources/resource.qrc">
+        <normaloff>:/img/catalogs/user.png</normaloff>:/img/catalogs/user.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Utilizator</string>
+      </attribute>
+      <layout class="QGridLayout" name="gridLayout_2">
+       <item row="1" column="0" colspan="3">
+        <widget class="QGroupBox" name="groupBox_2">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="title">
+          <string notr="true"/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_3">
+          <property name="topMargin">
+           <number>9</number>
+          </property>
+          <item row="0" column="0">
+           <widget class="QLabel" name="label">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="maximumSize">
+             <size>
+              <width>21</width>
+              <height>21</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../../resources/resource.qrc">:/img/common/info.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelOrganizationCompatibility">
+            <property name="sizePolicy">
+             <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+              <horstretch>0</horstretch>
+              <verstretch>0</verstretch>
+             </sizepolicy>
+            </property>
+            <property name="styleSheet">
+             <string notr="true">color: rgb(42, 223, 40);</string>
+            </property>
+            <property name="text">
+             <string>În schema actuală, organizația de lucru și organizația implicită reprezintă aceeași valoare.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item row="3" column="0" colspan="3">
+        <widget class="QCheckBox" name="checkConfirmExit">
+         <property name="text">
+          <string>Solicită confirmare la închiderea aplicației</string>
+         </property>
+        </widget>
+       </item>
+       <item row="5" column="0" colspan="3">
+        <widget class="QCheckBox" name="checkSeparateWindows">
+         <property name="text">
+          <string>Deschide documentele în ferestre separate</string>
+         </property>
+        </widget>
+       </item>
+       <item row="2" column="0" colspan="3">
+        <widget class="QCheckBox" name="checkMinimizeTray">
+         <property name="text">
+          <string>Minimizează aplicația în zona de notificare</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="2">
+        <spacer name="horizontalSpacer_2">
+         <property name="orientation">
+          <enum>Qt::Orientation::Horizontal</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>262</width>
+           <height>20</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="6" column="0" colspan="2">
+        <layout class="QFormLayout" name="printModeLayout">
+         <item row="0" column="0">
+          <widget class="QLabel" name="labelPrintMode">
+           <property name="text">
+            <string>Meniul de printare:</string>
+           </property>
+          </widget>
+         </item>
+         <item row="0" column="1">
+          <widget class="QComboBox" name="comboPrintMode"/>
+         </item>
+        </layout>
+       </item>
+       <item row="7" column="0">
+        <spacer name="preferencesSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+       <item row="0" column="0">
+        <widget class="QLabel" name="labelDefaultOrganization">
+         <property name="text">
+          <string>Organizația de lucru:</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0" colspan="3">
+        <widget class="QCheckBox" name="checkArchiveSqlite">
+         <property name="text">
+          <string>Arhivează automat baza SQLite la închiderea aplicației</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="1">
+        <widget class="QComboBox" name="comboDefaultOrganization">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Expanding" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+        </widget>
+       </item>
+      </layout>
+     </widget>
+     <widget class="QWidget" name="tabSynchronization">
+      <attribute name="icon">
+       <iconset resource="../../resources/resource.qrc">
+        <normaloff>:/img/actions/sync.png</normaloff>:/img/actions/sync.png</iconset>
+      </attribute>
+      <attribute name="title">
+       <string>Sincronizare</string>
+      </attribute>
+      <layout class="QVBoxLayout" name="synchronizationLayout">
+       <item>
+        <widget class="QCheckBox" name="checkSynchronization">
+         <property name="enabled">
+          <bool>false</bool>
+         </property>
+         <property name="text">
+          <string>Sincronizare cu baza de date cloud</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QGroupBox" name="groupBox_3">
+         <property name="title">
+          <string/>
+         </property>
+         <layout class="QGridLayout" name="gridLayout_4">
+          <item row="0" column="0">
+           <widget class="QLabel" name="label_2">
+            <property name="maximumSize">
+             <size>
+              <width>40</width>
+              <height>40</height>
+             </size>
+            </property>
+            <property name="text">
+             <string/>
+            </property>
+            <property name="pixmap">
+             <pixmap resource="../../resources/resource.qrc">:/img/common/info.png</pixmap>
+            </property>
+            <property name="scaledContents">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+          <item row="0" column="1">
+           <widget class="QLabel" name="labelSynchronizationHint">
+            <property name="styleSheet">
+             <string notr="true">color: rgb(42, 223, 40);</string>
+            </property>
+            <property name="text">
+             <string>Starea sincronizării nu este disponibilă.
+Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Setări cloud server”.</string>
+            </property>
+            <property name="wordWrap">
+             <bool>true</bool>
+            </property>
+           </widget>
+          </item>
+         </layout>
+        </widget>
+       </item>
+       <item>
+        <spacer name="synchronizationSpacer">
+         <property name="orientation">
+          <enum>Qt::Orientation::Vertical</enum>
+         </property>
+         <property name="sizeHint" stdset="0">
+          <size>
+           <width>20</width>
+           <height>40</height>
+          </size>
+         </property>
+        </spacer>
+       </item>
+      </layout>
+     </widget>
+    </widget>
+   </item>
+   <item>
+    <widget class="QDialogButtonBox" name="buttonBox">
+     <property name="standardButtons">
+      <set>QDialogButtonBox::StandardButton::Apply|QDialogButtonBox::StandardButton::Cancel|QDialogButtonBox::StandardButton::Ok</set>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources>
+  <include location="../../resources/resource.qrc"/>
+ </resources>
+ <connections/>
+</ui>

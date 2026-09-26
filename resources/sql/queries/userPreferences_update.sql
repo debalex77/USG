@@ -3,7 +3,6 @@ UPDATE userPreferences SET
     showQuestionCloseApp  = ?,
     showUserManual        = ?,
     showHistoryVersion    = ?,
-    order_splitFullName   = ?,
     updateListDoc         = ?,
     showDesignerMenuPrint = ?,
     checkNewVersionApp    = ?,

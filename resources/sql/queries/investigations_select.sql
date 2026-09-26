@@ -3,7 +3,7 @@ SELECT
     deletionMark,
     cod,
     name,
-    "use",
+    investigations.`use`,
     owner,
     uuid
 FROM

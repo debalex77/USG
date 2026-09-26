@@ -8,7 +8,7 @@
 #include <QIcon>
 #include <QFont>
 #include <QBrush>
-#include <data/enums.h>
+#include <core/enums.h>
 
 class BaseSqlTableModel : public QSqlTableModel
 {

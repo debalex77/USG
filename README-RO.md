@@ -43,9 +43,15 @@ Site oficial: <https://debalex77.github.io/USG/>
 - sincronizare opțională în fundal cu MariaDB, pe bază de UUID;
 - interfață în limbile română, engleză și rusă.
 
-## Versiunea 4.1.2
+## Versiunea 4.2.0
 
-Adăugat site-ul organizației, migrarea bazei de date și progresul detaliat al actualizării.
+Setările aplicației, organizației și utilizatorului au fost reorganizate în
+tabele, servicii și contexte dedicate. Au fost adăugate generarea
+consimțământului pe patru niveluri și opțiunile raportului pentru investigații
+suplimentare și parametrii de tipărire.
+
+Versiunea 4.1.2 adaugă site-ul organizației, migrarea corespunzătoare a bazei de
+date și progresul detaliat al actualizării.
 
 Versiunea 4.1.1 corectează tipărirea listei de prețuri pe SQLite și MariaDB
 și aranjarea comenzii pe A4 landscape, inclusiv separatorul central.
@@ -90,15 +96,15 @@ biblioteca compatibilă astfel:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.1.2-x86_64.AppImage
-./USG_v4.1.2-x86_64.AppImage
+chmod +x USG_v4.2.0-x86_64.AppImage
+./USG_v4.2.0-x86_64.AppImage
 ```
 
 Dacă FUSE nu poate fi instalat, folosiți modul de extragere oferit de runtime-ul
 AppImage:
 
 ```bash
-./USG_v4.1.2-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.0-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Această variantă extrage temporar pachetul și pornește mai lent, dar nu necesită
@@ -106,7 +112,7 @@ FUSE.
 
 ## Compilarea din sursă
 
-Configurația de referință pentru versiunea 4.1.2 este:
+Configurația de referință pentru versiunea 4.2.0 este:
 
 | Componentă | Versiune / cerință |
 |---|---|

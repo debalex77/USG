@@ -19,3 +19,13 @@ USG.pro.user
 # Local logs and temporary archives
 *.log
 /resources/img.zip
+
+# Local AI assistant files (Claude, Codex)
+CLAUDE.md
+CLAUDE.local.md
+MEMORY.md
+/.claude/
+/.codex/
+/.agents/
+AGENTS.md
+AGENTS.override.md

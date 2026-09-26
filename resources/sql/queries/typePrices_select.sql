@@ -3,7 +3,7 @@ SELECT
     deletionMark,
     name,
     discount,
-    noncomercial
+    noncomercial,
     uuid
 FROM
     typesPrices

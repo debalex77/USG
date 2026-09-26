@@ -1,3 +1,13 @@
+4.2.0 (September 26th, 2026)
+  * Migrated application, organization and user settings to dedicated tables.
+  * Reorganized settings and runtime state into dedicated services and contexts.
+  * Reorganized source modules, qmake fragments, dependencies and the Windows build script.
+  * Added four-category informed-consent generation for selected investigations.
+  * Added report options for additional investigations and doctor stamp/signature printing.
+  * Fixed e-mail account password saving on upgraded databases (cryptoSplitKey).
+  * Added the SMTP connection check and visible save errors for online accounts.
+  * Unified required-field hints with balloon tips.
+
 4.1.2 (September 18th, 2026)
   * Added organization websites and an idempotent SQLite/MariaDB schema migration.
   * Added the organization website to the printed ultrasound order.

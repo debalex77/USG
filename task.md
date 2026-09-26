@@ -648,8 +648,8 @@ Rezultat și observații:
 - Validarea elimină spațiile marginale din identificatorii și căile configurației
   (fără a modifica parola), iar relansarea după schimbarea limbii nu poate salva
   o configurație care nu a trecut `checkDataSettings()`.
-- Relansarea după schimbarea limbii transmite corect argumentele și închide procesul
-  curent numai după confirmarea pornirii noului proces.
+- Relansarea după schimbarea limbii transmite argumentele și pornește procesul nou
+  după închiderea controlată a ferestrei și a conexiunilor procesului curent.
 - Valorile legacy Base64/XOR sunt validate înainte de aplicarea profilului, fără
   expunerea datelor în log; portul MariaDB este validat și la citirea `.conf`.
 - Opțiunile booleene din `.conf` sunt citite strict (`true/false`, `1/0`); valorile
@@ -806,7 +806,7 @@ Rezultat și observații:
   stare draft și încarcă `.run`, `.deb`, AppImage, sursa LimeReport și sumele
   SHA-256. Publicarea draftului rămâne o confirmare manuală.
 - [x] Extinderea auditului de licențiere la `resources/img`, `resources/icons` și
-  `resources/images`.
+  imaginile LimeReport, organizate ulterior în `resources/img/limereport`.
 - [x] Includerea în pachetele Linux a licenței USG, auditului activelor, licențelor
   LimeReport, documentației de proveniență și patch-ului local.
 - [x] Generarea alături de pachete a arhivei sursei LimeReport și a sumei SHA-256.
@@ -857,3 +857,257 @@ Rezultat și observații:
   `docs/release_4_1_0_plan.md`.
 - [ ] Publicarea artefactelor și a tagului `v4.1.0`; `version.txt` nu trebuie
   împins pe canalul public înainte ca descărcările 4.1.0 să existe.
+
+## Rescrierea setărilor — v4.2.0
+
+- [x] Definirea separată a modelelor `ApplicationPreferences`,
+  `OrganizationSettings`, `UserPreferencesData` și `SynchronizationSettings`.
+- [x] Introducerea `SettingsService` ca sursă centrală a setărilor runtime, cu
+  semnale pentru modificarea fiecărui domeniu și a modului meniului de printare.
+- [x] Introducerea `SettingsRepository`; `UserPreferences` nu mai execută direct
+  operațiile SQL de verificare/inserare/actualizare pentru `constants` și
+  `userPreferences`.
+- [x] Păstrarea temporară a compatibilității cu schema 4.1.x și sincronizarea
+  controlată cu vechile câmpuri din `globals()`.
+- [x] Mutarea consumatorilor principali din `MainWindow`, `OrderDialog`,
+  `PricingDialog`, `OrderView` și `ReportView` pe `SettingsService`.
+- [x] Mutarea salvării opțiunii asistentului din `AsistantTipApp` prin
+  `SettingsRepository`, într-o tranzacție explicită.
+- [x] Build Debug Qt 6.9.3/qmake după prima etapă.
+- [ ] Mutarea setărilor locale ale aplicației în `AppSettingsStore`, fără
+  duplicare în baza medicală.
+- [x] Crearea tabelelor `applicationSettings`, `organizationSettings` și
+  `userSettings`; migrarea 4.2.0 copiază și verifică datele din `constants` și
+  `userPreferences` în mod idempotent, atât pentru SQLite, cât și MariaDB.
+- [x] Detectarea conflictelor din `constants` când mai mulți utilizatori au
+  valori diferite pentru aceeași organizație; migrarea se oprește fără a
+  suprascrie arbitrar valorile organizației.
+- [x] Verificarea izolată a noii scheme și a copierii pe baze temporare SQLite
+  și MariaDB 11.8.6, fără acces la bazele reale ale utilizatorului.
+- [ ] Retestarea migrării 4.2.0 pe copia MariaDB 3.x cu ID-uri legacy (`INT`):
+  tabelele noi de setări își adaptează tipurile FK la `users`, `organizations`,
+  `doctors` și `nurses`; corecția a fost verificată static, fără build.
+- [ ] Retestarea reluării migrării după un eșec la 4.2.0: verificarea 4.0.1
+  acceptă `reportEcho.patient_id` din schema deja migrată, iar versiunea bazei
+  este salvată după fiecare etapă finalizată, pentru a nu o repeta la relansare.
+- [ ] Retestarea bazei MariaDB deja marcate 4.2.0 cu `reportVideo` istoric:
+  la lansare se adaugă legătura lipsă către raport, iar video-urile existente
+  sunt asociate numai dacă o comandă are exact un raport; cazurile ambigue
+  rămân păstrate și sunt raportate în jurnal.
+- [ ] Retestarea migrării 4.2.0 pe copia `testdb` cu `reportVideo` legacy goal
+  (`id`, `nameVideo`, `path_file`): coloanele necesare se adaugă fără a șterge
+  tabela sau coloanele vechi; dacă tabela conține rânduri, migrarea se oprește
+  pentru a evita asocierea arbitrară a videoclipurilor.
+- [x] Refacerea interfeței ca `SettingsDialog`, cu pagini Aplicație,
+  Organizație, Utilizator și Sincronizare; `MainWindow` deschide noua interfață,
+  iar salvarea se face tranzacțional prin `SettingsRepository`.
+- [x] Eliminarea `order_splitFullName`, `show_content_info_video` și
+  `show_info_reports` din UI, persistență, `globals()` și consumatori.
+- [x] Eliminarea preferințelor aplicației și utilizatorului din `globals()`;
+  consumatorii runtime folosesc valorile tipizate din `SettingsService`, iar
+  utilizatorii noi sunt inițializați prin `SettingsRepository` și schema nouă.
+- [x] Mutarea stării `cloudConfigured`/`cloudEnabled` din `globals()` în
+  `SettingsService`; workerul de autentificare transmite explicit starea
+  decriptării, iar fluxurile de migrare și sincronizare citesc serviciul.
+- [x] Introducerea `CloudConnectionContext` pentru parametrii și parola
+  conexiunii cloud; încărcarea din worker este transmisă explicit către firul
+  UI, accesul concurent este protejat, iar câmpurile `cloud_*` au fost
+  eliminate din `globals()`. Conexiunile de sincronizare și migrarea UUID citesc
+  noul context. Build-ul integral Qt 6.9.3/qmake a reușit.
+- [x] Introducerea `MainDatabaseConnectionContext` pentru parametrii conexiunii
+  MariaDB principale; `DataBase`, `DatabaseProvider`, `AppSettings` și afișarea
+  informațiilor despre conexiune folosesc contextul thread-safe, iar câmpurile
+  `mySQL*` au fost eliminate din `globals()`. Build-ul integral Qt 6.9.3/qmake
+  a reușit. Testarea funcțională pe SQLite și MariaDB a fost confirmată de
+  utilizator la 2026-09-18; lansarea, conexiunile workerilor, salvarea,
+  revalidarea, tipărirea și sincronizarea documentelor au funcționat corect.
+- [x] Extinderea `MainDatabaseConnectionContext` cu motorul activ tipizat și
+  configurația SQLite. Câmpurile duplicate `thisMySQL`, `thisSqlite`,
+  `connectionMade`, `indexTypeSQL`, `sqliteDatabaseName`,
+  `sqliteDatabasePath` și `imageDatabasePath` au fost eliminate din
+  `globals()`. Starea conexiunii deschise este verificată direct prin
+  `QSqlDatabase::isValid()`/`isOpen()`, nu este păstrată într-un `bool` global.
+  Etapa a fost verificată static, fără build, conform solicitării utilizatorului.
+- [x] Finalizarea `ApplicationPathsContext` ca sursă unică thread-safe pentru
+  căile runtime ale aplicației. Căile profilului sunt actualizate atomic după
+  citire/salvare, calea profilului selectat este transmisă direct din
+  `DatabaseSelection`, iar directoarele derivate pentru starea UI și exportul
+  temporar sunt calculate de context. Câmpurile duplicate pentru căi au fost
+  eliminate din `globals()`, iar fișierele contextului au fost mutate în
+  modulul qmake `app.pri`. Verificarea statică a fost efectuată fără build, iar
+  buildul ulterior a fost confirmat de utilizator.
+- [x] Introducerea `SessionContext` și eliminarea `idUserApp` din `globals()`;
+  ID-ul memorat este tratat drept candidat, iar starea autentificată este
+  activată numai după validarea parolei. Toți consumatorii runtime folosesc
+  contextul de sesiune.
+- [x] Mutarea organizației, doctorului și asistentei implicite, a mărcii
+  aparatului și a logotipului din `globals()` în `SettingsService`; încărcarea
+  din worker este transmisă explicit către firul UI.
+- [x] Introducerea `OrganizationContext` și `DoctorContext` pentru datele
+  descriptive și imaginile organizației/doctorului autentificat; eliminarea
+  câmpurilor corespunzătoare din `globals()` și migrarea consumatorilor de
+  tipărire, export PDF, e-mail și arhivare.
+- [~] Separarea versiunii schemei în `databaseMetadata` este implementată,
+  `settingsUsers` nu mai este creată în bazele noi, iar scripturile ei au fost
+  eliminate. `versionApp` și `showHistoryVersion` mai există numai în schema și
+  migrările istorice `userPreferences`; eliminarea lor fizică se face după
+  validarea migrării noii scheme pe copii SQLite și MariaDB.
+- [x] Eliminarea completă a punții `importLegacyGlobals()`/
+  `applyToLegacyGlobals()` și a câmpurilor de setări corespunzătoare din
+  `globals()`.
+- [ ] Testarea bazelor noi și a migrărilor pe copii SQLite și MariaDB.
+
+## Reorganizarea directoarelor proiectului
+
+- [x] Separarea configurației monolitice din `USG.pro` în cinci module qmake:
+  `app.pri`, `features.pri`, `infrastructure.pri`, `resources.pri` și
+  `dependencies.pri`, fără mutarea codului și fără schimbarea comportamentului
+  aplicației.
+- [x] Separarea conținutului mixt din `src/data` în directoarele potrivite:
+  `src/app`, `src/database`, `src/settings`, `src/core`,
+  `src/features/reports` și `src/infrastructure/reporting`; directorul vechi
+  `src/data` a fost eliminat, iar proiectul a fost recompilat integral.
+- [x] Gruparea funcționalităților în `src/features` (`appointments`,
+  `catalogs`, `orders`, `patients`, `pricing`, `reports`).
+  - [x] `appointments`: dialogul și modelul programărilor.
+  - [x] `orders`: dialogul, view-ul și modelele jurnalului/investigațiilor.
+  - [x] `pricing`: dialogul, view-ul și modelele sale.
+  - [x] `reports`: dialogul, paginile de sisteme, view-ul, dashboard-ul,
+    modelele jurnalului și valorile de referință fetale.
+  - [x] `patients`: istoricul pacientului și interfața asociată.
+  - [x] `catalogs`: dialogurile, view-urile și modelele specifice cataloagelor.
+- [x] Mutarea serviciilor de e-mail, raportare și sincronizare în
+  `src/infrastructure`: accesul DB și persistența sunt separate în
+  `database`/`persistence`, worker-ele în `sync`, motorul și exportul e-mail în
+  `email`, iar integrarea LimeReport în `reporting`. Dialogul de trimitere
+  e-mail rămâne separat ca funcționalitate UI în `src/features/email`.
+- [x] Mutarea controalelor și delegaților reutilizabili în `src/ui`, separate
+  în `widgets`, `dialogs` și `delegates`; directoarele vechi `src/customs` și
+  `src/delegates` au fost eliminate.
+- [x] Reorganizarea resurselor cu păstrarea aliasurilor QRC existente: imaginile
+  LimeReport sunt în `resources/img/limereport`, stilurile principale în
+  `resources/styles`, iar aliasurile `:/images/...`, `:/style.qss` și
+  `:/style.css` au rămas neschimbate.
+- [x] Revizuirea separată a directoarelor `3rdparty`, `third_party`,
+  `build_scripts` și `installer`:
+  - `3rdparty` rămâne pentru dependențele binare locale LimeReport/OpenSSL,
+    ignorate de Git și consumate de `dependencies.pri`;
+  - `third_party` rămâne pentru documentația urmărită de Git privind licențele,
+    proveniența și patch-urile dependențelor;
+  - `build_scripts` rămâne pentru generarea pachetelor și structura Debian;
+  - `installer` rămâne proiectul separat Qt Installer Framework;
+  - copia locală neutilizată `3rdparty/LimeReport_1.7.14` (269 MB) a fost
+    eliminată după confirmarea explicită; versiunea activă rămâne LimeReport
+    1.7.23 în `3rdparty/LimeReport`.
+- [x] Eliminarea directorului mixt `src/catalogs`: asistentul aplicației a fost
+  mutat în `src/features/assistant`, iar dialogurile comune pentru perioadă și
+  alegerea imprimării în `src/ui/dialogs`.
+- [x] Separarea componentelor deja clar delimitate din `src/common`: ciclul de
+  viață al aplicației în `src/app`, logarea în `src/core/logging`, criptarea și
+  arhivarea în `src/infrastructure/security` și `src/infrastructure/backup`,
+  iar configurarea cloud în `src/features/cloud`; proiectul a fost regenerat
+  cu qmake și recompilat integral după mutare.
+- [x] Finalizarea auditului structural al `src/common`: componentele vizuale au
+  fost mutate în `src/ui/widgets`, `src/ui/dialogs` și `src/ui/services`,
+  inițializarea bazei în `src/database`, configurarea rapoartelor în
+  `src/settings` și versiunea în `src/core`. În `src/common` au rămas intenționat numai
+  contractele, tipurile și starea comună care necesită refactorizare
+  funcțională separată. Compilarea integrală a reușit după reorganizare.
+- [x] Eliminarea clasei neutilizate `HandlerFunctionThread`: auditul a confirmat
+  că nu mai exista nicio instanțiere sau apel, ci numai un include inutil și
+  intrările qmake.
+- [x] Audit tehnic static după reorganizare: 308/308 fișiere sursă declarate o
+  singură dată în qmake, include-uri locale valide, 427 resurse QRC fără fișiere
+  lipsă sau aliasuri duplicate și fără referințe active spre directoarele vechi.
+- [x] Proiectul `test/appsettingsstore/appsettingsstore.pro` a fost actualizat
+  după reorganizarea directoarelor; buildul izolat și toate cele 10 teste QtTest
+  au trecut la 2026-09-21.
+- [ ] Unificarea sursei versiunii aplicației, definită momentan atât în
+  `USG.pro`, cât și în `src/core/version.h` și metadatele de împachetare.
+- [x] După testarea funcțională, au fost eliminate câmpurile nefolosite
+  confirmate din `globals()`: `str_content_message_video`,
+  `str_content_message_report` și `thisSqlCipher`.
+
+## Pregătirea release-ului 4.2.0
+
+- [x] Versiunea aplicației și metadatele pachetelor au fost ridicate la 4.2.0;
+  lanțul păstrează migrarea 4.1.2 și execută apoi migrarea noii scheme de setări
+  prin `update_4_2_0()`.
+- [x] Generarea consimțământului informat a fost separată în patru categorii:
+  investigații invazive, neinvazive, endocavitare și screening obstetrical.
+- [x] `ReportDialog` oferă meniul „Opțiuni” pentru investigații suplimentare și
+  parametrii ștampilei/semnăturii, păstrând comportamentul exportului PDF.
+- [x] Catalogul rus `USG_ru_RU.ts` este actualizat pentru 4.2.0: 2345 mesaje
+  active finalizate, fără neconcordanțe ale parametrilor `%1`/`%n`; `lrelease`
+  generează catalogul `.qm` fără mesaje neterminate.
+- [x] Relansarea după schimbarea limbii nu mai pornește un proces înainte de
+  închiderea curată a ferestrei principale; confirmarea obișnuită și minimizarea
+  în tray sunt ocolite numai pentru acest flux. Limba selecției bazei de date
+  este încărcată înaintea dialogului și păstrată după alegerea profilului.
+- [ ] Test UI manual: comutare RO→RU și RU→RO cu „confirmare la ieșire” și
+  „minimizare în tray” activate, plus anularea închiderii unui document modificat.
+- [x] Fluxul de lansare verifică și migrează schema înainte de intrarea în bucla
+  normală a interfeței; o migrare sau verificare a view-urilor eșuată oprește
+  lansarea, fără a permite lucrul pe o schemă incompatibilă.
+- [x] Corectarea auditului de robustețe 4.2.0: tranzacție la crearea schemei
+  SQLite, verificarea tabelelor/coloanelor/FK pentru noua schemă de setări,
+  tranzacție la crearea utilizatorului, închiderea sigură a conexiunilor și
+  respectarea refuzului de închidere al subferestrelor.
+- [x] Preferința de minimizare în tray se aplică sigur și după modificarea din
+  SettingsDialog; arhivarea automată SQLite la închidere este executată după
+  închiderea conexiunilor și este jurnalizată.
+- [x] Eliminarea comenzilor shell pentru fișierele temporare/profiluri,
+  compararea versiunilor cu `QVersionNumber` și corectarea ownership-ului în
+  `DownloaderVersion`.
+- [x] Build Debug complet Qt 6.9.3/qmake și linkare reușite după auditul de
+  robustețe din 2026-09-21.
+- [x] Build Release complet Qt 6.9.3/qmake și linkare reușite după același
+  audit; dependențele LimeReport și QtZint sunt rezolvate din pachetul Release.
+- [x] Auditul SQL/sincronizare/parole: scripturile schemelor noi au trecut pe
+  SQLite și MariaDB temporare; conexiunile SQLite ale worker-elor activează FK,
+  raportul actualizează comanda cloud după ID-ul comenzii, migrarea UUID oprește
+  fluxul la eroare, iar sincronizarea automată pornește numai din SQLite.
+- [x] Parola MariaDB din profil se salvează autentificat AES-256-GCM, cu cheie
+  locală `crypto/profile.key` și compatibilitate la citirea profilelor vechi;
+  copia profilului și cheia trebuie păstrate împreună. Testele izolate pentru
+  citirea legacy, round-trip și detectarea modificării parolei au trecut.
+- [x] Salvarea configurației cloud și schimbarea parolei utilizatorului sunt
+  tranzacționale; schimbarea parolei recriptează configurările cloud ale
+  utilizatorului, iar migrarea 4.2.0 verifică unicitatea perechii organizație/
+  utilizator fără ștergerea implicită a datelor duplicate.
+- [ ] Verificare funcțională pe copii ale bazelor reale: schimbarea parolei
+  utilizatorului, redeschiderea profilului MariaDB, sincronizarea raportului cu
+  imagini și migrarea 4.2.0 pe o bază cu configurații cloud istorice.
+- [~] Tabela `cryptoSplitKey` lipsea în bazele actualizate (creată numai în
+  bazele noi), blocând salvarea parolelor e-mail. `ensureCryptoSplitKeySchema()`
+  o creează idempotent în `update_4_2_0()` și la fiecare lansare prin
+  `ensureRequiredViews()` (MariaDB: tipul FK adaptat la `organizations.id`).
+  Build Debug/Release reușit, QtTest 12/12. Scriptul SQLite verificat pe copia
+  bazei `alovada`; scriptul MariaDB adaptat verificat pe MariaDB 11.8.6
+  temporar cu `organizations.id` INT, INT UNSIGNED și BIGINT UNSIGNED
+  (creare, re-rulare, FK, CASCADE); fără adaptare, INT eșuează cu errno 150.
+  Lansarea pe `alovada` (tabela creată o singură dată) și `testdb`, salvarea
+  contului și trimiterea e-mail au fost confirmate în jurnale la 2026-09-26.
+- [~] Butonul „Verificarea conectării” din `OnlineAccountDialog` nu era conectat
+  (nici în 4.1.2 nu avea implementare). `EmailCore::testConnection()` verifică
+  SSL, EHLO și autentificarea SMTP fără trimitere; rezultatul se afișează prin
+  `PopUp`. Build Debug reușit, traducerea rusă completată. Rămâne testul UI cu
+  date corecte și cu parolă/port greșit.
+- [~] Salvarea eșuată a contului online afișează acum motivul (cheie split,
+  criptare, SQL, rând inexistent), nu doar îl scrie în jurnal. Dialogul mort
+  `ContOnline` (`src/features/cloud/contonline.*`, neinstanțiat nicăieri) a fost
+  eliminat din surse și din `features.pri`. Build Debug reușit.
+- [~] Câmpurile obligatorii necompletate sunt indicate uniform prin
+  `BalloonTip::showBalloonFor` (în loc de `QMessageBox`) în `PricingDialog`,
+  `CloudServerConfig`, `CatalogDialog`, `AgentSendEmail`, `AuthorizationUser`
+  și `Reports`; focusul trece pe câmpul indicat. Textele `tr()` sunt neschimbate
+  (0 mesaje noi la `lupdate`). Build Debug reușit; rămâne verificarea vizuală.
+- [ ] Migrare separată, versionată, a hash-urilor istorice SHA-256 ale
+  utilizatorilor; cheia cloud depinde momentan de hash-ul actual, astfel că
+  înlocuirea algoritmului necesită și recriptarea acreditărilor cloud.
+- [x] Revizuirea scriptului Windows `build_scripts/build_win`: kit MSVC 2022,
+  `windeployqt --compiler-runtime`, validarea dependențelor SQLite/MariaDB,
+  OpenSSL și LimeReport Release, actualizarea automată a metadatelor Qt IFW din
+  `version.txt`, licențe și arhivă separată a sursei LimeReport cu SHA-256.
+- [ ] Rularea și verificarea scriptului pe Windows cu kitul Qt/MSVC utilizat la
+  release; scriptul nu poate fi executat în mediul Linux curent.

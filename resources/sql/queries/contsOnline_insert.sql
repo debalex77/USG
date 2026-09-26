@@ -1,5 +1,4 @@
-INSERT INTO contsOnline (
-    id,
+INSERT INTO onlineAccount (
     id_organizations,
     id_users,
     email,
@@ -7,5 +6,6 @@ INSERT INTO contsOnline (
     port,
     username,
     password,
-    iv)
+    iv,
+    tag)
 VALUES (?,?,?,?,?,?,?,?,?)

@@ -5,11 +5,9 @@ SELECT
     c.username,
     c.password,
     c.iv,
-    u.hash AS hashUser
+    c.tag
 FROM
-    contsOnline c
-INNER JOIN
-    users u ON u.id = c.id_users
+    onlineAccount c
 WHERE
     c.id_organizations = ? AND
     c.id_users = ? AND

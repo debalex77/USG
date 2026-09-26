@@ -44,9 +44,15 @@ Official website: <https://debalex77.github.io/USG/>
 - optional UUID-based background synchronization to MariaDB;
 - Romanian, English and Russian user interfaces.
 
-## Version 4.1.2
+## Version 4.2.0
 
-Added organization websites, database migration and detailed update progress.
+Reorganized application, organization and user settings into dedicated database
+tables, services and runtime contexts. Added four-level informed-consent
+generation and report options for additional investigations and print
+parameters.
+
+Version 4.1.2 adds organization websites, the corresponding database migration
+and detailed update progress.
 
 Version 4.1.1 fixes price-list printing on SQLite and MariaDB and corrects
 the A4 landscape order layout, including the central separator.
@@ -90,14 +96,14 @@ runtime library with:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.1.2-x86_64.AppImage
-./USG_v4.1.2-x86_64.AppImage
+chmod +x USG_v4.2.0-x86_64.AppImage
+./USG_v4.2.0-x86_64.AppImage
 ```
 
 If FUSE cannot be installed, use the AppImage runtime's extraction fallback:
 
 ```bash
-./USG_v4.1.2-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.0-x86_64.AppImage --appimage-extract-and-run
 ```
 
 The fallback extracts the package temporarily and is therefore slower to
@@ -105,7 +111,7 @@ start. It does not require FUSE.
 
 ## Building from source
 
-The supported reference configuration for version 4.1.2 is:
+The supported reference configuration for version 4.2.0 is:
 
 | Component | Version / requirement |
 |---|---|

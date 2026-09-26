@@ -5,10 +5,9 @@ INSERT INTO userPreferences (
     showQuestionCloseApp,
     showUserManual,
     showHistoryVersion,
-    order_splitFullName,
     updateListDoc,
     showDesignerMenuPrint,
     checkNewVersionApp,
     databasesArchiving,
     showAsistantHelper)
-VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+VALUES (?,?,?,?,?,?,?,?,?,?,?)
