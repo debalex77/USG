@@ -148,7 +148,7 @@
 <body>
   <header>
     <nav class="nav" aria-label="Navigare principală">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.0</span></div>
+      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.2</span></div>
       <div class="navlinks">
         <span class="pill">Linux și Windows</span>
         <span class="pill">Qt 6.9.3 · qmake</span>
@@ -191,14 +191,17 @@
           </div>
 
           <div class="hr"></div>
-          <h2>Versiunea 4.2.0</h2>
-          <p>Reorganizarea setărilor aplicației, organizației și utilizatorului în tabele, servicii și contexte dedicate.</p>
-          <p>Corectată tipărirea listei de prețuri pe SQLite și MariaDB și centrarea separatorului comenzii pe A4 landscape.</p>
+          <h2>Versiunea 4.2.2</h2>
+          <p>Versiune de producție verificată pe Linux și Windows, cu migrare controlată de la bazele 3.0.6.</p>
+          <p>Migrarea SQLite–MariaDB auditează identitatea înainte de transfer și copiază numai UUID-urile asociate sigur, într-o tranzacție verificată.</p>
           <ul>
+            <li>potrivirile ambigue rămân separate, fără suprascrierea datelor istorice;</li>
+            <li>corectări pentru prima lansare, inițializarea bazei și installerul Windows;</li>
+            <li>teste automate pentru migrarea UUID între schemele legacy și actuale;</li>
+            <li>setările aplicației, organizației și utilizatorului reorganizate;</li>
             <li>consimțământ informat generat pe patru categorii de investigații;</li>
             <li>selectarea investigațiilor suplimentare și parametri de tipărire în Raportul ecografic;</li>
             <li>compatibilitate revizuită pentru SQLite și MariaDB;</li>
-            <li>migrarea schemei pacienților și sincronizare prin UUID;</li>
             <li>ferestre dedicate pentru comenzile și rapoartele ecografice;</li>
             <li>programări cu mai multe investigații;</li>
             <li>tipărire, export PDF și e-mail corectate;</li>
