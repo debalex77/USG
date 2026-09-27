@@ -3,6 +3,7 @@
 
 #include <QSqlTableModel>
 #include <QBrush>
+#include <QFont>
 
 #include <common/globals.h>
 #include <common/table_sections.h>
