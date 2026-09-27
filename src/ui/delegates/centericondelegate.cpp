@@ -23,6 +23,8 @@ void CenterIconDelegate::paint(QPainter *painter,
         // eliminam textul si iconul standard ca sa le desenam noi
         opt.text.clear();
         opt.icon = QIcon();
+        opt.features &= ~(QStyleOptionViewItem::HasDecoration
+                          | QStyleOptionViewItem::HasDisplay);
 
         const QWidget *widget = opt.widget;
         QStyle *style = widget ? widget->style() : QApplication::style();

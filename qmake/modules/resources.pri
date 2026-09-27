@@ -10,6 +10,8 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 !isEmpty(target.path): INSTALLS += target
 
 DISTFILES += \
+    $$PWD/../../.github/workflows/build-windows.yml \
+    $$PWD/../../.github/workflows/release-windows.yml \
     $$USG_ROOT/LICENSE.txt \
     $$USG_ROOT/README.md \
     $$USG_ROOT/README-RO.md \
@@ -27,6 +29,7 @@ DISTFILES += \
     $$USG_ROOT/build_scripts/build_maosx \
     $$USG_ROOT/build_scripts/build_new \
     $$USG_ROOT/build_scripts/build_win.bat \
+    $$USG_ROOT/build_scripts/write_sha256.ps1 \
     $$USG_ROOT/resources/fonts/freefontsdownload.txt \
     $$USG_ROOT/resources/fonts/www.freefontsdownload.net.url \
     $$USG_ROOT/translate/USG_ro_RO.qm \

@@ -151,19 +151,15 @@ if exist "%SHA_FILE%" del /f /q "%SHA_FILE%"
 if errorlevel 1 call :die "binarycreator a eșuat." || exit /b 1
 call :require_file "%PACKAGE_FILE%" "Pachetul Windows nu a fost creat." || exit /b 1
 
-set "SHA256="
-for /f "usebackq delims=" %%H in (`powershell -NoProfile -Command "(Get-FileHash -Algorithm SHA256 -LiteralPath '%PACKAGE_FILE%').Hash.ToLower()"`) do set "SHA256=%%H"
-if not defined SHA256 call :die "Calcularea SHA-256 a eșuat." || exit /b 1
-for %%F in ("%PACKAGE_FILE%") do >"%SHA_FILE%" echo %SHA256%  %%~nxF
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0write_sha256.ps1" -InputPath "%PACKAGE_FILE%" -OutputPath "%SHA_FILE%"
+if errorlevel 1 call :die "Calcularea SHA-256 a eșuat." || exit /b 1
 
 rem Sursa corespunzătoare LimeReport, ca artefact separat.
 if exist "%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip" del /f /q "%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip"
 "%ZIP_EXE%" a -tzip "%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip" "%LIMEREPORT_SOURCE_DIR%\*" -xr!.git -xr!build >nul
 if errorlevel 1 call :die "Arhivarea sursei LimeReport a eșuat." || exit /b 1
-set "LIME_SHA256="
-for /f "usebackq delims=" %%H in (`powershell -NoProfile -Command "(Get-FileHash -Algorithm SHA256 -LiteralPath '%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip').Hash.ToLower()"`) do set "LIME_SHA256=%%H"
-if not defined LIME_SHA256 call :die "Calcularea SHA-256 pentru sursa LimeReport a eșuat." || exit /b 1
->"%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip.sha256" echo %LIME_SHA256%  LimeReport_v1.7.23_USG_source.zip
+powershell -NoProfile -ExecutionPolicy Bypass -File "%~dp0write_sha256.ps1" -InputPath "%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip" -OutputPath "%BUILD_PATH%\LimeReport_v1.7.23_USG_source.zip.sha256"
+if errorlevel 1 call :die "Calcularea SHA-256 pentru sursa LimeReport a eșuat." || exit /b 1
 
 echo [OK] Pachet creat: %PACKAGE_FILE%
 echo [OK] SHA-256: %SHA_FILE%

@@ -184,6 +184,9 @@ void OrganizationDialog::onAddContract()
     if (!confirmSaveIfModified())
         return;
 
+    if (m_isNew || m_id <= 0)
+        return;
+
     ContractDialog *contract = new ContractDialog(m_db, this);
     contract->setAttribute(Qt::WA_DeleteOnClose);
     contract->setProperty("isNew", true);
@@ -830,7 +833,7 @@ bool OrganizationDialog::handleInsert()
 
     QVector<QVariant> data;
     data.append(m_db.getLastIdForTable("organizations") + 1);
-    data.append(StatusObject::statusObjectToInt(m_statusCatalog));
+    data.append(StatusObject::statusObjectToInt(StatusObject::ZeroWrite));
     data.append(ui->editIDNP->text());
     data.append(ui->editTVA->text().isEmpty()
                     ? QVariant()
@@ -888,6 +891,8 @@ bool OrganizationDialog::handleInsert()
         msg->deleteLater();
         return false;
     }
+    setIsNew(false);
+    setId(data.first().toInt());
     emit organizationCreated(data);
     return true;
 }
@@ -895,7 +900,9 @@ bool OrganizationDialog::handleInsert()
 bool OrganizationDialog::handleUpdate()
 {
     QVector<QVariant> data;
-    data.append(StatusObject::statusObjectToInt(m_statusCatalog));
+    const auto savedStatus = m_statusCatalog == StatusObject::Unknow
+        ? StatusObject::ZeroWrite : m_statusCatalog;
+    data.append(StatusObject::statusObjectToInt(savedStatus));
     data.append(ui->editIDNP->text());
     data.append(ui->editTVA->text().isEmpty()
                     ? QVariant()
@@ -1001,23 +1008,19 @@ bool OrganizationDialog::onWritingData()
                      ? handleInsert()
                      : handleUpdate();
 
-    if (m_isNew)
-        setIsNew(false); // setam ca nu este nou
-
     // modificarea formei
-    if (returnBool)
+    if (returnBool) {
+        if (m_statusCatalog == StatusObject::Unknow)
+            setStatusCatalog(StatusObject::ZeroWrite);
         setWindowModified(false);
+    }
 
     return returnBool;
 }
 
 void OrganizationDialog::onWritingDataClose()
 {
-    if (m_statusCatalog == StatusObject::Unknow)
-        setStatusCatalog(StatusObject::ZeroWrite);
-
     if (!onWritingData()){
-        setStatusCatalog(StatusObject::Unknow);
         return;
     }
     accept();
