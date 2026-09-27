@@ -2,6 +2,11 @@ name: Linux qmake build
 
 on:
   push:
+    paths-ignore:
+      - 'index.html'
+      - 'privacy.html'
+      - 'robots.txt'
+      - 'sitemap.xml'
   pull_request:
   workflow_dispatch:
 
