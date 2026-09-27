@@ -514,9 +514,6 @@
          <property name="calendarPopup">
           <bool>true</bool>
          </property>
-         <property name="timeSpec">
-          <enum>Qt::TimeSpec::LocalTime</enum>
-         </property>
         </widget>
        </item>
        <item row="2" column="2">

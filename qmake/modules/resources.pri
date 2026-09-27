@@ -26,7 +26,7 @@ DISTFILES += \
     $$USG_ROOT/TODO.md \
     $$USG_ROOT/build_scripts/build_maosx \
     $$USG_ROOT/build_scripts/build_new \
-    $$USG_ROOT/build_scripts/build_win \
+    $$USG_ROOT/build_scripts/build_win.bat \
     $$USG_ROOT/resources/fonts/freefontsdownload.txt \
     $$USG_ROOT/resources/fonts/www.freefontsdownload.net.url \
     $$USG_ROOT/translate/USG_ro_RO.qm \

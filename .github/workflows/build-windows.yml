@@ -1,0 +1,60 @@
+name: Windows build and installer
+
+on:
+  push:
+    branches: ['**']
+  pull_request:
+  workflow_dispatch:
+  workflow_call:
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 120
+    defaults:
+      run:
+        shell: pwsh
+    env:
+      QT_VERSION: 6.9.3
+      LIMEREPORT_COMMIT: e6210b58a46ab14c0ff8a409b5fa5d339937ea7c
+      VCPKG_DISABLE_METRICS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate version and tag
+        run: |
+          $version = (Get-Content version.txt -Raw).Trim()
+          if ($version -notmatch '^\d+\.\d+\.\d+$') { throw 'Invalid version.txt' }
+          if ($env:GITHUB_REF_TYPE -eq 'tag' -and $env:GITHUB_REF_NAME -ne "v$version") {
+            throw 'Tag must match version.txt'
+          }
+      - uses: ilammy/msvc-dev-cmd@v1
+        with:
+          arch: x64
+      - uses: jurplel/install-qt-action@v4
+        with:
+          version: '6.9.3'
+          arch: win64_msvc2022_64
+          modules: qtmultimedia qtpositioning qtwebchannel qtwebengine
+          cache: true
+      - name: Check out pinned vcpkg
+        uses: actions/checkout@v4
+        with:
+          repository: microsoft/vcpkg
+          ref: 4334d8b4c8916018600212ab4dd4bbdc343065d1
+          path: build/vcpkg
+      - name: Build dependencies, USG and installer
+        run: ./build_scripts/ci_windows.ps1
+      - name: Upload installer, checksums and dependency sources
+        uses: actions/upload-artifact@v4
+        with:
+          name: USG-Windows-amd64
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            build/USG_v*_Windows_amd64.exe
+            build/USG_v*_Windows_amd64.exe.sha256
+            build/LimeReport_v*_USG_source.zip
+            build/LimeReport_v*_USG_source.zip.sha256

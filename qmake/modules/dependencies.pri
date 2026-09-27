@@ -64,7 +64,14 @@ INCLUDEPATH += $$OPENSSL_DIR
 
 win32 {
     INCLUDEPATH += $$OPENSSL_DIR/include
-    LIBS += /LIBPATH:$$OPENSSL_DIR/lib libssl.lib libcrypto.lib
+
+    LIBS += /LIBPATH:$$OPENSSL_DIR/lib \
+            libssl.lib \
+            libcrypto.lib \
+            crypt32.lib \
+            ws2_32.lib \
+            advapi32.lib \
+            user32.lib
 }
 
 unix:!macx {

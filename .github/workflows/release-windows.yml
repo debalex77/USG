@@ -1,0 +1,48 @@
+name: Windows release packages
+
+on:
+  workflow_dispatch:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: windows-release-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  packages:
+    uses: ./.github/workflows/build-windows.yml
+  release:
+    if: github.ref_type == 'tag'
+    needs: packages
+    runs-on: windows-2022
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: USG-Windows-amd64
+          path: dist
+      - name: Upload Windows assets to draft release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $tag = $env:GITHUB_REF_NAME
+          # Linux may create the same draft concurrently. Re-read after creation.
+          $draft = gh release view $tag --json isDraft --jq '.isDraft' 2>$null
+          if ($LASTEXITCODE -ne 0) {
+            gh release create $tag --draft --verify-tag --title "USG $tag" --notes-file release.md
+            $draft = gh release view $tag --json isDraft --jq '.isDraft'
+            if ($LASTEXITCODE -ne 0) { throw 'Cannot create or read release' }
+          }
+          if ($draft -ne 'true') { throw 'Refusing to overwrite a published release' }
+          $assets = @(Get-ChildItem dist -File | ForEach-Object FullName)
+          if ($assets.Count -ne 4) { throw 'Expected installer, source archive and two checksums' }
+          gh release upload $tag @assets --clobber
+          if ($LASTEXITCODE -ne 0) { throw 'Release upload failed' }
