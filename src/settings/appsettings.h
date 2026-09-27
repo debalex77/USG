@@ -137,8 +137,8 @@ private:
     QString dirLogPath     = QDir::homePath() + NAME_DIR_LOG_PATH;
     QString fileLogPath    = QDir::homePath() + NAME_FILE_LOG_PATH;
 #elif defined(Q_OS_WIN)
-    QString dirLogPath     = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/logs";
-    QString fileLogPath    = QStandardPaths::writableLocation(QStandardPaths::AppConfigLocation) + "/logs/usg.log";
+    QString dirLogPath     = QStandardPaths::writableLocation(QStandardPaths::AppLocalDataLocation) + "/logs";
+    QString fileLogPath    = dirLogPath + "/usg.log";
 #endif
 
     QLineEdit *lineEditPathTemplatesPrint;

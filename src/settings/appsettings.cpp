@@ -44,6 +44,12 @@ AppSettings::AppSettings(QWidget *parent) :
 {
     ui->setupUi(this);
     dirConfigPath = ApplicationPathsContext::instance().configDirectory();
+#if defined(Q_OS_WIN)
+    // Validarea profilului are loc înainte de inițializarea LogManager.
+    // Directorul implicit trebuie să existe deja la prima configurare.
+    if (!QDir().mkpath(dirLogPath))
+        qWarning() << "AppSettings: cannot create log directory:" << dirLogPath;
+#endif
     captureSettingsState();
 
     setWindowTitle(tr("Setările aplicației %1").arg("[*]")); // setam titlu
