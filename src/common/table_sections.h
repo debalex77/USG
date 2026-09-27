@@ -799,7 +799,7 @@ namespace ReportSections {
         "1038.", "1039.", "1050.37.", "1050.38.", "1050.39."
     };
 
-    inline uint qHash(ReportSections::ReportSystem key, uint seed = 0)
+    inline size_t qHash(ReportSections::ReportSystem key, size_t seed = 0) noexcept
     {
         return ::qHash(static_cast<int>(key), seed);
     }

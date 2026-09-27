@@ -270,7 +270,6 @@ void FirstRunWizard::updateTableInvestigations()
     ui->tableView->setColumnHidden(InvestigationsSections::Owner, true); // ascundem owner
     ui->tableView->setColumnHidden(InvestigationsSections::Uuid, true);  // ascundem uuid
 
-    model_investigations->select();
 
     ui->tableView->horizontalHeader()->setStretchLastSection(true);
 
@@ -308,7 +307,6 @@ void FirstRunWizard::updateTableTypePrices()
     ui->tableView_typePrices->setColumnHidden(TypePricesSections::Uuid, true);         // uuid
     ui->tableView_typePrices->horizontalHeader()->setStretchLastSection(true);
 
-    model_typePrices->select();
 
     if (model_typePrices->rowCount() > 0) {
         ui->tableView_typePrices->setFocus();   // focusam la tabela

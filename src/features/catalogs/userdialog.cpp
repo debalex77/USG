@@ -146,7 +146,7 @@ bool UserDialog::controlRequiredObjects()
                                    BalloonTip::BottomCenter);
         return false;
     }
-    if (m_isNew && ui->userPassword->text().isEmpty()) {
+    if (m_isNew && !globals().firstLaunch && ui->userPassword->text().isEmpty()) {
         BalloonTip::showBalloonFor(ui->userPassword,
                                    QMessageBox::Warning,
                                    tr("Verificarea datelor"),

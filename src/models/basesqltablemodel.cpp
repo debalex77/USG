@@ -98,9 +98,9 @@ QVariant BaseSqlTableModel::dataFromCatForTableModel(const QModelIndex &index, i
     case Qt::DecorationRole:
 
         if (index.column() == 1 && QSqlTableModel::data(index, Qt::DisplayRole).toInt() == 0)
-            return QIcon(":img/element_x32.png");
+            return QIcon(":/img/catalogs/item.png");
         else if (index.column() == 1 && QSqlTableModel::data(index, Qt::DisplayRole).toInt() == 1)
-            return QIcon(":img/element_delete_x32.png");
+            return QIcon(":/img/catalogs/item_delete.png");
         else
             return value;
 

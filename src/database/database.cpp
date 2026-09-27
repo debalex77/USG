@@ -1465,6 +1465,55 @@ bool DataBase::updateInvestigationFromXML_2024()
         return false;
     };
 
+    // XML-ul folosește identificatorii istorici 1..9. Inițializăm catalogul
+    // numai dacă este gol; grupurile personalizate existente rămân intacte.
+    if (hasOwner) {
+        QSqlQuery groups(currentDatabase);
+        if (!groups.exec(QStringLiteral(R"(
+            SELECT COUNT(*) FROM investigationsGroup
+        )")) || !groups.next()) {
+            qWarning(logWarning()) << "Investigation groups:" << groups.lastError().text();
+            return rollback();
+        }
+        const bool emptyGroups = groups.value(0).toInt() == 0;
+        groups.finish();
+        if (emptyGroups) {
+            const QStringList names{
+                QStringLiteral("Examen complex"), QStringLiteral("Organe interne"),
+                QStringLiteral("Sistemul urinar"), QStringLiteral("Ginecologie"),
+                QStringLiteral("Prostata"), QStringLiteral("Obstetrică"),
+                QStringLiteral("Tiroida"), QStringLiteral("Glandele mamare"),
+                QStringLiteral("Alte investigații")
+            };
+            const bool groupHasUuid = currentDatabase.record(
+                QStringLiteral("investigationsGroup")).contains(QStringLiteral("uuid"));
+            if (!groups.prepare(groupHasUuid ? QStringLiteral(R"(
+                INSERT INTO investigationsGroup
+                    (id, deletionMark, cod, name, nameForPrint, uuid)
+                VALUES (?, 0, ?, ?, ?, ?)
+            )") : QStringLiteral(R"(
+                INSERT INTO investigationsGroup
+                    (id, deletionMark, cod, name, nameForPrint)
+                VALUES (?, 0, ?, ?, ?)
+            )"))) {
+                qWarning(logWarning()) << "Investigation groups:" << groups.lastError().text();
+                return rollback();
+            }
+            for (int i = 0; i < names.size(); ++i) {
+                groups.bindValue(0, i + 1);
+                groups.bindValue(1, QString::number(i + 1));
+                groups.bindValue(2, names.at(i));
+                groups.bindValue(3, names.at(i));
+                if (groupHasUuid)
+                    groups.bindValue(4, QUuid::createUuid().toRfc4122());
+                if (!groups.exec()) {
+                    qWarning(logWarning()) << "Investigation groups:" << groups.lastError().text();
+                    return rollback();
+                }
+            }
+        }
+    }
+
     // Marcăm toate înregistrările existente ca `use=0`.
     QSqlQuery query(currentDatabase);
     if (! query.exec("UPDATE investigations SET `use` = 0;")) {
