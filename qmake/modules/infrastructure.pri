@@ -18,7 +18,8 @@ SOURCES += \
     $$USG_ROOT/src/app/mdiareacontainer.cpp \
     $$USG_ROOT/src/app/popup.cpp \
     $$USG_ROOT/src/infrastructure/reporting/reports.cpp \
-    $$USG_ROOT/src/database/updatereleasesapp.cpp
+    $$USG_ROOT/src/database/updatereleasesapp.cpp \
+    $$USG_ROOT/src/database/uuidmigrationplan.cpp
 
 HEADERS += \
     $$USG_ROOT/src/app/about.h \
@@ -41,7 +42,8 @@ HEADERS += \
     $$USG_ROOT/src/app/mdiareacontainer.h \
     $$USG_ROOT/src/app/popup.h \
     $$USG_ROOT/src/infrastructure/reporting/reports.h \
-    $$USG_ROOT/src/database/updatereleasesapp.h
+    $$USG_ROOT/src/database/updatereleasesapp.h \
+    $$USG_ROOT/src/database/uuidmigrationplan.h
 
 FORMS += \
     $$USG_ROOT/src/app/about.ui \

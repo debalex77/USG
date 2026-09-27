@@ -34,7 +34,7 @@ private:
                                   const QVersionNumber &target) const;
     bool validateMigrationPrerequisites(const QVersionNumber &migrationVersion) const;
     bool validatePostMigration(const QVersionNumber &migrationVersion) const;
-    bool transferSqliteUuidsToCloud();
+    bool transferSqliteUuidsToCloud(bool auditOnly = false);
     bool ensurePatientAppointmentsSchema();
     bool ensureCryptoSplitKeySchema();
 

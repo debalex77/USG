@@ -12234,6 +12234,10 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
 <context>
     <name>UpdateReleasesApp</name>
     <message>
+        <source>Transferul UUID a fost oprit: conflict UUID sau eroare de schemă. Verificați jurnalul.</source>
+        <translation>Перенос UUID остановлен: конфликт UUID или ошибка схемы. Проверьте журнал.</translation>
+    </message>
+    <message>
         <location filename="../src/database/updatereleasesapp.cpp" line="250"/>
         <source>Actualizarea a fost anulată: driver SQL nesuportat: %1.</source>
         <translation>Обновление отменено: неподдерживаемый SQL-драйвер: %1.</translation>

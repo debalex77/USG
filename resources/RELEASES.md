@@ -1,3 +1,12 @@
+## USG v4.2.2 (27.09.2026)
+
+- Migrarea UUID verifică identitatea SQLite–MariaDB înainte de scriere.
+- Pacienții sunt identificați prin IDNP compatibil cu NPP și data nașterii sau, în lipsa IDNP, prin NPP și data nașterii; ID-ul numeric nu este folosit ca dovadă de identitate, iar documentele copil folosesc legăturile părinte verificate.
+- Tipurile de preț sunt identificate prin rolul semantic comercial/CNAM, nu prin denumirea tradusă sau reducerea modificabilă; astfel pot fi asociate în siguranță contractele și documentele de preț dependente.
+- Pentru o pereche SQLite–MariaDB se actualizează mai întâi profilul SQLite cu sincronizarea activă; profilul MariaDB se deschide direct numai după confirmarea commitului UUID comun.
+- Cazurile ambigue și duplicatele istorice rămân distincte și sunt raportate; conflictele UUID și erorile de schemă opresc transferul înainte de commit.
+- Added read-only migration tests for legacy schemas and different numeric IDs.
+
 ## USG v4.2.1 (27.09.2026)
 
 - Directorul de logare Windows este creat înaintea validării primei configurări.

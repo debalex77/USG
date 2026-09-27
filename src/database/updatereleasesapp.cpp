@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "updatereleasesapp.h"
+#include "uuidmigrationplan.h"
 #include "common/cloudconnectioncontext.h"
 
 #include "common/sessioncontext.h"
@@ -2273,7 +2274,7 @@ bool UpdateReleasesApp::update_3_0_7()
     return true;
 }
 
-bool UpdateReleasesApp::transferSqliteUuidsToCloud()
+bool UpdateReleasesApp::transferSqliteUuidsToCloud(bool auditOnly)
 {
     QSqlDatabase localDb = db->getDatabase();
     QSqlDatabase imageDb = db->getDatabaseImage();
@@ -2307,129 +2308,165 @@ bool UpdateReleasesApp::transferSqliteUuidsToCloud()
                           .arg(cloudDb.lastError().text());
         }
 
-        const QString patientTable = localDb.tables(QSql::Tables)
-                                                 .contains(QStringLiteral("patients"),
-                                                           Qt::CaseInsensitive)
-                                         ? QStringLiteral("patients")
-                                         : QStringLiteral("pacients");
-        QStringList tables = {
-            QStringLiteral("contracts"),                 QStringLiteral("doctors"),
-            QStringLiteral("investigations"),            QStringLiteral("investigationsGroup"),
-            QStringLiteral("conclusionTemplates"),
-            QStringLiteral("formationsSystemTemplates"), QStringLiteral("nurses"),
-            QStringLiteral("orderEcho"),                 QStringLiteral("organizations"), patientTable,
-            QStringLiteral("pricings"),                  QStringLiteral("reportEcho"),
-            QStringLiteral("typesPrices"),               QStringLiteral("users")
+        qint64 totalTransferred = 0;
+        bool transactionStarted = false;
+        const auto cloudTableName = [&cloudDb](const QString &requested) {
+            for (const QString &name : cloudDb.tables(QSql::Tables))
+                if (name.compare(requested, Qt::CaseInsensitive) == 0)
+                    return name;
+            if (requested == QStringLiteral("patients"))
+                for (const QString &name : cloudDb.tables(QSql::Tables))
+                    if (name.compare(QStringLiteral("pacients"), Qt::CaseInsensitive) == 0)
+                        return name;
+            return QString();
         };
         const bool transferImages = imageDb.isOpen()
                                     && imageDb.tables(QSql::Tables).contains(
-                                           QStringLiteral("imagesReports"),
-                                           Qt::CaseInsensitive);
-        if (transferImages)
-            tables.append(QStringLiteral("imagesReports"));
-
+                                           QStringLiteral("imagesReports"), Qt::CaseInsensitive);
         if (success) {
-            const QStringList cloudTables = cloudDb.tables(QSql::Tables);
-            for (const QString &table : tables) {
-                if (!cloudTables.contains(table, Qt::CaseInsensitive)) {
+
+            const auto audit = UuidMigration::build(localDb, imageDb, cloudDb, !auditOnly);
+            for (const QString &line : audit.summary)
+                qInfo(logInfo()).noquote() << "[UUID audit]" << line;
+
+            for (const QString &line : audit.warnings)
+                qWarning(logWarning()).noquote() << "[UUID audit]" << line;
+
+            for (const QString &line : audit.conflicts)
+                qCritical(logCritical()).noquote() << "[UUID audit]" << line;
+
+            success = audit.valid();
+            if (!success)
+                failure = tr("Transferul UUID a fost oprit: conflict UUID sau eroare de schemă. Verificați jurnalul.");
+
+            // DDL only after the complete read-only audit has passed. MariaDB
+            // commits DDL implicitly; the following data transaction is separate.
+            QStringList tables;
+            const QStringList expectedTables = {
+                QStringLiteral("contracts"), QStringLiteral("doctors"),
+                QStringLiteral("investigations"), QStringLiteral("investigationsGroup"),
+                QStringLiteral("conclusionTemplates"),
+                QStringLiteral("formationsSystemTemplates"), QStringLiteral("nurses"),
+                QStringLiteral("orderEcho"), QStringLiteral("organizations"),
+                QStringLiteral("patients"), QStringLiteral("pricings"),
+                QStringLiteral("reportEcho"), QStringLiteral("typesPrices"),
+                QStringLiteral("users")
+            };
+            for (const QString &table : expectedTables) {
+                if (!cloudTableName(table).isEmpty())
+                    tables.append(cloudTableName(table));
+                else {
                     success = false;
-                    failure = tr("Transferul UUID a fost oprit: tabela %1 lipsește în MariaDB.")
-                                  .arg(table);
+                    failure = QStringLiteral("UUID transfer: missing cloud table %1").arg(table);
+                    break;
+                }
+            }
+            if (transferImages) {
+                if (!cloudTableName(QStringLiteral("imagesReports")).isEmpty())
+                    tables.append(cloudTableName(QStringLiteral("imagesReports")));
+                else {
+                    success = false;
+                    failure = QStringLiteral("UUID transfer: missing cloud table imagesReports");
+                }
+            }
+
+            for (const QString &table : tables) {
+
+                if (!success || auditOnly)
+                    break;
+
+                QSqlQuery engine(cloudDb);
+                engine.prepare(QStringLiteral(R"(
+                    SELECT ENGINE FROM information_schema.TABLES
+                    WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = ?
+                )"));
+                engine.addBindValue(table);
+                if (!engine.exec() || !engine.next()
+                    || engine.value(0).toString().compare("InnoDB", Qt::CaseInsensitive) != 0) {
+                    success = false;
+                    failure = QStringLiteral("UUID transfer requires InnoDB: %1").arg(table);
                     break;
                 }
 
-                QSqlQuery columnQuery(cloudDb);
-                columnQuery.prepare(QStringLiteral(
-                    "SELECT 1 FROM information_schema.COLUMNS "
-                    "WHERE TABLE_SCHEMA=DATABASE() AND TABLE_NAME=? "
-                    "AND COLUMN_NAME='uuid' LIMIT 1"));
-                columnQuery.addBindValue(table);
-                if (!columnQuery.exec() || !columnQuery.next()) {
-                    QSqlQuery alterQuery(cloudDb);
-                    if (!alterQuery.exec(QStringLiteral(
-                            "ALTER TABLE `%1` ADD COLUMN uuid BINARY(16) NULL").arg(table))) {
+                if (!hasColumn(cloudDb, table, QStringLiteral("uuid"))) {
+                    QSqlQuery alter(cloudDb);
+                    if (!alter.exec(QStringLiteral(R"(
+                        ALTER TABLE `%1` ADD COLUMN uuid BINARY(16) NULL
+                    )").arg(table))) {
                         success = false;
-                        failure = tr("Nu s-a putut adăuga uuid în MariaDB.%1: %2")
-                                      .arg(table, alterQuery.lastError().text());
-                        break;
+                        failure = QStringLiteral("UUID column creation failed: %1").arg(table);
                     }
                 }
             }
         }
 
-        if (success && !cloudDb.transaction()) {
-            success = false;
-            failure = tr("Nu s-a putut porni tranzacția pentru transferul UUID: %1")
-                          .arg(cloudDb.lastError().text());
+        if (success && !auditOnly) {
+            transactionStarted = cloudDb.transaction();
+            success = transactionStarted;
+            if (!success)
+                failure = QStringLiteral("UUID transfer: transaction failed");
         }
 
-        qint64 totalTransferred = 0;
-        for (qsizetype tableIndex = 0; success && tableIndex < tables.size(); ++tableIndex) {
-            const QString &table = tables.at(tableIndex);
-            QSqlDatabase sourceDb = table == QStringLiteral("imagesReports")
-                                        ? imageDb : localDb;
-            QSqlQuery localQuery(sourceDb);
-            if (!localQuery.exec(QStringLiteral(
-                    "SELECT id, uuid FROM `%1` ORDER BY id").arg(table))) {
-                success = false;
-                failure = tr("Nu s-au putut citi UUID-urile SQLite din %1: %2")
-                              .arg(table, localQuery.lastError().text());
-                break;
+        if (success && !auditOnly) {
+            // Rebuild under row locks: a plan from before DDL must not authorize
+            // writes against data changed by another connection in the meantime.
+            const auto plan = UuidMigration::build(localDb, imageDb, cloudDb, true, true);
+            success = plan.valid();
+            if (!success) {
+                failure = QStringLiteral("UUID transfer: locked revalidation failed");
+                for (const QString &line : plan.conflicts)
+                    qCritical(logCritical()).noquote() << "[UUID audit]" << line;
             }
 
-            QSqlQuery updateCloud(cloudDb);
-            if (!updateCloud.prepare(QStringLiteral(
-                    "UPDATE `%1` SET uuid=? WHERE id=?").arg(table))) {
-                success = false;
-                failure = tr("Nu s-a putut pregăti transferul UUID pentru %1: %2")
-                              .arg(table, updateCloud.lastError().text());
-                break;
-            }
+            for (const auto &match : plan.matches) {
+                if (!success) break;
+                QSqlQuery update(cloudDb);
+                update.prepare(QStringLiteral(R"(
+                    UPDATE `%1`
+                    SET uuid = ?
+                    WHERE id = ? AND (uuid IS NULL OR OCTET_LENGTH(uuid) = 0)
+                )").arg(match.cloudTable));
+                update.addBindValue(match.uuid, QSql::Binary);
+                update.addBindValue(match.cloudId);
 
-            qint64 tableTransferred = 0;
-            while (localQuery.next()) {
-                const QByteArray uuid = localQuery.value(1).toByteArray();
-                if (uuid.size() != 16) {
+                if (!update.exec()) {
                     success = false;
-                    failure = tr("UUID SQLite invalid în %1, id=%2.")
-                                  .arg(table).arg(localQuery.value(0).toLongLong());
+                    failure = QStringLiteral("UUID transfer failed: %1 cloud_id=%2 (%3)")
+                                  .arg(match.cloudTable).arg(match.cloudId)
+                                  .arg(update.lastError().nativeErrorCode());
                     break;
                 }
-                updateCloud.bindValue(0, uuid, QSql::Binary);
-                updateCloud.bindValue(1, localQuery.value(0));
-                if (!updateCloud.exec()) {
+
+                totalTransferred += update.numRowsAffected();
+
+                QSqlQuery verify(cloudDb);
+                verify.prepare(QStringLiteral(R"(
+                    SELECT uuid FROM `%1` WHERE id = ?
+                )").arg(match.cloudTable));
+                verify.addBindValue(match.cloudId);
+                if (!verify.exec() || !verify.next() || verify.value(0).toByteArray() != match.uuid) {
                     success = false;
-                    failure = tr("Transferul UUID în MariaDB.%1 a eșuat pentru id=%2: %3")
-                                  .arg(table)
-                                  .arg(localQuery.value(0).toLongLong())
-                                  .arg(updateCloud.lastError().text());
-                    break;
-                }
-                if (updateCloud.numRowsAffected() > 0) {
-                    ++tableTransferred;
-                    ++totalTransferred;
+                    failure = QStringLiteral("UUID transfer verification failed: %1 cloud_id=%2")
+                                  .arg(match.cloudTable).arg(match.cloudId);
                 }
             }
 
-            emit migrationProgress(static_cast<int>(tableIndex + 1),
-                                   static_cast<int>(tables.size()),
-                                   tr("UUID: %1 — %2 înregistrări transferate în MariaDB.")
-                                       .arg(table).arg(tableTransferred));
+            if (success && !cloudDb.commit()) {
+                success = false;
+                failure = QStringLiteral("UUID transfer: commit failed");
+            }
         }
 
-        if (success && !cloudDb.commit()) {
-            success = false;
-            failure = tr("Commit-ul transferului UUID în MariaDB a eșuat: %1")
-                          .arg(cloudDb.lastError().text());
-        }
-        if (!success && cloudDb.isOpen())
+        if (!success && transactionStarted)
             cloudDb.rollback();
 
         if (success) {
-            qInfo(logInfo())
-                << tr("UUID-urile SQLite au fost transferate în MariaDB: %1 înregistrări.")
-                       .arg(totalTransferred);
+            if (auditOnly)
+                qInfo(logInfo()) << "[UUID] Read-only audit passed.";
+            else
+                qInfo(logInfo()) << "[UUID] Transfer committed. Rows:" << totalTransferred;
         }
+
         cloudDb.close();
     }
 
@@ -2447,6 +2484,13 @@ bool UpdateReleasesApp::update_4_0_1()
         qCritical(logCritical()) << "Actualizarea la 4.0.1: baza de date nu este deschisă.";
         return false;
     }
+
+    // Verify cross-database identities before this migration creates UUIDs or
+    // changes either schema. No fallback to equal numeric IDs is permitted.
+    if (MainDatabaseConnectionContext::instance().isSqlite()
+        && SettingsService::instance().synchronization().enabled
+        && !transferSqliteUuidsToCloud(true))
+        return false;
 
     emit migrationProgress(0, 0, tr("Se actualizează schema programărilor pacienților..."));
     if (!ensurePatientAppointmentsSchema())
@@ -3413,12 +3457,14 @@ bool UpdateReleasesApp::update_4_1_2()
         duplicateQuery.prepare(QStringLiteral(
             "SELECT id_users, COUNT(*) FROM `%1` "
             "GROUP BY id_users HAVING COUNT(*) > 1 LIMIT 1").arg(tableName));
+
         if (!duplicateQuery.exec()) {
             qCritical(logCritical()) << "Migrarea 4.1.2: verificarea duplicatelor din"
                                      << tableName << "a eșuat:"
                                      << duplicateQuery.lastError().text();
             return false;
         }
+
         if (duplicateQuery.next()) {
             qCritical(logCritical())
                 << QStringLiteral("Migrarea 4.1.2: tabela %1 conține %2 rânduri pentru "
@@ -3573,6 +3619,7 @@ bool UpdateReleasesApp::update_4_1_2()
     if (!ensureUniqueUserIndex(QStringLiteral("userPreferences"),
                                QStringLiteral("uq_userPreferences_users"), 2))
         return fail();
+
     if (!ensureUniqueUserIndex(QStringLiteral("constants"),
                                QStringLiteral("uq_constants_users"), 3))
         return fail();
