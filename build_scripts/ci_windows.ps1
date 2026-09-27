@@ -90,6 +90,13 @@ New-Item -ItemType Directory -Force $env:CI_DEPENDENCY_LICENSES | Out-Null
 foreach ($entry in @(@($staticDir, 'openssl'), @($clientDir, 'libmariadb'), @($clientDir, 'zlib'))) {
     Copy-Item "$($entry[0])/share/$($entry[1])/copyright" "$env:CI_DEPENDENCY_LICENSES/$($entry[1]).txt"
 }
+# cmd.exe COPY/XCOPY do not reliably accept the mixed separators used above.
+# Normalize every path crossing the PowerShell -> batch boundary.
+foreach ($name in @('QT_PATH', 'QIF_PATH', 'BUILD_EXE', 'LIMEREPORT_SOURCE_DIR',
+                    'MYSQL_CLIENT_DLL', 'MYSQL_RUNTIME_DIR', 'CI_DEPENDENCY_LICENSES')) {
+    $value = [Environment]::GetEnvironmentVariable($name)
+    [Environment]::SetEnvironmentVariable($name, [IO.Path]::GetFullPath($value).Replace('/', '\'))
+}
 Invoke-Native "$PSScriptRoot/build_win.bat" @('--check')
 Invoke-Native "$PSScriptRoot/build_win.bat" @()
 
