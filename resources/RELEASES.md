@@ -1,3 +1,12 @@
+## USG v4.2.1 (27.09.2026)
+
+- Directorul de logare Windows este creat înaintea validării primei configurări.
+- Administratorul inițial poate fi creat cu parola goală.
+- Corectate icoanele din asistentul inițial și din tabele.
+- Grupurile investigațiilor sunt inițializate înaintea importului dacă tabela este goală.
+- Corectată crearea organizației și compatibilitatea Qt 6/MSVC.
+- Adăugate fluxurile pentru installerul Windows, sursele LimeReport și sumele SHA-256.
+
 ## USG v4.2.0 (26.09.2026)
 
 - Setările aplicației, organizației și utilizatorului au fost separate în tabele dedicate, cu migrarea și verificarea datelor păstrate anterior în `constants` și `userPreferences`.
