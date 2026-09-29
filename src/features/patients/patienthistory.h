@@ -23,7 +23,7 @@ public:
     explicit PatientHistory(DataBase &db, QWidget *parent = nullptr);
     ~PatientHistory();
 
-    void setIdPatient(int IdPatient) {m_id_patient = IdPatient; emit IdPatientChanged();}
+    void setIdPatient(int idPatient);
     int getIdPatient() const {return m_id_patient;}
 
 signals:
@@ -44,6 +44,7 @@ private slots:
 
 private:
     void initSetCompleter();
+    QString ensurePatientInCompleterModel(int idPatient);
     void updateModelPatients();
     void updateTableDoc();
     void loadImagesPatients();

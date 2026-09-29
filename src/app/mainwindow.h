@@ -44,6 +44,7 @@
 #include <features/pricing/pricingview.h>
 
 #include <features/cloud/cloudserverconfig.h>
+#include <features/cloud/cloudserverview.h>
 #include <infrastructure/backup/archivecreationhandler.h>
 #include <core/version.h>
 
@@ -122,7 +123,7 @@ private slots:
     void onShowAsistantTip();
     void onBlockApp();
     void openOnlineAccountView();
-    void openCloudServerConfig();
+    void openCloudServerView();
     void openFirstRunWizard();
     void openArchiveHandler();
 
@@ -165,6 +166,7 @@ private:
     QToolButton *btnInvestigations;
     QToolButton *btnPricing;
     QToolButton *btnSettings;
+    QToolButton *btnUserManual;
     QToolButton *btnAbout;
     QToolButton *btnBlock;
 

@@ -114,6 +114,12 @@ private:
                               const std::function<void(PrintType::Column)> &printAction);
     void printOrder(PrintType::Column typePrint);
     void printReport(PrintType::Column typePrint);
+    void printReport(const ReportDialog::ReportDialogParameters &params,
+                     PrintType::Column typePrint);
+    bool reportParametersForOrder(
+        const OrderJournal::Item &order,
+        ReportDialog::ReportDialogParameters &params);
+    void openReportDocument(const ReportDialog::ReportDialogParameters &params);
 
     void initToolBar();
     void initBtnFilter();

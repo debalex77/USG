@@ -25,10 +25,11 @@
 #include <ui/widgets/balloontip.h>
 #include "ui_agentsendemail.h"
 #include <common/applicationpathscontext.h>
-#include <common/organizationcontext.h>
 #include <common/sessioncontext.h>
 #include <database/database_common.h>
 #include <settings/settingsservice.h>
+
+#include <QSignalBlocker>
 
 AgentSendEmail::AgentSendEmail(DataBase &db, QWidget *parent)
     : QDialog(parent)
@@ -44,7 +45,6 @@ AgentSendEmail::AgentSendEmail(DataBase &db, QWidget *parent)
 
     setWindowTitle(tr("Agentul e-mail"));
 
-    initModelAccount();
     initEditorsMap();
     initConnections();
 }
@@ -58,12 +58,68 @@ void AgentSendEmail::setContext(const MailContext &context)
 {
     m_ctx = context;
 
-    if (!loadOnlineAccountSettings(false))
+    if (m_ctx.organizationId <= 0) {
+        m_ctx.organizationId =
+            SettingsService::instance().organization().organizationId;
+    }
+
+    loadOrganizationDetails();
+    initModelAccount();
+
+    if (loadOnlineAccountSettings(false)) {
+        selectAccountByEmail(m_ctx.emailFrom);
+    } else {
         selectFirstAvailableAccount();
+    }
 
     buildMessage();
     collectAttachments();
     fillUiFromContext();
+}
+
+bool AgentSendEmail::loadOrganizationDetails()
+{
+    if (m_ctx.organizationId <= 0) {
+        qWarning(logWarning())
+            << "AgentSendEmail: ID-ul organizației nu este valid.";
+        return false;
+    }
+
+    QSqlQuery query(m_db.getDatabase());
+    query.prepare(QStringLiteral(R"(
+        SELECT
+            name,
+            telephone,
+            email
+        FROM
+            organizations
+        WHERE
+            id = ?
+        LIMIT 1
+    )"));
+    query.addBindValue(m_ctx.organizationId);
+
+    if (!query.exec()) {
+        qWarning(logWarning())
+            << "AgentSendEmail: datele organizației nu pot fi citite:"
+            << query.lastError().text();
+        return false;
+    }
+
+    if (!query.next()) {
+        qWarning(logWarning())
+            << "AgentSendEmail: organizația nu a fost găsită; id="
+            << m_ctx.organizationId;
+        return false;
+    }
+
+    m_ctx.organizationName = query.value(QStringLiteral("name")).toString();
+    m_ctx.organizationPhone = query.value(QStringLiteral("telephone")).toString();
+    m_ctx.organizationEmail = query.value(QStringLiteral("email")).toString();
+    if (m_ctx.emailFrom.trimmed().isEmpty())
+        m_ctx.emailFrom = m_ctx.organizationEmail;
+
+    return true;
 }
 
 const AgentSendEmail::MailContext &AgentSendEmail::context() const
@@ -111,7 +167,7 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
 
     QSqlDatabase base = m_db.getDatabase();
     if (!CryptoManager::loadOrCreateSplitKey(base,
-                                             SettingsService::instance().organization().organizationId,
+                                             m_ctx.organizationId,
                                              &realKey,
                                              &error)) {
         qWarning(logWarning()) << "Nu s-a putut incarca cheia split:" << error;
@@ -136,8 +192,7 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
             email = :email
         LIMIT 1
     )");
-    qry.bindValue(":id_organizations",
-                  SettingsService::instance().organization().organizationId);
+    qry.bindValue(":id_organizations", m_ctx.organizationId);
     qry.bindValue(":id_users", SessionContext::instance().userId());
     qry.bindValue(":email", m_ctx.emailFrom.trimmed());
 
@@ -179,6 +234,29 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
     return true;
 }
 
+bool AgentSendEmail::selectAccountByEmail(const QString &email)
+{
+    if (!modelAccount || email.trimmed().isEmpty())
+        return false;
+
+    const int roleEmail = modelAccount->roleForColumn(QStringLiteral("email"));
+    if (roleEmail < 0)
+        return false;
+
+    for (int row = 0; row < modelAccount->rowCount(); ++row) {
+        const QString rowEmail =
+            modelAccount->index(row, 0).data(roleEmail).toString().trimmed();
+        if (rowEmail.compare(email.trimmed(), Qt::CaseInsensitive) != 0)
+            continue;
+
+        const QSignalBlocker blocker(ui->comboAccount);
+        ui->comboAccount->setCurrentIndex(row);
+        return true;
+    }
+
+    return false;
+}
+
 void AgentSendEmail::selectFirstAvailableAccount()
 {
     if (!modelAccount)
@@ -190,8 +268,8 @@ void AgentSendEmail::selectFirstAvailableAccount()
         if (email.isEmpty())
             continue;
 
-        ui->comboAccount->setCurrentIndex(row);
         m_ctx.emailFrom = email;
+        selectAccountByEmail(email);
         loadOnlineAccountSettings();
         return;
     }
@@ -201,8 +279,6 @@ void AgentSendEmail::selectFirstAvailableAccount()
 
 void AgentSendEmail::buildMessage()
 {
-    const OrganizationContextData &organization =
-        OrganizationContext::instance().data();
     QStringList lines;
 
     if (m_ctx.thisReports) {
@@ -216,15 +292,15 @@ void AgentSendEmail::buildMessage()
         lines << tr("Vă rugăm să confirmați primirea acestuia și să ne contactați pentru orice informații suplimentare.");
         lines << "";
         lines << tr("Cu stimă,");
-        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, organization.name);
-        lines << tr("Telefon: %1").arg(organization.phone);
-        lines << tr("E-mail: %1").arg(organization.email);
+        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, m_ctx.organizationName);
+        lines << tr("Telefon: %1").arg(m_ctx.organizationPhone);
+        lines << tr("E-mail: %1").arg(m_ctx.organizationEmail);
     } else {
         m_ctx.subject = tr("Rezultatul investigației ecografice");
 
         lines << tr("Stimate/Stimată %1.").arg(m_ctx.namePatient);
         lines << tr("Vă transmitem raportul ecografic în urma investigației efectuate la %1 pe data de %2.")
-                     .arg(organization.name,
+                     .arg(m_ctx.organizationName,
                           m_ctx.dateInvestigation.toString("dd.MM.yyyy"));
         lines << tr("Documente atașate:");
         lines << tr(" - Comanda ecografică în format PDF.");
@@ -233,14 +309,14 @@ void AgentSendEmail::buildMessage()
         lines << tr("Observații importante:");
         lines << tr("Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară,");
         lines << tr("vă rugăm să ne contactați la %1 sau să ne scrieți la %2.")
-                     .arg(organization.phone,
-                          organization.email);
+                     .arg(m_ctx.organizationPhone,
+                          m_ctx.organizationEmail);
         lines << "";
         lines << tr("Vă mulțumim pentru încrederea acordată!");
         lines << tr("Cu stimă,");
-        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, organization.name);
-        lines << tr("Telefon: %1").arg(organization.phone);
-        lines << tr("E-mail: %1").arg(organization.email);
+        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, m_ctx.organizationName);
+        lines << tr("Telefon: %1").arg(m_ctx.organizationPhone);
+        lines << tr("E-mail: %1").arg(m_ctx.organizationEmail);
     }
 
     m_ctx.body = lines.join('\n');
@@ -558,8 +634,16 @@ void AgentSendEmail::onClose()
 
 void AgentSendEmail::initModelAccount()
 {
-    if (modelAccount)
+    if (modelAccount) {
         delete modelAccount;
+        modelAccount = nullptr;
+    }
+
+    if (m_ctx.organizationId <= 0) {
+        qWarning(logWarning())
+            << "AgentSendEmail: nu se poate inițializa lista conturilor fără organizație.";
+        return;
+    }
 
     QSqlQuery query(m_db.getDatabase());
     query.prepare(R"(
@@ -575,7 +659,7 @@ void AgentSendEmail::initModelAccount()
         ORDER BY
             username
     )");
-    query.addBindValue(SettingsService::instance().organization().organizationId);
+    query.addBindValue(m_ctx.organizationId);
     query.addBindValue(SessionContext::instance().userId());
 
     if (!query.exec()) {

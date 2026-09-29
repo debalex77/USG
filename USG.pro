@@ -38,8 +38,8 @@ CONFIG  -= qml_debug
 #------ INFO APP
 
 # Definim componentele versiunii
-USG_VERSION_TEXT = $$cat($$PWD/version.txt, lines)
-USG_VERSION_PARTS = $$split(USG_VERSION_TEXT, .)
+USG_VERSION_TEXT    = $$cat($$PWD/version.txt, lines)
+USG_VERSION_PARTS   = $$split(USG_VERSION_TEXT, .)
 USG_VERSION_MAJOR   = $$member(USG_VERSION_PARTS, 0)
 USG_VERSION_MINOR   = $$member(USG_VERSION_PARTS, 1)
 USG_VERSION_RELEASE = $$member(USG_VERSION_PARTS, 2)
@@ -82,3 +82,38 @@ include($$USG_ROOT/qmake/modules/features.pri)
 include($$USG_ROOT/qmake/modules/infrastructure.pri)
 include($$USG_ROOT/qmake/modules/resources.pri)
 include($$USG_ROOT/qmake/modules/dependencies.pri)
+
+DISTFILES += \
+    docs/user_manual/USER_MANUAL.md \
+    docs/user_manual/screenshots/0-about.png \
+    docs/user_manual/screenshots/01-overview.png \
+    docs/user_manual/screenshots/02-startup.png \
+    docs/user_manual/screenshots/03-first-run-wizard.png \
+    docs/user_manual/screenshots/04-login.png \
+    docs/user_manual/screenshots/05-main-window.png \
+    docs/user_manual/screenshots/06-catalogs.png \
+    docs/user_manual/screenshots/07-appointments.png \
+    docs/user_manual/screenshots/08-patients.png \
+    docs/user_manual/screenshots/09-patient-history.png \
+    docs/user_manual/screenshots/10-order.png \
+    docs/user_manual/screenshots/11-informed-consent.png \
+    docs/user_manual/screenshots/12-order-journal.png \
+    docs/user_manual/screenshots/13-report.png \
+    docs/user_manual/screenshots/14-report-internal-organs.png \
+    docs/user_manual/screenshots/15-report-urinary.png \
+    docs/user_manual/screenshots/16-report-prostate.png \
+    docs/user_manual/screenshots/17-report-gynecology.png \
+    docs/user_manual/screenshots/18-report-breast.png \
+    docs/user_manual/screenshots/19-report-thyroid.png \
+    docs/user_manual/screenshots/20-report-pregnancy.png \
+    docs/user_manual/screenshots/21-report-soft-tissue.png \
+    docs/user_manual/screenshots/22-report-images.png \
+    docs/user_manual/screenshots/23-report-video.png \
+    docs/user_manual/screenshots/24-normograms.png \
+    docs/user_manual/screenshots/25-report-journal.png \
+    docs/user_manual/screenshots/26-print-preview.png \
+    docs/user_manual/screenshots/27-email.png \
+    docs/user_manual/screenshots/28-pricing.png \
+    docs/user_manual/screenshots/29-statistics.png \
+    docs/user_manual/screenshots/30-settings.png \
+    docs/user_manual/screenshots/31-backup.png

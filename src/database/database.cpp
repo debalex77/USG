@@ -1164,7 +1164,8 @@ bool DataBase::verifyNewDatabaseSchema() const
           QStringLiteral("check_for_updates_on_startup"),
           QStringLiteral("show_user_manual_on_startup"),
           QStringLiteral("show_assistant_on_startup"),
-          QStringLiteral("document_journal_refresh_interval_seconds")}},
+          QStringLiteral("document_journal_refresh_interval_seconds"),
+          QStringLiteral("synchronization_enabled")}},
         {QStringLiteral("organizationSettings"),
          {QStringLiteral("organization_id"), QStringLiteral("default_doctor_id"),
           QStringLiteral("default_nurse_id"),
@@ -2371,52 +2372,6 @@ bool DataBase::existSubalternDocument(const QString nameTable, const QString nam
                                << tr("Solicitarea nereusita: %1").arg(qry.lastError().text());
         return false;
     }
-}
-
-QString DataBase::getQryFromTableConstantById(const int id_user) const
-{
-    const QStringList tables = db.tables(QSql::Tables);
-    if (tables.contains(QStringLiteral("userSettings"), Qt::CaseInsensitive)
-        && tables.contains(QStringLiteral("organizationSettings"),
-                           Qt::CaseInsensitive)) {
-        return QString(R"(
-            SELECT
-                user_settings.default_organization_id AS id_organizations,
-                organizations.IDNP,
-                organizations.name,
-                organizations.address,
-                organizations.telephone,
-                fullNameDoctors.nameAbbreviated AS doctor,
-                organizations.email
-            FROM userSettings AS user_settings
-            INNER JOIN organizations
-                    ON user_settings.default_organization_id = organizations.id
-            INNER JOIN organizationSettings AS organization_settings
-                    ON organization_settings.organization_id =
-                       user_settings.default_organization_id
-            INNER JOIN fullNameDoctors
-                    ON organization_settings.default_doctor_id =
-                       fullNameDoctors.id_doctors
-            WHERE user_settings.user_id = %1;
-        )").arg(QString::number(id_user));
-    }
-
-    return QString(R"(
-            SELECT
-                constants.id_organizations,
-                organizations.IDNP,
-                organizations.name,
-                organizations.address,
-                organizations.telephone,
-                fullNameDoctors.nameAbbreviated AS doctor,
-                organizations.email FROM constants
-            INNER JOIN
-                organizations ON constants.id_organizations = organizations.id
-            INNER JOIN
-                fullNameDoctors ON constants.id_doctors = fullNameDoctors.id_doctors
-            WHERE
-                constants.id_users = %1;
-        )").arg(QString::number(id_user));
 }
 
 QString DataBase::getQryForTableOrgansInternalById(const int id_doc) const

@@ -1,5 +1,6 @@
 SOURCES += \
     $$USG_ROOT/src/features/cloud/cloudserverconfig.cpp \
+    $$USG_ROOT/src/features/cloud/cloudserverview.cpp \
     $$USG_ROOT/src/features/email/agentsendemail.cpp \
     $$USG_ROOT/src/features/assistant/asistanttipapp.cpp \
     $$USG_ROOT/src/features/catalogs/catalogdialog.cpp \
@@ -13,10 +14,12 @@ SOURCES += \
     $$USG_ROOT/src/features/catalogs/onlineaccountdialog.cpp \
     $$USG_ROOT/src/features/catalogs/organizationdialog.cpp \
     $$USG_ROOT/src/features/patients/patienthistory.cpp \
-    $$USG_ROOT/src/features/catalogs/userdialog.cpp
+    $$USG_ROOT/src/features/catalogs/userdialog.cpp \
+    $$USG_ROOT/src/features/printing/printimagesservice.cpp
 
 HEADERS += \
     $$USG_ROOT/src/features/cloud/cloudserverconfig.h \
+    $$USG_ROOT/src/features/cloud/cloudserverview.h \
     $$USG_ROOT/src/features/email/agentsendemail.h \
     $$USG_ROOT/src/features/assistant/asistanttipapp.h \
     $$USG_ROOT/src/features/catalogs/catalogdialog.h \
@@ -30,10 +33,12 @@ HEADERS += \
     $$USG_ROOT/src/features/catalogs/onlineaccountdialog.h \
     $$USG_ROOT/src/features/catalogs/organizationdialog.h \
     $$USG_ROOT/src/features/patients/patienthistory.h \
-    $$USG_ROOT/src/features/catalogs/userdialog.h
+    $$USG_ROOT/src/features/catalogs/userdialog.h \
+    $$USG_ROOT/src/features/printing/printimagesservice.h
 
 FORMS += \
     $$USG_ROOT/src/features/cloud/cloudserverconfig.ui \
+    $$USG_ROOT/src/features/cloud/cloudserverview.ui \
     $$USG_ROOT/src/features/email/agentsendemail.ui \
     $$USG_ROOT/src/features/assistant/asistanttipapp.ui \
     $$USG_ROOT/src/features/catalogs/catalogdialog.ui \

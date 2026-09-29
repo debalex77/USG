@@ -24,8 +24,6 @@
 #include "reports.h"
 #include <ui/widgets/balloontip.h>
 #include "common/applicationpathscontext.h"
-#include "common/doctorcontext.h"
-#include "common/organizationcontext.h"
 #include "common/sessioncontext.h"
 #include "qabstractitemview.h"
 #include "qprogressdialog.h"
@@ -34,6 +32,7 @@
 #include <QPushButton>
 
 #include <features/email/agentsendemail.h>
+#include <features/printing/printimagesservice.h>
 #include <ui/dialogs/custommessage.h>
 #include <settings/settingsservice.h>
 
@@ -575,74 +574,57 @@ void Reports::setImageForReports()
 {
     const Settings::OrganizationSettings &organization =
         SettingsService::instance().organization();
-    //------------------------------------------------------------------------------------------------------
-    // ----- logotipul
 
-    QPixmap pix_logo = QPixmap();
-    QStandardItem *img_item_logo = new QStandardItem();
-    QString name_key_logo = "logo_" + globals().nameUserApp;
-    // --- verifiam cache
-    if (! globals().cache_img.find(name_key_logo, &pix_logo)){
-        if (!organization.logoData.isEmpty() && pix_logo.loadFromData(organization.logoData)){
-            globals().cache_img.insert(name_key_logo, pix_logo);
-            exist_logo = 1;
-        }
-    }
-    // --- setam logotipul
-    if (! pix_logo.isNull()) {
-        if (ui->hideLogo->isChecked()) {
-            img_item_logo->setData("", Qt::DisplayRole);
-        } else {
-            img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-        }
-    }
+    if (!model_img)
+        model_img = new QStandardItemModel(m_report);
 
-    //------------------------------------------------------------------------------------------------------
-    // ----- stampila organizatiei
-    QPixmap outPixmap_stamp = QPixmap();
-    QStandardItem *img_item_stamp = new QStandardItem();
-    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(organization.organizationId) + "_" + globals().nameUserApp;
-    // --- verifiam cache
-    if (! globals().cache_img.find(name_key_stamp_organization, &outPixmap_stamp)) {
-        const QByteArray &stampData = OrganizationContext::instance().data().stampData;
-        if (!stampData.isEmpty() && outPixmap_stamp.loadFromData(stampData)){
-            globals().cache_img.insert(name_key_stamp_organization, outPixmap_stamp);
-            exist_stamp_organization = 1;
-        }
-    }
-    // --- setam stampila
-    if (! outPixmap_stamp.isNull()) {
-        img_item_stamp->setData(outPixmap_stamp.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-    }
+    const PrintImagesService::Result images =
+        PrintImagesService::fillModel(model_img,
+                                      m_db.getDatabase(),
+                                      organization.organizationId,
+                                      organization.defaultDoctorId);
 
-    //------------------------------------------------------------------------------------------------------
-    // ----- semnatura doctorului
-    QPixmap outPixmap_signature = QPixmap();
-    QStandardItem* img_item_signature = new QStandardItem();
-    QString name_key_signature = "signature_doctor_id-" + QString::number(organization.defaultDoctorId) + "_" + globals().nameUserApp;
-    // --- verificam cache
-    if (! globals().cache_img.find(name_key_signature, &outPixmap_signature)) {
-        const QByteArray &signatureData = DoctorContext::instance().data().signatureData;
-        if (!signatureData.isEmpty() && outPixmap_signature.loadFromData(signatureData)) {
-            globals().cache_img.insert(name_key_signature, outPixmap_signature);
-            exist_signature_doctore = 1;
-        }
-    }
-    // --- setam semnatura
-    if (! outPixmap_signature.isNull()) {
-        img_item_signature->setData(outPixmap_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
+    exist_logo = images.logo ? 1 : 0;
+}
+
+void Reports::setOrganizationModelForReports(QSqlQueryModel *model) const
+{
+    if (!model)
+        return;
+
+    const Settings::OrganizationSettings &organization =
+        SettingsService::instance().organization();
+
+    QSqlQuery query(m_db.getDatabase());
+    query.prepare(QStringLiteral(R"(
+        SELECT
+            organizations.id AS id_organizations,
+            organizations.IDNP,
+            organizations.name,
+            organizations.address,
+            organizations.telephone,
+            fullNameDoctors.nameAbbreviated AS doctor,
+            organizations.email,
+            organizations.site
+        FROM
+            organizations
+        LEFT JOIN
+            fullNameDoctors
+                ON fullNameDoctors.id_doctors = ?
+        WHERE
+            organizations.id = ?
+    )"));
+    query.addBindValue(organization.defaultDoctorId);
+    query.addBindValue(organization.organizationId);
+
+    if (!query.exec()) {
+        qWarning(logWarning())
+            << "Reports: datele organizației pentru tipărire nu pot fi citite:"
+            << query.lastError().text();
+        return;
     }
 
-    //------------------------------------------------------------------------------------------------------
-    // ----- setam imaginile in model
-    QList<QStandardItem *> items_img;
-    items_img.append(img_item_logo);
-    items_img.append(img_item_stamp);
-    items_img.append(img_item_signature);
-
-    model_img = new QStandardItemModel(this);
-    model_img->setColumnCount(3);
-    model_img->appendRow(items_img);
+    model->setQuery(std::move(query));
 }
 
 void Reports::setReportVariabiles()
@@ -864,6 +846,7 @@ void Reports::generateReport()
         // eliminam m_report
         delete m_preview;
         delete m_report;
+        model_img = nullptr;
 
         // alocam memoria
         m_report = new LimeReport::ReportEngine(this);
@@ -906,13 +889,12 @@ void Reports::generateReport()
     //-----------------------------------------------------------------------------
     // 3 setam imaginile - logotipul, stampila si semnatura
     setImageForReports();
-    m_report->dataManager()->addModel("table_img", model_img, true);
+    m_report->dataManager()->addModel("table_img", model_img, false);
 
     //-----------------------------------------------------------------------------
     // 4 setam datele organizatiei
     QSqlQueryModel *print_model_organization = new QSqlQueryModel(this);
-    print_model_organization->setQuery(
-        m_db.getQryFromTableConstantById(SessionContext::instance().userId()));
+    setOrganizationModelForReports(print_model_organization);
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
 
     //-----------------------------------------------------------------------------
@@ -979,7 +961,6 @@ void Reports::generateReport()
     print_model_systemUrinary->deleteLater();
     print_model_breast->deleteLater();
     print_model_ginecology->deleteLater();
-    model_img->deleteLater();
 }
 
 void Reports::openDesignerReport()
@@ -987,13 +968,12 @@ void Reports::openDesignerReport()
     // *************************************************************************************
     // setam imaginile - logotipul, stampila si semnatura
     setImageForReports();
-    m_report->dataManager()->addModel("table_img", model_img, true);
+    m_report->dataManager()->addModel("table_img", model_img, false);
 
     // *************************************************************************************
     // organizatia
     QSqlQueryModel* print_model_organization = new QSqlQueryModel(this);
-    print_model_organization->setQuery(
-        m_db.getQryFromTableConstantById(SessionContext::instance().userId()));
+    setOrganizationModelForReports(print_model_organization);
     m_report->dataManager()->addModel("main_organization", print_model_organization, false);
 
     // *************************************************************************************
@@ -1037,7 +1017,6 @@ void Reports::openDesignerReport()
     delete print_model_systemUrinary;
     delete print_model_breast;
     delete print_model_ginecology;
-    delete model_img;
 }
 
 void Reports::openSettingsReport()
@@ -1255,15 +1234,38 @@ void Reports::sendReportToEmail()
 
     // ---------------------------------------------------------------------
     // 2 prezentam agentul
+    QString doctorName;
+    const Settings::OrganizationSettings &organization =
+        SettingsService::instance().organization();
+    QSqlQuery doctorQuery(m_db.getDatabase());
+    doctorQuery.prepare(QStringLiteral(R"(
+        SELECT
+            nameAbbreviated
+        FROM
+            fullNameDoctors
+        WHERE
+            id_doctors = ?
+    )"));
+    doctorQuery.addBindValue(organization.defaultDoctorId);
+    if (doctorQuery.exec() && doctorQuery.next()) {
+        doctorName = doctorQuery.value(0).toString();
+    } else if (doctorQuery.lastError().isValid()) {
+        qWarning(logWarning())
+            << "Reports: numele medicului pentru e-mail nu poate fi citit:"
+            << doctorQuery.lastError().text();
+    }
+
+    AgentSendEmail::MailContext context;
+    context.organizationId = organization.organizationId;
+    context.thisReports = true;
+    context.nameReport = ui->comboTypeReport->currentText();
+    context.emailTo = m_emailTo;
+    context.namePatient = ui->comboOrganizations->currentText();
+    context.nameDoctor = doctorName;
+
     AgentSendEmail *agent_sendEmail = new AgentSendEmail(m_db, this);
     agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);
-    agent_sendEmail->setProperty("ThisReports", true);
-    agent_sendEmail->setProperty("NameReport",  ui->comboTypeReport->currentText());
-    agent_sendEmail->setProperty("EmailFrom",   OrganizationContext::instance().data().email);
-    agent_sendEmail->setProperty("EmailTo",     m_emailTo);
-    agent_sendEmail->setProperty("NamePatient", ui->comboOrganizations->currentText());
-    agent_sendEmail->setProperty("NameDoctor",  DoctorContext::instance().data().abbreviatedName);
-    agent_sendEmail->setProperty("DateInvestigation", QVariant());
+    agent_sendEmail->setContext(context);
     agent_sendEmail->show();
 
     // ---------------------------------------------------------------------

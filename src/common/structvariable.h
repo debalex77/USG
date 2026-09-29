@@ -1,14 +1,10 @@
 #ifndef STRUCTVARIABLE_H
 #define STRUCTVARIABLE_H
 
-#include <QPixmapCache>
 #include <QString>
 
 // Structură pentru toate variabilele globale
 struct GlobalVariable {
-
-    // Tipuri complexe mari
-    QPixmapCache cache_img;
 
     QString langApp     = nullptr;
     QString unitMeasure = nullptr;

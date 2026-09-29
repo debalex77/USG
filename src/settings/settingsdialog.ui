@@ -460,9 +460,6 @@
       <layout class="QVBoxLayout" name="synchronizationLayout">
        <item>
         <widget class="QCheckBox" name="checkSynchronization">
-         <property name="enabled">
-          <bool>false</bool>
-         </property>
          <property name="text">
           <string>Sincronizare cu baza de date cloud</string>
          </property>

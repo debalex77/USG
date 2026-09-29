@@ -20,6 +20,16 @@ INCLUDEPATH += $$USG_ROOT/3rdparty/LimeReport/release
 
 unix:!macx {
     QMAKE_LFLAGS += -Wl,--disable-new-dtags
+    # Căi portabile pentru distribuțiile Linux:
+    #   <pachet>/bin/USG + <pachet>/lib (installer/.deb/AppImage)
+    #   <artefact>/USG + <artefact>/lib (artefactul CI)
+    # qmake transformă singur căile relative în $ORIGIN/... pe Linux.
+    # Nu introducem manual $ORIGIN: escaping-ul ar trece prin qmake, make și
+    # shell și poate produce un RPATH corupt (de exemplu "$RIGIN").
+    QMAKE_RPATHDIR += ../lib
+    QMAKE_RPATHDIR += lib
+
+    # Căile de dezvoltare rămân necesare pentru rularea directă din build.
     QMAKE_RPATHDIR += $$USG_ROOT/3rdparty/LimeReport/debug
     QMAKE_RPATHDIR += $$USG_ROOT/3rdparty/LimeReport/release
 }

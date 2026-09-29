@@ -23,19 +23,22 @@
 
 #include "orderdialog.h"
 #include "ui_orderdialog.h"
-#include "common/doctorcontext.h"
-#include "common/organizationcontext.h"
 #include "common/sessioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
 #include "settings/settingsservice.h"
 
 #include <common/applicationpathscontext.h>
+#include <features/printing/printimagesservice.h>
 
 #include <algorithm>
 
 OrderDialog::OrderDialog(DataBase &db, QWidget *parent)
+    : OrderDialog(db, 0, parent)
+{
+}
+
+OrderDialog::OrderDialog(DataBase &db, int orderId, QWidget *parent)
     : QDialog(parent)
-    , m_post(DocStatus::Unknow)
     , ui(new Ui::OrderDialog) // initial
     , m_settings(ApplicationPathsContext::instance().tableSettingsFilePath())
     , m_db(db)
@@ -92,6 +95,13 @@ OrderDialog::OrderDialog(DataBase &db, QWidget *parent)
 
     if (m_layoutSizes.window.isValid() && !m_layoutSizes.window.isEmpty())
         resize(m_layoutSizes.window);
+
+    if (orderId > 0) {
+        setOrderId(orderId);
+        loadOrder();
+    } else {
+        initializeNewOrder();
+    }
 }
 
 OrderDialog::~OrderDialog()
@@ -122,8 +132,6 @@ bool OrderDialog::applyPrefillData(const PrefillData &data, QString *errorText)
 {
     if (errorText)
         errorText->clear();
-
-    setIsNew(true);
 
     if (data.organizationId > 0)
         setIdOrganization(data.organizationId);
@@ -159,8 +167,8 @@ bool OrderDialog::applyPrefillData(const PrefillData &data, QString *errorText)
                 continue;
             QVariantMap destination;
             destination[QStringLiteral("id")]           = m_tempOrderRowId--;
-            destination[QStringLiteral("deletionMark")] = m_post;
-            destination[QStringLiteral("id_orderEcho")] = m_id;
+            destination[QStringLiteral("deletionMark")] = documentStatus();
+            destination[QStringLiteral("id_orderEcho")] = orderId();
             destination[QStringLiteral("cod")]          = source.value(QStringLiteral("cod"));
             destination[QStringLiteral("name")]         = source.value(QStringLiteral("name"));
             destination[QStringLiteral("price")]        = source.value(QStringLiteral("price"));
@@ -184,45 +192,39 @@ bool OrderDialog::applyPrefillData(const PrefillData &data, QString *errorText)
     return false;
 }
 
-void OrderDialog::slot_IsNewChanged()
+void OrderDialog::initializeNewOrder()
 {
-    if (m_isNew) {
-        slot_PostChanged(); // fortam setarea titlului
+    m_documentContext.clear();
+    setPost(DocStatus::Unknow);
 
-        // data si ora atuala
-        ui->dateTimeDoc->setDateTime(QDateTime::currentDateTime());
-        connect(timer, &QTimer::timeout,
-                this, &OrderDialog::updateTimerDateDoc, Qt::UniqueConnection);
-        timer->start(1000);
+    // data si ora atuala
+    ui->dateTimeDoc->setDateTime(QDateTime::currentDateTime());
+    connect(timer, &QTimer::timeout,
+            this, &OrderDialog::updateTimerDateDoc, Qt::UniqueConnection);
+    timer->start(1000);
 
-        // numar documentului
-        ui->numberDoc->setEnabled(false);
-        ui->patientBirthday->setDate(QDate::fromString("1970-01-01", "yyyy-MM-dd"));
-        setPatientDataEnabled(false);
+    // numar documentului
+    ui->numberDoc->setEnabled(false);
+    ui->patientBirthday->setDate(QDate::fromString("1970-01-01", "yyyy-MM-dd"));
+    setPatientDataEnabled(false);
 
-        // setam date din variabile globale
-        const Settings::OrganizationSettings &organization =
-            SettingsService::instance().organization();
-        setIdPerformingDoctor(organization.defaultDoctorId);
-        setIdNurse(organization.defaultNurseId);
-        setIdUser(SessionContext::instance().userId());
+    // setam date din variabile globale
+    const Settings::OrganizationSettings &organization = SettingsService::instance().organization();
+    setIdPerformingDoctor(organization.defaultDoctorId);
+    setIdNurse(organization.defaultNurseId);
+    setIdUser(SessionContext::instance().userId());
 
-        ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_organization);
-        changeIconForItemToolBox(OrderToolBoxIdx::Box_organization);
+    ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_organization);
+    changeIconForItemToolBox(OrderToolBoxIdx::Box_organization);
 
-        m_attachedImages = StatusObject::ZeroWrite;
+    m_attachedImages = StatusObject::ZeroWrite;
 
-        ui->comboOrganization->setFocus();
-
-    } else {
-        ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_patient);
-        changeIconForItemToolBox(OrderToolBoxIdx::Box_patient);
-    }
+    ui->comboOrganization->setFocus();
 }
 
-void OrderDialog::slot_IdChanged()
+void OrderDialog::loadOrder()
 {
-    if (m_id <= 0)
+    if (orderId() <= 0)
         return;
 
     // blocam signale ca sa nu fie modificarea formei
@@ -240,17 +242,41 @@ void OrderDialog::slot_IdChanged()
     QSqlQuery qry(m_currentDB);
     qry.prepare(R"(
         SELECT
-            id, deletionMark, numberDoc, dateDoc,
-            id_organizations, id_contracts, id_typesPrices,
-            id_doctors, id_doctors_execute, id_nurses,
-            patient_id, id_users, sum, comment,
+            id,
+            deletionMark,
+            numberDoc,
+            dateDoc,
+            id_organizations,
+            id_contracts,
+            id_typesPrices,
+            id_doctors,
+            id_doctors_execute,
+            id_nurses,
+            patient_id,
+            id_users, sum, comment,
             cardPayment, attachedImages, uuid
-        FROM orderEcho
-        WHERE id = :id
+        FROM
+            orderEcho
+        WHERE
+            id = :id
     )");
-    qry.bindValue(":id", m_id);
+    qry.bindValue(":id", orderId());
     if (qry.exec() && qry.next()){
-        qInfo(logInfo()) << "OrderDialog: vizualizarea comenzii, id=" << m_id;
+
+        qInfo(logInfo()) << "OrderDialog: vizualizarea comenzii, id=" << orderId();
+
+        OrderDocumentContextData context;
+        context.orderId           = qry.value("id").toInt();
+        context.organizationId    = qry.value("id_organizations").toInt();
+        context.contractId        = qry.value("id_contracts").toInt();
+        context.priceTypeId       = qry.value("id_typesPrices").toInt();
+        context.referringDoctorId = qry.value("id_doctors").toInt();
+        context.executingDoctorId = qry.value("id_doctors_execute").toInt();
+        context.nurseId           = qry.value("id_nurses").toInt();
+        context.patientId         = qry.value("patient_id").toInt();
+        context.authorUserId      = qry.value("id_users").toInt();
+        context.deletionMark      = qry.value("deletionMark").toInt();
+        m_documentContext.setData(context);
 
         ui->numberDoc->setText(qry.value(OrderSections::NumberDoc).toString());
         ui->numberDoc->setEnabled(false);
@@ -262,6 +288,7 @@ void OrderDialog::slot_IdChanged()
                                             QStringLiteral("yyyy-MM-dd hh:mm:ss"));
         if (dateDoc.isValid())
             ui->dateTimeDoc->setDateTime(dateDoc);
+
         setPost(qry.value(OrderSections::DeletionMark).toInt());
         setIdOrganization(qry.value(OrderSections::Id_Organizations).toInt());
 
@@ -270,13 +297,13 @@ void OrderDialog::slot_IdChanged()
         // Modelul initial contine contractele tuturor organizatiilor si poate
         // sa nu contina un contract CNAM istoric/inactiv.
         updateModelContracts();
-        setIdContract(qry.value(OrderSections::Id_Contracts).toInt());
-        setIdTypePrice(qry.value(OrderSections::Id_TypesPrices).toInt());
-        setIdRefferingDoctor(qry.value(OrderSections::Id_Doctors).toInt());
-        setIdPerformingDoctor(qry.value(OrderSections::Id_Doctors_exec).toInt());
-        setIdNurse(qry.value(OrderSections::Id_Nurses).toInt());
-        setIdPatient(qry.value(OrderSections::Id_Patients).toInt());
-        setIdUser(qry.value(OrderSections::Id_Users).toInt());
+        setIdContract(context.contractId);
+        setIdTypePrice(context.priceTypeId);
+        setIdRefferingDoctor(context.referringDoctorId);
+        setIdPerformingDoctor(context.executingDoctorId);
+        setIdNurse(context.nurseId);
+        setIdPatient(context.patientId);
+        setIdUser(context.authorUserId);
 
         updateTableSource();
         updateTableOrder();
@@ -295,42 +322,81 @@ void OrderDialog::slot_IdChanged()
         else
             m_attachedImages = 1;
     }
+    ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_patient);
     changeIconForItemToolBox(OrderToolBoxIdx::Box_patient);
 }
 
-void OrderDialog::slot_IdOrganizationChanged()
+bool OrderDialog::isNewDocument() const
 {
-    if (m_idOrganization < 0)
-        return;
-
-    ui->comboOrganization->setCurrentIndex(modelOrganizations->rowById("id", m_idOrganization));
+    return orderId() <= 0;
 }
 
-void OrderDialog::slot_IdContractChanged()
-{
-    if (m_idContract < 0)
-        return;
+int OrderDialog::orderId() const { return m_documentContext.data().orderId; }
+int OrderDialog::organizationId() const { return m_documentContext.data().organizationId; }
+int OrderDialog::contractId() const { return m_documentContext.data().contractId; }
+int OrderDialog::priceTypeId() const { return m_documentContext.data().priceTypeId; }
+int OrderDialog::patientId() const { return m_documentContext.data().patientId; }
+int OrderDialog::nurseId() const { return m_documentContext.data().nurseId; }
+int OrderDialog::performingDoctorId() const { return m_documentContext.data().executingDoctorId; }
+int OrderDialog::referringDoctorId() const { return m_documentContext.data().referringDoctorId; }
+int OrderDialog::authorUserId() const { return m_documentContext.data().authorUserId; }
+int OrderDialog::documentStatus() const { return m_documentContext.data().deletionMark; }
 
-    ui->comboContract->setCurrentIndex(modelContracts->rowById("id", m_idContract));
+void OrderDialog::setOrderId(int value)
+{
+    OrderDocumentContextData context = m_documentContext.data();
+    context.orderId = value;
+    m_documentContext.setData(context);
 }
 
-void OrderDialog::slot_IdTypePriceChanged()
+void OrderDialog::setIdOrganization(int value)
 {
-    if (m_idTypePrice < 0)
+    OrderDocumentContextData context = m_documentContext.data();
+    context.organizationId = value;
+    m_documentContext.setData(context);
+
+    if (organizationId() < 0)
         return;
 
-    ui->comboTypePrices->setCurrentIndex(modelTypePrices->rowById("id", m_idTypePrice));
+    ui->comboOrganization->setCurrentIndex(modelOrganizations->rowById("id", organizationId()));
+}
 
-    if (m_idOrganization < 0 ||
-        m_idContract < 0)
+void OrderDialog::setIdContract(int value)
+{
+    OrderDocumentContextData context = m_documentContext.data();
+    context.contractId = value;
+    m_documentContext.setData(context);
+
+    if (contractId() < 0)
+        return;
+
+    ui->comboContract->setCurrentIndex(modelContracts->rowById("id", contractId()));
+}
+
+void OrderDialog::setIdTypePrice(int value)
+{
+    OrderDocumentContextData context = m_documentContext.data();
+    context.priceTypeId = value;
+    m_documentContext.setData(context);
+
+    if (priceTypeId() < 0)
+        return;
+
+    ui->comboTypePrices->setCurrentIndex(modelTypePrices->rowById("id", priceTypeId()));
+
+    if (organizationId() < 0 || contractId() < 0)
         return;
 
     updateTableSource();
 }
 
-void OrderDialog::slot_IdPatientChanged()
+void OrderDialog::setIdPatient(int value)
 {
-    if (m_idPatient <= 0) {
+    OrderDocumentContextData context = m_documentContext.data();
+    context.patientId = value;
+    m_documentContext.setData(context);
+
+    if (patientId() <= 0) {
         QSignalBlocker blocker(ui->comboPatient->lineEdit());
         ui->comboPatient->setEditText(QString());
         ui->patientBirthday->setDate(QDate::fromString("1970-01-01", "yyyy-MM-dd"));
@@ -347,49 +413,66 @@ void OrderDialog::slot_IdPatientChanged()
     setPatientDataEnabled(false);
 }
 
-void OrderDialog::slot_IdNurseChanged()
+void OrderDialog::setIdNurse(int value)
 {
-    if (m_idNurse < 0)
+    OrderDocumentContextData context = m_documentContext.data();
+    context.nurseId = value;
+    m_documentContext.setData(context);
+
+    if (nurseId() < 0)
         return;
 
-    ui->comboNurse->setCurrentIndex(modelNurses->rowById("id", m_idNurse));
+    ui->comboNurse->setCurrentIndex(modelNurses->rowById("id", nurseId()));
 }
 
-void OrderDialog::slot_IdPerformingDoctorChanged()
+void OrderDialog::setIdPerformingDoctor(int value)
 {
-    if (m_idPerformingDoctor < 0)
+    OrderDocumentContextData context = m_documentContext.data();
+    context.executingDoctorId = value;
+    m_documentContext.setData(context);
+
+    if (performingDoctorId() < 0)
         return;
 
-    ui->comboPerformingDoctor->setCurrentIndex(modelPerformingDoctors->rowById("id", m_idPerformingDoctor));
+    ui->comboPerformingDoctor->setCurrentIndex(modelPerformingDoctors->rowById("id", performingDoctorId()));
 }
 
-void OrderDialog::slot_IdRefferingDoctorChanged()
+void OrderDialog::setIdRefferingDoctor(int value)
 {
+    OrderDocumentContextData context = m_documentContext.data();
+    context.referringDoctorId = value;
+    m_documentContext.setData(context);
+
     if (!modelRefferingDoctors)
         return;
 
-    const int row = m_idRefferingDoctor > 0
-                        ? modelRefferingDoctors->rowById("id", m_idRefferingDoctor)
+    const int row = referringDoctorId() > 0
+                        ? modelRefferingDoctors->rowById("id", referringDoctorId())
                         : 0;
     QSignalBlocker blocker(ui->comboReferringDoctor);
     ui->comboReferringDoctor->setCurrentIndex(row >= 0 ? row : 0);
 }
 
-void OrderDialog::slot_IdUserChanged()
+void OrderDialog::setIdUser(int value)
 {
-    if (m_idUser < 0)
-        return;
+    OrderDocumentContextData context = m_documentContext.data();
+    context.authorUserId = value;
+    m_documentContext.setData(context);
 }
 
-void OrderDialog::slot_PostChanged()
+void OrderDialog::setPost(int value)
 {
-    if (m_post == DocStatus::Unknow)
+    OrderDocumentContextData context = m_documentContext.data();
+    context.deletionMark = value;
+    m_documentContext.setData(context);
+
+    if (documentStatus() == DocStatus::Unknow)
         setWindowTitle(tr("Comanda ecografica (crearea) %1").arg("[*]"));
-    else if (m_post == DocStatus::Write)
+    else if (documentStatus() == DocStatus::Write)
         setWindowTitle(tr("Comanda ecografica (salvata) %1").arg("[*]"));
-    else if (m_post == DocStatus::DeletionMark)
+    else if (documentStatus() == DocStatus::DeletionMark)
         setWindowTitle(tr("Comanda ecografica (marcata pentru eliminare) %1").arg("[*]"));
-    else if (m_post == DocStatus::Post)
+    else if (documentStatus() == DocStatus::Post)
         setWindowTitle(tr("Comanda ecografica (validata) %1").arg("[*]"));
 }
 
@@ -452,17 +535,17 @@ void OrderDialog::onCreateNewDoctor()
 
 void OrderDialog::onOpenCatalogDoctor()
 {
-    if (m_idRefferingDoctor <= 0)
+    if (referringDoctorId() <= 0)
         return;
     CatalogDialog *catalog = new CatalogDialog(m_db, CatalogType::Type::Doctors, this);
     catalog->setAttribute(Qt::WA_DeleteOnClose);
     catalog->setProperty("isNew", false);
-    catalog->setProperty("id", m_idRefferingDoctor);
+    catalog->setProperty("id", referringDoctorId());
     catalog->setWindowModality(Qt::ApplicationModal);
     connect(catalog, &CatalogDialog::catalogDialogChanged,
             this, [this]()
             {
-                const int editedDoctorId = m_idRefferingDoctor;
+                const int editedDoctorId = referringDoctorId();
                 updateModelRefferingDoctors();
 
                 const int row = modelRefferingDoctors
@@ -646,7 +729,7 @@ void OrderDialog::onValidateDataPatient()
 
     /** 5. setam structura */
     PatientDataStructure patientData;
-    patientData.id            = m_idPatient <= 0 ? 0 : m_idPatient;
+    patientData.id            = patientId() <= 0 ? 0 : patientId();
     patientData.deletionMark  = StatusObject::ZeroWrite;
     patientData.idnp          = ui->patientIDNP->text();
     patientData.name          = lastName;
@@ -669,7 +752,7 @@ void OrderDialog::onValidateDataPatient()
     worker->moveToThread(thread);
 
     /** 8. conectarea - lansarea procesului inserarii sau actualizarii datelor */
-    if (ui->newPatient->isChecked() && m_idPatient <= 0){
+    if (ui->newPatient->isChecked() && patientId() <= 0){
         connect(thread, &QThread::started,
                 worker, &PatientSaverWorker::processInsert, Qt::UniqueConnection);
     } else {
@@ -785,12 +868,14 @@ void OrderDialog::onClearDataPatient()
 
 void OrderDialog::onOpenPatientHistory()
 {
-    PatientHistory *patient_history = new PatientHistory(m_db, this);
-    patient_history->setAttribute(Qt::WA_DeleteOnClose);
-    patient_history->setProperty("IdPatient", m_idPatient);
-    this->hide();
-    patient_history->exec();
-    this->show();
+    if (patientId() <= 0)
+        return;
+
+    PatientHistory patientHistory(m_db, this);
+    patientHistory.setIdPatient(patientId());
+    hide();
+    patientHistory.exec();
+    show();
     ui->editFilterPattern->setFocus();
 }
 
@@ -891,8 +976,8 @@ void OrderDialog::onDoubleClickedTableSource(const QModelIndex &index)
 
     QVariantMap rowData;
     rowData["id"]           = m_tempOrderRowId--; // seteaza initial -1, -2, -3 etc.
-    rowData["deletionMark"] = m_post;
-    rowData["id_orderEcho"] = m_id;
+    rowData["deletionMark"] = documentStatus();
+    rowData["id_orderEcho"] = orderId();
     rowData["cod"]          = codSource;
     rowData["name"]         = itemSource["name"];
     rowData["price"]        = itemSource["price"];
@@ -918,115 +1003,9 @@ void OrderDialog::onDoubleClickedTableOrder(const QModelIndex &index)
     ui->tableViewOrder->edit(idx);
 }
 
-void OrderDialog::setImageForDocPrint()
-{
-    const Settings::OrganizationSettings &organization =
-        SettingsService::instance().organization();
-    exist_logo         = 0;
-    exist_stamp        = 0;
-    exist_stamp_doctor = 0;
-    exist_signature    = 0;
-
-    //------------------------------------------------------------------------------------------------------
-    // ----- 1. logotipul
-    QPixmap pix_logo = QPixmap();
-    QStandardItem* img_item_logo = new QStandardItem();
-    QString name_key_logo = "logo_" + globals().nameUserApp;
-
-    // --- verifiam cache
-    if (! globals().cache_img.find(name_key_logo, &pix_logo)){
-        if (!organization.logoData.isEmpty() && pix_logo.loadFromData(organization.logoData)){
-            globals().cache_img.insert(name_key_logo, pix_logo);
-        }
-    }
-
-    // --- setam logotipul
-    if (! pix_logo.isNull()) {
-        img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-        exist_logo = 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    // ----- 2. stampila organizatiei
-    QPixmap pix_stamp_organization = QPixmap();
-    QStandardItem* img_item_stamp_organization = new QStandardItem();
-    QString name_key_stamp_organization = "stamp_organization_id-" + QString::number(organization.organizationId) + "_" + globals().nameUserApp;
-
-    // --- verifiam cache
-    if (! globals().cache_img.find(name_key_stamp_organization, &pix_stamp_organization)) {
-        const QByteArray &stampData = OrganizationContext::instance().data().stampData;
-        if (!stampData.isEmpty() && pix_stamp_organization.loadFromData(stampData)){
-            globals().cache_img.insert(name_key_stamp_organization, pix_stamp_organization);
-        }
-    }
-
-    // --- setam stampila
-    if (! pix_stamp_organization.isNull()) {
-        img_item_stamp_organization->setData(pix_stamp_organization.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-        exist_stamp = 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    // ----- 3. stampila doctorului
-    QPixmap pix_stamp_doctor = QPixmap();
-    QStandardItem* img_item_stamp_doctor = new QStandardItem();
-    QString name_key_stamp_doctor = "stamp_doctor_id-" + QString::number(organization.defaultDoctorId) + "_" + globals().nameUserApp;
-
-    // --- verifiam cache
-    if (! globals().cache_img.find(name_key_stamp_doctor, &pix_stamp_doctor)) {
-        const QByteArray &stampData = DoctorContext::instance().data().stampData;
-        if (!stampData.isEmpty() && pix_stamp_doctor.loadFromData(stampData)){
-            globals().cache_img.insert(name_key_stamp_doctor, pix_stamp_doctor);
-        }
-    }
-
-    // --- setam stampila
-    if (! pix_stamp_doctor.isNull()) {
-        img_item_stamp_doctor->setData(pix_stamp_doctor.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-        exist_stamp_doctor = 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    // ----- 4. semnatura doctorului
-    QPixmap pix_signature = QPixmap();
-    QStandardItem* img_item_signature = new QStandardItem();
-    QString name_key_signature = "signature_doctor_id-" + QString::number(organization.defaultDoctorId) + "_" + globals().nameUserApp;
-
-    // --- verificam cache
-    if (! globals().cache_img.find(name_key_signature, &pix_signature)) {
-        const QByteArray &signatureData = DoctorContext::instance().data().signatureData;
-        if (!signatureData.isEmpty() && pix_signature.loadFromData(signatureData)) {
-            globals().cache_img.insert(name_key_signature, pix_signature);
-        }
-    }
-
-    // --- setam semnatura
-    if (! pix_signature.isNull()) {
-        img_item_signature->setData(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation).toImage(), Qt::DisplayRole);
-        exist_signature = 1;
-    }
-
-    //------------------------------------------------------------------------------------------------------
-    // setam imaginile in model
-    QList<QStandardItem *> items_img;
-    items_img.append(img_item_logo);
-    items_img.append(img_item_stamp_organization);
-    items_img.append(img_item_stamp_doctor);
-    items_img.append(img_item_signature);
-
-    if (model_img) {
-        delete model_img;
-        model_img = nullptr;
-    }
-
-    model_img = new QStandardItemModel(this);
-    model_img->setColumnCount(4);
-    model_img->appendRow(items_img);
-}
-
 void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 {
-    if (m_isNew){
+    if (isNewDocument()){
         QMessageBox::warning(this, tr("Controlul validarii"),
                              tr("Documentul nu este validat !!! \nPrintare nu este posibila."),
                              QMessageBox::Ok);
@@ -1038,7 +1017,8 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 
     // *************************************************************************************
     // alocam memoria
-    LimeReport::ReportEngine *m_report = new LimeReport::ReportEngine(this);
+    LimeReport::ReportEngine *m_report       = new LimeReport::ReportEngine(this);
+    QStandardItemModel *print_model_images   = new QStandardItemModel(m_report);
     QSqlQueryModel *print_model_organization = new QSqlQueryModel(this);
     QSqlQueryModel *print_model_patient      = new QSqlQueryModel(this);
     QSqlQueryModel *print_model_table        = new QSqlQueryModel(this);
@@ -1049,28 +1029,29 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     bool noncomercial = ui->comboTypePrices ->currentData(roleNoncomecial).toBool();
 
     // *************************************************************************************
-    // logotipul, semnaturile
-    setImageForDocPrint();
-    m_report->dataManager()->addModel("table_img", model_img, true);
+    // contextul - logotipul, ștampilele și semnătura documentului
+    const OrderDocumentContextData &context = m_documentContext.data();
+    const PrintImagesService::Result printImages = PrintImagesService::fillModel(print_model_images,
+                                                                                 m_currentDB,
+                                                                                 context.organizationId,
+                                                                                 context.executingDoctorId);
+    m_report->dataManager()->addModel("table_img", print_model_images, false);
 
     // *************************************************************************************
     // setam solicitarile in model
-    m_db.setModelQuery(*print_model_organization,
-                       m_db.getDatabase(),
-                       m_db.getTextSQL(":/sql/queries_print/tableConstants.sql"),
-                       {m_idUser});
+    setPrintModelOrganization(print_model_organization);
 
     m_db.setModelQuery(*print_model_patient,
                        m_db.getDatabase(),
                        m_db.getTextSQL(":/sql/queries_print/tablePatientByID.sql"),
-                       {m_idPatient});
+                       {patientId()});
 
     QVariantMap map;                    // adaugam variabila pu
     map["noncomercial"] = noncomercial; // conditia: noncomercial = '0-00' else price
     m_db.setModelQuery(*print_model_table,
                        m_db.getDatabase(),
                        m_db.getTextSQL(":/sql/queries_print/orderTable.sql"),
-                       {m_id},
+                       {orderId()},
                        map);
 
     // *************************************************************************************
@@ -1079,10 +1060,10 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(noncomercial == 0
                                                                                    ? documentSum()
                                                                                    : 0, 0, 'f', 2));
-    m_report->dataManager()->setReportVariable("v_exist_logo", exist_logo);
-    m_report->dataManager()->setReportVariable("v_exist_stamp", exist_stamp);
-    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", exist_stamp_doctor);
-    m_report->dataManager()->setReportVariable("v_exist_signature", exist_signature);
+    m_report->dataManager()->setReportVariable("v_exist_logo", printImages.logo ? 1 : 0);
+    m_report->dataManager()->setReportVariable("v_exist_stamp", printImages.organizationStamp ? 1 : 0);
+    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", printImages.doctorStamp ? 1 : 0);
+    m_report->dataManager()->setReportVariable("v_exist_signature", printImages.doctorSignature ? 1 : 0);
 
     const QString consent = informedConsentText();
     m_report->dataManager()->setReportVariable("v_consent", consent);
@@ -1100,8 +1081,7 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     // *************************************************************************************
     // verificam drumul spre forme de tipar
     QDir dir;
-    if (! QFile(dir.toNativeSeparators(
-                   ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml")).exists()){
+    if (! QFile(dir.toNativeSeparators(ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml")).exists()){
         QMessageBox msgBox;
         msgBox.setWindowTitle(tr("Printarea documentului"));
         msgBox.setIcon(QMessageBox::Warning);
@@ -1120,8 +1100,7 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 
         return;
     }
-    m_report->loadFromFile(dir.toNativeSeparators(
-        ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml"));
+    m_report->loadFromFile(dir.toNativeSeparators(ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml"));
 
     // *************************************************************************************
     // prezentam forma de tipar
@@ -1165,23 +1144,23 @@ int OrderDialog::valuePaymentOrder() const
 bool OrderDialog::insertDataOrder(QString &details_error)
 {
     QVector<QVariant> data;
-    data.append(m_post);
+    data.append(documentStatus());
     data.append(ui->numberDoc->text());
     data.append(ui->dateTimeDoc->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    data.append(m_idOrganization);
-    data.append(m_idContract);
-    data.append(m_idTypePrice);
-    data.append((m_idRefferingDoctor <= 0)
+    data.append(organizationId());
+    data.append(contractId());
+    data.append(priceTypeId());
+    data.append((referringDoctorId() <= 0)
                     ? QVariant()
-                    : m_idRefferingDoctor);
-    data.append((m_idPerformingDoctor <= 0)
+                    : referringDoctorId());
+    data.append((performingDoctorId() <= 0)
                     ? QVariant()
-                    : m_idPerformingDoctor);
-    data.append((m_idNurse <= 0)
+                    : performingDoctorId());
+    data.append((nurseId() <= 0)
                     ? QVariant()
-                    : m_idNurse);
-    data.append(m_idPatient);
-    data.append(m_idUser);
+                    : nurseId());
+    data.append(patientId());
+    data.append(authorUserId());
     data.append(documentSum());
     data.append((ui->editComment->toPlainText().isEmpty())
                     ? QVariant()
@@ -1201,7 +1180,7 @@ bool OrderDialog::insertDataOrder(QString &details_error)
     {
         return false;
     } else {
-        m_id = newId.toInt();
+        setOrderId(newId.toInt());
         return true;
     }
 }
@@ -1209,30 +1188,30 @@ bool OrderDialog::insertDataOrder(QString &details_error)
 bool OrderDialog::updateDataOrder(QString &details_error)
 {
     QVector<QVariant> data;
-    data.append(m_post);
+    data.append(documentStatus());
     data.append(ui->numberDoc->text());
     data.append(ui->dateTimeDoc->dateTime().toString("yyyy-MM-dd hh:mm:ss"));
-    data.append(m_idOrganization);
-    data.append(m_idContract);
-    data.append(m_idTypePrice);
-    data.append((m_idRefferingDoctor <= 0)
+    data.append(organizationId());
+    data.append(contractId());
+    data.append(priceTypeId());
+    data.append((referringDoctorId() <= 0)
                     ? QVariant()
-                    : m_idRefferingDoctor);
-    data.append((m_idPerformingDoctor <= 0)
+                    : referringDoctorId());
+    data.append((performingDoctorId() <= 0)
                     ? QVariant()
-                    : m_idPerformingDoctor);
-    data.append((m_idNurse <= 0)
+                    : performingDoctorId());
+    data.append((nurseId() <= 0)
                     ? QVariant()
-                    : m_idNurse);
-    data.append(m_idPatient);
-    data.append(m_idUser);
+                    : nurseId());
+    data.append(patientId());
+    data.append(authorUserId());
     data.append(documentSum());
     data.append((ui->editComment->toPlainText().isEmpty())
                     ? QVariant()
                     : ui->editComment->toPlainText());
     data.append(valuePaymentOrder());
     data.append(m_attachedImages);
-    data.append(m_id);
+    data.append(orderId());
 
     if (! m_db.execPreparedFromFile(m_db.getDatabase(),
                                    ":/sql/queries_doc/order_update.sql",
@@ -1295,7 +1274,7 @@ bool OrderDialog::deleteRowsOrderTable(QString &details_error)
 {
     QSqlQuery qry(m_currentDB);
     qry.prepare(QStringLiteral("DELETE FROM orderEchoTable WHERE id_orderEcho = :id_orderEcho"));
-    qry.bindValue(":id_orderEcho", m_id);
+    qry.bindValue(":id_orderEcho", orderId());
 
     if (!qry.exec()) {
         details_error = qry.lastError().text();
@@ -1321,8 +1300,8 @@ bool OrderDialog::reinsertAllOrderRows(QString &details_error)
         }
 
         rowData["id"]           = tempId--; // -1, -2, -3 etc
-        rowData["deletionMark"] = m_post;
-        rowData["id_orderEcho"] = m_id;
+        rowData["deletionMark"] = documentStatus();
+        rowData["id_orderEcho"] = orderId();
 
         rows.append(rowData);
     }
@@ -1374,7 +1353,7 @@ bool OrderDialog::controlRequiredObjects()
                                    BalloonTip::BottomCenter);
         return false;
     }
-    if (ui->comboPatient->currentText().isEmpty() || m_idPatient <= 0){
+    if (ui->comboPatient->currentText().isEmpty() || patientId() <= 0){
         ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_patient);
         BalloonTip::showBalloonFor(ui->comboPatient,
                                    QMessageBox::Information,
@@ -1387,20 +1366,20 @@ bool OrderDialog::controlRequiredObjects()
     }
     QSqlQuery patientQuery(m_currentDB);
     patientQuery.prepare(QStringLiteral("SELECT 1 FROM patients WHERE id = ? LIMIT 1"));
-    patientQuery.addBindValue(m_idPatient);
+    patientQuery.addBindValue(patientId());
     if (!patientQuery.exec() || !patientQuery.next()) {
         ui->toolBox->setCurrentIndex(OrderToolBoxIdx::Box_patient);
         BalloonTip::showBalloonFor(ui->comboPatient,
                                    QMessageBox::Warning,
                                    tr("Verificarea datelor"),
                                    tr("Pacientul selectat (ID %1) nu există în baza de date. Selectați din nou pacientul din listă.")
-                                       .arg(m_idPatient),
+                                       .arg(patientId()),
                                    6000,
                                    true,
                                    BalloonTip::BottomCenter);
         qWarning(logWarning()).noquote()
             << QStringLiteral("OrderDialog: patient_id=%1 nu există în patients; SQL: %2")
-                   .arg(m_idPatient)
+                   .arg(patientId())
                    .arg(patientQuery.lastError().text());
         return false;
     }
@@ -1416,7 +1395,7 @@ bool OrderDialog::controlRequiredObjects()
 void OrderDialog::onOpenReport()
 {
     // controlam daca documentul este validat
-    if (m_isNew){
+    if (isNewDocument()){
         QMessageBox::warning(this, tr("Controlul validarii"),
                              tr("Documentul nu este validat !!! \nRaportul ecografic nu poate fi format."),
                              QMessageBox::Ok);
@@ -1434,7 +1413,7 @@ void OrderDialog::onOpenReport()
     // determinam daca este salvat document 'Report', deschidem document
     QSqlQuery q(m_currentDB);
     q.prepare("SELECT id, deletionMark FROM reportEcho WHERE id_orderEcho = :id_orderEcho");
-    q.bindValue(":id_orderEcho", m_id);
+    q.bindValue(":id_orderEcho", orderId());
 
     if (!q.exec()) {
         this->show();
@@ -1447,8 +1426,8 @@ void OrderDialog::onOpenReport()
     if (q.next()) {
         params.isNew     = false;
         params.id        = q.value("id").toInt();
-        params.idOrder   = m_id;
-        params.idPatient = m_idPatient;
+        params.idOrder   = orderId();
+        params.idPatient = patientId();
         params.status    = DocStatus::determineStatusDoc(q.value("deletionMark").toInt());
         params.orderDisplayText = orderDisplayText;
 
@@ -1484,9 +1463,9 @@ void OrderDialog::onOpenReport()
     }
 
     params.isNew     = true;
-    params.idPatient = m_idPatient;
-    params.idOrder   = m_id;
-    params.status    = DocStatus::determineStatusDoc(m_post);
+    params.idPatient = patientId();
+    params.idOrder   = orderId();
+    params.status    = DocStatus::determineStatusDoc(documentStatus());
     params.systems   = dlg.selectedSystems();
     params.orderDisplayText = orderDisplayText;
 
@@ -1503,15 +1482,14 @@ bool OrderDialog::onSave()
     if (!controlRequiredObjects())
         return false;
 
-    /** in slot_IsNewChanged daca isNew am pus focus pe comboOrganization
-     *  ca urmare la validarea/salvarea documentului e necesar de oprit
-     *  timer pu dateTimeDoc
-     ********************************************************************/
+    // Pentru documentul nou, initializeNewOrder() pornește actualizarea orei.
+    // La prima salvare/validare oprim timerul ca data documentului să rămână fixă.
     if (timer->isActive())
         timer->stop();
 
-    const int initialId = m_id;
-    const int initialPost = m_post;
+    const int initialId = orderId();
+    const int initialPost = documentStatus();
+    const bool wasNew = isNewDocument();
     const int initialAttachedImages = m_attachedImages;
     const QString initialNumberDoc = ui->numberDoc->text();
     QList<QVariantMap> initialOrderRows;
@@ -1519,7 +1497,7 @@ bool OrderDialog::onSave()
     for (int row = 0; row < modelTableOrder->rowCount(); ++row)
         initialOrderRows.append(modelTableOrder->rowDataByRow(row));
 
-    if (m_post == DocStatus::Unknow)
+    if (documentStatus() == DocStatus::Unknow)
         setPost(DocStatus::Write);
 
     QString details_error;
@@ -1542,14 +1520,14 @@ bool OrderDialog::onSave()
                    .arg(current_db.lastError().text());
         }
 
-        m_id = initialId;
+        setOrderId(initialId);
         m_attachedImages = initialAttachedImages;
         setPost(initialPost);
         ui->numberDoc->setText(initialNumberDoc);
         modelTableOrder->setRows(initialOrderRows);
     };
 
-    if (m_isNew) {
+    if (wasNew) {
 
         if (m_attachedImages == StatusObject::Unknow)
             m_attachedImages = 0;
@@ -1590,8 +1568,8 @@ bool OrderDialog::onSave()
 
         // inseram toate liniile
         for (int i = 0; i < modelTableOrder->rowCount(); ++i) {
-            modelTableOrder->setFieldValueInternal(i, "deletionMark", m_post);
-            modelTableOrder->setFieldValueInternal(i, "id_orderEcho", m_id);
+            modelTableOrder->setFieldValueInternal(i, "deletionMark", documentStatus());
+            modelTableOrder->setFieldValueInternal(i, "id_orderEcho", orderId());
 
             if (!modelTableOrder->insertRowToDatabase(m_db, "orderEchoTable", i, &details_error)) {
                 rollbackAndRestore();
@@ -1660,8 +1638,7 @@ bool OrderDialog::onSave()
         return false;
     }
 
-    if (m_isNew) {
-        setIsNew(false);
+    if (wasNew) {
         qInfo(logInfo()) << QStringLiteral("Documentul 'Comanda ecografica' nr.='%1' creat cu succes in baza de date.")
                                 .arg(ui->numberDoc->text());
     } else {
@@ -1685,9 +1662,48 @@ bool OrderDialog::onSave()
     return true;
 }
 
+void OrderDialog::setPrintModelOrganization(QSqlQueryModel *model)
+{
+    if (!model)
+        return;
+
+    if (model->rowCount() > 0)
+        model->clear();
+
+    const OrderDocumentContextData &context = m_documentContext.data();
+    m_db.setModelQuery(
+        *model,
+        m_currentDB,
+        QStringLiteral(R"(
+            SELECT
+                org.id AS id_organizations,
+                org.IDNP,
+                org.name,
+                org.address,
+                org.telephone,
+                doctor.nameAbbreviated AS doctor,
+                nurse.nameAbbreviated AS nurse,
+                org.email,
+                org.site
+            FROM
+                organizations org
+            LEFT JOIN
+                fullNameDoctors doctor
+                    ON doctor.id_doctors = ?
+            LEFT JOIN
+                fullNameNurses nurse
+                    ON nurse.id_nurses = ?
+            WHERE
+                org.id = ?
+        )"),
+        {context.executingDoctorId,
+         context.nurseId,
+         context.organizationId});
+}
+
 bool OrderDialog::onPost()
 {
-    const int oldPost = m_post;
+    const int oldPost = documentStatus();
     setPost(DocStatus::Post);
     m_postInProgress = true;
 
@@ -1744,7 +1760,7 @@ void OrderDialog::updateModelContracts()
 {
     QueryRolesModel *newModel = nullptr;
 
-    if (m_idOrganization <= 0) {
+    if (m_documentContext.data().organizationId <= 0) {
         QString str = m_db.getTextSQL(":/sql/queries/contracts_view.sql");
         newModel = new QueryRolesModel(str, ui->comboContract);
         newModel->setEmptyRowEnabled(true);
@@ -1755,8 +1771,8 @@ void OrderDialog::updateModelContracts()
                 ? ":/sql/queries/contracts_select_by_organization_sqlite.sql"
                 : ":/sql/queries/contracts_select_by_organization_mysql.sql"));
 
-        qry.addBindValue(m_idOrganization);
-        qry.addBindValue(m_idContract);
+        qry.addBindValue(m_documentContext.data().organizationId);
+        qry.addBindValue(m_documentContext.data().contractId);
 
         if (!qry.exec()) {
             qCritical(logCritical()).noquote()
@@ -1777,7 +1793,7 @@ void OrderDialog::updateModelContracts()
     modelContracts = newModel;
     ui->comboContract->setModel(modelContracts);
     ui->comboContract->setModelColumn(
-        modelContracts->columnIndex(m_idOrganization <= 0 ? "contract_owner" : "name"));
+        modelContracts->columnIndex(m_documentContext.data().organizationId <= 0 ? "contract_owner" : "name"));
 }
 
 void OrderDialog::updateModelTypesPrices()
@@ -1818,7 +1834,7 @@ void OrderDialog::updateModelNurses()
 
 void OrderDialog::updateModelRefferingDoctors()
 {
-    const int selectedDoctorId = m_idRefferingDoctor;
+    const int selectedDoctorId = referringDoctorId();
     QSignalBlocker blocker(ui->comboReferringDoctor);
 
     if (modelRefferingDoctors)
@@ -1960,14 +1976,14 @@ void OrderDialog::ensurePatientInCompleterModel(int idPatient, const QString &fu
 
 void OrderDialog::loadPatientDetails()
 {
-    if (m_idPatient <= 0)
+    if (patientId() <= 0)
         return;
 
     QSqlQuery qry(m_currentDB);
     qry.prepare(MainDatabaseConnectionContext::instance().isSqlite()
                     ? m_db.getTextSQL(":/sql/queries_doc/patients_byID_sqlite.sql")
                     : m_db.getTextSQL(":/sql/queries_doc/patients_byID_mariadb.sql"));
-    qry.addBindValue(m_idPatient);
+    qry.addBindValue(patientId());
 
     if (!qry.exec()) {
         qCritical(logCritical()).noquote()
@@ -1979,7 +1995,7 @@ void OrderDialog::loadPatientDetails()
 
     if (!qry.next()) {
         qCritical(logCritical()).noquote()
-            << "Pacientul cu id =" << m_idPatient << " nu a fost găsit";
+            << "Pacientul cu id =" << patientId() << " nu a fost găsit";
         qCritical(logCritical()).noquote()
             << "SQL query:" << qry.lastQuery();
         return;
@@ -1988,7 +2004,7 @@ void OrderDialog::loadPatientDetails()
     const QString fullName = qry.value(PatientSearchColumns::FullName).toString().trimmed();
 
     // ne asiguram ca pacientul exista in modelul completerului
-    ensurePatientInCompleterModel(m_idPatient, fullName);
+    ensurePatientInCompleterModel(patientId(), fullName);
 
     // sincronizam textul din combo
     {
@@ -2063,10 +2079,10 @@ void OrderDialog::initSyncPatientData(PatientDataStructure patientData)
 void OrderDialog::initSyncOrderData()
 {
     PatientDataStructure patientData;
-    patientData.id = m_idPatient;
+    patientData.id = patientId();
 
     OrderDataStructure orderData;
-    orderData.id = m_id;
+    orderData.id = orderId();
 
     QThread *thread = new QThread();
     auto *worker = new SyncOrderWorker(dbProvider(), patientData, orderData);
@@ -2191,9 +2207,9 @@ void OrderDialog::updateTableSource()
 
     QSqlQuery q(m_currentDB);
     q.prepare(m_db.getTextSQL(":/sql/queries_doc/orderPopulateTableSource.sql"));
-    q.bindValue(":id_organization", m_idOrganization);
-    q.bindValue(":id_contract",     m_idContract);
-    q.bindValue(":id_typePrices",   m_idTypePrice);
+    q.bindValue(":id_organization", m_documentContext.data().organizationId);
+    q.bindValue(":id_contract",     m_documentContext.data().contractId);
+    q.bindValue(":id_typePrices",   m_documentContext.data().priceTypeId);
     if (!q.exec()) {
         qWarning(logWarning()).noquote()
             << "updateTableSource error:"
@@ -2274,7 +2290,7 @@ void OrderDialog::updateTableOrder()
 
     QSqlQuery q(m_currentDB);
     q.prepare("SELECT * FROM orderEchoTable WHERE id_orderEcho = :id_orderEcho");
-    q.bindValue(":id_orderEcho", m_id);
+    q.bindValue(":id_orderEcho", m_documentContext.data().orderId);
     if (!q.exec()) {
         qWarning(logWarning()).noquote()
             << "updateTableOrder error:"
@@ -2404,7 +2420,7 @@ QString OrderDialog::informedConsentText() const
     if (consentTypes.testFlag(ReportSections::ConsentType::ObstetricScreening)) {
         QString consent = tr(
             "Am fost informată despre scopul, modul de efectuare, beneficiile și limitele "
-            "examinării ecografice a sarcinii.\n\n"
+            "examinării ecografice a sarcinii.\n"
             "Înțeleg că examinarea are ca scop evaluarea sarcinii și, în funcție de vârsta "
             "gestațională și tipul examinării, evaluarea dezvoltării și anatomiei fetale și "
             "depistarea unor eventuale anomalii. Nu toate malformațiile și anomaliile fetale "
@@ -2547,7 +2563,7 @@ void OrderDialog::closeEvent(QCloseEvent *event)
         messange_box.exec();
 
         if (messange_box.clickedButton() == yesButton) {
-            const bool ok = (m_post == DocStatus::Post) ? onPost() : onSave();
+            const bool ok = (documentStatus() == DocStatus::Post) ? onPost() : onSave();
             if (ok) {
                 saveLayoutSizes();
                 event->accept();

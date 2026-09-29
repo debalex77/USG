@@ -20,8 +20,8 @@
 #include <common/appmetatypes.h>
 #include <common/globals.h>
 #include <common/table_sections.h>
-#include <common/property_macros.h>
 #include <ui/widgets/balloontip.h>
+#include <common/orderdialogcontext.h>
 #include <settings/reportsettingsmanager.h>
 
 #include <features/reports/reportdialog.h>
@@ -50,6 +50,7 @@ class OrderDialog : public QDialog
 
 public:
     explicit OrderDialog(DataBase &db, QWidget *parent = nullptr);
+    OrderDialog(DataBase &db, int orderId, QWidget *parent = nullptr);
     ~OrderDialog();
 
     struct PrefillData {
@@ -60,18 +61,6 @@ public:
         QList<int> investigationIds;
     };
 
-    DECLARE_PROPERTY_UPDATE(bool, isNew, IsNew, isNewChanged, slot_IsNewChanged)
-    DECLARE_PROPERTY_UPDATE(int, id, Id, idChanged, slot_IdChanged)
-    DECLARE_PROPERTY_UPDATE(int, idOrganization, IdOrganization, idOrganizationChanged, slot_IdOrganizationChanged)
-    DECLARE_PROPERTY_UPDATE(int, idContract, IdContract, idContractChanged, slot_IdContractChanged)
-    DECLARE_PROPERTY_UPDATE(int, idTypePrice, IdTypePrice, idTypePriceChanged, slot_IdTypePriceChanged)
-    DECLARE_PROPERTY_UPDATE(int, idPatient, IdPatient, idPatientChanged, slot_IdPatientChanged)
-    DECLARE_PROPERTY_UPDATE(int, idNurse, IdNurse, idNurseChanged, slot_IdNurseChanged)
-    DECLARE_PROPERTY_UPDATE(int, idPerformingDoctor, IdPerformingDoctor, idPerformingDoctorChanged, slot_IdPerformingDoctorChanged)
-    DECLARE_PROPERTY_UPDATE(int, idRefferingDoctor, IdRefferingDoctor, idRefferingDoctorChanged, slot_IdRefferingDoctorChanged)
-    DECLARE_PROPERTY_UPDATE(int, idUser, IdUser, idUserChanged, slot_IdUserChanged)
-    DECLARE_PROPERTY_UPDATE(int, post, Post, postChanged, slot_PostChanged)
-
     // functiile exportate pu solicitarea din alte clase
     void onPrintDocument(PrintType::Column type_print,
                          const QString &filePDF = QString());
@@ -80,18 +69,6 @@ public:
     bool applyPrefillData(const PrefillData &data, QString *errorText = nullptr);
 
 signals:
-    void isNewChanged();  // signals proprietatilor
-    void idChanged();
-    void idOrganizationChanged();
-    void idContractChanged();
-    void idTypePriceChanged();
-    void idPatientChanged();
-    void idNurseChanged();
-    void idPerformingDoctorChanged(); // a executat
-    void idRefferingDoctorChanged();  // a trimis
-    void idUserChanged();
-    void postChanged();
-
     void PostDocument();       // conectarea -> 'OrderView'
     void SaveDocument();
 
@@ -99,18 +76,6 @@ signals:
     void printToPdfFinished(); // conectarea -> 'OrderView' -> onSendEmail()
 
 private slots:
-    void slot_IsNewChanged();
-    void slot_IdChanged();
-    void slot_IdOrganizationChanged();
-    void slot_IdContractChanged();
-    void slot_IdTypePriceChanged();
-    void slot_IdPatientChanged();
-    void slot_IdNurseChanged();
-    void slot_IdPerformingDoctorChanged();
-    void slot_IdRefferingDoctorChanged();
-    void slot_IdUserChanged();
-    void slot_PostChanged();
-
     void dataWasModified();
     void updateTimerDateDoc();
     void onDateTimeChanged();
@@ -137,7 +102,6 @@ private slots:
     void onDoubleClickedTableSource(const QModelIndex &index);
     void onDoubleClickedTableOrder(const QModelIndex &index);
 
-    void setImageForDocPrint();
     void onPrint(PrintType::Column type_print, const QString &filePDF); // printare
 
     int valuePaymentOrder() const;
@@ -157,6 +121,32 @@ private slots:
     bool onPost();  // 'btnOk'
 
 private:
+    void initializeNewOrder();
+    void loadOrder();
+
+    [[nodiscard]] bool isNewDocument() const;
+    [[nodiscard]] int orderId() const;
+    [[nodiscard]] int organizationId() const;
+    [[nodiscard]] int contractId() const;
+    [[nodiscard]] int priceTypeId() const;
+    [[nodiscard]] int patientId() const;
+    [[nodiscard]] int nurseId() const;
+    [[nodiscard]] int performingDoctorId() const;
+    [[nodiscard]] int referringDoctorId() const;
+    [[nodiscard]] int authorUserId() const;
+    [[nodiscard]] int documentStatus() const;
+
+    void setOrderId(int value);
+    void setIdOrganization(int value);
+    void setIdContract(int value);
+    void setIdTypePrice(int value);
+    void setIdPatient(int value);
+    void setIdNurse(int value);
+    void setIdPerformingDoctor(int value);
+    void setIdRefferingDoctor(int value);
+    void setIdUser(int value);
+    void setPost(int value);
+
     void setupDateDocFormat();
 
     void updateModelOrganizations();
@@ -198,6 +188,7 @@ private:
     QString informedConsentText() const;
 
     void initFooterDoc();
+    void setPrintModelOrganization(QSqlQueryModel *model);
 
     void saveLayoutSizes();
     void loadLayoutSizes();
@@ -207,6 +198,7 @@ private:
 private:
     Ui::OrderDialog *ui;
     ReportSettingsManager m_settings;
+    OrderDialogContext m_documentContext;
 
     // structura
     struct DialogLayoutSettings {
@@ -249,13 +241,6 @@ private:
 
     // atasarea imaginilor
     int m_attachedImages = StatusObject::Unknow;
-
-    // printare
-    int exist_logo         = StatusObject::ZeroWrite; // variabile pu forma de tipar
-    int exist_stamp        = StatusObject::ZeroWrite;
-    int exist_stamp_doctor = StatusObject::ZeroWrite;
-    int exist_signature    = StatusObject::ZeroWrite;
-    QStandardItemModel *model_img = nullptr;
 
     // other
     bool m_postInProgress = false;

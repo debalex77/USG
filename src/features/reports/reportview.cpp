@@ -637,10 +637,8 @@ void ReportView::openOrder()
     const auto *item = currentItem();
     if (!item || item->orderId <= 0)
         return;
-    auto *dialog = new OrderDialog(m_db, this);
+    auto *dialog = new OrderDialog(m_db, item->orderId, this);
     dialog->setAttribute(Qt::WA_DeleteOnClose);
-    dialog->setProperty("isNew", false);
-    dialog->setProperty("id", item->orderId);
     dialog->show();
 }
 

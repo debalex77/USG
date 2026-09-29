@@ -13,12 +13,13 @@ Component.prototype.createOperations = function() {
 
     component.addOperation("Mkdir", applicationsDir);
 
-    // content pentru desktop file
-    var content = [
-        "[Desktop Entry]",
+    // CreateDesktopEntry înlocuiește intrarea ca un singur fișier gestionat de
+    // installer. AppendFile nu este potrivit aici: la fiecare actualizare
+    // concatenează încă o secțiune [Desktop Entry] și lasă copii de rollback.
+    var desktopEntry = [
         "Version=1.0",
         "Type=Application",
-        "Name=USG-Evidența investigațiilor ecografice v4.2.1",
+        "Name=USG - Evidența investigațiilor ecografice",
         "Comment=Gestionarea pacienților și a rapoartelor ecografice",
         "Comment[en]=Manage patients and ultrasound examination reports",
         "Comment[ru]=Управление пациентами и протоколами УЗИ",
@@ -31,13 +32,6 @@ Component.prototype.createOperations = function() {
         "StartupWMClass=USG"
     ].join("\n");
 
-    // La actualizare eliminăm shortcutul vechi. La instalarea curată nu
-    // înregistrăm o operație Delete fără fișier-sursă, deoarece anularea ei
-    // în timpul dezinstalării ar încerca să restaureze un backup inexistent.
-    if (installer.fileExists(desktopFile))
-        component.addOperation("Delete", desktopFile);
-
-    // adaugă conținutul specificat în fișierul desktopFile
-    component.addOperation("AppendFile", desktopFile, content);
+    component.addOperation("CreateDesktopEntry", desktopFile, desktopEntry);
 
 }

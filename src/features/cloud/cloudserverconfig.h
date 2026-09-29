@@ -46,6 +46,8 @@ private:
     bool existServerConfig();
     bool insertDataIntoTableCloudServer();
     bool updateDataIntoTableCloudServer();
+    bool isActiveSessionConfiguration() const;
+    void updateActiveCloudContext();
 
 private slots:
     void dataWasModified();

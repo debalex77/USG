@@ -23,6 +23,7 @@
 
 #include "settingsdialog.h"
 #include "ui_settingsdialog.h"
+#include "common/cloudconnectioncontext.h"
 #include "common/sessioncontext.h"
 
 #include <QCloseEvent>
@@ -185,6 +186,7 @@ void SettingsDialog::initializeConnections()
     connect(ui->checkConfirmExit, &QCheckBox::toggled, this, dirty);
     connect(ui->checkArchiveSqlite, &QCheckBox::toggled, this, dirty);
     connect(ui->checkSeparateWindows, &QCheckBox::toggled, this, dirty);
+    connect(ui->checkSynchronization, &QCheckBox::toggled, this, dirty);
     connect(ui->comboPrintMode, &QComboBox::currentIndexChanged, this, dirty);
 
     connect(ui->comboOrganization, &QComboBox::currentIndexChanged,
@@ -311,7 +313,11 @@ void SettingsDialog::loadUser(int userId)
     const int printIndex = ui->comboPrintMode->findData(int(values.user.printMenuMode));
     ui->comboPrintMode->setCurrentIndex(qMax(0, printIndex));
 
+    const bool isCurrentUser = userId == SessionContext::instance().userId();
     ui->checkSynchronization->setChecked(values.synchronization.enabled);
+    ui->checkSynchronization->setEnabled(isCurrentUser
+                                          && MainDatabaseConnectionContext::instance().isSqlite()
+                                          && values.synchronization.configured);
     QString synchronizationStatus;
     if (!values.synchronization.configured) {
         synchronizationStatus = tr("Sincronizarea cloud nu este configurată.");
@@ -370,6 +376,11 @@ bool SettingsDialog::saveSettings()
     m_loaded = settings;
     if (m_currentUserId == SessionContext::instance().userId()) {
         SettingsService::instance().setSnapshot(settings.values);
+
+        CloudConnectionData cloud = CloudConnectionContext::instance().data();
+        cloud.enabled = settings.values.synchronization.configured
+                        && settings.values.synchronization.enabled;
+        CloudConnectionContext::instance().setData(cloud);
     }
 
     setWindowModified(false);
@@ -403,6 +414,7 @@ SettingsRepository::PersistedSettings SettingsDialog::collectSettings() const
                                       && ui->checkArchiveSqlite->isChecked();
     values.user.openDocumentsInSeparateWindows = ui->checkSeparateWindows->isChecked();
     values.user.printMenuMode = Settings::PrintMenuMode(ui->comboPrintMode->currentData().toInt());
+    values.synchronization.enabled = ui->checkSynchronization->isChecked();
     return settings;
 }
 

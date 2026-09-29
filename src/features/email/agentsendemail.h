@@ -39,6 +39,11 @@ class AgentSendEmail : public QDialog
 public:
     struct MailContext
     {
+        int organizationId = 0;
+        QString organizationName;
+        QString organizationPhone;
+        QString organizationEmail;
+
         QString nrOrder;
         QString nrReport;
         bool thisReports = false;
@@ -79,6 +84,8 @@ private:
     void initEditorsMap();
 
     bool loadOnlineAccountSettings(bool logFailure = true);
+    bool loadOrganizationDetails();
+    bool selectAccountByEmail(const QString &email);
     void selectFirstAvailableAccount();
     void refreshAttachmentsFromEditors();
     void buildMessage();

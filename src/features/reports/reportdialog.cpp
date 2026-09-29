@@ -23,8 +23,8 @@
 
 #include "reportdialog.h"
 #include "features/orders/orderdialog.h"
+#include "features/patients/patienthistory.h"
 #include "ui_reportdialog.h"
-#include "common/organizationcontext.h"
 #include "common/sessioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
 
@@ -35,6 +35,7 @@
 #include <infrastructure/sync/syncreportworker.h>
 #include <settings/settingsservice.h>
 #include <common/applicationpathscontext.h>
+#include <features/printing/printimagesservice.h>
 
 #include <QThread>
 #include <QApplication>
@@ -49,9 +50,6 @@
 namespace {
     constexpr auto SettingsKey = "ReportDialog";
 }
-
-constexpr QSize k_LogoSize  = {300, 50};
-constexpr QSize k_StampSize = {200, 200};
 
 ReportDialog::ReportDialog(DataBase &db,
                            const ReportDialogParameters &parameters,
@@ -76,13 +74,11 @@ ReportDialog::ReportDialog(DataBase &db,
 
     setStatusDcument(m_statusDoc); // dortam initial
     QSqlDatabase currentDB = m_db.getDatabase();
-    style_pressed =
-        globals().isSystemThemeDark
+    style_pressed = globals().isSystemThemeDark
             ? R"(QCommandLinkButton { background:#5b5b5b; border:1px inset #00baff; color:#fff; })"
             : R"(background:#C2C2C3; border:1px inset navy;)";
 
-    style_unpressed =
-        globals().isSystemThemeDark
+    style_unpressed = globals().isSystemThemeDark
             ? R"(QCommandLinkButton { background:qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #4b4b4b, stop:1 #3c3c3c); border:0; color:#fff; })"
             : R"(background-color:qlineargradient(x1:0,y1:0,x2:0,y2:1, stop:0 #f6f7fa, stop:1 #dadbde); border:0;)";
 
@@ -202,7 +198,11 @@ void ReportDialog::onOpenPrintParameters()
     auto *showDoctorStamp = new QCheckBox(tr("Prezintă ștampila doctorului"), &dialog);
     auto *showDoctorSignature = new QCheckBox(tr("Prezintă semnătura doctorului"), &dialog);
 
-    const DoctorPrintImages doctor = loadDoctorPrintImages();
+    const PrintImagesService::DoctorPrintImages doctor =
+        PrintImagesService::loadDoctorPrintImages(
+            m_currentDB,
+            m_documentContext.data().executingDoctorId);
+
     const bool stampAvailable = !doctor.stamp.isEmpty();
     const bool signatureAvailable = !doctor.signature.isEmpty();
 
@@ -241,9 +241,7 @@ void ReportDialog::onOpenOrder()
     if (m_params.idOrder <= 0)
         return;
 
-    OrderDialog order(m_db, this);
-    order.setProperty("isNew", false);
-    order.setProperty("id", m_params.idOrder);
+    OrderDialog order(m_db, m_params.idOrder, this);
     connect(&order, &OrderDialog::PostDocument, this,
             [this](){
                 ui->labelOrderEcho->setText(m_params.orderDisplayText);
@@ -268,7 +266,12 @@ void ReportDialog::onOpenPatient()
 
 void ReportDialog::onOpenPatientHistory()
 {
+    if (m_params.idPatient <= 0)
+        return;
 
+    PatientHistory patientHistory(m_db, this);
+    patientHistory.setIdPatient(m_params.idPatient);
+    patientHistory.exec();
 }
 
 void ReportDialog::slotPatientTextChanged(const QString &text)
@@ -398,34 +401,47 @@ void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     if (type_print == PrintType::ExportToPDF && filePDF.trimmed().isEmpty())
         return;
 
-    /** 3. alocam memoria */
+    /** 3. alocam memoria pu modele */
     LimeReport::ReportEngine m_report(this);
     QStandardItemModel model_img(&m_report);
     QSqlQueryModel print_model_organization(&m_report);
     QSqlQueryModel print_model_patient(&m_report);
 
-    /** 4. setam modelurile */
-    setLogoStampOrganization(&model_img);
+    /** 4. citim contextul documentului */
+    if (!m_documentContext.data().isValid())
+        loadDocumentContext();
+
+    /** 5. completam logog, stamp & signature */
+    PrintImagesService::Result imageService;
+    imageService = PrintImagesService::fillModel(
+        &model_img,
+        m_currentDB,
+        m_documentContext.data().organizationId,
+        m_documentContext.data().executingDoctorId);
+
     setPrintModelOrganization(&print_model_organization);
     setPrintModelPatient(&print_model_patient);
 
-    /** 5. transmitem modelurile generatorului de rapoarte */
+    /** 6. transmitem modelurile generatorului de rapoarte */
     m_report.dataManager()->addModel("table_logo", &model_img, true);
     m_report.dataManager()->addModel("main_organization", &print_model_organization, false);
     m_report.dataManager()->addModel("table_patient", &print_model_patient, false);
 
-    /** 6. setam variabile necesare */
-    m_report.dataManager()->clearUserVariables();
-    m_report.dataManager()->setReportVariable("v_exist_logo",         exist_logo);
-    m_report.dataManager()->setReportVariable("v_exist_stamp",        exist_stam_organization);
-    const int showDoctorStamp = exist_stamp_doctor && m_showDoctorStamp ? 1 : 0;
-    const int showDoctorSignature = exist_signature_doctor && m_showDoctorSignature ? 1 : 0;
+    /** 7. setam variabile necesare */
+    const int showDoctorStamp = imageService.doctorStamp && m_showDoctorStamp ? 1 : 0;
+    const int showDoctorSignature = imageService.doctorSignature && m_showDoctorSignature ? 1 : 0;
     qInfo(logInfo()) << "ReportDialog: directorul șabloanelor de printare:"
                      << ApplicationPathsContext::instance().data().templatesDirectory;
-    m_report.dataManager()->setReportVariable("v_exist_stamp_doctor", showDoctorStamp);
-    m_report.dataManager()->setReportVariable("v_exist_signature", showDoctorSignature);
+
+    m_report.dataManager()->clearUserVariables();
+    m_report.dataManager()->setReportVariable("v_exist_logo",  imageService.logo ? 1 : 0);
+    m_report.dataManager()->setReportVariable("v_exist_stamp", imageService.organizationStamp ? 1 : 0);
+    m_report.dataManager()->setReportVariable("v_exist_stamp_doctor", imageService.doctorStamp ? 1 : 0);
+    m_report.dataManager()->setReportVariable("v_exist_signature", imageService.doctorSignature ? 1 : 0);
+
     m_report.dataManager()->setReportVariable("v_show_stamp_doctor", showDoctorStamp);
     m_report.dataManager()->setReportVariable("v_show_signature_doctor", showDoctorSignature);
+
     m_report.dataManager()->setReportVariable("v_export_pdf", type_print == PrintType::ExportToPDF ? 1 : 0);
     m_report.dataManager()->setReportVariable("unitMeasure", (globals().unitMeasure == "milimetru") ? "mm" : "cm");
     QString str_recmmand = ""; //o.getAllRecommandation().join(", ");
@@ -439,7 +455,7 @@ void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     /** pregatim un container ce pastreaza modele vii */
     std::vector<std::unique_ptr<QSqlQueryModel>> printModels; /** pe viitor !!! */
 
-    /** 7. procesarea tabelelor dupa sisteme */
+    /** 8. procesarea tabelelor dupa sisteme */
     if (m_systems.testFlag(ReportSystem::OrgansInternal) &&
         m_systems.testFlag(ReportSystem::UrinarySystem)) { /** complex */
         auto modelOrgansInternal = std::make_unique<QSqlQueryModel>();
@@ -527,7 +543,7 @@ void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
         this->show();
     }
 
-    /** 8. prezentam fereastra */
+    /** 9. prezentam fereastra */
     if (this->isHidden())
         this->show();
 }
@@ -814,6 +830,11 @@ void ReportDialog::applyParameters()
         // datele user
         m_params.idUser   = SessionContext::instance().userId();
         m_params.nameUser = globals().nameUserApp;
+
+        // citim contextul - organizationId, userId, doctorExecuteId, nurseId
+        // ID-le ce au fost introduse in order
+        if (m_params.idOrder > 0)
+            loadDocumentContext();
 
         connect(timer, &QTimer::timeout,
                 this, &ReportDialog::onDateTimeChanged, Qt::UniqueConnection);
@@ -1325,8 +1346,22 @@ void ReportDialog::loadReport()
     m_params.idUser   = q.value("id_users").toInt();
     m_params.nameUser = q.value("nameUser").toString();
 
+    loadDocumentContext();
+
     setupPageSignals();
     loadDataSection();
+}
+
+bool ReportDialog::loadDocumentContext()
+{
+    QString error;
+    if (m_documentContext.loadFromOrder(m_currentDB, m_params.idOrder, &error))
+        return true;
+
+    qWarning(logWarning()).noquote()
+        << QStringLiteral("ReportDialog: contextul comenzii nu a putut fi încărcat: %1")
+               .arg(error);
+    return false;
 }
 
 void ReportDialog::initSetCompleter()
@@ -1593,128 +1628,38 @@ bool ReportDialog::updateParentOrderAttachedMedia(QString *error)
     return true;
 }
 
-QStandardItem *ReportDialog::mkImageItem(const QString &cacheKey,
-                                         const QByteArray &bytes,
-                                         const QSize &targetSize)
-{
-    Q_UNUSED(cacheKey);
-    QPixmap pix;
-    if (!bytes.isEmpty() && pix.loadFromData(bytes))
-        pix = pix.scaled(targetSize, Qt::KeepAspectRatio, Qt::SmoothTransformation);
-    if (pix.isNull())
-        return new QStandardItem; /** item gol */
-
-    auto *it = new QStandardItem;
-    it->setData(pix,           Qt::DecorationRole);   /** Qt Views (optional) */
-    it->setData(pix.toImage(), Qt::DisplayRole);      /** LimeReport (de obicei citeste DisplayRole) */
-    return it;
-}
-
-ReportDialog::DoctorPrintImages ReportDialog::loadDoctorPrintImages() const
-{
-    DoctorPrintImages images;
-    const int doctorId = SettingsService::instance().organization().defaultDoctorId;
-    if (doctorId <= 0) {
-        qWarning(logWarning()) << "ReportDialog: doctorul implicit nu este selectat.";
-        return images;
-    }
-    if (!m_currentDB.isOpen()) {
-        qWarning(logWarning()) << "ReportDialog: baza de date nu este deschisă pentru imaginile doctorului.";
-        return images;
-    }
-
-    QSqlQuery query(m_currentDB);
-    query.prepare(QStringLiteral(R"(
-        SELECT signature, stamp
-        FROM doctors
-        WHERE id = ? AND deletionMark = 0
-    )"));
-    query.addBindValue(doctorId);
-    if (!query.exec()) {
-        qWarning(logWarning()) << "ReportDialog: imaginile doctorului nu pot fi citite:"
-                               << query.lastError().text();
-        return images;
-    }
-    if (!query.next()) {
-        qWarning(logWarning()) << "ReportDialog: doctorul implicit nu a fost găsit; id="
-                               << doctorId;
-        return images;
-    }
-
-    const auto decodeImage = [doctorId](const QVariant &value, const char *field) {
-        const QByteArray stored = value.toByteArray();
-        if (stored.isEmpty())
-            return QByteArray();
-        if (!QImage::fromData(stored).isNull())
-            return stored;
-        const QByteArray decoded = QByteArray::fromBase64(stored);
-        if (!decoded.isEmpty() && !QImage::fromData(decoded).isNull())
-            return decoded;
-        qWarning(logWarning()) << "ReportDialog: imaginea doctorului nu poate fi decodificată; id="
-                               << doctorId << "câmp=" << field;
-        return QByteArray();
-    };
-
-    images.signature = decodeImage(query.value(0), "signature");
-    images.stamp = decodeImage(query.value(1), "stamp");
-    return images;
-}
-
-void ReportDialog::setLogoStampOrganization(QStandardItemModel *model_img)
-{
-    const Settings::OrganizationSettings &organization =
-        SettingsService::instance().organization();
-    const DoctorPrintImages doctor = loadDoctorPrintImages();
-    /** 1. logo */
-    const QString keyLogo = QStringLiteral("logo_%1").arg(globals().nameUserApp);
-    QStandardItem* itLogo = mkImageItem(keyLogo, organization.logoData, k_LogoSize);
-    exist_logo = itLogo->data(Qt::DisplayRole).isValid() ? 1 : 0;
-
-    /** 2. stampila organizației */
-    const QString keyOrg = QStringLiteral("stamp_organization_id-%1_%2")
-                               .arg(organization.organizationId).arg(globals().nameUserApp);
-    QStandardItem* itOrg = mkImageItem(
-        keyOrg, OrganizationContext::instance().data().stampData, k_StampSize);
-    exist_stam_organization = itOrg->data(Qt::DisplayRole).isValid() ? 1 : 0;
-
-    /** 3. semnătura doctorului */
-    const QString keySig = QStringLiteral("signature_doctor_id-%1_%2")
-                               .arg(organization.defaultDoctorId).arg(globals().nameUserApp);
-    QStandardItem* itSig = mkImageItem(
-        keySig, doctor.signature, k_StampSize);
-    exist_signature_doctor = itSig->data(Qt::DisplayRole).isValid() ? 1 : 0;
-
-    /** 4. ștampila doctorului */
-    const QString keyDoc = QStringLiteral("stamp_doctor_id-%1_%2")
-                               .arg(organization.defaultDoctorId).arg(globals().nameUserApp);
-    QStandardItem* itDoc = mkImageItem(
-        keyDoc, doctor.stamp, k_StampSize);
-    exist_stamp_doctor = itDoc->data(Qt::DisplayRole).isValid() ? 1 : 0;
-
-    /** set în model (o singură linie, 4 coloane) */
-    if (! model_img)
-        return;
-
-    model_img->clear();
-    model_img->setColumnCount(4);
-
-    QList<QStandardItem*> row;
-    row.reserve(4);
-    // Aceeași ordine 1-based folosită de șabloanele LimeReport:
-    // logo, ștampila organizației, ștampila doctorului, semnătura doctorului.
-    row << itLogo << itOrg << itDoc << itSig;
-    model_img->appendRow(row);
-}
-
 void ReportDialog::setPrintModelOrganization(QSqlQueryModel *print_model_organization)
 {
     if (print_model_organization->rowCount() > 0)
         print_model_organization->clear();
 
-    m_db.setModelQuery(*print_model_organization,
-                       m_db.getDatabase(),
-                       m_db.getTextSQL(":/sql/queries_print/tableConstants.sql"),
-                       {m_params.idUser});
+    const ReportDocumentContextData &context = m_documentContext.data();
+    m_db.setModelQuery(
+        *print_model_organization,
+        m_currentDB,
+        QStringLiteral(R"(
+            SELECT
+                org.id AS id_organizations,
+                org.IDNP,
+                org.name,
+                org.address,
+                org.telephone,
+                doctor.nameAbbreviated AS doctor,
+                nurse.nameAbbreviated AS nurse,
+                org.email,
+                org.site
+            FROM
+                organizations org
+            LEFT JOIN
+                fullNameDoctors doctor ON doctor.id_doctors = ?
+            LEFT JOIN
+                fullNameNurses nurse ON nurse.id_nurses = ?
+            WHERE
+                org.id = ?
+        )"),
+        {context.executingDoctorId,
+         context.nurseId,
+         context.organizationId});
 }
 
 void ReportDialog::setPrintModelPatient(QSqlQueryModel *print_model_patient)

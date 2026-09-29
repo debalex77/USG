@@ -15,6 +15,8 @@ SOURCES += \
     $$USG_ROOT/src/core/logging/logmanager.cpp \
     $$USG_ROOT/src/common/organizationcontext.cpp \
     $$USG_ROOT/src/common/sessioncontext.cpp \
+    $$USG_ROOT/src/common/reportdialogcontext.cpp \
+    $$USG_ROOT/src/common/orderdialogcontext.cpp \
     $$USG_ROOT/src/app/splashmanager.cpp \
     $$USG_ROOT/src/app/windowmanager.cpp
 
@@ -36,6 +38,8 @@ HEADERS += \
     $$USG_ROOT/src/app/splashmanager.h \
     $$USG_ROOT/src/common/structvariable.h \
     $$USG_ROOT/src/common/table_sections.h \
+    $$USG_ROOT/src/common/reportdialogcontext.h \
+    $$USG_ROOT/src/common/orderdialogcontext.h \
     $$USG_ROOT/src/core/version.h \
     $$USG_ROOT/src/app/windowmanager.h
 

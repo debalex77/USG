@@ -23,9 +23,6 @@
 
 #include "orderview.h"
 #include "ui_orderview.h"
-#include "common/doctorcontext.h"
-#include "common/organizationcontext.h"
-#include "common/sessioncontext.h"
 #include "settings/settingsservice.h"
 
 #include <common/applicationpathscontext.h>
@@ -110,7 +107,6 @@ void OrderView::onAddDoc()
 {
     OrderDialog *doc = new OrderDialog(m_db, this);
     doc->setAttribute(Qt::WA_DeleteOnClose);
-    doc->setProperty("isNew", true);
     connect(doc, &OrderDialog::PostDocument,
             this, &OrderView::updateTableView, Qt::UniqueConnection);
     doc->show();
@@ -125,10 +121,8 @@ void OrderView::onEditDoc()
     const QModelIndex sourceIndex = proxyTable->mapToSource(idx);
     const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
 
-    OrderDialog *doc = new OrderDialog(m_db, this);
+    OrderDialog *doc = new OrderDialog(m_db, item.id, this);
     doc->setAttribute(Qt::WA_DeleteOnClose);
-    doc->setProperty("isNew", false);
-    doc->setProperty("id", item.id);
     connect(doc, &OrderDialog::PostDocument,
             this, &OrderView::updateTableView, Qt::UniqueConnection);
     doc->show();
@@ -309,10 +303,8 @@ void OrderView::onPrintDoc()
     const QModelIndex sourceIndex = proxyTable->mapToSource(idx);
     const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
 
-    OrderDialog *doc = new OrderDialog(m_db, this);
+    OrderDialog *doc = new OrderDialog(m_db, item.id, this);
     doc->setAttribute(Qt::WA_DeleteOnClose);
-    doc->setProperty("isNew", false);
-    doc->setProperty("id", item.id);
     doc->onPrintDocument(PrintType::Preview);
     doc->close();
 }
@@ -361,16 +353,11 @@ void OrderView::onSendEmail()
     loader->show();
 
     DatesDocForExportEmail data{};
-    data.id_user                      = SessionContext::instance().userId();
     data.thisMySQL                    = MainDatabaseConnectionContext::instance().isMariaDb();
     data.id_order                     = item.id;
     data.id_report                    = -1;
     data.id_patient                   = item.patientId;
     data.unitMeasure                  = globals().unitMeasure;
-    data.logo_byteArray               = SettingsService::instance().organization().logoData;
-    data.stamp_organization_byteArray = OrganizationContext::instance().data().stampData;
-    data.stamp_doctor_byteArray       = DoctorContext::instance().data().stampData;
-    data.signature_doctor_byteArray   = DoctorContext::instance().data().signatureData;
     data.pathTemplatesDocs            = ApplicationPathsContext::instance().data().templatesDirectory;
     data.filePDF                      = exportDirectory;
 
@@ -413,10 +400,10 @@ void OrderView::launchEmailAgent(const QVector<DatesForAgentEmail> &exportedData
 
     const DatesForAgentEmail &data = exportedData.constFirst();
     AgentSendEmail::MailContext context;
+    context.organizationId    = data.organizationId;
     context.thisReports       = false;
     context.nrOrder           = data.nr_order;
     context.nrReport          = data.nr_report;
-    context.emailFrom         = OrganizationContext::instance().data().email;
     context.emailTo           = data.emailTo;
     context.namePatient       = data.name_patient;
     context.nameDoctor        = data.name_doctor_execute;
@@ -452,32 +439,16 @@ void OrderView::onCreateReport()
 
     ReportDialog::ReportDialogParameters params;
 
-    // determinam daca este salvat document 'Report', deschidem document
-    QSqlQuery q;
-    q.prepare("SELECT id, deletionMark FROM reportEcho WHERE id_orderEcho = :id_orderEcho");
-    q.bindValue(":id_orderEcho", id_order);
-    if(q.exec() && q.next()) {
-        // parametrii
-        params.isNew       = false;
-        params.id          = q.value("id").toInt();
-        params.idOrder     = id_order;
-        params.idPatient   = id_patient;
-        params.status      = DocStatus::determineStatusDoc(q.value("deletionMark").toInt());
-        params.orderDisplayText = orderDisplayText;
-        // deschidem 'ReportDialog'
-        auto *report = new ReportDialog(m_db, params, this);
-        report->setAttribute(Qt::WA_DeleteOnClose);
-        connect(report, &ReportDialog::reportChanged,
-                this, &OrderView::updateTableView);
-        connect(report, &ReportDialog::reportPost,
-                this, &OrderView::updateTableView);
-        report->show();
-
+    // Dacă raportul există deja, îl deschidem; un raport marcat ca șters nu
+    // este considerat document activ asociat comenzii.
+    if (reportParametersForOrder(item, params)) {
+        openReportDocument(params);
         return;
     }
 
     // determinam investigatii din 'Order'
     QStringList codes;
+    QSqlQuery q(m_db.getDatabase());
     q.prepare(R"(SELECT cod FROM orderEchoTable WHERE id_orderEcho = :id_orderEcho)");
     q.bindValue(":id_orderEcho", id_order);
     if (q.exec()) {
@@ -784,39 +755,95 @@ void OrderView::printOrder(PrintType::Column typePrint)
         return;
 
     const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
-    OrderDialog document(m_db, this);
-    document.setProperty("isNew", false);
-    document.setProperty("id", item.id);
+    OrderDialog document(m_db, item.id, this);
     document.onPrintDocument(typePrint);
 }
 
 void OrderView::printReport(PrintType::Column typePrint)
 {
-    if (!modelViewReport || modelViewReport->rowCount() <= 0)
-        return;
-
-    const int reportId = modelViewReport->index(0, 0).data().toInt();
-    if (reportId <= 0)
-        return;
-
-    ReportDialog::ReportDialogParameters params;
-    params.isNew = false;
-    params.id = reportId;
-    params.status = DocStatus::Post;
-
     const QModelIndex idx = ui->tableView->currentIndex();
-    const QModelIndex sourceIndex = proxyTable->mapToSource(idx);
-    if (sourceIndex.isValid()) {
-        const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
-        params.idOrder = item.id;
-        params.idPatient = item.patientId;
-        params.orderDisplayText = QStringLiteral("Comanda ecografică nr.%1 din %2")
-                                      .arg(item.numberDoc.trimmed(), item.dateDocText);
-    }
+    if (!isValidIndex(idx))
+        return;
 
+    const QModelIndex sourceIndex = proxyTable->mapToSource(idx);
+    if (!sourceIndex.isValid())
+        return;
+
+    const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
+    ReportDialog::ReportDialogParameters params;
+    if (!reportParametersForOrder(item, params))
+        return;
+
+    printReport(params, typePrint);
+}
+
+void OrderView::printReport(
+    const ReportDialog::ReportDialogParameters &params,
+    const PrintType::Column typePrint)
+{
     ReportDialog document(m_db, params, this);
     document.onPrintDocument(typePrint);
+}
 
+bool OrderView::reportParametersForOrder(
+    const OrderJournal::Item &order,
+    ReportDialog::ReportDialogParameters &params)
+{
+    if (order.id <= 0)
+        return false;
+
+    QSqlQuery query(m_db.getDatabase());
+    query.prepare(QStringLiteral(R"(
+        SELECT
+            id,
+            deletionMark,
+            id_users
+        FROM
+            reportEcho
+        WHERE
+            id_orderEcho = :id_orderEcho AND
+            deletionMark <> :deleted
+        ORDER BY
+            id DESC
+        LIMIT 1
+    )"));
+    query.bindValue(QStringLiteral(":id_orderEcho"), order.id);
+    query.bindValue(QStringLiteral(":deleted"), DocStatus::DeletionMark);
+
+    if (!query.exec()) {
+        qWarning(logWarning()).noquote()
+            << "OrderView: verificarea raportului asociat a eșuat:"
+            << query.lastError().text()
+            << "\nLast query:" << query.lastQuery();
+        return false;
+    }
+
+    if (!query.next())
+        return false;
+
+    params = {};
+    params.isNew = false;
+    params.id = query.value(QStringLiteral("id")).toInt();
+    params.idOrder = order.id;
+    params.idPatient = order.patientId;
+    params.idUser = query.value(QStringLiteral("id_users")).toInt();
+    params.status = DocStatus::determineStatusDoc(
+        query.value(QStringLiteral("deletionMark")).toInt());
+    params.orderDisplayText = QStringLiteral("Comanda ecografică nr.%1 din %2")
+                                  .arg(order.numberDoc.trimmed(), order.dateDocText);
+    return params.id > 0;
+}
+
+void OrderView::openReportDocument(
+    const ReportDialog::ReportDialogParameters &params)
+{
+    auto *report = new ReportDialog(m_db, params, this);
+    report->setAttribute(Qt::WA_DeleteOnClose);
+    connect(report, &ReportDialog::reportChanged,
+            this, &OrderView::updateTableView, Qt::UniqueConnection);
+    connect(report, &ReportDialog::reportPost,
+            this, &OrderView::updateTableView, Qt::UniqueConnection);
+    report->show();
 }
 
 
@@ -924,6 +951,19 @@ void OrderView::slotContextMenuRequested(const QPoint &pos)
     if (!index.isValid())
         return;
 
+    // Acțiunile trebuie aplicate rândului pe care s-a deschis meniul, nu unei
+    // selecții anterioare din jurnal.
+    ui->tableView->setCurrentIndex(index);
+    ui->tableView->selectRow(index.row());
+
+    const QModelIndex sourceIndex = proxyTable->mapToSource(index);
+    if (!sourceIndex.isValid())
+        return;
+
+    const OrderJournal::Item &item = modelTable->itemAt(sourceIndex.row());
+    ReportDialog::ReportDialogParameters reportParams;
+    const bool hasReport = reportParametersForOrder(item, reportParams);
+
     QMenu menu(this);
 
     QAction *actionNewDoc = menu.addAction(QIcon(":/img/toolBar/add.png"),
@@ -933,8 +973,18 @@ void OrderView::slotContextMenuRequested(const QPoint &pos)
     QAction *actionDeleteDoc = menu.addAction(QIcon(":/img/toolBar/delete.png"),
                                               tr("Elimină documentul"));
     menu.addSeparator();
-    QAction *actionPrintDoc = menu.addAction(QIcon(":/img/actions/print.png"),
-                                             tr("Printează documentul"));
+    QAction *actionPrintDoc = menu.addAction(
+        QIcon(":/img/actions/print.png"), tr("Printează comanda"));
+
+    QAction *actionOpenReport = nullptr;
+    QAction *actionPrintReport = nullptr;
+    if (hasReport) {
+        menu.addSeparator();
+        actionOpenReport = menu.addAction(
+            QIcon(":/img/documents/reportEcho.png"), tr("Deschide raportul"));
+        actionPrintReport = menu.addAction(
+            QIcon(":/img/actions/print.png"), tr("Printează raportul"));
+    }
 
     QAction *selectedAction = menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
     if (!selectedAction)
@@ -948,6 +998,10 @@ void OrderView::slotContextMenuRequested(const QPoint &pos)
         onDeleteDoc();
     else if (selectedAction == actionPrintDoc)
         onPrintDoc();
+    else if (selectedAction == actionOpenReport)
+        openReportDocument(reportParams);
+    else if (selectedAction == actionPrintReport)
+        printReport(reportParams, PrintType::Preview);
 }
 
 void OrderView::loadFilterJournalBySettings()

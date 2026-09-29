@@ -34,6 +34,7 @@
 #include <QStandardPaths>
 #include <QVersionNumber>
 #include <app/firstrunwizard.h>
+#include <common/cloudconnectioncontext.h>
 #include <common/maindatabaseconnectioncontext.h>
 #include <ui/dialogs/infowindow.h>
 #include <common/sessioncontext.h>
@@ -146,6 +147,7 @@ void MainWindow::initButton()
     btnReports              = new QToolButton(toolBar);
     btnPricing              = new QToolButton(toolBar);
     btnSettings             = new QToolButton(toolBar);
+    btnUserManual           = new QToolButton(toolBar);
     btnAbout                = new QToolButton(toolBar);
     btnBlock                = new QToolButton(toolBar);
 
@@ -163,6 +165,7 @@ void MainWindow::initButton()
     btnReports->setIcon(QIcon(":/img/documents/reports.png"));
     btnPricing->setIcon(QIcon(":/img/documents/pricing.png"));
     btnSettings->setIcon(QIcon(":/img/catalogs/settings.png"));
+    btnUserManual->setIcon(QIcon(":/img/catalogs/user_manual.png"));
     btnAbout->setIcon(QIcon(":/img/common/info.png"));
     btnBlock->setIcon(QIcon(":/img/common/lock.png"));
 
@@ -201,6 +204,8 @@ void MainWindow::initButton()
     toolBar->addSeparator();
     toolBar->addWidget(btnSettings);
     toolBar->addSeparator();
+    toolBar->addWidget(btnUserManual);
+    toolBar->addSeparator();
     toolBar->addWidget(btnAbout);
     toolBar->addSeparator();
     toolBar->addWidget(btnBlock);
@@ -233,6 +238,8 @@ void MainWindow::initButton()
             this, &MainWindow::openDocExamen, Qt::UniqueConnection);
     connect(btnSettings, &QAbstractButton::clicked,
             this, &MainWindow::openAppSettings, Qt::UniqueConnection);
+    connect(btnUserManual, &QAbstractButton::clicked,
+            this, &MainWindow::openUserManual, Qt::UniqueConnection);
     connect(btnAbout, &QAbstractButton::clicked,
             this, &MainWindow::openAbout, Qt::UniqueConnection);
     connect(btnBlock, &QAbstractButton::clicked,
@@ -358,7 +365,7 @@ void MainWindow::initActions()
     connect(actionOnlineAccount, &QAction::triggered,
             this, &MainWindow::openOnlineAccountView, Qt::UniqueConnection);
     connect(actionCloudServer, &QAction::triggered,
-            this, &MainWindow::openCloudServerConfig, Qt::UniqueConnection);
+            this, &MainWindow::openCloudServerView, Qt::UniqueConnection);
     connect(actionFirstWizard, &QAction::triggered,
             this, &MainWindow::openFirstRunWizard, Qt::UniqueConnection);
     connect(actionCreationArchive, &QAction::triggered,
@@ -470,6 +477,7 @@ void MainWindow::updateTextBtn()
     btnReports->setText(tr("Rapoarte"));
     btnPricing->setText(tr("Prețuri"));
     btnSettings->setText(tr("Setări"));
+    btnUserManual->setText(tr("Manual Online"));
     btnAbout->setText(tr("Despre aplicația"));
     btnBlock->setText(tr("Blocare"));
 }
@@ -634,8 +642,8 @@ bool MainWindow::completeStartup()
             if (MainDatabaseConnectionContext::instance().isSqlite()
                 && !databaseVersion.isNull()
                 && databaseVersion < QVersionNumber(4, 0, 1)
-                && SettingsService::instance().synchronization().configured
-                && !SettingsService::instance().synchronization().enabled) {
+                && CloudConnectionContext::instance().data().configured
+                && CloudConnectionContext::instance().data().password.isEmpty()) {
                 progress->hide();
                 txt_title_bar->setText(
                     tr("Pentru actualizare este necesară resalvarea parolei cloud."));
@@ -647,7 +655,7 @@ bool MainWindow::completeStartup()
                     SettingsService::instance().organization().organizationId);
                 migrationCredentialsReady =
                     cloudServer.exec() == QDialog::Accepted
-                    && SettingsService::instance().synchronization().enabled;
+                    && !CloudConnectionContext::instance().data().password.isEmpty();
             }
 
             txt_title_bar->setText(tr("Se actualizează baza de date de la versiunea %1 la %2...")
@@ -1124,15 +1132,16 @@ void MainWindow::openOnlineAccountView()
     mdiAreaCont->addWidget(view);
 }
 
-void MainWindow::openCloudServerConfig()
+void MainWindow::openCloudServerView()
 {
-    CloudServerConfig *cloud_server = new CloudServerConfig(this);
-    cloud_server->setAttribute(Qt::WA_DeleteOnClose);
-    cloud_server->setProperty("ID_user", SessionContext::instance().userId());
-    cloud_server->setProperty(
-        "ID_Organization",
-        SettingsService::instance().organization().organizationId);
-    cloud_server->show();
+    const QString key = QStringLiteral("CloudServerView");
+    if (mdiAreaCont->activateIfExists(key))
+        return;
+
+    auto *view = new CloudServerView(m_db);
+    view->setObjectName(key);
+    view->setWindowIcon(QIcon(QStringLiteral(":/img/database/cloud-server.png")));
+    mdiAreaCont->addWidget(view);
 }
 
 void MainWindow::openFirstRunWizard()

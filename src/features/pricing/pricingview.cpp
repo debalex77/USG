@@ -25,6 +25,25 @@
 #include "ui_pricingview.h"
 #include "common/applicationpathscontext.h"
 
+namespace {
+
+bool isTechnicalPricingColumn(const int column)
+{
+    switch (column) {
+    case PricingsJournal::Id:
+    case PricingsJournal::Id_Organizations:
+    case PricingsJournal::Id_Contracts:
+    case PricingsJournal::Id_TypesPrices:
+    case PricingsJournal::Id_Users:
+    case PricingsJournal::Uuid:
+        return true;
+    default:
+        return false;
+    }
+}
+
+} // namespace
+
 PricingView::PricingView(DataBase &db, QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::PricingView)
@@ -287,7 +306,10 @@ void PricingView::loadSizeSection()
         const int width = journalSettings.sectionSizes.value(col, header->defaultSectionSize());
         header->resizeSection(col, width);
 
-        const bool hidden = journalSettings.hiddenSections.value(col, false);
+        // ID-urile relațiilor și UUID sunt date interne. Setările salvate de
+        // versiunile anterioare nu trebuie să le poată face vizibile.
+        const bool hidden = isTechnicalPricingColumn(col)
+                            || journalSettings.hiddenSections.value(col, false);
         ui->tabView->setColumnHidden(col, hidden);
     }
 
@@ -399,12 +421,10 @@ void PricingView::updateTableView()
     ui->tabView->setModel(proxy);
 
     // ascundem sectiile
-    ui->tabView->hideColumn(PricingsJournal::Id);
-    ui->tabView->hideColumn(PricingsJournal::Id_Organizations);
-    ui->tabView->hideColumn(PricingsJournal::Id_Contracts);
-    ui->tabView->hideColumn(PricingsJournal::Id_TypesPrices);
-    ui->tabView->hideColumn(PricingsJournal::Id_Users);
-    ui->tabView->hideColumn(PricingsJournal::Uuid);
+    for (int column = 0; column < model->columnCount(); ++column) {
+        if (isTechnicalPricingColumn(column))
+            ui->tabView->hideColumn(column);
+    }
 
     // pozitionam delegatul pu centrarea imaginei
     ui->tabView->setItemDelegateForColumn(PricingsJournal::DeletionMark, new CenterIconDelegate(ui->tabView));

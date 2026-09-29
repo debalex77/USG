@@ -69,17 +69,23 @@ PatientHistory::~PatientHistory()
     delete ui;
 }
 
+void PatientHistory::setIdPatient(const int idPatient)
+{
+    m_id_patient = idPatient;
+    emit IdPatientChanged();
+}
+
 void PatientHistory::slot_IdPatientChanged()
 {
+    const QString patientText = ensurePatientInCompleterModel(m_id_patient);
+
     {
-        QSignalBlocker blocker(ui->comboPatient);
-        const int row = ui->comboPatient->findData(m_id_patient, Qt::UserRole);
-        ui->comboPatient->setCurrentIndex(row);
-        if (row < 0)
-            ui->comboPatient->setEditText(QString());
+        QSignalBlocker blocker(ui->comboPatient->lineEdit());
+        ui->comboPatient->setEditText(patientText);
     }
+
     setWindowTitle(m_id_patient > 0
-        ? tr("Istoria pacientului - %1").arg(ui->comboPatient->lineEdit()->text())
+        ? tr("Istoria pacientului - %1").arg(patientText)
         : tr("Istoria pacientului"));
     updateTableDoc();
     loadImagesPatients();
@@ -218,6 +224,49 @@ void PatientHistory::initSetCompleter()
 
     connect(completerPatients, QOverload<const QModelIndex &>::of(&QCompleter::activated),
             this, QOverload<const QModelIndex &>::of(&PatientHistory::activatedItemCompleter));
+}
+
+QString PatientHistory::ensurePatientInCompleterModel(const int idPatient)
+{
+    if (idPatient <= 0)
+        return {};
+
+    for (int row = 0; row < model_patients->rowCount(); ++row) {
+        const QModelIndex index = model_patients->index(row, 0);
+        if (index.data(Qt::UserRole).toInt() == idPatient)
+            return index.data(Qt::DisplayRole).toString();
+    }
+
+    QSqlQuery query(m_currentDB);
+    query.prepare(QStringLiteral(R"(
+        SELECT
+            id,
+            full_name
+        FROM
+            v_patients_completer_active
+        WHERE
+            id = ?
+    )"));
+    query.addBindValue(idPatient);
+
+    if (!query.exec()) {
+        qWarning(logWarning()).noquote()
+            << "PatientHistory: pacientul nu a putut fi încărcat:"
+            << query.lastError().text();
+        return {};
+    }
+
+    if (!query.next()) {
+        qWarning(logWarning())
+            << "PatientHistory: pacientul nu a fost găsit; id=" << idPatient;
+        return {};
+    }
+
+    const QString fullName = query.value("full_name").toString().trimmed();
+    auto *item = new QStandardItem(fullName);
+    item->setData(idPatient, Qt::UserRole);
+    model_patients->appendRow(item);
+    return fullName;
 }
 
 void PatientHistory::updateModelPatients()

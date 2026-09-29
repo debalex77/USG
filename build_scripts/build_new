@@ -28,6 +28,7 @@ BUILD_DIR="build/build_project"
 INSTALLER_DIR="build/usg_installer"
 DEPLOY_DIR="build/deploy"
 APPDIR="$DEPLOY_DIR/AppDir"
+BUILD_DEB_DIR=""
 
 # Executabile
 CQTDEPLOYER="${CQTDEPLOYER:-cqtdeployer}"
@@ -80,7 +81,7 @@ cleanup() {
     warn "KEEP_BUILD=1 setat – păstrăm directoarele intermediare."
   fi
 }
-trap 'err "Execuție întreruptă la linia $LINENO"; cleanup' ERR
+trap 'err "Execuție întreruptă la linia $LINENO"' ERR
 trap 'cleanup' EXIT
 
 #==============================#
@@ -89,7 +90,7 @@ trap 'cleanup' EXIT
 
 cd "$ROOT"
 
-require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "$QMAKE" "sha256sum" "md5sum" "gzip" "tar" "dpkg-deb" "find" "xargs" "awk" "rsync"
+require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "$QMAKE" "sha256sum" "md5sum" "gzip" "tar" "dpkg-deb" "find" "xargs" "awk" "rsync" "readelf" "ldd"
 command -v "$APPIMAGETOOL" >/dev/null 2>&1 || warn "appimagetool nu este în PATH. Etapa AppImage va fi omisă."
 
 [[ -d "$QT_LIB_DIR" ]]     || die "QT_LIB_DIR inexistent: $QT_LIB_DIR"
@@ -206,6 +207,23 @@ done
 # Plugin printsupport
 copy_checked "$QT_PLUGINS_DIR/printsupport/libcupsprintersupport.so" \
              "$ROOT/$BUILD_DIR/plugins/printsupport/libcupsprintersupport.so"
+
+# Executabilul trebuie să poată găsi bibliotecile livrate chiar dacă este
+# pornit direct din bin/, fără launcherul USG.sh și fără LD_LIBRARY_PATH.
+PACKAGE_EXECUTABLE="$ROOT/$BUILD_DIR/bin/USG"
+[[ -x "$PACKAGE_EXECUTABLE" ]] || die "Executabilul distribuit lipsește: $PACKAGE_EXECUTABLE"
+
+PACKAGE_DYNAMIC_SECTION="$(readelf -d "$PACKAGE_EXECUTABLE")"
+[[ "$PACKAGE_DYNAMIC_SECTION" == *'$ORIGIN/../lib'* ]] \
+  || die 'Executabilul nu conține RPATH-ul portabil $ORIGIN/../lib.'
+
+PACKAGE_LDD_OUTPUT="$(env -u LD_LIBRARY_PATH ldd "$PACKAGE_EXECUTABLE")"
+if grep -Fq "not found" <<< "$PACKAGE_LDD_OUTPUT"; then
+  printf '%s\n' "$PACKAGE_LDD_OUTPUT" >&2
+  die "Pachetul conține dependențe runtime nerezolvate."
+fi
+
+log 'RPATH-ul portabil și dependențele executabilului distribuit au fost verificate.'
 
 # Licențe, proveniență și sursa corespunzătoare LimeReport
 LICENSES_DIR="$ROOT/$BUILD_DIR/licenses"

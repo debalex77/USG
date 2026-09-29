@@ -23,6 +23,7 @@
 
 #include "appcontroller.h"
 #include "common/applicationpathscontext.h"
+#include "common/cloudconnectioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
 #include "common/sessioncontext.h"
 #include "core/version.h"
@@ -332,11 +333,24 @@ bool AppController::authorizeUser()
     }
 
     if (loaded.found) {
-        // Configuratia efectiva a conexiunii cloud este încarcata separat din
-        // cloudServer de DataConstantsWorker si nu face parte din tabelele de
-        // preferințe 4.2.0.
-        loaded.data.values.synchronization = SettingsService::instance().synchronization();
+        // DataConstantsWorker stabilește dacă configurația cloud este validă,
+        // iar repository-ul păstrează alegerea utilizatorului. Sincronizarea
+        // efectivă este activă numai dacă ambele condiții sunt îndeplinite.
+        const Settings::SynchronizationSettings runtime =
+            SettingsService::instance().synchronization();
+        const CloudConnectionData cloudRuntime =
+            CloudConnectionContext::instance().data();
+        const bool cloudConfigurationUsable =
+            runtime.configured && !cloudRuntime.password.isEmpty();
+        loaded.data.values.synchronization.configured = cloudConfigurationUsable;
+        loaded.data.values.synchronization.enabled =
+            cloudConfigurationUsable && runtime.enabled
+            && loaded.data.values.synchronization.enabled;
         SettingsService::instance().setSnapshot(loaded.data.values);
+
+        CloudConnectionData cloud = cloudRuntime;
+        cloud.enabled = loaded.data.values.synchronization.enabled;
+        CloudConnectionContext::instance().setData(cloud);
 
     } else {
         qWarning(logWarning())

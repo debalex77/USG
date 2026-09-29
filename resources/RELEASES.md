@@ -1,3 +1,14 @@
+## USG v4.2.3 (29.09.2026)
+
+- Manualul de utilizare în limba română a fost rescris, completat cu capturi de ecran și legat de butonul **Manual Online** din fereastra principală; pagina Wiki veche este înlocuită.
+- Adăugată fereastra **Servere cloud** pentru administrarea configurațiilor de sincronizare și corectată închiderea acesteia.
+- Sincronizarea SQLite–MariaDB poate fi activată sau dezactivată din preferințe; migrarea 4.2.3 adaugă și verifică opțiunea în SQLite și MariaDB.
+- Introduse contexte dedicate pentru Comanda și Raportul ecografic și serviciul comun pentru imaginile de tipărire; logo-ul, ștampilele și semnătura sunt citite conform organizației și doctorului documentului.
+- Revizuite exportul PDF, anexele, selectarea contului și fluxul agentului de e-mail.
+- Completate acțiunile pentru istoricul pacientului și jurnalele Comenzilor/Rapoartelor ecografice.
+- Revizuite pachetele Linux: RPATH portabil pentru LimeReport și instalare fără intrări desktop duplicate.
+- Actualizată traducerea interfeței în limba rusă.
+
 ## USG v4.2.2 (27.09.2026)
 
 - Migrarea UUID verifică identitatea SQLite–MariaDB înainte de scriere.

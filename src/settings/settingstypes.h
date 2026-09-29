@@ -71,7 +71,9 @@ struct UserPreferencesData {
 
 struct SynchronizationSettings {
     bool configured = false;
-    bool enabled    = false;
+    // Preferința este activă implicit. Sincronizarea efectivă are loc numai
+    // după încărcarea unei configurații cloud valide (configured == true).
+    bool enabled    = true;
 
     friend bool operator==(const SynchronizationSettings &,
                            const SynchronizationSettings &) = default;

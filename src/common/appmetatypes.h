@@ -84,6 +84,7 @@ struct DatesCatPatient // de eliminat
 
 struct DatesForAgentEmail
 {
+    int organizationId = 0;
     QString nr_order;
     QString nr_report;
     QString emailTo;
@@ -94,7 +95,6 @@ struct DatesForAgentEmail
 
 struct DatesDocForExportEmail
 {
-    int id_user;
     bool thisMySQL;
     int id_order;
     int id_report;
@@ -102,10 +102,6 @@ struct DatesDocForExportEmail
     QString nr_report;
     int id_patient;
     QString unitMeasure;
-    QByteArray logo_byteArray;
-    QByteArray stamp_organization_byteArray;
-    QByteArray stamp_doctor_byteArray;
-    QByteArray signature_doctor_byteArray;
     QString pathTemplatesDocs;
     QString filePDF;
 };

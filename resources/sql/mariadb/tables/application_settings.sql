@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS `applicationSettings` (
     `show_user_manual_on_startup`               BOOLEAN NOT NULL DEFAULT FALSE,
     `show_assistant_on_startup`                 BOOLEAN NOT NULL DEFAULT TRUE,
     `document_journal_refresh_interval_seconds` INT UNSIGNED NOT NULL DEFAULT 0,
+    `synchronization_enabled`                   BOOLEAN NOT NULL DEFAULT TRUE,
     PRIMARY KEY (`user_id`),
     CONSTRAINT `fk_applicationSettings_user`
         FOREIGN KEY (`user_id`)

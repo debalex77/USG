@@ -49,6 +49,9 @@ SettingsRepository::LoadResult SettingsRepository::loadForUser(int userId) const
     QString error;
     bool loadedFromNewSchema = false;
     if (hasNewSchema()) {
+        const bool hasSynchronizationPreference =
+            m_database.getDatabase().record(QStringLiteral("applicationSettings"))
+                .contains(QStringLiteral("synchronization_enabled"));
         QSqlQuery q(m_database.getDatabase());
         q.prepare(QStringLiteral(R"(
             SELECT
@@ -57,6 +60,7 @@ SettingsRepository::LoadResult SettingsRepository::loadForUser(int userId) const
                 application.show_user_manual_on_startup,
                 application.show_assistant_on_startup,
                 application.document_journal_refresh_interval_seconds,
+                %1 AS synchronization_enabled,
                 user_settings.user_id AS user_settings_user_id,
                 user_settings.default_organization_id,
                 user_settings.minimize_to_tray,
@@ -82,7 +86,9 @@ SettingsRepository::LoadResult SettingsRepository::loadForUser(int userId) const
                       user_settings.default_organization_id
             WHERE
                 base_user.id = ?
-        )"));
+        )").arg(hasSynchronizationPreference
+                    ? QStringLiteral("application.synchronization_enabled")
+                    : QStringLiteral("1")));
         q.addBindValue(userId);
         if (!q.exec()) {
             result.error = q.lastError().text();
@@ -131,6 +137,12 @@ SettingsRepository::LoadResult SettingsRepository::loadForUser(int userId) const
     // document_journal_refresh_interval_seconds
     values.application.documentJournalRefreshIntervalSeconds =
         value("updateListDoc", "document_journal_refresh_interval_seconds").toInt();
+
+    // Bazele anterioare acestei preferințe păstrează comportamentul existent:
+    // sincronizarea este permisă dacă există o configurație cloud validă.
+    values.synchronization.enabled = loadedFromNewSchema
+        ? row.value(QStringLiteral("synchronization_enabled")).toBool()
+        : true;
 
     // default_organization_id
     const QVariant organizationId =
@@ -202,6 +214,11 @@ bool SettingsRepository::saveForUser(const PersistedSettings &settings,
                                  databaseBoolean(values.application.showAssistantOnStartup));
         applicationValues.insert("document_journal_refresh_interval_seconds",
                                  values.application.documentJournalRefreshIntervalSeconds);
+        if (m_database.getDatabase().record(QStringLiteral("applicationSettings"))
+                .contains(QStringLiteral("synchronization_enabled"))) {
+            applicationValues.insert("synchronization_enabled",
+                                     databaseBoolean(values.synchronization.enabled));
+        }
         if (!upsert(QStringLiteral("applicationSettings"), QStringLiteral("user_id"),
                     userId, applicationValues, errors))
             return false;

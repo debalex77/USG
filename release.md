@@ -1,62 +1,73 @@
-# USG v4.2.2
+# USG v4.2.3
 
-## Changes
+## Modificări principale
 
-- Create the Windows log directory before first-run settings validation.
-- Allow an empty password for the initial administrator.
-- Fix first-run wizard icons and table icon rendering.
-- Initialize investigation groups before import when the group table is empty.
-- Fix organization creation and Qt 6/MSVC compatibility.
-- Add Windows build and draft-release workflows, with corrected packaging paths and SHA-256 generation.
-- Audit SQLite–MariaDB identities before UUID migration. Safe matches receive a
-  shared UUID; ambiguous historical duplicates remain distinct and are reported.
-  Patient matching validates IDNP together with NPP and birth date and never
-  uses the numeric database ID as identity evidence.
-  Price types use their stable commercial/CNAM role as identity, allowing their
-  dependent contracts and pricing documents to be matched across translated
-  names and different mutable discounts.
-  Existing UUID conflicts and schema errors stop the transfer before commit.
+- Manualul de utilizare în limba română a fost rescris, completat cu
+  capturi de ecran și legat direct de butonul **Manual Online** din fereastra
+  principală. Pagina actualizată este publicată în GitHub Wiki.
+- A fost adăugată fereastra **Servere cloud** pentru vizualizarea, adăugarea,
+  modificarea și eliminarea configurațiilor de sincronizare.
+- Sincronizarea SQLite–MariaDB poate fi activată sau dezactivată din
+  preferințele aplicației. Migrarea 4.2.3 adaugă în mod controlat coloana
+  necesară atât în SQLite, cât și în MariaDB.
+- Datele de tipărire sunt încărcate în contextul documentului: organizația,
+  logo-ul, ștampila organizației, doctorul, semnătura și ștampila doctorului nu
+  mai depind de imagini globale rămase în cache.
+- Contextele dedicate pentru Comanda ecografică și Raportul ecografic păstrează
+  identitatea organizației, utilizatorului și doctorului documentului deschis.
+- Au fost revizuite exportul PDF, anexele și selectarea contului în agentul de
+  e-mail.
+- Au fost completate acțiunile pentru istoricul pacientului și jurnalele
+  Comenzilor/Rapoartelor ecografice.
+- A fost corectată închiderea ferestrei Servere cloud și a aplicației când
+  această fereastră este deschisă.
+- Pachetele Linux verifică RPATH-ul portabil și includ LimeReport fără a depinde
+  de instalarea globală a bibliotecii. Instalatorul nu mai acumulează intrări
+  desktop duplicate.
+- Interfața în limba rusă a fost actualizată pentru funcțiile noi.
 
-## Updating and validation
+## Actualizare și verificare
 
-Back up databases and configuration before updating. This patch uses the existing
-4.2.0 schema. Reimport the investigation classifier if the initial group catalog
-was left empty; existing custom groups are preserved.
+Înainte de instalare creați copii de siguranță pentru baza principală, baza de
+imagini și configurația profilului.
 
-For an SQLite profile synchronized with MariaDB, update the SQLite profile first
-with the cloud connection enabled. Open the MariaDB profile directly only after
-the shared UUID transfer has committed.
+Pentru un profil SQLite sincronizat cu MariaDB:
 
-The Windows installer containing these fixes was tested and confirmed by the
-maintainer. Newly versioned packages remain in draft pending package verification.
+1. actualizați mai întâi profilul SQLite, cu serverul cloud accesibil;
+2. așteptați finalizarea migrării și verificați jurnalul;
+3. deschideți profilul MariaDB direct numai după confirmarea actualizării.
 
-## Windows packages
+După actualizare verificați autentificarea, deschiderea unei Comenzi și a unui
+Raport, previzualizarea cu imaginile corecte ale organizației/doctorului,
+trimiterea unui e-mail și starea preferinței de sincronizare.
 
-- `USG_v4.2.2_Windows_amd64.exe` — installer.
-- `LimeReport_v1.7.23_USG_source.zip` — corresponding dependency source.
-- SHA-256 files are supplied alongside both archives.
+## Pachete Windows
 
-## Linux packages
+- `USG_v4.2.3_Windows_amd64.exe` — installer.
+- `LimeReport_v1.7.23_USG_source.zip` — sursa dependenței.
+- Fișierele SHA-256 sunt publicate alături de arhive.
 
-- `USG_v4.2.2_Linux_amd64.run` — Qt Installer Framework installer.
-- `USG_v4.2.2_Linux_amd64.deb` — Debian package.
-- `USG_v4.2.2-x86_64.AppImage` — portable package.
-- `LimeReport_v1.7.23_USG_source.tar.gz` — corresponding LimeReport source and
-  the patch used by USG.
+## Pachete Linux
 
-Verify each package against its supplied SHA-256 checksum before installation.
+- `USG_v4.2.3_Linux_amd64.run` — Qt Installer Framework installer.
+- `USG_v4.2.3_Linux_amd64.deb` — pachet Debian.
+- `USG_v4.2.3-x86_64.AppImage` — pachet portabil.
+- `LimeReport_v1.7.23_USG_source.tar.gz` — sursa LimeReport și corecția folosită
+  de USG.
 
-### Running the AppImage
+Verificați fiecare pachet folosind suma SHA-256 publicată.
+
+### Pornirea AppImage
 
 ```bash
-chmod +x USG_v4.2.2-x86_64.AppImage
-./USG_v4.2.2-x86_64.AppImage
+chmod +x USG_v4.2.3-x86_64.AppImage
+./USG_v4.2.3-x86_64.AppImage
 ```
 
-If FUSE is unavailable, use temporary extraction:
+Dacă FUSE nu este disponibil:
 
 ```bash
-./USG_v4.2.2-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.3-x86_64.AppImage --appimage-extract-and-run
 ```
 
-Full release history: [`resources/RELEASES.md`](resources/RELEASES.md).
+Istoricul complet: [`resources/RELEASES.md`](resources/RELEASES.md).

@@ -29,6 +29,7 @@
 #include <features/reports/reportpagevideo.h>
 
 #include <common/table_sections.h>
+#include <common/reportdialogcontext.h>
 
 namespace Ui {
 class ReportDialog;
@@ -126,6 +127,7 @@ private:
     void loadPatientDetails();
 
     void loadReport();
+    bool loadDocumentContext();
 
     void initSetCompleter();
 
@@ -141,17 +143,6 @@ private:
     bool updateData();
     bool updateParentOrderAttachedMedia(QString *error = nullptr);
 
-    QStandardItem* mkImageItem(const QString& cacheKey,
-                               const QByteArray& bytes,
-                               const QSize& targetSize);
-
-    struct DoctorPrintImages {
-        QByteArray signature;
-        QByteArray stamp;
-    };
-    DoctorPrintImages loadDoctorPrintImages() const;
-
-    void setLogoStampOrganization(QStandardItemModel *model_img);
     void setPrintModelOrganization(QSqlQueryModel *print_model_organization);
     void setPrintModelPatient(QSqlQueryModel *print_model_patient);
 
@@ -216,6 +207,7 @@ private:
     QTimer   *timer; // data si ora
 
     ReportDialogParameters m_params;
+    ReportDialogContext m_documentContext;
     ReportSections::ReportSystems m_systems;
     DocStatus::Column m_statusDoc;
 

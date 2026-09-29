@@ -24,6 +24,7 @@
 #include "cloudserverconfig.h"
 #include <ui/widgets/balloontip.h>
 #include "common/cloudconnectioncontext.h"
+#include "common/sessioncontext.h"
 #include "qabstractitemview.h"
 #include "ui_cloudserverconfig.h"
 
@@ -31,6 +32,22 @@
 
 #include <ui/dialogs/custommessage.h>
 #include <settings/settingsservice.h>
+
+namespace {
+
+bool synchronizationEnabledAfterCloudSave()
+{
+    const Settings::SynchronizationSettings current =
+        SettingsService::instance().synchronization();
+    const CloudConnectionData cloud = CloudConnectionContext::instance().data();
+
+    // Prima configurare activează sincronizarea. La redactarea ulterioară se
+    // păstrează alegerea utilizatorului. O parolă imposibil de decriptat are
+    // contextul fără parolă și trebuie reactivată după resalvarea corectă.
+    return !current.configured || current.enabled || cloud.password.isEmpty();
+}
+
+} // namespace
 
 CloudServerConfig::CloudServerConfig(QWidget *parent)
     : QDialog(parent)
@@ -253,6 +270,39 @@ bool CloudServerConfig::existServerConfig()
     }
 }
 
+bool CloudServerConfig::isActiveSessionConfiguration() const
+{
+    return m_id_user == SessionContext::instance().userId()
+           && m_id_organization ==
+                  SettingsService::instance().organization().organizationId;
+}
+
+void CloudServerConfig::updateActiveCloudContext()
+{
+    if (!isActiveSessionConfiguration())
+        return;
+
+    CloudConnectionData cloudConnection;
+    cloudConnection.hostName          = ui->txt_host->text().trimmed();
+    cloudConnection.databaseName      = ui->txt_nameBase->text().trimmed();
+    cloudConnection.port              = ui->txt_port->text().toInt();
+    cloudConnection.connectionOptions = ui->txt_option->text().trimmed();
+    cloudConnection.userName          = ui->txt_user->text().trimmed();
+    cloudConnection.password          = ui->txt_password->text();
+    cloudConnection.configured        = true;
+    cloudConnection.enabled           = synchronizationEnabledAfterCloudSave();
+
+    CloudConnectionContext::instance().setData(cloudConnection);
+
+    Settings::SynchronizationSettings synchronization;
+    synchronization.configured = true;
+    synchronization.enabled = cloudConnection.enabled;
+    SettingsService::instance().setSynchronization(synchronization);
+
+    qInfo(logInfo())
+        << "Actualizat contextul cloud pentru organizația și utilizatorul activ.";
+}
+
 bool CloudServerConfig::insertDataIntoTableCloudServer()
 {
     if (m_id_organization <= 0)
@@ -330,24 +380,7 @@ bool CloudServerConfig::insertDataIntoTableCloudServer()
             return false;
         }
         qInfo(logInfo()) << "Inserarea datelor in tabela 'cloudServer'.";
-        CloudConnectionData cloudConnection;
-        cloudConnection.hostName          = ui->txt_host->text().trimmed();
-        cloudConnection.databaseName      = ui->txt_nameBase->text().trimmed();
-        cloudConnection.port              = ui->txt_port->text().toInt();
-        cloudConnection.connectionOptions = ui->txt_option->text().trimmed();
-        cloudConnection.userName          = ui->txt_user->text().trimmed();
-        cloudConnection.password          = ui->txt_password->text();
-        cloudConnection.configured        = true;
-        cloudConnection.enabled           = true;
-
-        CloudConnectionContext::instance().setData(cloudConnection);
-        Settings::SynchronizationSettings synchronization;
-        synchronization.configured = true;
-        synchronization.enabled    = true;
-
-        SettingsService::instance().setSynchronization(synchronization);
-
-        qInfo(logInfo()) << "Actualizate variabile globale pentru sincronizare cu serverul.";
+        updateActiveCloudContext();
 
         return true;
     }
@@ -414,15 +447,17 @@ bool CloudServerConfig::updateDataIntoTableCloudServer()
             database.rollback();
             qCritical(logCritical()) << "Verificarea parolei cloud după UPDATE a eșuat:"
                                      << verifyError;
-            Settings::SynchronizationSettings synchronization =
-                SettingsService::instance().synchronization();
-            synchronization.enabled = false;
-            SettingsService::instance().setSynchronization(synchronization);
-            CloudConnectionData cloudConnection =
-                CloudConnectionContext::instance().data();
-            cloudConnection.enabled = false;
-            cloudConnection.password.clear();
-            CloudConnectionContext::instance().setData(cloudConnection);
+            if (isActiveSessionConfiguration()) {
+                Settings::SynchronizationSettings synchronization =
+                    SettingsService::instance().synchronization();
+                synchronization.enabled = false;
+                SettingsService::instance().setSynchronization(synchronization);
+                CloudConnectionData cloudConnection =
+                    CloudConnectionContext::instance().data();
+                cloudConnection.enabled = false;
+                cloudConnection.password.clear();
+                CloudConnectionContext::instance().setData(cloudConnection);
+            }
             return false;
         }
         if (!database.commit()) {
@@ -433,24 +468,7 @@ bool CloudServerConfig::updateDataIntoTableCloudServer()
             return false;
         }
         qInfo(logInfo()) << "Actualizarea datelor in tabela 'cloudServer'.";
-        CloudConnectionData cloudConnection;
-        cloudConnection.hostName          = ui->txt_host->text().trimmed();
-        cloudConnection.databaseName      = ui->txt_nameBase->text().trimmed();
-        cloudConnection.port              = ui->txt_port->text().toInt();
-        cloudConnection.connectionOptions = ui->txt_option->text().trimmed();
-        cloudConnection.userName          = ui->txt_user->text().trimmed();
-        cloudConnection.password          = ui->txt_password->text();
-        cloudConnection.configured        = true;
-        cloudConnection.enabled           = true;
-
-        CloudConnectionContext::instance().setData(cloudConnection);
-        Settings::SynchronizationSettings synchronization;
-        synchronization.configured = true;
-        synchronization.enabled    = true;
-
-        SettingsService::instance().setSynchronization(synchronization);
-
-        qInfo(logInfo()) << "Actualizate variabile globale pentru sincronizare cu serverul.";
+        updateActiveCloudContext();
         return true;
     }
 
@@ -529,6 +547,12 @@ void CloudServerConfig::slot_ID_userChanged()
         ui->comboUser->setCurrentIndex(index_user.first().row());
 
     connectionComboBox();
+
+    // Configurația este identificată prin perechea organizație-utilizator.
+    // La schimbarea utilizatorului trebuie reîncărcate și câmpurile conexiunii,
+    // nu doar selectat rândul din combo-box.
+    if (m_id_organization > 0)
+        slot_ID_OrganizationChanged();
 }
 
 void CloudServerConfig::indexChangedComboOrganization(const int index)
@@ -579,6 +603,7 @@ bool CloudServerConfig::saveData()
 
     if (existServerConfig()) {
         if (updateDataIntoTableCloudServer()) {
+            setWindowModified(false);
             popUp->setPopupText(tr("Datele serverului cloud au fost<br>"
                                    "actualizate cu succes in baza de date."));
             popUp->show();
@@ -586,6 +611,7 @@ bool CloudServerConfig::saveData()
         }
     } else {
         if (insertDataIntoTableCloudServer()) {
+            setWindowModified(false);
             popUp->setPopupText(tr("Datele serverului cloud au fost<br>"
                                    "inserate cu succes in baza de date."));
             popUp->show();

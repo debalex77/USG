@@ -23,6 +23,8 @@
 
 #include "docemailexporterworker.h"
 
+#include <features/printing/printimagesservice.h>
+
 #include <QImage>
 
 namespace {
@@ -98,101 +100,51 @@ void DocEmailExporterWorker::process()
 // **********************************************************************************
 // --- setarea modelelor documentului 'orderEcho'
 
-void DocEmailExporterWorker::setModelImgForPrint()
+void DocEmailExporterWorker::setModelImgForPrint(QSqlDatabase &dbConn)
 {
-    // 1. logotip
-    QImage pix_logo;
-    QStandardItem *img_item_logo = new QStandardItem();
-    if (! m_data.logo_byteArray.isEmpty() && pix_logo.loadFromData(m_data.logo_byteArray)) {
-        img_item_logo->setData(pix_logo.scaled(300,50, Qt::KeepAspectRatio, Qt::SmoothTransformation),
-                               Qt::DisplayRole);
-        exist_logo = 1;
-    }
+    if (!model_img)
+        model_img = new QStandardItemModel(this);
 
-    // 2. stampila organizatiei
-    QImage pix_stamp_organization;
-    QStandardItem* img_item_stamp_organization = new QStandardItem();
-    if (! m_data.stamp_organization_byteArray.isEmpty() && pix_stamp_organization.loadFromData(m_data.stamp_organization_byteArray)) {
-        img_item_stamp_organization->setData(pix_stamp_organization.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation),
-                                             Qt::DisplayRole);
-        exist_stamp_organization = 1;
-    }
+    const PrintImagesService::Result images =
+        PrintImagesService::fillModel(model_img,
+                                      dbConn,
+                                      m_orderOrganizationId,
+                                      m_orderExecutingDoctorId);
 
-    // 3. stampila doctorului
-    QImage pix_stamp_doctor;
-    QStandardItem* img_item_stamp_doctor = new QStandardItem();
-    if (! m_data.stamp_doctor_byteArray.isEmpty() && pix_stamp_doctor.loadFromData(m_data.stamp_doctor_byteArray)) {
-        img_item_stamp_doctor->setData(pix_stamp_doctor.scaled(200,200, Qt::KeepAspectRatio, Qt::SmoothTransformation),
-                                       Qt::DisplayRole);
-        exist_stamp_doctor = 1;
-    }
-
-    // 4. semnatura doctorului
-    QImage pix_signature;
-    QStandardItem* img_item_signature = new QStandardItem();
-    if (! m_data.signature_doctor_byteArray.isEmpty() && pix_signature.loadFromData(m_data.signature_doctor_byteArray)) {
-        img_item_signature->setData(pix_signature.scaled(200, 200, Qt::KeepAspectRatio, Qt::SmoothTransformation),
-                                    Qt::DisplayRole);
-        exist_signature = 1;
-    }
-
-    // Conventie unica pentru toate sabloanele: logo, stampila organizatiei,
-    // stampila doctorului, semnatura doctorului.
-    model_img = new QStandardItemModel(this);
-    model_img->setColumnCount(4);
-    model_img->appendRow({img_item_logo,
-                          img_item_stamp_organization,
-                          img_item_stamp_doctor,
-                          img_item_signature});
-
+    exist_logo               = images.logo ? 1 : 0;
+    exist_stamp_organization = images.organizationStamp ? 1 : 0;
+    exist_stamp_doctor       = images.doctorStamp ? 1 : 0;
+    exist_signature          = images.doctorSignature ? 1 : 0;
 }
 
 void DocEmailExporterWorker::setModelDatesOrganization(QSqlDatabase &dbConn)
 {
     QSqlQuery qry(dbConn);
-    const QStringList settingsTables = dbConn.tables(QSql::Tables);
-    const bool newSettingsSchema =
-        settingsTables.contains(QStringLiteral("userSettings"), Qt::CaseInsensitive)
-        && settingsTables.contains(QStringLiteral("organizationSettings"),
-                                   Qt::CaseInsensitive);
-    qry.prepare(newSettingsSchema ? QStringLiteral(R"(
-            SELECT
-                user_settings.default_organization_id AS id_organizations,
-                organizations.IDNP,
-                organizations.name,
-                organizations.address,
-                organizations.telephone,
-                fullNameDoctors.nameAbbreviated AS doctor,
-                organizations.email
-            FROM userSettings AS user_settings
-            INNER JOIN organizations
-                    ON organizations.id = user_settings.default_organization_id
-            INNER JOIN organizationSettings AS organization_settings
-                    ON organization_settings.organization_id =
-                       user_settings.default_organization_id
-            INNER JOIN fullNameDoctors
-                    ON fullNameDoctors.id_doctors =
-                       organization_settings.default_doctor_id
-            WHERE user_settings.user_id = ?
-        )") : QStringLiteral(R"(
-            SELECT
-                constants.id_organizations,
-                organizations.IDNP,
-                organizations.name,
-                organizations.address,
-                organizations.telephone,
-                fullNameDoctors.nameAbbreviated AS doctor,
-                organizations.email
-            FROM
-                constants
-            INNER JOIN
-                organizations ON organizations.id = constants.id_organizations
-            INNER JOIN
-                fullNameDoctors ON fullNameDoctors.id_doctors = constants.id_doctors
-            WHERE
-                constants.id_users = ?
-        )"));
-    qry.addBindValue(m_data.id_user);
+    qry.prepare(QStringLiteral(R"(
+        SELECT
+            organizations.id AS id_organizations,
+            organizations.IDNP,
+            organizations.name,
+            organizations.address,
+            organizations.telephone,
+            fullNameDoctors.nameAbbreviated AS doctor,
+            fullNameNurses.nameAbbreviated AS nurse,
+            organizations.email,
+            organizations.site
+        FROM
+            organizations
+        LEFT JOIN
+            fullNameDoctors
+                ON fullNameDoctors.id_doctors = ?
+        LEFT JOIN
+            fullNameNurses
+                ON fullNameNurses.id_nurses = ?
+        WHERE
+            organizations.id = ?
+    )"));
+    qry.addBindValue(m_orderExecutingDoctorId);
+    qry.addBindValue(m_orderNurseId);
+    qry.addBindValue(m_orderOrganizationId);
     if (! qry.exec()) {
         qCritical() << QStringLiteral("[THREAD %1] Eroare solicitarii la crearea 'model_organization':")
                             .arg(this->metaObject()->className())
@@ -300,7 +252,10 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
     QSqlQuery qry(dbConn);
     qry.prepare(R"(
             SELECT
+                orderEcho.id_organizations,
                 orderEcho.id_typesPrices,
+                orderEcho.id_doctors_execute,
+                orderEcho.id_nurses,
                 orderEcho.patient_id,
                 orderEcho.sum,
                 orderEcho.numberDoc  AS nr_order,
@@ -330,35 +285,50 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
         qCritical(logCritical()) << QStringLiteral("[THREAD %1] Eroare exec SELECT(orderEcho):")
                                         .arg(this->metaObject()->className())
                                  << qry.lastError().text();
-    } else {
-        if (qry.next()) {
-            QSqlRecord rec = qry.record();
-            noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
-            m_data.id_patient  = qry.value(rec.indexOf("patient_id")).toInt();
-            sum_order          = qry.value(rec.indexOf("sum")).toInt();
-            m_data.id_report   = qry.value(rec.indexOf("id_report")).toInt();
-            m_data.nr_order    = qry.value(rec.indexOf("nr_order")).toString();
-            m_data.nr_report   = qry.value(rec.indexOf("nr_report")).toString();
-            qInfo(logInfo()) << "[THREAD] Se initializeaza exportul documentului 'Comanda ecografica' nr." << m_data.nr_order;
-
-            // setam datele pentru export
-            m_datesExport.nr_order              = m_data.nr_order;
-            m_datesExport.nr_report             = m_data.nr_report;
-            m_datesExport.emailTo               = qry.value(rec.indexOf("emailTo")).toString();
-            m_datesExport.name_patient          = QStringLiteral("%1 %2")
-                                                      .arg(qry.value(rec.indexOf("patient_last_name")).toString(),
-                                                           qry.value(rec.indexOf("patient_first_name")).toString())
-                                                      .simplified();
-            m_datesExport.name_doctor_execute   = qry.value(rec.indexOf("doctore_execute")).toString();
-            m_datesExport.str_dateInvestigation = qry.value(rec.indexOf("dateInvestigation")).toString();
-        }
+        return;
     }
+
+    if (!qry.next()) {
+        qCritical(logCritical())
+            << QStringLiteral("[THREAD %1] Comanda cu id=%2 nu a fost găsită pentru export.")
+                   .arg(this->metaObject()->className())
+                   .arg(m_data.id_order);
+        return;
+    }
+
+    const QSqlRecord rec = qry.record();
+    noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
+    m_orderOrganizationId = qry.value(rec.indexOf("id_organizations")).toInt();
+    m_orderExecutingDoctorId = qry.value(rec.indexOf("id_doctors_execute")).toInt();
+    m_orderNurseId = qry.value(rec.indexOf("id_nurses")).toInt();
+    m_data.id_patient = qry.value(rec.indexOf("patient_id")).toInt();
+    sum_order = qry.value(rec.indexOf("sum")).toInt();
+    m_data.id_report = qry.value(rec.indexOf("id_report")).toInt();
+    m_data.nr_order = qry.value(rec.indexOf("nr_order")).toString();
+    m_data.nr_report = qry.value(rec.indexOf("nr_report")).toString();
+    qInfo(logInfo())
+        << "[THREAD] Se initializeaza exportul documentului 'Comanda ecografica' nr."
+        << m_data.nr_order;
+
+    m_datesExport.nr_order = m_data.nr_order;
+    m_datesExport.nr_report = m_data.nr_report;
+    m_datesExport.organizationId = m_orderOrganizationId;
+    m_datesExport.emailTo = qry.value(rec.indexOf("emailTo")).toString();
+    m_datesExport.name_patient =
+        QStringLiteral("%1 %2")
+            .arg(qry.value(rec.indexOf("patient_last_name")).toString(),
+                 qry.value(rec.indexOf("patient_first_name")).toString())
+            .simplified();
+    m_datesExport.name_doctor_execute =
+        qry.value(rec.indexOf("doctore_execute")).toString();
+    m_datesExport.str_dateInvestigation =
+        qry.value(rec.indexOf("dateInvestigation")).toString();
 
     // 3. introducem date pu export in vector
     datesExportForAgentEmail.append(m_datesExport);
 
     // 4. setam modele pu transmiterea generatorului de rapoarte
-    setModelImgForPrint();
+    setModelImgForPrint(dbConn);
     setModelDatesOrganization(dbConn);
     setModelDatesPatient(dbConn);
     setModelDocTable(dbConn, noncomercial_price);

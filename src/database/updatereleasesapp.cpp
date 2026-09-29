@@ -1108,6 +1108,15 @@ bool UpdateReleasesApp::ensureRequiredViews()
         return false;
     if (!ensureCryptoSplitKeySchema())
         return false;
+    if (!addColumnIfMissing(
+            currentDb,
+            QStringLiteral("applicationSettings"),
+            QStringLiteral("synchronization_enabled"),
+            MainDatabaseConnectionContext::instance().isSqlite()
+                ? QStringLiteral("INTEGER NOT NULL DEFAULT 1")
+                : QStringLiteral("BOOLEAN NOT NULL DEFAULT TRUE"),
+            QStringLiteral("Setări sincronizare")))
+        return false;
     if (!addColumnIfMissing(currentDb, QStringLiteral("tableGestation1"),
                             QStringLiteral("multiplePregnancy"),
                             QStringLiteral("INTEGER NOT NULL DEFAULT 0"),
@@ -1304,7 +1313,8 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString currentRelease)
         {QVersionNumber(4, 0, 1), &UpdateReleasesApp::update_4_0_1},
         {QVersionNumber(4, 1, 0), &UpdateReleasesApp::update_4_1_0},
         {QVersionNumber(4, 1, 2), &UpdateReleasesApp::update_4_1_2},
-        {QVersionNumber(4, 2, 0), &UpdateReleasesApp::update_4_2_0}
+        {QVersionNumber(4, 2, 0), &UpdateReleasesApp::update_4_2_0},
+        {QVersionNumber(4, 2, 3), &UpdateReleasesApp::update_4_2_3}
     };
 
     for (const MigrationStep &migration : migrations) {
@@ -3856,6 +3866,14 @@ bool UpdateReleasesApp::update_4_2_0()
             return false;
         }
     }
+    if (!addColumnIfMissing(
+            currentDb,
+            QStringLiteral("applicationSettings"),
+            QStringLiteral("synchronization_enabled"),
+            sqlite ? QStringLiteral("INTEGER NOT NULL DEFAULT 1")
+                   : QStringLiteral("BOOLEAN NOT NULL DEFAULT TRUE"),
+            QStringLiteral("4.2.0")))
+        return false;
     if (!ensureCryptoSplitKeySchema())
         return false;
     emit migrationProgress(1, 6, tr("4.2.0: noua schemă de setări este pregătită."));
@@ -4099,5 +4117,47 @@ bool UpdateReleasesApp::update_4_2_0()
 
     emit migrationProgress(6, 6, tr("4.2.0: noua schemă de setări este pregătită."));
 
+    return true;
+}
+
+bool UpdateReleasesApp::update_4_2_3()
+{
+    const QSqlDatabase currentDb = db->getDatabase();
+    if (!currentDb.isValid() || !currentDb.isOpen()) {
+        qCritical(logCritical())
+            << "Migrarea 4.2.3: baza de date nu este deschisă.";
+        return false;
+    }
+
+    const QStringList tables = currentDb.tables(QSql::Tables);
+    if (!tables.contains(QStringLiteral("applicationSettings"),
+                         Qt::CaseInsensitive)) {
+        qCritical(logCritical())
+            << "Migrarea 4.2.3: tabela applicationSettings lipsește.";
+        return false;
+    }
+
+    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    if (!addColumnIfMissing(
+            currentDb,
+            QStringLiteral("applicationSettings"),
+            QStringLiteral("synchronization_enabled"),
+            sqlite ? QStringLiteral("INTEGER NOT NULL DEFAULT 1")
+                   : QStringLiteral("BOOLEAN NOT NULL DEFAULT TRUE"),
+            QStringLiteral("4.2.3"))) {
+        return false;
+    }
+
+    if (!hasColumn(currentDb,
+                   QStringLiteral("applicationSettings"),
+                   QStringLiteral("synchronization_enabled"))) {
+        qCritical(logCritical())
+            << "Migrarea 4.2.3: coloana "
+               "applicationSettings.synchronization_enabled lipsește după actualizare.";
+        return false;
+    }
+
+    qInfo(logInfo())
+        << "Migrarea 4.2.3: preferința de sincronizare cloud este pregătită.";
     return true;
 }

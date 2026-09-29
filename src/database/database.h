@@ -150,7 +150,6 @@ public:
 
     bool existIdDocument(const QString nameTable, const QString name_condition, const QString value_condition, QSqlDatabase nameDatabase);
     bool existSubalternDocument(const QString nameTable, const QString name_condition, const QString value_condition, int &id_doc);
-    QString getQryFromTableConstantById(const int id_user) const;
     QString getQryForTableOrgansInternalById(const int id_doc) const;
     QString getQryForTableUrinarySystemById(const int id_doc) const;
     QString getQryForTableProstateById(const int id_doc) const;
