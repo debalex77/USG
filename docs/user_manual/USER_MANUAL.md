@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.3\
+**Versiune documentată:** 4.2.4\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -863,11 +863,15 @@ este activată.
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
 
-### Notă pentru 4.2.3
+### Notă pentru 4.2.4
 
-Versiunea 4.2.3 adaugă migrarea controlată a preferinței de
-sincronizare cloud. Utilizatorul poate activa sau dezactiva
-sincronizarea profilului SQLite din setările aplicației.
+Versiunea 4.2.4 corectează identitatea utilizată la tipărire. Organizația
+din Comanda ecografică este organizația trimițătoare, în timp ce antetul,
+logotipul, ștampilele și semnătura sunt preluate de la organizația și
+doctorul executant configurați în preferințele utilizatorului.
+
+Rapoartele statistice prezintă logotipul organizației, ștampila doctorului
+și semnătura doctorului.
 
 Pentru un profil SQLite sincronizat cu MariaDB, actualizarea trebuie
 efectuată cu atenție și numai după realizarea copiilor de siguranță.
@@ -1064,7 +1068,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.3**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.4**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

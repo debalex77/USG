@@ -166,7 +166,6 @@ private:
     QToolButton *btnInvestigations;
     QToolButton *btnPricing;
     QToolButton *btnSettings;
-    QToolButton *btnUserManual;
     QToolButton *btnAbout;
     QToolButton *btnBlock;
 

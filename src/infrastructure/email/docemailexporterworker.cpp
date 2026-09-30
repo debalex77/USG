@@ -108,8 +108,8 @@ void DocEmailExporterWorker::setModelImgForPrint(QSqlDatabase &dbConn)
     const PrintImagesService::Result images =
         PrintImagesService::fillModel(model_img,
                                       dbConn,
-                                      m_orderOrganizationId,
-                                      m_orderExecutingDoctorId);
+                                      m_data.printOrganizationId,
+                                      m_data.printDoctorId);
 
     exist_logo               = images.logo ? 1 : 0;
     exist_stamp_organization = images.organizationStamp ? 1 : 0;
@@ -142,9 +142,9 @@ void DocEmailExporterWorker::setModelDatesOrganization(QSqlDatabase &dbConn)
         WHERE
             organizations.id = ?
     )"));
-    qry.addBindValue(m_orderExecutingDoctorId);
-    qry.addBindValue(m_orderNurseId);
-    qry.addBindValue(m_orderOrganizationId);
+    qry.addBindValue(m_data.printDoctorId);
+    qry.addBindValue(m_data.printNurseId);
+    qry.addBindValue(m_data.printOrganizationId);
     if (! qry.exec()) {
         qCritical() << QStringLiteral("[THREAD %1] Eroare solicitarii la crearea 'model_organization':")
                             .arg(this->metaObject()->className())
@@ -251,11 +251,8 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
     // 2. setam variabile locale si structura
     QSqlQuery qry(dbConn);
     qry.prepare(R"(
-            SELECT
-                orderEcho.id_organizations,
+        SELECT
                 orderEcho.id_typesPrices,
-                orderEcho.id_doctors_execute,
-                orderEcho.id_nurses,
                 orderEcho.patient_id,
                 orderEcho.sum,
                 orderEcho.numberDoc  AS nr_order,
@@ -298,9 +295,6 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
 
     const QSqlRecord rec = qry.record();
     noncomercial_price = qry.value(rec.indexOf("noncomercial")).toBool();
-    m_orderOrganizationId = qry.value(rec.indexOf("id_organizations")).toInt();
-    m_orderExecutingDoctorId = qry.value(rec.indexOf("id_doctors_execute")).toInt();
-    m_orderNurseId = qry.value(rec.indexOf("id_nurses")).toInt();
     m_data.id_patient = qry.value(rec.indexOf("patient_id")).toInt();
     sum_order = qry.value(rec.indexOf("sum")).toInt();
     m_data.id_report = qry.value(rec.indexOf("id_report")).toInt();
@@ -312,7 +306,9 @@ void DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
 
     m_datesExport.nr_order = m_data.nr_order;
     m_datesExport.nr_report = m_data.nr_report;
-    m_datesExport.organizationId = m_orderOrganizationId;
+    // Contul de expediere și identitatea documentelor aparțin cabinetului
+    // configurat în UserPreference, nu organizației trimițătoare din comandă.
+    m_datesExport.organizationId = m_data.printOrganizationId;
     m_datesExport.emailTo = qry.value(rec.indexOf("emailTo")).toString();
     m_datesExport.name_patient =
         QStringLiteral("%1 %2")

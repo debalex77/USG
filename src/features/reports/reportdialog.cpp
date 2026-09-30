@@ -198,10 +198,12 @@ void ReportDialog::onOpenPrintParameters()
     auto *showDoctorStamp = new QCheckBox(tr("Prezintă ștampila doctorului"), &dialog);
     auto *showDoctorSignature = new QCheckBox(tr("Prezintă semnătura doctorului"), &dialog);
 
+    const int printDoctorId =
+        SettingsService::instance().organization().defaultDoctorId;
     const PrintImagesService::DoctorPrintImages doctor =
         PrintImagesService::loadDoctorPrintImages(
             m_currentDB,
-            m_documentContext.data().executingDoctorId);
+            printDoctorId);
 
     const bool stampAvailable = !doctor.stamp.isEmpty();
     const bool signatureAvailable = !doctor.signature.isEmpty();
@@ -411,13 +413,15 @@ void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     if (!m_documentContext.data().isValid())
         loadDocumentContext();
 
-    /** 5. completam logog, stamp & signature */
+    /** 5. completam logo, stampila si semnatura din UserPreference */
+    const Settings::OrganizationSettings &printSettings =
+        SettingsService::instance().organization();
     PrintImagesService::Result imageService;
     imageService = PrintImagesService::fillModel(
         &model_img,
         m_currentDB,
-        m_documentContext.data().organizationId,
-        m_documentContext.data().executingDoctorId);
+        printSettings.organizationId,
+        printSettings.defaultDoctorId);
 
     setPrintModelOrganization(&print_model_organization);
     setPrintModelPatient(&print_model_patient);
@@ -1633,7 +1637,11 @@ void ReportDialog::setPrintModelOrganization(QSqlQueryModel *print_model_organiz
     if (print_model_organization->rowCount() > 0)
         print_model_organization->clear();
 
-    const ReportDocumentContextData &context = m_documentContext.data();
+    // Antetul raportului aparține organizației și doctorului care efectuează
+    // investigația, configurați în UserPreference. Organizația din orderEcho
+    // este trimițătorul și rămâne doar în contextul documentului.
+    const Settings::OrganizationSettings &printSettings =
+        SettingsService::instance().organization();
     m_db.setModelQuery(
         *print_model_organization,
         m_currentDB,
@@ -1657,9 +1665,9 @@ void ReportDialog::setPrintModelOrganization(QSqlQueryModel *print_model_organiz
             WHERE
                 org.id = ?
         )"),
-        {context.executingDoctorId,
-         context.nurseId,
-         context.organizationId});
+        {printSettings.defaultDoctorId,
+         printSettings.defaultNurseId,
+         printSettings.organizationId});
 }
 
 void ReportDialog::setPrintModelPatient(QSqlQueryModel *print_model_patient)

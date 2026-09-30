@@ -357,6 +357,11 @@ void OrderView::onSendEmail()
     data.id_order                     = item.id;
     data.id_report                    = -1;
     data.id_patient                   = item.patientId;
+    const Settings::OrganizationSettings &printSettings =
+        SettingsService::instance().organization();
+    data.printOrganizationId          = printSettings.organizationId;
+    data.printDoctorId                = printSettings.defaultDoctorId;
+    data.printNurseId                 = printSettings.defaultNurseId;
     data.unitMeasure                  = globals().unitMeasure;
     data.pathTemplatesDocs            = ApplicationPathsContext::instance().data().templatesDirectory;
     data.filePDF                      = exportDirectory;

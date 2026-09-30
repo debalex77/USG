@@ -62,9 +62,6 @@ private:
     int exist_signature = 0;
     int exist_stamp_doctor = 0;
     int exist_stamp_organization = 0;
-    int m_orderOrganizationId = 0;
-    int m_orderExecutingDoctorId = 0;
-    int m_orderNurseId = 0;
     QStandardItemModel *model_img = nullptr;
 
     LimeReport::ReportEngine *m_report;

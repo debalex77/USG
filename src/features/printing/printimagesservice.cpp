@@ -18,7 +18,8 @@ namespace {
 PrintImagesService::Result PrintImagesService::fillModel(QStandardItemModel* model,
                                                          const QSqlDatabase& db,
                                                          int organizationId,
-                                                         int doctorId)
+                                                         int doctorId,
+                                                         ModelLayout layout)
 {
     Result result;
 
@@ -79,27 +80,22 @@ PrintImagesService::Result PrintImagesService::fillModel(QStandardItemModel* mod
 
     result.doctorSignature = itSig->data(Qt::DisplayRole).isValid();
 
-    /*
-     * Model LimeReport:
-     *
-     * coloana 0 - logo
-     * coloana 1 - ștampila organizației
-     * coloana 2 - ștampila doctorului
-     * coloana 3 - semnătura doctorului
-     */
-
     model->clear();
-    model->setColumnCount(4);
-
-    QList<QStandardItem*> row;
-    row.reserve(4);
-
-    row << itLogo
-        << itOrg
-        << itDoc
-        << itSig;
-
-    model->appendRow(row);
+    if (layout == ModelLayout::StatisticalReports) {
+        // Șabloanele rapoartelor statistice folosesc trei coloane LimeReport:
+        // 1 - logo, 2 - ștampila doctorului, 3 - semnătura doctorului.
+        // Ștampila organizației nu face parte din aceste rapoarte.
+        model->setColumnCount(3);
+        model->appendRow({itLogo, itDoc, itSig});
+        delete itOrg;
+        result.organizationStamp = false;
+    } else {
+        // Modelele documentelor Order/Report folosesc patru coloane:
+        // 1 - logo, 2 - ștampila organizației, 3 - ștampila doctorului,
+        // 4 - semnătura doctorului.
+        model->setColumnCount(4);
+        model->appendRow({itLogo, itOrg, itDoc, itSig});
+    }
 
     return result;
 }

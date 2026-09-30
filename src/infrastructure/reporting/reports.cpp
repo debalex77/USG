@@ -582,7 +582,8 @@ void Reports::setImageForReports()
         PrintImagesService::fillModel(model_img,
                                       m_db.getDatabase(),
                                       organization.organizationId,
-                                      organization.defaultDoctorId);
+                                      organization.defaultDoctorId,
+                                      PrintImagesService::ModelLayout::StatisticalReports);
 
     exist_logo = images.logo ? 1 : 0;
 }

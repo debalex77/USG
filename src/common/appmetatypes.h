@@ -95,12 +95,20 @@ struct DatesForAgentEmail
 
 struct DatesDocForExportEmail
 {
-    bool thisMySQL;
-    int id_order;
-    int id_report;
+    bool thisMySQL = false;
+    int id_order = 0;
+    int id_report = 0;
     QString nr_order;
     QString nr_report;
-    int id_patient;
+    int id_patient = 0;
+
+    // Identitatea cabinetului care efectuează investigația și emite
+    // documentele. Aceste valori provin exclusiv din UserPreference și nu
+    // trebuie confundate cu organizația/doctorul trimițător din orderEcho.
+    int printOrganizationId = 0;
+    int printDoctorId = 0;
+    int printNurseId = 0;
+
     QString unitMeasure;
     QString pathTemplatesDocs;
     QString filePDF;

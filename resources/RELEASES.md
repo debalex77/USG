@@ -1,3 +1,12 @@
+## USG v4.2.4 (30.09.2026)
+
+- Corectată separarea dintre organizația trimițătoare păstrată în Comanda ecografică și identitatea cabinetului care efectuează investigația: antetul, logotipul și imaginile de tipărire provin din preferințele utilizatorului.
+- Comanda ecografică folosește logotipul și ștampila organizației executante configurate în preferințe.
+- Raportul ecografic folosește datele organizației executante, iar ștampila și semnătura aparțin doctorului implicit configurat în preferințe și respectă parametrii de tipărire.
+- Exportul PDF pentru e-mail folosește aceeași identitate de tipărire ca previzualizarea documentelor.
+- Corectată maparea imaginilor în rapoartele statistice: logotipul organizației, ștampila doctorului și semnătura doctorului; ștampila organizației nu mai înlocuiește semnătura.
+- Manualul utilizatorului rămâne disponibil din meniul superior de asistență; butonul redundant a fost eliminat din bara de instrumente.
+
 ## USG v4.2.3 (29.09.2026)
 
 - Manualul de utilizare în limba română a fost rescris, completat cu capturi de ecran și legat de butonul **Manual Online** din fereastra principală; pagina Wiki veche este înlocuită.

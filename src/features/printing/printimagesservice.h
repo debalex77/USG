@@ -11,6 +11,11 @@ class QStandardItemModel;
 class PrintImagesService
 {
 public:
+    enum class ModelLayout {
+        Documents,
+        StatisticalReports
+    };
+
     struct Result {
         bool logo              = false;
         bool organizationStamp = false;
@@ -26,7 +31,8 @@ public:
     static Result fillModel(QStandardItemModel *model,
                             const QSqlDatabase &db,
                             int organizationId,
-                            int doctorId);
+                            int doctorId,
+                            ModelLayout layout = ModelLayout::Documents);
 
     static DoctorPrintImages loadDoctorPrintImages(const QSqlDatabase& db,
                                                    int doctorId);

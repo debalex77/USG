@@ -7,6 +7,8 @@
 struct ReportDocumentContextData
 {
     int orderId           = 0;
+    // Date relaționale ale comenzii. organizationId este organizația
+    // trimițătoare și nu trebuie folosită drept identitate de tipar.
     int organizationId    = 0;
     int orderUserId       = 0;
     int executingDoctorId = 0;

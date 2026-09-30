@@ -147,7 +147,6 @@ void MainWindow::initButton()
     btnReports              = new QToolButton(toolBar);
     btnPricing              = new QToolButton(toolBar);
     btnSettings             = new QToolButton(toolBar);
-    btnUserManual           = new QToolButton(toolBar);
     btnAbout                = new QToolButton(toolBar);
     btnBlock                = new QToolButton(toolBar);
 
@@ -165,7 +164,6 @@ void MainWindow::initButton()
     btnReports->setIcon(QIcon(":/img/documents/reports.png"));
     btnPricing->setIcon(QIcon(":/img/documents/pricing.png"));
     btnSettings->setIcon(QIcon(":/img/catalogs/settings.png"));
-    btnUserManual->setIcon(QIcon(":/img/catalogs/user_manual.png"));
     btnAbout->setIcon(QIcon(":/img/common/info.png"));
     btnBlock->setIcon(QIcon(":/img/common/lock.png"));
 
@@ -204,8 +202,6 @@ void MainWindow::initButton()
     toolBar->addSeparator();
     toolBar->addWidget(btnSettings);
     toolBar->addSeparator();
-    toolBar->addWidget(btnUserManual);
-    toolBar->addSeparator();
     toolBar->addWidget(btnAbout);
     toolBar->addSeparator();
     toolBar->addWidget(btnBlock);
@@ -238,8 +234,6 @@ void MainWindow::initButton()
             this, &MainWindow::openDocExamen, Qt::UniqueConnection);
     connect(btnSettings, &QAbstractButton::clicked,
             this, &MainWindow::openAppSettings, Qt::UniqueConnection);
-    connect(btnUserManual, &QAbstractButton::clicked,
-            this, &MainWindow::openUserManual, Qt::UniqueConnection);
     connect(btnAbout, &QAbstractButton::clicked,
             this, &MainWindow::openAbout, Qt::UniqueConnection);
     connect(btnBlock, &QAbstractButton::clicked,
@@ -477,7 +471,6 @@ void MainWindow::updateTextBtn()
     btnReports->setText(tr("Rapoarte"));
     btnPricing->setText(tr("Prețuri"));
     btnSettings->setText(tr("Setări"));
-    btnUserManual->setText(tr("Manual Online"));
     btnAbout->setText(tr("Despre aplicația"));
     btnBlock->setText(tr("Blocare"));
 }

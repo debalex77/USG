@@ -4,11 +4,15 @@
 struct OrderDocumentContextData
 {
     int orderId        = 0;
+    // Organizația care a trimis pacientul, salvată în document.
+    // Nu reprezintă organizația utilizată în antetul formularului tipărit.
     int organizationId = 0;
     int contractId     = 0;
     int priceTypeId    = 0;
 
     int referringDoctorId = 0;
+    // Doctorul documentului; identitatea de tipar este doctorul implicit din
+    // UserPreference.
     int executingDoctorId = 0;
     int nurseId = 0;
 

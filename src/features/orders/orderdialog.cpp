@@ -1029,12 +1029,14 @@ void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
     bool noncomercial = ui->comboTypePrices ->currentData(roleNoncomecial).toBool();
 
     // *************************************************************************************
-    // contextul - logotipul, ștampilele și semnătura documentului
-    const OrderDocumentContextData &context = m_documentContext.data();
+    // Identitatea de tipar aparține cabinetului care efectuează investigația
+    // (UserPreference), nu organizației trimițătoare salvate în orderEcho.
+    const Settings::OrganizationSettings &printSettings =
+        SettingsService::instance().organization();
     const PrintImagesService::Result printImages = PrintImagesService::fillModel(print_model_images,
                                                                                  m_currentDB,
-                                                                                 context.organizationId,
-                                                                                 context.executingDoctorId);
+                                                                                 printSettings.organizationId,
+                                                                                 printSettings.defaultDoctorId);
     m_report->dataManager()->addModel("table_img", print_model_images, false);
 
     // *************************************************************************************
@@ -1670,7 +1672,11 @@ void OrderDialog::setPrintModelOrganization(QSqlQueryModel *model)
     if (model->rowCount() > 0)
         model->clear();
 
-    const OrderDocumentContextData &context = m_documentContext.data();
+    // Modelul antetului descrie cabinetul care efectuează investigația.
+    // Organizația selectată în document rămâne organizația trimițătoare și
+    // nu este folosită drept identitate vizuală a formularului tipărit.
+    const Settings::OrganizationSettings &printSettings =
+        SettingsService::instance().organization();
     m_db.setModelQuery(
         *model,
         m_currentDB,
@@ -1696,9 +1702,9 @@ void OrderDialog::setPrintModelOrganization(QSqlQueryModel *model)
             WHERE
                 org.id = ?
         )"),
-        {context.executingDoctorId,
-         context.nurseId,
-         context.organizationId});
+        {printSettings.defaultDoctorId,
+         printSettings.defaultNurseId,
+         printSettings.organizationId});
 }
 
 bool OrderDialog::onPost()
