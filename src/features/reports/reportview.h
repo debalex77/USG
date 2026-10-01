@@ -28,7 +28,7 @@
 #include <models/sortmodel.h>
 
 #include <common/appmetatypes.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <common/table_sections.h>
 #include <database/database.h>
 
@@ -97,7 +97,7 @@ protected:
     bool eventFilter(QObject *watched, QEvent *event) override;
 
     Ui::Form *ui = nullptr;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     const QString m_settingsGroup = "ReportView";
     DataBase &m_db;
     JournalFilter m_filter;

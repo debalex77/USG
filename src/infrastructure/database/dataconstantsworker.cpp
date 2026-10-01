@@ -23,8 +23,8 @@
 
 #include "dataconstantsworker.h"
 
-DataConstantsWorker::DataConstantsWorker(DatabaseProvider *provider, GeneralData &data, QObject *parent)
-    : QObject{parent}, m_data(data), m_db(provider)
+DataConstantsWorker::DataConstantsWorker(const GeneralData &data, QObject *parent)
+    : QObject{parent}, m_data(data)
 {
 
 }
@@ -45,12 +45,16 @@ void DataConstantsWorker::process()
     OrganizationContextData organizationData;
     DoctorContextData doctorData;
 
+    // Provider local: worker-ul nu depinde de durata de viață a dialogului
+    // de autorizare care l-a pornit.
+    DatabaseProvider provider;
+
     { // Conexiunea trăieşte DOAR în acest bloc
 
-        QSqlDatabase dbConn = m_db->getDatabaseThread(connName, m_data.thisMySQL);
+        QSqlDatabase dbConn = provider.getDatabaseThread(connName, m_data.thisMySQL);
         if (! dbConn.isOpen() &&
             ! dbConn.open()) {
-            qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
                                .arg(this->metaObject()->className())
                         << dbConn.lastError().text();
             success = false;
@@ -80,7 +84,7 @@ void DataConstantsWorker::process()
             qry.addBindValue(m_data.id_user);
             if (! qry.exec()) {
                 success = false;
-                qCritical(logCritical()) << QStringLiteral("[THREAD %1] Eroare exec SELECT(constants):")
+                qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Eroare exec SELECT(constants):")
                                                 .arg(this->metaObject()->className())
                                          << qry.lastError().text();
             } else {
@@ -114,7 +118,7 @@ void DataConstantsWorker::process()
                 qry.addBindValue(m_data.id_organization);
             if (! qry.exec()) {
                 success = false;
-                qCritical(logCritical()) << QStringLiteral("[THREAD %1] Eroare exec SELECT(organizations):")
+                qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Eroare exec SELECT(organizations):")
                                                 .arg(this->metaObject()->className())
                                          << qry.lastError().text();
             } else {
@@ -129,7 +133,7 @@ void DataConstantsWorker::process()
                                                 : QString();
                     organizationData.stampData = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
 
-                    qInfo(logInfo()) << "[THREAD] Actualizate variabile globale cu date a organizatiei implicite";
+                    qInfo(logInfo()) << "[THREAD] Actualizat contextul organizatiei implicite";
                 }
             }
 
@@ -155,7 +159,7 @@ void DataConstantsWorker::process()
                 qry.addBindValue(m_data.id_doctor);
             if (! qry.exec()) {
                 success = false;
-                qCritical(logCritical()) << QStringLiteral("[THREAD %1] Eroare exec SELECT(doctors):")
+                qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Eroare exec SELECT(doctors):")
                                                 .arg(this->metaObject()->className())
                                          << qry.lastError().text();
             } else {
@@ -166,7 +170,7 @@ void DataConstantsWorker::process()
                     doctorData.stampData       = QByteArray::fromBase64(qry.value(rec.indexOf("stamp")).toString().toUtf8());
                     doctorData.signatureData   = QByteArray::fromBase64(qry.value(rec.indexOf("signature")).toString().toUtf8());
 
-                    qInfo(logInfo()) << "[THREAD] Actualizate variabile globale cu date doctorului implicit";
+                    qInfo(logInfo()) << "[THREAD] Actualizat contextul doctorului implicit";
                 }
             }
 
@@ -187,7 +191,7 @@ void DataConstantsWorker::process()
             qry.addBindValue(m_data.id_user);
             if (! qry.exec()) {
                 success = false;
-                qCritical(logCritical()) << QStringLiteral("[THREAD %1] Eroare exec SELECT(cloudServer):")
+                qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Eroare exec SELECT(cloudServer):")
                                                 .arg(this->metaObject()->className())
                                          << qry.lastError().text();
             } else {
@@ -224,7 +228,7 @@ void DataConstantsWorker::process()
                         if (!decrypted) {
                             qWarning(logWarning()) << "[THREAD] Parola cloud nu a putut fi decriptată.";
                         } else {
-                            qInfo(logInfo()) << "[THREAD] Actualizate variabile globale pentru sincronizare cu serverul.";
+                            qInfo(logInfo()) << "[THREAD] Actualizat contextul conexiunei cloud.";
                         }
                     } else {
                         cloudConnection.password.clear();
@@ -238,7 +242,7 @@ void DataConstantsWorker::process()
         }
     } // <- destructor QSqlDatabase
 
-    m_db->removeDatabaseThread(connName);
+    provider.removeDatabaseThread(connName);
 
     emit finished(success,
                   cloudConnection,

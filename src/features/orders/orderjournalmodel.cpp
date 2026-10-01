@@ -23,6 +23,8 @@
 
 #include "orderjournalmodel.h"
 
+#include <utility>
+
 OrderJournalModel::OrderJournalModel(DataBase &db, QObject *parent)
     : QAbstractTableModel{parent}
     , m_loader(db)
@@ -58,12 +60,18 @@ void OrderJournalModel::reload()
     m_items.clear();
     m_hasMore = true;
     m_loading = false;
+    m_lastError.clear();
     endResetModel();
 
     m_loader.setFilter(m_filter);
 
     if (canFetchMore())
         fetchMore();
+}
+
+QString OrderJournalModel::takeLastError()
+{
+    return std::exchange(m_lastError, QString());
 }
 
 int OrderJournalModel::rowCount(const QModelIndex &parent) const
@@ -345,6 +353,7 @@ void OrderJournalModel::loadInitial()
     const auto result = m_loader.loadFirstBatch(m_batchSize);
     appendItems(result.items);
     m_hasMore = result.hasMore;
+    m_lastError = result.error;
 
     m_loading = false;
 }
@@ -363,6 +372,7 @@ void OrderJournalModel::loadMore()
 
     appendItems(result.items);
     m_hasMore = result.hasMore;
+    m_lastError = result.error;
 
     m_loading = false;
 }

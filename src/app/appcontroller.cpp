@@ -27,16 +27,20 @@
 #include "common/maindatabaseconnectioncontext.h"
 #include "common/sessioncontext.h"
 #include "core/version.h"
+#include "database/database.h"
+#include "infrastructure/database/databaseprovider.h"
 
 #include "settings/settingsrepository.h"
 #include "settings/settingsservice.h"
 
 #include <QMessageBox>
 #include <QDir>
+#include <QFileInfo>
 #include <QProcess>
 #include <QScopeGuard>
 #include <QSqlError>
 #include <QSqlQuery>
+#include <QThread>
 #include <QTranslator>
 
 AppController::AppController(QObject *parent)
@@ -63,21 +67,20 @@ int AppController::run(int &argc, char **argv)
     applyGlobalFont(); /** fontul aplicatiei */
     applyStyleSheet(); /** stilul aplicatiei */
 
-    // Selectarea bazei este afișată înainte de citirea profilului. Limba ei
-    // trebuie cunoscută din preferința comună a aplicației.
+    // Selectarea bazei este afisata inainte de citirea profilului.
+    // Limba aflam din preferinta comuna a aplicatiei.
     QTranslator startupTranslator;
-    const QString startupLanguage = AppSettingsStore::readStartupLanguage(
-        ApplicationPathsContext::instance().startupSettingsFilePath());
+    const QString startupLanguage = AppSettingsStore::readStartupLanguage(ApplicationPathsContext::instance().startupSettingsFilePath());
     const QString language = startupLanguage.isEmpty()
                                  ? QLocale::system().name()
                                  : startupLanguage;
-    const QString translationPath = QStringLiteral(":/i18n/USG_%1.qm")
-                                        .arg(QLocale(language).name());
+
+    const QString translationPath = QStringLiteral(":/i18n/USG_%1.qm").arg(QLocale(language).name());
     if (startupTranslator.load(translationPath)) {
         app.installTranslator(&startupTranslator);
         if (language.startsWith(QLatin1String("ru"), Qt::CaseInsensitive)
-            && QCoreApplication::translate("DatabaseSelection", "Alege/creează baza de date")
-                   == QStringLiteral("Alege/creează baza de date")) {
+            && QCoreApplication::translate("DatabaseSelection",
+                                           "Alege/creează baza de date") == QStringLiteral("Alege/creează baza de date")) {
             qWarning(logWarning())
                 << "Catalogul rus nu a tradus dialogul de selectare a bazei de date:"
                 << translationPath;
@@ -189,6 +192,39 @@ bool AppController::ensureMainDatabaseConnected()
     if (currentDatabase.isValid() && currentDatabase.isOpen())
         return true;
 
+    /** la lansarea obisnuita fisierele SQLite (baza si imaginile) trebuie sa existe;
+     *  altfel driverul ar crea tacit baze goale in locul celor din profil */
+    const MainDatabaseConnectionData profileConnection = MainDatabaseConnectionContext::instance().data();
+    if (!globals().firstLaunch && profileConnection.backend == MainDatabaseBackend::SQLite) {
+        QStringList missingFiles;
+        for (const QString &path : {profileConnection.sqliteDatabasePath,
+                                    profileConnection.imageDatabasePath}) {
+            if (path.isEmpty())
+                missingFiles << tr("(calea nu este indicată în profil)");
+            else if (!QFileInfo::exists(path))
+                missingFiles << QDir::toNativeSeparators(path);
+        }
+
+        if (!missingFiles.isEmpty()) {
+            qCritical(logCritical())
+                << tr("Fișierele bazei de date SQLite din profil nu există:")
+                << missingFiles;
+
+            QStringList escapedFiles;
+            for (const QString &file : std::as_const(missingFiles))
+                escapedFiles << file.toHtmlEscaped();
+
+            QMessageBox::critical(nullptr,
+                                  tr("Conectarea la baza de date"),
+                                  tr("Fișierele bazei de date indicate în profil nu au fost găsite:<br><b>%1</b><br><br>"
+                                     "Verificați dacă fișierele nu au fost mutate, redenumite sau șterse, "
+                                     "sau dacă discul/directorul de rețea este accesibil.")
+                                      .arg(escapedFiles.join(QStringLiteral("<br>"))),
+                                  QMessageBox::Ok);
+            return false;
+        }
+    }
+
     /** conectarea propriu-zisa */
     if (m_db.connectToDataBase()) {
         const QSqlDatabase connectedDatabase = m_db.getDatabase();
@@ -205,7 +241,13 @@ bool AppController::ensureMainDatabaseConnected()
                                                   .arg(connection.hostName,
                                                        connection.databaseName)
                                             : connection.sqliteDatabasePath;
-    const QString errorText = failedDatabase.lastError().text();
+    const QString schemaError = m_db.lastConnectError();
+    const QString errorText = schemaError.isEmpty()
+                                  ? failedDatabase.lastError().text()
+                                  : schemaError
+                                        + QStringLiteral("\n")
+                                        + tr("Alegeți prima lansare pentru a crea schema "
+                                             "sau restaurați baza de date dintr-o copie de rezervă.");
 
     /** nu uitam de log */
     qCritical(logCritical())
@@ -218,7 +260,8 @@ bool AppController::ensureMainDatabaseConnected()
                           tr("Conectarea la baza de date"),
                           tr("Baza de date nu a putut fi deschisă:<br><b>%1</b><br><br>%2")
                               .arg(databaseDescription.toHtmlEscaped(),
-                                   errorText.toHtmlEscaped()),
+                                   errorText.toHtmlEscaped().replace(QLatin1Char('\n'),
+                                                                     QStringLiteral("<br>"))),
                           QMessageBox::Ok);
     return false;
 }
@@ -227,38 +270,91 @@ bool AppController::initializeNewDatabase()
 {
     DatabaseInit initializer(this);
     const bool initialized = initializer.run(nullptr, [] {
+        const bool mariaDb = MainDatabaseConnectionContext::instance().isMariaDb();
+        const QString threadId =
+            QString::number(reinterpret_cast<quintptr>(QThread::currentThreadId()));
+        const QString connectionName = QStringLiteral("init_schema_") + threadId;
+        const QString imageConnectionName = QStringLiteral("init_schema_image_") + threadId;
+
+        // Firul de lucru folosește numai conexiuni proprii; conexiunea
+        // implicită este deschisă ulterior pe firul GUI.
+        DatabaseProvider provider;
         bool success = false;
         {
-            DataBase db;
-            success = db.connectToDataBase() && db.creatingTables();
-            if (success)
-                success = db.loadNormogramsFromXml();
+            QSqlDatabase database = provider.getDatabaseThread(connectionName, mariaDb);
+            if (database.isOpen()) {
+                QSqlDatabase imageDatabase;
+                if (!mariaDb) {
+                    imageDatabase = provider.getDatabaseImagesThread(imageConnectionName);
+                    success = imageDatabase.isOpen()
+                              && DataBaseCommon::createTableDBImageSqlite(
+                                  imageDatabase,
+                                  QStringLiteral(":/sql/sqlite/tables/image_reports.sql"),
+                                  QStringLiteral("image_reports (DB_Image)"));
+                    if (!success) {
+                        qCritical(logCritical()).noquote()
+                            << "[THREAD]" << tr("Inițializarea bazei de imagini a eșuat.");
+                    }
+                } else {
+                    success = true;
+                }
 
-            if (success) {
-                QString schemaVersionError;
-                success = db.setDatabaseSchemaVersion(QStringLiteral(VERSION_FULL), &schemaVersionError);
-                if (!success)
-                    qCritical(logCritical())
-                        << tr("Inițializarea versiunii schemei a eșuat:")
-                        << schemaVersionError;
+                QString existingVersion;
+                QString error;
+                if (success) {
+                    success = DataBase::readExistingSchemaVersion(database,
+                                                                   &existingVersion,
+                                                                   &error);
+                }
+                if (!success) {
+                    qCritical(logCritical()).noquote()
+                        << "[THREAD]" << tr("Pregătirea bazelor pentru inițializare a eșuat:") << error;
+
+                } else if (!existingVersion.isEmpty()) {
+                    // Baza aleasă are deja schema aplicației; nu o recreăm și nu
+                    // îi schimbăm versiunea, migrările rulează în MainWindow.
+                    qInfo(logInfo()).noquote()
+                        << "[THREAD]" << tr("Baza de date are deja schema versiunii %1; crearea schemei este omisă.")
+                               .arg(existingVersion);
+
+                    // O bază declarată la versiunea curentă trebuie să fie și
+                    // completă. Bazele mai vechi sunt verificate după migrările
+                    // executate în MainWindow.
+                    if (existingVersion == QStringLiteral(VERSION_FULL)) {
+                        success = DataBase::verifyNewDatabaseSchema(database,
+                                                                    imageDatabase);
+                    }
+
+                } else {
+                    success = mariaDb ? DataBaseCommon::createAllTablesMariaDB(database)
+                                      : DataBaseCommon::createAllTablesSqlite(database);
+                    if (success)
+                        success = DataBase::loadNormogramsFromXml(database);
+                    if (success)
+                        success = DataBase::verifyNewDatabaseSchema(database,
+                                                                    imageDatabase);
+
+                    // Versiunea se scrie numai după verificarea ambelor baze.
+                    // O bază incompletă rămâne fără versiune și inițializarea
+                    // poate fi reluată la următoarea lansare.
+                    if (success) {
+                        success = DataBase::setDatabaseSchemaVersion(database,
+                                                                     QStringLiteral(VERSION_FULL),
+                                                                     &error);
+                        if (!success)
+                            qCritical(logCritical()).noquote()
+                                << "[THREAD]" << tr("Inițializarea versiunii schemei a eșuat:") << error;
+                    }
+                }
+
+                if (imageDatabase.isValid())
+                    imageDatabase.close();
             }
-
-            if (success && !MainDatabaseConnectionContext::instance().isMariaDb())
-                success = db.creatingTables_DbImage();
-
-            if (success)
-                success = db.verifyNewDatabaseSchema();
+            database.close();
         }
-
-        if (QSqlDatabase::contains(QStringLiteral("db_image"))) {
-            {
-                QSqlDatabase imageDb = QSqlDatabase::database(QStringLiteral("db_image"), false);
-                imageDb.close();
-            }
-            QSqlDatabase::removeDatabase(QStringLiteral("db_image"));
-        }
-        if (QSqlDatabase::contains(QSqlDatabase::defaultConnection))
-            QSqlDatabase::removeDatabase(QSqlDatabase::defaultConnection);
+        provider.removeDatabaseThread(connectionName);
+        if (!mariaDb)
+            provider.removeDatabaseThread(imageConnectionName);
 
         return success;
     });
@@ -279,7 +375,11 @@ bool AppController::initializeNewDatabase()
 bool AppController::ensureInitialAdministrator()
 {
     QSqlQuery q(m_db.getDatabase());
-    if (!q.exec(QStringLiteral(R"(SELECT COUNT(*) FROM users WHERE deletionMark = 0)"))
+    if (!q.exec(QStringLiteral(R"(
+            SELECT COUNT(*),
+                   SUM(CASE WHEN deletionMark = 0 THEN 1 ELSE 0 END)
+            FROM users
+        )"))
         || !q.next()) {
 
         qCritical(logCritical())
@@ -293,8 +393,29 @@ bool AppController::ensureInitialAdministrator()
         return false;
     }
 
-    if (q.value(0).toInt() > 0)
+    const int totalUsers  = q.value(0).toInt();
+    const int activeUsers = q.value(1).toInt(); // SUM pe tabel gol -> NULL -> 0
+    if (activeUsers > 0)
         return true;
+
+    // Crearea administratorului fara autentificare este permisa numai pe o
+    // baza fara utilizatori. Daca exista utilizatori marcati ca stersi, nu
+    // oferim o cale de ocolire a autentificarii.
+    if (totalUsers > 0) {
+        qCritical(logCritical())
+            << tr("Baza de date nu conține utilizatori activi (utilizatori marcați ca șterși: %1); "
+                  "crearea administratorului fără autentificare este refuzată.")
+                   .arg(totalUsers);
+
+        QMessageBox::critical(nullptr,
+                              tr("Autorizarea utilizatorului"),
+                              tr("Toți utilizatorii din baza de date sunt marcați ca șterși, "
+                                 "iar autentificarea nu este posibilă.<br><br>"
+                                 "Restabiliți baza de date dintr-o copie de rezervă sau "
+                                 "contactați administratorul aplicației."),
+                              QMessageBox::Ok);
+        return false;
+    }
 
     // Recupereaza si profilele incomplete create inainte de introducerea
     // cheii initialSetupComplete. Fara niciun utilizator activ, autentificarea
@@ -305,6 +426,7 @@ bool AppController::ensureInitialAdministrator()
     }
 
     UserDialog userDialog(m_db, nullptr);
+    userDialog.setInitialAdministrator(true);
     userDialog.setIsNew(true);
     userDialog.setWindowTitle(tr("Crearea administratorului aplicației [*]"));
     if (userDialog.exec() == QDialog::Accepted)
@@ -336,16 +458,15 @@ bool AppController::authorizeUser()
         // DataConstantsWorker stabilește dacă configurația cloud este validă,
         // iar repository-ul păstrează alegerea utilizatorului. Sincronizarea
         // efectivă este activă numai dacă ambele condiții sunt îndeplinite.
-        const Settings::SynchronizationSettings runtime =
-            SettingsService::instance().synchronization();
-        const CloudConnectionData cloudRuntime =
-            CloudConnectionContext::instance().data();
-        const bool cloudConfigurationUsable =
-            runtime.configured && !cloudRuntime.password.isEmpty();
+        const Settings::SynchronizationSettings runtime = SettingsService::instance().synchronization();
+        const CloudConnectionData cloudRuntime = CloudConnectionContext::instance().data();
+        const bool cloudConfigurationUsable = runtime.configured && !cloudRuntime.password.isEmpty();
+
         loaded.data.values.synchronization.configured = cloudConfigurationUsable;
-        loaded.data.values.synchronization.enabled =
-            cloudConfigurationUsable && runtime.enabled
-            && loaded.data.values.synchronization.enabled;
+        loaded.data.values.synchronization.enabled = cloudConfigurationUsable &&
+                                                     runtime.enabled &&
+                                                     loaded.data.values.synchronization.enabled;
+
         SettingsService::instance().setSnapshot(loaded.data.values);
 
         CloudConnectionData cloud = cloudRuntime;

@@ -4,6 +4,7 @@
 #pragma once
 
 #include <QString>
+#include <QStringList>
 #include <QDate>
 #include <QVariant>
 #include <QVector>
@@ -84,6 +85,8 @@ struct DatesCatPatient // de eliminat
 
 struct DatesForAgentEmail
 {
+    bool success = false;
+    QString errorText;
     int organizationId = 0;
     QString nr_order;
     QString nr_report;
@@ -91,6 +94,8 @@ struct DatesForAgentEmail
     QString name_patient;
     QString name_doctor_execute;
     QString str_dateInvestigation;
+    QStringList attachments; // fișierele exportate efectiv (căi complete)
+    QString exportDirectory;
 };
 
 struct DatesDocForExportEmail

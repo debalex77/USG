@@ -1,3 +1,17 @@
+## USG v4.2.5 (01.10.2026)
+
+- Pornire: la lansarea obișnuită aplicația verifică existența fișierelor SQLite din profil (baza principală și baza imaginilor) și se oprește cu un mesaj, fără să creeze baze goale; o bază MariaDB goală sau fără schema aplicației este semnalată explicit, cu recomandarea de a alege prima lansare.
+- Prima lansare: o bază existentă aleasă la configurare nu mai este recreată, iar versiunea schemei se scrie numai după verificarea completă; numele profilului și baza imaginilor sunt propuse după fișierul ales.
+- Inițializarea schemei și încărcarea constantelor după autentificare rulează pe conexiuni proprii; închiderea ferestrei de autentificare în timpul încărcării nu mai provoacă erori.
+- Administratorul inițial se creează numai când tabela utilizatorilor este goală; dacă toți utilizatorii sunt marcați ca eliminați, aplicația afișează un mesaj și se oprește.
+- Asistentul primei lansări: parola este obligatorie pentru utilizatorii adăugați, tipurile de prețuri și investigațiile nu se mai dublează la apăsări repetate.
+- Jurnalul Comenzilor ecografice: ștergerea cere confirmare, elimină și imaginile, video-urile și, la alegere, copia din cloud; filtrele după număr, organizație și contract au fost corectate; sortarea după orice coloană se aplică tuturor documentelor; previzualizarea urmează rândul curent; erorile de încărcare sunt afișate.
+- Tipărirea din jurnale folosește aceleași servicii ca documentele (ștampila și semnătura ascunse implicit); imaginea din formularul Comenzii ecografice a fost redimensionată.
+- E-mail: detectarea corectă a formatului imaginilor atașate, ștergerea sigură a directorului temporar, respingerea adreselor invalide și blocarea pornirii unui al doilea export în paralel.
+- Prețuri: corectată eliminarea documentului la eșecul salvării și eroarea la alegerea organizației (contractele).
+- Rapoarte statistice: lista conține numai șabloanele `.lrxml` disponibile, cu rând de selecție explicit.
+- Ecranul de pornire în limba rusă afișează textele aliniate corect; traducerea rusă a fost completată.
+
 ## USG v4.2.4 (30.09.2026)
 
 - Corectată separarea dintre organizația trimițătoare păstrată în Comanda ecografică și identitatea cabinetului care efectuează investigația: antetul, logotipul și imaginile de tipărire provin din preferințele utilizatorului.

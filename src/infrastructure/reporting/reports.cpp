@@ -54,7 +54,10 @@ Reports::Reports(DataBase &db, QWidget *parent) :
     else
         m_preview->setPreviewPageBackgroundColor(QColor(179,179,179));
 
-    ui->comboTypeReport->addItems(settings.getListReports()); // setam denumirea rapoartelor
+    // setam denumirea rapoartelor: index 0 - fără raport ales,
+    // apoi șabloanele existente acum în directorul rapoartelor
+    ui->comboTypeReport->addItem(tr("<<- selectează raport ->>"));
+    ui->comboTypeReport->addItems(settings.getListReportsFromDirectory());
 
     QString strQryOrganizations = "SELECT id,name FROM organizations WHERE deletionMark = 0;";    // solicitarea
     QString strQryContracts     = "SELECT id,name FROM contracts WHERE deletionMark = 0;";
@@ -662,6 +665,9 @@ void Reports::setReportVariabiles()
 
 void Reports::saveSettingsReport()
 {
+    if (ui->comboTypeReport->currentIndex() == 0) // <<- selectează raport ->>
+        return;
+
     QString reportId = ui->comboTypeReport->currentText();
 
     if (ui->showOnLaunch->isChecked())
@@ -839,6 +845,13 @@ void Reports::slotPageChanged(const int page)
 
 void Reports::generateReport()
 {
+    // Nu permitem reutilizarea accidentală a unui export anterior dacă
+    // generarea curentă se oprește înainte de crearea noului PDF.
+    if (send_email) {
+        m_emailExportDirectory.clear();
+        m_emailExportFile.clear();
+    }
+
     if (m_preview) {
 
         // deconectam conexiunile ...
@@ -935,24 +948,51 @@ void Reports::generateReport()
 
     //-----------------------------------------------------------------------------
     // 9 incarcam fisierul si actualizam pagina
-    m_report->loadFromFile(ApplicationPathsContext::instance().data().reportsDirectory + "/" + ui->comboTypeReport->currentText() + ".lrxml");
+    const QString templatePath =
+        QDir(ApplicationPathsContext::instance().data().reportsDirectory)
+            .filePath(ui->comboTypeReport->currentText() + QStringLiteral(".lrxml"));
+    if (!QFileInfo::exists(templatePath) || !m_report->loadFromFile(templatePath)) {
+        qCritical(logCritical())
+            << tr("Șablonul raportului nu a putut fi încărcat:") << templatePath;
+        if (!send_email) {
+            QMessageBox::critical(this,
+                                  tr("Generarea raportului"),
+                                  tr("Șablonul raportului nu a putut fi încărcat:\n%1")
+                                      .arg(QDir::toNativeSeparators(templatePath)),
+                                  QMessageBox::Ok);
+        }
+        print_model_organization->deleteLater();
+        print_model_main->deleteLater();
+        print_model_systemUrinary->deleteLater();
+        print_model_breast->deleteLater();
+        print_model_ginecology->deleteLater();
+        return;
+    }
     m_preview->refreshPages();
 
     //-----------------------------------------------------------------------------
     // 10 verificam daca trebuie de exportat in tmp/USG
     if (send_email) {
-        QDir dir(ApplicationPathsContext::instance().exportDirectory());
-        if (! dir.exists()) {
-            QDir().mkpath(ApplicationPathsContext::instance().exportDirectory());
-            qInfo(logInfo()) << "A fost creat directorul" << ApplicationPathsContext::instance().exportDirectory();
+        QString exportError;
+        if (!AgentSendEmail::prepareExportDirectory(&m_emailExportDirectory, &exportError)) {
+            qCritical(logCritical()) << "Reports: directorul pentru export e-mail nu poate fi creat:"
+                                     << exportError;
+            m_emailExportFile.clear();
         } else {
-            if (dir.removeRecursively()) {
-                qInfo(logInfo()) << "Directorul" << ApplicationPathsContext::instance().exportDirectory() << " a fost șters cu succes !";
-            } else {
-                qWarning(logWarning()) << "Eroare: Nu s-a putut șterge directorul - " << ApplicationPathsContext::instance().exportDirectory();
+            m_emailExportFile = QDir(m_emailExportDirectory)
+                                    .filePath(ui->comboTypeReport->currentText() + ".pdf");
+            const bool exported =
+                m_report->printToPDF(QDir::toNativeSeparators(m_emailExportFile));
+            const QFileInfo exportedFile(m_emailExportFile);
+            if (!exported || !exportedFile.exists() || !exportedFile.isFile()
+                || exportedFile.size() <= 0) {
+                qCritical(logCritical()) << "Reports: exportul PDF pentru e-mail a eșuat:"
+                                         << m_emailExportFile;
+                AgentSendEmail::removeExportDirectory(m_emailExportDirectory);
+                m_emailExportDirectory.clear();
+                m_emailExportFile.clear();
             }
         }
-        m_report->printToPDF(QDir::toNativeSeparators(ApplicationPathsContext::instance().exportDirectory() + "/" + ui->comboTypeReport->currentText() + ".pdf")); // pu transmiterea prin email
     }
 
     // *************************************************************************************
@@ -1003,7 +1043,7 @@ void Reports::openDesignerReport()
     setReportVariabiles();
     m_report->setShowProgressDialog(true);
 
-    if (ui->comboTypeReport->currentText() == tr("<<- selectează raport ->>"))
+    if (ui->comboTypeReport->currentIndex() == 0) // <<- selectează raport ->>
         m_report->loadFromFile("");
     else
         m_report->loadFromFile(ApplicationPathsContext::instance().data().reportsDirectory + "/" + ui->comboTypeReport->currentText() + ".lrxml");
@@ -1233,6 +1273,15 @@ void Reports::sendReportToEmail()
     send_email = true;
     generateReport();
 
+    if (m_emailExportFile.isEmpty() || !QFileInfo::exists(m_emailExportFile)) {
+        QMessageBox::critical(this,
+                              tr("Transmiterea prin e-mail"),
+                              tr("Raportul nu a putut fi exportat în format PDF."),
+                              QMessageBox::Ok);
+        send_email = false;
+        return;
+    }
+
     // ---------------------------------------------------------------------
     // 2 prezentam agentul
     QString doctorName;
@@ -1263,6 +1312,8 @@ void Reports::sendReportToEmail()
     context.emailTo = m_emailTo;
     context.namePatient = ui->comboOrganizations->currentText();
     context.nameDoctor = doctorName;
+    context.attachments = {m_emailExportFile};
+    context.exportDirectory = m_emailExportDirectory;
 
     AgentSendEmail *agent_sendEmail = new AgentSendEmail(m_db, this);
     agent_sendEmail->setAttribute(Qt::WA_DeleteOnClose);

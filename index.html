@@ -148,7 +148,7 @@
 <body>
   <header>
     <nav class="nav" aria-label="Navigare principală">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.4</span></div>
+      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.5</span></div>
       <div class="navlinks">
         <span class="pill">Linux și Windows</span>
         <span class="pill">Qt 6.9.3 · qmake</span>
@@ -191,18 +191,17 @@
           </div>
 
           <div class="hr"></div>
-          <h2>Versiunea 4.2.4</h2>
-          <p>Actualizare corectivă pentru Linux și Windows, compatibilă cu bazele SQLite și MariaDB.</p>
-          <p>Manualul de utilizare a fost actualizat cu capturi de ecran și poate fi deschis direct din fereastra principală.</p>
+          <h2>Versiunea 4.2.5</h2>
+          <p>Actualizare corectivă pentru Linux și Windows, compatibilă cu bazele SQLite și MariaDB, fără modificări ale schemei bazei de date.</p>
+          <p>Manualul de utilizare poate fi deschis direct din fereastra principală.</p>
           <ul>
-            <li>administrarea configurațiilor cloud într-o fereastră dedicată;</li>
-            <li>activarea sau oprirea sincronizării din preferințele aplicației;</li>
-            <li>organizația trimițătoare din document este separată de identitatea cabinetului care efectuează investigația;</li>
-            <li>antetul, logotipul și imaginile de tipărire sunt încărcate din preferințele utilizatorului;</li>
-            <li>rapoartele statistice prezintă corect ștampila și semnătura doctorului;</li>
-            <li>export PDF, anexe și trimitere e-mail revizuite;</li>
-            <li>pachete Linux cu RPATH portabil pentru LimeReport;</li>
-            <li>manual Wiki nou și traducere rusă actualizată;</li>
+            <li>verificări la pornire: fișiere SQLite lipsă și baze MariaDB fără schema aplicației sunt semnalate, fără crearea unor baze goale;</li>
+            <li>prima lansare pe o bază existentă nu mai recreează schema;</li>
+            <li>jurnalul Comenzilor ecografice: ștergere completă, filtre și sortare corectate;</li>
+            <li>tipărirea din jurnale folosește aceeași identitate ca documentele;</li>
+            <li>export și trimitere e-mail mai sigure;</li>
+            <li>corecturi pentru documentele de prețuri și rapoartele statistice;</li>
+            <li>traducere rusă completată;</li>
             <li>LimeReport 1.7.23 compilat pentru Qt 6.9.3.</li>
           </ul>
         </article>

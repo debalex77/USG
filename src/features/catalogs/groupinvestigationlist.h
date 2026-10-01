@@ -6,7 +6,7 @@
 #include <LimeReport>
 #include <QSqlQueryModel>
 
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 #include <features/catalogs/groupinvestigation.h>
 #include "database/database.h"
@@ -42,7 +42,7 @@ private slots:
 
 private:
     Ui::GroupInvestigationList *ui;
-    ReportSettingsManager settings;
+    LayoutSettingsManager settings;
     const QString name_class = "GroupInvestigationList";
 
     DataBase  &m_db;

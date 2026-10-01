@@ -49,7 +49,7 @@ void SyncPatientDataWorker::process()
         QSqlDatabase cloudDb = m_db->getDatabaseSyncThread(connCloud);
         if (!cloudDb.isOpen() && !cloudDb.open()) {
 
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB:")
             .arg(this->metaObject()->className())
                 << cloudDb.lastError().text();
 
@@ -57,7 +57,7 @@ void SyncPatientDataWorker::process()
 
             // 4. verificam daca exista pacient cu acelasi nume, prenume, data nasterii
             if (patientExistsInDatabase(cloudDb)) {
-                qWarning(logWarning()) << QStringLiteral("[SYNC] Pacientul '%1' din %2 deja exista in baza de date 'cloud'.")
+                qWarning(logWarning()).noquote() << QStringLiteral("[SYNC] Pacientul '%1' din %2 deja exista in baza de date 'cloud'.")
                                               .arg(m_data.name + " " + m_data.firstName,
                                                    m_data.birthday.toString("dd.MM.yyyy"));
                 patientDataUpdate(cloudDb);
@@ -153,18 +153,18 @@ void SyncPatientDataWorker::patientDataUpdate(QSqlDatabase &dbConn)
     qry.addBindValue(m_context.value("id_cloud_patient").toInt()); // ID-ul din baza cloud
     if (! qry.exec()) {
         dbConn.rollback();
-        qCritical(logCritical()) << QStringLiteral("[SYNC %1] Eroare de actualizare a datelor pacientului %2: %3")
+        qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Eroare de actualizare a datelor pacientului %2: %3")
                                         .arg(this->metaObject()->className(),
                                              m_data.name + " " + m_data.firstName,
                                              qry.lastError().text());
     } else {
         if (dbConn.commit() == false) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[SYNC %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
         } else {
-            qInfo(logInfo()) << QStringLiteral("[SYNC] Actualizarea cu succes a datelor pacientului - %1")
+            qInfo(logInfo()).noquote() << QStringLiteral("[SYNC] Actualizarea cu succes a datelor pacientului - %1")
                                     .arg(m_data.name + " " + m_data.firstName);
         }
     }
@@ -207,18 +207,18 @@ void SyncPatientDataWorker::patientDataInsert(QSqlDatabase &dbConn)
 
     if (! qry.exec()) {
         dbConn.rollback();
-        qCritical(logCritical()) << QStringLiteral("[SYNC %1] Inserarea datelor pacientului %2 a eșuat: %3")
+        qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Inserarea datelor pacientului %2 a eșuat: %3")
                                         .arg(this->metaObject()->className(),
                                              m_data.name + " " + m_data.firstName,
                                              qry.lastError().text());
     } else {
         if (!dbConn.commit()) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[SYNC %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
         } else {
-            qInfo(logInfo()) << QStringLiteral("[SYNC] Pacientul '%1' a fost sincronizat cu succes în cloud.")
+            qInfo(logInfo()).noquote() << QStringLiteral("[SYNC] Pacientul '%1' a fost sincronizat cu succes în cloud.")
                                     .arg(m_data.name + " " + m_data.firstName);
         }
     }

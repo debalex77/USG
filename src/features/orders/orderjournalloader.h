@@ -11,6 +11,7 @@ public:
     struct BatchResult {
         QVector<OrderJournal::Item> items;
         bool hasMore = false;
+        QString error; // nevid când interogarea a eșuat
     };
 
     explicit OrderJournalLoader(DataBase &db);

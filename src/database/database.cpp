@@ -44,6 +44,52 @@
 #include <QThread>
 #include <QUuid>
 #include <QSqlDriver>
+#include <QVersionNumber>
+
+namespace {
+
+// Bazele vechi păstrau versiunea schemei per utilizator (userPreferences.versionApp).
+// Regula unică pentru detectare și import: versiunea utilizatorului preferat,
+// iar în lipsa ei cea mai mare versiune găsită (ultima migrare aplicată bazei).
+bool readLegacySchemaVersion(const QSqlDatabase &database,
+                             int preferredUserId,
+                             QString *version,
+                             QString *error)
+{
+    version->clear();
+
+    QSqlQuery query(database);
+    if (!query.exec(QStringLiteral(R"(
+            SELECT id_users, versionApp
+            FROM userPreferences
+            WHERE versionApp IS NOT NULL
+              AND TRIM(versionApp) <> ''
+        )"))) {
+        if (error)
+            *error = query.lastError().text();
+        return false;
+    }
+
+    QVersionNumber highest;
+    QString highestText;
+    while (query.next()) {
+        const QString value = query.value(1).toString().trimmed();
+        if (preferredUserId > 0 && query.value(0).toInt() == preferredUserId) {
+            *version = value;
+            return true;
+        }
+        const QVersionNumber number = QVersionNumber::fromString(value);
+        if (highestText.isEmpty() || QVersionNumber::compare(number, highest) > 0) {
+            highest = number;
+            highestText = value;
+        }
+    }
+
+    *version = highestText;
+    return true;
+}
+
+} // namespace
 
 DataBase::DataBase(QObject *parent) : QObject(parent)
 {
@@ -58,6 +104,8 @@ DataBase::~DataBase()
 
 bool DataBase::connectToDataBase()
 {
+    m_lastConnectError.clear();
+
     const MainDatabaseConnectionData connection =
         MainDatabaseConnectionContext::instance().data();
     if (connection.backend == MainDatabaseBackend::MariaDb)
@@ -764,29 +812,12 @@ QString DataBase::databaseSchemaVersion(QString *error)
     // importată o singură dată, apoi databaseMetadata devine sursa unică.
     QString importedVersion;
     if (database.tables(QSql::Tables).contains(QStringLiteral("userPreferences"),
-                                                Qt::CaseInsensitive)) {
-        QSqlQuery legacy(database);
-        legacy.prepare(QStringLiteral(R"(
-                SELECT versionApp
-                FROM userPreferences
-                WHERE id_users = ?
-                  AND versionApp IS NOT NULL
-                  AND TRIM(versionApp) <> ''
-                LIMIT 1
-            )"));
-        legacy.addBindValue(SessionContext::instance().userId());
-        if (!legacy.exec()) {
-            if (error)
-                *error = legacy.lastError().text();
-            return {};
-        }
-        if (legacy.next())
-            importedVersion = legacy.value(0).toString().trimmed();
-    }
-
-    // O bază nouă este creată direct cu schema aplicației curente.
-    if (importedVersion.isEmpty() && globals().firstLaunch)
-        importedVersion = QStringLiteral(VERSION_FULL);
+                                                Qt::CaseInsensitive)
+        && !readLegacySchemaVersion(database,
+                                    SessionContext::instance().userId(),
+                                    &importedVersion,
+                                    error))
+        return {};
 
     if (importedVersion.isEmpty()) {
         if (error)
@@ -802,7 +833,74 @@ QString DataBase::databaseSchemaVersion(QString *error)
     return importedVersion;
 }
 
+bool DataBase::readExistingSchemaVersion(const QSqlDatabase &database,
+                                         QString *version,
+                                         QString *error)
+{
+    if (version)
+        version->clear();
+    if (error)
+        error->clear();
+
+    if (!database.isValid() || !database.isOpen()) {
+        if (error)
+            *error = tr("Baza de date nu este deschisă.");
+        return false;
+    }
+
+    // Citire fără modificări: decide dacă baza aleasă la prima lansare
+    // are deja o schemă a aplicației (inițializată complet sau din versiuni vechi).
+    const QStringList tables = database.tables(QSql::Tables);
+    const auto readValue = [&](const QString &sql, QString *value) {
+        QSqlQuery query(database);
+        if (!query.exec(sql)) {
+            if (error)
+                *error = query.lastError().text();
+            return false;
+        }
+        if (query.next())
+            *value = query.value(0).toString().trimmed();
+        return true;
+    };
+
+    QString found;
+    if (tables.contains(QStringLiteral("databaseMetadata"), Qt::CaseInsensitive)
+        && !readValue(QStringLiteral(R"(
+                SELECT schema_version FROM databaseMetadata WHERE singleton_id = 1
+            )"), &found))
+        return false;
+
+    // Înainte de autentificare nu există un utilizator preferat.
+    if (found.isEmpty()
+        && tables.contains(QStringLiteral("userPreferences"), Qt::CaseInsensitive)
+        && !readLegacySchemaVersion(database, 0, &found, error))
+        return false;
+
+    if (found.isEmpty() && tables.contains(QStringLiteral("users"), Qt::CaseInsensitive)) {
+        QString usersCount;
+        if (!readValue(QStringLiteral("SELECT COUNT(*) FROM users"), &usersCount))
+            return false;
+        if (usersCount.toInt() > 0) {
+            if (error)
+                *error = tr("Baza de date conține utilizatori, dar versiunea schemei "
+                            "nu poate fi determinată.");
+            return false;
+        }
+    }
+
+    if (version)
+        *version = found;
+    return true;
+}
+
 bool DataBase::setDatabaseSchemaVersion(const QString &version, QString *error)
+{
+    return setDatabaseSchemaVersion(getDatabase(), version, error);
+}
+
+bool DataBase::setDatabaseSchemaVersion(const QSqlDatabase &database,
+                                        const QString &version,
+                                        QString *error)
 {
     if (error)
         error->clear();
@@ -814,7 +912,7 @@ bool DataBase::setDatabaseSchemaVersion(const QString &version, QString *error)
         return false;
     }
 
-    QSqlQuery query(getDatabase());
+    QSqlQuery query(database);
     query.prepare(QStringLiteral(
         "UPDATE databaseMetadata SET schema_version = ? WHERE singleton_id = 1"));
     query.addBindValue(normalizedVersion);
@@ -826,7 +924,7 @@ bool DataBase::setDatabaseSchemaVersion(const QString &version, QString *error)
     if (query.numRowsAffected() > 0)
         return true;
 
-    QSqlQuery exists(getDatabase());
+    QSqlQuery exists(database);
     if (!exists.exec(QStringLiteral(
             "SELECT 1 FROM databaseMetadata WHERE singleton_id = 1"))) {
         if (error)
@@ -1053,7 +1151,13 @@ bool DataBase::creatingTables_DbImage()
 
 bool DataBase::verifyNewDatabaseSchema() const
 {
-    const QSqlDatabase currentDatabase = QSqlDatabase::database();
+    return verifyNewDatabaseSchema(QSqlDatabase::database(),
+                                   QSqlDatabase::database(QStringLiteral("db_image"), false));
+}
+
+bool DataBase::verifyNewDatabaseSchema(const QSqlDatabase &currentDatabase,
+                                       const QSqlDatabase &imageDatabase)
+{
     if (!currentDatabase.isValid() || !currentDatabase.isOpen()) {
         qCritical(logCritical())
             << tr("Verificarea schemei a eșuat: baza principală nu este deschisă.");
@@ -1328,8 +1432,6 @@ bool DataBase::verifyNewDatabaseSchema() const
     }
 
     if (MainDatabaseConnectionContext::instance().isSqlite()) {
-        const QSqlDatabase imageDatabase =
-            QSqlDatabase::database(QStringLiteral("db_image"), false);
         if (!imageDatabase.isValid() || !imageDatabase.isOpen()
             || !imageDatabase.tables(QSql::Tables).contains(
                 QStringLiteral("imagesReports"), Qt::CaseInsensitive)) {
@@ -1628,6 +1730,20 @@ bool DataBase::updateInvestigationFromXML_2024()
 
 bool DataBase::loadNormogramsFromXml()
 {
+    int loadedCount = 0;
+    const bool loaded = loadNormogramsFromXml(getDatabase(), [this, &loadedCount](int total, int value) {
+        loadedCount = total;
+        emit updateProgress(total, value);
+    });
+    if (loaded && loadedCount > 0)
+        emit finishedProgress(tr("Au fost încărcate %1 elemente ale normogramelor.")
+                                  .arg(loadedCount));
+    return loaded;
+}
+
+bool DataBase::loadNormogramsFromXml(QSqlDatabase currentDatabase,
+                                     const std::function<void(int, int)> &progress)
+{
     QDomDocument normogramsXml;
     QFile xmlFile(":/xmls/normograms.xml");
     if (!xmlFile.open(QIODevice::ReadOnly)) {
@@ -1652,7 +1768,6 @@ bool DataBase::loadNormogramsFromXml()
         return false;
     }
 
-    QSqlDatabase currentDatabase = getDatabase();
     if (!currentDatabase.isValid() || !currentDatabase.isOpen()) {
         qWarning(logWarning()) << tr("Baza de date nu este deschisă pentru încărcarea normogramelor.");
         return false;
@@ -1709,7 +1824,8 @@ bool DataBase::loadNormogramsFromXml()
             currentDatabase.rollback();
             return false;
         }
-        emit updateProgress(entries.count(), index + 1);
+        if (progress)
+            progress(entries.count(), index + 1);
     }
 
     if (!currentDatabase.commit()) {
@@ -1719,8 +1835,6 @@ bool DataBase::loadNormogramsFromXml()
         return false;
     }
 
-    emit finishedProgress(tr("Au fost încărcate %1 elemente ale normogramelor.")
-                              .arg(entries.count()));
     return true;
 }
 
@@ -1730,6 +1844,20 @@ bool DataBase::loadNormogramsFromXml()
 void DataBase::insertDataForTabletypesPrices()
 {
     QSqlQuery qry;
+
+    // Catalogul implicit se completează o singură dată: apăsarea repetată a
+    // butonului sau reluarea asistentului pe o bază existentă nu creează duplicate.
+    if (!qry.exec(QStringLiteral("SELECT COUNT(*) FROM typesPrices")) || !qry.next()) {
+        qWarning(logWarning()) << tr("Eroare la verificarea tabelei 'typesPrices': %1")
+                                      .arg(qry.lastError().text());
+        return;
+    }
+    if (qry.value(0).toInt() > 0) {
+        qInfo(logInfo()) << tr("Tabela 'typesPrices' conține deja date; completarea implicită este omisă.");
+        return;
+    }
+    qry.clear();
+
     int m_id = getLastIdForTable("typesPrices") + 1;
 
     /** preturi comerciale */
@@ -1798,7 +1926,8 @@ bool DataBase::removeObjectById(const QString nameTable, const int _id)
 {
     QSqlQuery qry;
 
-    qry.prepare(QString("DELETE FROM %1 WHERE id = '%1';").arg(nameTable, QString::number(_id)));
+    qry.prepare(QString("DELETE FROM %1 WHERE id = ?;").arg(nameTable));
+    qry.addBindValue(_id);
     if (qry.exec()){
         return true;
     } else {
@@ -3330,9 +3459,24 @@ bool DataBase::openDataBase()
     // reportVideo was added after some databases had already reached their
     // recorded application version. CREATE IF NOT EXISTS keeps this repair
     // safe for both existing and new SQLite/MariaDB installations.
+    const QStringList existingTables = db.isOpen() ? db.tables(QSql::Tables) : QStringList();
     if (db.isOpen()
-        && !db.tables(QSql::Tables).contains(QStringLiteral("reportVideo"),
-                                              Qt::CaseInsensitive)) {
+        && !existingTables.contains(QStringLiteral("reportVideo"), Qt::CaseInsensitive)) {
+        // MariaDB verifică cheile externe la creare: într-o bază goală sau
+        // incompletă reparația ar eșua cu errno 150. Schema nu se creează aici,
+        // ci numai prin inițializarea de la prima lansare.
+        if (MainDatabaseConnectionContext::instance().isMariaDb()
+            && (!existingTables.contains(QStringLiteral("orderEcho"), Qt::CaseInsensitive)
+                || !existingTables.contains(QStringLiteral("reportEcho"), Qt::CaseInsensitive))) {
+            m_lastConnectError = existingTables.isEmpty()
+                ? tr("Baza de date este goală și nu conține schema aplicației.")
+                : tr("Baza de date nu conține schema completă a aplicației "
+                     "(lipsesc tabelele orderEcho/reportEcho).");
+            qCritical(logCritical()) << m_lastConnectError;
+            db.close();
+            return false;
+        }
+
         const QString reportVideoResource = MainDatabaseConnectionContext::instance().isSqlite()
                                                 ? QStringLiteral(":/sql/sqlite/tables/report_video.sql")
                                                 : QStringLiteral(":/sql/mariadb/tables/report_video.sql");

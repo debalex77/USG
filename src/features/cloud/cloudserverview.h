@@ -5,7 +5,7 @@
 #include <QMap>
 
 #include <database/database.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 class PopUp;
 class QSqlQueryModel;
@@ -74,7 +74,7 @@ protected:
 private:
     Ui::CloudServerView *ui = nullptr;
     DataBase &m_db;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     ViewSettings m_viewSettings;
 
     QSqlQueryModel *m_model = nullptr;

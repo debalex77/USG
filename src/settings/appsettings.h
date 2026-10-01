@@ -66,9 +66,11 @@ private:
     enum IndexBaseSQL {idx_Unknow = 0, idx_MySQL = 1, idx_Sqlite = 2};
     void captureSettingsState();
     void restoreSettingsState();
+
     void persistStartupLanguage(const AppSettingsStore::ProfileData &data);
     [[nodiscard]] AppSettingsStore::ProfileData profileFromGlobals() const;
     [[nodiscard]] AppSettingsStore::ProfileData profileFromForm() const;
+
     void applyProfileToForm(const AppSettingsStore::ProfileData &data);
     void applyProfileToRuntime(const AppSettingsStore::ProfileData &data,
                                const QString &settingsPath = QString());
@@ -168,6 +170,7 @@ private:
     AppSettingsStore::ProfileData m_loadedProfile;
     AppSettingsStore::ProfileData m_initialProfile;
     QString m_initialSettingsPath;
+    QString m_writtenSettingsPath; // profilul scris de acest dialog
     bool m_populatingForm = false;
 
 protected:

@@ -23,11 +23,48 @@
 
 #include "emailcore.h"
 #include "core/loggingcategories.h"
+#include "temporaryexportowner.h"
 
+#include <algorithm>
+
+#include <QDir>
+#include <QDateTime>
 #include <QFileInfo>
+#include <QMimeDatabase>
 #include <QRegularExpression>
+#include <QUuid>
+#include <QUrl>
 
 namespace {
+
+// Răspunsul final după DATA sosește abia după ce serverul primește tot
+// mesajul (inclusiv atașamentele), de aceea are un timeout mai mare.
+constexpr int commandTimeoutMs = 10000;
+constexpr int dataTimeoutMs    = 120000;
+
+QByteArray wrappedBase64(const QByteArray &data)
+{
+    const QByteArray encoded = data.toBase64();
+    QByteArray result;
+    for (qsizetype offset = 0; offset < encoded.size(); offset += 76) {
+        result += encoded.mid(offset, 76);
+        result += "\r\n";
+    }
+    return result;
+}
+
+QString encodedHeader(const QString &value)
+{
+    const QString sanitized = QString(value).replace('\r', ' ').replace('\n', ' ');
+    return QStringLiteral("=?UTF-8?B?%1?=")
+        .arg(QString::fromLatin1(sanitized.toUtf8().toBase64()));
+}
+
+QString asciiFileName(QString name)
+{
+    name.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9._-]")), QStringLiteral("_"));
+    return name.isEmpty() ? QStringLiteral("attachment") : name;
+}
 
 // Citește un răspuns SMTP complet (inclusiv multi-linie: "250-...", "250 ...")
 // și returnează codul din ultima linie.
@@ -36,13 +73,71 @@ int readSmtpReply(QSslSocket &socket, int timeoutMs, QByteArray *reply)
     static const QRegularExpression lastLine(QStringLiteral(R"((?:^|\r\n)(\d{3}) [^\r\n]*\r\n$)"));
     reply->clear();
     while (true) {
+        // Datele pot fi deja în buffer (ex. greeting-ul primit odată cu
+        // handshake-ul TLS); waitForReadyRead() așteaptă doar date noi.
+        reply->append(socket.readAll());
         const QRegularExpressionMatch match = lastLine.match(QString::fromUtf8(*reply));
         if (match.hasMatch())
             return match.captured(1).toInt();
         if (!socket.waitForReadyRead(timeoutMs))
             return -1;
-        reply->append(socket.readAll());
     }
+}
+
+bool openSecureSmtpSession(QSslSocket &socket, const QString &host, int port,
+                           int timeoutMs, QByteArray *reply, QString *error)
+{
+    const auto setError = [error](const QString &text) {
+        if (error)
+            *error = text;
+        return false;
+    };
+    const auto expect = [&](const QByteArray &command, int expected, const QString &stage) {
+        if (!command.isEmpty()) {
+            socket.write(command);
+            socket.flush();
+        }
+        const int code = readSmtpReply(socket, timeoutMs, reply);
+        if (code == expected)
+            return true;
+        const QString details = code < 0
+            ? QCoreApplication::translate("EmailCore", "serverul nu a răspuns")
+            : QString::fromUtf8(*reply).trimmed();
+        return setError(QStringLiteral("%1: %2").arg(stage, details));
+    };
+
+    if (port == 465) {
+        socket.connectToHostEncrypted(host, port);
+        if (!socket.waitForEncrypted(timeoutMs))
+            return setError(QCoreApplication::translate(
+                                "EmailCore",
+                                "Conexiunea securizată cu %1:%2 nu a putut fi stabilită: %3")
+                                .arg(host).arg(port).arg(socket.errorString()));
+        return expect({}, 220, QStringLiteral("Greeting"))
+               && expect("EHLO localhost\r\n", 250, QStringLiteral("EHLO"));
+    }
+
+    socket.connectToHost(host, port);
+    if (!socket.waitForConnected(timeoutMs))
+        return setError(QCoreApplication::translate(
+                            "EmailCore",
+                            "Conexiunea cu %1:%2 nu a putut fi stabilită: %3")
+                            .arg(host).arg(port).arg(socket.errorString()));
+    if (!expect({}, 220, QStringLiteral("Greeting"))
+        || !expect("EHLO localhost\r\n", 250, QStringLiteral("EHLO")))
+        return false;
+    if (!reply->contains("STARTTLS"))
+        return setError(QCoreApplication::translate(
+            "EmailCore", "Serverul SMTP nu oferă extensia STARTTLS."));
+    if (!expect("STARTTLS\r\n", 220, QStringLiteral("STARTTLS")))
+        return false;
+
+    socket.startClientEncryption();
+    if (!socket.waitForEncrypted(timeoutMs))
+        return setError(QCoreApplication::translate(
+                            "EmailCore", "Negocierea TLS cu %1:%2 a eșuat: %3")
+                            .arg(host).arg(port).arg(socket.errorString()));
+    return expect("EHLO localhost\r\n", 250, QStringLiteral("EHLO TLS"));
 }
 
 } // namespace
@@ -59,13 +154,10 @@ bool EmailCore::testConnection(const QString &smtpServer, int port,
     };
 
     QSslSocket socket;
-    socket.connectToHostEncrypted(smtpServer, port);
-    if (!socket.waitForEncrypted(timeoutMs))
-        return fail(QCoreApplication::translate("EmailCore",
-                                                "Conexiunea securizată cu %1:%2 nu a putut fi stabilită: %3")
-                        .arg(smtpServer).arg(port).arg(socket.errorString()));
-
     QByteArray reply;
+    QString connectionError;
+    if (!openSecureSmtpSession(socket, smtpServer, port, timeoutMs, &reply, &connectionError))
+        return fail(connectionError);
     const auto step = [&](const QByteArray &command, int expectedCode, const QString &stage) {
         if (!command.isEmpty()) {
             socket.write(command);
@@ -80,9 +172,7 @@ bool EmailCore::testConnection(const QString &smtpServer, int port,
         return fail(QStringLiteral("%1: %2").arg(stage, details));
     };
 
-    if (!step({}, 220, QStringLiteral("Greeting"))
-        || !step("EHLO localhost\r\n", 250, QStringLiteral("EHLO"))
-        || !step("AUTH LOGIN\r\n", 334, QStringLiteral("AUTH LOGIN"))
+    if (!step("AUTH LOGIN\r\n", 334, QStringLiteral("AUTH LOGIN"))
         || !step(userName.toUtf8().toBase64() + "\r\n", 334,
                  QCoreApplication::translate("EmailCore", "Utilizator"))
         || !step(password.toUtf8().toBase64() + "\r\n", 235,
@@ -126,6 +216,11 @@ void EmailCore::setEmailData(const QString &smtpServer, int port, const QString 
     m_filesAttachments = attachments;
 }
 
+void EmailCore::setExportOwner(std::shared_ptr<TemporaryExportOwner> owner)
+{
+    m_exportOwner = std::move(owner);
+}
+
 /*****************************************************************
 **
 ** Funcţia de trimitere email cu ataşamentul PDF.
@@ -143,113 +238,67 @@ void EmailCore::setEmailData(const QString &smtpServer, int port, const QString 
 ******************************************************************/
 void EmailCore::sendEmail()
 {
-    qInfo(logInfo()) << "Se trimite emailul...";
+    qInfo(logInfo()) << "[THREAD] Se trimite emailul...";
 
-    // Creăm un socket SSL pentru a stabili conexiunea securizată.
     QSslSocket socket;
+    QByteArray reply;
 
-    // Conectăm socket-ul la serverul SMTP folosind conexiune criptată.
-    socket.connectToHostEncrypted(m_smtpServer, m_port);
-    if (! socket.waitForConnected(10000)) {
-        qCritical(logCritical()) << "Eroare la conectare:" << socket.errorString();
+    // Orice ramură de eroare trebuie să emită emailSent(false, ...), altfel
+    // firul de trimitere nu se oprește, iar dialogul apelant rămâne blocat.
+    const auto fail = [this, &socket](const QString &text) {
+        qCritical(logCritical()) << "[THREAD] Trimiterea e-mail-ului a eșuat:" << text;
+        socket.abort();
+        emit emailSent(false, text);
+    };
+
+    const auto step = [&](const QByteArray &command,
+                          std::initializer_list<int> expectedCodes,
+                          const QString &stage,
+                          int timeoutMs = commandTimeoutMs) {
+        if (!command.isEmpty()) {
+            socket.write(command);
+            socket.flush();
+        }
+        const int code = readSmtpReply(socket, timeoutMs, &reply);
+        if (std::find(expectedCodes.begin(), expectedCodes.end(), code) != expectedCodes.end()) {
+            qInfo(logInfo()) << "[THREAD] SMTP" << stage << "->" << code;
+            return true;
+        }
+        const QString details = code < 0
+            ? QCoreApplication::translate("EmailCore", "serverul nu a răspuns")
+            : QString::fromUtf8(reply).trimmed();
+        fail(QStringLiteral("%1: %2").arg(stage, details));
+        return false;
+    };
+
+    // Adresele intră direct în comenzile MAIL FROM / RCPT TO: CR/LF sau
+    // parantezele unghiulare ar permite injectarea unor comenzi SMTP.
+    static const QRegularExpression invalidAddressChars(QStringLiteral("[\\r\\n<>]"));
+    if (m_emailFrom.contains(invalidAddressChars) || m_emailTo.contains(invalidAddressChars)) {
+        fail(QCoreApplication::translate("EmailCore",
+                                         "Adresa expeditorului sau a destinatarului conține caractere nepermise."));
         return;
     }
 
-    // Așteptăm mesajul de bun venit de la server.
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit greeting de la server";
-        return;
-    }
-    QByteArray response = socket.readAll();
-    qInfo(logInfo()) << "Greeting de la server:" << response;
-
-    // Trimiterea comenzii EHLO pentru a iniţia conversaţia SMTP.
-    QString ehloCommand = "EHLO localhost\r\n";
-    socket.write(ehloCommand.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la EHLO";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns EHLO:" << response;
-
-    // Pornim autentificarea cu AUTH LOGIN.
-    QString authCommand = "AUTH LOGIN\r\n";
-    socket.write(authCommand.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la AUTH LOGIN";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns AUTH LOGIN:" << response;
-
-    // Trimiterea username-ului în format Base64.
-    QByteArray usernameEncoded = m_userName.toUtf8().toBase64();
-    socket.write(usernameEncoded + "\r\n");
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns după username";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns după username:" << response;
-
-    // Trimiterea parolei în format Base64.
-    QByteArray passwordEncoded = m_password.toUtf8().toBase64();
-    socket.write(passwordEncoded + "\r\n");
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns după parolă";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns după parolă:" << response;
-
-    // Specificăm adresa expeditorului.
-    QString mailFrom = QString("MAIL FROM:<%1>\r\n").arg(m_emailFrom);
-    socket.write(mailFrom.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la MAIL FROM";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns MAIL FROM:" << response;
-
-    // Specificăm adresa destinatarului.
-    QString rcptTo = QString("RCPT TO:<%1>\r\n").arg(m_emailTo);
-    socket.write(rcptTo.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la RCPT TO";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns RCPT TO:" << response;
-
-    // Comanda DATA pentru a începe trimiterea conținutului email-ului.
-    QString dataCommand = "DATA\r\n";
-    socket.write(dataCommand.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la DATA";
-        return;
-    }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns DATA:" << response;
-
-    // Creăm mesajul MIME ce va conține corpul text și atașamentul PDF.
-    // Stabilim un boundary unic pentru delimitarea părţilor.
-    QString boundary = "----=_Part_boundary_123456789";
+    // Mesajul MIME se construiește înainte de conectare: un atașament care
+    // nu poate fi citit oprește trimiterea, nu este omis în tăcere.
+    const QString boundary = QStringLiteral("----=_USG_%1")
+                                 .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
     QByteArray message;
     QTextStream stream(&message, QIODevice::WriteOnly);
 
     // Header-ele email-ului.
-    stream << "From: " << m_emailFrom << "\r\n";
-    stream << "To: " << m_emailTo << "\r\n";
-    stream << "Subject: " << m_subiect << "\r\n";
+    stream << "From: " << QString(m_emailFrom).replace('\r', ' ').replace('\n', ' ') << "\r\n";
+    stream << "To: " << QString(m_emailTo).replace('\r', ' ').replace('\n', ' ') << "\r\n";
+    stream << "Subject: " << encodedHeader(m_subiect) << "\r\n";
+    stream << "Date: " << QDateTime::currentDateTime().toString(Qt::RFC2822Date) << "\r\n";
+    QString messageDomain = m_emailFrom.section('@', 1, 1).trimmed();
+    messageDomain.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9.-]")),
+                          QString());
+    if (messageDomain.isEmpty())
+        messageDomain = QStringLiteral("localhost");
+    stream << "Message-ID: <" << QUuid::createUuid().toString(QUuid::WithoutBraces)
+           << "@" << messageDomain << ">\r\n";
     stream << "MIME-Version: 1.0\r\n";
     stream << "Content-Type: multipart/mixed; boundary=\"" << boundary << "\"\r\n";
     stream << "\r\n";
@@ -259,72 +308,78 @@ void EmailCore::sendEmail()
     // Partea 1: Corpul text al email-ului.
     stream << "--" << boundary << "\r\n";
     stream << "Content-Type: text/plain; charset=\"utf-8\"\r\n";
-    stream << "Content-Transfer-Encoding: 7bit\r\n";
+    stream << "Content-Transfer-Encoding: base64\r\n";
     stream << "\r\n";
-    stream << m_body << "\r\n";
+    stream << wrappedBase64(m_body.toUtf8());
     stream << "\r\n";
 
     // Partea 2: Atașamente multiple
     for (const QString &filePath : std::as_const(m_filesAttachments)) {
         QFile file(filePath);
         if (!file.open(QIODevice::ReadOnly)) {
-            qDebug() << "Nu pot deschide fișierul:" << filePath;
-            // Poți alege să returnezi false sau să continui cu următorul fișier.
-            continue;
+            fail(QCoreApplication::translate("EmailCore", "Atașamentul nu poate fi citit: %1 (%2)")
+                     .arg(QDir::toNativeSeparators(filePath), file.errorString()));
+            return;
         }
-        QByteArray fileData = file.readAll();
+        const QByteArray fileData = file.readAll();
         file.close();
-        QByteArray fileEncoded = fileData.toBase64();
 
-        // Obţinem numele fişierului din calea completă
-        QFileInfo fileInfo(filePath);
-        QString fileName = fileInfo.fileName();
+        const QString fileName = QFileInfo(filePath).fileName();
+        const QString fallbackName = asciiFileName(fileName);
+        const QString encodedName = QString::fromLatin1(QUrl::toPercentEncoding(fileName));
+        const QString mimeType = QMimeDatabase()
+                                     .mimeTypeForFile(filePath, QMimeDatabase::MatchExtension)
+                                     .name();
 
         stream << "--" << boundary << "\r\n";
-        // Poţi schimba tipul MIME în funcţie de extensie; folosim application/octet-stream ca fallback.
-        stream << "Content-Type: application/octet-stream; name=\"" << fileName << "\"\r\n";
+        stream << "Content-Type: " << (mimeType.isEmpty() ? QStringLiteral("application/octet-stream") : mimeType)
+               << "; name=\"" << fallbackName << "\"\r\n";
         stream << "Content-Transfer-Encoding: base64\r\n";
-        stream << "Content-Disposition: attachment; filename=\"" << fileName << "\"\r\n";
+        stream << "Content-Disposition: attachment; filename=\"" << fallbackName
+               << "\"; filename*=UTF-8''" << encodedName << "\r\n";
         stream << "\r\n";
-        // Scriem datele codificate în linii de 76 de caractere
-        for (int i = 0; i < fileEncoded.size(); i += 76) {
-            stream << fileEncoded.mid(i, 76) << "\r\n";
-        }
+        stream << wrappedBase64(fileData);
         stream << "\r\n";
     }
 
-    // Închidem secțiunea MIME.
+    // Închidem secțiunea MIME și semnalăm sfârșitul datelor.
     stream << "--" << boundary << "--\r\n";
     stream << "\r\n";
-
-    // Semnalăm sfârșitul datelor cu o linie care conține doar un punct.
-    stream << ".\r\n";
     stream.flush();
 
-    // Trimiterea mesajului complet către server.
-    socket.write(message);
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns după trimiterea email-ului";
+    // SMTP dot-stuffing: orice linie MIME care începe cu punct primește încă
+    // un punct; terminatorul DATA este adăugat numai după această transformare.
+    if (message.startsWith('.'))
+        message.prepend('.');
+    message.replace("\r\n.", "\r\n..");
+    message += ".\r\n";
+
+    QString connectionError;
+    if (!openSecureSmtpSession(socket, m_smtpServer, m_port,
+                               commandTimeoutMs, &reply, &connectionError)) {
+        fail(connectionError);
         return;
     }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns după trimiterea mesajului:" << response;
 
-    // Comanda QUIT pentru a închide conexiunea.
-    QString quitCommand = "QUIT\r\n";
-    socket.write(quitCommand.toUtf8());
-    socket.flush();
-    if (! socket.waitForReadyRead(10000)) {
-        qWarning(logWarning()) << "Nu am primit răspuns la QUIT";
+    if (!step("AUTH LOGIN\r\n", {334}, QStringLiteral("AUTH LOGIN"))
+        || !step(m_userName.toUtf8().toBase64() + "\r\n", {334}, QCoreApplication::translate("EmailCore", "Utilizator"))
+        || !step(m_password.toUtf8().toBase64() + "\r\n", {235}, QCoreApplication::translate("EmailCore", "Autentificare"))
+        || !step(QStringLiteral("MAIL FROM:<%1>\r\n").arg(m_emailFrom).toUtf8(),
+                 {250}, QStringLiteral("MAIL FROM"))
+        || !step(QStringLiteral("RCPT TO:<%1>\r\n").arg(m_emailTo).toUtf8(),
+                 {250, 251}, QStringLiteral("RCPT TO"))
+        || !step("DATA\r\n", {354}, QStringLiteral("DATA"))
+        || !step(message, {250}, QCoreApplication::translate("EmailCore", "Transmiterea mesajului"), dataTimeoutMs)) {
         return;
     }
-    response = socket.readAll();
-    qInfo(logInfo()) << "Răspuns QUIT:" << response;
 
+    // Mesajul a fost acceptat de server; un QUIT eșuat nu mai schimbă rezultatul.
+    socket.write("QUIT\r\n");
+    socket.flush();
+    readSmtpReply(socket, commandTimeoutMs, &reply);
     socket.disconnectFromHost();
 
-    qInfo(logInfo()) << "Email trimis!";
+    qInfo(logInfo()) << "[THREAD] Email trimis!";
 
-    emit emailSent(true);
+    emit emailSent(true, QString());
 }

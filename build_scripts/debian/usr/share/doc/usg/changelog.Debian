@@ -1,3 +1,31 @@
+usg (4.2.5) UNRELEASED; urgency=medium
+
+  * Startup checks for missing SQLite files and MariaDB databases without the application schema.
+  * First launch no longer recreates the schema of an existing database.
+  * Fixed deletion, filters, sorting and preview in the ultrasound Order journal.
+  * Safer e-mail export; pricing and statistical report fixes.
+  * Completed the Russian translation.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Thu, 01 Oct 2026 12:00:00 +0300
+
+usg (4.2.4) UNRELEASED; urgency=medium
+
+  * Separated the referring organization from the performing printing identity.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Wed, 30 Sep 2026 18:00:00 +0300
+
+usg (4.2.3) UNRELEASED; urgency=medium
+
+  * Rewritten user manual, Cloud Servers window and optional cloud synchronization.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Tue, 29 Sep 2026 18:00:00 +0300
+
+usg (4.2.2) UNRELEASED; urgency=medium
+
+  * Verified SQLite-MariaDB identity before the UUID migration.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Sun, 27 Sep 2026 20:00:00 +0300
+
 usg (4.2.1) UNRELEASED; urgency=medium
 
   * Fixed first-run setup, icons, investigation groups and Windows packaging.

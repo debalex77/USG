@@ -17,7 +17,7 @@
 #include <features/email/agentsendemail.h>
 
 #include <common/appmetatypes.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <ui/services/tablecolumnscontroller.h>
 #include <common/globals.h>
 #include <ui/dialogs/processingaction.h>
@@ -81,9 +81,10 @@ private slots:
     void updateEmailExportProgress(const QString &text);
     void launchEmailAgent(const QVector<DatesForAgentEmail> &exportedData);
 
-    void onClickedTableView(const QModelIndex &index);
+    void onCurrentRowChanged(const QModelIndex &current, const QModelIndex &previous);
     void onDoubleClickedTableView(const QModelIndex &index);
     void onColumnsChanged();
+    void onSortIndicatorChanged(int section, Qt::SortOrder order);
 
     void indexChangedCombo(int index);
     void onApplyFilter();
@@ -102,13 +103,18 @@ private:
     void saveSettingsJournal();
 
     void updateModelOrganizations();
-    void updateModelContracts();
+    void updateModelContracts(int organizationId);
     void updateModelUsers();
+    void syncFilterControls();
+    int comboCurrentId(QComboBox *combo, const QueryRolesModel *model) const;
+    QString filterDisplayName(const QueryRolesModel *model, int id) const;
 
     int lastVisibleSection() const;
 
     void initTableView();
     void updateTableView();
+    static bool sortRequiresFullJournal(int section, Qt::SortOrder order);
+    void fetchAllJournalRows();
     void updateDocumentPreview();
     void configurePrintButton(QPushButton *button,
                               const std::function<void(PrintType::Column)> &printAction);
@@ -120,6 +126,9 @@ private:
         const OrderJournal::Item &order,
         ReportDialog::ReportDialogParameters &params);
     void openReportDocument(const ReportDialog::ReportDialogParameters &params);
+    bool removeCloudOrder(const QByteArray &orderUuid, QString *error);
+    void showPrintError(const QString &error);
+    void showJournalLoadError();
 
     void initToolBar();
     void initBtnFilter();
@@ -133,11 +142,9 @@ private:
 
 private:
     Ui::OrderView *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     JournalFilter m_filter;
     const QString m_typeJournal = "OrderView";
-
-    int m_currentRow = -1;
 
     DataBase &m_db;
     DatabaseProvider m_dbProvider;
@@ -147,6 +154,7 @@ private:
     QueryRolesModel *modelOrganizations = nullptr;
     QueryRolesModel *modelContracts     = nullptr;
     QueryRolesModel *modelUsers         = nullptr;
+    int m_contractsOrganizationId = -1; // organizația pentru care e încărcat modelContracts
 
     TableColumnsController *m_columnsController = nullptr;
     ToolBarCustom     *toolBar;
@@ -160,6 +168,7 @@ private:
     QString styleBtnMessageBox;
 
     ProcessingAction *loader = nullptr;
+    bool m_emailExportRunning = false; // exportul PDF pentru e-mail rulează pe firul GUI
 
 protected:
     bool previewImagesDocs(QEvent *event);

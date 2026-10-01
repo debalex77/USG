@@ -21,7 +21,7 @@ public:
         bool thisMySQL = false;
     };
 
-    DataConstantsWorker(DatabaseProvider *provider, GeneralData &data, QObject *parent = nullptr);
+    explicit DataConstantsWorker(const GeneralData &data, QObject *parent = nullptr);
 
 public slots:
     void process();
@@ -39,7 +39,6 @@ signals:
 
 private:
     GeneralData m_data;
-    DatabaseProvider *m_db{nullptr};
     CryptoManager *crypto_manager;
 };
 

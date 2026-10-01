@@ -126,11 +126,6 @@ AuthorizationUser::~AuthorizationUser()
     delete ui;
 }
 
-DatabaseProvider *AuthorizationUser::dbProvider()
-{
-    return &m_dbProvider;
-}
-
 void AuthorizationUser::setDataConstants()
 {
     // 1. Creăm thread-ul pentru trimiterea emailului
@@ -145,7 +140,7 @@ void AuthorizationUser::setDataConstants()
     data.id_doctor       = organization.defaultDoctorId;
     data.id_organization = organization.organizationId;
 
-    auto worker = new DataConstantsWorker(dbProvider(), data);
+    auto worker = new DataConstantsWorker(data);
 
     // 3. mutal in flux nou
     worker->moveToThread(thread);
@@ -295,11 +290,8 @@ void AuthorizationUser::onDataReceived(bool success)
         return;
     }
 
-    qInfo(logInfo()) << "Actualizate variabile globale: "
-                        "constante, "
-                        "datele organizatiei, "
-                        "datele doctorului, "
-                        "datele cloud serverului.";
+    qInfo(logInfo())
+        << "Contextele aplicației au fost inițializate după autentificare.";
 
     QDialog::accept();
 }
@@ -370,7 +362,10 @@ bool AuthorizationUser::onControlAccept()
         m_Id = authenticatedUserId;
 
         // Setam variabile globale necesare
-        SessionContext::instance().setAuthenticatedUserId(m_Id);
+        // Pe o bază încă nemigrată coloana uuid poate lipsi; UUID-ul rămâne nul.
+        const QUuid authenticatedUserUuid =
+            QUuid::fromRfc4122(qry.value(UsersSections::Uuid).toByteArray());
+        SessionContext::instance().setAuthenticatedUserId(m_Id, authenticatedUserUuid);
         globals().nameUserApp = ui->editLogin->text();
         globals().memoryUser  = ui->checkBoxMemory->isChecked();
 
@@ -429,6 +424,17 @@ void AuthorizationUser::onAccepted()
 void AuthorizationUser::onClose()
 {
     this->close();
+}
+
+void AuthorizationUser::reject()
+{
+    // Cât worker-ul încarcă datele, dialogul rămâne deschis: închiderea
+    // (X, Esc, Alt+F4) ar opri aplicația cu firul de lucru încă activ.
+    // QDialog::closeEvent ignoră închiderea dacă dialogul rămâne vizibil.
+    if (m_loadingData)
+        return;
+
+    QDialog::reject();
 }
 
 void AuthorizationUser::changeEvent(QEvent *event)

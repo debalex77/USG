@@ -51,6 +51,8 @@ public:
     [[nodiscard("reportSettingsFilePath() - verifica corectitudinea drumului spre rapoarte")]]
     QString reportSettingsFilePath() const;
 
+    // <temp>/USG/<UUID utilizator>. Citește SessionContext (fără lock),
+    // de aceea se apelează doar din firul GUI.
     [[nodiscard("exportDirectory() -  verifica drumul spre directoriu pentru export")]]
     QString exportDirectory() const;
 

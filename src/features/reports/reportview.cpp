@@ -29,6 +29,9 @@
 #include <features/catalogs/contractdialog.h>
 #include <features/catalogs/organizationdialog.h>
 #include <features/catalogs/userdialog.h>
+#include <ui/dialogs/processingaction.h>
+
+#include <QScopeGuard>
 
 ReportView::ReportView(DataBase &db, QWidget *parent)
     : QDialog(parent)
@@ -66,6 +69,7 @@ ReportView::ReportView(DataBase &db, QWidget *parent)
 
 ReportView::~ReportView()
 {
+    saveTableSettings();
     delete ui;
 }
 
@@ -214,8 +218,10 @@ void ReportView::initConnections()
     connect(ui->openCatContract, &QToolButton::clicked, this, [this]() {
         const int organizationId = ui->comboOrganizations->currentData(
             QueryRolesModel::roleForColumn(m_organizations->columnIndex("id"))).toInt();
-        const int contractId = ui->comboContracts->currentData(
-            QueryRolesModel::roleForColumn(m_contracts->columnIndex("id"))).toInt();
+        const int contractId = m_contracts
+            ? ui->comboContracts->currentData(
+                  QueryRolesModel::roleForColumn(m_contracts->columnIndex("id"))).toInt()
+            : 0;
         if (contractId <= 0)
             return;
         auto *dialog = new ContractDialog(m_db, this);
@@ -520,6 +526,16 @@ bool ReportView::removeCloudDocuments(const QByteArray &reportUuid,
         return false;
     }
 
+    // Ștergerea din cloud rulează pe firul GUI și poate dura (rețea lentă,
+    // server indisponibil): utilizatorul vede de ce fereastra nu răspunde.
+    ProcessingAction progress(this);
+    progress.setTxtInfo(tr("Se elimină documentele din cloud ..."));
+    progress.show();
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    const auto restoreCursor = qScopeGuard([] { QApplication::restoreOverrideCursor(); });
+    // desenează dialogul înainte de blocare; fără input, ca să nu pornească alte acțiuni
+    QCoreApplication::processEvents(QEventLoop::ExcludeUserInputEvents);
+
     const QString connectionName = QStringLiteral("report_delete_cloud_%1")
                                        .arg(QUuid::createUuid().toString(QUuid::WithoutBraces));
     bool success = false;
@@ -655,8 +671,10 @@ void ReportView::applyFilter()
     m_filter.nrDoc = ui->numberDoc->text().trimmed();
     m_filter.idOrganization = ui->comboOrganizations->currentData(
         QueryRolesModel::roleForColumn(m_organizations->columnIndex("id"))).toInt();
-    m_filter.idContract = ui->comboContracts->currentData(
-        QueryRolesModel::roleForColumn(m_contracts->columnIndex("id"))).toInt();
+    m_filter.idContract = m_contracts
+        ? ui->comboContracts->currentData(
+              QueryRolesModel::roleForColumn(m_contracts->columnIndex("id"))).toInt()
+        : 0;
     m_filter.idUser = ui->comboUsers->currentData(
         QueryRolesModel::roleForColumn(m_users->columnIndex("id"))).toInt();
     reload();
@@ -776,7 +794,7 @@ void ReportView::restoreFilterControls()
             m_organizations->rowById("id", m_filter.idOrganization));
         updateContractsModel();
     }
-    if (m_filter.idContract > 0)
+    if (m_filter.idContract > 0 && m_contracts)
         ui->comboContracts->setCurrentIndex(
             m_contracts->rowById("id", m_filter.idContract));
     if (m_filter.idUser > 0)
@@ -808,6 +826,7 @@ void ReportView::updateContractsModel()
             ? ":/sql/queries/contracts_select_by_organization_sqlite.sql"
             : ":/sql/queries/contracts_select_by_organization_mysql.sql"));
     query.addBindValue(organizationId);
+    query.addBindValue(m_filter.idContract); // contractul din filtru rămâne vizibil chiar dacă e nevalid
     if (!query.exec()) {
         qWarning(logWarning()).noquote()
             << "ReportView contracts filter error:" << query.lastError().text();

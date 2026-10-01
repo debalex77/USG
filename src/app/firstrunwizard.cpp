@@ -521,10 +521,11 @@ void FirstRunWizard::loadInvestigations()
     if (! globals().firstLaunch)
         return;
 
+    // Butonul poate fi apăsat de mai multe ori: conexiunile nu se dublează.
     connect(&m_db, &DataBase::updateProgress,
-            this, &FirstRunWizard::handleUpdateProgress);
+            this, &FirstRunWizard::handleUpdateProgress, Qt::UniqueConnection);
     connect(&m_db, &DataBase::finishedProgress,
-            this, &FirstRunWizard::handleFinishedProgress);
+            this, &FirstRunWizard::handleFinishedProgress, Qt::UniqueConnection);
     if (!m_db.updateInvestigationFromXML_2024()) {
         emit finishLoadClassifier(
             tr("Clasificatorul «Investigații» nu a putut fi încărcat. Verificați jurnalul."));

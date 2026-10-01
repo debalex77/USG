@@ -9,8 +9,6 @@
 #include <QMessageBox>
 #include <QCompleter>
 #include <QStandardItemModel>
-#include <QSqlQueryModel>
-#include <LimeReport>
 #include <QStyleFactory>
 #include <QDomDocument>
 
@@ -22,7 +20,7 @@
 #include <common/table_sections.h>
 #include <ui/widgets/balloontip.h>
 #include <common/orderdialogcontext.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 #include <features/reports/reportdialog.h>
 
@@ -64,6 +62,8 @@ public:
     // functiile exportate pu solicitarea din alte clase
     void onPrintDocument(PrintType::Column type_print,
                          const QString &filePDF = QString());
+    [[nodiscard]] bool exportToPdf(const QString &filePDF,
+                                   QString *error = nullptr);
     bool extPostDocument();
     void setSuggestedPatientName(const QString &fullName);
     bool applyPrefillData(const PrefillData &data, QString *errorText = nullptr);
@@ -73,7 +73,6 @@ signals:
     void SaveDocument();
 
     void createNewPacient();   // conectarea -> 'CatalogTableEditor'
-    void printToPdfFinished(); // conectarea -> 'OrderView' -> onSendEmail()
 
 private slots:
     void dataWasModified();
@@ -183,12 +182,7 @@ private:
     double documentSum() const;
     void updateDocumentSumText();
 
-    QStringList selectedInvestigationCodes() const;
-    ReportSections::ConsentTypes selectedConsentTypes() const;
-    QString informedConsentText() const;
-
     void initFooterDoc();
-    void setPrintModelOrganization(QSqlQueryModel *model);
 
     void saveLayoutSizes();
     void loadLayoutSizes();
@@ -197,7 +191,7 @@ private:
 
 private:
     Ui::OrderDialog *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     OrderDialogContext m_documentContext;
 
     // structura

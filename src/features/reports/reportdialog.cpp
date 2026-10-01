@@ -36,6 +36,7 @@
 #include <settings/settingsservice.h>
 #include <common/applicationpathscontext.h>
 #include <features/printing/printimagesservice.h>
+#include <features/printing/reportprintservice.h>
 
 #include <QThread>
 #include <QApplication>
@@ -97,6 +98,9 @@ ReportDialog::ReportDialog(DataBase &db,
 
 ReportDialog::~ReportDialog()
 {
+    // Acoperă toate căile de închidere, inclusiv acceptarea documentului
+    // și distrugerea ferestrei odată cu aplicația.
+    saveWindowSize();
     delete ui;
 }
 
@@ -138,6 +142,25 @@ bool ReportDialog::documentIsNew() const
 void ReportDialog::onPrintDocument(PrintType::Column type_print, const QString &filePDF)
 {
     onPrint(type_print, filePDF);
+}
+
+QStringList ReportDialog::exportToPdf(const QString &fileBase,
+                                      bool showDoctorStamp,
+                                      bool showDoctorSignature,
+                                      QString *error)
+{
+    ReportPrintService service(m_db, m_currentDB);
+    ReportPrintService::Request request;
+    request.reportId = m_params.id;
+    request.mode = PrintType::ExportToPDF;
+    request.pdfBase = fileBase;
+    request.showDoctorStamp = showDoctorStamp;
+    request.showDoctorSignature = showDoctorSignature;
+    request.reportParent = this;
+    const ReportPrintService::Result result = service.print(request);
+    if (error)
+        *error = result.error;
+    return result.success ? result.files : QStringList{};
 }
 
 bool ReportDialog::extPostDocument()
@@ -389,167 +412,39 @@ bool ReportDialog::controlRequiredObjects()
 
 void ReportDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 {
-    using namespace ReportSections;
-
-    /** 1. verificam daca documentul validat */
-    if (m_params.isNew){
-        QMessageBox::warning(this, tr("Controlul validarii"),
+    if (m_params.isNew) {
+        QMessageBox::warning(this,
+                             tr("Controlul validarii"),
                              tr("Documentul nu este validat !!! \nPrintare nu este posibila."),
                              QMessageBox::Ok);
         return;
     }
 
-    /** 2. Daca export, verificam daca e transmis drumul spre fisier  */
-    if (type_print == PrintType::ExportToPDF && filePDF.trimmed().isEmpty())
-        return;
+    const bool restoreVisibility = isVisible();
+    if (restoreVisibility)
+        hide();
 
-    /** 3. alocam memoria pu modele */
-    LimeReport::ReportEngine m_report(this);
-    QStandardItemModel model_img(&m_report);
-    QSqlQueryModel print_model_organization(&m_report);
-    QSqlQueryModel print_model_patient(&m_report);
+    ReportPrintService service(m_db, m_currentDB);
+    ReportPrintService::Request request;
+    request.reportId = m_params.id;
+    request.mode = type_print;
+    request.pdfBase = filePDF;
+    request.showDoctorStamp = m_showDoctorStamp;
+    request.showDoctorSignature = m_showDoctorSignature;
+    request.reportParent = this;
 
-    /** 4. citim contextul documentului */
-    if (!m_documentContext.data().isValid())
-        loadDocumentContext();
+    const ReportPrintService::Result result = service.print(request);
 
-    /** 5. completam logo, stampila si semnatura din UserPreference */
-    const Settings::OrganizationSettings &printSettings =
-        SettingsService::instance().organization();
-    PrintImagesService::Result imageService;
-    imageService = PrintImagesService::fillModel(
-        &model_img,
-        m_currentDB,
-        printSettings.organizationId,
-        printSettings.defaultDoctorId);
+    if (restoreVisibility)
+        show();
 
-    setPrintModelOrganization(&print_model_organization);
-    setPrintModelPatient(&print_model_patient);
-
-    /** 6. transmitem modelurile generatorului de rapoarte */
-    m_report.dataManager()->addModel("table_logo", &model_img, true);
-    m_report.dataManager()->addModel("main_organization", &print_model_organization, false);
-    m_report.dataManager()->addModel("table_patient", &print_model_patient, false);
-
-    /** 7. setam variabile necesare */
-    const int showDoctorStamp = imageService.doctorStamp && m_showDoctorStamp ? 1 : 0;
-    const int showDoctorSignature = imageService.doctorSignature && m_showDoctorSignature ? 1 : 0;
-    qInfo(logInfo()) << "ReportDialog: directorul șabloanelor de printare:"
-                     << ApplicationPathsContext::instance().data().templatesDirectory;
-
-    m_report.dataManager()->clearUserVariables();
-    m_report.dataManager()->setReportVariable("v_exist_logo",  imageService.logo ? 1 : 0);
-    m_report.dataManager()->setReportVariable("v_exist_stamp", imageService.organizationStamp ? 1 : 0);
-    m_report.dataManager()->setReportVariable("v_exist_stamp_doctor", imageService.doctorStamp ? 1 : 0);
-    m_report.dataManager()->setReportVariable("v_exist_signature", imageService.doctorSignature ? 1 : 0);
-
-    m_report.dataManager()->setReportVariable("v_show_stamp_doctor", showDoctorStamp);
-    m_report.dataManager()->setReportVariable("v_show_signature_doctor", showDoctorSignature);
-
-    m_report.dataManager()->setReportVariable("v_export_pdf", type_print == PrintType::ExportToPDF ? 1 : 0);
-    m_report.dataManager()->setReportVariable("unitMeasure", (globals().unitMeasure == "milimetru") ? "mm" : "cm");
-    QString str_recmmand = ""; //o.getAllRecommandation().join(", ");
-    m_report.dataManager()->setReportVariable("all_recomandation", str_recmmand);
-
-    m_report.setPreviewWindowTitle(tr("Raport ecografic nr.") +
-                                    ui->numberDoc->text() + tr(" din ") +
-                                    ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss") +
-                                    tr(" (printare)"));
-
-    /** pregatim un container ce pastreaza modele vii */
-    std::vector<std::unique_ptr<QSqlQueryModel>> printModels; /** pe viitor !!! */
-
-    /** 8. procesarea tabelelor dupa sisteme */
-    if (m_systems.testFlag(ReportSystem::OrgansInternal) &&
-        m_systems.testFlag(ReportSystem::UrinarySystem)) { /** complex */
-        auto modelOrgansInternal = std::make_unique<QSqlQueryModel>();
-        auto modelUrinarySystem  = std::make_unique<QSqlQueryModel>();
-        showTemplateComplex(m_report, *modelOrgansInternal, *modelUrinarySystem, type_print, filePDF);
-        printModels.push_back(std::move(modelOrgansInternal));
-        printModels.push_back(std::move(modelUrinarySystem));
+    if (!result.success) {
+        CustomMessage message(this);
+        message.setWindowTitle(QGuiApplication::applicationDisplayName());
+        message.setTextTitle(tr("Printare nu este posibilă !!!"));
+        message.setDetailedText(result.error);
+        message.exec();
     }
-
-    if (m_systems.testFlag(ReportSystem::OrgansInternal) &&
-        !m_systems.testFlag(ReportSystem::UrinarySystem)) { /** organe interne */
-        auto modelOrgansInternal = std::make_unique<QSqlQueryModel>();
-        showTemplateOrgansInternal(m_report, *modelOrgansInternal, type_print, filePDF);
-        printModels.push_back(std::move(modelOrgansInternal));
-    }
-
-    if (!m_systems.testFlag(ReportSystem::OrgansInternal) &&
-        m_systems.testFlag(ReportSystem::UrinarySystem)) { /** s.urinar */
-        auto modelUrinarySystem  = std::make_unique<QSqlQueryModel>();
-        showTemplateUrinarySystem(m_report, *modelUrinarySystem, type_print, filePDF);
-        printModels.push_back(std::move(modelUrinarySystem));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Prostate)) { /** prostata */
-        auto modelProstate = std::make_unique<QSqlQueryModel>();
-        showTemplateProstate(m_report, *modelProstate, type_print, filePDF);
-        printModels.push_back(std::move(modelProstate));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Gynecology)) { /** ginecologia */
-        auto modelGynecology = std::make_unique<QSqlQueryModel>();
-        showTemplateGynecology(m_report, *modelGynecology, type_print, filePDF);
-        printModels.push_back(std::move(modelGynecology));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Breast)) { /** gl.mamare */
-        auto modelBreast = std::make_unique<QSqlQueryModel>();
-        showTemplateBreast(m_report, *modelBreast, type_print, filePDF);
-        printModels.push_back(std::move(modelBreast));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Thyroid)) { /** gl.tiroida */
-        auto modelThyroid = std::make_unique<QSqlQueryModel>();
-        showTemplateThyroid(m_report, *modelThyroid, type_print, filePDF);
-        printModels.push_back(std::move(modelThyroid));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Gestation0)) { /** gestation0 */
-        auto modelGestation0 = std::make_unique<QSqlQueryModel>(&m_report);
-        showTemplateGestation0(m_report, *modelGestation0, type_print, filePDF);
-        printModels.push_back(std::move(modelGestation0));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Gestation1)) { /** gestation1 */
-        auto modelGestation1 = std::make_unique<QSqlQueryModel>();
-        showTemplateGestation1(m_report, *modelGestation1, type_print, filePDF);
-        printModels.push_back(std::move(modelGestation1));
-    }
-
-    if (m_systems.testFlag(ReportSystem::Gestation2)) { /** gestation2 */
-        auto modelGestation2 = std::make_unique<QSqlQueryModel>();
-        showTemplateGestation2(m_report, *modelGestation2, type_print, filePDF);
-        printModels.push_back(std::move(modelGestation2));
-    }
-
-    if (m_systems.testFlag(ReportSystem::LymphNodes)) { /** lymph */
-        auto modelLymphNodes = std::make_unique<QSqlQueryModel>();
-        showTemplateLymphNodes(m_report, *modelLymphNodes, type_print, filePDF);
-        printModels.push_back(std::move(modelLymphNodes));
-    }
-
-    if (allTemplates) { /** Ca o idee - de creat un sablon cu toate sisteme */
-        this->hide();
-        m_report.setShowProgressDialog(true);
-        if (m_report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/AllTemplates.lrxml")) {
-            if (type_print == PrintType::Designer)
-                m_report.designReport();
-            else if (type_print == PrintType::Preview)
-                m_report.previewReport();
-            else if (type_print == PrintType::ExportToPDF && !filePDF.trimmed().isEmpty())
-                m_report.printToPDF(filePDF);
-            else
-                m_report.previewReport();
-        }
-        this->show();
-    }
-
-    /** 9. prezentam fereastra */
-    if (this->isHidden())
-        this->show();
 }
 
 bool ReportDialog::onSave()
@@ -1630,653 +1525,6 @@ bool ReportDialog::updateParentOrderAttachedMedia(QString *error)
         return false;
     }
     return true;
-}
-
-void ReportDialog::setPrintModelOrganization(QSqlQueryModel *print_model_organization)
-{
-    if (print_model_organization->rowCount() > 0)
-        print_model_organization->clear();
-
-    // Antetul raportului aparține organizației și doctorului care efectuează
-    // investigația, configurați în UserPreference. Organizația din orderEcho
-    // este trimițătorul și rămâne doar în contextul documentului.
-    const Settings::OrganizationSettings &printSettings =
-        SettingsService::instance().organization();
-    m_db.setModelQuery(
-        *print_model_organization,
-        m_currentDB,
-        QStringLiteral(R"(
-            SELECT
-                org.id AS id_organizations,
-                org.IDNP,
-                org.name,
-                org.address,
-                org.telephone,
-                doctor.nameAbbreviated AS doctor,
-                nurse.nameAbbreviated AS nurse,
-                org.email,
-                org.site
-            FROM
-                organizations org
-            LEFT JOIN
-                fullNameDoctors doctor ON doctor.id_doctors = ?
-            LEFT JOIN
-                fullNameNurses nurse ON nurse.id_nurses = ?
-            WHERE
-                org.id = ?
-        )"),
-        {printSettings.defaultDoctorId,
-         printSettings.defaultNurseId,
-         printSettings.organizationId});
-}
-
-void ReportDialog::setPrintModelPatient(QSqlQueryModel *print_model_patient)
-{
-    if (print_model_patient->rowCount() > 0)
-        print_model_patient->clear();
-
-    m_db.setModelQuery(*print_model_patient,
-                       m_db.getDatabase(),
-                       m_db.getTextSQL(":/sql/queries_print/tablePatientByID.sql"),
-                       {m_params.idPatient});
-}
-
-void ReportDialog::showTemplateComplex(LimeReport::ReportEngine &report,
-                                       QSqlQueryModel &modelOrgansInternal,
-                                       QSqlQueryModel &modelUrinarySystem,
-                                       PrintType::Column typePrint,
-                                       const QString &filePDF)
-{
-    /** extragem datele */
-    modelOrgansInternal.setQuery(m_db.getQryForTableOrgansInternalById(m_params.id));
-    modelUrinarySystem.setQuery(m_db.getQryForTableUrinarySystemById(m_params.id));
-    /** setam si transmitem modele necesare */
-    report.dataManager()->addModel("table_organs_internal", &modelOrgansInternal, false);
-    report.dataManager()->addModel("table_urinary_system", &modelUrinarySystem, false);
-    report.dataManager()->setReportVariable("unit_measure_volum", "ml");
-
-    /** daca sisteme intr-un raport return */
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Complex.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Complex.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sau exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - complex: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - complex: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - complex: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_complex.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - complex: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateOrgansInternal(LimeReport::ReportEngine &report,
-                                              QSqlQueryModel &modelOrgansInternal,
-                                              PrintType::Column typePrint,
-                                              const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    modelOrgansInternal.setQuery(m_db.getQryForTableOrgansInternalById(m_params.id));
-    report.dataManager()->addModel("table_organs_internal", &modelOrgansInternal, false);
-    report.dataManager()->setReportVariable("unit_measure_volum", "ml");
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Organs internal.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Organs internal.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - organs internal: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - organs internal: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - organs internal: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_organs_internal.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - organs internal: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateUrinarySystem(LimeReport::ReportEngine &report,
-                                             QSqlQueryModel &modelUrinarySystem,
-                                             PrintType::Column typePrint,
-                                             const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    modelUrinarySystem.setQuery(m_db.getQryForTableUrinarySystemById(m_params.id));
-    report.dataManager()->addModel("table_urinary_system", &modelUrinarySystem, false);
-    report.dataManager()->setReportVariable("unit_measure_volum", "ml");
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Urinary system.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Urinary system.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - urinary system: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - urinary system: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - urinary system: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_urinary_sistem.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - urinary system: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateProstate(LimeReport::ReportEngine &report,
-                                        QSqlQueryModel &modelProstate,
-                                        PrintType::Column typePrint,
-                                        const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    modelProstate.setQuery(m_db.getQryForTableProstateById(m_params.id));
-    report.dataManager()->addModel("table_prostate", &modelProstate, false);
-    report.dataManager()->setReportVariable("unit_measure_volum", "cm3");
-
-    auto section = m_sections.value(ReportSections::ReportSystem::Prostate);
-    auto prostatePage = qobject_cast<ReportPageProstate *>(section.page);
-    report.dataManager()->setReportVariable("method_examination",
-                                            prostatePage && prostatePage->isTransrectal()
-                                                ? "transrectal"
-                                                : "transabdominal");
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Prostate.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Prostate.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - prostate: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - prostate: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - prostate: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_prostate.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - prostate: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateGynecology(LimeReport::ReportEngine &report,
-                                          QSqlQueryModel &modelGynecology,
-                                          PrintType::Column typePrint,
-                                          const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    auto section = m_sections.value(ReportSections::ReportSystem::Gynecology);
-    auto gynecologyPage = qobject_cast<ReportPageGynecology *>(section.page);
-
-    report.dataManager()->setReportVariable("method_examination",
-                                            gynecologyPage && gynecologyPage->isTransvaginal()
-                                                ? "transvaginal"
-                                                : "transabdominal");
-    report.dataManager()->setReportVariable("unit_measure_volum", "cm3");
-    modelGynecology.setQuery(m_db.getQryForTableGynecologyById(m_params.id));
-    report.dataManager()->addModel("table_gynecology", &modelGynecology, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Gynecology.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Gynecology.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gynecology: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - gynecology: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - gynecology: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_gynecology.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gynecology: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateBreast(LimeReport::ReportEngine &report,
-                                      QSqlQueryModel &modelBreast,
-                                      PrintType::Column typePrint,
-                                      const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    modelBreast.setQuery(m_db.getQryForTableBreastById(m_params.id));
-    report.dataManager()->addModel("table_breast", &modelBreast, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Breast.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Breast.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - breast: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - breast: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - breast: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_breast.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - breast: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateThyroid(LimeReport::ReportEngine &report,
-                                       QSqlQueryModel &modelThyroid,
-                                       PrintType::Column typePrint,
-                                       const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    report.dataManager()->setReportVariable("unit_measure_volum", "cm3");
-    modelThyroid.setQuery(m_db.getQryForTableThyroidById(m_params.id));
-    report.dataManager()->addModel("table_thyroid", &modelThyroid, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Thyroid.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Thyroid.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - thyroid: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - thyroid: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - thyroid: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_thyroid.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - thyroid: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateGestation0(LimeReport::ReportEngine &report,
-                                          QSqlQueryModel &modelGestation0,
-                                          PrintType::Column typePrint,
-                                          const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    auto section = m_sections.value(ReportSections::ReportSystem::Gestation0);
-    auto gestation0Page = qobject_cast<ReportPageGestation0 *>(section.page);
-    if (!gestation0Page)
-        return;
-
-    report.dataManager()->setReportVariable("v_lmp", gestation0Page->LMP().toString("dd.MM.yyyy"));
-    report.dataManager()->setReportVariable("v_probable_date_birth", gestation0Page->probableDateBirth().toString("dd.MM.yyyy"));
-
-    //** extragem datele, setam model + setam variabile */
-    report.dataManager()->setReportVariable("ivestigation_view", static_cast<int>(gestation0Page->getViewExamination()));
-    modelGestation0.setQuery(m_db.getQryForTableGestation0dById(m_params.id));
-    report.dataManager()->addModel("table_gestation0", &modelGestation0, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Gestation0.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Gestation0.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation0: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - gestation0: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - gestation0: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_gestation0.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation0: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateGestation1(LimeReport::ReportEngine &report,
-                                          QSqlQueryModel &modelGestation1,
-                                          PrintType::Column typePrint,
-                                          const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    auto section = m_sections.value(ReportSections::ReportSystem::Gestation1);
-    auto gestation1Page = qobject_cast<ReportPageGestation1 *>(section.page);
-    if (!gestation1Page)
-        return;
-
-    report.dataManager()->setReportVariable("v_lmp", gestation1Page->LMP().toString("dd.MM.yyyy"));
-    report.dataManager()->setReportVariable("v_probable_date_birth", gestation1Page->probableDateBirth().toString("dd.MM.yyyy"));
-
-    //** extragem datele, setam model + setam variabile */
-    report.dataManager()->setReportVariable("ivestigation_view", static_cast<int>(gestation1Page->getViewExamination()));
-    modelGestation1.setQuery(m_db.getQryForTableGestation1dById(m_params.id));
-    report.dataManager()->addModel("table_gestation1", &modelGestation1, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/Gestation1.lrxml")){
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/Gestation1.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation1: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - gestation1: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - gestation1: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_gestation1.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation1: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateGestation2(LimeReport::ReportEngine &report,
-                                          QSqlQueryModel &modelGestation2,
-                                          PrintType::Column typePrint,
-                                          const QString &filePDF)
-{
-    /** extragem datele, setam model + setam variabile */
-    auto section = m_sections.value(ReportSections::ReportSystem::Gestation2);
-    auto gestation2Page = qobject_cast<ReportPageGestation2 *>(section.page);
-    if (!gestation2Page)
-        return;
-
-    report.dataManager()->setReportVariable("v_lmp", gestation2Page->LMP().toString("dd.MM.yyyy"));
-    report.dataManager()->setReportVariable("v_probable_date_birth", gestation2Page->probableDateBirth().toString("dd.MM.yyyy"));
-
-    //** extragem datele, setam model + setam variabile */
-    modelGestation2.setQuery(m_db.getQryForTableGestation2(m_params.id));
-    report.dataManager()->addModel("table_gestation2", &modelGestation2, false);
-
-    if (allTemplates)
-        return;
-
-    const QString templatePath = ApplicationPathsContext::instance().data().templatesDirectory + "/Gestation2.lrxml";
-    qInfo(logInfo()) << "[Gestation print] template:" << templatePath
-                     << "PDF export:" << (typePrint == PrintType::ExportToPDF)
-                     << "rows:" << modelGestation2.rowCount();
-    if (modelGestation2.lastError().isValid())
-        qWarning(logWarning()) << "[Gestation print] query error:"
-                               << modelGestation2.lastError().text();
-
-    if (!report.loadFromFile(templatePath)) {
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1").arg(templatePath));
-        msg.exec();
-        return;
-    }
-
-    QObject::connect(&report, &LimeReport::ReportEngine::renderPageFinished,
-                     &report, [](int count) {
-        qInfo(logInfo()) << "[Gestation print] rendered pages:" << count;
-    });
-    QObject::connect(&report, &LimeReport::ReportEngine::printingStarted,
-                     &report, [](int count) {
-        qInfo(logInfo()) << "[Gestation print] printing started, pages:" << count;
-    });
-    QObject::connect(&report, &LimeReport::ReportEngine::pagePrintingFinished,
-                     &report, [](int index) {
-        qInfo(logInfo()) << "[Gestation print] page sent:" << index;
-    });
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation2: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - gestation2: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - gestation2: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_gestation2.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - gestation2: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
-}
-
-void ReportDialog::showTemplateLymphNodes(LimeReport::ReportEngine &report,
-                                          QSqlQueryModel &modelLymphNodes,
-                                          PrintType::Column typePrint,
-                                          const QString &filePDF)
-{
-    //** extragem datele, setam model + setam variabile */
-    auto section = m_sections.value(ReportSections::ReportSystem::LymphNodes);
-    auto lymphNodesPage = qobject_cast<ReportPageLymphNodes *>(section.page);
-    if (!lymphNodesPage)
-        return;
-
-    const QString type_investig = lymphNodesPage->typeInvestigation();
-
-    report.dataManager()->setReportVariable("v_section_type_text", type_investig);
-    modelLymphNodes.setQuery(m_db.getQryForTableLymphNodes(m_params.id));
-    report.dataManager()->addModel("table_lymph", &modelLymphNodes, false);
-
-    if (allTemplates)
-        return;
-
-    /** completam sablonul */
-    if (! report.loadFromFile(ApplicationPathsContext::instance().data().templatesDirectory + "/LymphNodes.lrxml")) {
-        CustomMessage msg(this);
-        msg.setWindowTitle(QGuiApplication::applicationDisplayName());
-        msg.setTextTitle(tr("Printare nu este posibilă !!!"));
-        msg.setDetailedText(tr("Nu au fost incarcate datele in sablon - %1")
-                                .arg(ApplicationPathsContext::instance().data().templatesDirectory + "/LymphNodes.lrxml"));
-        msg.exec();
-        return;
-    }
-
-    /** ascundem fereastra */
-    this->hide();
-
-    /** prezentarea preview, designer sua exportam in PDF */
-    report.setShowProgressDialog(true);
-    if (typePrint == PrintType::Designer){
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - lymphNodes: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    } else if (typePrint == PrintType::Preview){
-        qInfo(logInfo()) << QObject::tr("Printare (preview) - lymphNodes: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.previewReport();
-    } else if (typePrint == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QObject::tr("Printare (export PDF) - lymphNodes: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.printToPDF(filePDF + "_lymphNodes.pdf");
-    } else {
-        qInfo(logInfo()) << QObject::tr("Printare (designer) - lymphNodes: document 'Raport ecografic' nr.%1")
-        .arg(ui->numberDoc->text());
-        report.designReport();
-    }
 }
 
 void ReportDialog::initSync()

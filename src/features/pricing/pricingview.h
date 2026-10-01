@@ -23,7 +23,7 @@
 
 #include <common/appmetatypes.h>
 #include <common/table_sections.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 #include <ui/dialogs/custommessage.h>
 
@@ -89,7 +89,7 @@ private:
 
     // setarile si variabile pu filtru si data
     const QString type_doc = "DocPricing";
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     PricingJournalSettings journalSettings;
 
     DataBase &m_db;

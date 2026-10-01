@@ -4,6 +4,8 @@
 #include <QDialog>
 #include <QDate>
 #include <QMap>
+#include <QPointer>
+#include <QVector>
 #include <QStringList>
 #include <QMessageBox>
 #include <QProcess>
@@ -22,6 +24,7 @@
 #include <common/globals.h>
 #include <infrastructure/security/cryptomanager.h>
 #include <infrastructure/email/emailcore.h>
+#include <infrastructure/email/temporaryexportowner.h>
 #include <ui/dialogs/processingaction.h>
 
 #include <ui/widgets/lineeditopen.h>
@@ -63,6 +66,7 @@ public:
         QString subject;
         QString body;
         QStringList attachments;
+        QString exportDirectory;
     };
 
 public:
@@ -72,10 +76,21 @@ public:
     void setContext(const MailContext &context);
     const MailContext &context() const;
 
+    // Creează câte un subdirector privat și unic pentru fiecare export
+    // (TemporaryExportOwner::prepare). Directorul transmis în MailContext este
+    // revendicat de setContext() și șters la eliberarea ultimei referințe
+    // (dialogul și, pe durata trimiterii, EmailCore).
+    static bool prepareExportDirectory(QString *directory, QString *error = nullptr);
+    // Șterge doar un director încă nerevendicat (export eșuat înainte de agent).
+    static void removeExportDirectory(const QString &directory);
+
+public slots:
+    void done(int result) override;
+
 private slots:
     void onOpenFile(const QString &typeFile);
     void onSend();
-    void onEmailSent(bool success);
+    void onEmailSent(bool success, const QString &errorText);
     void onClose();
 
 private:
@@ -90,6 +105,7 @@ private:
     void refreshAttachmentsFromEditors();
     void buildMessage();
     void collectAttachments();
+    LineEditOpen *appendAttachmentEditor(bool image);
     void fillUiFromContext();
     void openFile(const QString &filePath);
 
@@ -98,13 +114,17 @@ private:
 
     DataBase &m_db;
     MailContext m_ctx;
+    std::shared_ptr<TemporaryExportOwner> m_exportOwner;
 
     QueryRolesModel *modelAccount = nullptr;
 
     QMap<QString, LineEditOpen*> fileInputs;
     QMap<QString, LineEditOpen*> imgInputs;
+    QVector<LineEditOpen*> fileEditors;
+    QVector<LineEditOpen*> imageEditors;
 
-    ProcessingAction *loader = nullptr;
+    QPointer<ProcessingAction> loader;
+    QPointer<QThread> emailThread;
 };
 
 #endif // AGENTSENDEMAIL_H

@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "applicationpathscontext.h"
+#include "sessioncontext.h"
 
 #include <QDir>
 #include <QFileInfo>
@@ -97,7 +98,15 @@ QString ApplicationPathsContext::reportSettingsFilePath() const
 
 QString ApplicationPathsContext::exportDirectory() const
 {
+    // Fiecare utilizator al aplicației are subdirectorul lui, identificat prin
+    // UUID; fără UUID (bază nemigrată) se folosește ID-ul utilizatorului.
+    const SessionContext &session = SessionContext::instance();
+    const QUuid userUuid = session.userUuid();
+    const QString userDirectory = !userUuid.isNull()
+        ? userUuid.toString(QUuid::WithoutBraces)
+        : QStringLiteral("user_%1").arg(session.userId());
+
     return QDir::toNativeSeparators(
-        QDir(QDir::tempPath()).filePath(QStringLiteral("USG"))
+        QDir(QDir::tempPath()).filePath(QStringLiteral("USG/") + userDirectory)
     );
 }

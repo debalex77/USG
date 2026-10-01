@@ -26,7 +26,6 @@
 #include "ui_agentsendemail.h"
 #include <common/applicationpathscontext.h>
 #include <common/sessioncontext.h>
-#include <database/database_common.h>
 #include <settings/settingsservice.h>
 
 #include <QSignalBlocker>
@@ -37,11 +36,6 @@ AgentSendEmail::AgentSendEmail(DataBase &db, QWidget *parent)
     , m_db(db)
 {
     ui->setupUi(this);
-
-    const QString schema = MainDatabaseConnectionContext::instance().isMariaDb()
-        ? QStringLiteral(":/sql/mariadb/tables/online_account.sql")
-        : QStringLiteral(":/sql/sqlite/tables/online_account.sql");
-    DataBaseCommon::execFileBatch(m_db.getDatabase(), schema, "onlineAccount");
 
     setWindowTitle(tr("Agentul e-mail"));
 
@@ -57,6 +51,12 @@ AgentSendEmail::~AgentSendEmail()
 void AgentSendEmail::setContext(const MailContext &context)
 {
     m_ctx = context;
+
+    // Dialogul devine coproprietar al directorului temporar; o cale care nu
+    // provine din prepareExportDirectory() nu este preluată (și nici ștearsă).
+    m_exportOwner.reset();
+    if (!m_ctx.exportDirectory.isEmpty())
+        m_exportOwner = TemporaryExportOwner::claim(m_ctx.exportDirectory);
 
     if (m_ctx.organizationId <= 0) {
         m_ctx.organizationId =
@@ -140,6 +140,11 @@ void AgentSendEmail::initEditorsMap()
     imgInputs["img3"] = ui->attached_img3;
     imgInputs["img4"] = ui->attached_img4;
     imgInputs["img5"] = ui->attached_img5;
+
+    fileEditors = {ui->attached_file1, ui->attached_file2, ui->attached_file3,
+                   ui->attached_file4, ui->attached_file5};
+    imageEditors = {ui->attached_img1, ui->attached_img2, ui->attached_img3,
+                    ui->attached_img4, ui->attached_img5};
 }
 
 void AgentSendEmail::initConnections()
@@ -324,6 +329,9 @@ void AgentSendEmail::buildMessage()
 
 void AgentSendEmail::collectAttachments()
 {
+    // Lista vine de la exportul care a creat fișierele (ex. OrderView);
+    // directorul temporar nu mai este scanat după nume parțiale.
+    const QStringList exportedFiles = m_ctx.attachments;
     m_ctx.attachments.clear();
 
     for (LineEditOpen *ed : std::as_const(fileInputs))
@@ -332,98 +340,54 @@ void AgentSendEmail::collectAttachments()
     for (LineEditOpen *ed : std::as_const(imgInputs))
         ed->clear();
 
-    if (!m_ctx.nrOrder.isEmpty()) {
-        QString fileNumber = m_ctx.nrOrder;
-        fileNumber.replace('/', '_');
-        fileNumber.replace('\\', '_');
-        fileNumber.replace(':', '_');
-        const QString fileOrder =
-            ApplicationPathsContext::instance().exportDirectory() + "/Comanda_ecografica_nr_" + fileNumber + ".pdf";
+    int nextFile = 0;
+    int nextImage = 0;
+    const auto attach = [&](const QString &filePath) {
+        if (!QFileInfo::exists(filePath) || m_ctx.attachments.contains(filePath))
+            return;
 
-        if (QFile::exists(fileOrder)) {
-            ui->attached_file1->setText(fileOrder);
-            m_ctx.attachments << fileOrder;
+        const QString suffix = QFileInfo(filePath).suffix().toLower();
+        const bool isImage = suffix == QLatin1String("jpg")
+                             || suffix == QLatin1String("jpeg")
+                             || suffix == QLatin1String("png");
+        if (isImage) {
+            if (nextImage >= imageEditors.size())
+                appendAttachmentEditor(true);
+            imageEditors[nextImage++]->setText(filePath);
+        } else {
+            if (nextFile >= fileEditors.size())
+                appendAttachmentEditor(false);
+            fileEditors[nextFile++]->setText(filePath);
         }
-    }
-
-    if (!m_ctx.nameReport.isEmpty()) {
-        const QString fileReport =
-            ApplicationPathsContext::instance().exportDirectory() + "/" + m_ctx.nameReport + ".pdf";
-
-        if (QFile::exists(fileReport)) {
-            if (ui->attached_file1->text().isEmpty())
-                ui->attached_file1->setText(fileReport);
-            else if (ui->attached_file2->text().isEmpty())
-                ui->attached_file2->setText(fileReport);
-
-            if (!m_ctx.attachments.contains(fileReport))
-                m_ctx.attachments << fileReport;
-        }
-    }
-
-    if (m_ctx.nrReport.isEmpty())
-        return;
-
-    QString reportFileNumber = m_ctx.nrReport;
-    reportFileNumber.replace('/', '_');
-    reportFileNumber.replace('\\', '_');
-    reportFileNumber.replace(':', '_');
-
-    QDir dir(ApplicationPathsContext::instance().exportDirectory());
-    dir.setFilter(QDir::Files | QDir::NoSymLinks);
-    const QFileInfoList listFiles = dir.entryInfoList();
-
-    QList<QFileInfo> matchingFiles;
-    QList<QFileInfo> matchingImages;
-
-    for (auto it = listFiles.constBegin(); it != listFiles.constEnd(); ++it) {
-        if (it->fileName().contains("Raport_ecografic_nr_" + reportFileNumber))
-            matchingFiles.append(*it);
-
-        if (it->fileName().contains("Image_report_" + reportFileNumber))
-            matchingImages.append(*it);
-    }
-
-    QVector<LineEditOpen*> attachedFiles = {
-        ui->attached_file1,
-        ui->attached_file2,
-        ui->attached_file3,
-        ui->attached_file4,
-        ui->attached_file5
+        m_ctx.attachments << filePath;
     };
 
-    QVector<LineEditOpen*> attachedImages = {
-        ui->attached_img1,
-        ui->attached_img2,
-        ui->attached_img3,
-        ui->attached_img4,
-        ui->attached_img5
-    };
+    for (const QString &filePath : exportedFiles)
+        attach(filePath);
 
-    int n = 0;
-    for (const QFileInfo &fi : matchingFiles) {
-        while (n < attachedFiles.size() && !attachedFiles[n]->text().isEmpty())
-            ++n;
+}
 
-        if (n >= attachedFiles.size())
-            break;
+LineEditOpen *AgentSendEmail::appendAttachmentEditor(bool image)
+{
+    auto *editor = new LineEditOpen(image ? ui->tabImgAttached : ui->tabFilesAttached);
+    const int index = image ? imageEditors.size() : fileEditors.size();
+    const QString key = QStringLiteral("%1_%2")
+                            .arg(image ? QStringLiteral("img") : QStringLiteral("file"))
+                            .arg(index + 1, 3, 10, QLatin1Char('0'));
 
-        attachedFiles[n]->setText(fi.absoluteFilePath());
-        if (!m_ctx.attachments.contains(fi.absoluteFilePath()))
-            m_ctx.attachments << fi.absoluteFilePath();
-        ++n;
+    if (image) {
+        ui->gridLayout_2->addWidget(editor, index, 0);
+        imageEditors.append(editor);
+        imgInputs.insert(key, editor);
+    } else {
+        ui->gridLayout_3->addWidget(editor, index, 0);
+        fileEditors.append(editor);
+        fileInputs.insert(key, editor);
     }
 
-    n = 0;
-    for (const QFileInfo &fi : matchingImages) {
-        if (n >= attachedImages.size())
-            break;
-
-        attachedImages[n]->setText(fi.absoluteFilePath());
-        if (!m_ctx.attachments.contains(fi.absoluteFilePath()))
-            m_ctx.attachments << fi.absoluteFilePath();
-        ++n;
-    }
+    connect(editor, &LineEditOpen::onClickedButton,
+            this, [this, key]() { onOpenFile(key); });
+    return editor;
 }
 
 void AgentSendEmail::refreshAttachmentsFromEditors()
@@ -526,7 +490,7 @@ void AgentSendEmail::onSend()
         BalloonTip::showBalloonFor(ui->txt_from,
                                    QMessageBox::Information,
                                    tr("Verificarea"),
-                                   tr("Nu este indicat e-mail beneficiarului !!!"),
+                                   tr("Nu este indicat e-mailul expeditorului !!!"),
                                    4000,
                                    true,
                                    BalloonTip::BottomCenter);
@@ -564,6 +528,14 @@ void AgentSendEmail::onSend()
         return;
     }
 
+    if (emailThread && emailThread->isRunning()) {
+        QMessageBox::information(this,
+                                 tr("Transmiterea prin e-mail"),
+                                 tr("O trimitere este deja în curs."),
+                                 QMessageBox::Ok);
+        return;
+    }
+
     loader = new ProcessingAction(this);
     loader->setAttribute(Qt::WA_DeleteOnClose);
     loader->setProperty("txtInfo", tr("Se transmit documentele destinatarului ..."));
@@ -574,7 +546,8 @@ void AgentSendEmail::onSend()
     qInfo(logInfo()) << "[THREAD] Se initializeaza trimiterea emailului catre"
                      << ui->txt_to->text();
 
-    QThread *thread = new QThread(this);
+    QThread *thread = new QThread();
+    emailThread = thread;
     EmailCore *emailCore = new EmailCore();
     emailCore->moveToThread(thread);
 
@@ -587,49 +560,76 @@ void AgentSendEmail::onSend()
                             ui->txt_subiect->text().trimmed(),
                             ui->txt_body->toPlainText(),
                             m_ctx.attachments);
+    // EmailCore păstrează directorul pe disc chiar dacă dialogul este
+    // distrus în timpul trimiterii (ex. închiderea OrderView).
+    emailCore->setExportOwner(m_exportOwner);
 
     connect(thread, &QThread::started,
             emailCore, &EmailCore::sendEmail);
     connect(emailCore, &EmailCore::emailSent,
             this, &AgentSendEmail::onEmailSent);
     connect(emailCore, &EmailCore::emailSent,
-            thread, &QThread::quit);
+            thread, &QThread::quit, Qt::DirectConnection);
     connect(emailCore, &EmailCore::emailSent,
             emailCore, &QObject::deleteLater);
     connect(thread, &QThread::finished,
             thread, &QObject::deleteLater);
+    connect(thread, &QObject::destroyed, this, [this]() { emailThread = nullptr; });
 
     thread->start();
 }
 
-void AgentSendEmail::onEmailSent(bool success)
+void AgentSendEmail::onEmailSent(bool success, const QString &errorText)
 {
-    if (success)
-        qInfo(logInfo()) << "[THREAD] E-mail trimis cu succes!";
-    else
-        qCritical(logCritical()) << "[THREAD] Eroare la trimiterea e-mail-ului!";
-
     if (loader)
         loader->close();
+
+    if (!success) {
+        qCritical(logCritical()) << "[THREAD] Eroare la trimiterea e-mail-ului:" << errorText;
+
+        // Documentele exportate se păstrează, iar dialogul revine pentru
+        // corectarea datelor și reluarea trimiterii.
+        show();
+        QMessageBox::critical(this,
+                              tr("Transmiterea prin e-mail"),
+                              tr("E-mail-ul nu a fost trimis.\n\n%1").arg(errorText),
+                              QMessageBox::Ok);
+        return;
+    }
+
+    qInfo(logInfo()) << "[THREAD] E-mail trimis cu succes!";
+    QMessageBox::information(parentWidget(),
+                             tr("Transmiterea prin e-mail"),
+                             tr("E-mail-ul a fost trimis către %1.")
+                                 .arg(ui->txt_to->text().trimmed()),
+                             QMessageBox::Ok);
 
     onClose();
 }
 
 void AgentSendEmail::onClose()
 {
-    QDir dir(ApplicationPathsContext::instance().exportDirectory());
-    if (dir.exists()) {
-        if (dir.removeRecursively()) {
-            qInfo(logInfo()) << "[THREAD] Directorul"
-                             << ApplicationPathsContext::instance().exportDirectory()
-                             << "a fost sters cu succes!";
-        } else {
-            qWarning(logWarning()) << "[THREAD] Nu s-a putut sterge directorul:"
-                                   << ApplicationPathsContext::instance().exportDirectory();
-        }
-    }
-
+    // close() pe dialogul ascuns (după trimitere) nu trece prin done().
+    m_exportOwner.reset();
     close();
+}
+
+void AgentSendEmail::done(int result)
+{
+    // Acoperă butonul X, tasta Esc și close() pe dialogul vizibil.
+    // Directorul se șterge acum doar dacă nicio trimitere nu îl mai folosește.
+    m_exportOwner.reset();
+    QDialog::done(result);
+}
+
+bool AgentSendEmail::prepareExportDirectory(QString *directory, QString *error)
+{
+    return TemporaryExportOwner::prepare(directory, error);
+}
+
+void AgentSendEmail::removeExportDirectory(const QString &directory)
+{
+    TemporaryExportOwner::discard(directory);
 }
 
 void AgentSendEmail::initModelAccount()

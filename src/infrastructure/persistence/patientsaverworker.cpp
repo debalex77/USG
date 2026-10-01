@@ -50,7 +50,7 @@ void PatientSaverWorker::processInsert()
         QSqlDatabase dbConn = m_provider->getDatabaseThread(connName, MainDatabaseConnectionContext::instance().isMariaDb());
 
         if (!dbConn.isOpen() && !dbConn.open()) {
-            qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
             .arg(this->metaObject()->className())
                 << dbConn.lastError().text();
 
@@ -108,7 +108,7 @@ void PatientSaverWorker::processUpdate()
         QSqlDatabase dbConn = m_provider->getDatabaseThread(connName, MainDatabaseConnectionContext::instance().isMariaDb());
 
         if (!dbConn.isOpen() && !dbConn.open()) {
-            qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
             .arg(this->metaObject()->className())
                 << dbConn.lastError().text();
 
@@ -253,7 +253,7 @@ bool PatientSaverWorker::patientDataInsertInDB(QSqlDatabase &dbConn, QStringList
         err << "[THREAD] Eroare de inserare datelor pacientului - "
             << m_patientData.name + " " + m_patientData.firstName + " :"
             << qry.lastError().text();
-        qCritical(logCritical()) << err;
+        qCritical(logCritical()).noquote() << err.join(QLatin1Char(' ')).simplified();
         return false;
     } else {
         // QMYSQL nu garantează păstrarea lastInsertId() după COMMIT.
@@ -268,7 +268,7 @@ bool PatientSaverWorker::patientDataInsertInDB(QSqlDatabase &dbConn, QStringList
 
         if (dbConn.commit() == false) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[THREAD %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
             err.append(dbConn.lastError().text());
@@ -277,7 +277,7 @@ bool PatientSaverWorker::patientDataInsertInDB(QSqlDatabase &dbConn, QStringList
             m_patientData.id = static_cast<int>(insertedPatientId);
             m_patientData.uuid = uuid;
 
-            qInfo(logInfo()) << QStringLiteral("[THREAD] Inserarea cu succes a datelor pacientului - %1")
+            qInfo(logInfo()).noquote() << QStringLiteral("[THREAD] Inserarea cu succes a datelor pacientului - %1")
             .arg(m_patientData.name + " " + m_patientData.firstName);
             return true;
         }
@@ -338,18 +338,18 @@ bool PatientSaverWorker::patientDataUpdate(QSqlDatabase &dbConn, QStringList &er
         err << "[THREAD] Eroare de actualizare a datelor pacientului - "
             << m_patientData.name + " " + m_patientData.firstName + " :"
             << qry.lastError().text();
-        qCritical(logCritical()) << err;
+        qCritical(logCritical()).noquote() << err.join(QLatin1Char(' ')).simplified();
         return false;
     } else {
         if (dbConn.commit() == false) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[THREAD %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
             err.append(dbConn.lastError().text());
             return false;
         } else {
-            qInfo(logInfo()) << QStringLiteral("[THREAD] Actualizarea cu succes a datelor pacientului - %1")
+            qInfo(logInfo()).noquote() << QStringLiteral("[THREAD] Actualizarea cu succes a datelor pacientului - %1")
             .arg(m_patientData.name + " " + m_patientData.firstName);
         }
     }

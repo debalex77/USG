@@ -110,6 +110,7 @@ OrderJournalLoader::BatchResult OrderJournalLoader::execQuery(QSqlQuery &qry, in
 
     if (!m_db.getDatabase().isOpen()) {
         qWarning(logWarning()).noquote() << "JournalLoader: database is not open";
+        result.error = QStringLiteral("database is not open");
         return result;
     }
 
@@ -118,6 +119,7 @@ OrderJournalLoader::BatchResult OrderJournalLoader::execQuery(QSqlQuery &qry, in
     if (!qry.exec()) {
         qWarning(logWarning()).noquote() << "JournalLoader exec error:" << qry.lastError().text();
         qWarning(logWarning()).noquote() << "Executed query:" << qry.lastQuery();
+        result.error = qry.lastError().text();
         return result;
     }
 
@@ -170,15 +172,18 @@ OrderJournalLoader::BatchResult OrderJournalLoader::loadNextBatch(int limit, con
 {
     BatchResult result;
 
-    if (!m_db.getDatabase().isOpen())
+    if (!m_db.getDatabase().isOpen()) {
+        result.error = QStringLiteral("database is not open");
         return result;
+    }
 
     QSqlQuery qry(m_db.getDatabase());
     qry.setForwardOnly(true);
 
     const QString sql = buildSql(false);
     if (!qry.prepare(sql)) {
-        qWarning() << "JournalLoader prepare 'loadNextBatch' error:" << qry.lastError().text();
+        qWarning(logWarning()) << "JournalLoader prepare 'loadNextBatch' error:" << qry.lastError().text();
+        result.error = qry.lastError().text();
         return result;
     }
 
@@ -195,8 +200,10 @@ OrderJournalLoader::BatchResult OrderJournalLoader::loadFirstBatch(int limit)
 {
     BatchResult result;
 
-    if (!m_db.getDatabase().isOpen())
+    if (!m_db.getDatabase().isOpen()) {
+        result.error = QStringLiteral("database is not open");
         return result;
+    }
 
     QSqlQuery qry(m_db.getDatabase());
     qry.setForwardOnly(true);
@@ -204,6 +211,7 @@ OrderJournalLoader::BatchResult OrderJournalLoader::loadFirstBatch(int limit)
     const QString sql = buildSql(true);
     if (!qry.prepare(sql)) {
         qWarning(logWarning()) << "JournalLoader prepare 'loadFirstBatch' error:" << qry.lastError().text();
+        result.error = qry.lastError().text();
         return result;
     }
 

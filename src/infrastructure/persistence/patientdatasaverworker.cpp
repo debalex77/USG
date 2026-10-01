@@ -58,7 +58,7 @@ void PatientDataSaverWorker::processInsert()
         QSqlDatabase dbConn = m_db->getDatabaseThread(connName, m_data.thisMySQL);
         if (! dbConn.isOpen() &&
             ! dbConn.open()) {
-            qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
                                .arg(this->metaObject()->className())
                         << dbConn.lastError().text();
             emit finished(map);
@@ -114,7 +114,7 @@ void PatientDataSaverWorker::processUpdate()
         QSqlDatabase dbConn = m_db->getDatabaseThread(connName, m_data.thisMySQL);
         if (! dbConn.isOpen() &&
             ! dbConn.open()) {
-            qCritical() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Nu pot deschide conexiunea DB:")
             .arg(this->metaObject()->className())
                 << dbConn.lastError().text();
             emit finished(map);
@@ -211,17 +211,17 @@ bool PatientDataSaverWorker::patientDataInsertInDB(QSqlDatabase &dbConn, QString
         err << "[THREAD] Eroare de inserare datelor pacientului - "
             << m_data.name + " " + m_data.firstName + " :"
             << qry.lastError().text();
-        qCritical(logCritical()) << err;
+        qCritical(logCritical()).noquote() << err.join(QLatin1Char(' ')).simplified();
         return false;
     } else {
         if (dbConn.commit() == false) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[THREAD %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Commit-ul pentru inserarea în tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
             return false;
         } else {
-            qInfo(logInfo()) << QStringLiteral("[THREAD] Inserarea cu succes a datelor pacientului - %1")
+            qInfo(logInfo()).noquote() << QStringLiteral("[THREAD] Inserarea cu succes a datelor pacientului - %1")
                                     .arg(m_data.name + " " + m_data.firstName);
             return true;
         }
@@ -267,15 +267,15 @@ void PatientDataSaverWorker::patientDataUpdate(QSqlDatabase &dbConn, QStringList
         err << "[THREAD] Eroare de actualizare a datelor pacientului - "
             << m_data.name + " " + m_data.firstName + " :"
             << qry.lastError().text();
-        qCritical(logCritical()) << err;
+        qCritical(logCritical()).noquote() << err.join(QLatin1Char(' ')).simplified();
     } else {
         if (dbConn.commit() == false) {
             dbConn.rollback();
-            qCritical() << QStringLiteral("[THREAD %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
+            qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Commit-ul pentru actualizarea datelor in tabela 'patients' a eșuat: %2")
                                .arg(this->metaObject()->className(),
                                     dbConn.lastError().text());
         } else {
-            qInfo(logInfo()) << QStringLiteral("[THREAD] Actualizarea cu succes a datelor pacientului - %1")
+            qInfo(logInfo()).noquote() << QStringLiteral("[THREAD] Actualizarea cu succes a datelor pacientului - %1")
                                     .arg(m_data.name + " " + m_data.firstName);
         }
     }

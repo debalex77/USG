@@ -34,6 +34,7 @@ public:
     static bool createAllTablesSqlite();
     static bool createAllTablesSqlite(QSqlDatabase db);
     static bool createAllTablesMariaDB();
+    static bool createAllTablesMariaDB(QSqlDatabase db);
     static bool createTableDBImageSqlite(QSqlDatabase db,
                                          const QString &resourcePath,
                                          const QString &ctx);

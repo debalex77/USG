@@ -46,7 +46,7 @@ void docSyncWorker::process()
         QSqlDatabase dbConn_sync = m_db->getDatabaseSyncThread(connName_sync);
         if (! dbConn_sync.isOpen() &&
             ! dbConn_sync.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (sync):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (sync):")
                                .arg(this->metaObject()->className())
                         << dbConn_sync.lastError().text();
         }
@@ -55,7 +55,7 @@ void docSyncWorker::process()
         QSqlDatabase dbConn_local = m_db->getDatabaseThread(connName_local, m_data.thisMySQL, "[SYNC]");
         if (! dbConn_local.isOpen() &&
             ! dbConn_local.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (local):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (local):")
                                .arg(this->metaObject()->className())
                         << dbConn_local.lastError().text();
         }
@@ -64,7 +64,7 @@ void docSyncWorker::process()
         QSqlDatabase dbConnImg = m_db->getDatabaseImagesThread(connName_img);
         if (! dbConnImg.isOpen() &&
             ! dbConnImg.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (db_image):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (db_image):")
                                .arg(this->metaObject()->className())
                         << dbConnImg.lastError().text();
         }

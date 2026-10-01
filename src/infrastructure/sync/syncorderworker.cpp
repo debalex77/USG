@@ -220,7 +220,7 @@ bool SyncOrderWorker::syncOrderTableData(QSqlDatabase &dbSync, QSqlDatabase &dbL
 
     if (!qryLocal.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare citire detalii comandă SQLite:" << qryLocal.lastError().text();
+        << "[SYNC] Eroare citire detalii comandă SQLite:" << qryLocal.lastError().text();
         return false;
     }
 
@@ -231,7 +231,7 @@ bool SyncOrderWorker::syncOrderTableData(QSqlDatabase &dbSync, QSqlDatabase &dbL
 
     if (!qryDeleteSync.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare ștergere detalii comandă MariaDB:" << qryDeleteSync.lastError().text();
+        << "[SYNC] Eroare ștergere detalii comandă MariaDB:" << qryDeleteSync.lastError().text();
         return false;
     }
         // Inserăm rândurile noi din SQLite în MariaDB
@@ -527,7 +527,7 @@ bool SyncOrderWorker::checkIfRecordExists(QSqlDatabase &db,
 
     if (!qry.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare verificare înregistrare:" << qry.lastError().text();
+        << "[SYNC] Eroare verificare înregistrare:" << qry.lastError().text();
         return false;
     }
 

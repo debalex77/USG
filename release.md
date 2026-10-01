@@ -1,42 +1,51 @@
-# USG v4.2.4
+# USG v4.2.5
 
 ## Highlights
 
-- Corrected the separation between the document organization and the printing
-  identity. The organization stored in an ultrasound Order remains the
-  referring organization, while printed headers and images use the performing
-  organization and default doctor configured in User Preferences.
-- Ultrasound Orders now use the performing organization's logo and organization
-  stamp.
-- Ultrasound Reports use the performing organization's identity and the default
-  doctor's stamp and signature. Their visibility continues to follow the print
-  parameter checkboxes.
-- PDF attachments generated for e-mail now use the same printing identity as
-  document preview and printing.
-- Corrected the image layout used by statistical reports: organization logo,
-  doctor stamp, and doctor signature. The organization stamp no longer replaces
-  the doctor's signature.
+- Startup checks: on a regular launch the application verifies that the SQLite
+  database files configured in the profile (main and image databases) exist,
+  and stops with a message instead of silently creating empty databases. An
+  empty MariaDB database, or one without the application schema, is now
+  reported explicitly with a hint to use the first-launch setup.
+- First launch: an existing database selected during setup is no longer
+  recreated; the schema version is written only after full verification. The
+  profile name and the image database are proposed from the selected file.
+- Schema initialization and post-login constant loading use dedicated
+  connections; closing the login window while loading no longer fails.
+- The initial administrator is created only when the users table is empty; if
+  all users are marked as deleted, the application reports it and stops.
+- First-run wizard: a password is required for added users; investigation and
+  price-type catalogs are no longer duplicated on repeated clicks.
+- Ultrasound Order journal: deletion asks for confirmation and also removes
+  images, videos and, optionally, the cloud copy; number, organization and
+  contract filters are fixed; sorting by any column applies to all documents;
+  the preview follows the current row; loading errors are shown.
+- Printing from journals uses the same print services as the documents (stamp
+  and signature hidden by default); the image in the Order template was
+  resized.
+- E-mail: correct detection of attached image formats, reliable cleanup of the
+  temporary directory, rejection of invalid addresses, and protection against
+  starting a second export in parallel.
+- Pricing: fixed removal of the document header when saving rows fails and the
+  error when selecting an organization (contracts).
+- Statistical reports: the list contains only available `.lrxml` templates,
+  with an explicit selection row.
+- Russian splash screen alignment fixed; Russian translation completed.
 
-## Included changes from v4.2.3
+## Included changes from v4.2.4
 
-- Rewritten Romanian User Manual with updated screenshots and direct access
-  through the **Online Manual** action in the main window's Help menu.
-- Added the **Cloud Servers** window for viewing, adding, editing, and removing
-  synchronization configurations.
-- SQLite–MariaDB synchronization can be enabled or disabled from application
-  preferences.
-- Revised PDF export, attachments, e-mail account selection, and the e-mail
-  agent workflow.
-- Completed patient-history actions and the ultrasound Order/Report journals.
-- Corrected the Cloud Servers window and application shutdown flow.
-- Linux packages use a portable RPATH and bundle LimeReport without requiring a
-  global LimeReport installation.
-- Updated the Russian interface translation for the recently added features.
+- Separation between the referring organization stored in the Order and the
+  performing organization's printing identity (header, logo, stamps and
+  signature from User Preferences).
+- PDF attachments for e-mail use the same printing identity as preview.
+- Statistical reports show the doctor stamp and signature, not the
+  organization stamp.
 
 ## Upgrade and verification
 
-Create backups of the main database, image database, and application profile
-before installing the update.
+Version 4.2.5 does not change the database schema. Create backups of the main
+database, image database, and application profile before installing the
+update.
 
 For a SQLite profile synchronized with MariaDB:
 
@@ -45,29 +54,25 @@ For a SQLite profile synchronized with MariaDB:
 3. Open the MariaDB profile directly only after the SQLite-side update has been
    confirmed.
 
-After upgrading, verify authentication, open an existing ultrasound Order and
-Report, and confirm that:
+After upgrading, verify authentication, open the ultrasound Order journal and
+confirm that:
 
-- the referring organization is still stored in the Order;
-- the printed header and logo belong to the performing organization configured
-  in User Preferences;
-- the ultrasound Report shows the configured doctor's stamp and signature when
-  enabled;
-- statistical reports show the doctor stamp and signature, not the organization
-  stamp;
-- PDF export and e-mail attachments use the same printing identity.
+- filters, sorting and the document preview work on the whole period;
+- deleting a test Order removes its Report and images;
+- printing and PDF/e-mail export of an Order and a Report work as before;
+- statistical reports list the available templates.
 
 ## Windows packages
 
-- `USG_v4.2.4_Windows_amd64.exe` — Windows installer.
+- `USG_v4.2.5_Windows_amd64.exe` — Windows installer.
 - `LimeReport_v1.7.23_USG_source.zip` — bundled dependency source.
 - SHA-256 checksum files are published with the artifacts.
 
 ## Linux packages
 
-- `USG_v4.2.4_Linux_amd64.run` — Qt Installer Framework installer.
-- `USG_v4.2.4_Linux_amd64.deb` — Debian package.
-- `USG_v4.2.4-x86_64.AppImage` — portable AppImage package.
+- `USG_v4.2.5_Linux_amd64.run` — Qt Installer Framework installer.
+- `USG_v4.2.5_Linux_amd64.deb` — Debian package.
+- `USG_v4.2.5-x86_64.AppImage` — portable AppImage package.
 - `LimeReport_v1.7.23_USG_source.tar.gz` — LimeReport source and the local patch
   used by USG.
 
@@ -76,14 +81,14 @@ Verify downloaded packages using the published SHA-256 checksums.
 ### Running the AppImage
 
 ```bash
-chmod +x USG_v4.2.4-x86_64.AppImage
-./USG_v4.2.4-x86_64.AppImage
+chmod +x USG_v4.2.5-x86_64.AppImage
+./USG_v4.2.5-x86_64.AppImage
 ```
 
 If FUSE is not available:
 
 ```bash
-./USG_v4.2.4-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.5-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Full release history: [`resources/RELEASES.md`](resources/RELEASES.md).

@@ -50,33 +50,33 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         db.setUserName(connection.userName);
         db.setPassword(connection.password);
         if (! db.open()) {
-            qCritical(logCritical()) << this->metaObject()->className()
-                                     << "[getDatabaseThread()]"
-                                     << prefixConn + " Eroare la deschiderea bazei de date(MYSQL):"
-                                     << db.lastError().text();
+            qCritical(logCritical()).noquote()
+                << prefixConn << this->metaObject()->className()
+                << "[getDatabaseThread()] Eroare la deschiderea bazei de date(MYSQL):"
+                << db.lastError().text();
         } else {
-            qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
-                             << connectionName;
+            qInfo(logInfo()).noquote() << prefixConn << "realizata conexiunea -"
+                                       << connectionName;
         }
     } else {
         db.setHostName(connection.sqliteDatabaseName);
         db.setDatabaseName(connection.sqliteDatabasePath);
         if (! db.open()) {
-            qCritical(logCritical()) << this->metaObject()->className()
-                                     << "[getDatabaseThread()]"
-                                     << prefixConn + " Eroare la deschiderea bazei de date(sqlite):"
-                                     << db.lastError().text();
+            qCritical(logCritical()).noquote()
+                << prefixConn << this->metaObject()->className()
+                << "[getDatabaseThread()] Eroare la deschiderea bazei de date(sqlite):"
+                << db.lastError().text();
         } else {
             QSqlQuery pragma(db);
             if (!pragma.exec(QStringLiteral("PRAGMA foreign_keys = ON"))) {
-                qCritical(logCritical())
-                    << prefixConn + " activarea foreign_keys pentru SQLite a eșuat:"
+                qCritical(logCritical()).noquote()
+                    << prefixConn << "activarea foreign_keys pentru SQLite a eșuat:"
                     << pragma.lastError().text();
                 db.close();
                 return db;
             }
-            qInfo(logInfo()) << prefixConn + " realizata conexiunea -"
-                             << connectionName;
+            qInfo(logInfo()).noquote() << prefixConn << "realizata conexiunea -"
+                                       << connectionName;
         }
     }
 
@@ -93,20 +93,20 @@ QSqlDatabase DatabaseProvider::getDatabaseImagesThread(const QString &connection
     db.setDatabaseName(
         MainDatabaseConnectionContext::instance().data().imageDatabasePath);
     if (! db.open()) {
-        qWarning(logWarning()) << this->metaObject()->className()
-                               << "[getDatabaseThread()]"
-                               << "[THREAD] Eroare la deschiderea bazei de date(db_image 'sqlite'):"
-                               << db.lastError().text();
+        qWarning(logWarning()).noquote()
+            << "[THREAD]" << this->metaObject()->className()
+            << "[getDatabaseImagesThread()] Eroare la deschiderea bazei de date(db_image 'sqlite'):"
+            << db.lastError().text();
     } else {
         QSqlQuery pragma(db);
         if (!pragma.exec(QStringLiteral("PRAGMA foreign_keys = ON"))) {
-            qCritical(logCritical())
+            qCritical(logCritical()).noquote()
                 << "[THREAD] activarea foreign_keys pentru db_image a eșuat:"
                 << pragma.lastError().text();
             db.close();
             return db;
         }
-        qInfo(logInfo()) << "[THREAD] realizata conexiunea (db_image) -" << connectionName;
+        qInfo(logInfo()).noquote() << "[THREAD] realizata conexiunea (db_image) -" << connectionName;
     }
     return db;
 }
@@ -126,12 +126,12 @@ QSqlDatabase DatabaseProvider::getDatabaseSyncThread(const QString &connectionNa
     db.setUserName(cloud.userName);
     db.setPassword(cloud.password);
     if (! db.open()) {
-        qWarning(logWarning()) << this->metaObject()->className()
-                               << "[getDatabaseThread()]"
-                               << "[SYNC] Eroare la deschiderea bazei de date cloud (MariaDB):"
-                               << db.lastError().text();
+        qWarning(logWarning()).noquote()
+            << "[SYNC]" << this->metaObject()->className()
+            << "[getDatabaseSyncThread()] Eroare la deschiderea bazei de date cloud (MariaDB):"
+            << db.lastError().text();
     } else {
-        qInfo(logInfo()) << "[SYNC] realizata conexiunea -" << connectionName;
+        qInfo(logInfo()).noquote() << "[SYNC] realizata conexiunea -" << connectionName;
     }
     return db;
 }
@@ -145,9 +145,9 @@ void DatabaseProvider::removeDatabaseThread(const QString &connectionName, QStri
 {
     QSqlDatabase::removeDatabase(connectionName);
     if (QSqlDatabase::contains(connectionName))
-        qWarning(logWarning()) << QStringLiteral("%1 eroare la eliminare conexiunei - %2")
+        qWarning(logWarning()).noquote() << QStringLiteral("%1 eroare la eliminare conexiunei - %2")
             .arg(prefixConn, connectionName);
     else
-        qInfo(logInfo()) << QStringLiteral("%1 eliminarea cu succes conexiunei - %2")
+        qInfo(logInfo()).noquote() << QStringLiteral("%1 eliminarea cu succes conexiunei - %2")
             .arg(prefixConn, connectionName);
 }

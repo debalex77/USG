@@ -15,6 +15,8 @@
 #include <QProgressDialog>
 #include <QSqlQueryModel>
 
+#include <functional>
+
 #if (QT_VERSION > QT_VERSION_CHECK(5, 15, 2))
 #include <QRegularExpression>
 #endif
@@ -33,6 +35,9 @@ public:
     ~DataBase();
 
     bool connectToDataBase();
+    // Motivul ultimului eșec din connectToDataBase() care nu provine din
+    // QSqlDatabase::lastError() (ex. baza MariaDB fără schema aplicației).
+    QString lastConnectError() const { return m_lastConnectError; }
     bool createConnectBaseSqlite(QString &txtMessage);
     bool createConnectBaseSqlite(const QString &databaseName,
                                  const QString &databasePath,
@@ -84,6 +89,13 @@ public:
     /** Versiunea structurii bazei, independentă de utilizator și aplicație. */
     QString databaseSchemaVersion(QString *error = nullptr);
     bool setDatabaseSchemaVersion(const QString &version, QString *error = nullptr);
+    /** Versiunea unei scheme existente sau șir gol pentru o bază fără schema aplicației. */
+    static bool readExistingSchemaVersion(const QSqlDatabase &database,
+                                          QString *version,
+                                          QString *error = nullptr);
+    static bool setDatabaseSchemaVersion(const QSqlDatabase &database,
+                                         const QString &version,
+                                         QString *error = nullptr);
 
     /** Șterge rânduri dintr-un tabel pe baza unor condiții WHERE.*/
     bool deleteFromTable(const QString class_name,
@@ -123,10 +135,15 @@ public:
     bool creatingTables();
     bool creatingTables_DbImage();
     bool verifyNewDatabaseSchema() const;
+    static bool verifyNewDatabaseSchema(const QSqlDatabase &currentDatabase,
+                                        const QSqlDatabase &imageDatabase);
 
     void loadInvestigationFromXml();
     bool updateInvestigationFromXML_2024();
     bool loadNormogramsFromXml();
+    // Variantă fără QObject, utilizabilă pe conexiunea unui fir de lucru.
+    static bool loadNormogramsFromXml(QSqlDatabase currentDatabase,
+                                      const std::function<void(int, int)> &progress = {});
     void insertDataForTabletypesPrices();
     bool execQuery(const QString strQuery);
     bool removeObjectById(const QString nameTable, const int _id);
@@ -193,6 +210,7 @@ private:
     QSqlDatabase db_image;
     DataBaseCommon db_common;
     QString m_connectionName = nullptr;
+    QString m_lastConnectError;
     QProgressDialog *progress_dialog;
 
 private:

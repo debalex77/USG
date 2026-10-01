@@ -9,6 +9,10 @@
 #include <QDebug>
 #include <core/loggingcategories.h>
 
+#include <memory>
+
+class TemporaryExportOwner;
+
 class EmailCore : public QObject
 {
     Q_OBJECT
@@ -20,6 +24,10 @@ public:
                       const QString &password, const QString &emailTo, const QString &subiect,
                       const QString &body, const QStringList &attachments);
 
+    // Directorul temporar al atașamentelor rămâne pe disc cât timp EmailCore
+    // păstrează referința (până la distrugerea obiectului în firul SMTP).
+    void setExportOwner(std::shared_ptr<TemporaryExportOwner> owner);
+
     // Verifică conexiunea SSL și autentificarea SMTP fără a trimite mesaj.
     static bool testConnection(const QString &smtpServer, int port,
                                const QString &userName, const QString &password,
@@ -29,7 +37,9 @@ public slots:
     void sendEmail();
 
 signals:
-    void emailSent(bool success);  // Semnal când emailul s-a trimis
+    // Emis o singură dată la finalul fiecărei încercări de trimitere;
+    // errorText descrie cauza când success == false.
+    void emailSent(bool success, const QString &errorText);
 
 private:
     QString m_smtpServer;
@@ -41,6 +51,7 @@ private:
     QString m_subiect;
     QString m_body;
     QStringList m_filesAttachments;
+    std::shared_ptr<TemporaryExportOwner> m_exportOwner;
 };
 
 #endif // EMAILCORE_H

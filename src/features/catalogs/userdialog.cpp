@@ -77,6 +77,11 @@ bool UserDialog::setDeleteMarkUser(QString &err)
     return true;
 }
 
+void UserDialog::setInitialAdministrator(bool initialAdministrator)
+{
+    m_initialAdministrator = initialAdministrator;
+}
+
 void UserDialog::slot_IsNewChanged()
 {
     if (m_isNew){
@@ -112,7 +117,7 @@ void UserDialog::slot_StatusCatalogChanged()
 {
     switch (m_statusCatalog) {
     case StatusObject::Unknow:
-        if (globals().firstLaunch)
+        if (m_initialAdministrator)
             setWindowTitle(tr("Crearea administratorului aplicației %1").arg("[*]"));
         else
             setWindowTitle(tr("Utilizator (crearea) %1").arg("[*]"));
@@ -146,7 +151,7 @@ bool UserDialog::controlRequiredObjects()
                                    BalloonTip::BottomCenter);
         return false;
     }
-    if (m_isNew && !globals().firstLaunch && ui->userPassword->text().isEmpty()) {
+    if (m_isNew && !m_initialAdministrator && ui->userPassword->text().isEmpty()) {
         BalloonTip::showBalloonFor(ui->userPassword,
                                    QMessageBox::Warning,
                                    tr("Verificarea datelor"),
@@ -255,17 +260,16 @@ bool UserDialog::handleInsert()
         return false;
     }
 
-    // Actualizăm sesiunea și profilul numai după confirmarea tranzacției.
-    if (globals().firstLaunch) {
+    // Actualizăm sesiunea și profilul numai după confirmarea tranzacției și
+    // numai pentru administratorul inițial; utilizatorii creați ulterior
+    // (inclusiv din asistentul primei lansări) nu înlocuiesc sesiunea curentă.
+    if (m_initialAdministrator) {
         SessionContext::instance().setCandidateUserId(m_id);
         globals().nameUserApp = ui->userName->text();
         if (!AppSettings::saveRememberedUser(m_id, ui->userName->text(), true)) {
             qWarning(logWarning())
                 << tr("Utilizatorul a fost creat, dar memorarea lui în profil a eșuat.");
         }
-    }
-
-    if (globals().firstLaunch) {
         SettingsService::instance().setSnapshot(settings.values);
     }
 

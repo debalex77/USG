@@ -100,13 +100,13 @@ bool migrateProfileKeys(QSettings &settings)
     bool needsMigration = false;
     for (const auto &key : renamedKeys)
         needsMigration |= settings.contains(QLatin1String(key.oldKey));
+
     if (!needsMigration)
         return true;
 
     // Keep the original profile (including unknown keys) before removing aliases.
     const QString backupPath = settings.fileName() + QStringLiteral(".pre-4.1.2.bak");
-    if (!settings.isWritable()
-        || (!QFile::exists(backupPath) && !QFile::copy(settings.fileName(), backupPath))) {
+    if (!settings.isWritable() || (!QFile::exists(backupPath) && !QFile::copy(settings.fileName(), backupPath))) {
         qWarning(logWarning()) << "Migrarea cheilor profilului 4.1.2: copia de siguranță nu poate fi pregătită.";
         return false;
     }
@@ -116,8 +116,10 @@ bool migrateProfileKeys(QSettings &settings)
         const QString newKey = QLatin1String(key.newKey);
         if (!settings.contains(oldKey))
             continue;
+
         if (!settings.contains(newKey))
             settings.setValue(newKey, settings.value(oldKey));
+
         settings.remove(oldKey);
     }
 
@@ -139,6 +141,7 @@ int readBoundedInt(QSettings &settings, const QString &key, int defaultValue,
     bool converted = false;
     const QVariant storedValue = settings.value(key, defaultValue);
     const int value = storedValue.toInt(&converted);
+
     if (converted && value >= minimum && value <= maximum)
         return value;
 

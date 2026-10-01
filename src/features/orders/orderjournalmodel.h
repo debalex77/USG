@@ -27,6 +27,9 @@ public:
     const OrderJournal::Item &itemAt(int row) const;
 
     void reload();
+    // eroarea ultimei încărcări (reload/fetchMore), care se golește la citire:
+    // aceeași eroare se raportează o singură dată
+    QString takeLastError();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -53,6 +56,7 @@ private:
     int m_batchSize = 100;
     bool m_hasMore = true;
     bool m_loading = false;
+    QString m_lastError;
 };
 
 #endif // ORDERJOURNALMODEL_H

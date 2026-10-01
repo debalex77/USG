@@ -410,6 +410,18 @@ bool DataBaseCommon::createAllTablesSqlite(QSqlDatabase db)
 
 bool DataBaseCommon::createAllTablesMariaDB()
 {
+    return createAllTablesMariaDB(QSqlDatabase::database());
+}
+
+bool DataBaseCommon::createAllTablesMariaDB(QSqlDatabase db)
+{
+    const auto execFileBatch = [&db](const QString &resourcePath, const QString &context) {
+        return DataBaseCommon::execFileBatch(db, resourcePath, context);
+    };
+    const auto execSingle = [&db](const QString &resourcePath, const QString &context) {
+        return DataBaseCommon::execFileBatch(db, resourcePath, context);
+    };
+
     if (!execFileBatch(":/sql/mariadb/tables/users.sql", "users"))
         return false;
 

@@ -28,7 +28,7 @@
 #include "settings/settingsservice.h"
 
 #include <common/applicationpathscontext.h>
-#include <features/printing/printimagesservice.h>
+#include <features/printing/orderprintservice.h>
 
 #include <algorithm>
 
@@ -106,12 +106,29 @@ OrderDialog::OrderDialog(DataBase &db, int orderId, QWidget *parent)
 
 OrderDialog::~OrderDialog()
 {
+    // Acoperă toate căile de închidere, inclusiv acceptarea documentului
+    // și distrugerea ferestrei odată cu aplicația.
+    saveLayoutSizes();
     delete ui;
 }
 
 void OrderDialog::onPrintDocument(PrintType::Column type_print, const QString &filePDF)
 {
     onPrint(type_print, filePDF);
+}
+
+bool OrderDialog::exportToPdf(const QString &filePDF, QString *error)
+{
+    OrderPrintService service(m_db, m_currentDB);
+    OrderPrintService::Request request;
+    request.orderId = orderId();
+    request.mode = PrintType::ExportToPDF;
+    request.pdfFile = filePDF;
+    request.reportParent = this;
+    const OrderPrintService::Result result = service.print(request);
+    if (error)
+        *error = result.error;
+    return result.success;
 }
 
 bool OrderDialog::extPostDocument()
@@ -1005,128 +1022,29 @@ void OrderDialog::onDoubleClickedTableOrder(const QModelIndex &index)
 
 void OrderDialog::onPrint(PrintType::Column type_print, const QString &filePDF)
 {
-    if (isNewDocument()){
-        QMessageBox::warning(this, tr("Controlul validarii"),
+    if (isNewDocument()) {
+        QMessageBox::warning(this,
+                             tr("Controlul validarii"),
                              tr("Documentul nu este validat !!! \nPrintare nu este posibila."),
                              QMessageBox::Ok);
         return;
     }
 
-    if (type_print == PrintType::ExportToPDF && filePDF.trimmed().isEmpty())
-        return;
+    OrderPrintService service(m_db, m_currentDB);
+    OrderPrintService::Request request;
+    request.orderId      = orderId();
+    request.mode         = type_print;
+    request.pdfFile      = filePDF;
+    request.reportParent = this;
 
-    // *************************************************************************************
-    // alocam memoria
-    LimeReport::ReportEngine *m_report       = new LimeReport::ReportEngine(this);
-    QStandardItemModel *print_model_images   = new QStandardItemModel(m_report);
-    QSqlQueryModel *print_model_organization = new QSqlQueryModel(this);
-    QSqlQueryModel *print_model_patient      = new QSqlQueryModel(this);
-    QSqlQueryModel *print_model_table        = new QSqlQueryModel(this);
-
-    // *************************************************************************************
-    // verificam daca este complectata variabila 'noncomercial_price'
-    auto roleNoncomecial = modelTypePrices->roleForColumn("noncomercial");
-    bool noncomercial = ui->comboTypePrices ->currentData(roleNoncomecial).toBool();
-
-    // *************************************************************************************
-    // Identitatea de tipar aparține cabinetului care efectuează investigația
-    // (UserPreference), nu organizației trimițătoare salvate în orderEcho.
-    const Settings::OrganizationSettings &printSettings =
-        SettingsService::instance().organization();
-    const PrintImagesService::Result printImages = PrintImagesService::fillModel(print_model_images,
-                                                                                 m_currentDB,
-                                                                                 printSettings.organizationId,
-                                                                                 printSettings.defaultDoctorId);
-    m_report->dataManager()->addModel("table_img", print_model_images, false);
-
-    // *************************************************************************************
-    // setam solicitarile in model
-    setPrintModelOrganization(print_model_organization);
-
-    m_db.setModelQuery(*print_model_patient,
-                       m_db.getDatabase(),
-                       m_db.getTextSQL(":/sql/queries_print/tablePatientByID.sql"),
-                       {patientId()});
-
-    QVariantMap map;                    // adaugam variabila pu
-    map["noncomercial"] = noncomercial; // conditia: noncomercial = '0-00' else price
-    m_db.setModelQuery(*print_model_table,
-                       m_db.getDatabase(),
-                       m_db.getTextSQL(":/sql/queries_print/orderTable.sql"),
-                       {orderId()},
-                       map);
-
-    // *************************************************************************************
-    // transmitem variabile si modelurile generatorului de rapoarte
-    m_report->dataManager()->clearUserVariables();
-    m_report->dataManager()->setReportVariable("sume_total", QString("%1").arg(noncomercial == 0
-                                                                                   ? documentSum()
-                                                                                   : 0, 0, 'f', 2));
-    m_report->dataManager()->setReportVariable("v_exist_logo", printImages.logo ? 1 : 0);
-    m_report->dataManager()->setReportVariable("v_exist_stamp", printImages.organizationStamp ? 1 : 0);
-    m_report->dataManager()->setReportVariable("v_exist_stamp_doctor", printImages.doctorStamp ? 1 : 0);
-    m_report->dataManager()->setReportVariable("v_exist_signature", printImages.doctorSignature ? 1 : 0);
-
-    const QString consent = informedConsentText();
-    m_report->dataManager()->setReportVariable("v_consent", consent);
-
-    m_report->dataManager()->addModel("main_organization", print_model_organization, false);
-    m_report->dataManager()->addModel("table_pacient", print_model_patient, false);
-    m_report->dataManager()->addModel("table_table", print_model_table, false);
-    m_report->setShowProgressDialog(true);
-
-    m_report->setPreviewWindowTitle(tr("Comanda ecografică nr.") +
-                                    ui->numberDoc->text() + tr(" din ") +
-                                    ui->dateTimeDoc->dateTime().toString("dd.MM.yyyy hh:mm:ss") +
-                                    tr(" (printare)"));
-
-    // *************************************************************************************
-    // verificam drumul spre forme de tipar
-    QDir dir;
-    if (! QFile(dir.toNativeSeparators(ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml")).exists()){
-        QMessageBox msgBox;
-        msgBox.setWindowTitle(tr("Printarea documentului"));
-        msgBox.setIcon(QMessageBox::Warning);
-        msgBox.setText(tr("Documentul nu poate fi printat."));
-        msgBox.setDetailedText(tr("Nu a fost gasit fisierul sablon formei de tipar:\n%1")
-                                   .arg(dir.toNativeSeparators(
-                                       ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml")));
-        msgBox.setStandardButtons(QMessageBox::Ok);
-        msgBox.setStyleSheet(m_db.getStyleForButtonMessageBox());
-        msgBox.exec();
-
-        delete print_model_organization;
-        delete print_model_patient;
-        delete print_model_table;
-        delete m_report;
-
-        return;
+    const OrderPrintService::Result result = service.print(request);
+    if (!result.success) {
+        CustomMessage message(this);
+        message.setWindowTitle(QGuiApplication::applicationDisplayName());
+        message.setTextTitle(tr("Printare nu este posibilă !!!"));
+        message.setDetailedText(result.error);
+        message.exec();
     }
-    m_report->loadFromFile(dir.toNativeSeparators(ApplicationPathsContext::instance().data().templatesDirectory + "/Order.lrxml"));
-
-    // *************************************************************************************
-    // prezentam forma de tipar
-    if (type_print == PrintType::Designer){
-        qInfo(logInfo()) << QStringLiteral("Printare (designer) - document 'Comanda ecografica' nr.%1")
-        .arg(ui->numberDoc->text());
-        m_report->designReport();
-    } else if (type_print == PrintType::Preview){
-        qInfo(logInfo()) << QStringLiteral("Printare (preview) - document 'Comanda ecografica' nr.%1")
-        .arg(ui->numberDoc->text());
-        m_report->previewReport();
-    } else if (type_print == PrintType::ExportToPDF){
-        qInfo(logInfo()) << QStringLiteral("Printare (export pdf) - document 'Comanda ecografica' nr.%1")
-        .arg(ui->numberDoc->text());
-        m_report->printToPDF(filePDF);
-        emit printToPdfFinished();
-    }
-
-    // *************************************************************************************
-    // elibiram memoria
-    print_model_organization->deleteLater();
-    print_model_patient->deleteLater();
-    print_model_table->deleteLater();
-    m_report->deleteLater();
 }
 
 int OrderDialog::valuePaymentOrder() const
@@ -1662,49 +1580,6 @@ bool OrderDialog::onSave()
         initSyncOrderData();
 
     return true;
-}
-
-void OrderDialog::setPrintModelOrganization(QSqlQueryModel *model)
-{
-    if (!model)
-        return;
-
-    if (model->rowCount() > 0)
-        model->clear();
-
-    // Modelul antetului descrie cabinetul care efectuează investigația.
-    // Organizația selectată în document rămâne organizația trimițătoare și
-    // nu este folosită drept identitate vizuală a formularului tipărit.
-    const Settings::OrganizationSettings &printSettings =
-        SettingsService::instance().organization();
-    m_db.setModelQuery(
-        *model,
-        m_currentDB,
-        QStringLiteral(R"(
-            SELECT
-                org.id AS id_organizations,
-                org.IDNP,
-                org.name,
-                org.address,
-                org.telephone,
-                doctor.nameAbbreviated AS doctor,
-                nurse.nameAbbreviated AS nurse,
-                org.email,
-                org.site
-            FROM
-                organizations org
-            LEFT JOIN
-                fullNameDoctors doctor
-                    ON doctor.id_doctors = ?
-            LEFT JOIN
-                fullNameNurses nurse
-                    ON nurse.id_nurses = ?
-            WHERE
-                org.id = ?
-        )"),
-        {printSettings.defaultDoctorId,
-         printSettings.defaultNurseId,
-         printSettings.organizationId});
 }
 
 bool OrderDialog::onPost()
@@ -2365,112 +2240,6 @@ double OrderDialog::documentSum() const
         sum += modelTableOrder->rowDataByRow(n).value("price").toDouble();
     }
     return sum;
-}
-
-QStringList OrderDialog::selectedInvestigationCodes() const
-{
-    QStringList selectedCodes;
-    selectedCodes.reserve(modelTableOrder->rowCount());
-
-    for (int row = 0; row < modelTableOrder->rowCount(); ++row) {
-        const QString code = modelTableOrder->rowDataByRow(row)
-                                 .value(QStringLiteral("cod"))
-                                 .toString()
-                                 .trimmed();
-        if (!code.isEmpty())
-            selectedCodes.append(code);
-    }
-
-    return selectedCodes;
-}
-
-ReportSections::ConsentTypes OrderDialog::selectedConsentTypes() const
-{
-    return ReportSections::consentTypesByCodes(selectedInvestigationCodes());
-}
-
-QString OrderDialog::informedConsentText() const
-{
-    const QStringList codes = selectedInvestigationCodes();
-    const ReportSections::ConsentTypes consentTypes = selectedConsentTypes();
-
-    if (consentTypes.testFlag(ReportSections::ConsentType::Invasive)) {
-        return tr("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de "
-                  "efectuare, beneficiile, riscurile și limitele procedurii indicate mai sus, "
-                  "precum și despre alternativele disponibile și consecințele refuzului.\n\n"
-                  "Am fost informat(ă) despre posibilele riscuri și complicații ale procedurii, "
-                  "inclusiv durere sau disconfort, sângerare, infecție, lezarea structurilor "
-                  "învecinate și, în cazuri rare, necesitatea unor intervenții medicale "
-                  "suplimentare.\n\n"
-                  "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la "
-                  "acestea. Îmi exprim liber consimțământul pentru efectuarea procedurii "
-                  "indicate mai sus.");
-    }
-
-    const bool transvaginal = std::any_of(codes.cbegin(), codes.cend(), [](const QString &code) {
-        return ReportSections::TransvaginalConsentCodes.contains(code.trimmed());
-    });
-    const bool transrectal = std::any_of(codes.cbegin(), codes.cend(), [](const QString &code) {
-        return ReportSections::TransrectalConsentCodes.contains(code.trimmed());
-    });
-    const QString endocavitaryAccess = transvaginal && transrectal
-        ? tr("în vagin sau în rect")
-        : (transrectal ? tr("în rect") : tr("în vagin"));
-
-    const QString endocavitaryParagraph =
-        tr("Am fost informat(ă) că examinarea se efectuează prin introducerea unui "
-           "transductor ecografic protejat corespunzător %1 și că aceasta poate provoca "
-           "un disconfort temporar. Examinarea poate fi întreruptă la solicitarea mea.")
-            .arg(endocavitaryAccess);
-
-    if (consentTypes.testFlag(ReportSections::ConsentType::ObstetricScreening)) {
-        QString consent = tr(
-            "Am fost informată despre scopul, modul de efectuare, beneficiile și limitele "
-            "examinării ecografice a sarcinii.\n"
-            "Înțeleg că examinarea are ca scop evaluarea sarcinii și, în funcție de vârsta "
-            "gestațională și tipul examinării, evaluarea dezvoltării și anatomiei fetale și "
-            "depistarea unor eventuale anomalii. Nu toate malformațiile și anomaliile fetale "
-            "pot fi identificate ecografic. Unele pot deveni evidente numai ulterior în "
-            "evoluția sarcinii, iar un rezultat ecografic normal nu garantează absența unei "
-            "patologii fetale. Ecografia nu poate exclude toate anomaliile cromozomiale sau "
-            "sindroamele genetice.\n\n");
-
-        if (consentTypes.testFlag(ReportSections::ConsentType::Endocavitary))
-            consent += endocavitaryParagraph + QStringLiteral("\n\n");
-
-        consent += tr(
-            "Utilizarea Doppler: Am fost informată că examinarea poate include utilizarea "
-            "modurilor Doppler pentru evaluarea circulației materne și/sau fetale. Conform "
-            "datelor disponibile, nu au fost raportate efecte adverse asupra fătului în urma "
-            "utilizării diagnostice a ultrasunetelor. Expunerea este limitată la timpul și "
-            "nivelul de energie necesare obținerii informației medicale, conform principiului "
-            "ALARA.\n\n"
-            "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acestea. "
-            "Îmi exprim liber consimțământul pentru efectuarea examinării ecografice "
-            "indicate mai sus.");
-        return consent;
-    }
-
-    if (consentTypes.testFlag(ReportSections::ConsentType::Endocavitary)) {
-        return tr("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de "
-                  "efectuare și limitele investigației ecografice indicate mai sus.\n\n%1\n\n"
-                  "Înțeleg că ecografia nu poate identifica sau exclude toate patologiile, "
-                  "iar rezultatul poate fi influențat de particularitățile anatomice și "
-                  "condițiile examinării.\n\n"
-                  "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la "
-                  "acestea. Îmi exprim liber consimțământul pentru efectuarea examinării "
-                  "endocavitare indicate mai sus.")
-            .arg(endocavitaryParagraph);
-    }
-
-    return tr("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de efectuare "
-              "și limitele investigației ecografice indicate mai sus.\n\n"
-              "Înțeleg că rezultatul examinării poate fi influențat de particularitățile "
-              "anatomice, pregătirea pacientului și condițiile de examinare și că ecografia "
-              "nu poate identifica sau exclude toate patologiile.\n\n"
-              "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acestea. "
-              "Îmi exprim liber consimțământul pentru efectuarea investigației ecografice "
-              "indicate mai sus.");
 }
 
 void OrderDialog::updateDocumentSumText()

@@ -14,7 +14,7 @@
 #include <common/property_macros.h>
 #include <common/table_sections.h>
 #include <ui/widgets/balloontip.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <common/appmetatypes.h>
 
 #include <features/catalogs/organizationcontractmodel.h>
@@ -107,7 +107,7 @@ private:
 
 private:
     Ui::OrganizationDialog *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     CatalogViewFilter m_filterContract;
 
     const QString className = "OrganizationDialog";

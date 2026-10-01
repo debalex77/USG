@@ -78,11 +78,11 @@ AppSettings::AppSettings(QWidget *parent) :
 
     setLanguageApp(); // setam limba aplicatiei
     setDefaultPath(); // setam localizarea fisierelor
-    const MainDatabaseBackend backend =
-        MainDatabaseConnectionContext::instance().backend();
-    changeIndexTypeSQL(backend == MainDatabaseBackend::MariaDb ? idx_MySQL
-                       : backend == MainDatabaseBackend::SQLite ? idx_Sqlite
-                                                                : idx_Unknow);
+    const MainDatabaseBackend backend = MainDatabaseConnectionContext::instance().backend();
+    changeIndexTypeSQL(backend == MainDatabaseBackend::MariaDb
+                           ? idx_MySQL
+                           : backend == MainDatabaseBackend::SQLite ? idx_Sqlite
+                                                                    : idx_Unknow);
 
     initConnections(); // connectari
 
@@ -126,16 +126,15 @@ void AppSettings::persistStartupLanguage(const AppSettingsStore::ProfileData &da
 AppSettingsStore::ProfileData AppSettings::profileFromGlobals() const
 {
     AppSettingsStore::ProfileData data;
-    const ApplicationPathsData paths =
-        ApplicationPathsContext::instance().data();
+    const ApplicationPathsData paths = ApplicationPathsContext::instance().data();
 
     // index
-    data.languageIndex    = globals().langApp == QStringLiteral("ru-RU") ? 0 : 1;
-    const MainDatabaseBackend backend =
-        MainDatabaseConnectionContext::instance().backend();
-    data.databaseIndex = backend == MainDatabaseBackend::MariaDb ? idx_MySQL
-                         : backend == MainDatabaseBackend::SQLite ? idx_Sqlite
-                                                                  : idx_Unknow;
+    data.languageIndex = globals().langApp == QStringLiteral("ru-RU") ? 0 : 1;
+    const MainDatabaseBackend backend = MainDatabaseConnectionContext::instance().backend();
+    data.databaseIndex = backend == MainDatabaseBackend::MariaDb
+                             ? idx_MySQL
+                             : backend == MainDatabaseBackend::SQLite ? idx_Sqlite
+                                                                      : idx_Unknow;
     data.unitMeasureIndex = globals().unitMeasure == QStringLiteral("centimetru")
                                     || globals().unitMeasure == QStringLiteral("cm")
                                 ? 1 : 0;
@@ -146,22 +145,21 @@ AppSettingsStore::ProfileData AppSettings::profileFromGlobals() const
     data.pathVideo     = paths.videoDirectory;
 
     // mysql/mariadb
-    const MainDatabaseConnectionData connection =
-        MainDatabaseConnectionContext::instance().data();
-    data.mysqlHost = connection.hostName;
+    const MainDatabaseConnectionData connection = MainDatabaseConnectionContext::instance().data();
+    data.mysqlHost     = connection.hostName;
     data.mysqlDatabase = connection.databaseName;
     data.mysqlPort = connection.port;
     if (data.mysqlPort < 1 || data.mysqlPort > 65535)
         data.mysqlPort = AppSettingsStore::Default::mysqlPort;
-    data.mysqlUser = connection.userName;
+    data.mysqlUser     = connection.userName;
     data.mysqlPassword = connection.password;
-    data.mysqlOptions = connection.connectionOptions;
+    data.mysqlOptions  = connection.connectionOptions;
 
     // sqlite
     data.sqliteDatabase    = connection.sqliteDatabaseName;
     data.sqlitePath        = connection.sqliteDatabasePath;
     data.imageDatabasePath = connection.imageDatabasePath;
-    data.logPath = paths.logFilePath;
+    data.logPath           = paths.logFilePath;
 
     // remember
     data.rememberUser       = globals().memoryUser;
@@ -247,38 +245,44 @@ void AppSettings::applyProfileToForm(const AppSettingsStore::ProfileData &data)
 void AppSettings::applyProfileToRuntime(const AppSettingsStore::ProfileData &data,
                                         const QString &settingsPath)
 {
+    // lang & unit.measure
     globals().langApp = data.languageIndex == 0 ? QStringLiteral("ru-RU")
                                                 : QStringLiteral("ro-RO");
     globals().unitMeasure = data.unitMeasureIndex == 0 ? QStringLiteral("milimetru")
                                                        : QStringLiteral("centimetru");
+
+    // paths
     ApplicationPathsData paths = ApplicationPathsContext::instance().data();
     if (!settingsPath.isEmpty())
         paths.settingsFilePath = QDir::toNativeSeparators(settingsPath);
-    paths.logFilePath = QDir::toNativeSeparators(data.logPath);
+    paths.logFilePath        = QDir::toNativeSeparators(data.logPath);
     paths.templatesDirectory = QDir::toNativeSeparators(data.pathTemplates);
-    paths.reportsDirectory = QDir::toNativeSeparators(data.pathReports);
-    paths.videoDirectory = QDir::toNativeSeparators(data.pathVideo);
+    paths.reportsDirectory   = QDir::toNativeSeparators(data.pathReports);
+    paths.videoDirectory     = QDir::toNativeSeparators(data.pathVideo);
     ApplicationPathsContext::instance().setData(paths);
 
+    // data user
     globals().numSavedFilesLog = data.retainedLogFiles;
     globals().memoryUser       = data.rememberUser;
     SessionContext::instance().setCandidateUserId(data.rememberedUserId);
     globals().nameUserApp      = data.rememberedUserName;
+
+    // connection
     MainDatabaseConnectionData connection;
     connection.backend = data.databaseIndex == idx_MySQL
                              ? MainDatabaseBackend::MariaDb
                          : data.databaseIndex == idx_Sqlite
                              ? MainDatabaseBackend::SQLite
                              : MainDatabaseBackend::None;
-    connection.hostName = data.mysqlHost;
-    connection.databaseName = data.mysqlDatabase;
-    connection.port = data.mysqlPort;
-    connection.connectionOptions = data.mysqlOptions;
-    connection.userName = data.mysqlUser;
-    connection.password = data.mysqlPassword;
+    connection.hostName           = data.mysqlHost;
+    connection.databaseName       = data.mysqlDatabase;
+    connection.port               = data.mysqlPort;
+    connection.connectionOptions  = data.mysqlOptions;
+    connection.userName           = data.mysqlUser;
+    connection.password           = data.mysqlPassword;
     connection.sqliteDatabaseName = data.sqliteDatabase;
     connection.sqliteDatabasePath = data.sqlitePath;
-    connection.imageDatabasePath = data.imageDatabasePath;
+    connection.imageDatabasePath  = data.imageDatabasePath;
     MainDatabaseConnectionContext::instance().setData(connection);
 
     globals().firstLaunch = !data.initialSetupComplete;
@@ -617,8 +621,7 @@ void AppSettings::setLanguageApp()
 
 void AppSettings::setDefaultPath()
 {
-    const ApplicationPathsData paths =
-        ApplicationPathsContext::instance().data();
+    const ApplicationPathsData paths = ApplicationPathsContext::instance().data();
     if (ui->txtPathAppSettings->text().isEmpty())
         ui->txtPathAppSettings->setText(paths.settingsFilePath);
 
@@ -629,10 +632,8 @@ void AppSettings::setDefaultPath()
     // Șabloanele instalate sunt localizate relativ la executabil, independent
     // de directorul curent din care a fost pornită aplicația.
     const QDir applicationDirectory(QCoreApplication::applicationDirPath());
-    const QString defaultTemplatesPath = QDir::toNativeSeparators(
-        applicationDirectory.filePath(QStringLiteral("templets")));
-    const QString defaultReportsPath = QDir::toNativeSeparators(
-        QDir(defaultTemplatesPath).filePath(QStringLiteral("reports")));
+    const QString defaultTemplatesPath = QDir::toNativeSeparators(applicationDirectory.filePath(QStringLiteral("templets")));
+    const QString defaultReportsPath   = QDir::toNativeSeparators(QDir(defaultTemplatesPath).filePath(QStringLiteral("reports")));
 
     lineEditPathTemplatesPrint->setText(paths.templatesDirectory.isEmpty()
                                             ? defaultTemplatesPath
@@ -654,34 +655,45 @@ void AppSettings::setDefaultPathSqlite()
     //******************************************************************************
     // crearea fisierelor bazelor de date si setarea
     QString str_dir_database = dir.toNativeSeparators(dir.homePath() + "/Database_usg");
-    QString str_file_database = str_dir_database + "/base.sqlite3";
-    QString str_file_database_image = str_dir_database + "/base_image.sqlite3";
 
 #elif defined(Q_OS_MACOS)
 
     // Șabloanele rămân în directorul aplicației; aici se inițializează numai
     // locația implicită a bazelor SQLite.
     QString str_dir_database = dir.toNativeSeparators(dir.homePath() + "/USG/Database_usg");
-    QString str_file_database = str_dir_database + "/base.sqlite3";
-    QString str_file_database_image = str_dir_database + "/base_image.sqlite3";
 
 #elif defined(Q_OS_WIN)
 
     //******************************************************************************
     // crearea fisierelor bazelor de date si setam variabel globale
-    QString str_dir_database        = dir.toNativeSeparators(dir.rootPath()) + "Database_usg";
-    QString str_file_database       = str_dir_database + "\\base.sqlite3";
-    QString str_file_database_image = str_dir_database + "\\base_image.sqlite3";
+    QString str_dir_database = dir.toNativeSeparators(dir.rootPath()) + "Database_usg";
 
 #endif
+
+    // Propunem un nume nefolosit (base, base_2, ...), ca o configurare nouă
+    // să nu preia o bază existentă și să nu suprascrie profilul ei .conf.
     const QDir databaseDirectory(str_dir_database);
+    const auto nameIsFree = [&](const QString &name) {
+        return !databaseDirectory.exists(name + QStringLiteral(".sqlite3"))
+               && !databaseDirectory.exists(name + QStringLiteral("_image.sqlite3"))
+               && !QFileInfo::exists(QDir(dirConfigPath).filePath(name + QStringLiteral(".conf")));
+    };
+    QString nameBase = QStringLiteral("base");
+    for (int index = 2; !nameIsFree(nameBase); ++index)
+        nameBase = QStringLiteral("base_%1").arg(index);
+
+    const QString str_file_database =
+        QDir::toNativeSeparators(databaseDirectory.filePath(nameBase + QStringLiteral(".sqlite3")));
+    const QString str_file_database_image =
+        QDir::toNativeSeparators(databaseDirectory.filePath(nameBase + QStringLiteral("_image.sqlite3")));
+
     if (!databaseDirectory.exists()) {
         // mkpath creează și directorul intermediar (de exemplu ~/USG pe macOS).
         if (QDir().mkpath(str_dir_database)) {
 
             //---- baza principale
             lineEditPathDBSqlite->setText(str_file_database);                     // baza principala
-            ui->nameBaseSqlite->setText("base");                                  // denumirea bazei de date
+            ui->nameBaseSqlite->setText(nameBase);                                // denumirea bazei de date
 
             //---- baza cu imagini
             lineEditPathDBImage->setText(str_file_database_image);         // baza de date cu imagini
@@ -697,42 +709,13 @@ void AppSettings::setDefaultPathSqlite()
             qCritical(logCritical()) << tr("Directoria '%1' pentru baza de date SQlite nu a fost creată.").arg(str_dir_database);
         }
     } else {
-//         if (QFile(str_file_database).exists()){
-//             QMessageBox messange_box(QMessageBox::Question,
-//                                      tr("Determinarea existen\310\233ei bazei de date"),
-//                                      tr("Baza de date '<u>%1</u>' exist\304\203 \303\256n sistem !!!<br><br>"
-//                                         "Pentru crearea bazei de date noi cu nume '<b><u>%2</u></b>' este necesar de eliminat fi\310\231ierul vechi. "
-//                                         "Dori\310\233i s\304\203 elimina\310\233i fi\310\231ierul din sistem ?").arg(str_file_database, (ui->nameBaseSqlite->text().isEmpty()) ? "base" : ui->nameBaseSqlite->text()),
-//                                      QMessageBox::NoButton, this);
-//             QPushButton *yesButton = messange_box.addButton(tr("Da"), QMessageBox::YesRole);
-//             QPushButton *noButton = messange_box.addButton(tr("Nu"), QMessageBox::NoRole);
-//             yesButton->setStyleSheet(db->getStyleForButtonMessageBox());
-//             noButton->setStyleSheet(db->getStyleForButtonMessageBox());
-//             messange_box.exec();
 
-//             if (messange_box.clickedButton() == yesButton){
-// #if defined(Q_OS_LINUX)
-//                 QString str_cmd = "rm \"" + str_file_database + "\"";
-//                 system(str_cmd.toStdString().c_str());
-//                 str_cmd = "rm \"" + str_file_database_image + "\"";
-//                 system(str_cmd.toStdString().c_str());
-// #elif defined(Q_OS_MACOS)
-//                 QString str_cmd = "rm \"" + str_file_database + "\"";
-//                 system(str_cmd.toStdString().c_str());
-//                 str_cmd = "rm \"" + str_file_database_image + "\"";
-//                 system(str_cmd.toStdString().c_str());
-// #elif defined(Q_OS_WIN)
-//                 QString str_cmd = "del " + str_file_database;
-//                 system(str_cmd.toStdString().c_str());
-// #endif
-//             } else if (messange_box.clickedButton() == noButton) {
-//                 return;
-//             }
-//         }
-        ui->nameBaseSqlite->setText("base");
+        ui->nameBaseSqlite->setText(nameBase);
         lineEditPathDBSqlite->setText(str_file_database);
 
         lineEditPathDBImage->setText(str_file_database_image);
+
+        setPathAppSettings();
     }
 }
 
@@ -839,6 +822,21 @@ bool AppSettings::saveSettings()
 
     const QString settingsPath = dir_conf.toNativeSeparators(ui->txtPathAppSettings->text());
 
+    // La o configurare nouă, un profil existent aparține altei baze de date.
+    // Îl suprascriem numai cu acordul utilizatorului (o singură dată pe cale).
+    if (globals().firstLaunch
+        && settingsPath != m_writtenSettingsPath
+        && QFileInfo::exists(settingsPath)) {
+        const QMessageBox::StandardButton answer =
+            QMessageBox::warning(this, tr("Salvarea setărilor"),
+                                 tr("Fișierul de configurare există deja:<br><b>%1</b><br><br>"
+                                    "Suprascrierea lui înlocuiește conexiunea salvată anterior. "
+                                    "Continuați?").arg(settingsPath.toHtmlEscaped()),
+                                 QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        if (answer != QMessageBox::Yes)
+            return false;
+    }
+
     const AppSettingsStore::ProfileData data = profileFromForm();
 
     const AppSettingsStore::WriteError writeError = AppSettingsStore::writeProfile(settingsPath, data);
@@ -861,6 +859,7 @@ bool AppSettings::saveSettings()
     }
 
     applyProfileToRuntime(data, settingsPath);
+    m_writtenSettingsPath = settingsPath;
     m_loadedProfile = data;
     persistStartupLanguage(data);
 
@@ -945,8 +944,8 @@ void AppSettings::updateTableLog(QString level_log, QStringList level_exclude)
 
 bool AppSettings::loadSettings()
 {
-    const QString settingsPath =
-        ApplicationPathsContext::instance().data().settingsFilePath;
+    const QString settingsPath = ApplicationPathsContext::instance().data().settingsFilePath;
+
     // verificam existenta fisierului si il citim
     const QFileInfo settingsFileInfo(settingsPath);
     if (settingsPath.isEmpty() ||
@@ -960,8 +959,7 @@ bool AppSettings::loadSettings()
     }
 
     // verificam formatul corect a fisierului
-    const AppSettingsStore::ReadResult readResult =
-        AppSettingsStore::readProfile(settingsPath, fileLogPath);
+    const AppSettingsStore::ReadResult readResult = AppSettingsStore::readProfile(settingsPath, fileLogPath);
     if (readResult.error == AppSettingsStore::ReadError::Access ||
         readResult.error == AppSettingsStore::ReadError::Format) {
         const QString reason = readResult.error == AppSettingsStore::ReadError::Format
@@ -1191,7 +1189,31 @@ void AppSettings::onEditPathSqlite()
         QDir file_database;
         lineEditPathDBSqlite->setText(file_database.toNativeSeparators(fileName));
 
-        if (ui->nameBaseSqlite->text().isEmpty()){
+        if (globals().firstLaunch || globals().moveApp == 1) {
+            // La configurarea unei conexiuni noi cu o bază existentă, numele
+            // profilului și baza de imagini se aliniază la fișierul ales, nu la
+            // valorile propuse automat (base_N), altfel imaginile vechi nu sunt găsite.
+            const QFileInfo fileInfo(fileName);
+            const QString nameBase = fileInfo.completeBaseName();
+            ui->nameBaseSqlite->setText(nameBase); // actualizează și calea profilului/logului
+
+            const QString imagePath = QDir::toNativeSeparators(
+                fileInfo.dir().filePath(nameBase + QStringLiteral("_image.sqlite3")));
+            lineEditPathDBImage->setText(imagePath);
+
+            if (!QFileInfo::exists(imagePath)) {
+                const QString consequence = globals().firstLaunch
+                    ? tr("La continuare va fi creat un fișier nou, fără imagini.")
+                    : tr("Lansarea nu va fi posibilă fără acest fișier.");
+                QMessageBox::information(this,
+                                         tr("Baza de date cu imagini"),
+                                         tr("Lângă baza aleasă nu a fost găsit fișierul cu imagini:<br><b>%1</b><br><br>"
+                                            "%2<br>Dacă imaginile sunt păstrate în alt fișier, "
+                                            "indicați-l în câmpul bazei de date cu imagini.")
+                                             .arg(imagePath.toHtmlEscaped(), consequence),
+                                         QMessageBox::Ok);
+            }
+        } else if (ui->nameBaseSqlite->text().isEmpty()){
             QFileInfo fileInfo(dir.toNativeSeparators(fileName));
             QString m_nameBase = fileInfo.fileName();
             m_nameBase.remove(m_nameBase.size() - 8, 8); // 8 simboluri = (.sqlite3)

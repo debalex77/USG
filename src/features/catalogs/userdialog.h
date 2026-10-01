@@ -39,6 +39,11 @@ public:
     // procedura de marcare pu eliminare din view
     bool setDeleteMarkUser(QString &err);
 
+    // Crearea administratorului inițial (baza fără utilizatori): parola este
+    // opțională, iar utilizatorul devine cel memorat în profil.
+    // Se apelează înainte de setIsNew(true).
+    void setInitialAdministrator(bool initialAdministrator);
+
 signals:
     void isNewChanged();
     void idChanged();
@@ -75,6 +80,8 @@ private:
     PopUp    *popUp;
 
     QString styleForButtonMessageBox;
+
+    bool m_initialAdministrator = false;
 
 protected:
     void closeEvent(QCloseEvent *event);

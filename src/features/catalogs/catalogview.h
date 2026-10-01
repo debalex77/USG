@@ -12,7 +12,7 @@
 #include <features/catalogs/userdialog.h>
 
 #include <common/table_sections.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <common/property_macros.h>
 #include <ui/services/tablecolumnscontroller.h>
 #include <common/globals.h>
@@ -71,7 +71,7 @@ private:
 private:
     Ui::CatalogView *ui;
 
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     CatalogViewFilter m_filter;
     CatalogType::Type m_catalogType;
 

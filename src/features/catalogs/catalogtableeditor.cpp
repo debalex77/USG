@@ -69,6 +69,9 @@ CatalogTableEditor::CatalogTableEditor(DataBase &db,
 
 CatalogTableEditor::~CatalogTableEditor()
 {
+    // Selectorul de șabloane poate fi distrus odată cu ReportDialog sau
+    // cu aplicația, fără un closeEvent propriu.
+    saveSizeSection();
     delete ui;
 }
 
@@ -505,6 +508,21 @@ void CatalogTableEditor::loadFilterBySettings()
 
 void CatalogTableEditor::loadSizeSection()
 {
+    const QString catalog = CatalogType::enumToString(m_catalogType);
+    const QString settingsRoot = catalog + QStringLiteral("/window/");
+    const int savedWidth = m_settings
+                               .getValue(metaObject()->className(),
+                                         settingsRoot + QStringLiteral("width"),
+                                         width())
+                               .toInt();
+    const int savedHeight = m_settings
+                                .getValue(metaObject()->className(),
+                                          settingsRoot + QStringLiteral("height"),
+                                          height())
+                                .toInt();
+    if (savedWidth > 0 && savedHeight > 0)
+        resize(savedWidth, savedHeight);
+
     auto *header = ui->tableView->horizontalHeader();
     if (!header)
         return;
@@ -537,24 +555,31 @@ void CatalogTableEditor::loadSizeSection()
 
 void CatalogTableEditor::saveSizeSection()
 {
-    QString m_cat = CatalogType::enumToString(m_catalogType);
+    const QString catalog = CatalogType::enumToString(m_catalogType);
+
+    m_settings.setValue(metaObject()->className(),
+                        catalog + QStringLiteral("/window/width"),
+                        width());
+    m_settings.setValue(metaObject()->className(),
+                        catalog + QStringLiteral("/window/height"),
+                        height());
 
     for (int numSection = 0; numSection < ui->tableView->horizontalHeader()->count(); ++numSection) {
 
         // size sections
         int w = ui->tableView->horizontalHeader()->sectionSize(numSection);
-        m_settings.setValue(metaObject()->className(), m_cat + QString("/sections/%1").arg(numSection), w);
+        m_settings.setValue(metaObject()->className(), catalog + QString("/sections/%1").arg(numSection), w);
 
         // sortarea
-        m_settings.setValue(metaObject()->className(), m_cat + "/sort/section",
+        m_settings.setValue(metaObject()->className(), catalog + "/sort/section",
                             ui->tableView->horizontalHeader()->sortIndicatorSection());
 
-        m_settings.setValue(metaObject()->className(), m_cat + "/sort/direction",
+        m_settings.setValue(metaObject()->className(), catalog + "/sort/direction",
                             static_cast<int>(ui->tableView->horizontalHeader()->sortIndicatorOrder()));
 
         // show/hide section
         m_settings.setValue(metaObject()->className(),
-                            m_cat + QString("/hide_show_sections/%1").arg(numSection),
+                            catalog + QString("/hide_show_sections/%1").arg(numSection),
                             ui->tableView->horizontalHeader()->isSectionHidden(numSection) ? 1 : 0);
     }
 

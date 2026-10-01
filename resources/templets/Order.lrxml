@@ -2241,7 +2241,7 @@
                 </item>
                 <item ClassName="ImageItem" Type="Object">
                   <objectName Type="QString">ImageItem3</objectName>
-                  <geometry Type="QRect" height="440" width="440" x="569" y="340"/>
+                  <geometry Type="QRect" height="420" width="420" x="569" y="340"/>
                   <children Type="Collection"/>
                   <zOrder Type="qreal" Value="0"/>
                   <borders Type="enumAndFlags" Value="0"/>

@@ -33,7 +33,7 @@ HEADERS += \
     $$USG_ROOT/src/core/logging/logmanager.h \
     $$USG_ROOT/src/common/organizationcontext.h \
     $$USG_ROOT/src/common/property_macros.h \
-    $$USG_ROOT/src/settings/reportsettingsmanager.h \
+    $$USG_ROOT/src/settings/layoutsettingsmanager.h \
     $$USG_ROOT/src/common/sessioncontext.h \
     $$USG_ROOT/src/app/splashmanager.h \
     $$USG_ROOT/src/common/structvariable.h \

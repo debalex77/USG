@@ -14,7 +14,7 @@
 #include <features/catalogs/groupinvestigationlist.h>
 
 #include <common/appmetatypes.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <common/table_sections.h>
 #include <ui/widgets/balloontip.h>
 
@@ -95,7 +95,7 @@ private:
 
 private:
     Ui::CatalogTableEditor *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
     CatalogViewFilter m_filter;
 
     CatalogType::FormType m_formType;

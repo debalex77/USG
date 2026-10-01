@@ -197,7 +197,7 @@ void PricingDialog::slot_IdOrganizationChanged()
 
 void PricingDialog::slot_IdContractChanged()
 {
-    if (m_idContract < 0)
+    if (m_idContract < 0 || !modelContracts)
         return;
 
     ui->comboContract->setCurrentIndex(modelContracts->rowById("id", m_idContract));
@@ -259,6 +259,8 @@ void PricingDialog::indexChangedCombo(int index)
         dataWasModified(); // modificam forma
 
     } else if (combo == ui->comboContract) {
+        if (!modelContracts)
+            return;
         // determinam rolul
         auto roleID            = modelContracts->roleForColumn("id");
         auto role_id_typePrice = modelContracts->roleForColumn("id_typesPrices");
@@ -965,8 +967,10 @@ void PricingDialog::updateModelOrganizations()
 
 void PricingDialog::updateModelContracts()
 {
-    if (modelContracts)
-        delete modelContracts;
+    // Pointerul se anulează imediat: dacă interogarea de mai jos eșuează,
+    // nu rămâne o referință spre modelul șters.
+    delete modelContracts;
+    modelContracts = nullptr;
 
     if (m_idOrganization <= 0) {
         QString str = m_db.getTextSQL(":/sql/queries/contracts_view.sql");
@@ -982,6 +986,7 @@ void PricingDialog::updateModelContracts()
                 : ":/sql/queries/contracts_select_by_organization_mysql.sql")
                     );
         qry.addBindValue(m_idOrganization);
+        qry.addBindValue(m_idContract); // contractul curent rămâne vizibil chiar dacă e nevalid
         if (!qry.exec()) {
             qCritical(logCritical())
             << "SQL error:" << qry.lastError().text()

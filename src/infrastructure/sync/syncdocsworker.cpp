@@ -35,7 +35,7 @@ void SyncDocsWorker::process()
         m_data.id_report == 0 ||
         m_data.id_patient == 0 ||
         m_data.nameConnection.isEmpty()) {
-        qCritical() << QStringLiteral("[SYNC %1] Nu sunt determinate datele pu sincronizare !!!.")
+        qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu sunt determinate datele pu sincronizare !!!.")
         .arg(this->metaObject()->className());
         emit finished();
         return;
@@ -65,7 +65,7 @@ void SyncDocsWorker::process()
         dbConn_sync = m_db->getDatabaseSyncThread(conn_sync);
         if (! dbConn_sync.isOpen() &&
             ! dbConn_sync.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (sync):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (sync):")
             .arg(this->metaObject()->className())
                 << dbConn_sync.lastError().text();
             dbConn_sync.close();
@@ -77,7 +77,7 @@ void SyncDocsWorker::process()
         dbConn_local = m_db->getDatabaseThread(conn_local, MainDatabaseConnectionContext::instance().isMariaDb(), "[SYNC]");
         if (! dbConn_local.isOpen() &&
             ! dbConn_local.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (local):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (local):")
             .arg(this->metaObject()->className())
                 << dbConn_local.lastError().text();
             dbConn_local.close();
@@ -89,7 +89,7 @@ void SyncDocsWorker::process()
         dbConnImg = m_db->getDatabaseImagesThread(conn_img);
         if (! dbConnImg.isOpen() &&
             ! dbConnImg.open()) {
-            qCritical() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (db_image):")
+            qCritical(logCritical()).noquote() << QStringLiteral("[SYNC %1] Nu pot deschide conexiunea DB (db_image):")
             .arg(this->metaObject()->className())
                 << dbConnImg.lastError().text();
             dbConnImg.close();
@@ -124,12 +124,12 @@ void SyncDocsWorker::process()
         }
 
         emit syncProgress(tr("Sincronizare finalizată cu succes"));
-        qInfo(logInfo()) << QStringLiteral("[SYNC] Sincronizare comandă ecografică ID=%1 finalizată cu succes")
+        qInfo(logInfo()).noquote() << QStringLiteral("[SYNC] Sincronizare comandă ecografică ID=%1 finalizată cu succes")
                                 .arg(m_data.id_order);
 
     } catch (const std::exception &e) {
 
-        qCritical(logCritical()) << QStringLiteral("[SYNC] Eroare sincronizare: %1").arg(e.what());
+        qCritical(logCritical()).noquote() << QStringLiteral("[SYNC] Eroare sincronizare: %1").arg(e.what());
         emit syncError(QString::fromStdString(e.what()));
     }
 
@@ -167,12 +167,12 @@ bool SyncDocsWorker::syncPatientData(QSqlDatabase &dbSync, QSqlDatabase &dbLocal
 
     if (!qryLocal.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare citire pacient SQLite:" << qryLocal.lastError().text();
+        << "[SYNC] Eroare citire pacient SQLite:" << qryLocal.lastError().text();
         return false;
     }
 
     if (!qryLocal.next()) {
-        qCritical(logCritical()) << "Pacientul cu ID" << m_data.id_patient << "nu este găsit în SQLite";
+        qCritical(logCritical()) << "[SYNC] Pacientul cu ID" << m_data.id_patient << "nu este găsit în SQLite";
         return false;
     }
 
@@ -199,12 +199,12 @@ bool SyncDocsWorker::syncOrderData(QSqlDatabase &dbSync, QSqlDatabase &dbLocal)
 
     if (!qryLocal.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare citire comandă SQLite:" << qryLocal.lastError().text();
+        << "[SYNC] Eroare citire comandă SQLite:" << qryLocal.lastError().text();
         return false;
     }
 
     if (!qryLocal.next()) {
-        qCritical(logCritical()) << "Comanda cu ID" << m_data.id_order << "nu găsită în SQLite";
+        qCritical(logCritical()) << "[SYNC] Comanda cu ID" << m_data.id_order << "nu găsită în SQLite";
         return false;
     }
 
@@ -230,7 +230,7 @@ bool SyncDocsWorker::syncOrderTableData(QSqlDatabase &dbSync, QSqlDatabase &dbLo
 
     if (!qryLocal.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare citire detalii comandă SQLite:" << qryLocal.lastError().text();
+        << "[SYNC] Eroare citire detalii comandă SQLite:" << qryLocal.lastError().text();
         return false;
     }
 
@@ -241,7 +241,7 @@ bool SyncDocsWorker::syncOrderTableData(QSqlDatabase &dbSync, QSqlDatabase &dbLo
 
     if (!qryDeleteSync.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare ștergere detalii comandă MariaDB:" << qryDeleteSync.lastError().text();
+        << "[SYNC] Eroare ștergere detalii comandă MariaDB:" << qryDeleteSync.lastError().text();
         return false;
     }
     // Inserăm rândurile noi din SQLite în MariaDB
@@ -253,7 +253,7 @@ bool SyncDocsWorker::syncOrderTableData(QSqlDatabase &dbSync, QSqlDatabase &dbLo
         }
 
         if (!insertOrUpdateRecord(dbSync, "orderEchoTable", rowData)) {
-            qCritical(logCritical()) << "Eroare sincronizare rând comandă ID:" << qryLocal.value("id");
+            qCritical(logCritical()) << "[SYNC] Eroare sincronizare rând comandă ID:" << qryLocal.value("id");
             return false;
         }
     }
@@ -276,7 +276,7 @@ bool SyncDocsWorker::syncAttachedImages(QSqlDatabase &dbSync, QSqlDatabase &dbIm
 
     if (!qryImgLocal.exec()) {
         qWarning(logWarning()).noquote()
-        << "Eroare citire imagini SQLite:" << qryImgLocal.lastError().text();
+        << "[SYNC] Eroare citire imagini SQLite:" << qryImgLocal.lastError().text();
         return true; // Nu este critic, continuăm
     }
 
@@ -286,7 +286,7 @@ bool SyncDocsWorker::syncAttachedImages(QSqlDatabase &dbSync, QSqlDatabase &dbIm
     qryDeleteImg.bindValue(":id_orderEcho", m_data.id_order);
     if (!qryDeleteImg.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare ștergere imagini MariaDB:" << qryDeleteImg.lastError().text();
+        << "[SYNC] Eroare ștergere imagini MariaDB:" << qryDeleteImg.lastError().text();
         return false;
     }
 
@@ -299,7 +299,7 @@ bool SyncDocsWorker::syncAttachedImages(QSqlDatabase &dbSync, QSqlDatabase &dbIm
         }
 
         if (!insertOrUpdateRecord(dbSync, "orderImages", rowData)) {
-            qCritical(logCritical()) << "Eroare sincronizare imagine ID:" << qryImgLocal.value("id");
+            qCritical(logCritical()) << "[SYNC] Eroare sincronizare imagine ID:" << qryImgLocal.value("id");
             return false;
         }
     }
@@ -318,7 +318,7 @@ bool SyncDocsWorker::checkIfRecordExists(QSqlDatabase &db,
 
     if (!qry.exec()) {
         qCritical(logCritical()).noquote()
-        << "Eroare verificare înregistrare:" << qry.lastError().text();
+        << "[SYNC] Eroare verificare înregistrare:" << qry.lastError().text();
         return false;
     }
 
@@ -332,7 +332,7 @@ bool SyncDocsWorker::insertOrUpdateRecord(QSqlDatabase &dbTarget,
     // Extract UUID from data
     const QByteArray uuid = data.value("uuid").toByteArray();
     if (uuid.isEmpty()) {
-        qCritical(logCritical()) << "UUID lipseste pentru tabel:" << table;
+        qCritical(logCritical()) << "[SYNC] UUID lipseste pentru tabel:" << table;
         return false;
     }
 
@@ -356,7 +356,7 @@ bool SyncDocsWorker::insertOrUpdateRecord(QSqlDatabase &dbTarget,
 
         if (!qryUpdate.exec()) {
             qCritical(logCritical()).noquote()
-            << "Eroare UPDATE:" << qryUpdate.lastError().text();
+            << "[SYNC] Eroare UPDATE:" << qryUpdate.lastError().text();
             return false;
         }
     } else {
@@ -386,7 +386,7 @@ bool SyncDocsWorker::insertOrUpdateRecord(QSqlDatabase &dbTarget,
 
         if (!qryInsert.exec()) {
             qCritical(logCritical()).noquote()
-            << "Eroare INSERT:" << qryInsert.lastError().text();
+            << "[SYNC] Eroare INSERT:" << qryInsert.lastError().text();
             return false;
         }
     }

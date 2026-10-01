@@ -1,5 +1,5 @@
-#ifndef REPORTSETTINGSMANAGER_H
-#define REPORTSETTINGSMANAGER_H
+#ifndef LAYOUTSETTINGSMANAGER_H
+#define LAYOUTSETTINGSMANAGER_H
 
 #include "common/applicationpathscontext.h"
 #include <QDir>
@@ -7,15 +7,20 @@
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QJsonArray>
+#include <QSaveFile>
+#include <QSet>
 #include <QStandardPaths>
 #include <QVariant>
 #include <QVariantMap>
 
-class ReportSettingsManager
+#include <functional>
+#include <utility>
+
+class LayoutSettingsManager
 {
 public:
 
-    ReportSettingsManager(const QString &filePath)
+    LayoutSettingsManager(const QString &filePath)
         : m_filePath(filePath)
     {
         load();
@@ -92,6 +97,7 @@ public:
 
         setNested(raportObj, 0);
         m_json[raportId] = raportObj;
+        m_dirtyPaths.insert(raportId + QLatin1Char('/') + parts.join(QLatin1Char('/')));
 
         if (m_autoSave)
             save();
@@ -100,6 +106,7 @@ public:
     void setShowOnLaunchRaport(const QString &raportId)
     {
         m_json["showOnLaunch"] = raportId;
+        m_dirtyPaths.insert(QStringLiteral("showOnLaunch"));
         if (m_autoSave)
             save();
     }
@@ -112,6 +119,7 @@ public:
     void setListReports()
     {
         m_json["listReports"] = QJsonValue::fromVariant(getListReportsFromDirectory());
+        m_dirtyPaths.insert(QStringLiteral("listReports"));
         if (m_autoSave)
             save();
     }
@@ -126,16 +134,22 @@ public:
         QStringList list;
         QDir dir(ApplicationPathsContext::instance().data().reportsDirectory);
         dir.setFilter(QDir::Files | QDir::NoSymLinks);
-        QFileInfoList listFiles = dir.entryInfoList();
-        for (int n = 0; n < listFiles.size(); n++) {
-            QFileInfo fileInfo = listFiles.at(n);
-            list << fileInfo.baseName();
+        dir.setNameFilters({QStringLiteral("*.lrxml")});
+        const QFileInfoList listFiles = dir.entryInfoList();
+        for (const QFileInfo &fileInfo : listFiles) {
+            // numele raportului = numele fișierului fără „.lrxml”
+            const QString name = fileInfo.completeBaseName();
+            if (!name.isEmpty())
+                list << name;
         }
         return list;
     }
 
     void save()
     {
+        if (m_dirtyPaths.isEmpty())
+            return;
+
         // 1. Încarcă ce există pe disc
         QJsonObject diskJson;
 
@@ -149,28 +163,61 @@ public:
                 diskJson = doc.object();
         }
 
-        // 2. MERGE: suprascriem doar cheile locale
-        for (auto it = m_json.begin(); it != m_json.end(); ++it) {
-            diskJson[it.key()] = it.value();
+        // 2. MERGE: suprascriem numai valorile modificate de această
+        // instanță, până la cheia imbricată exactă. Mai multe ferestre
+        // pot avea simultan cache-uri ale aceluiași fișier, inclusiv mai
+        // multe selectoare CatalogTableEditor pentru tipuri diferite de
+        // șabloane. Rescrierea obiectului părinte ar restaura dimensiuni vechi
+        // peste valorile salvate mai recent de altă fereastră.
+        for (const QString &dirtyPath : std::as_const(m_dirtyPaths)) {
+            const QStringList parts = dirtyPath.split(QLatin1Char('/'), Qt::SkipEmptyParts);
+            if (parts.isEmpty())
+                continue;
+
+            QJsonValue localValue = m_json.value(parts.constFirst());
+            for (qsizetype index = 1; index < parts.size(); ++index) {
+                if (!localValue.isObject()) {
+                    localValue = QJsonValue();
+                    break;
+                }
+                localValue = localValue.toObject().value(parts.at(index));
+            }
+
+            std::function<void(QJsonObject &, qsizetype)> mergeValue;
+            mergeValue = [&](QJsonObject &object, qsizetype index) {
+                const QString &part = parts.at(index);
+                if (index == parts.size() - 1) {
+                    object.insert(part, localValue);
+                    return;
+                }
+                QJsonObject child = object.value(part).toObject();
+                mergeValue(child, index + 1);
+                object.insert(part, child);
+            };
+            mergeValue(diskJson, 0);
         }
 
         // 3. Scriem rezultatul final
-        QFile fileOut(m_filePath);
+        QSaveFile fileOut(m_filePath);
         if (fileOut.open(QIODevice::WriteOnly | QIODevice::Text)) {
             QJsonDocument doc(diskJson);
-            fileOut.write(doc.toJson(QJsonDocument::Indented));
-            fileOut.close();
+            const QByteArray json = doc.toJson(QJsonDocument::Indented);
+            if (fileOut.write(json) == json.size() && fileOut.commit()) {
+                m_json = diskJson;
+                m_dirtyPaths.clear();
+            } else {
+                qWarning() << "[LayoutSettingsManager] - scrierea atomică a eșuat pentru:"
+                           << m_filePath << fileOut.errorString();
+            }
         } else {
-            qWarning() << "[ReportSettingsManager] - nu sunt salvate setarile în:" << m_filePath;
+            qWarning() << "[LayoutSettingsManager] - nu sunt salvate setarile în:" << m_filePath;
         }
-
-        // 4. actualizăm cache-ul intern
-        m_json = diskJson;
     }
 
     void reload()
     {
         m_json = QJsonObject();
+        m_dirtyPaths.clear();
         load();
     }
 
@@ -195,7 +242,7 @@ private:
             if (err.error == QJsonParseError::NoError && doc.isObject())
                 m_json = doc.object();
             else
-                qWarning() << "[ReportSettingsManager] - Eroare parsare JSON:" << err.errorString();
+                qWarning() << "[LayoutSettingsManager] - Eroare parsare JSON:" << err.errorString();
 
             // ne conducem dupa continut 'showOnLaunch' care este
             // doar in fisierul 'report_settings.json', daca nu contine, atunci
@@ -208,7 +255,8 @@ private:
 
     QString m_filePath;
     QJsonObject m_json;
+    QSet<QString> m_dirtyPaths;
     bool m_autoSave = true;
 };
 
-#endif // REPORTSETTINGSMANAGER_H
+#endif // LAYOUTSETTINGSMANAGER_H

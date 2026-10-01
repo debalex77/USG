@@ -27,6 +27,7 @@
 #include <QElapsedTimer>
 #include <QPixmap>
 #include <QPainter>
+#include <QFontMetrics>
 #include <QCoreApplication>
 #include <QDate>
 
@@ -48,51 +49,61 @@ void SplashManager::show(QWidget &mainWindow, int durationMs)
         return;
     }
 
+    // Pozițiile pe X se calculează după lățimea reală a textului (traducerile
+    // au lungimi diferite): toate textele se aliniază la aceeași margine dreaptă.
+    #if defined(Q_OS_MACOS)
+    constexpr int titlePointSize = 22;
+    constexpr int infoPointSize  = 13;
+    constexpr int yearPointSize  = 10;
+    constexpr int versionY       = 74;
+    #elif defined(Q_OS_WIN)
+    constexpr int titlePointSize = 20;
+    constexpr int infoPointSize  = 11;
+    constexpr int yearPointSize  = 9;
+    constexpr int versionY       = 70;
+    #else
+    constexpr int titlePointSize = 20;
+    constexpr int infoPointSize  = 11;
+    constexpr int yearPointSize  = 9;
+    constexpr int versionY       = 74;
+    #endif
+    constexpr int minTitlePointSize = 12;
+    constexpr int rightMargin       = 20;
+
+    const int rightEdge     = pm.width() - rightMargin;
+    const int maxTitleWidth = pm.width() - 2 * rightMargin;
+
     QPainter p(&pm);
     QFont f = p.font();
     f.setBold(true);
-    f.setPointSize(14);
 
-    #if defined(Q_OS_LINUX)
-            f.setPointSize(20);
-            p.setFont(f);
-            p.drawText(96, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
-            f.setPointSize(11);
-            p.setFont(f);
-            p.drawText(464, 74, QCoreApplication::tr("versiunea ") + VERSION_FULL);
-            p.drawText(536, 242, QCoreApplication::tr("autor:"));
-            p.drawText(400, 259, COMPANY_EMAIL);
-            f.setPointSize(9);
-            p.setFont(f);
-            p.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year())
-                                     + QCoreApplication::tr(" a."));
-    #elif defined(Q_OS_WIN)
-            f.setPointSize(18);
-            p.setFont(f);
-            p.drawText(132, 48, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
-            f.setPointSize(11);
-            p.setFont(f);
-            p.drawText(464, 68, QCoreApplication::tr("versiunea ") + VERSION_FULL);
-            p.drawText(534, 242, QCoreApplication::tr("autor:"));
-            p.drawText(400, 259, COMPANY_EMAIL);
-            f.setPointSize(9);
-            p.setFont(f);
-            p.drawText(290,310, "2021 - " + QString::number(QDate::currentDate().year())
-                                     + QCoreApplication::tr(" a."));
-    #elif defined(Q_OS_MACOS)
-            f.setPointSize(22);
-            p.setFont(f);
-            p.drawText(182, 44, QCoreApplication::tr("USG - Evidența examinărilor ecografice"));
-            f.setPointSize(13);
-            p.setFont(f);
-            p.drawText(468, 74, QCoreApplication::tr("versiunea ") + VERSION_FULL);
-            p.drawText(530, 242, QCoreApplication::tr("autor:"));
-            p.drawText(408, 259, COMPANY_EMAIL);
-            f.setPointSize(10);
-            p.setFont(f);
-            p.drawText(290,310,"2021 - " + QString::number(QDate::currentDate().year())
-                                     + QCoreApplication::tr(" a."));
-    #endif
+    const auto drawRightAligned = [&p, rightEdge](int y, const QString &text) {
+        p.drawText(rightEdge - p.fontMetrics().horizontalAdvance(text), y, text);
+    };
+
+    // titlu – aliniat la dreapta; se micșorează fontul dacă textul nu încape
+    const QString title = QCoreApplication::tr("USG - Evidența examinărilor ecografice");
+    int titleSize = titlePointSize;
+    f.setPointSize(titleSize);
+    p.setFont(f);
+    while (titleSize > minTitlePointSize
+           && p.fontMetrics().horizontalAdvance(title) > maxTitleWidth) {
+        f.setPointSize(--titleSize);
+        p.setFont(f);
+    }
+    drawRightAligned(44, title);
+
+    // versiune, autor – aliniate la dreapta
+    f.setPointSize(infoPointSize);
+    p.setFont(f);
+    drawRightAligned(versionY, QCoreApplication::tr("versiunea ") + VERSION_FULL);
+    drawRightAligned(242, QCoreApplication::tr("autor:"));
+    drawRightAligned(259, COMPANY_EMAIL);
+
+    f.setPointSize(yearPointSize);
+    p.setFont(f);
+    p.drawText(290, 310, "2021 - " + QString::number(QDate::currentDate().year())
+                             + QCoreApplication::tr(" a."));
 
     p.end();
 

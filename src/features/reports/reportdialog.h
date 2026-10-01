@@ -6,11 +6,10 @@
 #include <QTimer>
 #include <QStandardItemModel>
 #include <QCommandLinkButton>
-#include <LimeReport>
 #include <memory.h>
 #include <QVector>
 
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 #include <features/catalogs/catalogdialog.h> // patient
 #include <database/database.h>
@@ -69,6 +68,10 @@ public:
     /** functiile exportate pu alte clase */
     void onPrintDocument(PrintType::Column type_print,
                          const QString &filePDF = QString());
+    [[nodiscard]] QStringList exportToPdf(const QString &fileBase,
+                                          bool showDoctorStamp,
+                                          bool showDoctorSignature,
+                                          QString *error = nullptr);
     bool extPostDocument();
 
 signals:
@@ -76,7 +79,6 @@ signals:
     void reportChanged();
     void reportPost();
 
-    void printToPdfFinished();
 
 private slots:
     void dataWasModified();
@@ -143,55 +145,6 @@ private:
     bool updateData();
     bool updateParentOrderAttachedMedia(QString *error = nullptr);
 
-    void setPrintModelOrganization(QSqlQueryModel *print_model_organization);
-    void setPrintModelPatient(QSqlQueryModel *print_model_patient);
-
-    void showTemplateComplex(LimeReport::ReportEngine &report,
-                             QSqlQueryModel &modelOrgansInternal,
-                             QSqlQueryModel &modelUrinarySystem,
-                             PrintType::Column typePrint,
-                             const QString &filePDF);
-    void showTemplateOrgansInternal(LimeReport::ReportEngine &report,
-                                    QSqlQueryModel &modelOrgansInternal,
-                                    PrintType::Column typePrint,
-                                    const QString &filePDF);
-    void showTemplateUrinarySystem(LimeReport::ReportEngine &report,
-                                   QSqlQueryModel &modelUrinarySystem,
-                                   PrintType::Column typePrint,
-                                   const QString &filePDF);
-    void showTemplateProstate(LimeReport::ReportEngine &report,
-                              QSqlQueryModel &modelProstate,
-                              PrintType::Column typePrint,
-                              const QString &filePDF);
-    void showTemplateGynecology(LimeReport::ReportEngine &report,
-                                QSqlQueryModel &modelGynecology,
-                                PrintType::Column typePrint,
-                                const QString &filePDF);
-    void showTemplateBreast(LimeReport::ReportEngine &report,
-                            QSqlQueryModel &modelBreast,
-                            PrintType::Column typePrint,
-                            const QString &filePDF);
-    void showTemplateThyroid(LimeReport::ReportEngine &report,
-                             QSqlQueryModel &modelThyroid,
-                             PrintType::Column typePrint,
-                             const QString &filePDF);
-    void showTemplateGestation0(LimeReport::ReportEngine &report,
-                                QSqlQueryModel &modelGestation0,
-                                PrintType::Column typePrint,
-                                const QString &filePDF);
-    void showTemplateGestation1(LimeReport::ReportEngine &report,
-                                QSqlQueryModel &modelGestation1,
-                                PrintType::Column typePrint,
-                                const QString &filePDF);
-    void showTemplateGestation2(LimeReport::ReportEngine &report,
-                                QSqlQueryModel &modelGestation2,
-                                PrintType::Column typePrint,
-                                const QString &filePDF);
-    void showTemplateLymphNodes(LimeReport::ReportEngine &report,
-                                QSqlQueryModel &modelLymphNodes,
-                                PrintType::Column typePrint,
-                                const QString &filePDF);
-
     void initSync();
 
     void saveWindowSize();
@@ -199,7 +152,7 @@ private:
 
 private:
     Ui::ReportDialog *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
 
     DataBase    &m_db;
     QSqlDatabase m_currentDB;
@@ -235,13 +188,8 @@ private:
     QString style_pressed;
     QString style_unpressed;
 
-    int exist_logo              = 0;
-    int exist_stamp_doctor      = 0;
-    int exist_signature_doctor  = 0;
-    int exist_stam_organization = 0;
     bool m_showDoctorStamp      = false;
     bool m_showDoctorSignature  = false;
-    bool allTemplates           = false;
 
 protected:
     void closeEvent(QCloseEvent *event);   // controlam modificarea datelor

@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.4\
+**Versiune documentată:** 4.2.5\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -863,15 +863,21 @@ este activată.
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
 
-### Notă pentru 4.2.4
+### Notă pentru 4.2.5
 
-Versiunea 4.2.4 corectează identitatea utilizată la tipărire. Organizația
-din Comanda ecografică este organizația trimițătoare, în timp ce antetul,
-logotipul, ștampilele și semnătura sunt preluate de la organizația și
-doctorul executant configurați în preferințele utilizatorului.
+Versiunea 4.2.5 este o actualizare corectivă, fără modificări ale schemei
+bazei de date. La pornire, aplicația verifică dacă fișierele SQLite din
+profil există și dacă baza MariaDB conține schema aplicației; în caz
+contrar, afișează un mesaj și nu creează baze goale. O bază existentă
+aleasă la prima lansare nu mai este recreată.
 
-Rapoartele statistice prezintă logotipul organizației, ștampila doctorului
-și semnătura doctorului.
+În jurnalul Comenzilor ecografice au fost corectate ștergerea documentelor
+(inclusiv imaginile și copia din cloud), filtrele și sortarea, care se
+aplică acum tuturor documentelor din perioada aleasă. Au fost corectate
+și exportul pentru e-mail, salvarea documentelor de prețuri și lista
+rapoartelor statistice.
+
+Înainte de actualizare, efectuați copiile de siguranță descrise mai sus.
 
 Pentru un profil SQLite sincronizat cu MariaDB, actualizarea trebuie
 efectuată cu atenție și numai după realizarea copiilor de siguranță.
@@ -1068,7 +1074,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.4**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.5**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

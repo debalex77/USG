@@ -37,8 +37,10 @@ signals:
     void IdChanged();
     void PwdHashChanged();
 
+public slots:
+    void reject() override;
+
 private:
-    DatabaseProvider *dbProvider();
     void setDataConstants();
 
 private slots:
@@ -65,7 +67,6 @@ private:
     QToolButton *show_hide_password;
     CryptoManager *crypto_manager;
 
-    DatabaseProvider m_dbProvider;
     bool m_loadingData = false;
     QTimer m_lastConnectionTimer;
 

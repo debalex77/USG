@@ -8,7 +8,7 @@
 
 #include <common/appmetatypes.h>
 #include <common/globals.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 #include <ui/services/tablecolumnscontroller.h>
 
 #include <ui/widgets/toolbarcustom.h>
@@ -56,7 +56,7 @@ private:
 
 private:
     Ui::OnlineAccountView *ui;
-    ReportSettingsManager m_settings;
+    LayoutSettingsManager m_settings;
 
     struct Filter
     {

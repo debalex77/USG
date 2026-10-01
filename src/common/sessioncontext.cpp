@@ -39,6 +39,11 @@ int SessionContext::userId() const
     return m_userId;
 }
 
+QUuid SessionContext::userUuid() const
+{
+    return m_userUuid;
+}
+
 bool SessionContext::hasAuthenticatedUser() const
 {
     return m_authenticated && m_userId > 0;
@@ -50,6 +55,7 @@ void SessionContext::setCandidateUserId(int userId)
     const bool authenticationChangedValue = m_authenticated;
 
     m_userId = userId;
+    m_userUuid = QUuid();
     m_authenticated = false;
 
     if (userChanged)
@@ -59,13 +65,14 @@ void SessionContext::setCandidateUserId(int userId)
         emit authenticationChanged(false);
 }
 
-void SessionContext::setAuthenticatedUserId(int userId)
+void SessionContext::setAuthenticatedUserId(int userId, const QUuid &userUuid)
 {
     const bool userChanged   = m_userId != userId;
     const bool authenticated = userId > 0;
     const bool authenticationChangedValue = m_authenticated != authenticated;
 
     m_userId        = userId;
+    m_userUuid      = authenticated ? userUuid : QUuid();
     m_authenticated = authenticated;
 
     if (userChanged)

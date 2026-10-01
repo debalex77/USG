@@ -16,7 +16,7 @@
 #include <features/catalogs/organizationdialog.h>
 #include <features/catalogs/catalogdialog.h>
 #include <ui/dialogs/customperiod.h>
-#include <settings/reportsettingsmanager.h>
+#include <settings/layoutsettingsmanager.h>
 
 namespace Ui {
 class Reports;
@@ -76,7 +76,7 @@ private slots:
 
 private:
     Ui::Reports *ui;
-    ReportSettingsManager settings;
+    LayoutSettingsManager settings;
 
     DataBase &m_db;
 
@@ -103,7 +103,9 @@ private:
     int m_id_onLaunch = -1;
     int exist_logo    = 0;
     QString m_emailTo = nullptr;
-    bool send_email =  false;
+    bool send_email = false;
+    QString m_emailExportDirectory;
+    QString m_emailExportFile;
     int m_currentPage;
 
 protected:

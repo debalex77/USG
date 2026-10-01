@@ -1,6 +1,9 @@
 #pragma once
 
+#include <algorithm>
+
 #include <QDateTime>
+#include <QCoreApplication>
 #include <QHash>
 #include <QSet>
 #include <QString>
@@ -847,6 +850,92 @@ namespace ReportSections {
         }
 
         return result;
+    }
+
+    inline QString informedConsentTextByCodes(const QStringList &codes)
+    {
+        const ConsentTypes consentTypes = consentTypesByCodes(codes);
+        const auto trConsent = [](const char *text) {
+            return QCoreApplication::translate("OrderDialog", text);
+        };
+
+        if (consentTypes.testFlag(ConsentType::Invasive)) {
+            return trConsent("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de "
+                             "efectuare, beneficiile, riscurile și limitele procedurii indicate mai sus, "
+                             "precum și despre alternativele disponibile și consecințele refuzului.\n\n"
+                             "Am fost informat(ă) despre posibilele riscuri și complicații ale procedurii, "
+                             "inclusiv durere sau disconfort, sângerare, infecție, lezarea structurilor "
+                             "învecinate și, în cazuri rare, necesitatea unor intervenții medicale "
+                             "suplimentare.\n\n"
+                             "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la "
+                             "acestea. Îmi exprim liber consimțământul pentru efectuarea procedurii "
+                             "indicate mai sus.");
+        }
+
+        const bool transvaginal = std::any_of(codes.cbegin(), codes.cend(), [](const QString &code) {
+            return TransvaginalConsentCodes.contains(code.trimmed());
+        });
+        const bool transrectal = std::any_of(codes.cbegin(), codes.cend(), [](const QString &code) {
+            return TransrectalConsentCodes.contains(code.trimmed());
+        });
+        const QString endocavitaryAccess = transvaginal && transrectal
+            ? trConsent("în vagin sau în rect")
+            : (transrectal ? trConsent("în rect") : trConsent("în vagin"));
+
+        const QString endocavitaryParagraph =
+            trConsent("Am fost informat(ă) că examinarea se efectuează prin introducerea unui "
+                      "transductor ecografic protejat corespunzător %1 și că aceasta poate provoca "
+                      "un disconfort temporar. Examinarea poate fi întreruptă la solicitarea mea.")
+                .arg(endocavitaryAccess);
+
+        if (consentTypes.testFlag(ConsentType::ObstetricScreening)) {
+            QString consent = trConsent(
+                "Am fost informată despre scopul, modul de efectuare, beneficiile și limitele "
+                "examinării ecografice a sarcinii.\n"
+                "Înțeleg că examinarea are ca scop evaluarea sarcinii și, în funcție de vârsta "
+                "gestațională și tipul examinării, evaluarea dezvoltării și anatomiei fetale și "
+                "depistarea unor eventuale anomalii. Nu toate malformațiile și anomaliile fetale "
+                "pot fi identificate ecografic. Unele pot deveni evidente numai ulterior în "
+                "evoluția sarcinii, iar un rezultat ecografic normal nu garantează absența unei "
+                "patologii fetale. Ecografia nu poate exclude toate anomaliile cromozomiale sau "
+                "sindroamele genetice.\n\n");
+
+            if (consentTypes.testFlag(ConsentType::Endocavitary))
+                consent += endocavitaryParagraph + QStringLiteral("\n\n");
+
+            consent += trConsent(
+                "Utilizarea Doppler: Am fost informată că examinarea poate include utilizarea "
+                "modurilor Doppler pentru evaluarea circulației materne și/sau fetale. Conform "
+                "datelor disponibile, nu au fost raportate efecte adverse asupra fătului în urma "
+                "utilizării diagnostice a ultrasunetelor. Expunerea este limitată la timpul și "
+                "nivelul de energie necesare obținerii informației medicale, conform principiului "
+                "ALARA.\n\n"
+                "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acestea. "
+                "Îmi exprim liber consimțământul pentru efectuarea examinării ecografice "
+                "indicate mai sus.");
+            return consent;
+        }
+
+        if (consentTypes.testFlag(ConsentType::Endocavitary)) {
+            return trConsent("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de "
+                             "efectuare și limitele investigației ecografice indicate mai sus.\n\n%1\n\n"
+                             "Înțeleg că ecografia nu poate identifica sau exclude toate patologiile, "
+                             "iar rezultatul poate fi influențat de particularitățile anatomice și "
+                             "condițiile examinării.\n\n"
+                             "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la "
+                             "acestea. Îmi exprim liber consimțământul pentru efectuarea examinării "
+                             "endocavitare indicate mai sus.")
+                .arg(endocavitaryParagraph);
+        }
+
+        return trConsent("Am fost informat(ă), într-un limbaj accesibil, despre scopul, modul de efectuare "
+                         "și limitele investigației ecografice indicate mai sus.\n\n"
+                         "Înțeleg că rezultatul examinării poate fi influențat de particularitățile "
+                         "anatomice, pregătirea pacientului și condițiile de examinare și că ecografia "
+                         "nu poate identifica sau exclude toate patologiile.\n\n"
+                         "Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acestea. "
+                         "Îmi exprim liber consimțământul pentru efectuarea investigației ecografice "
+                         "indicate mai sus.");
     }
 
     inline QString systemDisplayName(ReportSystem system)

@@ -1269,9 +1269,8 @@ bool UpdateReleasesApp::ensureRequiredViews()
 
 bool UpdateReleasesApp::execUpdateCurrentRelease(const QString currentRelease)
 {
-    if (globals().firstLaunch)
-        return true;
-
+    // Și la prima lansare baza aleasă poate fi una existentă, cu schemă veche:
+    // migrările depind numai de versiunea din databaseMetadata.
     if (currentRelease.trimmed().isEmpty()) {
         qCritical(logCritical())
             << "Actualizarea a fost anulată: versiunea bazei de date lipsește.";

@@ -1,3 +1,22 @@
+4.2.5 (October 1st, 2026)
+  * Startup checks for missing SQLite files and MariaDB databases without the application schema.
+  * First launch no longer recreates the schema of an existing database.
+  * Fixed deletion, filters, sorting and preview in the ultrasound Order journal.
+  * Journal printing uses the shared Order/Report print services.
+  * Safer e-mail export: image formats, temporary directory cleanup, address validation.
+  * Fixed pricing document removal on failed save and contract loading by organization.
+  * Statistical reports list only available .lrxml templates.
+  * Completed the Russian translation.
+
+4.2.4 (September 30th, 2026)
+  * Separated the referring organization from the performing printing identity.
+
+4.2.3 (September 29th, 2026)
+  * Rewritten user manual, Cloud Servers window and optional cloud synchronization.
+
+4.2.2 (September 27th, 2026)
+  * Verified SQLite-MariaDB identity before the UUID migration.
+
 4.2.1 (September 27th, 2026)
   * Fixed first-run setup, icons, investigation groups and Windows packaging.
 
