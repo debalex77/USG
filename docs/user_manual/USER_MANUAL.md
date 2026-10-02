@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.5\
+**Versiune documentată:** 4.2.6\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -681,6 +681,25 @@ Fereastra de expediere conține:
 > înainte de apăsarea butonului **Trimite**. Documentele medicale conțin
 > date confidențiale.
 
+### Trimiterea mai multor rapoarte într-un e-mail
+
+Rapoartele ecografice validate pot fi transmise într-o singură scrisoare
+organizației (centrului de sănătate) care a trimis pacienții:
+
+1. deschideți jurnalul **Rapoarte ecografice**;
+2. opțional, selectați rapoartele dorite cu **Ctrl** sau **Shift**;
+3. apăsați butonul de e-mail din bara de instrumente sau alegeți
+   **Trimite rapoartele prin e-mail ...** din meniul contextual;
+4. în fereastra de selecție alegeți organizația și perioada, bifați
+   rapoartele și, dacă este necesar, includerea imaginilor;
+5. confirmați; rapoartele se exportă în PDF și se deschide fereastra de
+   expediere cu adresa organizației din catalog.
+
+Se pot alege numai rapoarte validate. Dacă unele rapoarte nu pot fi
+exportate, aplicația afișează cauza și întreabă dacă se continuă cu cele
+exportate. La atașamente de peste 20 MB se cere confirmare, deoarece
+serverele de e-mail pot respinge scrisorile mari.
+
 ------------------------------------------------------------------------
 
 ## 18. Prețuri
@@ -862,6 +881,13 @@ este activată.
 6. instalați versiunea nouă;
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
+
+### Notă pentru 4.2.6
+
+Versiunea 4.2.6 nu modifică schema bazei de date. Adaugă trimiterea mai
+multor rapoarte ecografice validate într-un singur e-mail către
+organizația care a trimis pacienții (vezi secțiunea „Expedierea prin
+e-mail”) și ecrane de pornire noi pentru toamnă și primăvară.
 
 ### Notă pentru 4.2.5
 
@@ -1074,7 +1100,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.5**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.6**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

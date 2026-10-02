@@ -26,28 +26,7 @@
 #include <features/printing/orderprintservice.h>
 #include <features/printing/reportprintservice.h>
 
-#include <QBuffer>
-#include <QImageReader>
-
-namespace {
-QString fileSafeDocumentNumber(QString number)
-{
-    number.replace('/', '_');
-    number.replace('\\', '_');
-    number.replace(':', '_');
-    return number;
-}
-
-// QImageReader::imageFormat() nu are supraîncărcare pentru QByteArray:
-// fără QBuffer datele ar fi convertite implicit în QString (nume de fișier).
-QByteArray imageFormatOf(QByteArray data)
-{
-    QBuffer buffer(&data);
-    if (!buffer.open(QIODevice::ReadOnly))
-        return {};
-    return QImageReader::imageFormat(&buffer);
-}
-}
+#include <infrastructure/email/reportimagesexporter.h>
 
 DocEmailExporterWorker::DocEmailExporterWorker(DataBase &database,
                                                DatabaseProvider *provider,
@@ -213,7 +192,7 @@ bool DocEmailExporterWorker::exportOrderEcho(QSqlDatabase &dbConn)
         qry.value(rec.indexOf("dateInvestigation")).toString();
 
     const QString pdfPath = m_data.filePDF + "/Comanda_ecografica_nr_"
-                            + fileSafeDocumentNumber(m_data.nr_order) + ".pdf";
+                            + ReportImagesExporter::fileSafeDocumentNumber(m_data.nr_order) + ".pdf";
     OrderPrintService service(*db, dbConn);
     OrderPrintService::Request request;
     request.orderId = m_data.id_order;
@@ -241,7 +220,7 @@ bool DocEmailExporterWorker::exportReportEcho(QSqlDatabase &dbConn)
 {
     const QString reportBase = QDir(m_data.filePDF).filePath(
         QStringLiteral("Raport_ecografic_nr_%1")
-            .arg(fileSafeDocumentNumber(m_data.nr_report)));
+            .arg(ReportImagesExporter::fileSafeDocumentNumber(m_data.nr_report)));
 
     ReportPrintService service(*db, dbConn);
     ReportPrintService::Request request;
@@ -276,92 +255,17 @@ bool DocEmailExporterWorker::exportReportEcho(QSqlDatabase &dbConn)
 
 bool DocEmailExporterWorker::exportImagesDocument(QSqlDatabase &dbConn)
 {
-    emit setTextInfo("Se pregateste exportarea imaginelor ...");
+    ReportImagesExporter::Request request;
+    request.orderId = m_data.id_order;
+    request.reportId = m_data.id_report;
+    request.reportNumber = m_data.nr_report;
+    request.directory = m_data.filePDF;
 
-    QSqlQuery qry(dbConn);
-    qry.prepare(R"(
-        SELECT
-            image_1,
-            image_2,
-            image_3,
-            image_4,
-            image_5
-        FROM
-            imagesReports
-        WHERE
-            id_orderEcho = ? AND
-            id_reportEcho = ?
-    )");
-    qry.addBindValue(m_data.id_order);
-    qry.addBindValue(m_data.id_report);
-    if (! qry.exec()) {
-        qCritical(logCritical()).noquote() << QStringLiteral("[THREAD %1] Eroare la selectare din tabela 'imagesReports':")
-                                        .arg(this->metaObject()->className())
-                                 << qry.lastError().text();
-        m_exportErrors << tr("Imaginile atașate nu au putut fi citite: %1")
-                              .arg(qry.lastError().text());
-        return false;
-    } else {
-        qInfo(logInfo()) << "[THREAD] Se initializeaza exportul imaginelor documentului 'Raport ecografic' nr." << m_data.nr_report;
+    const ReportImagesExporter::Result result = ReportImagesExporter::exportImages(
+        dbConn, request, [this](const QString &text) { emit setTextInfo(text); });
 
-        if (qry.next()){
-            QSqlRecord rec = qry.record();
-            const QVector<QString> imageNames = {"image_1", "image_2", "image_3", "image_4", "image_5"};
-            bool success = true;
-
-            for (int i = 0; i < imageNames.size(); ++i) {
-                const QByteArray stored = qry.value(rec.indexOf(imageNames.at(i))).toByteArray();
-                if (stored.isEmpty())
-                    continue;
-
-                QByteArray imageData = stored;
-                QByteArray format = imageFormatOf(imageData);
-                if (format.isEmpty()) {
-                    const QByteArray decoded = QByteArray::fromBase64(
-                        stored, QByteArray::AbortOnBase64DecodingErrors);
-                    const QByteArray decodedFormat = imageFormatOf(decoded);
-                    if (!decodedFormat.isEmpty()) {
-                        imageData = decoded;
-                        format = decodedFormat;
-                    }
-                }
-
-                if (format.isEmpty()) {
-                    success = false;
-                    const QString error = tr("Imaginea atașată nr.%1 nu are un format recunoscut.")
-                                              .arg(i + 1);
-                    m_exportErrors << error;
-                    qCritical(logCritical()) << "[THREAD DocEmailExporterWorker]" << error;
-                    continue;
-                }
-
-                const QString extension = QString::fromLatin1(format).toLower() == QStringLiteral("jpeg")
-                    ? QStringLiteral("jpg")
-                    : QString::fromLatin1(format).toLower();
-                const QString filePath = QDir(m_data.filePDF).filePath(
-                    QStringLiteral("Image_report_%1_nr_%2.%3")
-                        .arg(fileSafeDocumentNumber(m_data.nr_report),
-                             QString::number(i + 1), extension));
-                QFile file(filePath);
-                if (!file.open(QIODevice::WriteOnly) || file.write(imageData) != imageData.size()) {
-                    success = false;
-                    const QString error = tr("Imaginea atașată nu a putut fi salvată: %1")
-                                              .arg(QDir::toNativeSeparators(filePath));
-                    m_exportErrors << error;
-                    qCritical(logCritical()) << "[THREAD DocEmailExporterWorker]" << error
-                                             << file.errorString();
-                    continue;
-                }
-                file.close();
-                m_exportedFiles << filePath;
-                qInfo(logInfo()) << "[THREAD] Exportul cu succes a imaginei -" << filePath;
-                emit setTextInfo("Imagine salvată: " + filePath);
-            }
-            // La eșec, cauza ajunge în m_exportErrors și este afișată de OrderView.
-            if (success)
-                emit setTextInfo("Imaginile sunt salvate cu succes ...");
-            return success;
-        }
-    }
-    return true; // raportul nu are imagini atașate
+    // La eșec, cauza ajunge în m_exportErrors și este afișată de OrderView.
+    m_exportedFiles << result.files;
+    m_exportErrors << result.errors;
+    return result.success;
 }

@@ -1,3 +1,10 @@
+4.2.6 (October 2nd, 2026)
+  * Send several validated ultrasound reports in one e-mail to the referring organization.
+  * Report journal: multiple selection and an e-mail button in the toolbar and context menu.
+  * Optional export of attached report images; shared image exporter for single and multiple reports.
+  * Seasonal splash screens for autumn and spring.
+  * Russian translation updated.
+
 4.2.5 (October 1st, 2026)
   * Startup checks for missing SQLite files and MariaDB databases without the application schema.
   * First launch no longer recreates the schema of an existing database.

@@ -194,108 +194,137 @@
         <translation>Почтовый агент</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="290"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="309"/>
         <source>Rapoarte investigațiilor ecografice</source>
         <translation>Протоколы ультразвуковых исследований</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="292"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="293"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="311"/>
         <source>Către %1.</source>
         <translation>Для %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="293"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="312"/>
         <source>Vă transmitem alăturat raportul medical %1.</source>
         <translation>Направляем Вам во вложении медицинский протокол %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="294"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="313"/>
         <source>Rapoarte atașate:</source>
         <translation>Прикреплённые протоколы:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="295"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="314"/>
         <source> - %1 în format PDF.</source>
         <translation> - %1 в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="297"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="316"/>
         <source>Vă rugăm să confirmați primirea acestuia și să ne contactați pentru orice informații suplimentare.</source>
         <translation>Просим подтвердить получение и связаться с нами, если Вам потребуется дополнительная информация.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="299"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="321"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="304"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="318"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="340"/>
         <source>Cu stimă,</source>
         <translation>С уважением,</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="301"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="323"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="290"/>
+        <source>Rapoartele investigațiilor ecografice (%1)</source>
+        <translation>Заключения ультразвуковых исследований (%1)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="294"/>
+        <source>Vă transmitem alăturat rapoartele investigațiilor ecografice efectuate pacienților îndreptați de instituția dumneavoastră.</source>
+        <translation>Направляем Вам заключения ультразвуковых исследований пациентов, направленных Вашим учреждением.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="296"/>
+        <source>Rapoarte atașate (format PDF):</source>
+        <translation>Прилагаемые заключения (формат PDF):</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="300"/>
+        <source>Imaginile ecografice sunt atașate separat.</source>
+        <translation>Ультразвуковые изображения приложены отдельно.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="302"/>
+        <source>Vă rugăm să confirmați primirea și să ne contactați pentru orice informații suplimentare.</source>
+        <translation>Просим подтвердить получение и обращаться к нам за любой дополнительной информацией.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="306"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="320"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="342"/>
         <source>Telefon: %1</source>
         <translation>Телефон: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="302"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="324"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="307"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="321"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="343"/>
         <source>E-mail: %1</source>
         <translation>E-mail: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="304"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="323"/>
         <source>Rezultatul investigației ecografice</source>
         <translation>Результат ультразвукового исследования</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="306"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="325"/>
         <source>Stimate/Stimată %1.</source>
         <translation>Уважаемый(ая) %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="307"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="326"/>
         <source>Vă transmitem raportul ecografic în urma investigației efectuate la %1 pe data de %2.</source>
         <translation>Направляем Вам протокол ультразвукового исследования, выполненного в %1 от %2.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="310"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="329"/>
         <source>Documente atașate:</source>
         <translation>Прикреплённые документы:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="311"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="330"/>
         <source> - Comanda ecografică în format PDF.</source>
         <translation> - Заказ на ультразвуковое исследование в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="312"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="331"/>
         <source> - Rapoarte ecografice în format PDF.</source>
         <translation> - Протоколы ультразвуковых исследований в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="314"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="333"/>
         <source>Observații importante:</source>
         <translation>Важная информация:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="315"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="334"/>
         <source>Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară,</source>
         <translation>Если у Вас возникли вопросы по результатам исследования или Вы хотите получить дополнительную консультацию,</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="316"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="335"/>
         <source>vă rugăm să ne contactați la %1 sau să ne scrieți la %2.</source>
         <translation>просим связаться с нами по телефону %1 или написать на %2.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="320"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="339"/>
         <source>Vă mulțumim pentru încrederea acordată!</source>
         <translation>Благодарим Вас за доверие!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="492"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="504"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="516"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="525"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="511"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="523"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="535"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="544"/>
         <source>Verificarea</source>
         <translation>Проверка</translation>
     </message>
@@ -304,27 +333,27 @@
         <translation type="vanished">Не указан e-mail получателя !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="505"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="524"/>
         <source>Nu este indicat e-mail destinatarului !!!</source>
         <translation>Не указан e-mail адресата !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="517"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="536"/>
         <source>Nu au putut fi încărcate datele contului SMTP selectat.</source>
         <translation>Не удалось загрузить данные выбранной учётной записи SMTP.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="526"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="545"/>
         <source>Nu există documente exportate pentru atașare.</source>
         <translation>Нет экспортированных документов для прикрепления.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="534"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="553"/>
         <source>O trimitere este deja în curs.</source>
         <translation>Отправка уже выполняется.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="541"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="560"/>
         <source>Se transmit documentele destinatarului ...</source>
         <translation>Документы отправляются адресату ...</translation>
     </message>
@@ -335,19 +364,19 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="533"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="594"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="602"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="552"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="613"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="621"/>
         <source>Transmiterea prin e-mail</source>
         <translation>Отправка по электронной почте</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="493"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="512"/>
         <source>Nu este indicat e-mailul expeditorului !!!</source>
         <translation>Не указан e-mail отправителя !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="595"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="614"/>
         <source>E-mail-ul nu a fost trimis.
 
 %1</source>
@@ -356,7 +385,7 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="603"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="622"/>
         <source>E-mail-ul a fost trimis către %1.</source>
         <translation>Письмо отправлено на адрес %1.</translation>
     </message>
@@ -3776,42 +3805,42 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>DocEmailExporterWorker</name>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="86"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="65"/>
         <source>Conexiunea cu baza de date nu a putut fi deschisă: %1</source>
         <translation>Не удалось открыть соединение с базой данных: %1</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="106"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="85"/>
         <source>Baza de date a imaginilor nu a putut fi deschisă: %1</source>
         <translation>Не удалось открыть базу данных изображений: %1</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="130"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="109"/>
         <source>Exportul documentelor nu s-a finalizat.</source>
         <translation>Экспорт документов не завершён.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="176"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="155"/>
         <source>Datele comenzii nu au putut fi citite: %1</source>
         <translation>Не удалось прочитать данные направления: %1</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="182"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="161"/>
         <source>Comanda selectată nu are un raport ecografic validat.</source>
         <translation>Для выбранного направления нет утверждённого протокола УЗИ.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="235"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="214"/>
         <source>S-a exportat documentul „Comandă ecografică” nr.%1.</source>
         <translation>Экспортирован документ «Направление на УЗИ» №%1.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="257"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="236"/>
         <source>Raportul ecografic nu a putut fi exportat în PDF.</source>
         <translation>Не удалось экспортировать ультразвуковое заключение в PDF.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="268"/>
+        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="247"/>
         <source>S-au exportat fișierele raportului ecografic nr.%1.</source>
         <translation>Экспортированы файлы ультразвукового заключения №%1.</translation>
     </message>
@@ -3940,19 +3969,16 @@ Doriți să salvați aceste modificări ?</source>
         <translation type="vanished">Экспорт документов успешно завершён.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="301"/>
         <source>Imaginile atașate nu au putut fi citite: %1</source>
-        <translation>Не удалось прочитать прикреплённые изображения: %1</translation>
+        <translation type="vanished">Не удалось прочитать прикреплённые изображения: %1</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="331"/>
         <source>Imaginea atașată nr.%1 nu are un format recunoscut.</source>
-        <translation>Формат прикреплённого изображения №%1 не распознан.</translation>
+        <translation type="vanished">Формат прикреплённого изображения №%1 не распознан.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/email/docemailexporterworker.cpp" line="348"/>
         <source>Imaginea atașată nu a putut fi salvată: %1</source>
-        <translation>Не удалось сохранить прикреплённое изображение: %1</translation>
+        <translation type="vanished">Не удалось сохранить прикреплённое изображение: %1</translation>
     </message>
 </context>
 <context>
@@ -4382,128 +4408,128 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Первоначальная настройка не завершена. Прервать её и продолжить при следующем запуске?</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="530"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="531"/>
         <source>Clasificatorul «Investigații» nu a putut fi încărcat. Verificați jurnalul.</source>
         <translation>Не удалось загрузить классификатор «Исследования». Проверьте журнал.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="543"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="544"/>
         <source>Completat catalogul &quot;Tipul prețurilor&quot;.</source>
         <translation>Справочник «Тип цен» заполнен.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="578"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="597"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="794"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="814"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="937"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="957"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1080"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1100"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="579"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="598"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="795"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="815"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="938"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="958"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1081"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1101"/>
         <source>Atenție</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="578"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="597"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="794"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="814"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="937"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="957"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1080"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1100"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="579"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="598"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="795"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="815"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="938"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="958"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1081"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1101"/>
         <source>Nu este marcat randul !!!.</source>
         <translation>Не выделена строка !!!.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="728"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="729"/>
         <source>Utilizatorul &apos;%1&apos; figureaza in urmatoarele documente:</source>
         <translation>Пользователь «%1» указан в следующих документах:</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="733"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="876"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1018"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1218"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="734"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="877"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1019"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1219"/>
         <source> - %1</source>
         <translation> - %1</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="739"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="759"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="740"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="760"/>
         <source>Utilizatorul &apos;%1&apos; nu poate fi eliminat !!!</source>
         <translation>Пользователь «%1» не может быть удалён !!!</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="750"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="751"/>
         <source>Eroarea solicitarii de selectare a utilizatorului %1</source>
         <translation>Ошибка запроса выбора пользователя %1</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="769"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="770"/>
         <source>Utilizatorul &apos;%1&apos; eliminat cu cucces din baza de date.</source>
         <translation>Пользователь «%1» успешно удалён из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="871"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="872"/>
         <source>Doctor &apos;%1&apos; figureaza in urmatoarele documente:</source>
         <translation>Врач «%1» указан в следующих документах:</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="882"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="902"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="883"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="903"/>
         <source>Doctor &apos;%1&apos; nu poate fi eliminat !!!</source>
         <translation>Врач «%1» не может быть удалён !!!</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="893"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="894"/>
         <source>Eroarea solicitarii de selectare a doctorului %1</source>
         <translation>Ошибка запроса выбора врача %1</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="912"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="913"/>
         <source>Doctor &apos;%1&apos; eliminat cu cucces din baza de date.</source>
         <translation>Врач «%1» успешно удалён из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1013"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1014"/>
         <source>As.medicala &apos;%1&apos; figureaza in urmatoarele documente:</source>
         <translation>Медсестра «%1» указана в следующих документах:</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1024"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1044"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1025"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1045"/>
         <source>As.medicala &apos;%1&apos; nu poate fi eliminat !!!</source>
         <translation>Медсестра «%1» не может быть удалена !!!</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1035"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1036"/>
         <source>Eroarea solicitarii de selectare a as.medicale %1</source>
         <translation>Ошибка запроса выбора медсестры %1</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1055"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1056"/>
         <source>As.medicala &apos;%1&apos; eliminat cu cucces din baza de date.</source>
         <translation>Медсестра «%1» успешно удалена из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1213"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1214"/>
         <source>Organizatia &apos;%1&apos; figureaza in urmatoarele documente:</source>
         <translation>Организация «%1» указана в следующих документах:</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1224"/>
-        <location filename="../src/app/firstrunwizard.cpp" line="1245"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1225"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1246"/>
         <source>Organizatia &apos;%1&apos; nu poate fi eliminat !!!</source>
         <translation>Организация «%1» не может быть удалена !!!</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1236"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1237"/>
         <source>Eroarea solicitarii de selectare a organizatiei %1</source>
         <translation>Ошибка запроса выбора организации %1</translation>
     </message>
     <message>
-        <location filename="../src/app/firstrunwizard.cpp" line="1255"/>
+        <location filename="../src/app/firstrunwizard.cpp" line="1256"/>
         <source>Organizatia &apos;%1&apos; eliminat cu cucces din baza de date.</source>
         <translation>Организация «%1» успешно удалена из базы данных.</translation>
     </message>
@@ -7921,23 +7947,23 @@ Doriți să salvați aceste modificări ?</source>
         <translation>УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/app/splashmanager.cpp" line="85"/>
+        <location filename="../src/app/splashmanager.cpp" line="109"/>
         <location filename="../src/core/version.h" line="6"/>
         <source>USG - Evidența examinărilor ecografice</source>
         <translation>УЗИ - Учёт ультразвуковых исследований</translation>
     </message>
     <message>
-        <location filename="../src/app/splashmanager.cpp" line="99"/>
+        <location filename="../src/app/splashmanager.cpp" line="123"/>
         <source>versiunea </source>
         <translation>версия </translation>
     </message>
     <message>
-        <location filename="../src/app/splashmanager.cpp" line="100"/>
+        <location filename="../src/app/splashmanager.cpp" line="124"/>
         <source>autor:</source>
         <translation>автор:</translation>
     </message>
     <message>
-        <location filename="../src/app/splashmanager.cpp" line="106"/>
+        <location filename="../src/app/splashmanager.cpp" line="130"/>
         <source> a.</source>
         <translation> г.</translation>
     </message>
@@ -7945,7 +7971,7 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>QObject</name>
     <message>
-        <location filename="../src/app/splashmanager.cpp" line="118"/>
+        <location filename="../src/app/splashmanager.cpp" line="142"/>
         <source>Încărcat: %1%</source>
         <translation>Загружено: %1%</translation>
     </message>
@@ -8824,6 +8850,39 @@ Doriți să salvați aceste modificări ?</source>
         <location filename="../src/features/reports/reportdialog.cpp" line="1593"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
+    </message>
+</context>
+<context>
+    <name>ReportImagesExporter</name>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="66"/>
+        <source>Se pregătește exportul imaginilor ...</source>
+        <translation>Подготовка экспорта изображений ...</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="88"/>
+        <source>Imaginile atașate nu au putut fi citite: %1</source>
+        <translation>Не удалось прочитать прикреплённые изображения: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="121"/>
+        <source>Imaginea atașată nr.%1 a raportului nr.%2 nu are un format recunoscut.</source>
+        <translation>Прикреплённое изображение №%1 заключения №%2 имеет нераспознанный формат.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="139"/>
+        <source>Imaginea atașată nu a putut fi salvată: %1</source>
+        <translation>Не удалось сохранить прикреплённое изображение: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="149"/>
+        <source>Imagine salvată: %1</source>
+        <translation>Изображение сохранено: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportimagesexporter.cpp" line="153"/>
+        <source>Imaginile sunt salvate cu succes ...</source>
+        <translation>Изображения успешно сохранены ...</translation>
     </message>
 </context>
 <context>
@@ -12011,292 +12070,332 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>ReportView</name>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="52"/>
+        <location filename="../src/features/reports/reportview.cpp" line="58"/>
         <source>Lista documentelor: Rapoarte ecografice</source>
         <translation>Список документов: Протоколы УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="99"/>
+        <location filename="../src/features/reports/reportview.cpp" line="105"/>
         <source>Preview concluzion</source>
         <translation>Предпросмотр заключения</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="120"/>
+        <location filename="../src/features/reports/reportview.cpp" line="126"/>
         <source>Concluzie</source>
         <translation>Заключение</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="267"/>
-        <location filename="../src/features/reports/reportview.cpp" line="1132"/>
+        <location filename="../src/features/reports/reportview.cpp" line="277"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1285"/>
         <source>Informație</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="267"/>
-        <location filename="../src/features/reports/reportview.cpp" line="1133"/>
+        <location filename="../src/features/reports/reportview.cpp" line="277"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1286"/>
         <source>Nu este marcat rândul.</source>
         <translation>Строка не выбрана.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="287"/>
+        <location filename="../src/features/reports/reportview.cpp" line="297"/>
         <source>Încărcarea rapoartelor ecografice</source>
         <translation>Загрузка протоколов УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="288"/>
+        <location filename="../src/features/reports/reportview.cpp" line="298"/>
         <source>Lista rapoartelor nu a putut fi încărcată.</source>
         <translation>Не удалось загрузить список протоколов.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="324"/>
+        <location filename="../src/features/reports/reportview.cpp" line="334"/>
         <source>Documentul a fost salvat cu succes&lt;br&gt; in baza de date.</source>
         <translation>Документ успешно сохранён&lt;br&gt; в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="331"/>
+        <location filename="../src/features/reports/reportview.cpp" line="341"/>
         <source>Crearea raportului.</source>
         <translation>Создание протокола.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="332"/>
+        <location filename="../src/features/reports/reportview.cpp" line="342"/>
         <source>Crearea raportului ecografic este în stânsă legătură cu documentul &lt;u&gt;Comanda ecografică&lt;/u&gt; !!! &lt;br&gt;&lt;br&gt;Pentru salvarea raportului trebuie să existe o &lt;b&gt;Comandă ecografică&lt;/b&gt; validă și pacientul asociat acesteia.&lt;br&gt;&lt;br&gt;Pentru formarea corectă a rapoartelor statistice este necesar de urmat ordinea creării documentelor:&lt;br&gt;1. Comanda ecografică&lt;br&gt;2. Raport ecografic.</source>
         <translation>Создание протокола УЗИ тесно связано с документом &lt;u&gt;Направление на УЗИ&lt;/u&gt; !!! &lt;br&gt;&lt;br&gt;Для сохранения протокола должно существовать действительное &lt;b&gt;Направление на УЗИ&lt;/b&gt; и связанный с ним пациент.&lt;br&gt;&lt;br&gt;Для корректного формирования статистических отчётов необходимо соблюдать порядок создания документов:&lt;br&gt;1. Направление на УЗИ&lt;br&gt;2. Протокол УЗИ.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="353"/>
-        <location filename="../src/features/reports/reportview.cpp" line="451"/>
+        <location filename="../src/features/reports/reportview.cpp" line="363"/>
+        <location filename="../src/features/reports/reportview.cpp" line="461"/>
         <source>Eliminarea raportului ecografic</source>
         <translation>Удаление протокола УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="354"/>
+        <location filename="../src/features/reports/reportview.cpp" line="364"/>
         <source>Doriți să fie eliminată și Comanda ecografică asociată?</source>
         <translation>Удалить также связанное направление на УЗИ?</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="358"/>
+        <location filename="../src/features/reports/reportview.cpp" line="368"/>
         <source>Da — se elimină Raportul nr.%1 și Comanda ecografică.
 Nu — se elimină numai Raportul ecografic.</source>
         <translation>Да — будут удалены протокол №%1 и направление на УЗИ.
 Нет — будет удалён только протокол УЗИ.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="362"/>
+        <location filename="../src/features/reports/reportview.cpp" line="372"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="363"/>
+        <location filename="../src/features/reports/reportview.cpp" line="373"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="364"/>
-        <location filename="../src/features/reports/reportview.cpp" line="391"/>
+        <location filename="../src/features/reports/reportview.cpp" line="374"/>
+        <location filename="../src/features/reports/reportview.cpp" line="401"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="379"/>
+        <location filename="../src/features/reports/reportview.cpp" line="389"/>
         <source>Eliminarea documentelor din cloud</source>
         <translation>Удаление документов из облака</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="380"/>
+        <location filename="../src/features/reports/reportview.cpp" line="390"/>
         <source>Doriți ca documentele selectate să fie eliminate și din baza de date cloud?</source>
         <translation>Удалить выбранные документы также из облачной базы данных?</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="384"/>
+        <location filename="../src/features/reports/reportview.cpp" line="394"/>
         <source>Șterge și din cloud — elimină documentele local și din MariaDB.
 Șterge numai local — documentele din MariaDB sunt păstrate.</source>
         <translation>Удалить и из облака — документы будут удалены локально и из MariaDB.
 Удалить только локально — документы в MariaDB будут сохранены.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="387"/>
+        <location filename="../src/features/reports/reportview.cpp" line="397"/>
         <source>Șterge și din cloud</source>
         <translation>Удалить и из облака</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="389"/>
+        <location filename="../src/features/reports/reportview.cpp" line="399"/>
         <source>Șterge numai local</source>
         <translation>Удалить только локально</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="436"/>
+        <location filename="../src/features/reports/reportview.cpp" line="446"/>
         <source>Comanda asociată nu mai există sau nu a fost eliminată.</source>
         <translation>Связанное направление больше не существует или не было удалено.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="437"/>
+        <location filename="../src/features/reports/reportview.cpp" line="447"/>
         <source>Raportul nu mai există sau nu a fost eliminat.</source>
         <translation>Протокол больше не существует или не был удалён.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="453"/>
+        <location filename="../src/features/reports/reportview.cpp" line="463"/>
         <source>Raportul ecografic nr.%1 nu a fost eliminat.</source>
         <translation>Протокол УЗИ №%1 не был удалён.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="455"/>
+        <location filename="../src/features/reports/reportview.cpp" line="465"/>
         <source>Eroare SQL: %1
 Interogare: %2</source>
         <translation>Ошибка SQL: %1
 Запрос: %2</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="458"/>
+        <location filename="../src/features/reports/reportview.cpp" line="468"/>
         <source>tranzacție bază de date</source>
         <translation>транзакция базы данных</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="493"/>
+        <location filename="../src/features/reports/reportview.cpp" line="503"/>
         <source>Sincronizarea eliminării</source>
         <translation>Синхронизация удаления</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="495"/>
+        <location filename="../src/features/reports/reportview.cpp" line="505"/>
         <source>Documentele au fost eliminate local, dar eliminarea din cloud a eșuat.</source>
         <translation>Документы удалены локально, но удалить их из облака не удалось.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="507"/>
+        <location filename="../src/features/reports/reportview.cpp" line="517"/>
         <source>Raportul și comanda asociată au fost eliminate&lt;br&gt;cu succes din baza de date.</source>
         <translation>Протокол и связанное направление успешно удалены&lt;br&gt;из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="513"/>
+        <location filename="../src/features/reports/reportview.cpp" line="523"/>
         <source>Raportul ecografic a fost eliminat.&lt;br&gt;Comanda asociată a fost păstrată.</source>
         <translation>Протокол УЗИ удалён.&lt;br&gt;Связанное направление сохранено.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="525"/>
+        <location filename="../src/features/reports/reportview.cpp" line="535"/>
         <source>Raportul local nu are UUID; documentul cloud nu poate fi identificat sigur.</source>
         <translation>У локального протокола отсутствует UUID; облачный документ невозможно надёжно идентифицировать.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="532"/>
+        <location filename="../src/features/reports/reportview.cpp" line="542"/>
         <source>Se elimină documentele din cloud ...</source>
         <translation>Удаление документов из облака ...</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="601"/>
+        <location filename="../src/features/reports/reportview.cpp" line="611"/>
         <source>Eroare necunoscută la eliminarea din cloud.</source>
         <translation>Неизвестная ошибка при удалении из облака.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="664"/>
+        <location filename="../src/features/reports/reportview.cpp" line="692"/>
+        <location filename="../src/features/reports/reportview.cpp" line="738"/>
+        <source>Transmiterea prin e-mail</source>
+        <translation>Отправка по электронной почте</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="701"/>
+        <source>Se pregătesc rapoartele în format PDF ...</source>
+        <translation>Подготовка заключений в формате PDF ...</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="748"/>
+        <source>Au fost exportate %1 din %2 rapoarte.
+Continuați cu documentele exportate?</source>
+        <translation>Экспортировано заключений: %1 из %2.
+Продолжить с экспортированными документами?</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="769"/>
+        <source>Dimensiunea totală a atașamentelor este %1 MB și poate depăși limita serverului de e-mail.
+Continuați?</source>
+        <translation>Общий размер вложений составляет %1 МБ и может превысить ограничение почтового сервера.
+Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="814"/>
         <source>Verificarea perioadei</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="665"/>
+        <location filename="../src/features/reports/reportview.cpp" line="815"/>
         <source>Data de sfârșit nu poate fi mai mică decât data de început.</source>
         <translation>Дата окончания не может быть раньше даты начала.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="729"/>
+        <location filename="../src/features/reports/reportview.cpp" line="879"/>
         <source>Deschide raportul</source>
         <translation>Открыть протокол</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="731"/>
+        <location filename="../src/features/reports/reportview.cpp" line="881"/>
         <source>Deschide comanda asociată</source>
         <translation>Открыть связанное направление</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="733"/>
+        <location filename="../src/features/reports/reportview.cpp" line="883"/>
         <source>Printează raportul</source>
         <translation>Печать протокола</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="752"/>
+        <location filename="../src/features/reports/reportview.cpp" line="884"/>
+        <source>Trimite rapoartele prin e-mail ...</source>
+        <translation>Отправить заключения по электронной почте ...</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="905"/>
         <source>Perioada: %1 - %2</source>
         <translation>Период: %1 - %2</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="756"/>
+        <location filename="../src/features/reports/reportview.cpp" line="909"/>
         <source>; număr: %1</source>
         <translation>; номер: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="758"/>
+        <location filename="../src/features/reports/reportview.cpp" line="911"/>
         <source>; organizație: %1</source>
         <translation>; организация: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="760"/>
+        <location filename="../src/features/reports/reportview.cpp" line="913"/>
         <source>; contract: %1</source>
         <translation>; договор: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="762"/>
+        <location filename="../src/features/reports/reportview.cpp" line="915"/>
         <source>; autor: %1</source>
         <translation>; автор: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="887"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1040"/>
         <source>Preview</source>
         <translation>Предпросмотр</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="888"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1041"/>
         <source>Designer</source>
         <translation>Дизайнер</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1167"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1300"/>
+        <source>Se pregătesc rapoartele pentru e-mail.&lt;br&gt;Fereastra poate fi închisă după finalizare.</source>
+        <translation>Идёт подготовка заключений для отправки по почте.&lt;br&gt;Окно можно закрыть после завершения.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="1332"/>
         <source>Adaugă (Ins)</source>
         <translation>Добавить (Ins)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1169"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1334"/>
         <source>Elimină (Del)</source>
         <translation>Удалить (Del)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1171"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1336"/>
         <source>Editează (F2)</source>
         <translation>Редактировать (F2)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1173"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1338"/>
         <source>Deschide filtru (Ctrl + F1)</source>
         <translation>Открыть фильтр (Ctrl + F1)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1175"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1340"/>
         <source>Filtru rapid (Ctrl + F2)</source>
         <translation>Быстрый фильтр (Ctrl + F2)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1177"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1342"/>
         <source>Șterge filtru (Ctrl + F3)</source>
         <translation>Очистить фильтр (Ctrl + F3)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1179"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1344"/>
         <source>Actualizează (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1181"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1346"/>
         <source>Ascunde/prezintă secții&lt;br&gt; (Ctrl + H)</source>
         <translation>Скрыть/показать разделы&lt;br&gt; (Ctrl + H)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1183"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1348"/>
         <source>Printare (Ctrl + P)</source>
         <translation>Печать (Ctrl + P)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1185"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1350"/>
+        <source>Trimite rapoartele prin e-mail</source>
+        <translation>Отправить заключения по электронной почте</translation>
+    </message>
+    <message>
+        <location filename="../src/features/reports/reportview.cpp" line="1352"/>
         <source>Vizualizarea concluziei (Ctrl + T)</source>
         <translation>Просмотр заключения (Ctrl + T)</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportview.cpp" line="1187"/>
+        <location filename="../src/features/reports/reportview.cpp" line="1354"/>
         <source>Perioada (Ctrl + Shift + P)</source>
         <translation>Период (Ctrl + Shift + P)</translation>
     </message>
@@ -12488,6 +12587,225 @@ Interogare: %2</source>
         <location filename="../src/infrastructure/reporting/reports.cpp" line="1279"/>
         <source>Raportul nu a putut fi exportat în format PDF.</source>
         <translation>Не удалось экспортировать отчёт в формате PDF.</translation>
+    </message>
+</context>
+<context>
+    <name>ReportsEmailExporterWorker</name>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="60"/>
+        <source>Conexiunea cu baza de date nu a putut fi deschisă: %1</source>
+        <translation>Не удалось открыть соединение с базой данных: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="75"/>
+        <source>Baza de date a imaginilor nu a putut fi deschisă: %1</source>
+        <translation>Не удалось открыть базу данных изображений: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="85"/>
+        <source>Se exportă raportul %1 din %2 ...</source>
+        <translation>Экспорт заключения %1 из %2 ...</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="107"/>
+        <source>Exportul rapoartelor nu s-a finalizat.</source>
+        <translation>Экспорт заключений не завершён.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="124"/>
+        <source>Datele organizației destinatare nu au putut fi citite: %1</source>
+        <translation>Не удалось прочитать данные организации-получателя: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="129"/>
+        <source>Organizația destinatară nu a fost găsită.</source>
+        <translation>Организация-получатель не найдена.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="159"/>
+        <source>Raportul cu id=%1 nu a putut fi citit: %2</source>
+        <translation>Не удалось прочитать заключение с id=%1: %2</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="165"/>
+        <source>Raportul cu id=%1 nu a fost găsit.</source>
+        <translation>Заключение с id=%1 не найдено.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="179"/>
+        <source>Raportul nr.%1 nu mai este validat.</source>
+        <translation>Заключение №%1 больше не проведено.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="183"/>
+        <source>Raportul nr.%1 aparține altei organizații.</source>
+        <translation>Заключение №%1 относится к другой организации.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="200"/>
+        <source>Raportul nr.%1: %2</source>
+        <translation>Заключение №%1: %2</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="203"/>
+        <source>nu a putut fi exportat în PDF.</source>
+        <translation>не удалось экспортировать в PDF.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/email/reportsemailexporterworker.cpp" line="225"/>
+        <source>Raport ecografic nr.%1 din %2 – %3</source>
+        <translation>Заключение УЗИ №%1 от %2 – %3</translation>
+    </message>
+</context>
+<context>
+    <name>ReportsEmailSelectionDialog</name>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="59"/>
+        <source>Transmiterea rapoartelor ecografice prin e-mail</source>
+        <translation>Отправка заключений УЗИ по электронной почте</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="87"/>
+        <source>Afișează</source>
+        <translation>Показать</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="90"/>
+        <source>Căutare după pacient, IDNP sau număr ...</source>
+        <translation>Поиск по пациенту, IDNP или номеру ...</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="94"/>
+        <source>Nr. raport</source>
+        <translation>№ заключения</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="94"/>
+        <source>Data</source>
+        <translation>Дата</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="94"/>
+        <source>Pacient</source>
+        <translation>Пациент</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="95"/>
+        <source>IDNP</source>
+        <translation>IDNP</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="95"/>
+        <source>Comanda</source>
+        <translation>Заказ</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="95"/>
+        <source>Imagini</source>
+        <translation>Изображения</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="113"/>
+        <source>Bifează tot</source>
+        <translation>Выбрать всё</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="114"/>
+        <source>Debifează tot</source>
+        <translation>Снять все отметки</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="115"/>
+        <source>Atașează și imaginile rapoartelor</source>
+        <translation>Приложить также изображения заключений</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="119"/>
+        <source>Exportă și pregătește e-mailul</source>
+        <translation>Экспортировать и подготовить письмо</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="124"/>
+        <source>Organizația:</source>
+        <translation>Организация:</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="127"/>
+        <source>Perioada:</source>
+        <translation>Период:</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="147"/>
+        <source>Se afișează doar rapoartele validate.</source>
+        <translation>Отображаются только проведённые заключения.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="242"/>
+        <source>Selectați organizația căreia i se transmit rapoartele.</source>
+        <translation>Выберите организацию, которой отправляются заключения.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="257"/>
+        <source>Destinatar: organizația nu are adresa de e-mail indicată în catalog.</source>
+        <translation>Получатель: у организации в справочнике не указан адрес электронной почты.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="258"/>
+        <source>Destinatar: %1</source>
+        <translation>Получатель: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="280"/>
+        <source>Verificarea perioadei</source>
+        <translation>Проверка периода</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="281"/>
+        <source>Data de sfârșit nu poate fi mai mică decât data de început.</source>
+        <translation>Дата окончания не может быть раньше даты начала.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="297"/>
+        <source>Lista rapoartelor nu a putut fi încărcată:
+%1</source>
+        <translation>Не удалось загрузить список заключений:
+%1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="322"/>
+        <source>da</source>
+        <translation>да</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="348"/>
+        <source>Într-o scrisoare pot fi transmise cel mult %1 rapoarte.</source>
+        <translation>В одном письме можно отправить не более %1 заключений.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="384"/>
+        <source>Au fost bifate primele %1 rapoarte: într-o scrisoare pot fi transmise cel mult %1 rapoarte.</source>
+        <translation>Отмечены первые %1 заключений: в одном письме можно отправить не более %1 заключений.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="394"/>
+        <source>Bifate: %1 din %2</source>
+        <translation>Отмечено: %1 из %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="402"/>
+        <source>Selectați organizația și bifați cel puțin un raport.</source>
+        <translation>Выберите организацию и отметьте хотя бы одно заключение.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/reportsemailselectiondialog.cpp" line="410"/>
+        <source>Organizația selectată nu are adresa de e-mail indicată.
+Adresa destinatarului va trebui introdusă manual în agentul e-mail.
+
+Continuați?</source>
+        <translation>У выбранной организации не указан адрес электронной почты.
+Адрес получателя нужно будет ввести вручную в почтовом агенте.
+
+Продолжить?</translation>
     </message>
 </context>
 <context>

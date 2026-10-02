@@ -60,6 +60,8 @@ SOURCES += \
     $$USG_ROOT/src/infrastructure/database/dataconstantsworker.cpp \
     $$USG_ROOT/src/infrastructure/email/docemailexporterworker.cpp \
     $$USG_ROOT/src/infrastructure/email/emailcore.cpp \
+    $$USG_ROOT/src/infrastructure/email/reportimagesexporter.cpp \
+    $$USG_ROOT/src/infrastructure/email/reportsemailexporterworker.cpp \
     $$USG_ROOT/src/infrastructure/email/temporaryexportowner.cpp \
     $$USG_ROOT/src/infrastructure/security/cryptomanager.cpp \
     $$USG_ROOT/src/infrastructure/sync/docsyncworker.cpp \
@@ -77,6 +79,8 @@ HEADERS += \
     $$USG_ROOT/src/infrastructure/database/dataconstantsworker.h \
     $$USG_ROOT/src/infrastructure/email/docemailexporterworker.h \
     $$USG_ROOT/src/infrastructure/email/emailcore.h \
+    $$USG_ROOT/src/infrastructure/email/reportimagesexporter.h \
+    $$USG_ROOT/src/infrastructure/email/reportsemailexporterworker.h \
     $$USG_ROOT/src/infrastructure/email/temporaryexportowner.h \
     $$USG_ROOT/src/infrastructure/security/cryptomanager.h \
     $$USG_ROOT/src/infrastructure/sync/docsyncworker.h \

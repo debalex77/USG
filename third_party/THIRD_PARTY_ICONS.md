@@ -13,6 +13,9 @@ legal advice.
 - **OK** — commercial use is explicitly permitted on the identified source page.
 - **OWN** — original work created by Alexandru Codreanu; no third-party visual
   asset was identified in the file.
+- **OWN-AI** — base image generated with an AI image generation tool and then
+  modified by Alexandru Codreanu; no third-party visual asset was identified in
+  the file. Use is subject to the terms of the AI service used for generation.
 - **OK-ATTR** — commercial use is permitted, but attribution is required under the free license.
 - **OK-LGPL** — use is permitted under the LGPL, subject to its obligations.
 - **NO-COMMERCIAL** — the source page permits personal use only; commercial distribution requires another license.
@@ -22,8 +25,9 @@ legal advice.
 
 ## Summary
 
-- Files reviewed: **152**.
+- Files reviewed: **154**.
 - OWN: **4**.
+- OWN-AI: **2**.
 - OK: **20**.
 - OK-ATTR: **95**.
 - OK-LGPL: **33**.
@@ -34,7 +38,7 @@ legal advice.
 
 ### Licensing conclusion
 
-The asset set no longer contains **UNKNOWN**, **RISK**, or **NO-COMMERCIAL** entries. From the perspective of this technical provenance and licensing audit, all **152** file locations have a documented basis for use. Commercial redistribution remains conditional on compliance with each license: attribution for **OK-ATTR** entries; retention of the applicable license, notices, and conditions for **OK-LGPL** entries; and retention of licensing evidence for assets obtained through aggregators or services with their own terms. Flaticon and Icons8 assets require attribution and licensing evidence, or the corresponding Premium license. Oxygen and LimeReport assets require the applicable license and notices. The four **OWN** splash images do not introduce a third-party visual-asset license.
+The asset set no longer contains **UNKNOWN**, **RISK**, or **NO-COMMERCIAL** entries. From the perspective of this technical provenance and licensing audit, all **154** file locations have a documented basis for use. Commercial redistribution remains conditional on compliance with each license: attribution for **OK-ATTR** entries; retention of the applicable license, notices, and conditions for **OK-LGPL** entries; and retention of licensing evidence for assets obtained through aggregators or services with their own terms. Flaticon and Icons8 assets require attribution and licensing evidence, or the corresponding Premium license. Oxygen and LimeReport assets require the applicable license and notices. The four **OWN** splash images and the two **OWN-AI** seasonal splash images do not introduce a third-party visual-asset license; for the **OWN-AI** images, the terms of the AI image generation service apply.
 
 ### Compliance limitation
 
@@ -59,6 +63,10 @@ copies of all applicable licenses.
 - `catalogs/item_delete.png` was verified in the asset set as a **128×128 px** RGBA PNG with a transparent background. It is a visual derivative of `catalogs/item.png`; a red “X” was added using OpenAI image generation to indicate a document marked for deletion. The base license remains **LGPL**.
 - The four splash images under `resources/icons` were recorded as original
   works created by Alexandru Codreanu using GIMP.
+- 2026-10-02: the seasonal splash images `splash_autumn.png` and
+  `splash_springtime.png` (600×320 px, RGB PNG) were added. Their base images
+  were generated with an AI image generation tool and then modified by
+  Alexandru Codreanu; they are recorded as **OWN-AI**.
 - The other three files under `resources/icons` are byte-identical copies of
   the corresponding audited `resources/img/app_ico` files and retain the same
   provenance and licensing status.
@@ -73,8 +81,10 @@ copies of all applicable licenses.
 | `eco_248x248.ico` | **OK** | [ShareIcon](https://www.shareicon.net/ultrasound-ultra-sound-scans-scan-101150) | Byte-identical to `resources/img/app_ico/eco_248x248.ico`; original by Goran Babic, conversion by Alexandru Codreanu. |
 | `eco_512x512.ico` | **OK** | [ShareIcon](https://www.shareicon.net/ultrasound-ultra-sound-scans-scan-101150) | Byte-identical to `resources/img/app_ico/eco_512x512.ico`; original by Goran Babic, conversion by Alexandru Codreanu. |
 | `eco_512x512.png` | **OK** | [ShareIcon](https://www.shareicon.net/ultrasound-ultra-sound-scans-scan-101150) | Byte-identical to `resources/img/app_ico/eco_512x512.png`; original by Goran Babic. |
+| `splash_autumn.png` | **OWN-AI** | Alexandru Codreanu | Autumn splash image (1 September – 30 November); AI-generated base image, modified by Alexandru Codreanu. |
 | `splash_santa.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP. |
 | `splash_snow.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP. |
+| `splash_springtime.png` | **OWN-AI** | Alexandru Codreanu | Spring splash image (1 March – 31 May); AI-generated base image, modified by Alexandru Codreanu. |
 | `usg_splash.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP. |
 | `usg_splash_.png` | **OWN** | Alexandru Codreanu | Original splash image created using GIMP; currently not listed in `resources/resource.qrc`. |
 
@@ -255,3 +265,8 @@ the pinned corresponding source are handled as described in
    editable GIMP source files should be archived privately when available as
    provenance evidence, but they do not need to be included in the application
    package.
+9. For the two **OWN-AI** splash images (`splash_autumn.png`,
+   `splash_springtime.png`), retain the notice that the base images were
+   AI-generated and modified by Alexandru Codreanu, the name of the AI service
+   used, and a copy of its terms of use from the generation date. Archive the
+   edited source files privately as provenance evidence.

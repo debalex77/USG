@@ -252,6 +252,8 @@
         <file>sql/queries_doc/order_journal_mariadb.sql</file>
         <file>sql/queries_doc/report_journal.sql</file>
         <file>sql/queries_doc/report_journal_mariadb.sql</file>
+        <file>sql/queries_doc/reports_email_select.sql</file>
+        <file>sql/queries_doc/reports_email_export_item.sql</file>
         <file>img/toolBar/add.png</file>
         <file>img/toolBar/calendar.png</file>
         <file>img/toolBar/delete.png</file>
@@ -429,5 +431,7 @@
         <file>sql/sqlite/tables/report_video.sql</file>
         <file>sql/mariadb/tables/report_video.sql</file>
         <file>img/catalogs/item_delete.png</file>
+        <file>icons/splash_autumn.png</file>
+        <file>icons/splash_springtime.png</file>
     </qresource>
 </RCC>

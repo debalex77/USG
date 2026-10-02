@@ -119,6 +119,34 @@ struct DatesDocForExportEmail
     QString filePDF;
 };
 
+// Exportul mai multor rapoarte ecografice validate pentru o singură scrisoare
+// adresată organizației (centrului de sănătate) care a trimis pacienții.
+struct DatesReportsForExportEmail
+{
+    bool thisMySQL = false;
+    int recipientOrganizationId = 0; // orderEcho.id_organizations
+    QVector<qint64> reportIds;
+    bool includeImages = false;
+
+    // Cabinetul care emite documentele (UserPreference).
+    int printOrganizationId = 0;
+    QString filePDF; // directorul temporar creat de TemporaryExportOwner
+};
+
+struct ReportsForAgentEmail
+{
+    bool success = false;   // cel puțin un raport exportat
+    QString errorText;      // erorile tuturor rapoartelor neexportate
+    int exportedCount = 0;
+    int requestedCount = 0;
+    int organizationId = 0; // cabinetul expeditor
+    QString recipientName;
+    QString emailTo;
+    QStringList documentTitles; // câte un rând pentru fiecare raport exportat
+    QStringList attachments;    // fișierele exportate efectiv (căi complete)
+    QString exportDirectory;
+};
+
 struct DatesDocsOrderReportSync
 {
     bool thisMySQL = false;
@@ -217,6 +245,8 @@ Q_DECLARE_METATYPE(OrderDataStructure)
 Q_DECLARE_METATYPE(DatesCatPatient)
 Q_DECLARE_METATYPE(DatesForAgentEmail)
 Q_DECLARE_METATYPE(DatesDocForExportEmail)
+Q_DECLARE_METATYPE(DatesReportsForExportEmail)
+Q_DECLARE_METATYPE(ReportsForAgentEmail)
 Q_DECLARE_METATYPE(DatesDocsOrderReportSync)
 Q_DECLARE_METATYPE(PricingJournalSettings)
 Q_DECLARE_METATYPE(JournalFilter)

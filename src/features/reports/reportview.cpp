@@ -30,6 +30,11 @@
 #include <features/catalogs/organizationdialog.h>
 #include <features/catalogs/userdialog.h>
 #include <ui/dialogs/processingaction.h>
+#include <features/email/agentsendemail.h>
+#include <features/email/reportsemailselectiondialog.h>
+#include <infrastructure/email/reportsemailexporterworker.h>
+#include <common/doctorcontext.h>
+#include <common/maindatabaseconnectioncontext.h>
 
 #include <QScopeGuard>
 
@@ -47,6 +52,7 @@ ReportView::ReportView(DataBase &db, QWidget *parent)
                                   ToolBarCustom::PeriodSearch))
     , m_popup(new PopUp(this))
     , m_previewModel(new QStandardItemModel(this))
+    , m_dbProvider(this)
 {
     ui->setupUi(this);
     setWindowTitle(tr("Lista documentelor: Rapoarte ecografice"));
@@ -78,7 +84,6 @@ void ReportView::buildUi()
     m_toolBar->setStyles(m_db.toolButtonStyleForIcon(),
                          m_db.toolButtonStyleForText());
 
-    m_toolBar->getBtnSendEmail()->hide();
     m_toolBar->getBtnSaecrPacient()->hide();
     ui->layoutToolBar->addWidget(m_toolBar);
 
@@ -92,6 +97,7 @@ void ReportView::buildUi()
         m_toolBar->getBtnUpdateTable(),
         m_toolBar->getBtnHideShowColumn(),
         m_toolBar->getBtnPrintDoc(),
+        m_toolBar->getBtnSendEmail(),
         m_toolBar->getBtnViewTabOrder(),
         m_toolBar->getBtnOpenPeriod()
     };
@@ -136,7 +142,9 @@ void ReportView::initTable()
     ui->tableView->setModel(m_proxy);
 
     ui->tableView->setSelectionBehavior(QAbstractItemView::SelectRows);
-    ui->tableView->setSelectionMode(QAbstractItemView::SingleSelection);
+    // Selecția multiplă (Ctrl/Shift) preselectează rapoartele pentru e-mail;
+    // celelalte acțiuni lucrează cu rândul curent.
+    ui->tableView->setSelectionMode(QAbstractItemView::ExtendedSelection);
     ui->tableView->setSortingEnabled(true);
     ui->tableView->setWordWrap(false);
     ui->tableView->setTextElideMode(Qt::ElideRight);
@@ -193,6 +201,8 @@ void ReportView::initConnections()
 
     connect(m_toolBar, &ToolBarCustom::printDoc,
             this, &ReportView::printReport);
+    connect(m_toolBar, &ToolBarCustom::sendEmail,
+            this, &ReportView::sendReportsByEmail);
 
     connect(m_toolBar, &ToolBarCustom::openPeriod,
             this, &ReportView::choosePeriod);
@@ -648,6 +658,146 @@ void ReportView::printReportDocument(PrintType::Column typePrint)
     dialog.onPrintDocument(typePrint);
 }
 
+void ReportView::sendReportsByEmail()
+{
+    // LimeReport poate procesa evenimente în timpul exportului; o a doua
+    // pornire ar suprapune exporturile pe același fir.
+    if (m_emailExportRunning)
+        return;
+
+    QSet<qint64> preselectedIds;
+    const QModelIndexList selectedRows = ui->tableView->selectionModel()->selectedRows();
+    for (const QModelIndex &proxyIndex : selectedRows) {
+        const QModelIndex sourceIndex = m_proxy->mapToSource(proxyIndex);
+        if (sourceIndex.isValid())
+            preselectedIds.insert(m_model->itemAt(sourceIndex.row()).id);
+    }
+
+    ReportsEmailSelectionDialog selection(m_db, this);
+    selection.setInitialState(m_filter.idOrganization,
+                              m_filter.startDate.date(),
+                              m_filter.endDate.date(),
+                              preselectedIds);
+    if (selection.exec() != QDialog::Accepted)
+        return;
+
+    const QVector<qint64> reportIds = selection.selectedReportIds();
+    if (reportIds.isEmpty())
+        return;
+
+    // Fiecare trimitere primește propriul director temporar.
+    QString exportDirectory;
+    QString exportError;
+    if (!AgentSendEmail::prepareExportDirectory(&exportDirectory, &exportError)) {
+        QMessageBox::warning(this, tr("Transmiterea prin e-mail"),
+                             exportError, QMessageBox::Ok);
+        return;
+    }
+
+    if (m_loader)
+        m_loader->close();
+    m_loader = new ProcessingAction(this);
+    m_loader->setAttribute(Qt::WA_DeleteOnClose);
+    m_loader->setProperty("txtInfo", tr("Se pregătesc rapoartele în format PDF ..."));
+    m_loader->show();
+
+    DatesReportsForExportEmail data;
+    data.thisMySQL = MainDatabaseConnectionContext::instance().isMariaDb();
+    data.recipientOrganizationId = selection.organizationId();
+    data.reportIds = reportIds;
+    data.includeImages = selection.includeImages();
+    data.printOrganizationId = SettingsService::instance().organization().organizationId;
+    data.filePDF = exportDirectory;
+
+    qInfo(logInfo()) << "ReportView: export pentru e-mail; rapoarte=" << reportIds.size()
+                     << "organizație id=" << data.recipientOrganizationId
+                     << "imagini=" << data.includeImages;
+
+    // Exportul LimeReport se execută în firul GUI (vezi OrderView::onSendEmail).
+    auto *worker = new ReportsEmailExporterWorker(m_db, &m_dbProvider, data, this);
+    connect(worker, &ReportsEmailExporterWorker::setTextInfo, this,
+            [this](const QString &text) {
+                if (m_loader)
+                    m_loader->setProperty("txtInfo", text);
+            }, Qt::QueuedConnection);
+    connect(worker, &ReportsEmailExporterWorker::finished,
+            this, &ReportView::launchEmailAgent, Qt::QueuedConnection);
+    connect(worker, &ReportsEmailExporterWorker::finished,
+            worker, &QObject::deleteLater);
+
+    m_emailExportRunning = true;
+    QTimer::singleShot(0, worker, &ReportsEmailExporterWorker::process);
+}
+
+void ReportView::launchEmailAgent(const ReportsForAgentEmail &result)
+{
+    m_emailExportRunning = false;
+    if (m_loader)
+        m_loader->close();
+
+    const QString title = tr("Transmiterea prin e-mail");
+    if (!result.success) {
+        QMessageBox::critical(this, title, result.errorText, QMessageBox::Ok);
+        AgentSendEmail::removeExportDirectory(result.exportDirectory);
+        return;
+    }
+
+    // Export parțial: utilizatorul decide dacă trimite documentele reușite.
+    if (!result.errorText.isEmpty()) {
+        QMessageBox box(QMessageBox::Warning, title,
+                        tr("Au fost exportate %1 din %2 rapoarte.\n"
+                           "Continuați cu documentele exportate?")
+                            .arg(result.exportedCount)
+                            .arg(result.requestedCount),
+                        QMessageBox::Yes | QMessageBox::No, this);
+        box.setDetailedText(result.errorText);
+        box.setDefaultButton(QMessageBox::No);
+        if (box.exec() != QMessageBox::Yes) {
+            AgentSendEmail::removeExportDirectory(result.exportDirectory);
+            return;
+        }
+    }
+
+    // Majoritatea serverelor SMTP limitează scrisoarea la aproximativ 25 MB.
+    constexpr qint64 maxAttachmentsBytes = 20 * 1024 * 1024;
+    qint64 totalBytes = 0;
+    for (const QString &file : result.attachments)
+        totalBytes += QFileInfo(file).size();
+    if (totalBytes > maxAttachmentsBytes) {
+        const auto answer = QMessageBox::question(
+            this, title,
+            tr("Dimensiunea totală a atașamentelor este %1 MB și poate depăși limita "
+               "serverului de e-mail.\nContinuați?")
+                .arg(QString::number(double(totalBytes) / (1024 * 1024), 'f', 1)),
+            QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+        if (answer != QMessageBox::Yes) {
+            AgentSendEmail::removeExportDirectory(result.exportDirectory);
+            return;
+        }
+    }
+
+    AgentSendEmail::MailContext context;
+    context.kind            = AgentSendEmail::MessageKind::MultipleReports;
+    context.organizationId  = result.organizationId;
+    context.recipientName   = result.recipientName;
+    context.emailTo         = result.emailTo;
+    context.documentTitles  = result.documentTitles;
+    context.includesImages  = std::any_of(result.attachments.cbegin(),
+                                          result.attachments.cend(),
+                                          [](const QString &file) {
+                                              return !file.endsWith(QStringLiteral(".pdf"),
+                                                                    Qt::CaseInsensitive);
+                                          });
+    context.nameDoctor      = DoctorContext::instance().data().abbreviatedName;
+    context.attachments     = result.attachments;
+    context.exportDirectory = result.exportDirectory;
+
+    auto *agent = new AgentSendEmail(m_db, this);
+    agent->setAttribute(Qt::WA_DeleteOnClose);
+    agent->setContext(context);
+    agent->show();
+}
+
 void ReportView::openOrder()
 {
     const auto *item = currentItem();
@@ -731,6 +881,7 @@ void ReportView::showContextMenu(const QPoint &pos)
         QIcon(":/img/documents/orderEcho.png"), tr("Deschide comanda asociată"));
     QAction *printAction = menu.addAction(
         QIcon(":/img/actions/print.png"), tr("Printează raportul"));
+    QAction *emailAction = menu.addAction(tr("Trimite rapoartele prin e-mail ..."));
     QAction *selected = menu.exec(ui->tableView->viewport()->mapToGlobal(pos));
     if (selected == openReportAction)
         editReport();
@@ -738,6 +889,8 @@ void ReportView::showContextMenu(const QPoint &pos)
         openOrder();
     else if (selected == printAction)
         printReport();
+    else if (selected == emailAction)
+        sendReportsByEmail();
 }
 
 void ReportView::fetchNextBatch(int value)
@@ -1139,6 +1292,18 @@ bool ReportView::isValidIndex(const QModelIndex &index)
 
 void ReportView::closeEvent(QCloseEvent *event)
 {
+    // Exportul LimeReport rulează în firul GUI și poate procesa evenimente
+    // intern; distrugerea ferestrei ar invalida workerul aflat în process().
+    if (m_emailExportRunning) {
+        qWarning(logWarning())
+            << "ReportView nu poate fi închis cât timp se pregătesc rapoartele pentru e-mail.";
+        m_popup->setPopupText(tr("Se pregătesc rapoartele pentru e-mail.<br>"
+                                 "Fereastra poate fi închisă după finalizare."));
+        m_popup->show();
+        event->ignore();
+        return;
+    }
+
     saveTableSettings();
     QDialog::closeEvent(event);
 }
@@ -1181,6 +1346,8 @@ bool ReportView::eventFilter(QObject *watched, QEvent *event)
         text = tr("Ascunde/prezintă secții<br> (Ctrl + H)");
     else if (button == m_toolBar->getBtnPrintDoc())
         text = tr("Printare (Ctrl + P)");
+    else if (button == m_toolBar->getBtnSendEmail())
+        text = tr("Trimite rapoartele prin e-mail");
     else if (button == m_toolBar->getBtnViewTabOrder())
         text = tr("Vizualizarea concluziei (Ctrl + T)");
     else if (button == m_toolBar->getBtnOpenPeriod())

@@ -1,49 +1,38 @@
-# USG v4.2.5
+# USG v4.2.6
 
 ## Highlights
 
-- Startup checks: on a regular launch the application verifies that the SQLite
-  database files configured in the profile (main and image databases) exist,
-  and stops with a message instead of silently creating empty databases. An
-  empty MariaDB database, or one without the application schema, is now
-  reported explicitly with a hint to use the first-launch setup.
-- First launch: an existing database selected during setup is no longer
-  recreated; the schema version is written only after full verification. The
-  profile name and the image database are proposed from the selected file.
-- Schema initialization and post-login constant loading use dedicated
-  connections; closing the login window while loading no longer fails.
-- The initial administrator is created only when the users table is empty; if
-  all users are marked as deleted, the application reports it and stops.
-- First-run wizard: a password is required for added users; investigation and
-  price-type catalogs are no longer duplicated on repeated clicks.
-- Ultrasound Order journal: deletion asks for confirmation and also removes
-  images, videos and, optionally, the cloud copy; number, organization and
-  contract filters are fixed; sorting by any column applies to all documents;
-  the preview follows the current row; loading errors are shown.
-- Printing from journals uses the same print services as the documents (stamp
-  and signature hidden by default); the image in the Order template was
-  resized.
-- E-mail: correct detection of attached image formats, reliable cleanup of the
-  temporary directory, rejection of invalid addresses, and protection against
-  starting a second export in parallel.
-- Pricing: fixed removal of the document header when saving rows fails and the
-  error when selecting an organization (contracts).
-- Statistical reports: the list contains only available `.lrxml` templates,
-  with an explicit selection row.
-- Russian splash screen alignment fixed; Russian translation completed.
+- Several ultrasound reports in one e-mail: the ultrasound Report journal has
+  an e-mail button (toolbar and context menu) that opens a selection window
+  for validated reports, filtered by the referring organization and period.
+  Rows selected in the journal (Ctrl/Shift) are checked by default.
+- The selected reports are exported to PDF and attached to a single message
+  addressed to the referring organization (address from the Organizations
+  catalog). Images attached to the reports can optionally be included.
+- Each report is re-checked before export (still validated and belonging to
+  the chosen organization). On partial export the errors are shown and the
+  user decides whether to continue; attachments over 20 MB require
+  confirmation.
+- While reports are being prepared, the journal cannot be closed and a second
+  export cannot be started; the temporary directory is removed after sending
+  or on cancel.
+- Report image export uses a shared service for single-document and
+  multi-report e-mails.
+- New seasonal splash screens for autumn (1 September – 30 November) and
+  spring (1 March – 31 May).
+- Russian translation updated for the new features.
 
-## Included changes from v4.2.4
+## Included changes from v4.2.5
 
-- Separation between the referring organization stored in the Order and the
-  performing organization's printing identity (header, logo, stamps and
-  signature from User Preferences).
-- PDF attachments for e-mail use the same printing identity as preview.
-- Statistical reports show the doctor stamp and signature, not the
-  organization stamp.
+- Startup checks for missing SQLite files and MariaDB databases without the
+  application schema; first launch no longer recreates an existing database.
+- Ultrasound Order journal: deletion, filters, sorting, preview and loading
+  errors fixed; journal printing uses the shared print services.
+- Safer e-mail export, pricing and statistical report fixes.
 
 ## Upgrade and verification
 
-Version 4.2.5 does not change the database schema. Create backups of the main
+Version 4.2.6 does not change the database schema. Create backups of the main
 database, image database, and application profile before installing the
 update.
 
@@ -57,22 +46,24 @@ For a SQLite profile synchronized with MariaDB:
 After upgrading, verify authentication, open the ultrasound Order journal and
 confirm that:
 
+- several validated reports of one organization can be selected in the
+  ultrasound Report journal and sent in a single e-mail, with and without
+  images;
+- the e-mail export of a single Order or Report works as before;
 - filters, sorting and the document preview work on the whole period;
-- deleting a test Order removes its Report and images;
-- printing and PDF/e-mail export of an Order and a Report work as before;
 - statistical reports list the available templates.
 
 ## Windows packages
 
-- `USG_v4.2.5_Windows_amd64.exe` — Windows installer.
+- `USG_v4.2.6_Windows_amd64.exe` — Windows installer.
 - `LimeReport_v1.7.23_USG_source.zip` — bundled dependency source.
 - SHA-256 checksum files are published with the artifacts.
 
 ## Linux packages
 
-- `USG_v4.2.5_Linux_amd64.run` — Qt Installer Framework installer.
-- `USG_v4.2.5_Linux_amd64.deb` — Debian package.
-- `USG_v4.2.5-x86_64.AppImage` — portable AppImage package.
+- `USG_v4.2.6_Linux_amd64.run` — Qt Installer Framework installer.
+- `USG_v4.2.6_Linux_amd64.deb` — Debian package.
+- `USG_v4.2.6-x86_64.AppImage` — portable AppImage package.
 - `LimeReport_v1.7.23_USG_source.tar.gz` — LimeReport source and the local patch
   used by USG.
 
@@ -81,14 +72,14 @@ Verify downloaded packages using the published SHA-256 checksums.
 ### Running the AppImage
 
 ```bash
-chmod +x USG_v4.2.5-x86_64.AppImage
-./USG_v4.2.5-x86_64.AppImage
+chmod +x USG_v4.2.6-x86_64.AppImage
+./USG_v4.2.6-x86_64.AppImage
 ```
 
 If FUSE is not available:
 
 ```bash
-./USG_v4.2.5-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.6-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Full release history: [`resources/RELEASES.md`](resources/RELEASES.md).

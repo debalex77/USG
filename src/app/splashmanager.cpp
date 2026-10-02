@@ -34,15 +34,39 @@
 void SplashManager::show(QWidget &mainWindow, int durationMs)
 {
     QPixmap pm;
-    QDate current_date = QDate::currentDate();
-    int current_year = current_date.year();
-    if (current_date >= QDate(current_year, 12, 15) || current_date <= QDate(current_year, 01, 15))
+
+    const QDate currentDate = QDate::currentDate();
+    const int currentYear = currentDate.year();
+
+    if (currentDate >= QDate(currentYear, 12, 15)
+        || currentDate <= QDate(currentYear, 1, 15)) {
+
+        // Crăciun / Anul Nou
         pm.load(":/icons/splash_santa.png");
-    else if (current_date >= QDate(current_date.year(), 12, 1)
-             || current_date <= QDate(current_year, 03, 01).addDays(-1))
+
+    } else if (currentDate >= QDate(currentYear, 12, 1)
+               || currentDate < QDate(currentYear, 3, 1)) {
+
+        // Iarnă
         pm.load(":/icons/splash_snow.png");
-    else
+
+    } else if (currentDate >= QDate(currentYear, 9, 1)
+               && currentDate < QDate(currentYear, 12, 1)) {
+
+        // Toamnă
+        pm.load(":/icons/splash_autumn.png");
+
+    } else if (currentDate >= QDate(currentYear, 3, 1)
+               && currentDate < QDate(currentYear, 6, 1)) {
+
+        // Primăvară
+        pm.load(":/icons/splash_springtime.png");
+
+    } else {
+
+        // Vară: 1 iunie – 31 august
         pm.load(":/icons/usg_splash.png");
+    }
 
     if (pm.isNull()) {
         mainWindow.show();

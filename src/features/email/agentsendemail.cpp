@@ -286,7 +286,26 @@ void AgentSendEmail::buildMessage()
 {
     QStringList lines;
 
-    if (m_ctx.thisReports) {
+    if (m_ctx.kind == MessageKind::MultipleReports) {
+        m_ctx.subject = tr("Rapoartele investigațiilor ecografice (%1)")
+                            .arg(m_ctx.documentTitles.size());
+
+        lines << tr("Către %1.").arg(m_ctx.recipientName);
+        lines << tr("Vă transmitem alăturat rapoartele investigațiilor ecografice efectuate "
+                    "pacienților îndreptați de instituția dumneavoastră.");
+        lines << tr("Rapoarte atașate (format PDF):");
+        for (const QString &title : std::as_const(m_ctx.documentTitles))
+            lines << QStringLiteral(" - %1").arg(title);
+        if (m_ctx.includesImages)
+            lines << tr("Imaginile ecografice sunt atașate separat.");
+        lines << "";
+        lines << tr("Vă rugăm să confirmați primirea și să ne contactați pentru orice informații suplimentare.");
+        lines << "";
+        lines << tr("Cu stimă,");
+        lines << QString("%1 / %2").arg(m_ctx.nameDoctor, m_ctx.organizationName);
+        lines << tr("Telefon: %1").arg(m_ctx.organizationPhone);
+        lines << tr("E-mail: %1").arg(m_ctx.organizationEmail);
+    } else if (m_ctx.thisReports) {
         m_ctx.subject = tr("Rapoarte investigațiilor ecografice");
 
         lines << tr("Către %1.").arg(m_ctx.namePatient);

@@ -14,6 +14,7 @@
 #include <QToolButton>
 #include <QBuffer>
 #include <QToolTip>
+#include <QPointer>
 
 #include <ui/dialogs/customperiod.h>
 #include <common/globals.h>
@@ -31,6 +32,7 @@
 #include <settings/layoutsettingsmanager.h>
 #include <common/table_sections.h>
 #include <database/database.h>
+#include <infrastructure/database/databaseprovider.h>
 
 class QDateTimeEdit;
 class ToolBarCustom;
@@ -40,6 +42,7 @@ class TableColumnsController;
 class QueryRolesModel;
 class QStandardItemModel;
 class PopUp;
+class ProcessingAction;
 
 namespace Ui { class Form; }
 
@@ -70,6 +73,8 @@ private slots:
     void toggleReportPreview();
     void organizationChanged(int index);
     void onColumnsChanged();
+    void sendReportsByEmail();
+    void launchEmailAgent(const ReportsForAgentEmail &result);
 
 private:
     bool isValidIndex(const QModelIndex &index);
@@ -111,6 +116,12 @@ protected:
     QueryRolesModel *m_contracts = nullptr;
     QueryRolesModel *m_users = nullptr;
     QStandardItemModel *m_previewModel = nullptr;
+
+    // Exportul pentru e-mail rulează pe firul GUI (LimeReport); cât timp
+    // este activ, fereastra nu se închide și nu se pornește un al doilea.
+    DatabaseProvider m_dbProvider;
+    QPointer<ProcessingAction> m_loader;
+    bool m_emailExportRunning = false;
 };
 
 #endif // REPORTVIEW_H

@@ -1,3 +1,13 @@
+## USG v4.2.6 (02.10.2026)
+
+- E-mail cu mai multe rapoarte: din jurnalul Rapoartelor ecografice (butonul de e-mail din bara de instrumente sau meniul contextual) se deschide o fereastră de selecție a rapoartelor validate, filtrate după organizația care a trimis pacienții și perioadă; rândurile selectate în jurnal (Ctrl/Shift) sunt bifate implicit.
+- Rapoartele alese se exportă în PDF și se atașează într-o singură scrisoare adresată organizației trimițătoare (adresa din catalogul organizațiilor); imaginile atașate rapoartelor se pot include opțional.
+- Înainte de export fiecare raport este verificat din nou (validat și aparținând organizației alese); la export parțial aplicația afișează erorile și întreabă dacă se continuă, iar la atașamente de peste 20 MB cere confirmare.
+- Cât timp se pregătesc rapoartele, jurnalul nu poate fi închis și nu se poate porni un al doilea export; directorul temporar se șterge după trimitere sau la anulare.
+- Exportul imaginilor unui raport folosește un serviciu comun pentru trimiterea unui singur document și a mai multor rapoarte.
+- Ecran de pornire sezonier nou pentru toamnă (1 septembrie – 30 noiembrie) și primăvară (1 martie – 31 mai).
+- Traducerea rusă a fost actualizată pentru funcțiile noi.
+
 ## USG v4.2.5 (01.10.2026)
 
 - Pornire: la lansarea obișnuită aplicația verifică existența fișierelor SQLite din profil (baza principală și baza imaginilor) și se oprește cu un mesaj, fără să creeze baze goale; o bază MariaDB goală sau fără schema aplicației este semnalată explicit, cu recomandarea de a alege prima lansare.

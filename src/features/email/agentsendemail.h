@@ -40,8 +40,17 @@ class AgentSendEmail : public QDialog
     Q_OBJECT
 
 public:
+    // Tipul scrisorii; thisReports rămâne pentru apelurile existente
+    // (true = raport statistic) când kind nu este MultipleReports.
+    enum class MessageKind {
+        Default,
+        MultipleReports // mai multe rapoarte ecografice către organizația trimițătoare
+    };
+
     struct MailContext
     {
+        MessageKind kind = MessageKind::Default;
+
         int organizationId = 0;
         QString organizationName;
         QString organizationPhone;
@@ -51,6 +60,11 @@ public:
         QString nrReport;
         bool thisReports = false;
         QString nameReport;
+
+        // MessageKind::MultipleReports
+        QString recipientName;
+        QStringList documentTitles;
+        bool includesImages = false;
 
         QString emailFrom;
         QString emailTo;
