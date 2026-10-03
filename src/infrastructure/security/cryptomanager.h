@@ -48,7 +48,8 @@ public:
     static bool loadOrCreateDbKeyPart(QSqlDatabase &db,
                                       int idOrganization,
                                       QByteArray *keyPart1,
-                                      QString *error = nullptr);
+                                      QString *error = nullptr,
+                                      bool *created = nullptr);
 
     static QByteArray deriveRealKey(const QByteArray &keyPart1,
                                     const QByteArray &keyPart2);
@@ -64,9 +65,25 @@ public:
     static EncryptedData encryptText(const QString &plainText,
                                      const QByteArray &realKey);
 
+    // logAuthFailure = false: eșecul autentificării (cheie greșită) nu se
+    // jurnalizează – pentru încercări cu mai multe chei.
     static QByteArray decryptText(const EncryptedData &data,
                                   const QByteArray &realKey,
-                                  bool *ok = nullptr);
+                                  bool *ok = nullptr,
+                                  bool logAuthFailure = true);
+
+    // Parola serverului cloud (cloudServer.password = base64(cipher + tag),
+    // cloudServer.iv = base64(iv)). De la 4.2.7 cheia este cea împărțită a
+    // organizației; cheia veche, derivată din users.hash (SHA-256 hex), este
+    // încercată doar cât baza nu este încă migrată.
+    static bool decryptCloudPassword(QSqlDatabase &db,
+                                     int idOrganization,
+                                     const QString &passwordBase64,
+                                     const QString &ivBase64,
+                                     const QString &legacyUserHash,
+                                     QString *plainText,
+                                     bool *usedLegacyKey = nullptr,
+                                     QString *error = nullptr);
 
 private:
     static bool isValidAes256Key(const QByteArray &key);

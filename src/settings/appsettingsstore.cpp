@@ -407,6 +407,87 @@ bool writeStartupLanguage(const QString &settingsPath, const QString &language)
            && secureProfilePermissions(settingsPath);
 }
 
+ArchiveOptions readArchiveOptions(const QString &settingsPath)
+{
+    ArchiveOptions options;
+    if (settingsPath.isEmpty())
+        return options;
+
+    QSettings settings(settingsPath, QSettings::IniFormat);
+    options.includeSettings = settings.value(QStringLiteral("archive/includeSettings"), false).toBool();
+    options.includeCrypto   = settings.value(QStringLiteral("archive/includeCrypto"), false).toBool();
+    options.encrypt         = settings.value(QStringLiteral("archive/encrypt"), false).toBool();
+    return options;
+}
+
+bool readArchivePassword(const QString &settingsPath, const QString &keySettingsPath,
+                         QString *password, QString *error)
+{
+    if (error)
+        error->clear();
+    if (!password || settingsPath.isEmpty() || keySettingsPath.isEmpty()) {
+        if (error)
+            *error = QStringLiteral("Parametri invalizi pentru citirea parolei arhivei.");
+        return false;
+    }
+    password->clear();
+
+    QSettings settings(settingsPath, QSettings::IniFormat);
+    const QString encoded = settings.value(QStringLiteral("archive/password")).toString();
+    if (encoded.isEmpty()) {
+        if (error)
+            *error = QStringLiteral("Parola arhivei nu este setată.");
+        return false;
+    }
+    if (!ProfileSecretCodec::isEncrypted(encoded)) {
+        if (error)
+            *error = QStringLiteral("Parola arhivei are un format necunoscut.");
+        return false;
+    }
+    return ProfileSecretCodec::decrypt(encoded, keySettingsPath, password, error)
+           && !password->isEmpty();
+}
+
+bool writeArchivePassword(const QString &settingsPath, const QString &keySettingsPath,
+                          const QString &password, QString *error)
+{
+    if (error)
+        error->clear();
+    if (settingsPath.isEmpty() || keySettingsPath.isEmpty()) {
+        if (error)
+            *error = QStringLiteral("Parametri invalizi pentru salvarea parolei arhivei.");
+        return false;
+    }
+
+    QString encoded;
+    if (!ProfileSecretCodec::encrypt(password, keySettingsPath, &encoded, error))
+        return false;
+
+    QSettings settings(settingsPath, QSettings::IniFormat);
+    settings.setValue(QStringLiteral("archive/password"), encoded);
+    settings.sync();
+    if (settings.status() != QSettings::NoError || !secureProfilePermissions(settingsPath)) {
+        if (error)
+            *error = QStringLiteral("Parola arhivei nu a putut fi salvată în %1").arg(settingsPath);
+        return false;
+    }
+    return true;
+}
+
+bool writeArchiveOptions(const QString &settingsPath, const ArchiveOptions &options)
+{
+    if (settingsPath.isEmpty())
+        return false;
+
+    QSettings settings(settingsPath, QSettings::IniFormat);
+    settings.setValue(QStringLiteral("archive/includeSettings"), options.includeSettings);
+    settings.setValue(QStringLiteral("archive/includeCrypto"), options.includeCrypto);
+    settings.setValue(QStringLiteral("archive/encrypt"), options.encrypt);
+    settings.sync();
+    return settings.status() == QSettings::NoError
+           && secureProfilePermissions(settingsPath);
+}
+
 bool writeGroup(const QString &settingsPath, const QString &group,
                 const QVariantMap &values)
 {

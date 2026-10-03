@@ -4,6 +4,7 @@
 #include <QDialog>
 
 #include <database/database.h>
+#include <common/table_sections.h>
 
 class CheckBoxDelegate;
 class ComboDelegate;
@@ -30,7 +31,7 @@ private slots:
     void removeAppointments();
     void removeCurrentAppointment();
     void saveAppointments();
-    void printAppointments();
+    void printAppointments(PrintType::Column mode);
     void createOrder();
 
 private:
@@ -42,6 +43,7 @@ private:
     void setupConnections();
     void setupTable();
     void setupStyle();
+    void setupPrintButton();
     bool saveChanges();
     int currentRow() const;
 

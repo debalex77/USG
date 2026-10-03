@@ -1,7 +1,9 @@
 #ifndef AUTHORIZATIONUSER_H
 #define AUTHORIZATIONUSER_H
 
+#include <QDeadlineTimer>
 #include <QDialog>
+#include <QHash>
 #include <QKeyEvent>
 #include <QMessageBox>
 #include <QCryptographicHash>
@@ -57,6 +59,16 @@ private slots:
 private:
     void refreshLastConnection(int userId = 0);
 
+    // Limitarea încercărilor eșuate (în memorie, pentru fiecare login).
+    QString attemptsKey() const;
+    int remainingLockoutSeconds() const;
+    void rejectCredentials();
+    void updateLockoutState();
+
+    // Hash SHA-256 vechi -> PBKDF2, doar pe o bază migrată la 4.2.7.
+    void upgradeLegacyPasswordHash(QSqlDatabase &database, int userId,
+                                   const QString &legacyHash);
+
     Ui::AuthorizationUser *ui;
     int m_Id = -1;     /* proprietatea - id obiectului */
     DataBase &m_db;
@@ -70,10 +82,15 @@ private:
     bool m_loadingData = false;
     QTimer m_lastConnectionTimer;
 
+    QHash<QString, int> m_failedAttempts;
+    QHash<QString, QDeadlineTimer> m_lockedUntil;
+    QTimer m_lockoutTimer;
+    QString m_okText;
+
 protected:
-    void changeEvent(QEvent *event);       // contolam traducerea aplicatiei
+    void changeEvent(QEvent *event) override;       // contolam traducerea aplicatiei
     void showEvent(QShowEvent *event) override;
-    void keyPressEvent(QKeyEvent *event);
+    void keyPressEvent(QKeyEvent *event) override;
 };
 
 #endif // AUTHORIZATIONUSER_H

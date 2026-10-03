@@ -1,7 +1,7 @@
 SELECT
     id,
     deletionMark,
-    CONCAT(name, ' ', fName) AS FullName,
+    CONCAT(name, ' ', IFNULL(fName, '')) AS FullName,
     telephone,
     email,
     comment,

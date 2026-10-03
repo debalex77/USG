@@ -53,6 +53,9 @@ void CheckBoxDelegate::setEditorData(QWidget *editor, const QModelIndex &index) 
     if (!cb)
         return;
 
+    // setEditorData se apelează înainte ca view-ul să înregistreze editorul:
+    // toggled de aici ar emite commitData/closeEditor pentru un editor străin
+    const QSignalBlocker blocker(cb);
     cb->setChecked(index.model()->data(index, Qt::EditRole).toBool());
 }
 

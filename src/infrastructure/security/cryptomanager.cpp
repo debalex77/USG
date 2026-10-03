@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "cryptomanager.h"
+#include "passwordhasher.h"
 
 #include <QSqlQuery>
 #include <QSqlError>
@@ -112,7 +113,14 @@ QByteArray CryptoManager::loadOrCreateLocalKeyPart(int idOrganization, bool *ok)
         return QByteArray();
     }
 
-    if (!file.open(QIODevice::WriteOnly | QIODevice::Truncate)) {
+#ifdef Q_OS_LINUX
+    // Fișierul se creează direct cu 0600, fără intervalul cu permisiunile umask.
+    const bool opened = file.open(QIODevice::WriteOnly | QIODevice::Truncate,
+                                  QFileDevice::ReadOwner | QFileDevice::WriteOwner);
+#else
+    const bool opened = file.open(QIODevice::WriteOnly | QIODevice::Truncate);
+#endif
+    if (!opened) {
         qWarning(logWarning()) << "CryptoManager::loadOrCreateLocalKeyPart - nu pot salva:"
                                << filePath;
         return QByteArray();
@@ -135,10 +143,13 @@ QByteArray CryptoManager::loadOrCreateLocalKeyPart(int idOrganization, bool *ok)
 bool CryptoManager::loadOrCreateDbKeyPart(QSqlDatabase &db,
                                           int idOrganization,
                                           QByteArray *keyPart1,
-                                          QString *error)
+                                          QString *error,
+                                          bool *created)
 {
     if (error)
         error->clear();
+    if (created)
+        *created = false;
 
     if (!keyPart1) {
         if (error)
@@ -210,6 +221,8 @@ bool CryptoManager::loadOrCreateDbKeyPart(QSqlDatabase &db,
     }
 
     *keyPart1 = newKeyPart1;
+    if (created)
+        *created = true;
     return true;
 }
 
@@ -252,8 +265,12 @@ bool CryptoManager::loadOrCreateSplitKey(QSqlDatabase &db,
     }
 
     QByteArray keyPart1;
-    if (!loadOrCreateDbKeyPart(db, idOrganization, &keyPart1, error))
+    bool dbKeyPartCreated = false;
+    if (!loadOrCreateDbKeyPart(db, idOrganization, &keyPart1, error, &dbKeyPartCreated))
         return false;
+
+    const QString localFilePath = localKeyPartFilePath(idOrganization);
+    const bool localKeyPartExisted = QFile::exists(localFilePath);
 
     bool okLocal = false;
     const QByteArray keyPart2 = loadOrCreateLocalKeyPart(idOrganization, &okLocal);
@@ -261,6 +278,16 @@ bool CryptoManager::loadOrCreateSplitKey(QSqlDatabase &db,
         if (error)
             *error = "Nu s-a putut incarca/genereaza key_part2 local.";
         return false;
+    }
+
+    // Partea din BD exista deja, dar cea locala a fost creata acum: baza a fost
+    // mutata/restaurata fara directorul crypto, iar parolele salvate anterior
+    // (cloud, e-mail) nu mai pot fi decriptate.
+    if (!localKeyPartExisted && !dbKeyPartCreated) {
+        qWarning(logWarning()) << "CryptoManager::loadOrCreateSplitKey - cheia locala a organizatiei"
+                               << idOrganization << "lipsea si a fost creata din nou:" << localFilePath
+                               << "- parolele salvate anterior (cloud, e-mail) trebuie reintroduse."
+                                  " Daca baza a fost mutata, copiati fisierul de pe calculatorul vechi.";
     }
 
     const QByteArray key = deriveRealKey(keyPart1, keyPart2);
@@ -373,7 +400,8 @@ CryptoManager::EncryptedData CryptoManager::encryptText(const QString &plainText
 
 QByteArray CryptoManager::decryptText(const EncryptedData &data,
                                       const QByteArray &realKey,
-                                      bool *ok)
+                                      bool *ok,
+                                      bool logAuthFailure)
 {
     if (ok)
         *ok = false;
@@ -452,7 +480,8 @@ QByteArray CryptoManager::decryptText(const EncryptedData &data,
     EVP_CIPHER_CTX_free(ctx);
 
     if (!success) {
-        qWarning(logWarning()) << "CryptoManager::decryptText - decriptarea/autentificarea a esuat";
+        if (logAuthFailure)
+            qWarning(logWarning()) << "CryptoManager::decryptText - decriptarea/autentificarea a esuat";
         return QByteArray();
     }
 
@@ -460,4 +489,74 @@ QByteArray CryptoManager::decryptText(const EncryptedData &data,
         *ok = true;
 
     return plain;
+}
+
+bool CryptoManager::decryptCloudPassword(QSqlDatabase &db,
+                                         int idOrganization,
+                                         const QString &passwordBase64,
+                                         const QString &ivBase64,
+                                         const QString &legacyUserHash,
+                                         QString *plainText,
+                                         bool *usedLegacyKey,
+                                         QString *error)
+{
+    if (usedLegacyKey)
+        *usedLegacyKey = false;
+    if (error)
+        error->clear();
+
+    if (!plainText) {
+        if (error)
+            *error = QStringLiteral("Pointer plainText este null.");
+        return false;
+    }
+    plainText->clear();
+
+    const QByteArray payload = fromBase64(passwordBase64);
+    if (payload.size() <= 16) {
+        if (error)
+            *error = QStringLiteral("Parola cloud criptată lipsește sau este incompletă.");
+        return false;
+    }
+
+    EncryptedData encrypted;
+    encrypted.cipherText = payload.first(payload.size() - 16);
+    encrypted.tag = payload.last(16);
+    encrypted.iv = fromBase64(ivBase64);
+
+    QByteArray splitKey;
+    QString splitKeyError;
+    if (loadOrCreateSplitKey(db, idOrganization, &splitKey, &splitKeyError)) {
+        bool decrypted = false;
+        // Fără avertisment: înainte de migrarea 4.2.7 parola este încă
+        // criptată cu cheia veche, iar eșecul aici este așteptat.
+        const QByteArray plain = decryptText(encrypted, splitKey, &decrypted, false);
+        if (decrypted) {
+            *plainText = QString::fromUtf8(plain);
+            return true;
+        }
+    }
+
+    // Cheia veche: SHA-256(eticheta ‖ users.hash brut ‖ organizația).
+    if (PasswordHasher::isLegacyHash(legacyUserHash)) {
+        const QByteArray legacyKey =
+            deriveCloudKey(QByteArray::fromHex(legacyUserHash.toLatin1()), idOrganization);
+        bool decrypted = false;
+        const QByteArray plain = decryptText(encrypted, legacyKey, &decrypted);
+        if (decrypted) {
+            qInfo(logInfo()) << "CryptoManager::decryptCloudPassword - parola cloud a fost"
+                                " decriptată cu cheia veche (bază nemigrată la 4.2.7).";
+            *plainText = QString::fromUtf8(plain);
+            if (usedLegacyKey)
+                *usedLegacyKey = true;
+            return true;
+        }
+    }
+
+    if (error) {
+        *error = splitKeyError.isEmpty()
+            ? QStringLiteral("Parola cloud nu poate fi decriptată cu cheia organizației.")
+            : splitKeyError;
+    }
+    return false;
 }

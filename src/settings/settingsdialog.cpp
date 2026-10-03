@@ -243,11 +243,8 @@ void SettingsDialog::initializeConnections()
                     return;
 
                 if (isWindowModified()) {
-                    const QMessageBox::StandardButton answer = QMessageBox::question(
-                        this, tr("Setări modificate"),
-                        tr("Doriți să salvați modificările înainte de a selecta alt utilizator?"),
-                        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-                        QMessageBox::Save);
+                    const QMessageBox::StandardButton answer = askSaveChanges(
+                        tr("Doriți să salvați modificările înainte de a selecta alt utilizator?"));
                     if (answer == QMessageBox::Save && !saveSettings()) {
                         const QSignalBlocker blocker(ui->comboUsers);
                         setComboValue(ui->comboUsers, m_currentUserId);
@@ -262,17 +259,30 @@ void SettingsDialog::initializeConnections()
                 loadUser(requestedUserId);
             });
 
-    connect(ui->buttonBox->button(QDialogButtonBox::Apply),
-            &QPushButton::clicked, this, &SettingsDialog::saveSettings);
-    connect(ui->buttonBox->button(QDialogButtonBox::Ok),
-            &QPushButton::clicked, this, [this]() {
-                if (!saveSettings())
-                    return;
-                m_accepting = true;
-                accept();
-            });
-    connect(ui->buttonBox->button(QDialogButtonBox::Cancel),
-            &QPushButton::clicked, this, &SettingsDialog::reject);
+    // Ordinea OK, Salvează, Închide (ca în celelalte dialoguri) nu depinde de
+    // platformă: butoanele cu același rol rămân în ordinea adăugării.
+    ui->buttonBox->setStandardButtons(QDialogButtonBox::NoButton);
+    const auto addButton = [this](const QString &text, const QString &icon) {
+        QPushButton *button = ui->buttonBox->addButton(text, QDialogButtonBox::ActionRole);
+        button->setIcon(QIcon(icon));
+        button->setMinimumWidth(104);
+        return button;
+    };
+    QPushButton *okButton    = addButton(tr("OK"), QStringLiteral(":/img/btns/valide.png"));
+    QPushButton *saveButton  = addButton(tr("Salvează"), QStringLiteral(":/img/btns/save.png"));
+    QPushButton *closeButton = addButton(tr("Închide"), QStringLiteral(":/img/btns/close.png"));
+    okButton->setDefault(true);
+    okButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_Return));
+    saveButton->setShortcut(QKeySequence(Qt::CTRL | Qt::Key_S));
+
+    connect(saveButton, &QPushButton::clicked, this, &SettingsDialog::saveSettings);
+    connect(okButton, &QPushButton::clicked, this, [this]() {
+        if (!saveSettings())
+            return;
+        m_accepting = true;
+        accept();
+    });
+    connect(closeButton, &QPushButton::clicked, this, &SettingsDialog::reject);
 }
 
 void SettingsDialog::loadUser(int userId)
@@ -467,14 +477,34 @@ bool SettingsDialog::confirmDiscardChanges()
     if (!isWindowModified())
         return true;
 
-    const QMessageBox::StandardButton answer = QMessageBox::question(
-        this, tr("Setări modificate"),
-        tr("Doriți să salvați modificările înainte de închidere?"),
-        QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel,
-        QMessageBox::Save);
+    const QMessageBox::StandardButton answer = askSaveChanges(
+        tr("Doriți să salvați modificările înainte de închidere?"));
     if (answer == QMessageBox::Save)
         return saveSettings();
     return answer == QMessageBox::Discard;
+}
+
+QMessageBox::StandardButton SettingsDialog::askSaveChanges(const QString &text)
+{
+    // butoane traduse și stilizate ca în celelalte dialoguri (CatalogDialog)
+    QMessageBox messageBox(QMessageBox::Question, tr("Setări modificate"),
+                           text, QMessageBox::NoButton, this);
+    QPushButton *yesButton    = messageBox.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton     = messageBox.addButton(tr("Nu"), QMessageBox::NoRole);
+    QPushButton *cancelButton = messageBox.addButton(tr("Anulare"), QMessageBox::RejectRole);
+    const QString style = m_database.getStyleForButtonMessageBox();
+    yesButton->setStyleSheet(style);
+    noButton->setStyleSheet(style);
+    cancelButton->setStyleSheet(style);
+    messageBox.setDefaultButton(yesButton);
+    messageBox.setEscapeButton(cancelButton);
+    messageBox.exec();
+
+    if (messageBox.clickedButton() == yesButton)
+        return QMessageBox::Save;
+    if (messageBox.clickedButton() == noButton)
+        return QMessageBox::Discard;
+    return QMessageBox::Cancel;
 }
 
 void SettingsDialog::closeEvent(QCloseEvent *event)

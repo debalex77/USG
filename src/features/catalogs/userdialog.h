@@ -63,13 +63,13 @@ private slots:
     void dataWasModified();
 
     bool controlRequiredObjects();
-    bool userExistsByName();
+    bool userExistsByName(bool *ok);
+    bool controlUniqueUserName();
     bool handleInsert();
     bool handleUpdate();
-    bool reencryptCloudPasswords(QSqlDatabase &database,
-                                 const QByteArray &oldHash,
-                                 const QByteArray &newHash,
-                                 QString *error);
+    QString passwordHashForStorage(const QSqlDatabase &database,
+                                   const QString &password,
+                                   QString *error) const;
     bool onSave();
     bool onSaveAndClose();
 

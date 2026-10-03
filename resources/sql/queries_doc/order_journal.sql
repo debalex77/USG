@@ -39,4 +39,5 @@ WHERE
     %id_cont%
     %id_us%
     %id_pacient%
+    %search%
     AND doc.dateDoc BETWEEN :startDate AND :endDate

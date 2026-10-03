@@ -17,6 +17,10 @@ public:
     void setupMenu();
     void updateButtonPosition();
     void setSearchOptionSelected(QString typeSearch);
+    /** Înlocuiește opțiunile implicite (cod/denumire): perechi (identificator, text). */
+    void setSearchOptions(const QList<std::pair<QString, QString>> &options);
+    /** Iconița opțiunii: apare în meniu și pe buton după alegerea opțiunii. */
+    void setSearchOptionIcon(const QString &typeSearch, const QIcon &icon);
     QString getSearchOptionSelected();
 
 signals:

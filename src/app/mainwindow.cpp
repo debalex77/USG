@@ -519,73 +519,9 @@ bool MainWindow::createAutomaticSqliteArchive()
         return true;
     }
 
-#if defined(Q_OS_WIN)
-    const QStringList executableNames{QStringLiteral("7zz.exe"),
-                                      QStringLiteral("7za.exe"),
-                                      QStringLiteral("7z.exe")};
-#else
-    const QStringList executableNames{QStringLiteral("7zz"),
-                                      QStringLiteral("7za"),
-                                      QStringLiteral("7z")};
-#endif
-    QString sevenZip;
-    for (const QString &name : executableNames) {
-        sevenZip = QStandardPaths::findExecutable(name);
-        if (!sevenZip.isEmpty())
-            break;
-    }
-    if (sevenZip.isEmpty()) {
-        qCritical(logCritical())
-            << tr("Arhivarea automată nu poate fi efectuată: 7-Zip nu este instalat.");
-        return false;
-    }
-
-    const MainDatabaseConnectionData connection =
-        MainDatabaseConnectionContext::instance().data();
-    QStringList sourceFiles;
-    for (const QString &path : {connection.sqliteDatabasePath,
-                                connection.imageDatabasePath}) {
-        if (!path.trimmed().isEmpty() && QFileInfo::exists(path))
-            sourceFiles.append(QDir::cleanPath(path));
-    }
-    if (sourceFiles.isEmpty()) {
-        qCritical(logCritical())
-            << tr("Arhivarea automată nu poate fi efectuată: fișierele SQLite lipsesc.");
-        return false;
-    }
-
-    const QString archiveDirectory =
-        QDir(QDir::homePath()).filePath(QStringLiteral("Database_usg"));
-    if (!QDir().mkpath(archiveDirectory)) {
-        qCritical(logCritical())
-            << tr("Directorul arhivei nu poate fi creat:") << archiveDirectory;
-        return false;
-    }
-
-    QString databaseName = connection.sqliteDatabaseName.trimmed();
-    if (databaseName.isEmpty())
-        databaseName = QFileInfo(connection.sqliteDatabasePath).completeBaseName();
-    databaseName.replace(QRegularExpression(QStringLiteral("[^A-Za-z0-9._-]+")),
-                         QStringLiteral("_"));
-    const QString archivePath = QDir(archiveDirectory).filePath(
-        QStringLiteral("%1_%2.7z")
-            .arg(databaseName,
-                 QDateTime::currentDateTime().toString(QStringLiteral("yyyyMMdd-HHmmss"))));
-
-    QStringList arguments{QStringLiteral("a"), QStringLiteral("-t7z"), archivePath,
-                          QStringLiteral("-mx=9"), QStringLiteral("-mmt=on"),
-                          QStringLiteral("-ms=on"), QStringLiteral("-bso0"),
-                          QStringLiteral("-bsp0"), QStringLiteral("-bd")};
-    arguments.append(sourceFiles);
-    const int exitCode = QProcess::execute(sevenZip, arguments);
-    if (exitCode != 0) {
-        qCritical(logCritical())
-            << tr("Arhivarea automată a eșuat. Cod proces:") << exitCode;
-        return false;
-    }
-
-    qInfo(logInfo()) << tr("Arhiva automată SQLite a fost creată:") << archivePath;
-    return true;
+    // Dialogul afișează progresul 7-Zip; bazele sunt deja închise.
+    ArchiveCreationHandler handler(m_db, this);
+    return handler.execAutomatic();
 }
 
 /*!
@@ -726,6 +662,8 @@ bool MainWindow::completeStartup()
         return false;
     }
 
+    promptUnreadableCloudPassword();
+
     // Asistentul folosește numai schema curentă.
     if (globals().firstLaunch){
         textEdit_dockWidget->append(tr("%1  S-a depistat lansarea primara a aplicatiei.")
@@ -745,6 +683,38 @@ bool MainWindow::completeStartup()
         onShowAsistantTip();
 
     return true;
+}
+
+void MainWindow::promptUnreadableCloudPassword()
+{
+    // Sincronizarea rulează doar cu baza locală SQLite.
+    if (!MainDatabaseConnectionContext::instance().isSqlite())
+        return;
+
+    const CloudConnectionData cloud = CloudConnectionContext::instance().data();
+    if (!cloud.configured || !cloud.passwordUnreadable)
+        return;
+
+    QMessageBox box(QMessageBox::Warning,
+                    tr("Sincronizarea cloud"),
+                    tr("Parola serverului cloud salvată în baza de date nu poate fi decriptată "
+                       "pe acest calculator (cheia locală de criptare lipsește sau diferă, "
+                       "de exemplu baza de date a fost mutată fără directorul <b>crypto</b>).<br><br>"
+                       "Sincronizarea rămâne dezactivată până la reintroducerea parolei.<br>"
+                       "Deschideți acum configurarea serverului cloud?"),
+                    QMessageBox::NoButton,
+                    this);
+    const QPushButton *btnOpen = box.addButton(tr("Configurare cloud"), QMessageBox::AcceptRole);
+    box.addButton(tr("Mai târziu"), QMessageBox::RejectRole);
+    box.exec();
+    if (box.clickedButton() != btnOpen)
+        return;
+
+    CloudServerConfig cloudServer(this);
+    cloudServer.setProperty("ID_user", SessionContext::instance().userId());
+    cloudServer.setProperty("ID_Organization",
+                            SettingsService::instance().organization().organizationId);
+    cloudServer.exec();
 }
 
 void MainWindow::launchFirstRunWizard()
@@ -1147,8 +1117,8 @@ void MainWindow::openFirstRunWizard()
 
 void MainWindow::openArchiveHandler()
 {
-    auto archive_handler = new ArchiveCreationHandler(this);
-    archive_handler->exec();
+    ArchiveCreationHandler handler(m_db, this);
+    handler.exec();
 }
 
 // **********************************************************************************

@@ -55,6 +55,11 @@ void CatalogsModel::setSort(int column, Qt::SortOrder order)
     reload();
 }
 
+void CatalogsModel::setSearchText(const QString &text)
+{
+    m_loader.setSearchText(text);
+}
+
 void CatalogsModel::reload()
 {
     beginResetModel();
@@ -62,11 +67,17 @@ void CatalogsModel::reload()
     m_cursor.clear();
     m_hasMore = true;
     m_loading = true;
+    m_lastError.clear();
     endResetModel();
     m_loading = false;
 
     if (canFetchMore())
         fetchMore();
+}
+
+QString CatalogsModel::takeLastError()
+{
+    return std::exchange(m_lastError, QString());
 }
 
 int CatalogsModel::rowCount(const QModelIndex &parent) const
@@ -398,6 +409,8 @@ void CatalogsModel::loadInitial()
     m_cursor = result.cursor;
     appendItems(result.items);
     m_hasMore = result.hasMore;
+    if (!result.error.isEmpty())
+        m_lastError = result.error;
 
     m_loading = false;
 }
@@ -417,6 +430,8 @@ void CatalogsModel::loadMore()
     m_cursor = result.cursor;
     appendItems(result.items);
     m_hasMore = result.hasMore;
+    if (!result.error.isEmpty())
+        m_lastError = result.error;
 
     m_loading = false;
 }

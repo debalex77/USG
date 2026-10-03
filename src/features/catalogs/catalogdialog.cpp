@@ -24,6 +24,7 @@
 #include "catalogdialog.h"
 #include <ui/widgets/balloontip.h>
 #include "ui_catalogdialog.h"
+#include <QVersionNumber>
 
 static const int max_length_comment = 255; // lungimea maxima a cometariului
 
@@ -917,9 +918,16 @@ bool CatalogDialog::handleDeletionMark(QString &err)
         return false;
     }
 
+    const QString column = (m_typeCatalog == CatalogType::Type::Patients)
+                               ? QStringLiteral("deletion_mark")
+                               : QStringLiteral("deletionMark");
+
     QSqlQuery q;
-    q.prepare(QStringLiteral("UPDATE %1 SET deletionMark = :deletionMark WHERE id = :id")
-                  .arg(tableName));
+    if (!q.prepare(QStringLiteral("UPDATE %1 SET %2 = :deletionMark WHERE id = :id")
+                       .arg(tableName, column))) {
+        qWarning(logWarning()) << "prepare:" << q.lastError().text();
+        return false;
+    }
     q.bindValue(QStringLiteral(":deletionMark"),
                 StatusObject::statusObjectToInt(m_statusCatalog));
     q.bindValue(QStringLiteral(":id"), m_id);

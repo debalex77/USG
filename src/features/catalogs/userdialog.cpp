@@ -27,7 +27,7 @@
 
 #include "settings/settingsrepository.h"
 #include "settings/settingsservice.h"
-#include "infrastructure/security/cryptomanager.h"
+#include "infrastructure/security/passwordhasher.h"
 
 UserDialog::UserDialog(DataBase &db, QWidget *parent)
     : QDialog(parent)
@@ -161,25 +161,95 @@ bool UserDialog::controlRequiredObjects()
                                    BalloonTip::BottomCenter);
         return false;
     }
+
+    // La modificare câmpul gol păstrează parola existentă.
+    const QString password = ui->userPassword->text();
+    if (!password.isEmpty() && password.size() < PasswordHasher::minPasswordLength) {
+        BalloonTip::showBalloonFor(ui->userPassword,
+                                   QMessageBox::Warning,
+                                   tr("Verificarea datelor"),
+                                   tr("Parola trebuie să conțină cel puțin %1 caractere !!!")
+                                       .arg(PasswordHasher::minPasswordLength),
+                                   4000,
+                                   true,
+                                   BalloonTip::BottomCenter);
+        return false;
+    }
+
+    if (m_isNew && m_initialAdministrator && password.isEmpty()) {
+        QMessageBox messageBox(QMessageBox::Warning,
+                               tr("Administrator fără parolă"),
+                               tr("Administratorul nu are parolă: oricine are acces la calculator "
+                                  "va putea deschide aplicația și datele pacienților.\n\n"
+                                  "Continuați fără parolă?"),
+                               QMessageBox::NoButton, this);
+        QPushButton *yesButton = messageBox.addButton(tr("Da"), QMessageBox::YesRole);
+        QPushButton *noButton  = messageBox.addButton(tr("Nu"), QMessageBox::NoRole);
+        yesButton->setStyleSheet(styleForButtonMessageBox);
+        noButton->setStyleSheet(styleForButtonMessageBox);
+        messageBox.setDefaultButton(noButton);
+        messageBox.exec();
+        if (messageBox.clickedButton() != yesButton) {
+            ui->userPassword->setFocus();
+            return false;
+        }
+        qWarning(logWarning()) << "UserDialog: administratorul inițial a fost creat fără parolă.";
+    }
     return true;
 }
 
-bool UserDialog::userExistsByName()
+bool UserDialog::userExistsByName(bool *ok)
 {
-    QSqlQuery q;
-    q.prepare(m_db.getTextSQL(":/sql/queries/check_object_exists_by_name.sql"));
-    q.addBindValue(ui->userName->text());
-    if (q.exec() && q.next()) {
-        return q.value(0).toInt() > 0;
+    if (ok)
+        *ok = false;
+
+    // Excludem utilizatorul curent: la modificare numele propriu nu este duplicat.
+    // Indexul unic uq_users_name acoperă și utilizatorii marcați pentru ștergere,
+    // iar numele se compară fără diferență între majuscule și minuscule
+    // (la MariaDB prin colația coloanei).
+    QSqlQuery q(m_db.getDatabase());
+    const bool sqlite = MainDatabaseConnectionContext::instance().isSqlite();
+    if (!q.prepare(QStringLiteral(R"(
+            SELECT
+                COUNT(id)
+            FROM
+                users
+            WHERE
+                name = ? %1
+                AND id <> ?
+        )").arg(sqlite ? QStringLiteral("COLLATE NOCASE") : QString()))) {
+        qCritical(logCritical()) << "UserDialog: verificarea numelui utilizatorului a eșuat:"
+                                 << q.lastError().text();
+        return false;
+    }
+    q.addBindValue(ui->userName->text().trimmed());
+    q.addBindValue(m_id);
+    if (!q.exec() || !q.next()) {
+        qCritical(logCritical()) << "UserDialog: verificarea numelui utilizatorului a eșuat:"
+                                 << q.lastError().text();
+        return false;
     }
 
-    return false;
+    if (ok)
+        *ok = true;
+    return q.value(0).toInt() > 0;
 }
 
-bool UserDialog::handleInsert()
+bool UserDialog::controlUniqueUserName()
 {
-    // verificam utilizatorul dupa nume
-    if (userExistsByName()) {
+    bool ok = false;
+    const bool exists = userExistsByName(&ok);
+    if (!ok) {
+        CustomMessage msg;
+        msg.setWindowTitle(tr("Verificarea datelor."));
+        msg.setTextTitle(tr("Nu s-a putut verifica unicitatea numelui utilizatorului \"<b>%1</b>\".")
+                             .arg(ui->userName->text()));
+        msg.setDetailedText(tr("Verificați conexiunea și jurnalul aplicației."));
+        msg.exec();
+        return false;
+    }
+
+    if (exists) {
         CustomMessage msg;
         msg.setWindowTitle(tr("Verificarea datelor."));
         msg.setTextTitle(tr("Utilizatorul cu nume \"<b>%1</b>\" există în baza de date")
@@ -189,10 +259,29 @@ bool UserDialog::handleInsert()
         return false;
     }
 
+    return true;
+}
+
+bool UserDialog::handleInsert()
+{
+    // verificam utilizatorul dupa nume
+    if (!controlUniqueUserName())
+        return false;
+
     QSqlDatabase database = m_db.getDatabase();
     if (!database.transaction()) {
         qCritical(logCritical()) << "UserDialog: transaction start failed:"
                                  << database.lastError().text();
+        return false;
+    }
+
+    QString hashError;
+    const QString passwordHash =
+        passwordHashForStorage(database, ui->userPassword->text(), &hashError);
+    if (passwordHash.isEmpty()) {
+        database.rollback();
+        qCritical(logCritical()) << "UserDialog: hash-ul parolei nu a putut fi calculat:"
+                                 << hashError;
         return false;
     }
 
@@ -210,9 +299,9 @@ bool UserDialog::handleInsert()
         ) VALUES (?,?,?,?,?,?)
     )");
     q.addBindValue(StatusObject::statusObjectToInt(m_statusCatalog));
-    q.addBindValue(ui->userName->text());
+    q.addBindValue(ui->userName->text().trimmed());
     q.addBindValue(QVariant()); // password
-    q.addBindValue(QCryptographicHash::hash(ui->userPassword->text().toUtf8(), QCryptographicHash::Sha256).toHex());
+    q.addBindValue(passwordHash);
     q.addBindValue(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
     q.addBindValue(uuid.toRfc4122());
     if (!q.exec()) {
@@ -265,8 +354,8 @@ bool UserDialog::handleInsert()
     // (inclusiv din asistentul primei lansări) nu înlocuiesc sesiunea curentă.
     if (m_initialAdministrator) {
         SessionContext::instance().setCandidateUserId(m_id);
-        globals().nameUserApp = ui->userName->text();
-        if (!AppSettings::saveRememberedUser(m_id, ui->userName->text(), true)) {
+        globals().nameUserApp = ui->userName->text().trimmed();
+        if (!AppSettings::saveRememberedUser(m_id, ui->userName->text().trimmed(), true)) {
             qWarning(logWarning())
                 << tr("Utilizatorul a fost creat, dar memorarea lui în profil a eșuat.");
         }
@@ -279,6 +368,10 @@ bool UserDialog::handleInsert()
 bool UserDialog::handleUpdate()
 {
     if (m_id <= 0)
+        return false;
+
+    // verificam utilizatorul dupa nume (redenumirea nu poate crea duplicate)
+    if (!controlUniqueUserName())
         return false;
 
     QSqlDatabase database = m_db.getDatabase();
@@ -306,27 +399,20 @@ bool UserDialog::handleUpdate()
         return false;
     }
 
-    const QByteArray oldHash = QByteArray::fromHex(current.value(0).toByteArray());
+    const QString oldHash = current.value(0).toString();
     current.finish();
+
+    // Cheia parolei cloud nu mai depinde de hash-ul utilizatorului (4.2.7),
+    // deci schimbarea parolei nu cere recriptarea configurației cloud.
     const bool passwordChanged = !ui->userPassword->text().isEmpty();
-    const QByteArray newHash = passwordChanged
-                                   ? QCryptographicHash::hash(ui->userPassword->text().toUtf8(),
-                                                             QCryptographicHash::Sha256)
-                                   : oldHash;
+    QString hashError;
+    const QString newHash = passwordChanged
+        ? passwordHashForStorage(database, ui->userPassword->text(), &hashError)
+        : oldHash;
     if (newHash.isEmpty()) {
         database.rollback();
-        qCritical(logCritical()) << "UserDialog: hash-ul parolei existente este invalid.";
+        qCritical(logCritical()) << "UserDialog: hash-ul parolei este invalid:" << hashError;
         return false;
-    }
-
-    if (passwordChanged && newHash != oldHash) {
-        QString cryptoError;
-        if (!reencryptCloudPasswords(database, oldHash, newHash, &cryptoError)) {
-            database.rollback();
-            qCritical(logCritical())
-                << "UserDialog: parolele cloud nu au putut fi recriptate:" << cryptoError;
-            return false;
-        }
     }
 
     QSqlQuery q(database);
@@ -341,9 +427,9 @@ bool UserDialog::handleUpdate()
             id = ?
     )");
     q.addBindValue(StatusObject::statusObjectToInt(m_statusCatalog));
-    q.addBindValue(ui->userName->text());
+    q.addBindValue(ui->userName->text().trimmed());
     q.addBindValue(QVariant()); // password
-    q.addBindValue(newHash.toHex());
+    q.addBindValue(newHash);
     q.addBindValue(QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss"));
     q.addBindValue(m_id);
     if (!q.exec()) {
@@ -370,112 +456,43 @@ bool UserDialog::handleUpdate()
     return true;
 }
 
-bool UserDialog::reencryptCloudPasswords(QSqlDatabase &database,
-                                         const QByteArray &oldHash,
-                                         const QByteArray &newHash,
-                                         QString *error)
+QString UserDialog::passwordHashForStorage(const QSqlDatabase &database,
+                                          const QString &password,
+                                          QString *error) const
 {
     if (error)
         error->clear();
 
-    if (!database.tables(QSql::Tables).contains(QStringLiteral("cloudServer"),
-                                                 Qt::CaseInsensitive)) {
-        return true;
-    }
-
-    QSqlQuery select(database);
-    select.prepare(QStringLiteral(R"(
-        SELECT
-            id,
-            id_organizations,
-            password,
-            iv
-        FROM
-            cloudServer
-        WHERE
-            id_users = ?
-    )"));
-    select.addBindValue(m_id);
-    if (!select.exec()) {
-        if (error)
-            *error = select.lastError().text();
-        return false;
-    }
-
-    struct CloudPasswordRow
-    {
-        qlonglong id = 0;
-        int organizationId = 0;
-        QString password;
-        QString iv;
-    };
-    QList<CloudPasswordRow> rows;
-    while (select.next()) {
-        rows.append({select.value(0).toLongLong(),
-                     select.value(1).toInt(),
-                     select.value(2).toString(),
-                     select.value(3).toString()});
-    }
-
-    for (const CloudPasswordRow &row : rows) {
-        const QByteArray payload = CryptoManager::fromBase64(row.password);
-        if (payload.size() <= 16) {
+    // Administratorul inițial poate fi creat pe o bază MariaDB încă nemigrată,
+    // unde users.hash este CHAR(64): hash-ul curent ar fi trunchiat. Scriem
+    // atunci hash-ul vechi, pe care migrarea 4.2.7 îl convertește.
+    if (MainDatabaseConnectionContext::instance().isMariaDb()) {
+        QSqlQuery column(database);
+        if (!column.prepare(QStringLiteral(R"(
+                SELECT
+                    CHARACTER_MAXIMUM_LENGTH
+                FROM
+                    INFORMATION_SCHEMA.COLUMNS
+                WHERE
+                    TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = 'users'
+                    AND COLUMN_NAME = 'hash'
+            )"))
+            || !column.exec() || !column.next()) {
             if (error)
-                *error = tr("Parola cloud criptată pentru organizația %1 este invalidă.")
-                             .arg(row.organizationId);
-            return false;
+                *error = column.lastError().text();
+            return QString();
         }
-
-        CryptoManager::EncryptedData encrypted;
-        encrypted.cipherText = payload.first(payload.size() - 16);
-        encrypted.tag = payload.last(16);
-        encrypted.iv = CryptoManager::fromBase64(row.iv);
-
-        bool decrypted = false;
-        const QByteArray plainText = CryptoManager::decryptText(
-            encrypted,
-            CryptoManager::deriveCloudKey(oldHash, row.organizationId),
-            &decrypted);
-        if (!decrypted) {
-            if (error)
-                *error = tr("Parola cloud pentru organizația %1 nu poate fi decriptată cu parola curentă.")
-                             .arg(row.organizationId);
-            return false;
-        }
-
-        const CryptoManager::EncryptedData reencrypted = CryptoManager::encryptText(
-            QString::fromUtf8(plainText),
-            CryptoManager::deriveCloudKey(newHash, row.organizationId));
-        if (!reencrypted.isValid()) {
-            if (error)
-                *error = tr("Parola cloud pentru organizația %1 nu poate fi recriptată.")
-                             .arg(row.organizationId);
-            return false;
-        }
-
-        QSqlQuery update(database);
-        update.prepare(QStringLiteral(R"(
-            UPDATE
-                cloudServer
-            SET
-                password = ?,
-                iv = ?
-            WHERE
-                id = ?
-        )"));
-        update.addBindValue(CryptoManager::toBase64(reencrypted.cipherText + reencrypted.tag));
-        update.addBindValue(CryptoManager::toBase64(reencrypted.iv));
-        update.addBindValue(row.id);
-        if (!update.exec() || update.numRowsAffected() != 1) {
-            if (error)
-                *error = update.lastError().text().isEmpty()
-                             ? tr("Înregistrarea cloud %1 nu a fost actualizată.").arg(row.id)
-                             : update.lastError().text();
-            return false;
+        if (column.value(0).toLongLong() < 255) {
+            qInfo(logInfo()) << "UserDialog: users.hash nu este încă migrat; se salvează hash-ul vechi.";
+            return PasswordHasher::legacyHash(password);
         }
     }
 
-    return true;
+    const QString hash = PasswordHasher::hashPassword(password);
+    if (hash.isEmpty() && error)
+        *error = QStringLiteral("PBKDF2 a eșuat.");
+    return hash;
 }
 
 bool UserDialog::onSave()

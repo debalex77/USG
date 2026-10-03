@@ -46,6 +46,8 @@
 #include <ui/delegates/combodelegate.h>
 #include <features/orders/orderdialog.h>
 #include <features/appointments/registrationtablemodel.h>
+#include <features/printing/appointmentprintservice.h>
+#include <settings/settingsservice.h>
 
 //---------------------------------------------------------------------
 
@@ -137,12 +139,17 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event) override
     {
+        // Filtrul este instalat și pe sub-widget-urile editorului (lineEdit, popup);
+        // tratarea implicită (FocusOut, Tab, Esc -> commitData/closeEditor) este
+        // valabilă doar pentru combo, altfel view-ul primește un editor străin.
+        const bool isEditor = qobject_cast<QComboBox *>(watched) != nullptr;
+
         if (event->type() != QEvent::KeyPress)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         const auto *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() != Qt::Key_Return && keyEvent->key() != Qt::Key_Enter)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         QComboBox *combo = qobject_cast<QComboBox *>(watched);
         QWidget *widget = qobject_cast<QWidget *>(watched);
@@ -151,7 +158,7 @@ public:
             widget = widget->parentWidget();
         }
         if (!combo)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         if (auto *completer = combo->lineEdit()->completer(); completer->popup()->isVisible()) {
             const QModelIndex completion = completer->popup()->currentIndex();
@@ -348,12 +355,17 @@ public:
 
     bool eventFilter(QObject *watched, QEvent *event) override
     {
+        // Filtrul este instalat și pe sub-widget-urile editorului (lineEdit, popup);
+        // tratarea implicită (FocusOut, Tab, Esc -> commitData/closeEditor) este
+        // valabilă doar pentru combo, altfel view-ul primește un editor străin.
+        const bool isEditor = qobject_cast<QComboBox *>(watched) != nullptr;
+
         if (event->type() != QEvent::KeyPress)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         auto *keyEvent = static_cast<QKeyEvent *>(event);
         if (keyEvent->key() != Qt::Key_Return && keyEvent->key() != Qt::Key_Enter)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         MultiSelectionCombo *combo = dynamic_cast<MultiSelectionCombo *>(watched);
         QWidget *widget = qobject_cast<QWidget *>(watched);
@@ -362,7 +374,7 @@ public:
             widget = widget->parentWidget();
         }
         if (!combo)
-            return QStyledItemDelegate::eventFilter(watched, event);
+            return isEditor && QStyledItemDelegate::eventFilter(watched, event);
 
         combo->hidePopup();
         auto *delegate = const_cast<MultiInvestigationDelegate *>(this);
@@ -518,7 +530,7 @@ void AppointmentDialog::setupDelegates()
 void AppointmentDialog::setupConnections()
 {
     connect(ui->btnWrite, &QToolButton::clicked, this, &AppointmentDialog::saveAppointments);
-    connect(ui->btnPrint, &QToolButton::clicked, this, &AppointmentDialog::printAppointments);
+    setupPrintButton();
     auto *removeMenu = new QMenu(ui->btnRemove);
     removeMenu->addAction(tr("Elimină rândul selectat"),
                           this, &AppointmentDialog::removeCurrentAppointment);
@@ -923,10 +935,59 @@ void AppointmentDialog::removeCurrentAppointment()
     m_popup->show();
 }
 
-void AppointmentDialog::printAppointments()
+void AppointmentDialog::setupPrintButton()
 {
-    QMessageBox::information(this, tr("Printarea programării"),
-                             tr("Forma de tipar se află în proces de dezvoltare."));
+    // ca în OrderView: meniul cu designer doar în modul extins de printare
+    if (SettingsService::instance().user().printMenuMode
+        == Settings::PrintMenuMode::Standard) {
+        connect(ui->btnPrint, &QToolButton::clicked, this,
+                [this]() { printAppointments(PrintType::Preview); });
+        return;
+    }
+
+    auto *printMenu = new QMenu(ui->btnPrint);
+    printMenu->addAction(QIcon(QStringLiteral(":/img/actions/print.png")),
+                         tr("Deschide preview"), this,
+                         [this]() { printAppointments(PrintType::Preview); });
+    printMenu->addAction(QIcon(QStringLiteral(":/images/design.png")),
+                         tr("Deschide designer"), this,
+                         [this]() { printAppointments(PrintType::Designer); });
+    ui->btnPrint->setMenu(printMenu);
+    ui->btnPrint->setPopupMode(QToolButton::InstantPopup);
+}
+
+void AppointmentDialog::printAppointments(PrintType::Column mode)
+{
+    // se tipărește ce este afișat, inclusiv modificările încă nesalvate
+    AppointmentPrintService::Request request;
+    request.date = ui->docDate->date();
+    request.mode = mode;
+    request.reportParent = this;
+
+    for (int row = 0; row < m_model->rowCount(QModelIndex()); ++row) {
+        const QModelIndex base = m_model->index(row, Id);
+        const QString patient = base.siblingAtColumn(Patient).data(Qt::EditRole)
+                                    .toString().trimmed();
+        if (patient.isEmpty())
+            continue;
+
+        AppointmentPrintService::Row item;
+        item.time           = m_model->headerData(row, Qt::Vertical, Qt::DisplayRole).toString();
+        item.executed       = base.siblingAtColumn(Executed).data(Qt::EditRole).toBool();
+        item.patient        = patient;
+        item.investigations = base.siblingAtColumn(Investigation).data(Qt::EditRole).toString();
+        item.organizationId = base.siblingAtColumn(Organization).data(Qt::EditRole).toInt();
+        item.doctorId       = base.siblingAtColumn(Doctor).data(Qt::EditRole).toInt();
+        item.comment        = base.siblingAtColumn(Comment).data(Qt::EditRole).toString();
+        request.rows.append(item);
+    }
+
+    const AppointmentPrintService service(m_db.getDatabase());
+    const AppointmentPrintService::Result result = service.print(request);
+    if (!result.success) {
+        qWarning(logWarning()) << "AppointmentDialog print error:" << result.error;
+        QMessageBox::warning(this, tr("Printarea programării"), result.error);
+    }
 }
 
 int AppointmentDialog::currentRow() const

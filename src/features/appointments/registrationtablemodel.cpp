@@ -69,7 +69,8 @@ QVariant RegistrationTableModel::data(const QModelIndex &index, int role) const
         if (! cell_data.value(RegistrationTableModel::index(index.row(), 1), Qt::DisplayRole).toString().isEmpty() &&
             cell_data.value(RegistrationTableModel::index(index.row(), 1), Qt::DisplayRole).toInt() == 1 &&
             ! cell_data.value(index).toString().isEmpty()){
-            QFont font = cell_data.value(index, Qt::FontRole).value<QFont>();
+            // fontul implicit al tabelului, tăiat; cell_data păstrează doar valori
+            QFont font;
             font.setStrikeOut(true);
             return font;
         }

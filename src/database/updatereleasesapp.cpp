@@ -24,6 +24,8 @@
 #include "updatereleasesapp.h"
 #include "uuidmigrationplan.h"
 #include "common/cloudconnectioncontext.h"
+#include "infrastructure/security/cryptomanager.h"
+#include "infrastructure/security/passwordhasher.h"
 
 #include "common/sessioncontext.h"
 #include "settings/settingsservice.h"
@@ -1313,7 +1315,8 @@ bool UpdateReleasesApp::execUpdateCurrentRelease(const QString currentRelease)
         {QVersionNumber(4, 1, 0), &UpdateReleasesApp::update_4_1_0},
         {QVersionNumber(4, 1, 2), &UpdateReleasesApp::update_4_1_2},
         {QVersionNumber(4, 2, 0), &UpdateReleasesApp::update_4_2_0},
-        {QVersionNumber(4, 2, 3), &UpdateReleasesApp::update_4_2_3}
+        {QVersionNumber(4, 2, 3), &UpdateReleasesApp::update_4_2_3},
+        {QVersionNumber(4, 2, 7), &UpdateReleasesApp::update_4_2_7}
     };
 
     for (const MigrationStep &migration : migrations) {
@@ -4158,5 +4161,390 @@ bool UpdateReleasesApp::update_4_2_3()
 
     qInfo(logInfo())
         << "Migrarea 4.2.3: preferința de sincronizare cloud este pregătită.";
+    return true;
+}
+
+bool UpdateReleasesApp::update_4_2_7()
+{
+    // Securitatea conturilor:
+    //  - numele utilizatorilor devin unice, fără diferență între majuscule și
+    //    minuscule (duplicatele existente sunt redenumite);
+    //  - coloana veche users.password (parola codificată reversibil până la
+    //    4.1.0) este golită;
+    //  - parola serverului cloud trece de la cheia derivată din users.hash la
+    //    cheia împărțită a organizației (cryptoSplitKey + fișier local);
+    //  - users.hash trece de la SHA-256 fără salt la PBKDF2-SHA256 cu salt.
+    // Ordinea contează: recriptarea cloud are nevoie de hash-urile vechi.
+    QSqlDatabase currentDb = db->getDatabase();
+    if (!currentDb.isValid() || !currentDb.isOpen()) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: baza de date nu este deschisă.";
+        return false;
+    }
+
+    const QStringList tables = currentDb.tables(QSql::Tables);
+    if (!tables.contains(QStringLiteral("users"), Qt::CaseInsensitive)) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: tabela users lipsește.";
+        return false;
+    }
+
+    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool hasCloudServer = tables.contains(QStringLiteral("cloudServer"), Qt::CaseInsensitive);
+    const QString nameEquals = sqlite ? QStringLiteral("name = ? COLLATE NOCASE")
+                                      : QStringLiteral("name = ?");
+    constexpr int stepCount = 5;
+    constexpr int maxNameLength = 50; // users.name VARCHAR(50) la MariaDB
+
+    emit migrationProgress(0, stepCount, tr("4.2.7: se pregătește schema utilizatorilor..."));
+
+    if (hasCloudServer && !ensureCryptoSplitKeySchema())
+        return false;
+
+    // MariaDB confirmă implicit DDL-ul: lărgim users.hash înaintea tranzacției.
+    if (!sqlite) {
+        QSqlQuery column(currentDb);
+        if (!column.prepare(QStringLiteral(R"(
+                SELECT
+                    CHARACTER_MAXIMUM_LENGTH,
+                    COLLATION_NAME
+                FROM
+                    INFORMATION_SCHEMA.COLUMNS
+                WHERE
+                    TABLE_SCHEMA = DATABASE()
+                    AND TABLE_NAME = 'users'
+                    AND COLUMN_NAME = ?
+            )"))) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: citirea schemei users a eșuat:"
+                                     << column.lastError().text();
+            return false;
+        }
+
+        column.bindValue(0, QStringLiteral("hash"));
+        if (!column.exec() || !column.next()) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: coloana users.hash nu poate fi citită:"
+                                     << column.lastError().text();
+            return false;
+        }
+        const qlonglong hashLength = column.value(0).toLongLong();
+        column.finish();
+
+        if (hashLength < 255) {
+            QSqlQuery alter(currentDb);
+            if (!alter.exec(QStringLiteral(
+                    "ALTER TABLE `users` MODIFY `hash` VARCHAR(255) NULL"))) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: lărgirea users.hash a eșuat:"
+                                         << alter.lastError().text();
+                return false;
+            }
+            qInfo(logInfo()) << "Migrarea 4.2.7: users.hash a devenit VARCHAR(255).";
+        }
+
+        column.bindValue(0, QStringLiteral("name"));
+        if (column.exec() && column.next()) {
+            qInfo(logInfo()) << "Migrarea 4.2.7: colația users.name:"
+                             << column.value(1).toString();
+        }
+    }
+
+    if (!currentDb.transaction()) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: tranzacția nu poate fi pornită:"
+                                 << currentDb.lastError().text();
+        return false;
+    }
+    auto fail = [&currentDb]() {
+        currentDb.rollback();
+        return false;
+    };
+
+    // 1. Nume unice. Utilizatorul cu id-ul cel mai mic își păstrează numele
+    //    (era singurul care se putea autentifica); ceilalți primesc sufix.
+    struct UserNameRow
+    {
+        qlonglong id = 0;
+        QString name;
+    };
+    QList<UserNameRow> userNames;
+    {
+        QSqlQuery select(currentDb);
+        if (!select.exec(QStringLiteral("SELECT id, name FROM users ORDER BY id"))) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: citirea utilizatorilor a eșuat:"
+                                     << select.lastError().text();
+            return fail();
+        }
+        while (select.next())
+            userNames.append({select.value(0).toLongLong(), select.value(1).toString()});
+    }
+
+    QStringList renamedUsers;
+    for (const UserNameRow &row : std::as_const(userNames)) {
+        const QString base = row.name.trimmed().isEmpty() ? QStringLiteral("utilizator")
+                                                           : row.name.trimmed();
+        QString candidate = base;
+        bool unique = false;
+        for (int suffix = 2; suffix < 10000; ++suffix) {
+            // Comparăm doar cu utilizatorii deja procesați (id mai mic), prin
+            // colația bazei de date, aceeași pe care o folosește indexul unic.
+            QSqlQuery check(currentDb);
+            check.prepare(QStringLiteral("SELECT COUNT(*) FROM users WHERE id < ? AND %1")
+                              .arg(nameEquals));
+            check.addBindValue(row.id);
+            check.addBindValue(candidate);
+            if (!check.exec() || !check.next()) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: verificarea numelui a eșuat:"
+                                         << check.lastError().text();
+                return fail();
+            }
+            if (check.value(0).toLongLong() == 0) {
+                unique = true;
+                break;
+            }
+            const QString tail = QStringLiteral(" (%1)").arg(suffix);
+            candidate = base.left(maxNameLength - tail.size()) + tail;
+        }
+        if (!unique) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: nu s-a găsit un nume liber pentru utilizatorul"
+                                     << row.id;
+            return fail();
+        }
+
+        if (candidate == row.name)
+            continue;
+
+        QSqlQuery update(currentDb);
+        update.prepare(QStringLiteral("UPDATE users SET name = ? WHERE id = ?"));
+        update.addBindValue(candidate);
+        update.addBindValue(row.id);
+        if (!update.exec()) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: redenumirea utilizatorului"
+                                     << row.id << "a eșuat:" << update.lastError().text();
+            return fail();
+        }
+        renamedUsers.append(QStringLiteral("'%1' → '%2'").arg(row.name, candidate));
+        qWarning(logWarning()) << "Migrarea 4.2.7: utilizatorul" << row.id
+                               << "a fost redenumit:" << row.name << "->" << candidate;
+    }
+    emit migrationProgress(1, stepCount, renamedUsers.isEmpty()
+        ? tr("4.2.7: numele utilizatorilor sunt unice.")
+        : tr("4.2.7: utilizatori redenumiți (nume duplicate): %1.")
+              .arg(renamedUsers.join(QStringLiteral(", "))));
+
+    // 2. Parola codificată reversibil din versiunile anterioare 4.1.0.
+    {
+        QSqlQuery clear(currentDb);
+        if (!clear.exec(QStringLiteral(
+                "UPDATE users SET password = NULL WHERE password IS NOT NULL"))) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: golirea users.password a eșuat:"
+                                     << clear.lastError().text();
+            return fail();
+        }
+        qInfo(logInfo()) << "Migrarea 4.2.7: users.password golită pentru"
+                         << clear.numRowsAffected() << "utilizatori.";
+    }
+    emit migrationProgress(2, stepCount, tr("4.2.7: parolele vechi au fost eliminate."));
+
+    // 3. Parola cloud: cheia veche (din users.hash) -> cheia împărțită.
+    int cloudReencrypted = 0;
+    int cloudUnreadable = 0;
+    if (hasCloudServer) {
+        struct CloudRow
+        {
+            qlonglong id = 0;
+            int organizationId = 0;
+            QString password;
+            QString iv;
+            QString userHash;
+        };
+        QList<CloudRow> cloudRows;
+        {
+            QSqlQuery select(currentDb);
+            if (!select.exec(QStringLiteral(R"(
+                    SELECT
+                        c.id,
+                        c.id_organizations,
+                        c.password,
+                        c.iv,
+                        u.hash
+                    FROM
+                        cloudServer c
+                    LEFT JOIN
+                        users u ON u.id = c.id_users
+                )"))) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: citirea cloudServer a eșuat:"
+                                         << select.lastError().text();
+                return fail();
+            }
+            while (select.next()) {
+                cloudRows.append({select.value(0).toLongLong(),
+                                  select.value(1).toInt(),
+                                  select.value(2).toString(),
+                                  select.value(3).toString(),
+                                  select.value(4).toString()});
+            }
+        }
+
+        for (const CloudRow &row : std::as_const(cloudRows)) {
+            if (CryptoManager::fromBase64(row.password).size() <= 16)
+                continue; // configurație fără parolă salvată
+
+            QString plainText;
+            bool legacyKey = false;
+            QString error;
+            if (!CryptoManager::decryptCloudPassword(currentDb, row.organizationId,
+                                                     row.password, row.iv, row.userHash,
+                                                     &plainText, &legacyKey, &error)) {
+                // Rândul rămâne neschimbat; parola trebuie resalvată din configurația cloud.
+                ++cloudUnreadable;
+                qWarning(logWarning()) << "Migrarea 4.2.7: parola cloud" << row.id
+                                       << "nu poate fi decriptată:" << error;
+                continue;
+            }
+            if (!legacyKey)
+                continue; // deja criptată cu cheia împărțită
+
+            QByteArray splitKey;
+            if (!CryptoManager::loadOrCreateSplitKey(currentDb, row.organizationId,
+                                                     &splitKey, &error)) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: cheia organizației"
+                                         << row.organizationId << "nu poate fi încărcată:" << error;
+                return fail();
+            }
+            const CryptoManager::EncryptedData encrypted =
+                CryptoManager::encryptText(plainText, splitKey);
+            if (!encrypted.isValid()) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: recriptarea parolei cloud"
+                                         << row.id << "a eșuat.";
+                return fail();
+            }
+
+            QSqlQuery update(currentDb);
+            update.prepare(QStringLiteral("UPDATE cloudServer SET password = ?, iv = ? WHERE id = ?"));
+            update.addBindValue(CryptoManager::toBase64(encrypted.cipherText + encrypted.tag));
+            update.addBindValue(CryptoManager::toBase64(encrypted.iv));
+            update.addBindValue(row.id);
+            if (!update.exec()) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: salvarea parolei cloud"
+                                         << row.id << "a eșuat:" << update.lastError().text();
+                return fail();
+            }
+            ++cloudReencrypted;
+        }
+        qInfo(logInfo()) << "Migrarea 4.2.7: parole cloud recriptate:" << cloudReencrypted
+                         << "nedecriptabile:" << cloudUnreadable;
+    }
+    emit migrationProgress(3, stepCount, cloudUnreadable == 0
+        ? tr("4.2.7: parolele cloud folosesc cheia organizației.")
+        : tr("4.2.7: %1 parole cloud nu au putut fi decriptate și trebuie resalvate "
+             "în configurația serverului cloud.").arg(cloudUnreadable));
+
+    // 4. users.hash: SHA-256 fără salt -> PBKDF2-SHA256 cu salt.
+    {
+        struct HashRow
+        {
+            qlonglong id = 0;
+            QString hash;
+        };
+        QList<HashRow> hashRows;
+        QSqlQuery select(currentDb);
+        if (!select.exec(QStringLiteral("SELECT id, hash FROM users"))) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: citirea hash-urilor a eșuat:"
+                                     << select.lastError().text();
+            return fail();
+        }
+        while (select.next())
+            hashRows.append({select.value(0).toLongLong(), select.value(1).toString()});
+        select.finish();
+
+        for (const HashRow &row : std::as_const(hashRows)) {
+            if (!PasswordHasher::isLegacyHash(row.hash)) {
+                if (!PasswordHasher::isCurrentHash(row.hash))
+                    qWarning(logWarning()) << "Migrarea 4.2.7: utilizatorul" << row.id
+                                           << "nu are un hash valid al parolei.";
+                continue;
+            }
+
+            const QString upgraded = PasswordHasher::upgradeLegacyHash(row.hash);
+            if (upgraded.isEmpty()) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: conversia hash-ului utilizatorului"
+                                         << row.id << "a eșuat.";
+                return fail();
+            }
+            QSqlQuery update(currentDb);
+            update.prepare(QStringLiteral("UPDATE users SET hash = ? WHERE id = ?"));
+            update.addBindValue(upgraded);
+            update.addBindValue(row.id);
+            if (!update.exec()) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: salvarea hash-ului utilizatorului"
+                                         << row.id << "a eșuat:" << update.lastError().text();
+                return fail();
+            }
+        }
+    }
+    emit migrationProgress(4, stepCount, tr("4.2.7: parolele utilizatorilor folosesc PBKDF2."));
+
+    // 5. Indexul unic pe nume. La SQLite intră în tranzacție; la MariaDB
+    //    se creează după commit (DDL cu confirmare implicită).
+    if (sqlite) {
+        QSqlQuery index(currentDb);
+        if (!index.exec(QStringLiteral(
+                "CREATE UNIQUE INDEX IF NOT EXISTS uq_users_name ON users(name COLLATE NOCASE)"))) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: crearea indexului uq_users_name a eșuat:"
+                                     << index.lastError().text();
+            return fail();
+        }
+    }
+
+    if (!currentDb.commit()) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: commit-ul a eșuat:"
+                                 << currentDb.lastError().text();
+        return fail();
+    }
+
+    if (!sqlite) {
+        QSqlQuery exists(currentDb);
+        if (!exists.exec(QStringLiteral(R"(
+                SELECT COUNT(*)
+                FROM information_schema.statistics
+                WHERE table_schema = DATABASE()
+                  AND table_name = 'users'
+                  AND index_name = 'uq_users_name'
+            )")) || !exists.next()) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: verificarea indexului uq_users_name a eșuat:"
+                                     << exists.lastError().text();
+            return false;
+        }
+        if (exists.value(0).toLongLong() == 0) {
+            QSqlQuery index(currentDb);
+            if (!index.exec(QStringLiteral(
+                    "CREATE UNIQUE INDEX `uq_users_name` ON `users`(`name`)"))) {
+                qCritical(logCritical()) << "Migrarea 4.2.7: crearea indexului uq_users_name a eșuat:"
+                                         << index.lastError().text();
+                return false;
+            }
+        }
+    }
+
+    // Verificare finală: niciun hash vechi și nicio parolă reversibilă rămasă.
+    QSqlQuery verify(currentDb);
+    if (!verify.exec(QStringLiteral(
+            "SELECT COUNT(*) FROM users WHERE password IS NOT NULL")) || !verify.next()
+        || verify.value(0).toLongLong() != 0) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: users.password nu a fost golită complet."
+                                 << verify.lastError().text();
+        return false;
+    }
+    if (!verify.exec(QStringLiteral("SELECT hash FROM users"))) {
+        qCritical(logCritical()) << "Migrarea 4.2.7: verificarea hash-urilor a eșuat:"
+                                 << verify.lastError().text();
+        return false;
+    }
+    while (verify.next()) {
+        if (PasswordHasher::isLegacyHash(verify.value(0).toString())) {
+            qCritical(logCritical()) << "Migrarea 4.2.7: au rămas hash-uri SHA-256 neconvertite.";
+            return false;
+        }
+    }
+
+    emit migrationProgress(stepCount, stepCount,
+                           tr("4.2.7: securitatea conturilor a fost actualizată."));
+    qInfo(logInfo()) << "Migrarea 4.2.7: securitatea conturilor a fost actualizată.";
     return true;
 }

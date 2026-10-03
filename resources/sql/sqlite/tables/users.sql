@@ -13,3 +13,6 @@ CREATE UNIQUE INDEX IF NOT EXISTS
 
 CREATE INDEX IF NOT EXISTS
     idx_users_name ON users(name);
+
+CREATE UNIQUE INDEX IF NOT EXISTS
+    uq_users_name ON users(name COLLATE NOCASE);

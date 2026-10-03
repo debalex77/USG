@@ -117,10 +117,25 @@ namespace Default {
     inline constexpr int mysqlPort           = 3306;
 }
 
+// Opțiunile arhivei 7z (startup.ini, comune pentru toate profilurile).
+struct ArchiveOptions {
+    bool includeSettings = false;
+    bool includeCrypto   = false;
+    bool encrypt         = false;
+};
+
 ReadResult readProfile(const QString &settingsPath, const QString &defaultLogPath);
 WriteError writeProfile(const QString &settingsPath, const ProfileData &data);
 QString readStartupLanguage(const QString &settingsPath);
 bool writeStartupLanguage(const QString &settingsPath, const QString &language);
+ArchiveOptions readArchiveOptions(const QString &settingsPath);
+bool writeArchiveOptions(const QString &settingsPath, const ArchiveOptions &options);
+// Parola arhivei se păstrează în settingsPath (startup.ini), criptată cu cheia
+// profilului keySettingsPath (crypto/profile.key de lângă profil).
+bool readArchivePassword(const QString &settingsPath, const QString &keySettingsPath,
+                         QString *password, QString *error = nullptr);
+bool writeArchivePassword(const QString &settingsPath, const QString &keySettingsPath,
+                          const QString &password, QString *error = nullptr);
 bool writeGroup(const QString &settingsPath, const QString &group,
                 const QVariantMap &values);
 

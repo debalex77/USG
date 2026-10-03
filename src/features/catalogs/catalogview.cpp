@@ -24,7 +24,24 @@
 #include "catalogview.h"
 #include "common/applicationpathscontext.h"
 #include "features/catalogs/catalogdialog.h"
+#include "features/patients/patientremovalrepository.h"
 #include "ui_catalogview.h"
+
+#include <QApplication>
+#include <QLabel>
+#include <QPushButton>
+#include <QShortcut>
+
+namespace {
+
+// Coloana 2 este numele/denumirea în toate cataloagele (FullName / Name).
+constexpr int defaultSortSection = 2;
+
+// La reîncărcare, câte rânduri în plus față de poziția veche se încarcă
+// pentru regăsirea înregistrării curente (mutată de sortare/redenumire).
+constexpr int maxExtraRowsToRestore = 1000;
+
+}
 
 CatalogView::CatalogView(DataBase &db, CatalogType::Type catalogType, QWidget *parent)
     : QDialog(parent)
@@ -73,6 +90,9 @@ void CatalogView::onScroll(int value)
 
     if (model->canFetchMore())
         model->fetchMore();
+
+    // Și eroarea unui lot încărcat automat de QTableView la capătul derulării.
+    showLoadError();
 }
 
 void CatalogView::onAdd()
@@ -122,6 +142,7 @@ void CatalogView::onEdit()
         m_catalogType == CatalogType::Type::Patients) {
 
         CatalogDialog *catalogCommon = new CatalogDialog(m_db, m_catalogType, this);
+        catalogCommon->setAttribute(Qt::WA_DeleteOnClose);
         catalogCommon->setProperty("isNew", false);
         catalogCommon->setProperty("id", item.id);
         connect(catalogCommon, &CatalogDialog::catalogDialogChanged,
@@ -264,13 +285,106 @@ void CatalogView::onDelete()
             msg.exec();
         }
     }
-
-    ui->tableView->selectRow(m_currentRow);
 }
 
 void CatalogView::onUpdate()
 {
     updateTableView();
+}
+
+void CatalogView::onContextMenuRequested(const QPoint &pos)
+{
+    const QModelIndex index = ui->tableView->indexAt(pos);
+    if (!index.isValid())
+        return;
+
+    ui->tableView->selectRow(index.row());
+    const CatalogsCommon &item = model->itemAt(proxy->mapToSource(index).row());
+    const bool marked = item.deletionMark == StatusObject::DeletionMark;
+
+    menu->clear();
+    connect(menu->addAction(tr("Editare")), &QAction::triggered,
+            this, &CatalogView::onEdit);
+    connect(menu->addAction(marked ? tr("Anularea marcării pentru eliminare")
+                                   : tr("Marcare pentru eliminare")),
+            &QAction::triggered, this, &CatalogView::onDelete);
+
+    if (m_catalogType == CatalogType::Type::Patients) {
+        menu->addSeparator();
+        QAction *removeAction = menu->addAction(tr("Eliminare din baza de date"));
+        removeAction->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_Delete));
+        connect(removeAction, &QAction::triggered,
+                this, &CatalogView::onRemovePatient);
+    }
+
+    menu->popup(ui->tableView->viewport()->mapToGlobal(pos));
+}
+
+void CatalogView::onRemovePatient()
+{
+    if (m_catalogType != CatalogType::Type::Patients)
+        return;
+
+    const QModelIndex idx = ui->tableView->currentIndex();
+    if (!isValidIndex(idx))
+        return;
+
+    // Copiem datele: dialogurile rulează bucle de evenimente în care lista
+    // se poate reîncărca.
+    const CatalogsCommon item = model->itemAt(proxy->mapToSource(idx).row());
+    const QString patientName = item.txtBirthday.isEmpty()
+        ? item.fullName
+        : QStringLiteral("%1, %2").arg(item.fullName, item.txtBirthday);
+
+    PatientRemovalRepository repository(m_db);
+    QList<PatientRemovalRepository::Reference> references;
+    QString error;
+    if (!repository.findReferences(item.id, &references, &error)) {
+        showPatientRemovalError(patientName, error);
+        return;
+    }
+    if (!references.isEmpty()) {
+        showPatientReferences(patientName, references);
+        return;
+    }
+
+    const QString styleButtons = m_db.getStyleForButtonMessageBox();
+    QMessageBox messageBox(QMessageBox::Question,
+                           tr("Eliminarea pacientului"),
+                           tr("Eliminați definitiv pacientul <b>%1</b> din baza de date?<br><br>"
+                              "Operația nu poate fi anulată.")
+                               .arg(patientName.toHtmlEscaped()),
+                           QMessageBox::NoButton, this);
+    QPushButton *yesButton = messageBox.addButton(tr("Da"), QMessageBox::YesRole);
+    QPushButton *noButton  = messageBox.addButton(tr("Nu"), QMessageBox::NoRole);
+    yesButton->setStyleSheet(styleButtons);
+    noButton->setStyleSheet(styleButtons);
+    messageBox.setDefaultButton(noButton);
+    messageBox.exec();
+    if (messageBox.clickedButton() != yesButton)
+        return;
+
+    switch (repository.removePatient(item.id, &error)) {
+    case PatientRemovalRepository::RemoveResult::Removed:
+        popUp->setPopupText(tr("Pacientul <b>%1</b><br>a fost eliminat din baza de date.")
+                                .arg(patientName.toHtmlEscaped()));
+        popUp->show();
+        updateTableView();
+        break;
+
+    case PatientRemovalRepository::RemoveResult::Referenced:
+        // un document a fost salvat între verificare și eliminare
+        if (repository.findReferences(item.id, &references, &error))
+            showPatientReferences(patientName, references);
+        else
+            showPatientRemovalError(patientName, error);
+        break;
+
+    case PatientRemovalRepository::RemoveResult::Error:
+        showPatientRemovalError(patientName, error);
+        updateTableView();
+        break;
+    }
 }
 
 void CatalogView::onShowHideColumn()
@@ -282,13 +396,6 @@ void CatalogView::onShowHideColumn()
     QPoint p = QPoint(0, btn->height());
     const QPoint globalPos = btn->mapToGlobal(p);
     m_columnsController->showMenu(globalPos);
-}
-
-void CatalogView::onClickedTableView(const QModelIndex &index)
-{
-    if (! index.isValid())
-        return;
-    m_currentRow = index.row();
 }
 
 void CatalogView::onDoubleClickedTableView(const QModelIndex &index)
@@ -332,6 +439,9 @@ void CatalogView::loadFilterBySettings()
 {
     const QString catalog = CatalogType::enumToString(m_catalogType);
 
+    m_filter.sortSection = defaultSortSection;
+    m_filter.sortOrder = Qt::AscendingOrder;
+
     const QJsonObject rootObj = m_settings.getJsonObject(m_class);
     if (rootObj.isEmpty()) {
         return;
@@ -343,7 +453,11 @@ void CatalogView::loadFilterBySettings()
     }
 
     // --- sortarea sectiilor
-    m_filter.sortSection = catalogObj.value("sort").toObject().value("section").toInt(0);
+    // Secțiunea 0 (ID, mereu ascunsă) nu poate fi aleasă din antet: era doar
+    // valoarea implicită salvată de versiunile anterioare.
+    m_filter.sortSection = catalogObj.value("sort").toObject().value("section").toInt(defaultSortSection);
+    if (m_filter.sortSection <= 0)
+        m_filter.sortSection = defaultSortSection;
     m_filter.sortOrder = catalogObj.value("sort").toObject().value("direction").toInt(0) == 0
                              ? Qt::AscendingOrder
                              : Qt::DescendingOrder;
@@ -535,8 +649,16 @@ void CatalogView::initTableView()
 
     connect(ui->tableView->verticalScrollBar(), &QScrollBar::valueChanged,
             this, &CatalogView::onScroll, Qt::UniqueConnection);
-    connect(ui->tableView, QOverload<const QModelIndex&>::of(&QTableView::clicked),
-            this, &CatalogView::onClickedTableView, Qt::UniqueConnection);
+    connect(ui->tableView, &QWidget::customContextMenuRequested,
+            this, &CatalogView::onContextMenuRequested, Qt::UniqueConnection);
+
+    if (m_catalogType == CatalogType::Type::Patients) {
+        auto *removeShortcut = new QShortcut(QKeySequence(Qt::SHIFT | Qt::Key_Delete),
+                                             ui->tableView);
+        removeShortcut->setContext(Qt::WidgetShortcut);
+        connect(removeShortcut, &QShortcut::activated,
+                this, &CatalogView::onRemovePatient);
+    }
     connect(ui->tableView, QOverload<const QModelIndex&>::of(&QTableView::doubleClicked),
             this, &CatalogView::onDoubleClickedTableView, Qt::UniqueConnection);
 }
@@ -547,8 +669,15 @@ void CatalogView::updateTableView()
     if (!model || !proxy)
         return;
 
-    if (!model)
-        return;
+    // Înregistrarea curentă se reține după id: reîncărcarea aduce doar primul
+    // lot, iar după editare/sortare același număr de rând poate fi alt rând.
+    qint64 currentId = 0;
+    int currentRow = -1;
+    const QModelIndex currentIndex = ui->tableView->currentIndex();
+    if (currentIndex.isValid()) {
+        currentRow = currentIndex.row();
+        currentId = proxy->index(currentRow, 0).data(Qt::UserRole).toLongLong();
+    }
 
     {
         QSignalBlocker blocker(ui->tableView->horizontalHeader());
@@ -556,14 +685,138 @@ void CatalogView::updateTableView()
     }
     model->setSort(m_filter.sortSection, m_filter.sortOrder);
 
-    if (proxy->rowCount() <= 0)
-        return;
+    int rowToSelect = currentId > 0 ? rowById(currentId, 0) : -1;
+    if (rowToSelect < 0 && currentRow >= 0) {
+        QApplication::setOverrideCursor(Qt::WaitCursor);
+        const int rowLimit = currentRow + 1 + maxExtraRowsToRestore;
+        while (model->canFetchMore() && proxy->rowCount() < rowLimit
+               && (currentId > 0 ? rowToSelect < 0 : proxy->rowCount() <= currentRow)) {
+            const int loadedRows = proxy->rowCount();
+            model->fetchMore();
+            if (proxy->rowCount() == loadedRows)
+                break;
+            if (currentId > 0)
+                rowToSelect = rowById(currentId, loadedRows);
+        }
+        QApplication::restoreOverrideCursor();
+    }
 
-    int rowToSelect = 0;
-    if (m_currentRow >= 0 && m_currentRow < proxy->rowCount())
-        rowToSelect = m_currentRow;
+    showLoadError();
+
+    if (proxy->rowCount() <= 0) {
+        ui->tableView->clearSelection();
+        return;
+    }
+
+    // înregistrarea nu mai există sau nu a fost găsită: aceeași poziție
+    if (rowToSelect < 0)
+        rowToSelect = qBound(0, currentRow, proxy->rowCount() - 1);
 
     ui->tableView->selectRow(rowToSelect);
+    ui->tableView->scrollTo(proxy->index(rowToSelect, defaultSortSection));
+}
+
+int CatalogView::rowById(qint64 id, int fromRow) const
+{
+    for (int row = qMax(fromRow, 0); row < proxy->rowCount(); ++row) {
+        if (proxy->index(row, 0).data(Qt::UserRole).toLongLong() == id)
+            return row;
+    }
+    return -1;
+}
+
+void CatalogView::fetchAllRows()
+{
+    if (!model || !model->canFetchMore())
+        return;
+
+    QApplication::setOverrideCursor(Qt::WaitCursor);
+    int previousCount = -1;
+    while (model->canFetchMore() && model->rowCount() != previousCount) {
+        previousCount = model->rowCount();
+        model->fetchMore();
+    }
+    QApplication::restoreOverrideCursor();
+
+    showLoadError();
+}
+
+void CatalogView::showPatientReferences(const QString &patientName,
+                                        const QList<PatientRemovalRepository::Reference> &references)
+{
+    using Kind = PatientRemovalRepository::Reference::Kind;
+
+    // Lista detaliată este limitată; totalurile acoperă toate documentele.
+    constexpr int maxListedReferences = 50;
+
+    int orders = 0;
+    int reports = 0;
+    int appointments = 0;
+    QStringList lines;
+    for (const PatientRemovalRepository::Reference &reference : references) {
+        const QString dateTime = reference.dateDoc.toString(QStringLiteral("dd.MM.yyyy HH:mm:ss"));
+        QString line;
+        switch (reference.kind) {
+        case Kind::Order:
+            ++orders;
+            line = tr("Comanda ecografică nr.%1 din %2").arg(reference.numberDoc, dateTime);
+            break;
+        case Kind::Report:
+            ++reports;
+            line = tr("Raport ecografic nr.%1 din %2").arg(reference.numberDoc, dateTime);
+            break;
+        case Kind::Appointment:
+            ++appointments;
+            line = tr("Programare din %1")
+                       .arg(reference.dateDoc.toString(QStringLiteral("dd.MM.yyyy")));
+            break;
+        }
+        if (lines.size() < maxListedReferences)
+            lines.append(line);
+    }
+    if (references.size() > maxListedReferences)
+        lines.append(tr("... și încă %1").arg(references.size() - maxListedReferences));
+
+    const QString details =
+        tr("Comenzi ecografice: %1\nRapoarte ecografice: %2\nProgramări: %3")
+            .arg(orders).arg(reports).arg(appointments)
+        + QStringLiteral("\n\n") + lines.join(QLatin1Char('\n'))
+        + QStringLiteral("\n\n")
+        + tr("Pacientul poate fi marcat pentru eliminare (tasta Delete sau meniul contextual).");
+
+    CustomMessage message(this);
+    message.setWindowTitle(tr("Eliminarea pacientului"));
+    message.setTextTitle(tr("Pacientul <b>%1</b> figurează în documente și nu poate fi "
+                            "eliminat din baza de date.")
+                             .arg(patientName.toHtmlEscaped()));
+    message.setDetailedText(details);
+    message.exec();
+}
+
+void CatalogView::showPatientRemovalError(const QString &patientName, const QString &error)
+{
+    CustomMessage message(this);
+    message.setWindowTitle(tr("Eliminarea pacientului"));
+    message.setTextTitle(tr("Pacientul <b>%1</b> nu a fost eliminat din baza de date.")
+                             .arg(patientName.toHtmlEscaped()));
+    message.setDetailedText(error);
+    message.exec();
+}
+
+void CatalogView::showLoadError()
+{
+    if (!model)
+        return;
+
+    const QString error = model->takeLastError();
+    if (error.isEmpty())
+        return;
+
+    CustomMessage message(this);
+    message.setWindowTitle(windowTitle());
+    message.setTextTitle(tr("Lista nu a putut fi încărcată complet."));
+    message.setDetailedText(error);
+    message.exec();
 }
 
 void CatalogView::initToolBar()
@@ -572,6 +825,9 @@ void CatalogView::initToolBar()
 
     ui->layoutToolBar->addWidget(toolBar);
     ui->layoutToolBar->addStretch();
+
+    if (m_catalogType == CatalogType::Type::Patients)
+        initSearchEdit();
 
     connect(toolBar, &ToolBarCustom::addDoc,
             this, &CatalogView::onAdd, Qt::UniqueConnection);
@@ -584,6 +840,46 @@ void CatalogView::initToolBar()
             this, &CatalogView::onUpdate, Qt::UniqueConnection);
     connect(toolBar, &ToolBarCustom::hideShowColumn,
             this, &CatalogView::onShowHideColumn, Qt::UniqueConnection);
+
+    // La pacienți butonul Delete deschide submeniul: marcare și eliminare
+    // din baza de date; tasta Delete marchează direct.
+    if (m_catalogType == CatalogType::Type::Patients) {
+        QToolButton *deleteButton = toolBar->getBtnDeletDoc();
+
+        // părinte = view-ul (ca menuSetFilter din OrderView), nu butonul:
+        // altfel meniul moștenește QSS-ul butoanelor din toolbar
+        auto *deleteMenu = new QMenu(this);
+        QAction *markAction   = deleteMenu->addAction(tr("Marcare pentru eliminare"));
+        QAction *removeAction = deleteMenu->addAction(tr("Eliminare din baza de date"));
+        removeAction->setShortcut(QKeySequence(Qt::SHIFT | Qt::Key_Delete));
+
+        connect(markAction, &QAction::triggered,
+                this, &CatalogView::onDelete);
+        connect(removeAction, &QAction::triggered,
+                this, &CatalogView::onRemovePatient);
+
+        // textul marcării după starea pacientului curent
+        connect(deleteMenu, &QMenu::aboutToShow, this, [this, markAction]() {
+            const QModelIndex idx = ui->tableView->currentIndex();
+            const bool marked = idx.isValid()
+                && model->itemAt(proxy->mapToSource(idx).row()).deletionMark
+                       == StatusObject::DeletionMark;
+            markAction->setText(marked ? tr("Anularea marcării pentru eliminare")
+                                       : tr("Marcare pentru eliminare"));
+        });
+
+        // ca „Filtru rapid” din OrderView: click deschide meniul, fără săgeată
+        deleteButton->setMenu(deleteMenu);
+        deleteButton->setPopupMode(QToolButton::InstantPopup);
+        deleteButton->setStyleSheet(deleteButton->styleSheet()
+            + QStringLiteral("QToolButton::menu-indicator { image: none; width: 0px; }"));
+
+        // tasta Delete marchează direct (shortcut-ul butonului ar deschide meniul)
+        deleteButton->setShortcut(QKeySequence());
+        auto *markShortcut = new QShortcut(QKeySequence(Qt::Key_Delete), this);
+        connect(markShortcut, &QShortcut::activated,
+                this, &CatalogView::onDelete);
+    }
 }
 
 bool CatalogView::isValidIndex(const QModelIndex &index)
@@ -631,7 +927,77 @@ void CatalogView::closeEvent(QCloseEvent *event)
 
 bool CatalogView::eventFilter(QObject *obj, QEvent *event)
 {
+    // Esc în câmpul de căutare golește textul, nu închide catalogul.
+    if (obj == m_searchEdit && event->type() == QEvent::KeyPress
+        && static_cast<QKeyEvent *>(event)->key() == Qt::Key_Escape
+        && !m_searchEdit->text().isEmpty()) {
+        m_searchEdit->clear();
+        applySearch();
+        return true;
+    }
     return QDialog::eventFilter(obj, event);
+}
+
+void CatalogView::initSearchEdit()
+{
+    m_searchEdit = new QLineEdit(this);
+    m_searchEdit->setPlaceholderText(tr("Căutare: nume, prenume, IDNP, dd.MM.yyyy"));
+    m_searchEdit->setToolTip(tr("Căutarea pacientului după nume, prenume, IDNP "
+                                "sau data nașterii (dd.MM.yyyy) – (Ctrl+F)"));
+    m_searchEdit->setClearButtonEnabled(true);
+    m_searchEdit->setMaxLength(100);
+    m_searchEdit->setMinimumWidth(280);
+    m_searchEdit->installEventFilter(this);
+
+    auto *searchLabel = new QLabel(tr("Căutare pacient:"), this);
+    searchLabel->setBuddy(m_searchEdit);
+    ui->layoutToolBar->addWidget(searchLabel);
+    ui->layoutToolBar->addWidget(m_searchEdit);
+
+    // Căutarea pornește după o scurtă pauză în tastare, nu la fiecare literă.
+    m_searchTimer.setSingleShot(true);
+    m_searchTimer.setInterval(400);
+
+    connect(&m_searchTimer, &QTimer::timeout,
+            this, &CatalogView::applySearch);
+
+    connect(m_searchEdit, &QLineEdit::textChanged,
+            this, [this]() { m_searchTimer.start(); });
+
+    connect(m_searchEdit, &QLineEdit::returnPressed, this, [this]() {
+        applySearch();
+        ui->tableView->setFocus();
+    });
+
+    auto *searchShortcut = new QShortcut(QKeySequence(Qt::CTRL | Qt::Key_F), this);
+    searchShortcut->setContext(Qt::WidgetWithChildrenShortcut);
+    connect(searchShortcut, &QShortcut::activated, this, [this]() {
+        m_searchEdit->setFocus();
+        m_searchEdit->selectAll();
+    });
+}
+
+void CatalogView::applySearch()
+{
+    m_searchTimer.stop();
+    if (!m_searchEdit || !model)
+        return;
+
+    const QString text = m_searchEdit->text().simplified();
+    if (text == m_appliedSearch)
+        return;
+    m_appliedSearch = text;
+
+    // Rezultatul căutării începe de la primul rând (fără regăsirea celui curent).
+    model->setSearchText(text);
+    model->setSort(m_filter.sortSection, m_filter.sortOrder);
+    showLoadError();
+
+    ui->tableView->scrollToTop();
+    if (proxy->rowCount() > 0)
+        ui->tableView->selectRow(0);
+    else
+        ui->tableView->clearSelection();
 }
 
 void CatalogView::changeEvent(QEvent *event)
@@ -645,8 +1011,14 @@ void CatalogView::changeEvent(QEvent *event)
 
 void CatalogView::keyReleaseEvent(QKeyEvent *event)
 {
-    if (event->key() == Qt::Key_End)
-        ui->tableView->selectRow(model->rowCount() - 1);
+    if (event->key() == Qt::Key_End) {
+        // ultimul rând al catalogului, nu doar al loturilor încărcate
+        fetchAllRows();
+        if (proxy->rowCount() > 0) {
+            ui->tableView->selectRow(proxy->rowCount() - 1);
+            ui->tableView->scrollToBottom();
+        }
+    }
     if (event->key() == Qt::Key_Home)
         ui->tableView->selectRow(0);
 }

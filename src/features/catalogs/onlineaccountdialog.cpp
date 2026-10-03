@@ -182,6 +182,9 @@ void OnlineAccountDialog::slot_IdOrganizationChanged()
     if (!okDecrypt) {
         qWarning(logWarning()) << "Nu s-a putut decripta parola";
         ui->password->clear();
+        // De regulă cheia locală lipsește (baza mutată fără directorul crypto).
+        ui->password->setPlaceholderText(
+            tr("Parola salvată nu poate fi decriptată – reintroduceți parola"));
         return;
     }
 

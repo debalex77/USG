@@ -38,6 +38,9 @@ OrderView::OrderView(DataBase &db, QWidget *parent)
     , m_dbProvider(this)
     , popUp(new PopUp(this))
     , menuSetFilter(new QMenu(this))
+    , m_searchTimer(new QTimer(this))
+    , m_searchInvestigationsModel(new QStandardItemModel(this))
+    , m_searchInvestigationsCompleter(new QCompleter(this))
     , toolBar(new ToolBarCustom(this,
                                  ToolBarCustom::AddEditDelete |
                                  ToolBarCustom::Filter |
@@ -66,6 +69,7 @@ OrderView::OrderView(DataBase &db, QWidget *parent)
 
     initToolBar();
     initBtnFilter();
+    initSearchField();
 
     initBoxFilterAndTableFooter();
 
@@ -849,7 +853,148 @@ void OrderView::onOpenPeriod()
 
 void OrderView::onSearchPacients()
 {
+    // butonul (Ctrl+F) afișează/ascunde câmpul de căutare
+    if (ui->editFilterPattern->isHidden()) {
+        ui->editFilterPattern->setHidden(false);
+        ui->editFilterPattern->setFocus();
+    } else {
+        hideSearchField();
+    }
+}
 
+void OrderView::initSearchField()
+{
+    // tipul căutării se alege din meniul butonului din câmp (ca în Pricing)
+    ui->editFilterPattern->setSearchOptions({
+        { QStringLiteral("patient"),
+          tr("Caută după pacient (nume, prenume, IDNP)") },
+        { QStringLiteral("investigation"),
+          tr("Caută după investigație (cod sau denumire)") }
+    });
+    ui->editFilterPattern->setSearchOptionIcon(QStringLiteral("patient"),
+                                               QIcon(":/img/catalogs/pacient.png"));
+    ui->editFilterPattern->setSearchOptionIcon(QStringLiteral("investigation"),
+                                               QIcon(":/img/catalogs/investigations.png"));
+    ui->editFilterPattern->setSearchOptionSelected(QStringLiteral("patient"));
+    m_filter.searchMode = QStringLiteral("patient");
+
+    ui->editFilterPattern->setHidden(true);
+    ui->editFilterPattern->installEventFilter(this);
+
+    // popup-ul cu investigațiile care conțin textul introdus (cod sau denumire)
+    m_searchInvestigationsCompleter->setModel(m_searchInvestigationsModel);
+    m_searchInvestigationsCompleter->setCompletionColumn(0);
+    m_searchInvestigationsCompleter->setCaseSensitivity(Qt::CaseInsensitive);
+    m_searchInvestigationsCompleter->setCompletionMode(QCompleter::PopupCompletion);
+    m_searchInvestigationsCompleter->setFilterMode(Qt::MatchContains);
+    m_searchInvestigationsCompleter->setModelSorting(QCompleter::UnsortedModel);
+    m_searchInvestigationsCompleter->setMaxVisibleItems(15);
+
+    // în câmp rămâne „cod - denumire”; textul poate fi deja cel evidențiat
+    // în popup (fără textChanged), deci căutarea se pornește explicit
+    connect(m_searchInvestigationsCompleter,
+            QOverload<const QModelIndex &>::of(&QCompleter::activated),
+            m_searchTimer, QOverload<>::of(&QTimer::start));
+
+    m_searchTimer->setSingleShot(true);
+    m_searchTimer->setInterval(300);
+
+    connect(ui->editFilterPattern, &SearchLineEdit::setSearchByCodeName,
+            this, &OrderView::onSearchModeChanged, Qt::UniqueConnection);
+    connect(ui->editFilterPattern, &QLineEdit::textChanged,
+            m_searchTimer, QOverload<>::of(&QTimer::start), Qt::UniqueConnection);
+    connect(m_searchTimer, &QTimer::timeout,
+            this, &OrderView::applySearchText, Qt::UniqueConnection);
+}
+
+void OrderView::onSearchModeChanged(const QString &mode)
+{
+    if (mode == QLatin1String("investigation")) {
+        if (m_searchInvestigationsModel->rowCount() == 0)
+            loadSearchInvestigations();
+        ui->editFilterPattern->setCompleter(m_searchInvestigationsCompleter);
+    } else {
+        ui->editFilterPattern->setCompleter(nullptr);
+    }
+
+    ui->editFilterPattern->setFocus();
+    applySearchText(); // textul existent se caută după noul criteriu
+}
+
+void OrderView::loadSearchInvestigations()
+{
+    m_searchInvestigationsModel->clear();
+    m_searchInvestigationsModel->setColumnCount(1);
+
+    QSqlQuery qry(m_db.getDatabase());
+    // doar investigațiile folosite (`use` = 1)
+    if (!qry.prepare(m_db.getTextSQL(":/sql/queries/investigations_use_select.sql"))) {
+        qWarning(logWarning()) << "OrderView prepare investigations error:"
+                               << qry.lastError().text();
+        return;
+    }
+
+    if (!qry.exec()) {
+        qWarning(logWarning()) << "OrderView investigations error:"
+                               << qry.lastError().text();
+        return;
+    }
+
+    const QSqlRecord rec = qry.record();
+    const int colCod  = rec.indexOf("cod");
+    const int colName = rec.indexOf("name");
+
+    while (qry.next()) {
+        const QString cod = qry.value(colCod).toString();
+        auto *item = new QStandardItem(cod + " - " + qry.value(colName).toString());
+        item->setData(cod, Qt::UserRole);
+        m_searchInvestigationsModel->appendRow(item);
+    }
+}
+
+void OrderView::applySearchText()
+{
+    const QString text = ui->editFilterPattern->text().trimmed();
+    const QString mode = ui->editFilterPattern->getSearchOptionSelected();
+
+    QString searchText = text;
+    QString searchMode = mode;
+
+    // „cod - denumire” din popup: comenzile se caută după codul exact
+    if (mode == QLatin1String("investigation") && !text.isEmpty()) {
+        const QList<QStandardItem *> items =
+            m_searchInvestigationsModel->findItems(text, Qt::MatchExactly);
+        if (!items.isEmpty()) {
+            // la parcurgerea popup-ului cu săgețile textul se schimbă temporar
+            if (m_searchInvestigationsCompleter->popup()->isVisible())
+                return;
+            searchText = items.first()->data(Qt::UserRole).toString();
+            searchMode = QStringLiteral("investigation_code");
+        }
+    }
+
+    // fără text, schimbarea criteriului nu schimbă jurnalul
+    const bool unchanged = searchText == m_filter.searchText
+                           && (searchText.isEmpty() || searchMode == m_filter.searchMode);
+    m_filter.searchMode = searchMode;
+    if (unchanged)
+        return;
+
+    m_filter.searchText = searchText;
+    reloadTableView();
+}
+
+void OrderView::hideSearchField()
+{
+    // câmpul ascuns nu mai filtrează jurnalul
+    m_searchTimer->stop();
+    {
+        const QSignalBlocker blocker(ui->editFilterPattern);
+        ui->editFilterPattern->clear();
+    }
+    ui->editFilterPattern->setHidden(true);
+    applySearchText();
+    ui->tableView->setFocus();
 }
 
 void OrderView::openPreviewOrder()
@@ -1710,6 +1855,12 @@ void OrderView::onSortIndicatorChanged(int section, Qt::SortOrder order)
 void OrderView::updateTableView()
 {
     qInfo(logInfo()) << "OrderView: vizualizarea/actualizarea jurnalului";
+    reloadTableView();
+}
+
+void OrderView::reloadTableView()
+{
+    // fără log: căutarea live reîncarcă jurnalul la fiecare pauză în tastare
     if (!modelTable || !proxyTable)
         return;
 
@@ -1784,10 +1935,6 @@ void OrderView::initToolBar()
                        m_db.toolButtonStyleForText());
 
     ui->layoutToolBar->addWidget(toolBar);
-
-    // Căutarea pacienților nu este implementată în jurnal (ca în ReportView);
-    // butonul ascuns dezactivează și scurtătura Ctrl+F.
-    toolBar->getBtnSaecrPacient()->hide();
 
     toolBar->getBtnAddDoc()->installEventFilter(this);
     toolBar->getBtnEditDoc()->installEventFilter(this);
@@ -1884,10 +2031,17 @@ void OrderView::clearFilter()
 {
     m_filter.nrDoc.clear();
     m_filter.patientName.clear();
+    m_filter.searchText.clear();
     m_filter.idOrganization = 0;
     m_filter.idContract     = 0;
     m_filter.idUser         = 0;
     m_filter.patientId      = 0;
+
+    m_searchTimer->stop();
+    {
+        const QSignalBlocker blocker(ui->editFilterPattern);
+        ui->editFilterPattern->clear();
+    }
 
     // fără organizație, lista contractelor revine la toate contractele
     syncFilterControls();
@@ -2045,6 +2199,13 @@ bool OrderView::eventFilter(QObject *obj, QEvent *event)
         return previewImagesDocs(event);
     }
 
+    // Esc în câmpul de căutare îl închide, nu închide jurnalul
+    if (obj == ui->editFilterPattern && event->type() == QEvent::KeyPress
+        && static_cast<QKeyEvent *>(event)->key() == Qt::Key_Escape) {
+        hideSearchField();
+        return true;
+    }
+
     auto *button = qobject_cast<QToolButton *>(obj);
     if (!button || !popUp)
         return QDialog::eventFilter(obj, event);
@@ -2086,7 +2247,7 @@ bool OrderView::eventFilter(QObject *obj, QEvent *event)
     else if (button == toolBar->getBtnOpenPeriod())
         text = tr("Perioada (Ctrl + Shift + P)");
     else if (button == toolBar->getBtnSaecrPacient())
-        text = tr("Cauta (Ctrl + F)");
+        text = tr("Căutare după pacient sau investigație (Ctrl + F)");
 
     if (text.isEmpty())
         return QDialog::eventFilter(obj, event);

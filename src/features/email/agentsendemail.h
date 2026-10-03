@@ -112,7 +112,8 @@ private:
     void initConnections();
     void initEditorsMap();
 
-    bool loadOnlineAccountSettings(bool logFailure = true);
+    bool loadOnlineAccountSettings(bool logFailure = true,
+                                   bool *passwordUnreadable = nullptr);
     bool loadOrganizationDetails();
     bool selectAccountByEmail(const QString &email);
     void selectFirstAvailableAccount();

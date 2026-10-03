@@ -323,5 +323,9 @@ bool ComboDelegate::eventFilter(QObject *obj, QEvent *event)
         }
     }
 
-    return QStyledItemDelegate::eventFilter(obj, event);
+    // Cu m_enterMovesToNextItem filtrul este instalat și pe lineEdit/popup;
+    // tratarea implicită (FocusOut, Tab -> commitData/closeEditor) este
+    // valabilă doar pentru editorul înregistrat în view, adică pentru combo.
+    return qobject_cast<QComboBox *>(obj)
+           && QStyledItemDelegate::eventFilter(obj, event);
 }

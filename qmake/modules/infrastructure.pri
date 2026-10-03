@@ -64,6 +64,7 @@ SOURCES += \
     $$USG_ROOT/src/infrastructure/email/reportsemailexporterworker.cpp \
     $$USG_ROOT/src/infrastructure/email/temporaryexportowner.cpp \
     $$USG_ROOT/src/infrastructure/security/cryptomanager.cpp \
+    $$USG_ROOT/src/infrastructure/security/passwordhasher.cpp \
     $$USG_ROOT/src/infrastructure/sync/docsyncworker.cpp \
     $$USG_ROOT/src/infrastructure/persistence/patientdatasaverworker.cpp \
     $$USG_ROOT/src/infrastructure/persistence/patientsaverworker.cpp \
@@ -83,6 +84,7 @@ HEADERS += \
     $$USG_ROOT/src/infrastructure/email/reportsemailexporterworker.h \
     $$USG_ROOT/src/infrastructure/email/temporaryexportowner.h \
     $$USG_ROOT/src/infrastructure/security/cryptomanager.h \
+    $$USG_ROOT/src/infrastructure/security/passwordhasher.h \
     $$USG_ROOT/src/infrastructure/sync/docsyncworker.h \
     $$USG_ROOT/src/infrastructure/persistence/patientdatasaverworker.h \
     $$USG_ROOT/src/infrastructure/persistence/patientsaverworker.h \

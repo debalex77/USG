@@ -825,12 +825,17 @@ void OrderDialog::onValidateDataPatient()
                         ui->newPatient->setChecked(false);  // obiectul(pacientul) nu este nou
                 }
 
+                /** inchidem acces la campuri */
                 setPatientDataEnabled(false);
+
+                /** instalam focusul */
+                ui->editFilterPattern->setFocus();
 
                 /** initierea syncronizarii */
                 if (MainDatabaseConnectionContext::instance().isSqlite()
                     && SettingsService::instance().synchronization().enabled)
                     initSyncPatientData(savedPatient);
+
             });
 
     /** 10. conectarea - distrugerea daca a fost emis ca exista pacient */

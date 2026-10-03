@@ -86,6 +86,7 @@
         <file>sql/queries/organizations_select.sql</file>
         <file>sql/queries/users_listForm_select_sqlite.sql</file>
         <file>sql/queries/investigations_select.sql</file>
+        <file>sql/queries/investigations_use_select.sql</file>
         <file>sql/queries/typePrices_select.sql</file>
         <file>sql/queries/organizations_insert.sql</file>
         <file>sql/queries/organizations_update.sql</file>
@@ -98,6 +99,7 @@
         <file>sql/queries/userPreferences_insert.sql</file>
         <file>sql/queries/patients_fullName_select_mariadb.sql</file>
         <file>sql/queries/patients_fullName_select_sqlite.sql</file>
+        <file>sql/queries/patient_references.sql</file>
         <file>sql/queries/organizations_combo_view.sql</file>
         <file>sql/mariadb/tables/breast.sql</file>
         <file>sql/mariadb/tables/application_settings.sql</file>

@@ -165,8 +165,11 @@ void AgentSendEmail::initConnections()
             this, &AgentSendEmail::onClose, Qt::UniqueConnection);
 }
 
-bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
+bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure, bool *passwordUnreadable)
 {
+    if (passwordUnreadable)
+        *passwordUnreadable = false;
+
     QString error;
     QByteArray realKey;
 
@@ -232,6 +235,8 @@ bool AgentSendEmail::loadOnlineAccountSettings(bool logFailure)
 
     if (!okDecrypt) {
         qWarning(logWarning()) << "Nu s-a putut decripta parola onlineAccount";
+        if (passwordUnreadable)
+            *passwordUnreadable = true;
         return false;
     }
 
@@ -530,10 +535,17 @@ void AgentSendEmail::onSend()
     }
 
     m_ctx.emailFrom = ui->txt_from->text().trimmed();
-    if (!loadOnlineAccountSettings()) {
+    bool passwordUnreadable = false;
+    if (!loadOnlineAccountSettings(true, &passwordUnreadable)) {
         QMessageBox::warning(this,
                              tr("Verificarea"),
-                             tr("Nu au putut fi încărcate datele contului SMTP selectat."),
+                             passwordUnreadable
+                                 ? tr("Parola contului SMTP selectat nu poate fi decriptată pe acest "
+                                      "calculator (cheia locală de criptare lipsește sau diferă, "
+                                      "de exemplu baza de date a fost mutată fără directorul "
+                                      "<b>crypto</b>).<br>Reintroduceți parola în catalogul "
+                                      "conturilor online.")
+                                 : tr("Nu au putut fi încărcate datele contului SMTP selectat."),
                              QMessageBox::Ok);
         return;
     }

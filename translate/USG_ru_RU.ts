@@ -194,137 +194,137 @@
         <translation>Почтовый агент</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="309"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="314"/>
         <source>Rapoarte investigațiilor ecografice</source>
         <translation>Протоколы ультразвуковых исследований</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="293"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="311"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="298"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="316"/>
         <source>Către %1.</source>
         <translation>Для %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="312"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="317"/>
         <source>Vă transmitem alăturat raportul medical %1.</source>
         <translation>Направляем Вам во вложении медицинский протокол %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="313"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="318"/>
         <source>Rapoarte atașate:</source>
         <translation>Прикреплённые протоколы:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="314"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="319"/>
         <source> - %1 în format PDF.</source>
         <translation> - %1 в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="316"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="321"/>
         <source>Vă rugăm să confirmați primirea acestuia și să ne contactați pentru orice informații suplimentare.</source>
         <translation>Просим подтвердить получение и связаться с нами, если Вам потребуется дополнительная информация.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="304"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="318"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="340"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="309"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="323"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="345"/>
         <source>Cu stimă,</source>
         <translation>С уважением,</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="290"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="295"/>
         <source>Rapoartele investigațiilor ecografice (%1)</source>
         <translation>Заключения ультразвуковых исследований (%1)</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="294"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="299"/>
         <source>Vă transmitem alăturat rapoartele investigațiilor ecografice efectuate pacienților îndreptați de instituția dumneavoastră.</source>
         <translation>Направляем Вам заключения ультразвуковых исследований пациентов, направленных Вашим учреждением.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="296"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="301"/>
         <source>Rapoarte atașate (format PDF):</source>
         <translation>Прилагаемые заключения (формат PDF):</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="300"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="305"/>
         <source>Imaginile ecografice sunt atașate separat.</source>
         <translation>Ультразвуковые изображения приложены отдельно.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="302"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="307"/>
         <source>Vă rugăm să confirmați primirea și să ne contactați pentru orice informații suplimentare.</source>
         <translation>Просим подтвердить получение и обращаться к нам за любой дополнительной информацией.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="306"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="320"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="342"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="311"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="325"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="347"/>
         <source>Telefon: %1</source>
         <translation>Телефон: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="307"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="321"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="343"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="312"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="326"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="348"/>
         <source>E-mail: %1</source>
         <translation>E-mail: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="323"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="328"/>
         <source>Rezultatul investigației ecografice</source>
         <translation>Результат ультразвукового исследования</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="325"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="330"/>
         <source>Stimate/Stimată %1.</source>
         <translation>Уважаемый(ая) %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="326"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="331"/>
         <source>Vă transmitem raportul ecografic în urma investigației efectuate la %1 pe data de %2.</source>
         <translation>Направляем Вам протокол ультразвукового исследования, выполненного в %1 от %2.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="329"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="334"/>
         <source>Documente atașate:</source>
         <translation>Прикреплённые документы:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="330"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="335"/>
         <source> - Comanda ecografică în format PDF.</source>
         <translation> - Заказ на ультразвуковое исследование в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="331"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="336"/>
         <source> - Rapoarte ecografice în format PDF.</source>
         <translation> - Протоколы ультразвуковых исследований в формате PDF.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="333"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="338"/>
         <source>Observații importante:</source>
         <translation>Важная информация:</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="334"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="339"/>
         <source>Dacă aveți întrebări legate de rezultatul investigației sau doriți o consultație suplimentară,</source>
         <translation>Если у Вас возникли вопросы по результатам исследования или Вы хотите получить дополнительную консультацию,</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="335"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="340"/>
         <source>vă rugăm să ne contactați la %1 sau să ne scrieți la %2.</source>
         <translation>просим связаться с нами по телефону %1 или написать на %2.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="339"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="344"/>
         <source>Vă mulțumim pentru încrederea acordată!</source>
         <translation>Благодарим Вас за доверие!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="511"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="523"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="535"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="544"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="516"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="528"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="541"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="556"/>
         <source>Verificarea</source>
         <translation>Проверка</translation>
     </message>
@@ -333,27 +333,32 @@
         <translation type="vanished">Не указан e-mail получателя !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="524"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="529"/>
         <source>Nu este indicat e-mail destinatarului !!!</source>
         <translation>Не указан e-mail адресата !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="536"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="543"/>
+        <source>Parola contului SMTP selectat nu poate fi decriptată pe acest calculator (cheia locală de criptare lipsește sau diferă, de exemplu baza de date a fost mutată fără directorul &lt;b&gt;crypto&lt;/b&gt;).&lt;br&gt;Reintroduceți parola în catalogul conturilor online.</source>
+        <translation>Пароль выбранной учётной записи SMTP не может быть расшифрован на этом компьютере (локальный ключ шифрования отсутствует или отличается, например, база данных была перенесена без каталога &lt;b&gt;crypto&lt;/b&gt;).&lt;br&gt;Введите пароль повторно в справочнике онлайн-аккаунтов.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/email/agentsendemail.cpp" line="548"/>
         <source>Nu au putut fi încărcate datele contului SMTP selectat.</source>
         <translation>Не удалось загрузить данные выбранной учётной записи SMTP.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="545"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="557"/>
         <source>Nu există documente exportate pentru atașare.</source>
         <translation>Нет экспортированных документов для прикрепления.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="553"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="565"/>
         <source>O trimitere este deja în curs.</source>
         <translation>Отправка уже выполняется.</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="560"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="572"/>
         <source>Se transmit documentele destinatarului ...</source>
         <translation>Документы отправляются адресату ...</translation>
     </message>
@@ -364,19 +369,19 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="552"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="613"/>
-        <location filename="../src/features/email/agentsendemail.cpp" line="621"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="564"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="625"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="633"/>
         <source>Transmiterea prin e-mail</source>
         <translation>Отправка по электронной почте</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="512"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="517"/>
         <source>Nu este indicat e-mailul expeditorului !!!</source>
         <translation>Не указан e-mail отправителя !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="614"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="626"/>
         <source>E-mail-ul nu a fost trimis.
 
 %1</source>
@@ -385,7 +390,7 @@
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/email/agentsendemail.cpp" line="622"/>
+        <location filename="../src/features/email/agentsendemail.cpp" line="634"/>
         <source>E-mail-ul a fost trimis către %1.</source>
         <translation>Письмо отправлено на адрес %1.</translation>
     </message>
@@ -1076,147 +1081,195 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="441"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="443"/>
         <source>Programarea pacienților [*]</source>
         <translation>Запись пациентов [*]</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="523"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="525"/>
         <source>Elimină rândul selectat</source>
         <translation>Удалить выбранную строку</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="525"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="527"/>
         <source>Elimină toate programările zilei</source>
         <translation>Удалить все записи на этот день</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="612"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="614"/>
         <source>Programarea pacienților</source>
         <translation>Запись пациентов</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="613"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="615"/>
         <source>Programările nu au putut fi încărcate.
 %1</source>
         <translation>Не удалось загрузить записи пациентов.
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="680"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="833"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="682"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="835"/>
         <source>Salvarea programării</source>
         <translation>Сохранение записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="682"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="684"/>
         <source>Conexiunea cu baza de date nu este deschisă.</source>
         <translation>Соединение с базой данных не открыто.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="696"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="698"/>
         <source>Rândul %1 este deja salvat, dar pacientul a fost golit. Folosiți acțiunea «Elimină rândul selectat».</source>
         <translation>Строка %1 уже сохранена, но данные пациента были удалены. Используйте действие «Удалить выбранную строку».</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="708"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="710"/>
         <source>Rândul %1: %2</source>
         <translation>Строка %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="834"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="836"/>
         <source>Datele nu au putut fi salvate.
 %1</source>
         <translation>Не удалось сохранить данные.
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="845"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="847"/>
         <source>Programarea din data %1 a fost salvată cu succes.</source>
         <translation>Запись на дату %1 успешно сохранена.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="858"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="869"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="884"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="893"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="897"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="912"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="860"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="871"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="886"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="895"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="899"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="914"/>
         <source>Eliminarea programării</source>
         <translation>Удаление записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="859"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="861"/>
         <source>Doriți să eliminați toate programările din data %1?</source>
         <translation>Удалить все записи на дату %1?</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="872"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="874"/>
         <source>Programările din data %1 au fost eliminate.</source>
         <translation>Все записи на дату %1 удалены.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="885"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="887"/>
         <source>Selectați rândul pe care doriți să-l eliminați.</source>
         <translation>Выберите строку, которую необходимо удалить.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="894"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="896"/>
         <source>Rândul selectat este gol.</source>
         <translation>Выбранная строка пуста.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="898"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="900"/>
         <source>Doriți să eliminați programarea selectată%1?</source>
         <translation>Удалить выбранную запись%1?</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="920"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="922"/>
         <source>Programarea selectată a fost eliminată.</source>
         <translation>Выбранная запись удалена.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="928"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="940"/>
+        <source>Deschide preview</source>
+        <translation>Открыть просмотр</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="943"/>
+        <source>Deschide designer</source>
+        <translation>Открыть дизайнер</translation>
+    </message>
+    <message>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="979"/>
         <source>Printarea programării</source>
         <translation>Печать записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="929"/>
-        <source>Forma de tipar se află în proces de dezvoltare.</source>
-        <translation>Печатная форма находится в разработке.</translation>
-    </message>
-    <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="941"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="949"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="992"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1000"/>
         <source>Crearea comenzii</source>
         <translation>Создание заказа</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="942"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="993"/>
         <source>Selectați programarea din care doriți să creați comanda.</source>
         <translation>Выберите запись, на основании которой необходимо создать заказ.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="950"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1001"/>
         <source>Programarea selectată nu conține numele pacientului.</source>
         <translation>Выбранная запись не содержит имени пациента.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="971"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1022"/>
         <source>Completarea comenzii</source>
         <translation>Заполнение заказа</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="981"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1032"/>
         <source>Modificarea datelor</source>
         <translation>Изменение данных</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="982"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1033"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări?</source>
         <translation>Данные были изменены.
 Сохранить изменения?</translation>
+    </message>
+</context>
+<context>
+    <name>AppointmentPrintService</name>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="78"/>
+        <source>Nu sunt programări pentru data aleasă.</source>
+        <translation>На выбранную дату нет записей.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="82"/>
+        <source>Baza de date nu este deschisă pentru tipărirea programărilor.</source>
+        <translation>База данных не открыта для печати записей.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="125"/>
+        <source>Datele organizației pentru tipărire nu au putut fi citite: %1</source>
+        <translation>Не удалось прочитать данные организации для печати: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="153"/>
+        <source>da</source>
+        <translation>да</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="159"/>
+        <source>pentru data de %1 (%2)</source>
+        <translation>на %1 (%2)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="177"/>
+        <source>Programarea pacienților %1 (printare)</source>
+        <translation>Запись пациентов %1 (печать)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="183"/>
+        <source>Nu a fost încărcat șablonul formei de tipar: %1</source>
+        <translation>Не удалось загрузить шаблон печатной формы: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/printing/appointmentprintservice.cpp" line="202"/>
+        <source>Exportul PDF nu este disponibil pentru programări.</source>
+        <translation>Экспорт в PDF для записей недоступен.</translation>
     </message>
 </context>
 <context>
@@ -1247,9 +1300,13 @@ Doriți să salvați aceste modificări?</source>
         <translation>Архив 7zip:</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="109"/>
         <source>Lista bazelor de date (.sqlite)</source>
-        <translation>Список баз данных (.sqlite)</translation>
+        <translation type="vanished">Список баз данных (.sqlite)</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="109"/>
+        <source>Fișierele pentru arhivare</source>
+        <translation>Файлы для архивации</translation>
     </message>
     <message>
         <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="121"/>
@@ -1267,22 +1324,72 @@ Doriți să salvați aceste modificări?</source>
         <translation>Удалить выбранные ...</translation>
     </message>
     <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="173"/>
+        <source>Fișierele de configurare</source>
+        <translation>Файлы конфигурации</translation>
+    </message>
+    <message>
         <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="179"/>
+        <source>Adaugă setările (directoriul settings și profilul .conf)</source>
+        <translation>Добавить настройки (каталог settings и профиль .conf)</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="186"/>
+        <source>Adaugă cheile de criptare (directoriul crypto)</source>
+        <translation>Добавить ключи шифрования (каталог crypto)</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="196"/>
+        <source>Criptarea arhivei</source>
+        <translation>Шифрование архива</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="202"/>
+        <source>Criptează arhiva cu parolă (AES-256, inclusiv numele fișierelor)</source>
+        <translation>Шифровать архив паролем (AES-256, включая имена файлов)</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="209"/>
+        <source>Parola:</source>
+        <translation>Пароль:</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="223"/>
+        <source>Afișează</source>
+        <translation>Показать</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="230"/>
+        <source>Confirmare:</source>
+        <translation>Подтверждение:</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.ui" line="253"/>
         <source>TextLabel</source>
         <translation>TextLabel</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="40"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="45"/>
         <source>Crearea arhivei 7zip</source>
         <translation>Создание архива 7zip</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="66"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="80"/>
+        <source>Fără parolă arhiva nu poate fi restaurată. Notați parola într-un loc sigur.</source>
+        <translation>Без пароля архив невозможно восстановить. Запишите пароль в надёжном месте.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="85"/>
+        <source>Atenție: cu cheile de criptare, oricine are arhiva poate decripta parolele salvate (cloud, e-mail, profil). Păstrați arhiva într-un loc sigur.</source>
+        <translation>Внимание: с ключами шифрования любой, у кого есть архив, может расшифровать сохранённые пароли (облако, e-mail, профиль). Храните архив в надёжном месте.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="95"/>
         <source>Initierea ...</source>
         <translation>Инициализация ...</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="76"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="105"/>
         <source>Atenție: nu am găsit 7-Zip în PATH.
 Debian/Ubuntu: `sudo apt install 7zip` sau `sudo apt install p7zip-full`
 Windows: Instalează 7-Zip și adaugă-l în PATH.</source>
@@ -1291,109 +1398,236 @@ Debian/Ubuntu: `sudo apt install 7zip` или `sudo apt install p7zip-full`
 Windows: установите 7-Zip и добавьте его в PATH.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="90"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="121"/>
         <source>Procesarea destinată doar pentru baza de date .sqlite !!!</source>
         <translation>Обработка предназначена только для баз данных .sqlite !!!</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="97"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="128"/>
         <source>Procesarea nu este accesibilă !!!</source>
         <translation>Обработка недоступна !!!</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="140"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="202"/>
+        <source>parola salvată (introduceți una nouă pentru a o schimba)</source>
+        <translation>сохранённый пароль (введите новый, чтобы изменить)</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="203"/>
+        <source>minimum 8 caractere, fără diacritice</source>
+        <translation>минимум 8 символов, только латиница</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="218"/>
+        <source>Parola arhivei nu este disponibilă (%1). Introduceți parola în dialogul de arhivare.</source>
+        <translation>Пароль архива недоступен (%1). Введите пароль в диалоге архивирования.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="224"/>
+        <source>Parola arhivei trebuie să conțină cel puțin 8 caractere.</source>
+        <translation>Пароль архива должен содержать не менее 8 символов.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="228"/>
+        <source>Parola și confirmarea nu coincid.</source>
+        <translation>Пароль и подтверждение не совпадают.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="234"/>
+        <source>Parola arhivei</source>
+        <translation>Пароль архива</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="235"/>
+        <source>Fără această parolă arhiva &lt;b&gt;nu poate fi restaurată&lt;/b&gt;.&lt;br&gt;Notați parola într-un loc sigur, separat de calculator.&lt;br&gt;&lt;br&gt;Parola va fi salvată pentru arhivarea automată la închidere.&lt;br&gt;&lt;br&gt;Continuați?</source>
+        <translation>Без этого пароля архив &lt;b&gt;невозможно восстановить&lt;/b&gt;.&lt;br&gt;Запишите пароль в надёжном месте, отдельно от компьютера.&lt;br&gt;&lt;br&gt;Пароль будет сохранён для автоматического архивирования при закрытии.&lt;br&gt;&lt;br&gt;Продолжить?</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="249"/>
+        <source>Parola arhivei nu a putut fi salvată: %1</source>
+        <translation>Не удалось сохранить пароль архива: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="268"/>
+        <source>Cheile de criptare</source>
+        <translation>Ключи шифрования</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="269"/>
+        <source>Cu cheile de criptare, oricine are arhiva poate decripta parolele salvate (cloud, e-mail, profil).&lt;br&gt;&lt;br&gt;Păstrați arhiva într-un loc sigur.&lt;br&gt;&lt;br&gt;Adăugați cheile de criptare în arhivă?</source>
+        <translation>С ключами шифрования любой, у кого есть архив, может расшифровать сохранённые пароли (облако, e-mail, профиль).&lt;br&gt;&lt;br&gt;Храните архив в надёжном месте.&lt;br&gt;&lt;br&gt;Добавить ключи шифрования в архив?</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="293"/>
+        <source>Arhivarea automată a bazei de date</source>
+        <translation>Автоматическое архивирование базы данных</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="298"/>
+        <source>Arhivarea automată nu poate fi efectuată: 7-Zip nu este instalat.</source>
+        <translation>Автоматическое архивирование невозможно: 7-Zip не установлен.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="344"/>
         <source>Alege baze SQLite</source>
         <translation>Выберите базы SQLite</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="142"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="346"/>
         <source>SQLite DB (*.sqlite *.db *.sqlite3);;Toate fișierele (*)</source>
         <translation>SQLite DB (*.sqlite *.db *.sqlite3);;Все файлы (*)</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="179"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="400"/>
         <source>Alege arhiva 7z</source>
         <translation>Выберите архив 7z</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="183"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="404"/>
         <source>Arhive 7z (*.7z)</source>
         <translation>Архивы 7z (*.7z)</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="197"/>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="203"/>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="275"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="423"/>
         <source>Eroare</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="198"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="437"/>
+        <source>Fișierul lipsește și nu va fi arhivat: %1</source>
+        <translation>Файл отсутствует и не будет заархивирован: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="440"/>
         <source>Adaugă cel puțin un fișier SQLite.</source>
         <translation>Добавьте хотя бы один файл SQLite.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="204"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="428"/>
         <source>7-Zip nu este disponibil în PATH.</source>
         <translation>7-Zip недоступен в PATH.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="217"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="454"/>
+        <source>Directorul arhivei nu poate fi creat: %1</source>
+        <translation>Не удалось создать каталог архива: %1</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="476"/>
         <source>Rulează compresia…</source>
         <translation>Запуск сжатия…</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="220"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="479"/>
         <source>Fișiere:</source>
         <translation>Файлы:</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="275"/>
         <source>Nu pot porni 7-Zip.</source>
-        <translation>Не удалось запустить 7-Zip.</translation>
+        <translation type="vanished">Не удалось запустить 7-Zip.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="284"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="594"/>
         <source>Se oprește compresia…</source>
         <translation>Остановка сжатия…</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="307"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="635"/>
         <source>Progres: %1%</source>
         <translation>Прогресс: %1%</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="323"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="672"/>
         <source>Complet.</source>
         <translation>Готово.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="324"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="646"/>
         <source>Compresie finalizată cu succes.</source>
         <translation>Сжатие успешно завершено.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="326"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="675"/>
+        <source>Arhiva automată SQLite a fost creată:</source>
+        <translation>Автоматический архив SQLite создан:</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="655"/>
         <source>Eșec (exit=%1).</source>
         <translation>Ошибка (exit=%1).</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="327"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="656"/>
         <source>Compresie oprită/eronată (exit=%1).</source>
         <translation>Сжатие остановлено/завершилось с ошибкой (exit=%1).</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="333"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="659"/>
+        <source>Arhivarea automată a eșuat. Cod proces:</source>
+        <translation>Автоматическое архивирование завершилось с ошибкой. Код процесса:</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="583"/>
+        <source>Arhiva incompletă a fost ștearsă.</source>
+        <translation>Незавершённый архив удалён.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="484"/>
+        <source>Arhiva va fi criptată (AES-256).</source>
+        <translation>Архив будет зашифрован (AES-256).</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="564"/>
+        <source>Verificarea arhivei…</source>
+        <translation>Проверка архива…</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="565"/>
+        <source>Verificarea arhivei (7z t)…</source>
+        <translation>Проверка архива (7z t)…</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="593"/>
+        <source>Se oprește verificarea…</source>
+        <translation>Остановка проверки…</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="673"/>
+        <source>Arhiva a fost verificată cu succes.</source>
+        <translation>Архив успешно проверен.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="680"/>
+        <source>Verificarea a fost anulată.</source>
+        <translation>Проверка отменена.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="681"/>
+        <source>Verificarea a fost anulată; arhiva a fost păstrată, dar nu este verificată.</source>
+        <translation>Проверка отменена; архив сохранён, но не проверен.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="684"/>
+        <source>Verificarea a eșuat (exit=%1).</source>
+        <translation>Проверка не удалась (exit=%1).</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="685"/>
+        <source>Arhiva nu a trecut verificarea (exit=%1).</source>
+        <translation>Архив не прошёл проверку (exit=%1).</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="696"/>
         <source>Eroare proces: %1</source>
         <translation>Ошибка процесса: %1</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="335"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="710"/>
         <source>Eroare 7-Zip</source>
         <translation>Ошибка 7-Zip</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="336"/>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="711"/>
         <source>Nu pot rula 7-Zip (cod=%1).</source>
         <translation>Не удалось запустить 7-Zip (код=%1).</translation>
     </message>
@@ -1546,126 +1780,153 @@ Windows: установите 7-Zip и добавьте его в PATH.</transla
         <translation>Последний доступ: определить невозможно</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="46"/>
-        <location filename="../src/app/authorizationuser.cpp" line="445"/>
+        <location filename="../src/app/authorizationuser.cpp" line="68"/>
+        <location filename="../src/app/authorizationuser.cpp" line="583"/>
         <source>Autorizarea utilizatorului</source>
         <translation>Авторизация пользователя</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="68"/>
+        <location filename="../src/app/authorizationuser.cpp" line="90"/>
         <source>...maximum 50 caractere</source>
         <translation>...максимум 50 символов</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="233"/>
-        <location filename="../src/app/authorizationuser.cpp" line="239"/>
+        <location filename="../src/app/authorizationuser.cpp" line="261"/>
+        <location filename="../src/app/authorizationuser.cpp" line="267"/>
         <source>Citirea ultimei accesări a eșuat:</source>
         <translation>Не удалось прочитать время последнего входа:</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="251"/>
+        <location filename="../src/app/authorizationuser.cpp" line="276"/>
         <source>Ultima accesare: niciodată</source>
         <translation>Последний вход: ещё не было</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="263"/>
+        <location filename="../src/app/authorizationuser.cpp" line="288"/>
         <source>Ultima accesare: %1</source>
         <translation>Последний вход: %1</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="265"/>
+        <location filename="../src/app/authorizationuser.cpp" line="290"/>
         <source>Ultima accesare: indisponibilă</source>
         <translation>Последний вход: недоступно</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="305"/>
+        <location filename="../src/app/authorizationuser.cpp" line="321"/>
+        <source>Așteptați %1 s</source>
+        <translation>Подождите %1 с</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="346"/>
+        <source>Încercarea eșuată nr. %1 de autentificare pentru utilizatorul &apos;%2&apos;.</source>
+        <translation>Неудачная попытка аутентификации № %1 для пользователя &apos;%2&apos;.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="350"/>
+        <source>Numele utilizatorului sau parola sunt incorecte !!!&lt;br&gt;Accesul este interzis.</source>
+        <translation>Неверное имя пользователя или пароль !!!&lt;br&gt;Доступ запрещён.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="355"/>
+        <source>Autentificarea utilizatorului &apos;%1&apos; este suspendată pentru %2 secunde după %3 încercări eșuate.</source>
+        <translation>Аутентификация пользователя &apos;%1&apos; приостановлена на %2 секунд после %3 неудачных попыток.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="360"/>
+        <source>&lt;br&gt;&lt;br&gt;Următoarea încercare va fi posibilă peste %1 secunde.</source>
+        <translation>&lt;br&gt;&lt;br&gt;Следующая попытка будет возможна через %1 секунд.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="362"/>
+        <source>&lt;br&gt;&lt;br&gt;Ați uitat parola? Administratorul o poate reseta din catalogul &lt;b&gt;Utilizatori&lt;/b&gt;.</source>
+        <translation>&lt;br&gt;&lt;br&gt;Забыли пароль? Администратор может сбросить его в справочнике &lt;b&gt;Пользователи&lt;/b&gt;.</translation>
+    </message>
+    <message>
+        <location filename="../src/app/authorizationuser.cpp" line="403"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="306"/>
+        <location filename="../src/app/authorizationuser.cpp" line="404"/>
         <source>Nu este indicat &lt;b&gt;Login&lt;/b&gt; !!!&lt;br&gt;Accesul este interzis.</source>
         <translation>Не указан &lt;b&gt;Логин&lt;/b&gt; !!!&lt;br&gt;Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="312"/>
+        <location filename="../src/app/authorizationuser.cpp" line="410"/>
         <source>Incercarea accesului în aplicația fără indicarea numelui utilizatorului !!!</source>
         <translation>Попытка авторизации без указания имени пользователя !!!</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="349"/>
-        <location filename="../src/app/authorizationuser.cpp" line="391"/>
+        <location filename="../src/app/authorizationuser.cpp" line="368"/>
         <source>Controlul accesului</source>
         <translation>Проверка доступа</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="392"/>
         <source>Utilizatorul cu nume &lt;b&gt;%1&lt;/b&gt; nu a fost depistat in baza de date !!!&lt;br&gt;Accesul este interzis.</source>
-        <translation>Имя пользователя &lt;b&gt;%1&lt;/b&gt; не найдено в базе данных !!!&lt;br&gt;Доступ запрещён.</translation>
+        <translation type="vanished">Имя пользователя &lt;b&gt;%1&lt;/b&gt; не найдено в базе данных !!!&lt;br&gt;Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="354"/>
-        <location filename="../src/app/authorizationuser.cpp" line="395"/>
+        <location filename="../src/app/authorizationuser.cpp" line="448"/>
+        <location filename="../src/app/authorizationuser.cpp" line="492"/>
         <source>%1 - onAccepted()</source>
         <translation>%1 - onAccepted()</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="273"/>
+        <location filename="../src/app/authorizationuser.cpp" line="298"/>
         <source></source>
         <translation></translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="286"/>
+        <location filename="../src/app/authorizationuser.cpp" line="384"/>
         <source>Inițializarea aplicației</source>
         <translation>Инициализация приложения</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="287"/>
+        <location filename="../src/app/authorizationuser.cpp" line="385"/>
         <source>Datele necesare aplicației nu au putut fi încărcate. Verificați conexiunea și jurnalul aplicației.</source>
         <translation>Не удалось загрузить данные, необходимые для работы приложения. Проверьте соединение и журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="322"/>
+        <location filename="../src/app/authorizationuser.cpp" line="420"/>
         <source>Conectarea la baza de date</source>
         <translation>Подключение к базе данных</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="323"/>
+        <location filename="../src/app/authorizationuser.cpp" line="421"/>
         <source>Baza de date nu este deschisă. Autorizarea nu poate continua.</source>
         <translation>База данных не открыта. Авторизация не может быть продолжена.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="326"/>
+        <location filename="../src/app/authorizationuser.cpp" line="424"/>
         <source>%1 - onControlAccept(): baza de date nu este deschisă.</source>
         <translation>%1 - onControlAccept(): база данных не открыта.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="377"/>
+        <location filename="../src/app/authorizationuser.cpp" line="479"/>
         <source>Preferința de memorare a utilizatorului nu a putut fi salvată.</source>
         <translation>Не удалось сохранить настройку запоминания пользователя.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="385"/>
+        <location filename="../src/app/authorizationuser.cpp" line="487"/>
         <source>Nu este inregistrat timpul si data conectarii utilizatorului &apos;%1&apos;: %2</source>
         <translation>Не удалось зарегистрировать дату и время подключения пользователя &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="396"/>
+        <location filename="../src/app/authorizationuser.cpp" line="493"/>
         <source>Accesul la aplicație. Utilizatorul cu nume &apos;%1&apos; nu a fost depistat in baza de date.</source>
         <translation>Авторизация. Пользователь имя &apos;%1&apos; не был найден в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="350"/>
         <source>Parola utilizatorului &lt;b&gt;&apos;%1&apos;&lt;/b&gt; este incorectă !!!&lt;br&gt; Accesul este interzis.</source>
-        <translation>Пароль пользователя &lt;b&gt;&apos;%1&apos;&lt;/b&gt; не корректный !!!&lt;br&gt; Доступ запрещён.</translation>
+        <translation type="vanished">Пароль пользователя &lt;b&gt;&apos;%1&apos;&lt;/b&gt; не корректный !!!&lt;br&gt; Доступ запрещён.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="355"/>
+        <location filename="../src/app/authorizationuser.cpp" line="449"/>
         <source>Accesul la aplicație. Utilizatorul &apos;%1&apos; cu id=&apos;%2&apos; - întroducerea parolei incorecte.</source>
         <translation>Авторизация. Пользователь &apos;%1&apos; с id=&apos;%2&apos; - ввёл некорректный пароль.</translation>
     </message>
     <message>
-        <location filename="../src/app/authorizationuser.cpp" line="401"/>
+        <location filename="../src/app/authorizationuser.cpp" line="501"/>
         <source>Accesul la aplicatia. Autorizarea reusita a utilizatorului &apos;%1&apos; cu id=&apos;%2&apos;.</source>
         <translation>Вход в программу. Успешная авторизация пользователя &apos;%1&apos; с id=&apos;%2&apos;.</translation>
     </message>
@@ -2015,239 +2276,239 @@ tarifelor unice
         <translation>Комментарий</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="225"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="226"/>
         <source>Doctor (%1) %2</source>
         <translation>Врач (%1) %2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="227"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="228"/>
         <source>As.medicală (%1) %2</source>
         <translation>Медсестра (%1) %2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="229"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="230"/>
         <source>Pacient (%1) %2</source>
         <translation>Пациент (%1) %2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="242"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="243"/>
         <source>crearea</source>
         <translation>создание</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="245"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="246"/>
         <source>salvat</source>
         <translation>сохранён</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="248"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="249"/>
         <source>marcat pentru eliminare</source>
         <translation>помечен на удаление</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="327"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="328"/>
         <source>Semnatura este eliminat din baza de date.</source>
         <translation>Подпись удалена из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="332"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="333"/>
         <source>Eroare la eliminarea semnaturei din baza de date: </source>
         <translation>Ошибка удаления подписи из базы данных: </translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="339"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="340"/>
         <source>Eliminarea semnaturei</source>
         <translation>Удаление подписи</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="356"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="357"/>
         <source>Imaginea este eliminat din baza de date.</source>
         <translation>Изображение удалено из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="361"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="362"/>
         <source>Eroare la eliminarea imaginei din baza de date: </source>
         <translation>Ошибка удаления изображения из базы данных: </translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="368"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="369"/>
         <source>Eliminarea imaginei</source>
         <translation>Удаление изображения</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="385"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="386"/>
         <source>Nu este setată imaginea %1: %2</source>
         <translation>Не задано изображение %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="403"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="404"/>
         <source>Nu s-a putut deschide fișierul pentru citire: </source>
         <translation>Не удалось открыть файл для чтения: </translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="419"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="420"/>
         <source>Imaginea a fost salvată cu succes în baza de date.</source>
         <translation>Изображение успешно сохранено в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="427"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="428"/>
         <source>Eroare la salvarea imaginii în baza de date %1</source>
         <translation>Ошибка сохранения изображения в базе данных %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="436"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="437"/>
         <source>Inserarea imaginei</source>
         <translation>Добавление изображения</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="475"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="476"/>
         <source>Verificarea validării</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="476"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="477"/>
         <source>Pentru a încărca logotipul este necesar de salvat datele.&lt;br&gt;Doriți să salvați datele ?</source>
         <translation>Для загрузки изображения необходимо сохранить данные.&lt;br&gt;Сохранить данные?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="479"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="848"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="954"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="480"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="849"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="962"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="480"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="849"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="955"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="481"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="850"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="963"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="481"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="956"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="482"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="964"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="495"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="496"/>
         <source>Open File</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="546"/>
         <location filename="../src/features/catalogs/catalogdialog.cpp" line="547"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="548"/>
         <source>Doctor</source>
         <translation>Врач</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="551"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="552"/>
         <source>As.medicala</source>
         <translation>Медсестра</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="552"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="553"/>
         <source>As.medcala</source>
         <translation>Медсестра</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="556"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="558"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="557"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="559"/>
         <source>Pacientul</source>
         <translation>Пациент</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="556"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="557"/>
         <source> - anul nașterii: %1</source>
         <translation> - год рождения: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="562"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="563"/>
         <source>: nu a fost determinanta proprietatea &apos;typeCatalog&apos; !!!</source>
         <translation>: свойство &apos;typeCatalog&apos; не определено !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="622"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="633"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="644"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="623"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="634"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="645"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="623"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="624"/>
         <source>Nu este indicat &quot;&lt;b&gt;Nume, prenume, patronimic&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указаны «&lt;b&gt;Фамилия, имя, отчество&lt;/b&gt;» объекта !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="634"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="635"/>
         <source>Nu este indicat &quot;&lt;b&gt;Nume&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указана «&lt;b&gt;Фамилия&lt;/b&gt;» объекта !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="645"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="646"/>
         <source>Nu este indicat &quot;&lt;b&gt;Prenume&lt;/b&gt;&quot; obiectului !!!</source>
         <translation>Не указано «&lt;b&gt;Имя&lt;/b&gt;» объекта !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="720"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="721"/>
         <source>Inserarea datelor</source>
         <translation>Добавление данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="795"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="796"/>
         <source>Actualizarea datelor</source>
         <translation>Обновление данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="832"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="833"/>
         <source>%1 există în baza de date:&lt;br&gt; - nume: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - prenume: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - patronimic: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;%5 &lt;br&gt;Doriți să continuați validarea ?</source>
         <translation>%1 уже существует в базе данных:&lt;br&gt; - фамилия: &lt;b&gt;%2&lt;/b&gt;&lt;br&gt; - имя: &lt;b&gt;%3&lt;/b&gt;&lt;br&gt; - отчество: &lt;b&gt;%4&lt;/b&gt;&lt;br&gt;%5 &lt;br&gt;Продолжить проверку?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="846"/>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="950"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="847"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="958"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="900"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="901"/>
         <source>doctorului</source>
         <translation>врача</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="904"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="905"/>
         <source>asistentei medicale</source>
         <translation>медсестры</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="908"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="909"/>
         <source>pacientului</source>
         <translation>пациента</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="911"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="912"/>
         <source>Tipul catalogului nu este determinat.</source>
         <translation>Тип каталога не определён.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="916"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="917"/>
         <source>Nu este determinat ID-ul %1.</source>
         <translation>Не определён ID %1.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="928"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="936"/>
         <source>Eroare SQL: %1</source>
         <translation>Ошибка SQL: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="951"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="959"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Сохранить изменения?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogdialog.cpp" line="980"/>
+        <location filename="../src/features/catalogs/catalogdialog.cpp" line="988"/>
         <source>Creiază utilizator nou %1</source>
         <translation>Создать нового пользователя %1</translation>
     </message>
@@ -2427,65 +2688,188 @@ Rollback eșuat: %1</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="45"/>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="641"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="62"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="1007"/>
         <source>Catalog: %1</source>
         <translation>Каталог: %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="179"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="200"/>
         <source>%1 &lt;b&gt;%2&lt;/b&gt;&lt;br&gt;nu mai este marcată pentru eliminare.</source>
         <translation>%1 &lt;b&gt;%2&lt;/b&gt;&lt;br&gt;больше не помечена на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="183"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="204"/>
         <source>%1 &lt;b&gt;%2&lt;/b&gt;&lt;br&gt;a fost marcată pentru eliminare.</source>
         <translation>%1 &lt;b&gt;%2&lt;/b&gt;&lt;br&gt;помечена на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="194"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="215"/>
         <source>%1 &apos;%2&apos; nu poate fi marcat pentru eliminare !!!</source>
         <translation>%1 &apos;%2&apos; нельзя пометить на удаление !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="214"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="235"/>
         <source>Utilizatorul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;nu mai este marcată pentru eliminare.</source>
         <translation>Пользователь &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;больше не помечен на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="217"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="238"/>
         <source>Utilizatorul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;a fost marcată pentru eliminare.</source>
         <translation>Пользователь &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;помечен на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="227"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="248"/>
         <source>Marcarea utilizatorului &apos;%1&apos; nu s-a efectuat !!!</source>
         <translation>Не удалось изменить отметку пользователя &apos;%1&apos; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="247"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="268"/>
         <source>Organizația &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;nu mai este marcată pentru eliminare.</source>
         <translation>Организация &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;больше не помечена на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="250"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="271"/>
         <source>Organizația &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;a fost marcată pentru eliminare.</source>
         <translation>Организация &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;помечена на удаление.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="261"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="282"/>
         <source>Marcarea organizatiei &apos;%1&apos; nu s-a efectuat !!!</source>
         <translation>Не удалось изменить отметку организации &apos;%1&apos; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="593"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="306"/>
+        <source>Editare</source>
+        <translation>Редактирование</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="308"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="867"/>
+        <source>Anularea marcării pentru eliminare</source>
+        <translation>Снять пометку на удаление</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="309"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="852"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="868"/>
+        <source>Marcare pentru eliminare</source>
+        <translation>Пометить на удаление</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="314"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="853"/>
+        <source>Eliminare din baza de date</source>
+        <translation>Удалить из базы данных</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="353"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="788"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="799"/>
+        <source>Eliminarea pacientului</source>
+        <translation>Удаление пациента</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="354"/>
+        <source>Eliminați definitiv pacientul &lt;b&gt;%1&lt;/b&gt; din baza de date?&lt;br&gt;&lt;br&gt;Operația nu poate fi anulată.</source>
+        <translation>Окончательно удалить пациента &lt;b&gt;%1&lt;/b&gt; из базы данных?&lt;br&gt;&lt;br&gt;Операцию нельзя отменить.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="358"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="359"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="369"/>
+        <source>Pacientul &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;a fost eliminat din baza de date.</source>
+        <translation>Пациент &lt;b&gt;%1&lt;/b&gt;&lt;br&gt;удалён из базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="762"/>
+        <source>Comanda ecografică nr.%1 din %2</source>
+        <translation>Заказ УЗИ №%1 от %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="766"/>
+        <source>Raport ecografic nr.%1 din %2</source>
+        <translation>Протокол УЗИ №%1 от %2</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="770"/>
+        <source>Programare din %1</source>
+        <translation>Запись на приём от %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="778"/>
+        <source>... și încă %1</source>
+        <translation>... и ещё %1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="781"/>
+        <source>Comenzi ecografice: %1
+Rapoarte ecografice: %2
+Programări: %3</source>
+        <translation>Заказы УЗИ: %1
+Протоколы УЗИ: %2
+Записи на приём: %3</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="785"/>
+        <source>Pacientul poate fi marcat pentru eliminare (tasta Delete sau meniul contextual).</source>
+        <translation>Пациента можно пометить на удаление (клавиша Delete или контекстное меню).</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="789"/>
+        <source>Pacientul &lt;b&gt;%1&lt;/b&gt; figurează în documente și nu poate fi eliminat din baza de date.</source>
+        <translation>Пациент &lt;b&gt;%1&lt;/b&gt; указан в документах и не может быть удалён из базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="800"/>
+        <source>Pacientul &lt;b&gt;%1&lt;/b&gt; nu a fost eliminat din baza de date.</source>
+        <translation>Пациент &lt;b&gt;%1&lt;/b&gt; не был удалён из базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="817"/>
+        <source>Lista nu a putut fi încărcată complet.</source>
+        <translation>Список не удалось загрузить полностью.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="889"/>
         <source>Informație</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/catalogview.cpp" line="594"/>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="890"/>
         <source>Nu este marcat rândul.</source>
         <translation>Строка не выбрана.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="944"/>
+        <source>Căutare: nume, prenume, IDNP, dd.MM.yyyy</source>
+        <translation>Поиск: фамилия, имя, IDNP, дд.ММ.гггг</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="945"/>
+        <source>Căutarea pacientului după nume, prenume, IDNP sau data nașterii (dd.MM.yyyy) – (Ctrl+F)</source>
+        <translation>Поиск пациента по фамилии, имени, IDNP или дате рождения (дд.ММ.гггг) – (Ctrl+F)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/catalogview.cpp" line="952"/>
+        <source>Căutare pacient:</source>
+        <translation>Поиск пациента:</translation>
+    </message>
+    <message>
+        <source>Căutare: nume, prenume, IDNP, zz.ll.aaaa</source>
+        <translation type="vanished">Поиск: фамилия, имя, IDNP, дд.мм.гггг</translation>
+    </message>
+    <message>
+        <source>Căutarea pacientului după nume, prenume, IDNP sau data nașterii (zz.ll.aaaa) – Ctrl+F</source>
+        <translation type="vanished">Поиск пациента по фамилии, имени, IDNP или дате рождения (дд.мм.гггг) – Ctrl+F</translation>
     </message>
 </context>
 <context>
@@ -2631,86 +3015,86 @@ Rollback eșuat: %1</source>
     </message>
     <message>
         <location filename="../src/features/cloud/cloudserverconfig.cpp" line="62"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="684"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="664"/>
         <source>Setări cloud serverului %1</source>
         <translation>Настройки облачного сервера %1</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="225"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="213"/>
         <source>Parola criptată salvată este incompletă.</source>
         <translation>Сохранённый зашифрованный пароль неполный.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="239"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="227"/>
         <source>Verificarea parolei criptate după salvare a eșuat.</source>
         <translation>Проверка зашифрованного пароля после сохранения завершилась ошибкой.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="361"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="347"/>
         <source>Inserarea datelor cloudServer nu s-a efectuat !!!</source>
         <translation>Добавление данных cloudServer не выполнено !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="438"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="422"/>
         <source>Actualizarea datelor cloudServer nu s-a efectuat !!!</source>
         <translation>Обновление данных cloudServer не выполнено !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="583"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="595"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="654"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="563"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="575"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="634"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="584"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="564"/>
         <source>Nu este indicată organizația !!!</source>
         <translation>Организация не указана !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="596"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="576"/>
         <source>Nu este indicat utilizatorul !!!</source>
         <translation>Пользователь не указан !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="607"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="587"/>
         <source>Datele serverului cloud au fost&lt;br&gt;actualizate cu succes in baza de date.</source>
         <translation>Данные облачного сервера были&lt;br&gt;успешно обновлены в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="615"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="595"/>
         <source>Datele serverului cloud au fost&lt;br&gt;inserate cu succes in baza de date.</source>
         <translation>Данные облачного сервера были&lt;br&gt;успешно добавлены в базу данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="623"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="603"/>
         <source>Salvarea setărilor cloud</source>
         <translation>Сохранение настроек облака</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="624"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="604"/>
         <source>Setările cloud nu au putut fi salvate. Verificați jurnalul aplicației.</source>
         <translation>Не удалось сохранить настройки облака. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="655"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="635"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="658"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="638"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="659"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="639"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="660"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="640"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
@@ -4987,169 +5371,164 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Не удалось сохранить версию схемы базы данных:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="539"/>
         <source>Arhivarea automată nu poate fi efectuată: 7-Zip nu este instalat.</source>
-        <translation>Автоматическое архивирование невозможно: 7-Zip не установлен.</translation>
+        <translation type="vanished">Автоматическое архивирование невозможно: 7-Zip не установлен.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="553"/>
         <source>Arhivarea automată nu poate fi efectuată: fișierele SQLite lipsesc.</source>
-        <translation>Автоматическое архивирование невозможно: файлы SQLite отсутствуют.</translation>
+        <translation type="vanished">Автоматическое архивирование невозможно: файлы SQLite отсутствуют.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="561"/>
         <source>Directorul arhivei nu poate fi creat:</source>
-        <translation>Не удалось создать каталог архива:</translation>
+        <translation type="vanished">Не удалось создать каталог архива:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="583"/>
         <source>Arhivarea automată a eșuat. Cod proces:</source>
-        <translation>Автоматическое архивирование завершилось с ошибкой. Код процесса:</translation>
+        <translation type="vanished">Автоматическое архивирование завершилось с ошибкой. Код процесса:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="587"/>
         <source>Arhiva automată SQLite a fost creată:</source>
-        <translation>Автоматический архив SQLite создан:</translation>
+        <translation type="vanished">Автоматический архив SQLite создан:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="619"/>
-        <location filename="../src/app/mainwindow.cpp" line="704"/>
+        <location filename="../src/app/mainwindow.cpp" line="555"/>
+        <location filename="../src/app/mainwindow.cpp" line="640"/>
         <source>Actualizarea bazei de date</source>
         <translation>Обновление базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="620"/>
+        <location filename="../src/app/mainwindow.cpp" line="556"/>
         <source>Versiunea schemei bazei de date nu a putut fi determinată.</source>
         <translation>Не удалось определить версию схемы базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="642"/>
+        <location filename="../src/app/mainwindow.cpp" line="578"/>
         <source>Pentru actualizare este necesară resalvarea parolei cloud.</source>
         <translation>Для обновления необходимо повторно сохранить пароль облачного сервера.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="654"/>
+        <location filename="../src/app/mainwindow.cpp" line="590"/>
         <source>Se actualizează baza de date de la versiunea %1 la %2...</source>
         <translation>База данных обновляется с версии %1 до %2...</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="670"/>
+        <location filename="../src/app/mainwindow.cpp" line="606"/>
         <source>Actualizarea bazei de date la versiunea %1 s-a finalizat.</source>
         <translation>Обновление базы данных до версии %1 завершено.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="676"/>
+        <location filename="../src/app/mainwindow.cpp" line="612"/>
         <source>%1  Aplicația a fost actualizată până la versiunea: USG v</source>
         <translation>%1  Приложение обновлено до версии: USG v</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="683"/>
+        <location filename="../src/app/mainwindow.cpp" line="619"/>
         <source>%1  Pentru o sincronizare corectă, este necesar să actualizați și baza de date MariaDB/MySQL la versiunea 4.0.1 sau mai nouă.</source>
         <translation>%1  Для корректной синхронизации необходимо также обновить базу данных MariaDB/MySQL до версии 4.0.1 или новее.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="698"/>
+        <location filename="../src/app/mainwindow.cpp" line="634"/>
         <source>Actualizarea bazei de date a eșuat. Verificați jurnalul aplicației.</source>
         <translation>Обновление базы данных завершилось с ошибкой. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="699"/>
+        <location filename="../src/app/mainwindow.cpp" line="635"/>
         <source>Actualizarea a fost amânată: parola cloud nu a fost resalvată.</source>
         <translation>Обновление отложено: пароль облачного сервера не был повторно сохранён.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="702"/>
+        <location filename="../src/app/mainwindow.cpp" line="638"/>
         <source>Actualizarea nu este confirmată integral. Etapele din tranzacțiile anulate nu au fost păstrate.</source>
         <translation>Обновление подтверждено не полностью. Этапы отменённых транзакций не были сохранены.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="713"/>
+        <location filename="../src/app/mainwindow.cpp" line="649"/>
         <source>Verificarea schemei video a raportului a eșuat.</source>
         <translation>Не удалось проверить структуру таблицы видео отчёта.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="715"/>
+        <location filename="../src/app/mainwindow.cpp" line="651"/>
         <source>Tabela video a rapoartelor nu a putut fi actualizată. Verificați jurnalul aplicației.</source>
         <translation>Не удалось обновить таблицу видео отчётов. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="723"/>
+        <location filename="../src/app/mainwindow.cpp" line="659"/>
         <source>Verificarea view-urilor obligatorii ale aplicației a eșuat.</source>
         <translation>Не удалось проверить обязательные представления (VIEW) приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="714"/>
-        <location filename="../src/app/mainwindow.cpp" line="724"/>
+        <location filename="../src/app/mainwindow.cpp" line="650"/>
+        <location filename="../src/app/mainwindow.cpp" line="660"/>
         <source>Verificarea bazei de date</source>
         <translation>Проверка базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="725"/>
+        <location filename="../src/app/mainwindow.cpp" line="661"/>
         <source>View-urile obligatorii nu au putut fi verificate.</source>
         <translation>Не удалось проверить обязательные представления (VIEW).</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="731"/>
+        <location filename="../src/app/mainwindow.cpp" line="669"/>
         <source>%1  S-a depistat lansarea primara a aplicatiei.</source>
         <translation>%1  Обнаружен первый запуск приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="755"/>
+        <location filename="../src/app/mainwindow.cpp" line="725"/>
         <source>Configurarea inițială a fost întreruptă și va fi reluată la următoarea lansare.</source>
         <translation>Первоначальная настройка была прервана и продолжится при следующем запуске.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="761"/>
+        <location filename="../src/app/mainwindow.cpp" line="731"/>
         <source>Finalizarea configurării inițiale nu a putut fi salvată în profil.</source>
         <translation>Не удалось сохранить завершение первоначальной настройки в профиле.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="764"/>
+        <location filename="../src/app/mainwindow.cpp" line="734"/>
         <source>Configurarea inițială</source>
         <translation>Первоначальная настройка</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="765"/>
+        <location filename="../src/app/mainwindow.cpp" line="735"/>
         <source>Pașii au fost finalizați, dar starea nu a putut fi salvată. Asistentul va fi prezentat din nou la următoarea lansare.</source>
         <translation>Все шаги завершены, но состояние не удалось сохранить. Мастер будет показан снова при следующем запуске.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="771"/>
+        <location filename="../src/app/mainwindow.cpp" line="741"/>
         <source>Configurarea inițială s-a finalizat cu succes.</source>
         <translation>Первоначальная настройка успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1061"/>
+        <location filename="../src/app/mainwindow.cpp" line="1031"/>
         <source>Versiunea online nu este validă:</source>
         <translation>Версия, полученная онлайн, недействительна:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1068"/>
+        <location filename="../src/app/mainwindow.cpp" line="1038"/>
         <source>%1   %2: Există o versiune nouă a aplicației &lt;b&gt;&lt;u&gt;%3&lt;/u&gt;&lt;/b&gt;.</source>
         <translation>%1   %2: Доступна новая версия приложения &lt;b&gt;&lt;u&gt;%3&lt;/u&gt;&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1076"/>
+        <location filename="../src/app/mainwindow.cpp" line="1046"/>
         <source>Verificarea actualizării</source>
         <translation>Проверка обновления</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1077"/>
+        <location filename="../src/app/mainwindow.cpp" line="1047"/>
         <source>Doriți să descărcați versiunea nouă ?</source>
         <translation>Хотите загрузить новую версию?</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1539"/>
+        <location filename="../src/app/mainwindow.cpp" line="1509"/>
         <source> (MySQL: %1@%2): utilizator (%3)</source>
         <translation> (MySQL: %1@%2): пользователь (%3)</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1542"/>
+        <location filename="../src/app/mainwindow.cpp" line="1512"/>
         <source> (.sqlite3): base - &apos;%1&apos;, utilizator (%2)</source>
         <translation> (.sqlite3): база — &apos;%1&apos;, пользователь (%2)</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1545"/>
+        <location filename="../src/app/mainwindow.cpp" line="1515"/>
         <source>: utilizator (%1)</source>
         <translation>: пользователь (%1)</translation>
     </message>
@@ -5217,12 +5596,12 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Проверить новую версию</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1426"/>
+        <location filename="../src/app/mainwindow.cpp" line="1396"/>
         <source>Lista utilizatorilor</source>
         <translation>Список пользователей</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1476"/>
+        <location filename="../src/app/mainwindow.cpp" line="1446"/>
         <source>Examinarea ecografica</source>
         <translation>Протокол ультразвук.&lt;br&gt;исследования</translation>
     </message>
@@ -5262,177 +5641,197 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Мед.центры</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1302"/>
-        <location filename="../src/app/mainwindow.cpp" line="1360"/>
+        <location filename="../src/app/mainwindow.cpp" line="1272"/>
+        <location filename="../src/app/mainwindow.cpp" line="1330"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicația.</source>
         <translation>Пользователь &apos;%1&apos; закончил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1340"/>
+        <location filename="../src/app/mainwindow.cpp" line="1310"/>
         <source>Finisarea lucrului</source>
         <translation>Завершение работы</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1079"/>
-        <location filename="../src/app/mainwindow.cpp" line="1343"/>
+        <location filename="../src/app/mainwindow.cpp" line="1049"/>
+        <location filename="../src/app/mainwindow.cpp" line="1313"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1080"/>
-        <location filename="../src/app/mainwindow.cpp" line="1344"/>
+        <location filename="../src/app/mainwindow.cpp" line="1050"/>
+        <location filename="../src/app/mainwindow.cpp" line="1314"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1090"/>
+        <location filename="../src/app/mainwindow.cpp" line="1060"/>
         <source>Folosiți cea mai recentă versiune &quot;%1&quot;.</source>
         <translation>Используйте последнюю версию «%1».</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1095"/>
+        <location filename="../src/app/mainwindow.cpp" line="1065"/>
         <source>Fișierul temporar de versiune nu a putut fi eliminat:</source>
         <translation>Не удалось удалить временный файл версии:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1159"/>
+        <location filename="../src/app/mainwindow.cpp" line="1129"/>
         <source>Se descarcă fișierul ... </source>
         <translation>Загрузка файла ... </translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1184"/>
+        <location filename="../src/app/mainwindow.cpp" line="1154"/>
         <source>Fișierul este descărcat cu succes.</source>
         <translation>Файл успешно загружен.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1196"/>
+        <location filename="../src/app/mainwindow.cpp" line="1166"/>
         <source>Minimizarea în tray nu este disponibilă în sesiunea curentă.</source>
         <translation>Сворачивание в системный трей недоступно в текущем сеансе.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1207"/>
+        <location filename="../src/app/mainwindow.cpp" line="1177"/>
         <source>Maximizați fereastra</source>
         <translation>Развернуть окно</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1208"/>
+        <location filename="../src/app/mainwindow.cpp" line="1178"/>
         <source>Ieșire</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1316"/>
+        <location filename="../src/app/mainwindow.cpp" line="1286"/>
         <source>Aplicația este minimizată în tray. Pentru a maximiza fereastra aplicației, faceți clic pe pictograma aplicației din tray.</source>
         <translation>Приложение свёрнуто в системный трей. Чтобы развернуть окно приложения, щёлкните значок приложения в трее.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1301"/>
-        <location filename="../src/app/mainwindow.cpp" line="1332"/>
+        <location filename="../src/app/mainwindow.cpp" line="1271"/>
+        <location filename="../src/app/mainwindow.cpp" line="1302"/>
         <source>Aplicația se închide fără arhiva automată.</source>
         <translation>Приложение закрывается без автоматического архивирования.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="992"/>
+        <location filename="../src/app/mainwindow.cpp" line="699"/>
+        <source>Sincronizarea cloud</source>
+        <translation>Облачная синхронизация</translation>
+    </message>
+    <message>
+        <location filename="../src/app/mainwindow.cpp" line="700"/>
+        <source>Parola serverului cloud salvată în baza de date nu poate fi decriptată pe acest calculator (cheia locală de criptare lipsește sau diferă, de exemplu baza de date a fost mutată fără directorul &lt;b&gt;crypto&lt;/b&gt;).&lt;br&gt;&lt;br&gt;Sincronizarea rămâne dezactivată până la reintroducerea parolei.&lt;br&gt;Deschideți acum configurarea serverului cloud?</source>
+        <translation>Пароль облачного сервера, сохранённый в базе данных, не может быть расшифрован на этом компьютере (локальный ключ шифрования отсутствует или отличается, например, база данных была перенесена без каталога &lt;b&gt;crypto&lt;/b&gt;).&lt;br&gt;&lt;br&gt;Синхронизация остаётся отключённой до повторного ввода пароля.&lt;br&gt;Открыть настройку облачного сервера сейчас?</translation>
+    </message>
+    <message>
+        <location filename="../src/app/mainwindow.cpp" line="707"/>
+        <source>Configurare cloud</source>
+        <translation>Настройка облака</translation>
+    </message>
+    <message>
+        <location filename="../src/app/mainwindow.cpp" line="708"/>
+        <source>Mai târziu</source>
+        <translation>Позже</translation>
+    </message>
+    <message>
+        <location filename="../src/app/mainwindow.cpp" line="962"/>
         <source>Relansarea aplicației</source>
         <translation>Перезапуск приложения</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="993"/>
+        <location filename="../src/app/mainwindow.cpp" line="963"/>
         <source>Relansarea a fost anulată deoarece o fereastră nu a putut fi închisă.</source>
         <translation>Перезапуск отменён, так как не удалось закрыть одно из окон.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1333"/>
+        <location filename="../src/app/mainwindow.cpp" line="1303"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicatia.</source>
         <translation>Пользователь «%1» завершил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1341"/>
+        <location filename="../src/app/mainwindow.cpp" line="1311"/>
         <source>Doriți să închideți aplicația ?</source>
         <translation>Хотите закрыть приложение?</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1356"/>
+        <location filename="../src/app/mainwindow.cpp" line="1326"/>
         <source>Arhivarea automată</source>
         <translation>Автоматическое архивирование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1357"/>
+        <location filename="../src/app/mainwindow.cpp" line="1327"/>
         <source>Arhiva SQLite nu a putut fi creată. Detaliile sunt disponibile în jurnal.</source>
         <translation>Не удалось создать архив SQLite. Подробности доступны в журнале.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1373"/>
+        <location filename="../src/app/mainwindow.cpp" line="1343"/>
         <source>Lista cu doctori.</source>
         <translation>Список с докторами.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1383"/>
+        <location filename="../src/app/mainwindow.cpp" line="1353"/>
         <source>Lista as.medicale.</source>
         <translation>Список мед.сестёр.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1393"/>
+        <location filename="../src/app/mainwindow.cpp" line="1363"/>
         <source>Lista pacienților 
 înregistrați în baza de date.</source>
         <translation>Список пациентов 
 зарегистрированных в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1404"/>
+        <location filename="../src/app/mainwindow.cpp" line="1374"/>
         <source>Vizualizarea istorie 
 pacienților.</source>
         <translation>Визуализация
 истории пациентов.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1415"/>
+        <location filename="../src/app/mainwindow.cpp" line="1385"/>
         <source>Lista persoanelor 
 juridice.</source>
         <translation>Список 
 мед.центров (юр.лиц).</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1436"/>
+        <location filename="../src/app/mainwindow.cpp" line="1406"/>
         <source>Clasificatorul investigațiilor</source>
         <translation>Классификатор исследований</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1446"/>
+        <location filename="../src/app/mainwindow.cpp" line="1416"/>
         <source>Documente cu
  formarea  preturilor</source>
         <translation>Документ
 формирование цен</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1456"/>
+        <location filename="../src/app/mainwindow.cpp" line="1426"/>
         <source>Programarea pacienților 
  la investigații ecografice</source>
         <translation>Запись пациентов
  на ультразвук.исследование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1466"/>
+        <location filename="../src/app/mainwindow.cpp" line="1436"/>
         <source>Comanda pentru
  investigatiile ecografice</source>
         <translation>Заказ на ультразвук.
 исследование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1486"/>
+        <location filename="../src/app/mainwindow.cpp" line="1456"/>
         <source>Rapoarte investigațiilor 
  ecografice</source>
         <translation>Отчёты ультрзвук.
 исследований</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1496"/>
+        <location filename="../src/app/mainwindow.cpp" line="1466"/>
         <source>Setările principale
 ale aplicației.</source>
         <translation>Основные настройки
 приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1507"/>
+        <location filename="../src/app/mainwindow.cpp" line="1477"/>
         <source>Informația generală
 despre aplicația.</source>
         <translation>Общая информация
@@ -5569,115 +5968,120 @@ sursa: T.Moore ... 1990a.</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="195"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="187"/>
+        <source>Parola salvată nu poate fi decriptată – reintroduceți parola</source>
+        <translation>Сохранённый пароль не может быть расшифрован – введите пароль повторно</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="198"/>
         <source>Online account (crearea) %1</source>
         <translation>Онлайн-аккаунт (создание) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="198"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="201"/>
         <source>Online account (salvat) %1</source>
         <translation>Онлайн-аккаунт (сохранён) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="201"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="204"/>
         <source>Online account (marcată pentru eliminare) %1</source>
         <translation>Онлайн-аккаунт (помечен на удаление) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="204"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="207"/>
         <source>Online account %1</source>
         <translation>Онлайн-аккаунт %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="236"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="247"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="258"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="269"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="280"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="291"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="520"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="573"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="239"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="250"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="261"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="272"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="283"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="294"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="523"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="576"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="237"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="240"/>
         <source>Nu este indicata &quot;&lt;b&gt;Organizatia&lt;/b&gt;&quot; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="248"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="251"/>
         <source>Nu este indicat &quot;&lt;b&gt;E-mail&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;E-mail&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="259"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="262"/>
         <source>Nu este indicat &quot;&lt;b&gt;SMTP server&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;SMTP-сервер&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="270"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="273"/>
         <source>Nu este indicat &quot;&lt;b&gt;Port&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;Порт&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="281"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="284"/>
         <source>Nu este indicat &quot;&lt;b&gt;User name&lt;/b&gt;&quot; !!!</source>
         <translation>Не указано «&lt;b&gt;Имя пользователя&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="292"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="295"/>
         <source>Nu este indicata &quot;&lt;b&gt;Parola&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;Пароль&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="315"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="369"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="318"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="372"/>
         <source>Parola nu a putut fi criptată.</source>
         <translation>Не удалось зашифровать пароль.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="407"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="410"/>
         <source>Contul nu a fost găsit în baza de date pentru utilizatorul curent.</source>
         <translation>Учётная запись не найдена в базе данных для текущего пользователя.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="431"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="434"/>
         <source>Salvarea contului</source>
         <translation>Сохранение учётной записи</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="432"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="435"/>
         <source>Contul &lt;b&gt;%1&lt;/b&gt; nu a fost salvat.&lt;br&gt;%2</source>
         <translation>Учётная запись &lt;b&gt;%1&lt;/b&gt; не сохранена.&lt;br&gt;%2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="521"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="524"/>
         <source>Portul indicat nu este valid !!!</source>
         <translation>Указанный порт недействителен !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="544"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="547"/>
         <source>Conexiunea cu serverul SMTP&lt;br&gt;a fost verificată cu succes.</source>
         <translation>Соединение с SMTP-сервером&lt;br&gt;успешно проверено.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="545"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="548"/>
         <source>Conexiunea cu serverul SMTP a eșuat:&lt;br&gt;%1</source>
         <translation>Ошибка соединения с SMTP-сервером:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="574"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="577"/>
         <source>Datele obiectului &lt;b&gt;%1&lt;/b&gt; nu sunt salvate.&lt;br&gt;Doriți să salvați datele?</source>
         <translation>Данные объекта &lt;b&gt;%1&lt;/b&gt; не сохранены.&lt;br&gt;Хотите сохранить данные?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="580"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="583"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="581"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="584"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
@@ -5939,11 +6343,11 @@ sursa: T.Moore ... 1990a.</source>
     </message>
     <message>
         <location filename="../src/features/orders/orderdialog.cpp" line="727"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1247"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1258"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1269"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1280"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1294"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1252"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1263"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1274"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1285"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1299"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
@@ -5973,23 +6377,23 @@ sursa: T.Moore ... 1990a.</source>
         <translation>Данные пациента &lt;b&gt;%1&lt;/b&gt;&lt;br&gt; успешно добавлены/изменены в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="986"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="991"/>
         <source>Atentie</source>
         <translation>Внимание</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="987"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="992"/>
         <source>Investigatia &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; exista in tabel.</source>
         <translation>Обследование &lt;b&gt;&apos;%1 - %2&apos;&lt;/b&gt; существует в таблице.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1027"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1319"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1032"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1324"/>
         <source>Controlul validarii</source>
         <translation>Проверка проведения</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1028"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1033"/>
         <source>Documentul nu este validat !!! 
 Printare nu este posibila.</source>
         <translation>Документ не проведён !!! 
@@ -6004,7 +6408,7 @@ Printare nu este posibila.</source>
         <translation type="vanished"> (печать)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1599"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1604"/>
         <source>Printarea documentului</source>
         <translation>Печать документа</translation>
     </message>
@@ -6019,160 +6423,160 @@ Printare nu este posibila.</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1044"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1049"/>
         <source>Printare nu este posibilă !!!</source>
         <translation>Печать невозможна !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1178"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1183"/>
         <source>Editează rândul.</source>
         <translation>Редактировать строку.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1180"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1185"/>
         <source>Șterge rândul.</source>
         <translation>Удалить строку.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1218"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1223"/>
         <source>Rând invalid în modelul detaliilor.</source>
         <translation>Недопустимая строка в модели деталей.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1248"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1253"/>
         <source>Nu este selectată &lt;b&gt;&apos;Organizația&apos;&lt;/b&gt; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1259"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1264"/>
         <source>Nu este selectat &lt;b&gt;&apos;Contractul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Контракт&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1270"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1275"/>
         <source>Nu este selectat &lt;b&gt;&apos;Tipul prețului&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Тип цен&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1281"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1286"/>
         <source>Nu este selectat &lt;b&gt;&apos;Pacientul&apos;&lt;/b&gt; !!!</source>
         <translation>Не указан &lt;b&gt;&apos;Пациент&apos;&lt;/b&gt; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1295"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1300"/>
         <source>Pacientul selectat (ID %1) nu există în baza de date. Selectați din nou pacientul din listă.</source>
         <translation>Выбранный пациент (ID %1) отсутствует в базе данных. Повторно выберите пациента из списка.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1307"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1312"/>
         <source>Controlul completării obiectelor</source>
         <translation>Проверка заполнения реквизитов</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1308"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1313"/>
         <source>Nu este aleasa nici o investigatie !!!</source>
         <translation>Не выбрано ни одного обследования !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1320"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1325"/>
         <source>Documentul nu este validat !!! 
 Raportul ecografic nu poate fi format.</source>
         <translation>Документ не проведен !!! 
 Эхографическое обследование не возможно сформировать.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1340"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1345"/>
         <source>Eroare SQL</source>
         <translation>Ошибка SQL</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1341"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1346"/>
         <source>Nu s-a putut verifica raportul existent:
 %1</source>
         <translation>Не удалось проверить существующий протокол:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1429"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1434"/>
         <source>Nu s-a putut porni tranzactia.</source>
         <translation>Не удалось начать транзакцию.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1465"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1470"/>
         <source>Nu s-a putut genera numărul documentului.</source>
         <translation>Не удалось сформировать номер документа.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1482"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1499"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1487"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1504"/>
         <source>Validarea documentului nu s-a efectuat.</source>
         <translation>Проведение документа не выполнено.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1515"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1541"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1520"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1546"/>
         <source>Actualizarea datelor documentului nu s-a efectuat.</source>
         <translation>Обновление данных документа не выполнено.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1528"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1533"/>
         <source>Nu s-au putut șterge liniile vechi ale documentului.</source>
         <translation>Не удалось удалить старые строки документа.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1555"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1560"/>
         <source>Salvarea documentului nu s-a finalizat.</source>
         <translation>Сохранение документа не завершено.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1569"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1574"/>
         <source>Documentul a fost %1 cu succes&lt;br&gt; in baza de date.</source>
         <translation>Документ %1 успешно&lt;br&gt; в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1570"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1575"/>
         <source>validat</source>
         <translation>проведён</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1570"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1575"/>
         <source>salvat</source>
         <translation>записан</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1600"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1605"/>
         <source>Doriți să printați documentul ?</source>
         <translation>Распечатать документ ?</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1602"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="2330"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1607"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="2335"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1603"/>
-        <location filename="../src/features/orders/orderdialog.cpp" line="2331"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1608"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="2336"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1662"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1667"/>
         <source>&lt;&lt;-- contract indisponibil --&gt;&gt;</source>
         <translation>&lt;&lt;-- договор недоступен --&gt;&gt;</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1809"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1814"/>
         <source>...căutare după denumirea investigației sau după cuvânt cheie/model</source>
         <translation>...поиск по наименованию обследования или или по ключевому слову/модели</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1941"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1946"/>
         <source>Datele pacientului au fost salvate local, dar sincronizarea cloud a eșuat.</source>
         <translation>Данные пациента сохранены локально, но синхронизация с облаком завершилась ошибкой.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="1979"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="1984"/>
         <source>Comanda a fost salvată local, dar sincronizarea cloud a eșuat.</source>
         <translation>Направление сохранено локально, но синхронизация с облаком завершилась ошибкой.</translation>
     </message>
@@ -6263,19 +6667,19 @@ Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acest
 У меня была возможность задать вопросы, и я получил(а) на них ответы. Я добровольно даю согласие на проведение указанного выше ультразвукового исследования.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="2325"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="2330"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="2326"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="2331"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderdialog.cpp" line="2332"/>
+        <location filename="../src/features/orders/orderdialog.cpp" line="2337"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
@@ -6430,254 +6834,269 @@ Am avut posibilitatea de a adresa întrebări și am primit răspunsuri la acest
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="48"/>
+        <location filename="../src/features/orders/orderview.ui" line="61"/>
         <source>Comanda ecografică - investigații  solicitate</source>
         <translation>Заказ исследования</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="72"/>
-        <location filename="../src/features/orders/orderview.ui" line="170"/>
+        <location filename="../src/features/orders/orderview.ui" line="85"/>
+        <location filename="../src/features/orders/orderview.ui" line="183"/>
         <source>Deschide</source>
         <translation>Открыть</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="89"/>
-        <location filename="../src/features/orders/orderview.ui" line="222"/>
+        <location filename="../src/features/orders/orderview.ui" line="102"/>
+        <location filename="../src/features/orders/orderview.ui" line="235"/>
         <source>Printare</source>
         <translation>Печать</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="146"/>
+        <location filename="../src/features/orders/orderview.ui" line="159"/>
         <source>Raport ecografic - concluzie</source>
         <translation>Протокол - заключение</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="239"/>
+        <location filename="../src/features/orders/orderview.ui" line="252"/>
         <source>Raport ecografic lipsește !!!</source>
         <translation>Протокол исследование отсутствует !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="266"/>
+        <location filename="../src/features/orders/orderview.ui" line="279"/>
         <source>Seteaza filtru</source>
         <translation>Настройки фильтра</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="272"/>
+        <location filename="../src/features/orders/orderview.ui" line="285"/>
         <source>Perioada</source>
         <translation>Период</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="284"/>
+        <location filename="../src/features/orders/orderview.ui" line="297"/>
         <source>Lansarea perioadei</source>
         <translation>Начало периода</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="313"/>
+        <location filename="../src/features/orders/orderview.ui" line="326"/>
         <source>dd.MM.yyyy HH:mm</source>
         <translation>dd.MM.yyyy HH:mm</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="352"/>
+        <location filename="../src/features/orders/orderview.ui" line="365"/>
         <source>Finisarea perioadei</source>
         <translation>Окончание периода</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="365"/>
-        <location filename="../src/features/orders/orderview.ui" line="423"/>
-        <location filename="../src/features/orders/orderview.ui" line="447"/>
-        <location filename="../src/features/orders/orderview.ui" line="468"/>
+        <location filename="../src/features/orders/orderview.ui" line="378"/>
+        <location filename="../src/features/orders/orderview.ui" line="436"/>
+        <location filename="../src/features/orders/orderview.ui" line="460"/>
+        <location filename="../src/features/orders/orderview.ui" line="481"/>
         <source>...</source>
         <translation>...</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="375"/>
+        <location filename="../src/features/orders/orderview.ui" line="388"/>
         <source>Filtru</source>
         <translation>Фильтр</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="390"/>
+        <location filename="../src/features/orders/orderview.ui" line="403"/>
         <source>Nr. documentului</source>
         <translation>Nr. документа</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="406"/>
+        <location filename="../src/features/orders/orderview.ui" line="419"/>
         <source>Contract</source>
         <translation>Контракт</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="440"/>
+        <location filename="../src/features/orders/orderview.ui" line="453"/>
         <source>Autor</source>
         <translation>Автор</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="485"/>
+        <location filename="../src/features/orders/orderview.ui" line="498"/>
         <source>Organizatia</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="492"/>
+        <location filename="../src/features/orders/orderview.ui" line="505"/>
         <source>Salvează setările</source>
         <translation>Сохранить настройки</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="529"/>
+        <location filename="../src/features/orders/orderview.ui" line="542"/>
         <source>Aplica</source>
         <translation>Применить</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="552"/>
+        <location filename="../src/features/orders/orderview.ui" line="565"/>
         <source>Goleste</source>
         <translation>Очистить</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.ui" line="575"/>
+        <location filename="../src/features/orders/orderview.ui" line="588"/>
         <source>Inchide</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="54"/>
-        <location filename="../src/features/orders/orderview.cpp" line="2106"/>
+        <location filename="../src/features/orders/orderview.cpp" line="57"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2267"/>
         <source>Lista documentelor: Comanda ecografică</source>
         <translation>Список документов: Заказ исследование</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="181"/>
+        <location filename="../src/features/orders/orderview.cpp" line="185"/>
         <source>Eliminarea documentului.</source>
         <translation>Удаление документа.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="183"/>
+        <location filename="../src/features/orders/orderview.cpp" line="187"/>
         <source>Există documente subordonate care vor fi eliminate.&lt;br&gt;Doriți să continuați?</source>
         <translation>Существуют подчинённые документы, которые будут удалены.&lt;br&gt;Хотите продолжить?</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="184"/>
+        <location filename="../src/features/orders/orderview.cpp" line="188"/>
         <source>Doriți să eliminați Comanda ecografică nr.%1?</source>
         <translation>Удалить УЗИ-заказ №%1?</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="189"/>
+        <location filename="../src/features/orders/orderview.cpp" line="193"/>
         <source>Va fi eliminat documentul subordonat:
 %1</source>
         <translation>Будет удалён подчинённый документ:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="191"/>
+        <location filename="../src/features/orders/orderview.cpp" line="195"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="192"/>
+        <location filename="../src/features/orders/orderview.cpp" line="196"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="193"/>
-        <location filename="../src/features/orders/orderview.cpp" line="222"/>
+        <location filename="../src/features/orders/orderview.cpp" line="197"/>
+        <location filename="../src/features/orders/orderview.cpp" line="226"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="210"/>
+        <location filename="../src/features/orders/orderview.cpp" line="214"/>
         <source>Eliminarea documentelor din cloud</source>
         <translation>Удаление документов из облака</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="211"/>
+        <location filename="../src/features/orders/orderview.cpp" line="215"/>
         <source>Doriți ca documentele selectate să fie eliminate și din baza de date cloud?</source>
         <translation>Удалить выбранные документы также из облачной базы данных?</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="215"/>
+        <location filename="../src/features/orders/orderview.cpp" line="219"/>
         <source>Șterge și din cloud — elimină documentele local și din MariaDB.
 Șterge numai local — documentele din MariaDB sunt păstrate.</source>
         <translation>Удалить и из облака — документы будут удалены локально и из MariaDB.
 Удалить только локально — документы в MariaDB будут сохранены.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="218"/>
+        <location filename="../src/features/orders/orderview.cpp" line="222"/>
         <source>Șterge și din cloud</source>
         <translation>Удалить и из облака</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="220"/>
+        <location filename="../src/features/orders/orderview.cpp" line="224"/>
         <source>Șterge numai local</source>
         <translation>Удалить только локально</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="262"/>
+        <location filename="../src/features/orders/orderview.cpp" line="266"/>
         <source>Comanda nu mai există sau nu a fost eliminată.</source>
         <translation>Заказ больше не существует или не был удалён.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="279"/>
+        <location filename="../src/features/orders/orderview.cpp" line="283"/>
         <source>Eroare SQL: %1
 Interogare: %2</source>
         <translation>Ошибка SQL: %1
 Запрос: %2</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="282"/>
+        <location filename="../src/features/orders/orderview.cpp" line="286"/>
         <source>tranzacție bază de date</source>
         <translation>транзакция базы данных</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="313"/>
+        <location filename="../src/features/orders/orderview.cpp" line="317"/>
         <source>Sincronizarea eliminării</source>
         <translation>Синхронизация удаления</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="315"/>
+        <location filename="../src/features/orders/orderview.cpp" line="319"/>
         <source>Documentele au fost eliminate local, dar eliminarea din cloud a eșuat.</source>
         <translation>Документы удалены локально, но удалить их из облака не удалось.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="322"/>
+        <location filename="../src/features/orders/orderview.cpp" line="326"/>
         <source>Documentul este eliminat&lt;br&gt; cu succes din baza de date.</source>
         <translation>Документ успешно&lt;br&gt; удалён из базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="276"/>
+        <location filename="../src/features/orders/orderview.cpp" line="870"/>
+        <source>Caută după pacient (nume, prenume, IDNP)</source>
+        <translation>Поиск по пациенту (фамилия, имя, IDNP)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/orders/orderview.cpp" line="872"/>
+        <source>Caută după investigație (cod sau denumire)</source>
+        <translation>Поиск по исследованию (код или наименование)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/orders/orderview.cpp" line="2250"/>
+        <source>Căutare după pacient sau investigație (Ctrl + F)</source>
+        <translation>Поиск по пациенту или исследованию (Ctrl + F)</translation>
+    </message>
+    <message>
+        <location filename="../src/features/orders/orderview.cpp" line="280"/>
         <source>Eliminarea documentului</source>
         <translation>Удаление документа</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="277"/>
+        <location filename="../src/features/orders/orderview.cpp" line="281"/>
         <source>Nu s-a putut de eliminat documentul nr.%1 din baza de date</source>
         <translation>Не удалось удалить документ №%1 из базы данных</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="337"/>
+        <location filename="../src/features/orders/orderview.cpp" line="341"/>
         <source>Comanda locală nu are UUID; documentul cloud nu poate fi identificat sigur.</source>
         <translation>Локальный заказ не имеет UUID; облачный документ невозможно надёжно определить.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="344"/>
+        <location filename="../src/features/orders/orderview.cpp" line="348"/>
         <source>Se elimină documentele din cloud ...</source>
         <translation>Удаление документов из облака ...</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="406"/>
+        <location filename="../src/features/orders/orderview.cpp" line="410"/>
         <source>Eroare necunoscută la eliminarea din cloud.</source>
         <translation>Неизвестная ошибка при удалении из облака.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="434"/>
-        <location filename="../src/features/orders/orderview.cpp" line="439"/>
-        <location filename="../src/features/orders/orderview.cpp" line="444"/>
+        <location filename="../src/features/orders/orderview.cpp" line="438"/>
+        <location filename="../src/features/orders/orderview.cpp" line="443"/>
+        <location filename="../src/features/orders/orderview.cpp" line="448"/>
         <source>... filtru după -&gt; %1</source>
         <translation>... фильтр по -&gt; %1</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="525"/>
-        <location filename="../src/features/orders/orderview.cpp" line="537"/>
-        <location filename="../src/features/orders/orderview.cpp" line="599"/>
+        <location filename="../src/features/orders/orderview.cpp" line="529"/>
+        <location filename="../src/features/orders/orderview.cpp" line="541"/>
+        <location filename="../src/features/orders/orderview.cpp" line="603"/>
         <source>Transmiterea prin e-mail</source>
         <translation>Отправка по e-mail</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="526"/>
+        <location filename="../src/features/orders/orderview.cpp" line="530"/>
         <source>Comanda selectată nu are un raport ecografic validat.</source>
         <translation>Для выбранного направления нет утверждённого протокола УЗИ.</translation>
     </message>
@@ -6688,112 +7107,112 @@ Interogare: %2</source>
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="546"/>
+        <location filename="../src/features/orders/orderview.cpp" line="550"/>
         <source>Se pregătesc documentele în format PDF ...</source>
         <translation>Подготавливаются документы в формате PDF ...</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="596"/>
+        <location filename="../src/features/orders/orderview.cpp" line="600"/>
         <source>Exportul documentelor nu s-a finalizat. Verificați jurnalul aplicației.</source>
         <translation>Экспорт документов не завершён. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="689"/>
+        <location filename="../src/features/orders/orderview.cpp" line="693"/>
         <source>Documentul a fost salvat cu succes&lt;br&gt; in baza de date.</source>
         <translation>Документ успешно сохранён&lt;br&gt; в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="949"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1094"/>
         <source>Deschide preview</source>
         <translation>Открыть просмотр</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="951"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1096"/>
         <source>Deschide designer</source>
         <translation>Открыть дизайнер</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1034"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1179"/>
         <source>Lista documentelor nu a putut fi încărcată complet.</source>
         <translation>Не удалось полностью загрузить список документов.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1043"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1188"/>
         <source>Printare nu este posibilă !!!</source>
         <translation>Печать невозможна !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1221"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1366"/>
         <source>Creează document nou.</source>
         <translation>Создать новый документ.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1223"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1368"/>
         <source>Editează documentul.</source>
         <translation>Редактировать документ.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1225"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1370"/>
         <source>Elimină documentul</source>
         <translation>Удалить документ</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1228"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1373"/>
         <source>Printează comanda</source>
         <translation>Печать направления</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1235"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1380"/>
         <source>Deschide raportul</source>
         <translation>Открыть протокол</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1237"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1382"/>
         <source>Printează raportul</source>
         <translation>Печать протокола</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1333"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1478"/>
         <source>Perioada: </source>
         <translation>Период: </translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1346"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1491"/>
         <source>; filtru: </source>
         <translation>; фильтр: </translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1348"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1493"/>
         <source>; pacient: </source>
         <translation>; пациент: </translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1353"/>
+        <location filename="../src/features/orders/orderview.cpp" line="1498"/>
         <source>; autor: </source>
         <translation>; автор: </translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1875"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2022"/>
         <source>Informație</source>
         <translation>Информация</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1876"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2023"/>
         <source>Nu este marcat rândul.</source>
         <translation>Строка не выбрана.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1906"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2060"/>
         <source>Verificarea perioadei</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="1907"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2061"/>
         <source>Data de sfârșit nu poate fi mai mică decât data de început.</source>
         <translation>Дата окончания не может быть раньше даты начала.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2024"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2178"/>
         <source>Se pregătesc documentele pentru e-mail.&lt;br&gt;Fereastra poate fi închisă după finalizare.</source>
         <translation>Подготавливаются документы для e-mail.&lt;br&gt;Окно можно закрыть после завершения.</translation>
     </message>
@@ -6802,74 +7221,73 @@ Interogare: %2</source>
         <translation type="vanished">OrderView нельзя закрыть во время подготовки документов для отправки по электронной почте.</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2063"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2224"/>
         <source>Adaugă (Ins)</source>
         <translation>Добавить (Ins)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2065"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2226"/>
         <source>Elimină (Del)</source>
         <translation>Удалить (Del)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2067"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2228"/>
         <source>Editează (F2)</source>
         <translation>Редактировать (F2)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2069"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2230"/>
         <source>Deschide filtru (Ctrl + F1)</source>
         <translation>Открыть фильтр (Ctrl + F1)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2071"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2232"/>
         <source>Filtru rapid (Ctrl + F2)</source>
         <translation>Быстрый фильтр (Ctrl + F2)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2073"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2234"/>
         <source>Șterge filtru (Ctrl + F3)</source>
         <translation>Очистить фильтр (Ctrl + F3)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2075"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2236"/>
         <source>Actualizează (F5)</source>
         <translation>Обновить (F5)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2077"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2238"/>
         <source>Ascunde/prezintă secții&lt;br&gt; (Ctrl + H)</source>
         <translation>Скрыть/показать разделы&lt;br&gt; (Ctrl + H)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2079"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2240"/>
         <source>Printare (Ctrl + P)</source>
         <translation>Печать (Ctrl + P)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2081"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2242"/>
         <source>Trimite e-mail (Ctrl + M)</source>
         <translation>Отправить e-mail (Ctrl + M)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2083"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2244"/>
         <source>Crearea raportului (Ctrl + R)</source>
         <translation>Создать протокол (Ctrl + R)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2085"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2246"/>
         <source>Vizualizarea concluziei (Ctrl + T)</source>
         <translation>Просмотр заключения (Ctrl + T)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2087"/>
+        <location filename="../src/features/orders/orderview.cpp" line="2248"/>
         <source>Perioada (Ctrl + Shift + P)</source>
         <translation>Период (Ctrl + Shift + P)</translation>
     </message>
     <message>
-        <location filename="../src/features/orders/orderview.cpp" line="2089"/>
         <source>Cauta (Ctrl + F)</source>
-        <translation>Поиск (Ctrl + F)</translation>
+        <translation type="vanished">Поиск (Ctrl + F)</translation>
     </message>
     <message>
         <source>Lista documentelor: Comanda ecografica</source>
@@ -8051,17 +8469,17 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Не удалось открыть файл журнала: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="58"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="60"/>
         <source>nu a putut adăuga coloana %1.%2:</source>
         <translation>не удалось добавить столбец %1.%2:</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="65"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="67"/>
         <source>coloană adăugată: %1.%2</source>
         <translation>добавлен столбец: %1.%2</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="417"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="419"/>
         <source>Investigația selectată cu ID %1 nu mai există.</source>
         <translation>Выбранное исследование с ID %1 больше не существует.</translation>
     </message>
@@ -12812,19 +13230,49 @@ Continuați?</source>
     <name>SearchLineEdit</name>
     <message>
         <location filename="../src/ui/widgets/searchlineedit.cpp" line="81"/>
-        <location filename="../src/ui/widgets/searchlineedit.cpp" line="116"/>
+        <location filename="../src/ui/widgets/searchlineedit.cpp" line="149"/>
         <source>Caută după cod</source>
         <translation>Поиск по коду</translation>
     </message>
     <message>
         <location filename="../src/ui/widgets/searchlineedit.cpp" line="84"/>
-        <location filename="../src/ui/widgets/searchlineedit.cpp" line="118"/>
+        <location filename="../src/ui/widgets/searchlineedit.cpp" line="151"/>
         <source>Caută după denumire</source>
         <translation>Поиск по наименованию</translation>
     </message>
 </context>
 <context>
     <name>SettingsDialog</name>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="492"/>
+        <source>Da</source>
+        <translation>Да</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="493"/>
+        <source>Nu</source>
+        <translation>Нет</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="494"/>
+        <source>Anulare</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="271"/>
+        <source>OK</source>
+        <translation>OK</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="272"/>
+        <source>Salvează</source>
+        <translation>Сохранить</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/settingsdialog.cpp" line="273"/>
+        <source>Închide</source>
+        <translation>Закрыть</translation>
+    </message>
     <message>
         <location filename="../src/settings/settingsdialog.ui" line="14"/>
         <source>Setări</source>
@@ -12929,7 +13377,7 @@ Continuați?</source>
     </message>
     <message>
         <location filename="../src/settings/settingsdialog.ui" line="269"/>
-        <location filename="../src/settings/settingsdialog.cpp" line="445"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="455"/>
         <source>Niciun logotip</source>
         <translation>Без логотипа</translation>
     </message>
@@ -13026,71 +13474,70 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
         <translation>Выбранный файл не является допустимым изображением.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="247"/>
-        <location filename="../src/settings/settingsdialog.cpp" line="471"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="490"/>
         <source>Setări modificate</source>
         <translation>Настройки изменены</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="248"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="247"/>
         <source>Doriți să salvați modificările înainte de a selecta alt utilizator?</source>
         <translation>Сохранить изменения перед выбором другого пользователя?</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="283"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="293"/>
         <source>Citirea setărilor</source>
         <translation>Чтение настроек</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="323"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="333"/>
         <source>Sincronizarea cloud nu este configurată.</source>
         <translation>Облачная синхронизация не настроена.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="326"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="336"/>
         <source>Sincronizarea cloud este configurată și activă.</source>
         <translation>Облачная синхронизация настроена и активна.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="329"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="339"/>
         <source>Sincronizarea cloud este configurată, dar nu este activă.</source>
         <translation>Облачная синхронизация настроена, но не активна.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="334"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="344"/>
         <source>Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Setări cloud server”.</source>
         <translation>Соединение, пароль и облачная база настраиваются в отдельном окне «Настройки облачного сервера».</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="344"/>
-        <location filename="../src/settings/settingsdialog.cpp" line="352"/>
-        <location filename="../src/settings/settingsdialog.cpp" line="365"/>
-        <location filename="../src/settings/settingsdialog.cpp" line="371"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="354"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="362"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="375"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="381"/>
         <source>Salvarea setărilor</source>
         <translation>Сохранение настроек</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="345"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="355"/>
         <source>Selectați un utilizator valid.</source>
         <translation>Выберите допустимого пользователя.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="353"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="363"/>
         <source>Tranzacția nu a putut fi pornită: %1</source>
         <translation>Не удалось начать транзакцию: %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="362"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="372"/>
         <source>Setările nu au putut fi salvate.</source>
         <translation>Не удалось сохранить настройки.</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="372"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="382"/>
         <source>Confirmarea tranzacției a eșuat: %1</source>
         <translation>Подтверждение транзакции завершилось ошибкой: %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/settingsdialog.cpp" line="472"/>
+        <location filename="../src/settings/settingsdialog.cpp" line="481"/>
         <source>Doriți să salvați modificările înainte de închidere?</source>
         <translation>Сохранить изменения перед закрытием?</translation>
     </message>
@@ -13345,122 +13792,122 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
 <context>
     <name>UpdateReleasesApp</name>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2349"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2352"/>
         <source>Transferul UUID a fost oprit: conflict UUID sau eroare de schemă. Verificați jurnalul.</source>
         <translation>Перенос UUID остановлен: конфликт UUID или ошибка схемы. Проверьте журнал.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="251"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="253"/>
         <source>Actualizarea a fost anulată: driver SQL nesuportat: %1.</source>
         <translation>Обновление отменено: неподдерживаемый SQL-драйвер: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="264"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="266"/>
         <source>Actualizarea a fost anulată: motorul selectat nu corespunde driverului conexiunii (%1).</source>
         <translation>Обновление отменено: выбранный движок не соответствует драйверу соединения (%1).</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="272"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="274"/>
         <source>Actualizarea a fost anulată: baza de date are versiunea %1, mai nouă decât aplicația %2. Folosiți o versiune compatibilă a aplicației.</source>
         <translation>Обновление отменено: версия базы данных %1 новее версии приложения %2. Используйте совместимую версию приложения.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="330"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="332"/>
         <source>Migrarea la %1 a fost anulată înainte de modificarea schemei. Lipsesc tabelele obligatorii: %2.</source>
         <translation>Миграция на %1 отменена до изменения схемы. Отсутствуют обязательные таблицы: %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="424"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="426"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește tabela %2.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует таблица %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="441"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="443"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește view-ul %2.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует представление %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="450"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="452"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește coloana docYear.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует столбец docYear.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="493"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="495"/>
         <source>Verificarea UUID a eșuat: tabela sau coloana uuid lipsește în %1.</source>
         <translation>Проверка UUID завершилась ошибкой: в %1 отсутствует таблица или столбец uuid.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="506"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="508"/>
         <source>Verificarea UUID nu a putut fi executată pentru %1: %2</source>
         <translation>Не удалось выполнить проверку UUID для %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="515"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="517"/>
         <source>Verificarea UUID a eșuat pentru %1: %2 valori invalide, %3 valori duplicate.</source>
         <translation>Проверка UUID для %1 завершилась ошибкой: недействительных значений — %2, дублирующихся — %3.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="539"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="541"/>
         <source>Verificarea relațiilor după migrarea la %1 a eșuat: %2</source>
         <translation>Проверка связей после миграции на %1 завершилась ошибкой: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="546"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="548"/>
         <source>Verificările după migrarea la %1 s-au finalizat cu succes.</source>
         <translation>Проверки после миграции на %1 успешно завершены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1327"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1330"/>
         <source>Începe migrarea bazei de date la versiunea %1.</source>
         <translation>Начинается миграция базы данных на версию %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1329"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1332"/>
         <source>Se execută migrarea bazei de date la versiunea %1...</source>
         <translation>Выполняется миграция базы данных на версию %1...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1334"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1337"/>
         <source>Migrarea bazei de date la versiunea %1 a eșuat.</source>
         <translation>Миграция базы данных на версию %1 завершилась ошибкой.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1344"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1347"/>
         <source>Versiunea intermediară %1 nu a putut fi salvată: %2</source>
         <translation>Не удалось сохранить промежуточную версию %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1350"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1353"/>
         <source>Migrarea bazei de date la versiunea %1 s-a finalizat.</source>
         <translation>Миграция базы данных на версию %1 завершена.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1408"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1411"/>
         <source>Nu este eliminata tabela &apos;settingsUsers&apos; %1 </source>
         <translation>Не удалось удалить таблицу &apos;settingsUsers&apos; %1 </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1485"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1488"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (crearea tabelei &apos;sqlitestudio_temp_table0&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (создание таблицы &apos;sqlitestudio_temp_table0&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1495"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1498"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (eliminarea tabelei &apos;userPreferences&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (удаление таблицы &apos;userPreferences&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1543"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1546"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (inserarea datelor din tabela &apos;sqlitestudio_temp_table0&apos; in tabela &apos;userPreferences&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (перенос данных из таблицы &apos;sqlitestudio_temp_table0&apos; в таблицу &apos;userPreferences&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1553"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1556"/>
         <source>Eroare de actualizare a relizului &apos;</source>
         <translation>Ошибка обновления релиза &apos;</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2316"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2319"/>
         <source>Conexiunea MariaDB pentru transferul UUID nu poate fi deschisă: %1</source>
         <translation>Не удалось открыть соединение MariaDB для переноса UUID: %1</translation>
     </message>
@@ -13505,220 +13952,260 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
         <translation type="vanished">UUID из SQLite перенесены в MariaDB: %1 записей.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2504"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2507"/>
         <source>Se actualizează schema programărilor pacienților...</source>
         <translation>Обновляется схема записи пациентов...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2513"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2516"/>
         <source>UUID: se generează identificatorii în baza locală...</source>
         <translation>UUID: генерируются идентификаторы в локальной базе...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2581"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2584"/>
         <source>UUID generate în db_image.imagesReports: %1.</source>
         <translation>Сгенерировано UUID в db_image.imagesReports: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2588"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2591"/>
         <source>UUID: se transferă identificatorii în MariaDB...</source>
         <translation>UUID: идентификаторы переносятся в MariaDB...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2594"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2597"/>
         <source>Actualizarea UUID s-a finalizat.</source>
         <translation>Обновление UUID завершено.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2701"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2704"/>
         <source>Tabelele conturilor e-mail și cloud sunt pregătite.</source>
         <translation>Таблицы учётных записей e-mail и облака подготовлены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2712"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2715"/>
         <source>eliminare view %1</source>
         <translation>удаление представления %1</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2718"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2721"/>
         <source>Actualizarea la 4.0.1: resursa view-ului %1 nu poate fi citită: %2</source>
         <translation>Обновление до 4.0.1: не удалось прочитать ресурс представления %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2724"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2727"/>
         <source>creare view %1</source>
         <translation>создание представления %1</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2784"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2787"/>
         <source>Nu s-au putut verifica duplicatele istorice din %1: %2</source>
         <translation>Не удалось проверить исторические дубликаты в %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2828"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2831"/>
         <source>formatare lot %1</source>
         <translation>обработка пакета %1</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2835"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2838"/>
         <source>Numerotare anuală: %1 din %2 %3 convertite...</source>
         <translation>Годовая нумерация: преобразовано %1 из %2 %3...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2866"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2869"/>
         <source>Numerotare anuală: %1 comenzi și %2 rapoarte de procesat...</source>
         <translation>Годовая нумерация: необходимо обработать %1 направлений и %2 протоколов...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2881"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2884"/>
         <source>Tabela secvențelor anuale este pregătită.</source>
         <translation>Таблица годовых последовательностей подготовлена.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2898"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2901"/>
         <source>Coloanele pentru anul documentelor sunt pregătite.</source>
         <translation>Столбцы года документов подготовлены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2922"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2925"/>
         <source>comenzi</source>
         <translation>направлений</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2926"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2929"/>
         <source>Numerotare anuală: %1 comenzi convertite.</source>
         <translation>Годовая нумерация: преобразовано направлений — %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2934"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2937"/>
         <source>rapoarte</source>
         <translation>протоколов</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2938"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2941"/>
         <source>Numerotare anuală: %1 rapoarte convertite.</source>
         <translation>Годовая нумерация: преобразовано протоколов — %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2958"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2961"/>
         <source>Indexurile unice anuale au fost create.</source>
         <translation>Уникальные годовые индексы созданы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="2978"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="2981"/>
         <source>Secvențele anuale au fost inițializate.</source>
         <translation>Годовые последовательности инициализированы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3046"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3049"/>
         <source>În orderEcho au fost găsite %1 grupuri de numere istorice duplicate. Numerele sunt păstrate; se creează index normal.</source>
         <translation>В orderEcho найдено групп исторических дублирующихся номеров: %1. Номера сохраняются; создаётся обычный индекс.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3073"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3076"/>
         <source>În reportEcho au fost găsite %1 grupuri de numere istorice duplicate. Numerele sunt păstrate; se creează index normal.</source>
         <translation>В reportEcho найдено групп исторических дублирующихся номеров: %1. Номера сохраняются; создаётся обычный индекс.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3109"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3112"/>
         <source>View-urile pentru liste și selectoare au fost actualizate.</source>
         <translation>Представления для списков и элементов выбора обновлены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3118"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3121"/>
         <source>Se verifică integritatea bazei actualizate...</source>
         <translation>Проверяется целостность обновлённой базы данных...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3131"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3134"/>
         <source>Numerotarea anuală s-a finalizat: %1 comenzi, %2 rapoarte.</source>
         <translation>Годовая нумерация завершена: %1 направлений, %2 протоколов.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3224"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3227"/>
         <source>4.1.0: verificarea schemei pacienților...</source>
         <translation>4.1.0: проверка схемы пациентов...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3243"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3246"/>
         <source>4.1.0: view-ul vechi a fost eliminat.</source>
         <translation>4.1.0: старое представление удалено.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3289"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3292"/>
         <source>4.1.0: dependențele schemei vechi au fost eliminate.</source>
         <translation>4.1.0: зависимости старой схемы удалены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3314"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3317"/>
         <source>4.1.0: tabela și coloanele pacienților au fost redenumite.</source>
         <translation>4.1.0: таблица и столбцы пациентов переименованы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3331"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3334"/>
         <source>4.1.0: referințele documentelor au fost redenumite.</source>
         <translation>4.1.0: ссылки на документы переименованы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3417"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3420"/>
         <source>4.1.0: indexurile și view-ul pacienților au fost create.</source>
         <translation>4.1.0: индексы и представление пациентов созданы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3434"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3437"/>
         <source>Migrarea pacienților la versiunea 4.1.0 s-a finalizat.</source>
         <translation>Миграция пациентов на версию 4.1.0 завершена.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3585"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3588"/>
         <source>4.1.2: se verifică site-ul organizațiilor...</source>
         <translation>4.1.2: проверяется сайт организаций...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3597"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3600"/>
         <source>4.1.2: coloana organizations.site există deja; valorile au fost păstrate.</source>
         <translation>4.1.2: столбец organizations.site уже существует; значения сохранены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3598"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3601"/>
         <source>4.1.2: a fost adăugată coloana site în tabela organizations.</source>
         <translation>4.1.2: в таблицу organizations добавлен столбец site.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3624"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3627"/>
         <source>4.1.2: verificată unicitatea %1.id_users.</source>
         <translation>4.1.2: проверена уникальность %1.id_users.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3781"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3784"/>
         <source>4.2.0: se creează noua schemă de setări...</source>
         <translation>4.2.0: создаётся новая схема настроек...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3878"/>
-        <location filename="../src/database/updatereleasesapp.cpp" line="4117"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3881"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4120"/>
         <source>4.2.0: noua schemă de setări este pregătită.</source>
         <translation>4.2.0: новая схема настроек подготовлена.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3924"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3927"/>
         <source>4.2.0: setările aplicației au fost copiate.</source>
         <translation>4.2.0: настройки приложения скопированы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="3954"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="3957"/>
         <source>4.2.0: setările utilizatorilor au fost copiate.</source>
         <translation>4.2.0: настройки пользователей скопированы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="4032"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4035"/>
         <source>4.2.0: setările organizațiilor au fost copiate.</source>
         <translation>4.2.0: настройки организаций скопированы.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="4093"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4096"/>
         <source>4.2.0: datele migrate au fost verificate.</source>
         <translation>4.2.0: перенесённые данные проверены.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4197"/>
+        <source>4.2.7: se pregătește schema utilizatorilor...</source>
+        <translation>4.2.7: подготавливается схема пользователей...</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4326"/>
+        <source>4.2.7: numele utilizatorilor sunt unice.</source>
+        <translation>4.2.7: имена пользователей уникальны.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4327"/>
+        <source>4.2.7: utilizatori redenumiți (nume duplicate): %1.</source>
+        <translation>4.2.7: переименованы пользователи (повторяющиеся имена): %1.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4342"/>
+        <source>4.2.7: parolele vechi au fost eliminate.</source>
+        <translation>4.2.7: старые пароли удалены.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4434"/>
+        <source>4.2.7: parolele cloud folosesc cheia organizației.</source>
+        <translation>4.2.7: облачные пароли используют ключ организации.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4435"/>
+        <source>4.2.7: %1 parole cloud nu au putut fi decriptate și trebuie resalvate în configurația serverului cloud.</source>
+        <translation>4.2.7: не удалось расшифровать облачные пароли (%1); их нужно сохранить заново в настройках облачного сервера.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4481"/>
+        <source>4.2.7: parolele utilizatorilor folosesc PBKDF2.</source>
+        <translation>4.2.7: пароли пользователей используют PBKDF2.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="4547"/>
+        <source>4.2.7: securitatea conturilor a fost actualizată.</source>
+        <translation>4.2.7: безопасность учётных записей обновлена.</translation>
     </message>
 </context>
 <context>
@@ -13791,6 +14278,7 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
     <message>
         <location filename="../src/features/catalogs/userdialog.cpp" line="147"/>
         <location filename="../src/features/catalogs/userdialog.cpp" line="157"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="170"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
@@ -13805,96 +14293,124 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
         <translation>Не указан пароль пользователя !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="184"/>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="225"/>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="356"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="171"/>
+        <source>Parola trebuie să conțină cel puțin %1 caractere !!!</source>
+        <translation>Пароль должен содержать не менее %1 символов !!!</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="181"/>
+        <source>Administrator fără parolă</source>
+        <translation>Администратор без пароля</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="182"/>
+        <source>Administratorul nu are parolă: oricine are acces la calculator va putea deschide aplicația și datele pacienților.
+
+Continuați fără parolă?</source>
+        <translation>У администратора нет пароля: любой, кто имеет доступ к компьютеру, сможет открыть приложение и данные пациентов.
+
+Продолжить без пароля?</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="244"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="254"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="314"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="442"/>
         <source>Verificarea datelor.</source>
         <translation>Проверка данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="185"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="245"/>
+        <source>Nu s-a putut verifica unicitatea numelui utilizatorului &quot;&lt;b&gt;%1&lt;/b&gt;&quot;.</source>
+        <translation>Не удалось проверить уникальность имени пользователя &quot;&lt;b&gt;%1&lt;/b&gt;&quot;.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="247"/>
+        <source>Verificați conexiunea și jurnalul aplicației.</source>
+        <translation>Проверьте подключение и журнал приложения.</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="255"/>
         <source>Utilizatorul cu nume &quot;&lt;b&gt;%1&lt;/b&gt;&quot; există în baza de date</source>
         <translation>Пользователь с именем «&lt;b&gt;%1&lt;/b&gt;» уже существует в базе данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="187"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="257"/>
         <source>Alegeți alt nume a utilizatorului pentru validare.</source>
         <translation>Выберите другое имя пользователя.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="226"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="315"/>
         <source>Nu s-a putut salva datele utilizatorului &apos;%1&apos;&lt;br&gt;în baza de date.</source>
         <translation>Не удалось сохранить данные пользователя «%1»&lt;br&gt;в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="247"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="336"/>
         <source>Nu au fost inițializate setările utilizatorului &apos;%1&apos;:</source>
         <translation>Не удалось инициализировать настройки пользователя «%1»:</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="257"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="346"/>
         <source>Nu a putut fi confirmată crearea utilizatorului &apos;%1&apos;:</source>
         <translation>Не удалось подтвердить создание пользователя «%1»:</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="271"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="360"/>
         <source>Utilizatorul a fost creat, dar memorarea lui în profil a eșuat.</source>
         <translation>Пользователь создан, но сохранить его в профиле не удалось.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="357"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="443"/>
         <source>Nu s-a putut actualiza datele utilizatorului &apos;%1&apos;&lt;br&gt;în baza de date.</source>
         <translation>Не удалось обновить данные пользователя «%1»&lt;br&gt;в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="424"/>
         <source>Parola cloud criptată pentru organizația %1 este invalidă.</source>
-        <translation>Зашифрованный облачный пароль для организации %1 недействителен.</translation>
+        <translation type="vanished">Зашифрованный облачный пароль для организации %1 недействителен.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="441"/>
         <source>Parola cloud pentru organizația %1 nu poate fi decriptată cu parola curentă.</source>
-        <translation>Облачный пароль для организации %1 невозможно расшифровать текущим паролем.</translation>
+        <translation type="vanished">Облачный пароль для организации %1 невозможно расшифровать текущим паролем.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="451"/>
         <source>Parola cloud pentru organizația %1 nu poate fi recriptată.</source>
-        <translation>Облачный пароль для организации %1 невозможно зашифровать повторно.</translation>
+        <translation type="vanished">Облачный пароль для организации %1 невозможно зашифровать повторно.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="472"/>
         <source>Înregistrarea cloud %1 nu a fost actualizată.</source>
-        <translation>Облачная запись %1 не была обновлена.</translation>
+        <translation type="vanished">Облачная запись %1 не была обновлена.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="510"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="527"/>
         <source>Utilizatorul a fost salvat cu succes&lt;br&gt; in baza de date.</source>
         <translation>Пользователь успешно сохранён&lt;br&gt;в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="536"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="553"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="537"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="554"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="541"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="186"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="558"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="542"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="187"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="559"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/userdialog.cpp" line="543"/>
+        <location filename="../src/features/catalogs/userdialog.cpp" line="560"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>

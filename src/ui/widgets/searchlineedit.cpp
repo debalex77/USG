@@ -109,9 +109,42 @@ void SearchLineEdit::updateButtonPosition()
     }
 }
 
+void SearchLineEdit::setSearchOptions(const QList<std::pair<QString, QString>> &options)
+{
+    const QList<QAction *> oldActions = searchMenu->actions();
+    searchMenu->clear();
+    qDeleteAll(oldActions);
+
+    for (const auto &[type, text] : options) {
+        QAction *action = searchMenu->addAction(text);
+        action->setData(type);
+        connect(action, &QAction::triggered,
+                this, &SearchLineEdit::onSearchOptionSelected, Qt::UniqueConnection);
+    }
+}
+
+void SearchLineEdit::setSearchOptionIcon(const QString &typeSearch, const QIcon &icon)
+{
+    const QList<QAction *> actions = searchMenu->actions();
+    for (QAction *action : actions) {
+        if (action->data().toString() == typeSearch)
+            action->setIcon(icon);
+    }
+}
+
 void SearchLineEdit::setSearchOptionSelected(QString typeSearch)
 {
     m_typeSearch = typeSearch;
+
+    // opțiunile setate prin setSearchOptions au textul în meniu
+    const QList<QAction *> actions = searchMenu->actions();
+    for (const QAction *action : actions) {
+        if (action->data().toString() == m_typeSearch) {
+            setPlaceholderText(action->text());
+            return;
+        }
+    }
+
     if (m_typeSearch == "code")
         setPlaceholderText(tr("Caut\304\203 dup\304\203 cod"));
     else if (m_typeSearch == "name")
@@ -131,6 +164,10 @@ void SearchLineEdit::onSearchOptionSelected()
     if (action) {
         // set placeholder
         setPlaceholderText(action->text());
+
+        // opțiunea cu iconiță o afișează pe buton (inițial rămâne lupa)
+        if (!action->icon().isNull())
+            searchButton->setIcon(action->icon());
 
         QString type = action->data().toString(); // identificator = code || name
         m_typeSearch = type;

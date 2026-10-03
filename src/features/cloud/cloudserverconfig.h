@@ -41,7 +41,6 @@ private:
     void connectionComboBox();
     void disconnectionComboBox();
 
-    QByteArray getHashUserApp();
     bool verifyStoredPassword(const QByteArray &realKey, QString *error = nullptr);
     bool existServerConfig();
     bool insertDataIntoTableCloudServer();

@@ -2,6 +2,7 @@
 #define SETTINGSDIALOG_H
 
 #include <QDialog>
+#include <QMessageBox>
 
 #include "settings/settingsrepository.h"
 
@@ -34,6 +35,7 @@ private:
     void loadUser(int userId);
     bool saveSettings();
     bool confirmDiscardChanges();
+    QMessageBox::StandardButton askSaveChanges(const QString &text);
     void markModified();
     void setComboValue(QComboBox *combo, int value);
     int comboValue(const QComboBox *combo) const;

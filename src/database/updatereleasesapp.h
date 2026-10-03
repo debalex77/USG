@@ -63,6 +63,7 @@ private:
     bool update_4_1_2();
     bool update_4_2_0();
     bool update_4_2_3();
+    bool update_4_2_7();
 
 private:
     DataBase* db;

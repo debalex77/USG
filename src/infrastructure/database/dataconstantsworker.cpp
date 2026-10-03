@@ -204,36 +204,30 @@ void DataConstantsWorker::process()
                     cloudConnection.connectionOptions = qry.value(rec.indexOf("connectionOption")).toString();
                     cloudConnection.userName          = qry.value(rec.indexOf("username")).toString();
 
-                    const QByteArray payload = CryptoManager::fromBase64(qry.value(rec.indexOf("password")).toString());
-
-                    CryptoManager::EncryptedData encrypted;
-                    if (payload.size() > 16) {
-                        encrypted.cipherText = payload.first(payload.size() - 16);
-                        encrypted.tag = payload.last(16);
-                        encrypted.iv = CryptoManager::fromBase64(qry.value(rec.indexOf("iv")).toString());
-
-                        const QByteArray userHash = QByteArray::fromHex(qry.value(rec.indexOf("hashUser")).toString().toUtf8());
-                        const int cloudOrganizationId = qry.value(rec.indexOf("id_organizations")).toInt();
-                        const QByteArray realKey = CryptoManager::deriveCloudKey(userHash, cloudOrganizationId);
-
-                        bool decrypted = false;
-                        if (realKey.size() == 32) {
-                            cloudConnection.password = QString::fromUtf8(
-                                CryptoManager::decryptText(encrypted,
-                                                           realKey,
-                                                           &decrypted)
-                                );
-                        }
-                        cloudConnection.enabled = decrypted;
-                        if (!decrypted) {
-                            qWarning(logWarning()) << "[THREAD] Parola cloud nu a putut fi decriptată.";
-                        } else {
-                            qInfo(logInfo()) << "[THREAD] Actualizat contextul conexiunei cloud.";
-                        }
+                    // Până la migrarea 4.2.7 parola poate fi încă criptată cu
+                    // cheia veche, derivată din hash-ul utilizatorului.
+                    const int cloudOrganizationId = qry.value(rec.indexOf("id_organizations")).toInt();
+                    const QString storedPassword = qry.value(rec.indexOf("password")).toString();
+                    QString password;
+                    QString decryptError;
+                    const bool decrypted = CryptoManager::decryptCloudPassword(
+                        dbConn,
+                        cloudOrganizationId,
+                        storedPassword,
+                        qry.value(rec.indexOf("iv")).toString(),
+                        qry.value(rec.indexOf("hashUser")).toString(),
+                        &password,
+                        nullptr,
+                        &decryptError);
+                    cloudConnection.password = decrypted ? password : QString();
+                    cloudConnection.enabled = decrypted;
+                    cloudConnection.passwordUnreadable =
+                        !decrypted && CryptoManager::fromBase64(storedPassword).size() > 16;
+                    if (!decrypted) {
+                        qWarning(logWarning()) << "[THREAD] Parola cloud nu a putut fi decriptată:"
+                                               << decryptError;
                     } else {
-                        cloudConnection.password.clear();
-                        cloudConnection.enabled = false;
-                        qWarning(logWarning()) << "[THREAD] Configurația cloud nu conține o parolă criptată validă.";
+                        qInfo(logInfo()) << "[THREAD] Actualizat contextul conexiunei cloud.";
                     }
                 }
             }

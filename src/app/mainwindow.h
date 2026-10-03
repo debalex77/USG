@@ -90,6 +90,7 @@ public slots:
 
 private slots:
     void launchFirstRunWizard();
+    void promptUnreadableCloudPassword();
     void checkUpdateApp();
     void openDescriptionRealease();
     void openSourceCode();
@@ -184,7 +185,6 @@ private:
     AsistantTipApp           *asistant_tip;
     InfoWindow               *info_window;
     AuthorizationUser        *autorization;
-    ArchiveCreationHandler   *archive_handler;
 
     QLabel *txt_title_bar = nullptr;
 

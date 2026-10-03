@@ -23,6 +23,7 @@
 
 #include "catalogsloader.h"
 
+
 CatalogsLoader::CatalogsLoader(DataBase &db,
                                CatalogType::Type typeCatalogs)
     : m_db(db)
@@ -30,11 +31,15 @@ CatalogsLoader::CatalogsLoader(DataBase &db,
 {
     switch (m_typeCatalog) {
     case CatalogType::Type::Doctors:
-        strQry = m_db.getTextSQL(":/sql/queries/doctors_fullName_select.sql");
+        strQry = MainDatabaseConnectionContext::instance().isMariaDb()
+                     ? m_db.getTextSQL(":/sql/queries/doctors_fullName_select_mariadb.sql")
+                     : m_db.getTextSQL(":/sql/queries/doctors_fullName_select.sql");
         break;
 
     case CatalogType::Type::Nurses:
-        strQry = m_db.getTextSQL(":/sql/queries/nurses_fullName_select.sql");
+        strQry = MainDatabaseConnectionContext::instance().isMariaDb()
+                     ? m_db.getTextSQL(":/sql/queries/nurses_fullName_select_mariadb.sql")
+                     : m_db.getTextSQL(":/sql/queries/nurses_fullName_select.sql");
         break;
 
     case CatalogType::Type::Users:
@@ -62,8 +67,10 @@ CatalogsLoader::BatchResult CatalogsLoader::loadNextBatch(int limit, const QVari
 {
     BatchResult result;
 
-    if (!m_db.getDatabase().isOpen())
+    if (!m_db.getDatabase().isOpen()) {
+        result.error = QStringLiteral("database is not open");
         return result;
+    }
 
     QSqlQuery qry(m_db.getDatabase());
     qry.setForwardOnly(true);
@@ -73,11 +80,13 @@ CatalogsLoader::BatchResult CatalogsLoader::loadNextBatch(int limit, const QVari
         qWarning(logWarning())
             << "CatalogsLoader prepare 'loadNextBatch' error:"
             << qry.lastError().text();
+        result.error = qry.lastError().text();
         return result;
     }
 
     qry.bindValue(":lastName", lastName);
     qry.bindValue(":lastId",   lastId);
+    bindSearch(qry);
 
     return execQuery(qry, limit);
 }
@@ -86,8 +95,10 @@ CatalogsLoader::BatchResult CatalogsLoader::loadFirstBatch(int limit)
 {
     BatchResult result;
 
-    if (!m_db.getDatabase().isOpen())
+    if (!m_db.getDatabase().isOpen()) {
+        result.error = QStringLiteral("database is not open");
         return result;
+    }
 
     QSqlQuery qry(m_db.getDatabase());
     qry.setForwardOnly(true);
@@ -97,8 +108,10 @@ CatalogsLoader::BatchResult CatalogsLoader::loadFirstBatch(int limit)
         qWarning(logWarning())
             << "CatalogsLoader prepare 'loadFirstBatch' error:"
             << qry.lastError().text();
+        result.error = qry.lastError().text();
         return result;
     }
+    bindSearch(qry);
 
     return execQuery(qry, limit);
 }
@@ -109,13 +122,64 @@ void CatalogsLoader::setSort(int column, Qt::SortOrder order)
     m_sortOrder = order;
 }
 
+void CatalogsLoader::setSearchText(const QString &text)
+{
+    // Căutarea este disponibilă doar în catalogul pacienților.
+    constexpr int maxSearchWords = 5;
+
+    m_searchWords.clear();
+    if (m_typeCatalog != CatalogType::Type::Patients)
+        return;
+
+    m_searchWords = text.simplified().split(QLatin1Char(' '), Qt::SkipEmptyParts);
+    if (m_searchWords.size() > maxSearchWords)
+        m_searchWords.resize(maxSearchWords);
+}
+
+QString CatalogsLoader::searchCondition() const
+{
+    if (m_searchWords.isEmpty())
+        return {};
+
+    // Fiecare cuvânt trebuie găsit în nume/prenume, IDNP sau data nașterii
+    // (zz.ll.aaaa); astfel „Popescu Ion” și „Ion Popescu” dau același rezultat.
+    const QString birthday = MainDatabaseConnectionContext::instance().isMariaDb()
+        ? QStringLiteral("DATE_FORMAT(catalog.`birthday`, '%d.%m.%Y')")
+        : QStringLiteral("strftime('%d.%m.%Y', catalog.`birthday`)");
+
+    QStringList parts;
+    for (int i = 0; i < m_searchWords.size(); ++i) {
+        const QString index = QString::number(i);
+        parts.append(QStringLiteral("(catalog.`FullName` LIKE :searchName") + index
+                     + QStringLiteral(" ESCAPE '!' OR catalog.`idnp` LIKE :searchIdnp") + index
+                     + QStringLiteral(" ESCAPE '!' OR ") + birthday
+                     + QStringLiteral(" LIKE :searchBirthday") + index
+                     + QStringLiteral(" ESCAPE '!')"));
+    }
+    return QStringLiteral("(") + parts.join(QStringLiteral(" AND ")) + QStringLiteral(")");
+}
+
+void CatalogsLoader::bindSearch(QSqlQuery &qry) const
+{
+    for (int i = 0; i < m_searchWords.size(); ++i) {
+        // '%', '_' și '!' din textul introdus se caută literal (ESCAPE '!').
+        QString word = m_searchWords.at(i);
+        word.replace(QLatin1Char('!'), QStringLiteral("!!"))
+            .replace(QLatin1Char('%'), QStringLiteral("!%"))
+            .replace(QLatin1Char('_'), QStringLiteral("!_"));
+        const QString pattern = QLatin1Char('%') + word + QLatin1Char('%');
+        const QString index = QString::number(i);
+        qry.bindValue(QStringLiteral(":searchName") + index, pattern);
+        qry.bindValue(QStringLiteral(":searchIdnp") + index, pattern);
+        qry.bindValue(QStringLiteral(":searchBirthday") + index, pattern);
+    }
+}
+
 QString CatalogsLoader::buildSql(bool firstBatch) const
 {
     QString base = strQry.trimmed();
     base.remove(QRegularExpression(";\\s*$"));
     base.remove(QRegularExpression("\\s+ORDER\\s+BY[\\s\\S]*$", QRegularExpression::CaseInsensitiveOption));
-    if (MainDatabaseConnectionContext::instance().isMariaDb())
-        base.replace("name ||' '|| fName", "CONCAT(name, ' ', fName)");
 
     QStringList columns;
     switch (m_typeCatalog) {
@@ -137,14 +201,24 @@ QString CatalogsLoader::buildSql(bool firstBatch) const
     }
     const int column = m_sortColumn >= 0 && m_sortColumn < columns.size() ? m_sortColumn : 2;
     const QString field = QString("catalog.`%1`").arg(columns.at(column));
-    const QString key = column <= 1 || columns.at(column) == "id_contracts"
+    // id: fără funcții, ca SQL-ul să poată folosi cheia primară.
+    const QString key = column == 0
+        ? field
+        : column == 1 || columns.at(column) == "id_contracts"
         ? QString("COALESCE(%1, 0)").arg(field)
         : QString("LOWER(COALESCE(%1, ''))").arg(field);
     QString sql = QString("SELECT catalog.*, %1 AS pagination_key FROM (%2) catalog").arg(key, base);
+
+    QStringList conditions;
+    const QString search = searchCondition();
+    if (!search.isEmpty())
+        conditions.append(search);
     if (!firstBatch) {
-        sql += QString(" WHERE (%1 %2 :lastName OR (%1 = :lastName AND catalog.id < :lastId))")
-                   .arg(key, m_sortOrder == Qt::AscendingOrder ? ">" : "<");
+        conditions.append(QString("(%1 %2 :lastName OR (%1 = :lastName AND catalog.id < :lastId))")
+                              .arg(key, m_sortOrder == Qt::AscendingOrder ? ">" : "<"));
     }
+    if (!conditions.isEmpty())
+        sql += QStringLiteral(" WHERE ") + conditions.join(QStringLiteral(" AND "));
     sql += QString(" ORDER BY %1 %2, catalog.id DESC LIMIT :limitRows")
                .arg(key, m_sortOrder == Qt::AscendingOrder ? "ASC" : "DESC");
     return sql;
@@ -156,6 +230,7 @@ CatalogsLoader::BatchResult CatalogsLoader::execQuery(QSqlQuery &qry, int limit)
 
     if (!m_db.getDatabase().isOpen()) {
         qWarning(logWarning()).noquote() << "CatalogsLoader: database is not open";
+        result.error = QStringLiteral("database is not open");
         return result;
     }
 
@@ -164,6 +239,7 @@ CatalogsLoader::BatchResult CatalogsLoader::execQuery(QSqlQuery &qry, int limit)
     if (!qry.exec()) {
         qWarning(logWarning()).noquote() << "CatalogsLoader exec error:" << qry.lastError().text();
         qWarning(logWarning()).noquote() << "Executed query:" << qry.lastQuery();
+        result.error = qry.lastError().text();
         return result;
     }
 

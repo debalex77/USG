@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.6\
+**Versiune documentată:** 4.2.7\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -150,6 +150,17 @@ Fereastra de autentificare conține câmpurile:
 
 Introduceți datele utilizatorului și apăsați **OK**.
 
+Numele de utilizator nu ține cont de majuscule: „Admin” și „admin”
+desemnează același utilizator, iar doi utilizatori nu pot avea același
+nume. Parola face diferența între majuscule și minuscule.
+
+Parolele noi sau schimbate trebuie să aibă cel puțin 8 caractere. După 3
+încercări nereușite pentru același nume, autentificarea este suspendată
+temporar (30 de secunde, apoi tot mai mult, până la 5 minute); butonul
+**OK** afișează timpul rămas. Mesajul de eroare nu precizează dacă
+greșit este numele sau parola. Dacă ați uitat parola, adresați-vă
+administratorului.
+
 ![Autentificarea utilizatorului](screenshots/04-login.png)
 
 ### Blocarea aplicației
@@ -272,6 +283,20 @@ confirmarea operației.
 > \[!NOTE\] Eliminarea unei programări nu trebuie confundată cu
 > eliminarea documentelor medicale deja create.
 
+### 7.3. Tipărirea programărilor
+
+Butonul **Printează** deschide forma de tipar a programărilor din ziua
+selectată (A4 orizontal). Forma conține antetul organizației (logotipul
+sau denumirea și datele de contact), data și ziua săptămânii, tabelul
+programărilor (ora, pacientul, investigațiile, organizația, doctorul,
+comentariul, mențiunea „Efectuat”), numărul total de pacienți programați
+și numele medicului.
+
+Se tipăresc numai intervalele care au pacient, așa cum sunt afișate în
+fereastră, inclusiv modificările încă nesalvate. Dacă în preferințe este
+activat meniul extins de tipărire, butonul oferă și deschiderea
+designerului formei.
+
 ------------------------------------------------------------------------
 
 ## 8. Pacienți și istoricul pacientului
@@ -291,6 +316,27 @@ Datele disponibile în documente includ, după caz:
 - alte informații utilizate de document.
 
 ![Evidența pacienților](screenshots/08-patients.png)
+
+### Căutarea și eliminarea pacientului din catalog
+
+În catalogul Pacienți, câmpul **Căutare pacient** din bara de
+instrumente (`Ctrl+F`) filtrează lista după nume, prenume, IDNP sau data
+nașterii (zz.ll.aaaa); se pot introduce mai multe cuvinte, de exemplu
+familia și prenumele. `Esc` golește câmpul.
+
+Butonul de eliminare din bara de instrumente deschide un meniu:
+
+- **Marcare pentru eliminare** (sau tasta `Delete`) -- pacientul rămâne
+  în baza de date, marcat; repetarea comenzii anulează marcarea;
+- **Eliminare din baza de date** (sau `Shift+Delete`) -- pacientul este
+  șters definitiv, numai dacă nu este folosit în Comenzi, Rapoarte sau
+  programări. Altfel aplicația afișează lista documentelor care îl
+  folosesc.
+
+Aceleași comenzi sunt disponibile în meniul contextual al listei.
+
+> \[!WARNING\] Eliminarea din baza de date nu poate fi anulată. Creați o
+> copie de siguranță înainte de curățarea catalogului.
 
 ### 8.1. Istoria adresărilor
 
@@ -431,6 +477,22 @@ Sunt disponibile acțiuni pentru:
 - aplicarea sau golirea filtrului.
 
 Dacă Raportul asociat lipsește, aplicația indică explicit acest lucru.
+
+### Căutarea în jurnal
+
+Butonul de căutare din bara de instrumente (`Ctrl+F`) afișează sau
+ascunde câmpul de căutare de deasupra jurnalului. Criteriul se alege din
+meniul butonului din stânga câmpului:
+
+- **după pacient** – nume, prenume (în orice ordine) sau începutul
+  IDNP-ului;
+- **după investigație** – codul sau denumirea; în timpul tastării apare
+  lista investigațiilor folosite care conțin textul introdus, iar
+  investigația aleasă din listă afișează comenzile care o conțin.
+
+Jurnalul se filtrează pe măsura tastării, în perioada și cu filtrele
+aplicate. `Esc` în câmpul de căutare sau o nouă apăsare a butonului
+ascunde câmpul și anulează căutarea.
 
 ![Jurnalul comenzilor](screenshots/12-order-journal.png)
 
@@ -863,6 +925,36 @@ Pentru SQLite poate fi activată opțiunea:
 > restaurată. Verificați periodic copiile și păstrați cel puțin o copie
 > separată de calculatorul de lucru.
 
+### Criptarea arhivei
+
+În dialogul de arhivare poate fi bifată opțiunea **Criptează arhiva cu
+parolă**. Arhiva 7z este criptată AES-256, inclusiv lista fișierelor.
+Parola (minimum 8 caractere, fără diacritice) se introduce o singură dată
+și se salvează criptat pe calculator, pentru arhivarea automată la
+închidere. Dacă parola salvată nu este disponibilă, arhivarea automată
+se oprește cu un avertisment în jurnal; arhiva nu se creează necriptată.
+
+După creare, fiecare arhivă este verificată automat (`7z t`).
+
+Într-o arhivă criptată pot fi incluse și cheile de criptare
+(directorul `crypto`), necesare la mutarea bazei pe alt calculator.
+
+> \[!WARNING\] Fără parolă arhiva nu poate fi restaurată. Notați parola
+> într-un loc sigur, separat de calculator.
+
+### Restaurarea din arhivă
+
+1. Închideți aplicația.
+2. Extrageți arhiva cu 7-Zip (Windows: meniul contextual **7-Zip →
+   Extrage**; Linux: `7z x arhiva.7z`) și introduceți parola, dacă este
+   cerută.
+3. Copiați bazele `.sqlite3` în locul celor folosite de profil; la nevoie,
+   copiați directoarele `crypto` și `settings` în directorul de
+   configurare al aplicației.
+
+Pentru calculatoarele cu baze SQLite se recomandă și criptarea discului
+(BitLocker pe Windows, LUKS pe Linux).
+
 ------------------------------------------------------------------------
 
 ## 23. Actualizarea aplicației
@@ -881,6 +973,32 @@ este activată.
 6. instalați versiunea nouă;
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
+
+### Notă pentru 4.2.7
+
+Versiunea 4.2.7 actualizează schema bazei de date (securitatea
+conturilor). La prima pornire, migrarea:
+
+- convertește hash-urile parolelor utilizatorilor în PBKDF2-SHA256 cu
+  salt; parolele rămân aceleași;
+- golește coloana veche cu parola codificată reversibil (baze create
+  înainte de 4.1.0);
+- recriptează parola serverului cloud cu cheia organizației (parte în
+  baza de date, parte într-un fișier local din profil); după
+  restaurarea bazei pe alt calculator, parola cloud trebuie
+  reintrodusă în configurația serverului cloud;
+- face numele utilizatorilor unice, fără diferență între majuscule și
+  minuscule; numele duplicate sunt redenumite („nume (2)”), iar lista
+  apare în panoul informativ.
+
+Tot în 4.2.7: parole de minimum 8 caractere și pauză după autentificări
+nereușite (capitolul 4), arhive criptate cu parolă (capitolul 22),
+căutarea și eliminarea pacientului din catalog (capitolul 8), căutarea
+după pacient sau investigație în jurnalul comenzilor (capitolul 11) și
+forma de tipar a programărilor (capitolul 7).
+
+Pe o bază MariaDB folosită de mai multe stații, actualizați toate
+stațiile: versiunile anterioare nu mai pot verifica parolele convertite.
 
 ### Notă pentru 4.2.6
 
@@ -1100,7 +1218,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.6**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.7**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

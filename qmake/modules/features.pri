@@ -15,9 +15,11 @@ SOURCES += \
     $$USG_ROOT/src/features/catalogs/onlineaccountdialog.cpp \
     $$USG_ROOT/src/features/catalogs/organizationdialog.cpp \
     $$USG_ROOT/src/features/patients/patienthistory.cpp \
+    $$USG_ROOT/src/features/patients/patientremovalrepository.cpp \
     $$USG_ROOT/src/features/catalogs/userdialog.cpp \
     $$USG_ROOT/src/features/printing/printimagesservice.cpp \
     $$USG_ROOT/src/features/printing/orderprintservice.cpp \
+    $$USG_ROOT/src/features/printing/appointmentprintservice.cpp \
     $$USG_ROOT/src/features/printing/reportprintservice.cpp
 
 HEADERS += \
@@ -37,9 +39,11 @@ HEADERS += \
     $$USG_ROOT/src/features/catalogs/onlineaccountdialog.h \
     $$USG_ROOT/src/features/catalogs/organizationdialog.h \
     $$USG_ROOT/src/features/patients/patienthistory.h \
+    $$USG_ROOT/src/features/patients/patientremovalrepository.h \
     $$USG_ROOT/src/features/catalogs/userdialog.h \
     $$USG_ROOT/src/features/printing/printimagesservice.h \
     $$USG_ROOT/src/features/printing/orderprintservice.h \
+    $$USG_ROOT/src/features/printing/appointmentprintservice.h \
     $$USG_ROOT/src/features/printing/reportprintservice.h
 
 FORMS += \

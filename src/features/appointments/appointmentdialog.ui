@@ -65,7 +65,7 @@ QToolButton:pressed
          <string>Comanda</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/documents/orderEcho.png</normaloff>:/img/documents/orderEcho.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -104,7 +104,7 @@ QToolButton:pressed
          <string>Printează</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/actions/print.png</normaloff>:/img/actions/print.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -137,7 +137,7 @@ QToolButton:pressed
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/oxygen/go-previous.png</normaloff>:/img/oxygen/go-previous.png</iconset>
         </property>
        </widget>
@@ -173,7 +173,7 @@ QToolButton:pressed
          <string>Salvează</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/btns/valide.png</normaloff>:/img/btns/valide.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -231,7 +231,7 @@ QToolButton:pressed
          <string>Închide</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -270,7 +270,7 @@ QToolButton:pressed
          <string>Elimină</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/toolBar/delete.png</normaloff>:/img/toolBar/delete.png</iconset>
         </property>
         <property name="toolButtonStyle">
@@ -303,7 +303,7 @@ QToolButton:pressed
          <string>...</string>
         </property>
         <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
+         <iconset resource="../../../resources/resource.qrc">
           <normaloff>:/img/oxygen/go-next.png</normaloff>:/img/oxygen/go-next.png</iconset>
         </property>
        </widget>
@@ -330,7 +330,7 @@ QToolButton:pressed
   </layout>
  </widget>
  <resources>
-  <include location="../../resources/resource.qrc"/>
+  <include location="../../../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

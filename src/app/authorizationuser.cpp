@@ -25,11 +25,33 @@
 #include <ui/widgets/balloontip.h>
 #include "common/cloudconnectioncontext.h"
 #include "common/sessioncontext.h"
+#include "infrastructure/security/passwordhasher.h"
 #include "settings/appsettings.h"
 #include "settings/settingsservice.h"
 #include "ui_authorizationuser.h"
 
 #include <QDateTime>
+#include <QVersionNumber>
+
+#include <algorithm>
+
+namespace {
+
+// După atâtea încercări eșuate pentru același login începe pauza.
+constexpr int failedAttemptsBeforeDelay = 3;
+constexpr int firstDelaySeconds = 30;
+constexpr int maxDelaySeconds = 300;
+
+int lockoutDelaySeconds(int failedAttempts)
+{
+    if (failedAttempts < failedAttemptsBeforeDelay)
+        return 0;
+    // 30, 60, 120, 240, apoi limitat la 300 de secunde.
+    const int doublings = std::min(failedAttempts - failedAttemptsBeforeDelay, 4);
+    return std::min(firstDelaySeconds << doublings, maxDelaySeconds);
+}
+
+}
 
 AuthorizationUser::AuthorizationUser(DataBase &db,
                                      QWidget *parent) :
@@ -111,7 +133,13 @@ AuthorizationUser::AuthorizationUser(DataBase &db,
             this, [this]() {
                 ui->label_info->hide();
                 m_lastConnectionTimer.start();
+                updateLockoutState();
             });
+
+    m_okText = ui->btnOK->text();
+    m_lockoutTimer.setInterval(1000);
+    connect(&m_lockoutTimer, &QTimer::timeout,
+            this, &AuthorizationUser::updateLockoutState);
     connect(ui->editLogin, &QLineEdit::editingFinished,
             this, [this]() {
                 m_lastConnectionTimer.stop();
@@ -202,15 +230,22 @@ void AuthorizationUser::slot_IdChanged()
 
 void AuthorizationUser::updateLastConnectionForLogin()
 {
-    refreshLastConnection();
+    // Pentru un nume tastat nu afișăm ultima accesare: eticheta ar indica dacă
+    // utilizatorul există. O afișăm doar pentru utilizatorul memorat în profil.
+    const QString login = ui->editLogin->text().trimmed();
+    if (m_Id > 0 && globals().memoryUser
+        && login.compare(globals().nameUserApp.trimmed(), Qt::CaseInsensitive) == 0) {
+        refreshLastConnection(m_Id);
+        return;
+    }
+    ui->label_info->hide();
 }
 
 void AuthorizationUser::refreshLastConnection(int userId)
 {
     ui->label_info->hide();
 
-    const QString login = ui->editLogin->text().trimmed();
-    if (userId <= 0 && login.isEmpty())
+    if (userId <= 0)
         return;
 
     const QSqlDatabase database = m_db.getDatabase();
@@ -218,33 +253,23 @@ void AuthorizationUser::refreshLastConnection(int userId)
         return;
 
     QSqlQuery query(database);
-    const QString statement = userId > 0
-        ? QStringLiteral(R"(
+    if (!query.prepare(QStringLiteral(R"(
             SELECT name, lastConnection
             FROM users
             WHERE id = ? AND deletionMark = 0
-        )")
-        : QStringLiteral(R"(
-            SELECT name, lastConnection
-            FROM users
-            WHERE name = ? AND deletionMark = 0
-        )");
-    if (!query.prepare(statement)) {
+        )"))) {
         qWarning(logWarning()) << tr("Citirea ultimei accesări a eșuat:")
                                << query.lastError().text();
         return;
     }
-    query.addBindValue(userId > 0 ? QVariant(userId) : QVariant(login));
+    query.addBindValue(userId);
     if (!query.exec()) {
         qWarning(logWarning()) << tr("Citirea ultimei accesări a eșuat:")
                                << query.lastError().text();
         return;
     }
-    if (!query.next()) {
-        if (userId > 0 && !login.isEmpty())
-            refreshLastConnection();
+    if (!query.next())
         return;
-    }
 
     const QVariant storedDate = query.value(1);
     if (storedDate.isNull() || storedDate.toString().trimmed().isEmpty()) {
@@ -273,13 +298,86 @@ void AuthorizationUser::textChangedPasswd()
         edit_password->setPlaceholderText(tr(""));
 }
 
+QString AuthorizationUser::attemptsKey() const
+{
+    // Numele se compară fără diferență între majuscule și minuscule.
+    return ui->editLogin->text().trimmed().toCaseFolded();
+}
+
+int AuthorizationUser::remainingLockoutSeconds() const
+{
+    const auto it = m_lockedUntil.constFind(attemptsKey());
+    if (it == m_lockedUntil.cend() || it->hasExpired())
+        return 0;
+    // Rotunjim în sus: „0 secunde” nu se afișează cât pauza mai durează.
+    return int((it->remainingTime() + 999) / 1000);
+}
+
+void AuthorizationUser::updateLockoutState()
+{
+    const int seconds = remainingLockoutSeconds();
+    if (seconds > 0) {
+        ui->btnOK->setEnabled(false);
+        ui->btnOK->setText(tr("Așteptați %1 s").arg(seconds));
+        if (!m_lockoutTimer.isActive())
+            m_lockoutTimer.start();
+        return;
+    }
+
+    ui->btnOK->setText(m_okText);
+    if (!m_loadingData)
+        ui->btnOK->setEnabled(true);
+
+    // Timerul rulează cât mai există o pauză activă pentru oricare login.
+    const bool anyLockout = std::any_of(m_lockedUntil.cbegin(), m_lockedUntil.cend(),
+                                        [](const QDeadlineTimer &deadline) {
+                                            return !deadline.hasExpired();
+                                        });
+    if (!anyLockout)
+        m_lockoutTimer.stop();
+}
+
+void AuthorizationUser::rejectCredentials()
+{
+    const QString key = attemptsKey();
+    const int failedAttempts = ++m_failedAttempts[key];
+    const int delaySeconds = lockoutDelaySeconds(failedAttempts);
+
+    qWarning(logWarning()) << tr("Încercarea eșuată nr. %1 de autentificare pentru utilizatorul '%2'.")
+                                  .arg(QString::number(failedAttempts), ui->editLogin->text());
+
+    // Mesajul nu indică dacă utilizatorul există; cauza exactă rămâne în jurnal.
+    QString message = tr("Numele utilizatorului sau parola sunt incorecte !!!<br>"
+                         "Accesul este interzis.");
+
+    if (delaySeconds > 0) {
+        m_lockedUntil.insert(key, QDeadlineTimer(std::chrono::seconds(delaySeconds)));
+        qWarning(logWarning()) << tr("Autentificarea utilizatorului '%1' este suspendată pentru %2 secunde "
+                                     "după %3 încercări eșuate.")
+                                      .arg(ui->editLogin->text(),
+                                           QString::number(delaySeconds),
+                                           QString::number(failedAttempts));
+        message += tr("<br><br>Următoarea încercare va fi posibilă peste %1 secunde.")
+                       .arg(delaySeconds);
+        message += tr("<br><br>Ați uitat parola? Administratorul o poate reseta "
+                      "din catalogul <b>Utilizatori</b>.");
+    }
+
+    updateLockoutState();
+
+    QMessageBox::warning(this, tr("Controlul accesului"), message, QMessageBox::Ok);
+
+    edit_password->clear();
+    edit_password->setFocus();
+}
+
 void AuthorizationUser::onDataReceived(bool success)
 {
     m_loadingData = false;
-    ui->btnOK->setEnabled(true);
     ui->btnCancel->setEnabled(true);
     ui->editLogin->setEnabled(true);
     edit_password->setEnabled(true);
+    updateLockoutState();
 
     if (!success) {
         QMessageBox::critical(this,
@@ -330,32 +428,36 @@ bool AuthorizationUser::onControlAccept()
         database = m_db.getDatabase();
     }
 
-    // extragem datele utilizatorului
+    // extragem datele utilizatorului; numele se compară fără diferență între
+    // majuscule și minuscule (la MariaDB prin colația coloanei)
     QSqlQuery qry(database);
-    qry.prepare("SELECT * FROM users WHERE name = ? AND deletionMark = 0");
-    qry.addBindValue(ui->editLogin->text());
+    qry.prepare(QStringLiteral("SELECT * FROM users WHERE name = ? %1 AND deletionMark = 0")
+                    .arg(MainDatabaseConnectionContext::instance().isSqlite()
+                             ? QStringLiteral("COLLATE NOCASE")
+                             : QString()));
+    qry.addBindValue(ui->editLogin->text().trimmed());
     if (qry.exec() && qry.next()) {
         const int authenticatedUserId = qry.value(UsersSections::Id).toInt();
 
-        // verificam daca hash parolei = cu hash-ul din bd
-        const QString pwd_hex = QString::fromLatin1(
-            QCryptographicHash::hash(edit_password->text().toUtf8(), QCryptographicHash::Sha256).toHex()
-            );
-
+        // Logarea are loc înaintea migrării: hash-ul vechi (SHA-256) este
+        // acceptat și rescris doar dacă baza este deja migrată la 4.2.7
+        // (upgradeLegacyPasswordHash).
         const QString db_hash = qry.value(UsersSections::Hash).toString();
 
-        if (pwd_hex != db_hash){
-            QMessageBox::warning(this,
-                                 tr("Controlul accesului"),
-                                 tr("Parola utilizatorului <b>'%1'</b> este incorectă !!!<br> "
-                                    "Accesul este interzis.")
-                                     .arg(ui->editLogin->text()),
-                                 QMessageBox::Ok);
+        if (!PasswordHasher::verifyPassword(edit_password->text(), db_hash)){
             qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
                                    << tr("Accesul la aplicație. Utilizatorul '%1' cu id='%2' - întroducerea parolei incorecte.")
-                                          .arg(ui->editLogin->text(), QString::number(m_Id));
+                                          .arg(ui->editLogin->text(),
+                                               QString::number(authenticatedUserId));
+            rejectCredentials();
             return false;
         }
+
+        m_failedAttempts.remove(attemptsKey());
+        m_lockedUntil.remove(attemptsKey());
+
+        if (PasswordHasher::isLegacyHash(db_hash))
+            upgradeLegacyPasswordHash(database, authenticatedUserId, db_hash);
 
         // Actualizăm ID-ul numai după validarea parolei. Astfel o încercare
         // nereușită nu reîncarcă inutil datele utilizatorului memorat.
@@ -387,14 +489,12 @@ bool AuthorizationUser::onControlAccept()
                                          qry.lastError().text());
 
     } else {
-        QMessageBox::warning(this,
-                             tr("Controlul accesului"),
-                             tr("Utilizatorul cu nume <b>%1</b> nu a fost depistat in baza de date !!!<br>"
-                                "Accesul este interzis.")
-                                 .arg(ui->editLogin->text()), QMessageBox::Ok);
         qWarning(logWarning()) << tr("%1 - onAccepted()").arg(metaObject()->className())
                                << tr("Accesul la aplicație. Utilizatorul cu nume '%1' nu a fost depistat in baza de date.")
                                       .arg(ui->editLogin->text());
+        // Același timp de răspuns ca la o parolă greșită.
+        PasswordHasher::simulateVerification(edit_password->text());
+        rejectCredentials();
         return false;
     }
 
@@ -407,9 +507,47 @@ bool AuthorizationUser::onControlAccept()
     return true;
 }
 
+void AuthorizationUser::upgradeLegacyPasswordHash(QSqlDatabase &database,
+                                                  int userId,
+                                                  const QString &legacyHash)
+{
+    // Înainte de migrarea 4.2.7 hash-ul vechi este necesar pentru recriptarea
+    // parolei cloud, iar la MariaDB users.hash poate fi încă CHAR(64).
+    // După migrare un hash vechi poate apărea doar de la un client mai vechi.
+    QString versionError;
+    const QVersionNumber schemaVersion =
+        QVersionNumber::fromString(m_db.databaseSchemaVersion(&versionError));
+    if (schemaVersion.isNull() || schemaVersion < QVersionNumber(4, 2, 7))
+        return;
+
+    const QString newHash = PasswordHasher::hashPassword(edit_password->text());
+    if (newHash.isEmpty())
+        return;
+
+    QSqlQuery update(database);
+    if (!update.prepare(QStringLiteral(R"(
+            UPDATE users SET hash = ? WHERE id = ? AND hash = ?
+        )"))) {
+        qWarning(logWarning()) << "AuthorizationUser: actualizarea hash-ului parolei a eșuat:"
+                               << update.lastError().text();
+        return;
+    }
+    update.addBindValue(newHash);
+    update.addBindValue(userId);
+    update.addBindValue(legacyHash);
+    if (!update.exec()) {
+        qWarning(logWarning()) << "AuthorizationUser: actualizarea hash-ului parolei a eșuat:"
+                               << update.lastError().text();
+        return;
+    }
+    if (update.numRowsAffected() == 1)
+        qInfo(logInfo()) << "AuthorizationUser: hash-ul SHA-256 al utilizatorului" << userId
+                         << "a fost convertit în PBKDF2.";
+}
+
 void AuthorizationUser::onAccepted()
 {
-    if (m_loadingData)
+    if (m_loadingData || remainingLockoutSeconds() > 0)
         return;
 
     if (onControlAccept()) {
@@ -443,6 +581,8 @@ void AuthorizationUser::changeEvent(QEvent *event)
         ui->retranslateUi(this);
         // traducem  titlu
         setWindowTitle(tr("Autorizarea utilizatorului"));
+        m_okText = ui->btnOK->text();
+        updateLockoutState();
     }
 }
 

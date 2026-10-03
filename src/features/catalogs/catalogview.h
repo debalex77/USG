@@ -2,6 +2,8 @@
 #define CATALOGVIEW_H
 
 #include <QDialog>
+#include <QLineEdit>
+#include <QTimer>
 #include <QMenu>
 #include <QKeyEvent>
 #include <QScrollBar>
@@ -25,6 +27,7 @@
 #include <app/popup.h>
 
 #include <features/catalogs/catalogsmodel.h>
+#include <features/patients/patientremovalrepository.h>
 #include <models/sortmodel.h>
 
 namespace Ui {
@@ -48,9 +51,10 @@ private slots:
     void onEdit();
     void onDelete();
     void onUpdate();
+    void onContextMenuRequested(const QPoint &pos);
+    void onRemovePatient();
     void onShowHideColumn();
 
-    void onClickedTableView(const QModelIndex &index);
     void onDoubleClickedTableView(const QModelIndex &index);
     void onColumnsChanged();
 
@@ -62,6 +66,15 @@ private:
     void initTableView();
     void updateTableView();
     void initToolBar();
+    void initSearchEdit();
+    void applySearch();
+
+    int rowById(qint64 id, int fromRow) const;
+    void fetchAllRows();
+    void showLoadError();
+    void showPatientReferences(const QString &patientName,
+                               const QList<PatientRemovalRepository::Reference> &references);
+    void showPatientRemovalError(const QString &patientName, const QString &error);
 
     bool isValidIndex(const QModelIndex &index);
     int lastVisibleSection() const;
@@ -83,12 +96,15 @@ private:
 
     ToolBarCustom *toolBar;
 
-    int m_currentRow = -1;
-
     CatalogsModel *model;
     SortModel     *proxy;
 
     TableColumnsController *m_columnsController = nullptr;
+
+    // Căutarea pacienților (doar în catalogul Pacienți).
+    QLineEdit *m_searchEdit = nullptr;
+    QTimer     m_searchTimer;
+    QString    m_appliedSearch;
 
 protected:
     void closeEvent(QCloseEvent *event);

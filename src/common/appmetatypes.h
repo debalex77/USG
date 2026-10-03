@@ -195,6 +195,8 @@ struct JournalFilter
     int patientId      = 0;
     QString nrDoc;
     QString patientName;
+    QString searchText; // căutare live (OrderView)
+    QString searchMode; // "patient", "investigation" sau "investigation_code" (cod exact)
 
     int sortSection = 0;
     Qt::SortOrder sortOrder = Qt::AscendingOrder;

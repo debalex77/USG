@@ -9,6 +9,8 @@
 #include <QToolTip>
 #include <QMdiSubWindow>
 #include <QSqlQueryModel>
+#include <QCompleter>
+#include <QStandardItemModel>
 #include <functional>
 
 #include <ui/dialogs/customperiod.h>
@@ -113,6 +115,7 @@ private:
 
     void initTableView();
     void updateTableView();
+    void reloadTableView();
     static bool sortRequiresFullJournal(int section, Qt::SortOrder order);
     void fetchAllJournalRows();
     void updateDocumentPreview();
@@ -132,6 +135,11 @@ private:
 
     void initToolBar();
     void initBtnFilter();
+    void initSearchField();
+    void onSearchModeChanged(const QString &mode);
+    void loadSearchInvestigations();
+    void applySearchText();
+    void hideSearchField();
 
     bool isValidIndex(const QModelIndex &index);
 
@@ -150,6 +158,9 @@ private:
     DatabaseProvider m_dbProvider;
     PopUp *popUp;
     QMenu *menuSetFilter = nullptr;
+    QTimer *m_searchTimer = nullptr; // căutarea live pornește după pauza în tastare
+    QStandardItemModel *m_searchInvestigationsModel = nullptr; // popup „cod - denumire”
+    QCompleter *m_searchInvestigationsCompleter = nullptr;
 
     QueryRolesModel *modelOrganizations = nullptr;
     QueryRolesModel *modelContracts     = nullptr;

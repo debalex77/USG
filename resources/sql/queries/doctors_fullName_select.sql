@@ -1,7 +1,7 @@
 SELECT
     id,
     deletionMark,
-    name ||' '|| fName AS FullName,
+    name || ' ' || IFNULL(fName, '') AS FullName,
     telephone,
     email,
     comment,

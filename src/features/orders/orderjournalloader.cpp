@@ -66,6 +66,39 @@ QString OrderJournalLoader::buildSql(bool firstBatch) const
                     ? " AND p.id = :patientId "
                     : "");
 
+    // căutarea live (ca editSearch din Pricing): pacientul după „nume prenume”,
+    // „prenume nume” sau IDNP, investigația după cod sau denumire;
+    // EXISTS – o comandă cu mai multe investigații potrivite apare o dată
+    QString searchSql;
+    if (!m_filter.searchText.trimmed().isEmpty()) {
+        if (m_filter.searchMode == QLatin1String("investigation_code")) {
+            // investigația aleasă din popup: codul exact
+            searchSql = R"( AND EXISTS (
+                SELECT 1 FROM orderEchoTable t
+                WHERE t.id_orderEcho = doc.id
+                  AND t.cod = :searchCod) )";
+        } else if (m_filter.searchMode == QLatin1String("investigation")) {
+            searchSql = R"( AND EXISTS (
+                SELECT 1 FROM orderEchoTable t
+                WHERE t.id_orderEcho = doc.id
+                  AND (t.cod LIKE :searchCod OR t.name LIKE :searchName)) )";
+        } else {
+            const bool isMariaDb = MainDatabaseConnectionContext::instance().isMariaDb();
+            const QString lastFirst = isMariaDb
+                ? QStringLiteral("CONCAT_WS(' ', p.last_name, NULLIF(p.first_name, ''))")
+                : QStringLiteral("(p.last_name || ' ' || IFNULL(p.first_name, ''))");
+            const QString firstLast = isMariaDb
+                ? QStringLiteral("CONCAT_WS(' ', NULLIF(p.first_name, ''), p.last_name)")
+                : QStringLiteral("(IFNULL(p.first_name, '') || ' ' || p.last_name)");
+
+            searchSql = QString(R"( AND (
+                %1 LIKE :searchLastFirst
+                OR %2 LIKE :searchFirstLast
+                OR p.idnp LIKE :searchIdnp) )").arg(lastFirst, firstLast);
+        }
+    }
+    sql.replace("%search%", searchSql);
+
     if (!firstBatch) {
         sql += R"(
             AND (
@@ -102,6 +135,23 @@ void OrderJournalLoader::bindCommonParams(QSqlQuery &qry) const
 
     if (m_filter.patientId > 0)
         qry.bindValue(":patientId", m_filter.patientId);
+
+    // codul investigației și IDNP-ul se caută de la început, numele oriunde
+    const QString searchText = m_filter.searchText.trimmed();
+    if (!searchText.isEmpty()) {
+        const QString prefix   = searchText + "%";
+        const QString contains = "%" + searchText + "%";
+        if (m_filter.searchMode == QLatin1String("investigation_code")) {
+            qry.bindValue(":searchCod", searchText);
+        } else if (m_filter.searchMode == QLatin1String("investigation")) {
+            qry.bindValue(":searchCod", prefix);
+            qry.bindValue(":searchName", contains);
+        } else {
+            qry.bindValue(":searchLastFirst", contains);
+            qry.bindValue(":searchFirstLast", contains);
+            qry.bindValue(":searchIdnp", prefix);
+        }
+    }
 }
 
 OrderJournalLoader::BatchResult OrderJournalLoader::execQuery(QSqlQuery &qry, int limit)

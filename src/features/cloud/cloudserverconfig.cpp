@@ -182,18 +182,6 @@ void CloudServerConfig::disconnectionComboBox()
                this, &CloudServerConfig::dataWasModified);
 }
 
-QByteArray CloudServerConfig::getHashUserApp()
-{
-    QSqlQuery qry;
-    qry.prepare("SELECT hash FROM users WHERE id = ?");
-    qry.addBindValue(m_id_user);
-    if (qry.exec() && qry.next()) {
-        return QByteArray::fromHex(qry.value(0).toString().toUtf8());
-    } else {
-        return QByteArray();
-    }
-}
-
 bool CloudServerConfig::verifyStoredPassword(const QByteArray &realKey, QString *error)
 {
     if (error)
@@ -311,14 +299,12 @@ bool CloudServerConfig::insertDataIntoTableCloudServer()
     if (m_id_user <= 0)
         return false;
 
-    QByteArray hash_user = getHashUserApp();
-    if (hash_user.isEmpty())
-        return false;
-
-    const QByteArray realKey = CryptoManager::deriveCloudKey(hash_user,
-                                                              m_id_organization);
-    if (realKey.size() != 32) {
-        qWarning(logWarning()) << "Nu s-a putut deriva cheia parolei cloud.";
+    // Cheia împărțită a organizației (BD + fișier local), ca la conturile de e-mail.
+    QSqlDatabase keyDatabase = db->getDatabase();
+    QByteArray realKey;
+    QString keyError;
+    if (!CryptoManager::loadOrCreateSplitKey(keyDatabase, m_id_organization, &realKey, &keyError)) {
+        qWarning(logWarning()) << "Nu s-a putut încărca cheia parolei cloud:" << keyError;
         return false;
     }
     const CryptoManager::EncryptedData encrypted =
@@ -389,14 +375,12 @@ bool CloudServerConfig::insertDataIntoTableCloudServer()
 
 bool CloudServerConfig::updateDataIntoTableCloudServer()
 {
-    QByteArray hash_user = getHashUserApp();
-    if (hash_user.isEmpty())
-        return false;
-
-    const QByteArray realKey = CryptoManager::deriveCloudKey(hash_user,
-                                                              m_id_organization);
-    if (realKey.size() != 32) {
-        qWarning(logWarning()) << "Nu s-a putut deriva cheia parolei cloud.";
+    // Cheia împărțită a organizației (BD + fișier local), ca la conturile de e-mail.
+    QSqlDatabase keyDatabase = db->getDatabase();
+    QByteArray realKey;
+    QString keyError;
+    if (!CryptoManager::loadOrCreateSplitKey(keyDatabase, m_id_organization, &realKey, &keyError)) {
+        qWarning(logWarning()) << "Nu s-a putut încărca cheia parolei cloud:" << keyError;
         return false;
     }
     const CryptoManager::EncryptedData encrypted =
@@ -504,27 +488,23 @@ void CloudServerConfig::slot_ID_OrganizationChanged()
         ui->txt_option->setText(qry.value(rec.indexOf("connectionOption")).toString());
         ui->txt_user->setText(qry.value(rec.indexOf("username")).toString());
 
-        const QByteArray payload =
-            CryptoManager::fromBase64(qry.value(rec.indexOf("password")).toString());
-        CryptoManager::EncryptedData encrypted;
-        if (payload.size() > 16) {
-            encrypted.cipherText = payload.first(payload.size() - 16);
-            encrypted.tag = payload.last(16);
-            encrypted.iv = CryptoManager::fromBase64(qry.value(rec.indexOf("iv")).toString());
-
-            const QByteArray userHash = QByteArray::fromHex(
-                qry.value(rec.indexOf("hashUser")).toString().toUtf8());
-            const QByteArray realKey = CryptoManager::deriveCloudKey(userHash,
-                                                                      m_id_organization);
-            bool decrypted = false;
-            if (realKey.size() == 32) {
-                const QByteArray password =
-                    CryptoManager::decryptText(encrypted, realKey, &decrypted);
-                if (decrypted)
-                    ui->txt_password->setText(QString::fromUtf8(password));
+        const QString encryptedPassword = qry.value(rec.indexOf("password")).toString();
+        if (CryptoManager::fromBase64(encryptedPassword).size() > 16) {
+            QSqlDatabase keyDatabase = db->getDatabase();
+            QString password;
+            QString decryptError;
+            if (CryptoManager::decryptCloudPassword(keyDatabase,
+                                                    m_id_organization,
+                                                    encryptedPassword,
+                                                    qry.value(rec.indexOf("iv")).toString(),
+                                                    qry.value(rec.indexOf("hashUser")).toString(),
+                                                    &password,
+                                                    nullptr,
+                                                    &decryptError)) {
+                ui->txt_password->setText(password);
+            } else {
+                qWarning(logWarning()) << "Parola cloud nu a putut fi decriptată:" << decryptError;
             }
-            if (!decrypted)
-                qWarning(logWarning()) << "Parola cloud nu a putut fi decriptată.";
         } else {
             ui->txt_password->clear();
         }

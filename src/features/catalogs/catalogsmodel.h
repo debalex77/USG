@@ -25,6 +25,10 @@ public:
     const CatalogsCommon &itemAt(int row) const;
     void reload();
     void setSort(int column, Qt::SortOrder order);
+    // Se aplică la următoarea reîncărcare (setSort / reload).
+    void setSearchText(const QString &text);
+    // Eroarea ultimului lot (gol dacă nu a fost); se golește la citire.
+    QString takeLastError();
 
     int rowCount(const QModelIndex &parent = QModelIndex()) const override;
     int columnCount(const QModelIndex &parent = QModelIndex()) const override;
@@ -52,6 +56,7 @@ private:
     int m_batchSize = 100;
     bool m_hasMore = true;
     bool m_loading = false;
+    QString m_lastError;
 };
 
 #endif // CATALOGSMODEL_H

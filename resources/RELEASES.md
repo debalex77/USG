@@ -1,3 +1,22 @@
+## USG v4.2.7 (03.10.2026)
+
+- Parolele utilizatorilor se păstrează ca hash PBKDF2-SHA256 cu salt; la actualizarea bazei de date hash-urile existente sunt convertite automat, fără schimbarea parolelor.
+- Coloana veche cu parola codificată reversibil (bazele create înainte de 4.1.0) este golită.
+- Parola serverului cloud este criptată cu cheia organizației (parte în baza de date, parte în fișierul local din profil), ca la conturile de e-mail; schimbarea parolei utilizatorului nu mai afectează configurația cloud. După restaurarea bazei pe alt calculator, parola cloud trebuie reintrodusă.
+- Numele utilizatorilor sunt unice și nu țin cont de majuscule („Admin” = „admin”), la SQLite și MariaDB; dacă baza conține nume duplicate, actualizarea le redenumește („nume (2)”) și afișează lista în panoul informativ.
+- Verificarea numelui duplicat la crearea sau redenumirea unui utilizator a fost corectată.
+- Parolele noi sau schimbate trebuie să aibă cel puțin 8 caractere; la crearea administratorului inițial fără parolă se cere confirmare.
+- Autentificare: după 3 încercări nereușite pentru același nume urmează o pauză (30 s, apoi 60, 120, 240, maximum 300 s), butonul afișează timpul rămas, iar mesajul de eroare nu mai indică dacă greșit este numele sau parola. Hash-urile vechi sunt rescrise în formatul nou la prima autentificare reușită.
+- Dacă baza a fost mutată fără directorul `crypto/` al profilului, aplicația semnalează că parola cloud și parolele conturilor de e-mail trebuie reintroduse.
+- Arhivarea 7z: progresul este afișat corect, arhivarea la închidere rulează într-un dialog cu progres, iar directoarele cu setări și chei de criptare pot fi incluse opțional. Arhiva poate fi criptată AES-256 cu parolă (salvată criptat pentru arhivarea automată) și este verificată după creare.
+- Catalogul Pacienți: căutare după nume, prenume, IDNP sau data nașterii (Ctrl+F); încărcarea pe pagini păstrează rândul curent; pacientul fără documente sau programări poate fi eliminat din baza de date (meniul butonului de eliminare, meniul contextual sau Shift+Delete), altfel aplicația afișează documentele care îl folosesc. Corectată marcarea pacienților pentru eliminare.
+- Căutarea pacientului în Comanda ecografică, Raportul ecografic, istoricul pacientului și programări găsește și textul „Familie Prenume”.
+- Preferințele utilizatorului: butoanele OK, Salvează, Închide în ordinea obișnuită; confirmarea modificărilor nesalvate este tradusă.
+- Jurnalul Comenzilor ecografice: câmp de căutare (butonul din bara de instrumente sau Ctrl+F) după pacient (nume, prenume, IDNP) ori după investigație (cod sau denumire); criteriul se alege din meniul câmpului, iar la căutarea după investigație apare lista investigațiilor potrivite.
+- Programarea pacienților: forma de tipar a programărilor zilei (A4 orizontal, cu antetul organizației și numele medicului), din butonul **Printează**.
+- Programarea pacienților: corectate avertismentele la editarea celulelor (pacient, investigații, organizație, doctor, „Efectuat”) și afișarea rândurilor efectuate.
+- Pe o bază MariaDB comună, toate stațiile trebuie actualizate la 4.2.7: versiunile anterioare nu mai pot verifica parolele convertite.
+
 ## USG v4.2.6 (02.10.2026)
 
 - E-mail cu mai multe rapoarte: din jurnalul Rapoartelor ecografice (butonul de e-mail din bara de instrumente sau meniul contextual) se deschide o fereastră de selecție a rapoartelor validate, filtrate după organizația care a trimis pacienții și perioadă; rândurile selectate în jurnal (Ctrl/Shift) sunt bifate implicit.

@@ -15,6 +15,9 @@ struct CloudConnectionData
     QString password;
     bool configured = false;
     bool enabled = false;
+    // Parola este salvată în BD, dar nu poate fi decriptată cu cheia locală
+    // (de ex. baza a fost mutată pe alt calculator fără directorul crypto).
+    bool passwordUnreadable = false;
 
     [[nodiscard]]
     bool isUsable() const
