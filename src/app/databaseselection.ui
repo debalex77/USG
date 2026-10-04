@@ -21,6 +21,12 @@
   <layout class="QGridLayout" name="gridLayout">
    <item row="0" column="0">
     <widget class="QFrame" name="frame">
+     <property name="styleSheet">
+      <string notr="true">QPushButton {
+    text-align: left;
+    padding-left: 14px;
+}</string>
+     </property>
      <property name="frameShape">
       <enum>QFrame::Shape::StyledPanel</enum>
      </property>
@@ -28,9 +34,6 @@
       <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
-      <item row="0" column="0" rowspan="6">
-       <widget class="QListWidget" name="listWidget"/>
-      </item>
       <item row="1" column="1">
        <widget class="QPushButton" name="btnAddDatabase">
         <property name="sizePolicy">
@@ -46,7 +49,7 @@
          </size>
         </property>
         <property name="text">
-         <string>Adauga      </string>
+         <string>Adaugă</string>
         </property>
         <property name="icon">
          <iconset resource="../../resources/resource.qrc">
@@ -54,20 +57,7 @@
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <spacer name="verticalSpacer">
-        <property name="orientation">
-         <enum>Qt::Orientation::Vertical</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>20</width>
-          <height>175</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="5" column="1">
+      <item row="6" column="1">
        <widget class="QLabel" name="txtTypeConnection">
         <property name="styleSheet">
          <string notr="true">color: rgb(26, 95, 180);</string>
@@ -77,13 +67,59 @@
         </property>
        </widget>
       </item>
-      <item row="6" column="0" colspan="2">
+      <item row="7" column="0" colspan="2">
        <widget class="QLabel" name="txtPath">
         <property name="styleSheet">
          <string notr="true">color: rgb(134, 94, 60);</string>
         </property>
         <property name="text">
          <string>Unknow</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QPushButton" name="btnRemove">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Eliminare</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources/resource.qrc">
+          <normaloff>:/img/database/database_remove.png</normaloff>:/img/database/database_remove.png</iconset>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="1">
+       <widget class="QPushButton" name="btnCancel">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>120</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string>Anulare</string>
+        </property>
+        <property name="icon">
+         <iconset resource="../../resources/resource.qrc">
+          <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
         </property>
        </widget>
       </item>
@@ -110,31 +146,24 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QPushButton" name="btnRemove">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>120</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="text">
-         <string>Eliminare    </string>
-        </property>
-        <property name="icon">
-         <iconset resource="../../resources/resource.qrc">
-          <normaloff>:/img/database/database_remove.png</normaloff>:/img/database/database_remove.png</iconset>
-        </property>
-       </widget>
+      <item row="0" column="0" rowspan="7">
+       <widget class="QListWidget" name="listWidget"/>
       </item>
-      <item row="3" column="1">
-       <widget class="QPushButton" name="btnCancel">
+      <item row="5" column="1">
+       <spacer name="verticalSpacer">
+        <property name="orientation">
+         <enum>Qt::Orientation::Vertical</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>20</width>
+          <height>175</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="2" column="1">
+       <widget class="QPushButton" name="btnEditSettings">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Preferred" vsizetype="Fixed">
           <horstretch>0</horstretch>
@@ -148,11 +177,11 @@
          </size>
         </property>
         <property name="text">
-         <string>Anulare      </string>
+         <string>Editează</string>
         </property>
         <property name="icon">
          <iconset resource="../../resources/resource.qrc">
-          <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
+          <normaloff>:/img/database/database_setting.png</normaloff>:/img/database/database_setting.png</iconset>
         </property>
        </widget>
       </item>

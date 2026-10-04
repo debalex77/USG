@@ -588,8 +588,8 @@
         <translation>Язык интерфейса</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1573"/>
         <location filename="../src/settings/appsettings.cpp" line="1579"/>
+        <location filename="../src/settings/appsettings.cpp" line="1585"/>
         <source>Testarea conectării</source>
         <translation>Тест соединения</translation>
     </message>
@@ -619,8 +619,8 @@
         <translation>Наименование базы данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1536"/>
-        <location filename="../src/settings/appsettings.cpp" line="1541"/>
+        <location filename="../src/settings/appsettings.cpp" line="1542"/>
+        <location filename="../src/settings/appsettings.cpp" line="1547"/>
         <source>Crearea bazei de date (.sqlite)</source>
         <oldsource>Crearea bazei de date</oldsource>
         <translation>Создать базу данных (.sqlite3)</translation>
@@ -753,20 +753,20 @@
     </message>
     <message>
         <location filename="../src/settings/appsettings.cpp" line="55"/>
-        <location filename="../src/settings/appsettings.cpp" line="1649"/>
+        <location filename="../src/settings/appsettings.cpp" line="1655"/>
         <source>Setările aplicației %1</source>
         <oldsource>Setările aplicației [*]</oldsource>
         <translation>Настройки приложения %1</translation>
     </message>
     <message>
         <location filename="../src/settings/appsettings.cpp" line="74"/>
-        <location filename="../src/settings/appsettings.cpp" line="1654"/>
+        <location filename="../src/settings/appsettings.cpp" line="1660"/>
         <source>milimetru</source>
         <translation>милиметры</translation>
     </message>
     <message>
         <location filename="../src/settings/appsettings.cpp" line="74"/>
-        <location filename="../src/settings/appsettings.cpp" line="1654"/>
+        <location filename="../src/settings/appsettings.cpp" line="1660"/>
         <source>centimetru</source>
         <translation>сантиметры</translation>
     </message>
@@ -937,7 +937,37 @@ Selectați alt profil sau corectați setările.</source>
         <translation>Язык сохранён в профиле, но не для окна выбора базы данных. Проверьте права на запись настроек приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1580"/>
+        <location filename="../src/settings/appsettings.cpp" line="1472"/>
+        <source>Exemplu: 127.0.0.1</source>
+        <translation>Пример: 127.0.0.1</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1473"/>
+        <source>Exemplu: usg</source>
+        <translation>Пример: usg</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1474"/>
+        <source>Exemplu: MYSQL_OPT_RECONNECT=1</source>
+        <translation>Пример: MYSQL_OPT_RECONNECT=1</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1475"/>
+        <source>Exemplu: 3306</source>
+        <translation>Пример: 3306</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1476"/>
+        <source>Exemplu: usg_user</source>
+        <translation>Пример: usg_user</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1477"/>
+        <source>Introduceți parola</source>
+        <translation>Введите пароль</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1586"/>
         <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; lipsește.&lt;br&gt;&lt;br&gt;%2</source>
         <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos; (MySQL)&lt;/b&gt; отсутствует.&lt;br&gt;&lt;br&gt;%2</translation>
     </message>
@@ -1025,17 +1055,17 @@ Selectați alt profil sau corectați setările.</source>
         <translation>Для операционной системы macOS драйвер MySQL не включен! Он будет добавлен в последующих обновления.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1574"/>
+        <location filename="../src/settings/appsettings.cpp" line="1580"/>
         <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; este realizată cu succes.</source>
         <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; выполнено успешно.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1623"/>
+        <location filename="../src/settings/appsettings.cpp" line="1629"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1624"/>
+        <location filename="../src/settings/appsettings.cpp" line="1630"/>
         <source>Setările au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Настройки приложения были измененны.
@@ -1081,148 +1111,148 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Удалить</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="443"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="453"/>
         <source>Programarea pacienților [*]</source>
         <translation>Запись пациентов [*]</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="525"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="535"/>
         <source>Elimină rândul selectat</source>
         <translation>Удалить выбранную строку</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="527"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="537"/>
         <source>Elimină toate programările zilei</source>
         <translation>Удалить все записи на этот день</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="614"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="624"/>
         <source>Programarea pacienților</source>
         <translation>Запись пациентов</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="615"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="625"/>
         <source>Programările nu au putut fi încărcate.
 %1</source>
         <translation>Не удалось загрузить записи пациентов.
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="682"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="835"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="692"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="845"/>
         <source>Salvarea programării</source>
         <translation>Сохранение записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="684"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="694"/>
         <source>Conexiunea cu baza de date nu este deschisă.</source>
         <translation>Соединение с базой данных не открыто.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="698"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="708"/>
         <source>Rândul %1 este deja salvat, dar pacientul a fost golit. Folosiți acțiunea «Elimină rândul selectat».</source>
         <translation>Строка %1 уже сохранена, но данные пациента были удалены. Используйте действие «Удалить выбранную строку».</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="710"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="720"/>
         <source>Rândul %1: %2</source>
         <translation>Строка %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="836"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="846"/>
         <source>Datele nu au putut fi salvate.
 %1</source>
         <translation>Не удалось сохранить данные.
 %1</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="847"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="857"/>
         <source>Programarea din data %1 a fost salvată cu succes.</source>
         <translation>Запись на дату %1 успешно сохранена.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="860"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="871"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="886"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="895"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="899"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="914"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="870"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="881"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="896"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="905"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="909"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="924"/>
         <source>Eliminarea programării</source>
         <translation>Удаление записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="861"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="871"/>
         <source>Doriți să eliminați toate programările din data %1?</source>
         <translation>Удалить все записи на дату %1?</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="874"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="884"/>
         <source>Programările din data %1 au fost eliminate.</source>
         <translation>Все записи на дату %1 удалены.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="887"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="897"/>
         <source>Selectați rândul pe care doriți să-l eliminați.</source>
         <translation>Выберите строку, которую необходимо удалить.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="896"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="906"/>
         <source>Rândul selectat este gol.</source>
         <translation>Выбранная строка пуста.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="900"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="910"/>
         <source>Doriți să eliminați programarea selectată%1?</source>
         <translation>Удалить выбранную запись%1?</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="922"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="932"/>
         <source>Programarea selectată a fost eliminată.</source>
         <translation>Выбранная запись удалена.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="940"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="950"/>
         <source>Deschide preview</source>
         <translation>Открыть просмотр</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="943"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="953"/>
         <source>Deschide designer</source>
         <translation>Открыть дизайнер</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="979"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="989"/>
         <source>Printarea programării</source>
         <translation>Печать записи</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="992"/>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1000"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1002"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1010"/>
         <source>Crearea comenzii</source>
         <translation>Создание заказа</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="993"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1003"/>
         <source>Selectați programarea din care doriți să creați comanda.</source>
         <translation>Выберите запись, на основании которой необходимо создать заказ.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1001"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1011"/>
         <source>Programarea selectată nu conține numele pacientului.</source>
         <translation>Выбранная запись не содержит имени пациента.</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1022"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1032"/>
         <source>Completarea comenzii</source>
         <translation>Заполнение заказа</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1032"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1042"/>
         <source>Modificarea datelor</source>
         <translation>Изменение данных</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1033"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="1043"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări?</source>
         <translation>Данные были изменены.
@@ -3014,87 +3044,117 @@ Programări: %3</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="62"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="664"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="64"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="670"/>
         <source>Setări cloud serverului %1</source>
         <translation>Настройки облачного сервера %1</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="213"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="66"/>
+        <source>Exemplu: 127.0.0.1</source>
+        <translation>Пример: 127.0.0.1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="67"/>
+        <source>Exemplu: usg</source>
+        <translation>Пример: usg</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="68"/>
+        <source>Exemplu: 3306</source>
+        <translation>Пример: 3306</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="69"/>
+        <source>Exemplu: MYSQL_OPT_RECONNECT=1</source>
+        <translation>Пример: MYSQL_OPT_RECONNECT=1</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="70"/>
+        <source>Exemplu: usg_user</source>
+        <translation>Пример: usg_user</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="71"/>
+        <source>Introduceți parola</source>
+        <translation>Введите пароль</translation>
+    </message>
+    <message>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="219"/>
         <source>Parola criptată salvată este incompletă.</source>
         <translation>Сохранённый зашифрованный пароль неполный.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="227"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="233"/>
         <source>Verificarea parolei criptate după salvare a eșuat.</source>
         <translation>Проверка зашифрованного пароля после сохранения завершилась ошибкой.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="347"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="353"/>
         <source>Inserarea datelor cloudServer nu s-a efectuat !!!</source>
         <translation>Добавление данных cloudServer не выполнено !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="422"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="428"/>
         <source>Actualizarea datelor cloudServer nu s-a efectuat !!!</source>
         <translation>Обновление данных cloudServer не выполнено !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="563"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="575"/>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="634"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="569"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="581"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="640"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="564"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="570"/>
         <source>Nu este indicată organizația !!!</source>
         <translation>Организация не указана !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="576"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="582"/>
         <source>Nu este indicat utilizatorul !!!</source>
         <translation>Пользователь не указан !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="587"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="593"/>
         <source>Datele serverului cloud au fost&lt;br&gt;actualizate cu succes in baza de date.</source>
         <translation>Данные облачного сервера были&lt;br&gt;успешно обновлены в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="595"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="601"/>
         <source>Datele serverului cloud au fost&lt;br&gt;inserate cu succes in baza de date.</source>
         <translation>Данные облачного сервера были&lt;br&gt;успешно добавлены в базу данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="603"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="609"/>
         <source>Salvarea setărilor cloud</source>
         <translation>Сохранение настроек облака</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="604"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="610"/>
         <source>Setările cloud nu au putut fi salvate. Verificați jurnalul aplicației.</source>
         <translation>Не удалось сохранить настройки облака. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="635"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="641"/>
         <source>Datele au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Данные были изменены.
 Записать данные ?</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="638"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="644"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="639"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="645"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="640"/>
+        <location filename="../src/features/cloud/cloudserverconfig.cpp" line="646"/>
         <source>Anulare</source>
         <translation>Отмена</translation>
     </message>
@@ -4092,96 +4152,133 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Диалог</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="49"/>
         <source>Adauga      </source>
-        <translation>Добавить      </translation>
+        <translation type="vanished">Добавить      </translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="76"/>
+        <location filename="../src/app/databaseselection.ui" line="52"/>
+        <source>Adaugă</source>
+        <translation>Добавить</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.ui" line="66"/>
         <source>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Tipul conectării:&lt;br&gt;&lt;b&gt;&lt;u&gt;Unknow&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</source>
         <translation>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Тип соединения:&lt;br&gt;&lt;b&gt;&lt;u&gt;Unknow&lt;/u&gt;&lt;/b&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="86"/>
+        <location filename="../src/app/databaseselection.ui" line="76"/>
         <source>Unknow</source>
         <translation>Unknow</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="105"/>
+        <location filename="../src/app/databaseselection.ui" line="95"/>
+        <source>Eliminare</source>
+        <translation>Удалить</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.ui" line="118"/>
+        <source>Anulare</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.ui" line="141"/>
         <source>Conectarea</source>
         <translation>Соединение</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="128"/>
-        <source>Eliminare    </source>
-        <translation>Удалить    </translation>
+        <location filename="../src/app/databaseselection.ui" line="180"/>
+        <source>Editează</source>
+        <translation>Редактировать</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.ui" line="151"/>
+        <source>Eliminare    </source>
+        <translation type="vanished">Удалить    </translation>
+    </message>
+    <message>
         <source>Anulare      </source>
-        <translation>Закрыть      </translation>
+        <translation type="vanished">Закрыть      </translation>
     </message>
     <message>
         <location filename="../src/app/appcontroller.cpp" line="82"/>
-        <location filename="../src/app/databaseselection.cpp" line="42"/>
+        <location filename="../src/app/databaseselection.cpp" line="45"/>
         <source>Alege/creează baza de date</source>
         <translation>Выбор/создание базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="55"/>
+        <location filename="../src/app/databaseselection.cpp" line="58"/>
         <source>Crearea directoriei</source>
         <translation>Создание директории</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="56"/>
+        <location filename="../src/app/databaseselection.cpp" line="59"/>
         <source>Directoria &lt;b&gt;&apos;USG&apos;&lt;/b&gt; pentru păstrarea setărilor aplicației nu a fost creată !!!&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Директория &lt;b&gt;&apos;USG&apos;&lt;/b&gt; хранения настроек не была создана !!!&lt;br&gt;Обратитесь к администратору программы.</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="110"/>
+        <location filename="../src/app/databaseselection.cpp" line="115"/>
         <source>Necunoscut</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="122"/>
+        <location filename="../src/app/databaseselection.cpp" line="127"/>
         <source>Tipul conectării:&lt;br&gt;&lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt;</source>
         <translation>Тип подключения:&lt;br&gt;&lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="169"/>
-        <location filename="../src/app/databaseselection.cpp" line="184"/>
+        <location filename="../src/app/databaseselection.cpp" line="181"/>
+        <source>Verificarea fișierului</source>
+        <translation>Проверка файла</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.cpp" line="182"/>
+        <source>Fișierul cu setările conexiunii nu a fost găsit:&lt;br&gt;%1</source>
+        <translation>Файл с настройками подключения не найден:&lt;br&gt;%1</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.cpp" line="200"/>
+        <source>Deschiderea fișierului</source>
+        <translation>Открытие файла</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.cpp" line="201"/>
+        <source>Fișierul cu setările conexiunii nu a putut fi deschis:&lt;br&gt;%1</source>
+        <translation>Не удалось открыть файл с настройками подключения:&lt;br&gt;%1</translation>
+    </message>
+    <message>
+        <location filename="../src/app/databaseselection.cpp" line="213"/>
+        <location filename="../src/app/databaseselection.cpp" line="228"/>
         <source>Eliminarea setărilor</source>
         <translation>Удаление настроек</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="170"/>
+        <location filename="../src/app/databaseselection.cpp" line="214"/>
         <source>Doriți să eliminați fișierul:&lt;br&gt;%1 ?</source>
         <translation>Удалить файл настроек:&lt;br&gt;%1 ?</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="173"/>
-        <location filename="../src/app/databaseselection.cpp" line="209"/>
+        <location filename="../src/app/databaseselection.cpp" line="217"/>
+        <location filename="../src/app/databaseselection.cpp" line="253"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="174"/>
-        <location filename="../src/app/databaseselection.cpp" line="210"/>
+        <location filename="../src/app/databaseselection.cpp" line="218"/>
+        <location filename="../src/app/databaseselection.cpp" line="254"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="185"/>
+        <location filename="../src/app/databaseselection.cpp" line="229"/>
         <source>Fișierul nu a putut fi eliminat:&lt;br&gt;%1</source>
         <translation>Не удалось удалить файл:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="206"/>
+        <location filename="../src/app/databaseselection.cpp" line="250"/>
         <source>Crearea bazei de date</source>
         <translation>Создание базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="207"/>
+        <location filename="../src/app/databaseselection.cpp" line="251"/>
         <source>Adaugarea/crearea bazei de date ?</source>
         <translation>Добавление/создание базы данных?</translation>
     </message>
@@ -5968,120 +6065,141 @@ sursa: T.Moore ... 1990a.</source>
         <translation>Закрыть</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="187"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="51"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="54"/>
+        <source>Exemplu: cabinet@example.com</source>
+        <translation>Пример: cabinet@example.com</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="52"/>
+        <source>Exemplu: smtp.example.com</source>
+        <translation>Пример: smtp.example.com</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="53"/>
+        <source>Exemplu: 587</source>
+        <translation>Пример: 587</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="55"/>
+        <source>Introduceți parola</source>
+        <translation>Введите пароль</translation>
+    </message>
+    <message>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="194"/>
         <source>Parola salvată nu poate fi decriptată – reintroduceți parola</source>
         <translation>Сохранённый пароль не может быть расшифрован – введите пароль повторно</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="198"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="205"/>
         <source>Online account (crearea) %1</source>
         <translation>Онлайн-аккаунт (создание) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="201"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="208"/>
         <source>Online account (salvat) %1</source>
         <translation>Онлайн-аккаунт (сохранён) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="204"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="211"/>
         <source>Online account (marcată pentru eliminare) %1</source>
         <translation>Онлайн-аккаунт (помечен на удаление) %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="207"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="214"/>
         <source>Online account %1</source>
         <translation>Онлайн-аккаунт %1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="239"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="250"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="261"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="272"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="283"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="294"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="523"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="576"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="246"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="257"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="268"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="279"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="290"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="301"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="530"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="583"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="240"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="247"/>
         <source>Nu este indicata &quot;&lt;b&gt;Organizatia&lt;/b&gt;&quot; !!!</source>
         <translation>Не указана &quot;&lt;b&gt;Организация&lt;/b&gt;&quot; !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="251"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="258"/>
         <source>Nu este indicat &quot;&lt;b&gt;E-mail&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;E-mail&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="262"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="269"/>
         <source>Nu este indicat &quot;&lt;b&gt;SMTP server&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;SMTP-сервер&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="273"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="280"/>
         <source>Nu este indicat &quot;&lt;b&gt;Port&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;Порт&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="284"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="291"/>
         <source>Nu este indicat &quot;&lt;b&gt;User name&lt;/b&gt;&quot; !!!</source>
         <translation>Не указано «&lt;b&gt;Имя пользователя&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="295"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="302"/>
         <source>Nu este indicata &quot;&lt;b&gt;Parola&lt;/b&gt;&quot; !!!</source>
         <translation>Не указан «&lt;b&gt;Пароль&lt;/b&gt;» !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="318"/>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="372"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="325"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="379"/>
         <source>Parola nu a putut fi criptată.</source>
         <translation>Не удалось зашифровать пароль.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="410"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="417"/>
         <source>Contul nu a fost găsit în baza de date pentru utilizatorul curent.</source>
         <translation>Учётная запись не найдена в базе данных для текущего пользователя.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="434"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="441"/>
         <source>Salvarea contului</source>
         <translation>Сохранение учётной записи</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="435"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="442"/>
         <source>Contul &lt;b&gt;%1&lt;/b&gt; nu a fost salvat.&lt;br&gt;%2</source>
         <translation>Учётная запись &lt;b&gt;%1&lt;/b&gt; не сохранена.&lt;br&gt;%2</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="524"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="531"/>
         <source>Portul indicat nu este valid !!!</source>
         <translation>Указанный порт недействителен !!!</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="547"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="554"/>
         <source>Conexiunea cu serverul SMTP&lt;br&gt;a fost verificată cu succes.</source>
         <translation>Соединение с SMTP-сервером&lt;br&gt;успешно проверено.</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="548"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="555"/>
         <source>Conexiunea cu serverul SMTP a eșuat:&lt;br&gt;%1</source>
         <translation>Ошибка соединения с SMTP-сервером:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="577"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="584"/>
         <source>Datele obiectului &lt;b&gt;%1&lt;/b&gt; nu sunt salvate.&lt;br&gt;Doriți să salvați datele?</source>
         <translation>Данные объекта &lt;b&gt;%1&lt;/b&gt; не сохранены.&lt;br&gt;Хотите сохранить данные?</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="583"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="590"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="584"/>
+        <location filename="../src/features/catalogs/onlineaccountdialog.cpp" line="591"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
@@ -8479,7 +8597,7 @@ Doriți să salvați aceste modificări ?</source>
         <translation>добавлен столбец: %1.%2</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/appointmentdialog.cpp" line="419"/>
+        <location filename="../src/features/appointments/appointmentdialog.cpp" line="429"/>
         <source>Investigația selectată cu ID %1 nu mai există.</source>
         <translation>Выбранное исследование с ID %1 больше не существует.</translation>
     </message>
@@ -8832,37 +8950,37 @@ Doriți să salvați aceste modificări ?</source>
 <context>
     <name>RegistrationPatientsModel</name>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="158"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="159"/>
         <source>id</source>
         <translation>id</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="160"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="161"/>
         <source>Efectuat</source>
         <translation>Выполнен</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="162"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="163"/>
         <source>Nume, prenume pacientului</source>
         <translation>Фамилия, имя пациента</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="164"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="165"/>
         <source>Investigația</source>
         <translation>Исследование</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="166"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="167"/>
         <source>Organizația</source>
         <translation>Организация</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="168"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="169"/>
         <source>Doctor</source>
         <translation>Доктор</translation>
     </message>
     <message>
-        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="170"/>
+        <location filename="../src/features/appointments/registrationtablemodel.cpp" line="171"/>
         <source>Comentariu / note</source>
         <translation>Комментарий/заметки</translation>
     </message>

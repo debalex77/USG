@@ -31,6 +31,7 @@ private slots:
 
     void onConnectToBase();
     void onAddDatabase();
+    void onEditSettings();
     void onRemoveRowListWidget();
 
     void updateTimer();

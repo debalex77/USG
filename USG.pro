@@ -67,7 +67,7 @@ RC_ICONS = resources/img/app_ico/eco_512x512.ico
 ICON = resources/img/app_ico/eco_512x512.icns
 
 #-----------------------------------------------------------------------
-#------ CONFIG APP
+#------ CONFIG C++
 
 CONFIG += c++20
 
@@ -82,6 +82,9 @@ include($$USG_ROOT/qmake/modules/features.pri)
 include($$USG_ROOT/qmake/modules/infrastructure.pri)
 include($$USG_ROOT/qmake/modules/resources.pri)
 include($$USG_ROOT/qmake/modules/dependencies.pri)
+
+#-----------------------------------------------------------------------
+#------ USER MANUAL
 
 DISTFILES += \
     docs/user_manual/USER_MANUAL.md \
@@ -117,3 +120,10 @@ DISTFILES += \
     docs/user_manual/screenshots/29-statistics.png \
     docs/user_manual/screenshots/30-settings.png \
     docs/user_manual/screenshots/31-backup.png
+
+#------------------------------------------------------------------------
+#------- TRANSLATION TOOLS
+
+# lupdate USG.pro -ts translate/USG_ru_RU.ts
+# linguist translate/USG_ru_RU.ts
+# lrelease translate/USG_ru_RU.ts

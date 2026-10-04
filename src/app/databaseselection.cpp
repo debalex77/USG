@@ -26,8 +26,11 @@
 #include "common/applicationpathscontext.h"
 #include "settings/appsettingsstore.h"
 
+#include <QDesktopServices>
 #include <QFileInfo>
+#include <QProcess>
 #include <QSettings>
+#include <QUrl>
 
 DatabaseSelection::DatabaseSelection(QWidget *parent) :
     QDialog(parent),
@@ -78,6 +81,8 @@ DatabaseSelection::DatabaseSelection(QWidget *parent) :
             this, &DatabaseSelection::onConnectToBase, Qt::UniqueConnection);
     connect(ui->btnAddDatabase, &QAbstractButton::clicked,
             this, &DatabaseSelection::onAddDatabase, Qt::UniqueConnection);
+    connect(ui->btnEditSettings, &QAbstractButton::clicked,
+            this, &DatabaseSelection::onEditSettings, Qt::UniqueConnection);
     connect(ui->btnRemove, &QAbstractButton::clicked,
             this, &DatabaseSelection::onRemoveRowListWidget, Qt::UniqueConnection);
     connect(ui->btnCancel, &QAbstractButton::clicked,
@@ -158,6 +163,45 @@ void DatabaseSelection::onAddDatabase()
 {
     globals().firstLaunch = true;
     QDialog::accept();
+}
+
+void DatabaseSelection::onEditSettings()
+{
+    const QListWidgetItem *currentItem = ui->listWidget->currentItem();
+    if (!currentItem)
+        return;
+
+    const QString profileName = currentItem->data(Qt::DisplayRole).toString();
+    const QString settingsFilePath =
+        QDir(dirConfigPath).filePath(profileName + QStringLiteral(".conf"));
+    const QFileInfo settingsFileInfo(settingsFilePath);
+
+    if (!settingsFileInfo.exists() || !settingsFileInfo.isFile()) {
+        QMessageBox::warning(this,
+                             tr("Verificarea fișierului"),
+                             tr("Fișierul cu setările conexiunii nu a fost găsit:<br>%1")
+                                 .arg(QDir::toNativeSeparators(settingsFilePath)),
+                             QMessageBox::Ok);
+        return;
+    }
+
+    bool opened = false;
+#if defined(Q_OS_WIN)
+    opened = QProcess::startDetached(QStringLiteral("notepad.exe"),
+                                     {QDir::toNativeSeparators(settingsFileInfo.absoluteFilePath())});
+#elif defined(Q_OS_LINUX)
+    opened = QDesktopServices::openUrl(QUrl::fromLocalFile(settingsFileInfo.absoluteFilePath()));
+#else
+    opened = QDesktopServices::openUrl(QUrl::fromLocalFile(settingsFileInfo.absoluteFilePath()));
+#endif
+
+    if (!opened) {
+        QMessageBox::warning(this,
+                             tr("Deschiderea fișierului"),
+                             tr("Fișierul cu setările conexiunii nu a putut fi deschis:<br>%1")
+                                 .arg(QDir::toNativeSeparators(settingsFileInfo.absoluteFilePath())),
+                             QMessageBox::Ok);
+    }
 }
 
 void DatabaseSelection::onRemoveRowListWidget()

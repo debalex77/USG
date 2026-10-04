@@ -34,11 +34,11 @@ OnlineAccountDialog::OnlineAccountDialog(DataBase &db, QWidget *parent)
     : QDialog(parent)
     , m_statusCatalog(StatusObject::Unknow)
     , ui(new Ui::OnlineAccountDialog) // initial
+    , popUp(new PopUp(this))
     , m_db(db)
     , styleBtnMessageBox(m_db.getStyleForButtonMessageBox())
 {
     ui->setupUi(this);
-    popUp = new PopUp(this);
 
     const QString schema = MainDatabaseConnectionContext::instance().isMariaDb()
         ? QStringLiteral(":/sql/mariadb/tables/online_account.sql")
@@ -46,6 +46,13 @@ OnlineAccountDialog::OnlineAccountDialog(DataBase &db, QWidget *parent)
     DataBaseCommon::execFileBatch(m_db.getDatabase(), schema, "onlineAccount");
 
     slot_IsNewChanged(); // fortam
+
+    // placeholder
+    ui->email->setPlaceholderText(tr("Exemplu: cabinet@example.com"));
+    ui->smtp_server->setPlaceholderText(tr("Exemplu: smtp.example.com"));
+    ui->port->setPlaceholderText(tr("Exemplu: 587"));
+    ui->username->setPlaceholderText(tr("Exemplu: cabinet@example.com"));
+    ui->password->setPlaceholderText(tr("Introduceți parola"));
 
     updateModelOrganization();
     initConnections();

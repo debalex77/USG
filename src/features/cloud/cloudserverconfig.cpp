@@ -52,6 +52,8 @@ bool synchronizationEnabledAfterCloudSave()
 CloudServerConfig::CloudServerConfig(QWidget *parent)
     : QDialog(parent)
     , ui(new Ui::CloudServerConfig)
+    , db(new DataBase(this))
+    , popUp(new PopUp(this))
 {
     ui->setupUi(this);
 
@@ -61,8 +63,12 @@ CloudServerConfig::CloudServerConfig(QWidget *parent)
 
     setWindowTitle(tr("Setări cloud serverului %1").arg("[*]"));
 
-    db = new DataBase(this);
-    popUp = new PopUp(this);
+    ui->txt_host->setPlaceholderText(tr("Exemplu: 127.0.0.1"));
+    ui->txt_nameBase->setPlaceholderText(tr("Exemplu: usg"));
+    ui->txt_port->setPlaceholderText(tr("Exemplu: 3306"));
+    ui->txt_option->setPlaceholderText(tr("Exemplu: MYSQL_OPT_RECONNECT=1"));
+    ui->txt_user->setPlaceholderText(tr("Exemplu: usg_user"));
+    ui->txt_password->setPlaceholderText(tr("Introduceți parola"));
 
     initSetModels();
     initConnection();

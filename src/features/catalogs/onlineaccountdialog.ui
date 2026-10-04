@@ -14,7 +14,7 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../../resources/resource.qrc">
+   <iconset resource="../../../resources/resource.qrc">
     <normaloff>:/img/toolBar/email.png</normaloff>:/img/toolBar/email.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
@@ -140,7 +140,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../../resources/resource.qrc">
+        <iconset resource="../../../resources/resource.qrc">
          <normaloff>:/img/btns/valide.png</normaloff>:/img/btns/valide.png</iconset>
        </property>
       </widget>
@@ -157,7 +157,7 @@
         <string>Salvează</string>
        </property>
        <property name="icon">
-        <iconset resource="../../resources/resource.qrc">
+        <iconset resource="../../../resources/resource.qrc">
          <normaloff>:/img/btns/save.png</normaloff>:/img/btns/save.png</iconset>
        </property>
       </widget>
@@ -174,7 +174,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../../resources/resource.qrc">
+        <iconset resource="../../../resources/resource.qrc">
          <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
        </property>
       </widget>
@@ -210,7 +210,7 @@
   <tabstop>btnClose</tabstop>
  </tabstops>
  <resources>
-  <include location="../../resources/resource.qrc"/>
+  <include location="../../../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

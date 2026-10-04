@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.7\
+**Versiune documentată:** 4.2.8\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -974,6 +974,15 @@ este activată.
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
 
+### Notă pentru 4.2.8
+
+Versiunea 4.2.8 nu modifică schema bazei de date. În fereastra de
+selectare a bazei, butonul **Editează** deschide profilul `.conf`
+selectat în editorul sistemului. Au fost corectate alinierea butoanelor
+și iconurile mai multor ferestre, adăugate exemple în câmpurile de
+configurare MariaDB/cloud/e-mail și actualizată integral traducerea
+rusă pentru textele curente.
+
 ### Notă pentru 4.2.7
 
 Versiunea 4.2.7 actualizează schema bazei de date (securitatea
@@ -1218,7 +1227,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.7**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.8**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

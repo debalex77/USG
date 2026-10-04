@@ -31,7 +31,7 @@
         </font>
        </property>
        <property name="frameShape">
-        <enum>QFrame::StyledPanel</enum>
+        <enum>QFrame::Shape::StyledPanel</enum>
        </property>
        <property name="lineWidth">
         <number>1</number>
@@ -49,7 +49,7 @@
    <item row="1" column="0">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -76,10 +76,10 @@
    <item row="2" column="0" colspan="3">
     <widget class="QFrame" name="frame">
      <property name="frameShape">
-      <enum>QFrame::StyledPanel</enum>
+      <enum>QFrame::Shape::StyledPanel</enum>
      </property>
      <property name="frameShadow">
-      <enum>QFrame::Raised</enum>
+      <enum>QFrame::Shadow::Raised</enum>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
       <item row="0" column="0">
@@ -107,7 +107,7 @@
      <item>
       <spacer name="horizontalSpacer">
        <property name="orientation">
-        <enum>Qt::Horizontal</enum>
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
        <property name="sizeHint" stdset="0">
         <size>
@@ -129,7 +129,7 @@
         <string>OK</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources/resource.qrc">
+        <iconset resource="../../resources/resource.qrc">
          <normaloff>:/img/btns/valide.png</normaloff>:/img/btns/valide.png</iconset>
        </property>
       </widget>
@@ -146,7 +146,7 @@
         <string>Închide</string>
        </property>
        <property name="icon">
-        <iconset resource="../resources/resource.qrc">
+        <iconset resource="../../resources/resource.qrc">
          <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
        </property>
       </widget>
@@ -156,7 +156,7 @@
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resource.qrc"/>
+  <include location="../../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

@@ -435,5 +435,6 @@
         <file>img/catalogs/item_delete.png</file>
         <file>icons/splash_autumn.png</file>
         <file>icons/splash_springtime.png</file>
+        <file>img/database/database_setting.png</file>
     </qresource>
 </RCC>

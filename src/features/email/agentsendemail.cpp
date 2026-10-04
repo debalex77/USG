@@ -113,7 +113,7 @@ bool AgentSendEmail::loadOrganizationDetails()
         return false;
     }
 
-    m_ctx.organizationName = query.value(QStringLiteral("name")).toString();
+    m_ctx.organizationName  = query.value(QStringLiteral("name")).toString();
     m_ctx.organizationPhone = query.value(QStringLiteral("telephone")).toString();
     m_ctx.organizationEmail = query.value(QStringLiteral("email")).toString();
     if (m_ctx.emailFrom.trimmed().isEmpty())

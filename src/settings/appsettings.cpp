@@ -1469,6 +1469,12 @@ void AppSettings::changeIndexTypeSQL(const int _index)
         return;
 
 #endif
+        ui->mySQLhost->setPlaceholderText(tr("Exemplu: 127.0.0.1"));
+        ui->mySQLnameBase->setPlaceholderText(tr("Exemplu: usg"));
+        ui->mySQLoptionConnect->setPlaceholderText(tr("Exemplu: MYSQL_OPT_RECONNECT=1"));
+        ui->mySQLport->setPlaceholderText(tr("Exemplu: 3306"));
+        ui->mySQLuser->setPlaceholderText(tr("Exemplu: usg_user"));
+        ui->mySQLpasswdUser->setPlaceholderText(tr("Introduceți parola"));
 
         ui->tabLogs->setEnabled(true);
         ui->tabSqlite->setEnabled(false);

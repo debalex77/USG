@@ -43,6 +43,14 @@ Site oficial: <https://debalex77.github.io/USG/>
 - sincronizare opțională în fundal cu MariaDB, pe bază de UUID;
 - interfață în limbile română, engleză și rusă.
 
+## Versiunea 4.2.8
+
+Versiunea 4.2.8 permite deschiderea pentru editare a profilului bazei de date
+selectat, corectează căile resurselor și alinierea butoanelor în mai multe
+ferestre, adaugă exemple în câmpurile de conexiune, actualizează imaginile de
+pornire și completează traducerea rusă. Nu introduce o migrare nouă a schemei
+bazei de date.
+
 ## Versiunea 4.2.0
 
 Setările aplicației, organizației și utilizatorului au fost reorganizate în
@@ -96,15 +104,15 @@ biblioteca compatibilă astfel:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.2.0-x86_64.AppImage
-./USG_v4.2.0-x86_64.AppImage
+chmod +x USG_v4.2.8-x86_64.AppImage
+./USG_v4.2.8-x86_64.AppImage
 ```
 
 Dacă FUSE nu poate fi instalat, folosiți modul de extragere oferit de runtime-ul
 AppImage:
 
 ```bash
-./USG_v4.2.0-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.8-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Această variantă extrage temporar pachetul și pornește mai lent, dar nu necesită
@@ -112,7 +120,7 @@ FUSE.
 
 ## Compilarea din sursă
 
-Configurația de referință pentru versiunea 4.2.0 este:
+Configurația de referință pentru versiunea 4.2.8 este:
 
 | Componentă | Versiune / cerință |
 |---|---|

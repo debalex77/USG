@@ -1,3 +1,13 @@
+usg (4.2.8) UNRELEASED; urgency=medium
+
+  * Open the selected database profile configuration from Database Selection.
+  * Corrected button alignment and Qt resource paths in application dialogs.
+  * Added configuration examples to database, cloud and e-mail account fields.
+  * Refreshed splash artwork and documented the new database settings icon.
+  * Completed the Russian translation for the updated interface.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Sun, 04 Oct 2026 12:00:00 +0300
+
 usg (4.2.7) UNRELEASED; urgency=medium
 
   * Salted PBKDF2-SHA256 password hashes; legacy password column cleared.

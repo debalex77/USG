@@ -1,3 +1,14 @@
+## USG v4.2.8 (04.10.2026)
+
+- În fereastra de selectare a bazei de date, profilul `.conf` selectat poate fi deschis pentru editare: cu aplicația implicită pe Linux și cu Notepad pe Windows; lipsa fișierului sau imposibilitatea deschiderii sunt raportate utilizatorului.
+- Butoanele din selectarea bazei de date au iconurile și textele aliniate uniform; a fost adăugată și documentată iconița pentru editarea profilului.
+- Corectate căile resurselor Qt în ferestrele de lansare inițială, configurarea serverului cloud, contul online și agentul de e-mail.
+- Adăugate exemple în câmpurile de configurare MariaDB, server cloud și cont e-mail, fără modificarea valorilor salvate.
+- Actualizate imaginile de pornire și inventarul/licențierea iconurilor distribuite cu aplicația.
+- Traducerea rusă a fost actualizată și regenerată; toate textele curente detectate de `lupdate` sunt traduse.
+- Fișierele manualului și comenzile pentru instrumentele de traducere sunt documentate în proiectul qmake.
+- Versiunea 4.2.8 nu introduce o migrare nouă a schemei bazei de date.
+
 ## USG v4.2.7 (03.10.2026)
 
 - Parolele utilizatorilor se păstrează ca hash PBKDF2-SHA256 cu salt; la actualizarea bazei de date hash-urile existente sunt convertite automat, fără schimbarea parolelor.

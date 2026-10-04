@@ -1,3 +1,10 @@
+4.2.8 (October 4th, 2026)
+  * Open the selected .conf database profile from the Database Selection window on Linux and Windows.
+  * Corrected button alignment and Qt resource references in startup, cloud and e-mail dialogs.
+  * Added examples and password hints to database, cloud server and e-mail account fields.
+  * Refreshed splash artwork and updated third-party icon attribution.
+  * Completed and regenerated the Russian translation.
+
 4.2.7 (October 3rd, 2026)
   * User passwords are stored as salted PBKDF2-SHA256 hashes (existing hashes are converted during migration).
   * The legacy reversible password column is cleared.
