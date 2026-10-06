@@ -69,7 +69,7 @@
         <translation>ОК</translation>
     </message>
     <message>
-        <location filename="../src/app/about.cpp" line="45"/>
+        <location filename="../src/app/about.cpp" line="69"/>
         <source>
         &lt;div %1&gt;
             &lt;h3 align=&apos;center&apos;&gt;&lt;b&gt;%2 v%3&lt;/b&gt;&lt;/h3&gt;
@@ -114,7 +114,7 @@
         </translation>
     </message>
     <message>
-        <location filename="../src/app/about.cpp" line="74"/>
+        <location filename="../src/app/about.cpp" line="98"/>
         <source>
         &lt;div %1&gt;
             &lt;br&gt;
@@ -136,6 +136,27 @@
             Стандартной общественной лицензии GNU, опубликованной &lt;br&gt;
             Free Software Foundation; либо версии 3 лицензии, &lt;br&gt;
             либо (по Вашему выбору) любой более поздней версии.&lt;/h4&gt;
+            &lt;/p&gt;
+        &lt;/div&gt;
+        </translation>
+    </message>
+    <message>
+        <location filename="../src/app/about.cpp" line="110"/>
+        <source>
+        &lt;div %1&gt;
+            &lt;p align=center&gt;
+            Componente terțe: Qt (LGPLv3), LimeReport (LGPLv3), &lt;br&gt;
+            SQLCipher (BSD-3-Clause), OpenSSL (Apache-2.0). &lt;br&gt;
+            Textele licențelor se află în folderul &lt;b&gt;licenses&lt;/b&gt; al aplicației.
+            &lt;/p&gt;
+        &lt;/div&gt;
+        </source>
+        <translation>
+        &lt;div %1&gt;
+            &lt;p align=center&gt;
+            Сторонние компоненты: Qt (LGPLv3), LimeReport (LGPLv3), &lt;br&gt;
+            SQLCipher (BSD-3-Clause), OpenSSL (Apache-2.0). &lt;br&gt;
+            Тексты лицензий находятся в папке &lt;b&gt;licenses&lt;/b&gt; приложения.
             &lt;/p&gt;
         &lt;/div&gt;
         </translation>
@@ -5513,7 +5534,7 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Не удалось сохранить версию схемы базы данных:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1512"/>
+        <location filename="../src/app/mainwindow.cpp" line="1513"/>
         <source> (%1): base - &apos;%2&apos;, utilizator (%3)</source>
         <translation> (%1): база — «%2», пользователь (%3)</translation>
     </message>
@@ -5645,32 +5666,32 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Первоначальная настройка успешно завершена.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1031"/>
+        <location filename="../src/app/mainwindow.cpp" line="1032"/>
         <source>Versiunea online nu este validă:</source>
         <translation>Версия, полученная онлайн, недействительна:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1038"/>
+        <location filename="../src/app/mainwindow.cpp" line="1039"/>
         <source>%1   %2: Există o versiune nouă a aplicației &lt;b&gt;&lt;u&gt;%3&lt;/u&gt;&lt;/b&gt;.</source>
         <translation>%1   %2: Доступна новая версия приложения &lt;b&gt;&lt;u&gt;%3&lt;/u&gt;&lt;/b&gt;.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1046"/>
+        <location filename="../src/app/mainwindow.cpp" line="1047"/>
         <source>Verificarea actualizării</source>
         <translation>Проверка обновления</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1047"/>
+        <location filename="../src/app/mainwindow.cpp" line="1048"/>
         <source>Doriți să descărcați versiunea nouă ?</source>
         <translation>Хотите загрузить новую версию?</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1327"/>
+        <location filename="../src/app/mainwindow.cpp" line="1328"/>
         <source>Arhiva SQLite/SQLCipher nu a putut fi creată. Detaliile sunt disponibile în jurnal.</source>
         <translation>Не удалось создать архив SQLite/SQLCipher. Подробности доступны в журнале.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1509"/>
+        <location filename="../src/app/mainwindow.cpp" line="1510"/>
         <source> (MySQL: %1@%2): utilizator (%3)</source>
         <translation> (MySQL: %1@%2): пользователь (%3)</translation>
     </message>
@@ -5679,7 +5700,7 @@ Doriți să salvați aceste modificări ?</source>
         <translation type="vanished"> (.sqlite3): база — &apos;%1&apos;, пользователь (%2)</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1517"/>
+        <location filename="../src/app/mainwindow.cpp" line="1518"/>
         <source>: utilizator (%1)</source>
         <translation>: пользователь (%1)</translation>
     </message>
@@ -5747,12 +5768,12 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Проверить новую версию</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1396"/>
+        <location filename="../src/app/mainwindow.cpp" line="1397"/>
         <source>Lista utilizatorilor</source>
         <translation>Список пользователей</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1446"/>
+        <location filename="../src/app/mainwindow.cpp" line="1447"/>
         <source>Examinarea ecografica</source>
         <translation>Протокол ультразвук.&lt;br&gt;исследования</translation>
     </message>
@@ -5792,71 +5813,71 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Мед.центры</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1272"/>
-        <location filename="../src/app/mainwindow.cpp" line="1330"/>
+        <location filename="../src/app/mainwindow.cpp" line="1273"/>
+        <location filename="../src/app/mainwindow.cpp" line="1331"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicația.</source>
         <translation>Пользователь &apos;%1&apos; закончил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1310"/>
+        <location filename="../src/app/mainwindow.cpp" line="1311"/>
         <source>Finisarea lucrului</source>
         <translation>Завершение работы</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1049"/>
-        <location filename="../src/app/mainwindow.cpp" line="1313"/>
+        <location filename="../src/app/mainwindow.cpp" line="1050"/>
+        <location filename="../src/app/mainwindow.cpp" line="1314"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1050"/>
-        <location filename="../src/app/mainwindow.cpp" line="1314"/>
+        <location filename="../src/app/mainwindow.cpp" line="1051"/>
+        <location filename="../src/app/mainwindow.cpp" line="1315"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1060"/>
+        <location filename="../src/app/mainwindow.cpp" line="1061"/>
         <source>Folosiți cea mai recentă versiune &quot;%1&quot;.</source>
         <translation>Используйте последнюю версию «%1».</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1065"/>
+        <location filename="../src/app/mainwindow.cpp" line="1066"/>
         <source>Fișierul temporar de versiune nu a putut fi eliminat:</source>
         <translation>Не удалось удалить временный файл версии:</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1129"/>
+        <location filename="../src/app/mainwindow.cpp" line="1130"/>
         <source>Se descarcă fișierul ... </source>
         <translation>Загрузка файла ... </translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1154"/>
+        <location filename="../src/app/mainwindow.cpp" line="1155"/>
         <source>Fișierul este descărcat cu succes.</source>
         <translation>Файл успешно загружен.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1166"/>
+        <location filename="../src/app/mainwindow.cpp" line="1167"/>
         <source>Minimizarea în tray nu este disponibilă în sesiunea curentă.</source>
         <translation>Сворачивание в системный трей недоступно в текущем сеансе.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1177"/>
+        <location filename="../src/app/mainwindow.cpp" line="1178"/>
         <source>Maximizați fereastra</source>
         <translation>Развернуть окно</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1178"/>
+        <location filename="../src/app/mainwindow.cpp" line="1179"/>
         <source>Ieșire</source>
         <translation>Выход</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1286"/>
+        <location filename="../src/app/mainwindow.cpp" line="1287"/>
         <source>Aplicația este minimizată în tray. Pentru a maximiza fereastra aplicației, faceți clic pe pictograma aplicației din tray.</source>
         <translation>Приложение свёрнуто в системный трей. Чтобы развернуть окно приложения, щёлкните значок приложения в трее.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1271"/>
-        <location filename="../src/app/mainwindow.cpp" line="1302"/>
+        <location filename="../src/app/mainwindow.cpp" line="1272"/>
+        <location filename="../src/app/mainwindow.cpp" line="1303"/>
         <source>Aplicația se închide fără arhiva automată.</source>
         <translation>Приложение закрывается без автоматического архивирования.</translation>
     </message>
@@ -5891,17 +5912,17 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Перезапуск отменён, так как не удалось закрыть одно из окон.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1303"/>
+        <location filename="../src/app/mainwindow.cpp" line="1304"/>
         <source>Utilizatorul &apos;%1&apos; a finisat lucru cu aplicatia.</source>
         <translation>Пользователь «%1» завершил работу с приложением.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1311"/>
+        <location filename="../src/app/mainwindow.cpp" line="1312"/>
         <source>Doriți să închideți aplicația ?</source>
         <translation>Хотите закрыть приложение?</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1326"/>
+        <location filename="../src/app/mainwindow.cpp" line="1327"/>
         <source>Arhivarea automată</source>
         <translation>Автоматическое архивирование</translation>
     </message>
@@ -5910,78 +5931,78 @@ Doriți să salvați aceste modificări ?</source>
         <translation type="vanished">Не удалось создать архив SQLite. Подробности доступны в журнале.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1343"/>
+        <location filename="../src/app/mainwindow.cpp" line="1344"/>
         <source>Lista cu doctori.</source>
         <translation>Список с докторами.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1353"/>
+        <location filename="../src/app/mainwindow.cpp" line="1354"/>
         <source>Lista as.medicale.</source>
         <translation>Список мед.сестёр.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1363"/>
+        <location filename="../src/app/mainwindow.cpp" line="1364"/>
         <source>Lista pacienților 
 înregistrați în baza de date.</source>
         <translation>Список пациентов 
 зарегистрированных в базе данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1374"/>
+        <location filename="../src/app/mainwindow.cpp" line="1375"/>
         <source>Vizualizarea istorie 
 pacienților.</source>
         <translation>Визуализация
 истории пациентов.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1385"/>
+        <location filename="../src/app/mainwindow.cpp" line="1386"/>
         <source>Lista persoanelor 
 juridice.</source>
         <translation>Список 
 мед.центров (юр.лиц).</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1406"/>
+        <location filename="../src/app/mainwindow.cpp" line="1407"/>
         <source>Clasificatorul investigațiilor</source>
         <translation>Классификатор исследований</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1416"/>
+        <location filename="../src/app/mainwindow.cpp" line="1417"/>
         <source>Documente cu
  formarea  preturilor</source>
         <translation>Документ
 формирование цен</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1426"/>
+        <location filename="../src/app/mainwindow.cpp" line="1427"/>
         <source>Programarea pacienților 
  la investigații ecografice</source>
         <translation>Запись пациентов
  на ультразвук.исследование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1436"/>
+        <location filename="../src/app/mainwindow.cpp" line="1437"/>
         <source>Comanda pentru
  investigatiile ecografice</source>
         <translation>Заказ на ультразвук.
 исследование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1456"/>
+        <location filename="../src/app/mainwindow.cpp" line="1457"/>
         <source>Rapoarte investigațiilor 
  ecografice</source>
         <translation>Отчёты ультрзвук.
 исследований</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1466"/>
+        <location filename="../src/app/mainwindow.cpp" line="1467"/>
         <source>Setările principale
 ale aplicației.</source>
         <translation>Основные настройки
 приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1477"/>
+        <location filename="../src/app/mainwindow.cpp" line="1478"/>
         <source>Informația generală
 despre aplicația.</source>
         <translation>Общая информация

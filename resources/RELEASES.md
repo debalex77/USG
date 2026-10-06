@@ -8,8 +8,11 @@
 - Adăugat un flux separat pentru construirea pachetului demo Linux `USG_v4.2.9_Linux_amd64_demo.run`, fără amestecarea fișierelor cu instalatoarele de producție.
 - Pachetul demo verifică integritatea, schema și legăturile dintre bazele incluse, configurează automat profilul local și folosește utilizatorul `admin` fără parolă; anonimizarea rămâne o verificare manuală obligatorie.
 - Baza demo de imagini poate fi inclusă numai după verificare; în lipsa ei, scriptul generează o bază goală și sincronizează marcajele imaginilor în copia livrată.
-- Pachetele Linux cer și includ pluginul SQLCipher compatibil; pachetele Windows îl includ dacă `qsqlcipher.dll` există în kitul Qt folosit pentru build.
-- Pachetele Linux construiesc și includ runtime-ul privat OpenSSL 3.5.9 LTS folosit de SQLCipher, fără a modifica instalarea OpenSSL a sistemului.
+- Pachetele Linux și Windows construiesc și includ pluginul SQLCipher compatibil (`libqsqlcipher.so`, respectiv `qsqlcipher.dll`).
+- Pachetele Linux includ runtime-ul privat OpenSSL 3.5.9 LTS folosit de SQLCipher, fără a modifica instalarea OpenSSL a sistemului; pe Windows pluginul și aplicația sunt legate static cu aceeași versiune OpenSSL 3.5.9.
+- Fereastra „Despre aplicație” afișează, pentru bazele criptate, versiunile SQLite, SQLCipher și OpenSSL, iar fila licenței enumeră componentele terțe și folderul `licenses`.
+- Corectată deschiderea ferestrei „Istoria versiunilor”, care nu găsea fișierul descrierii versiunilor.
+- Corectată eliminarea fișierului temporar al versiunii online pe Windows.
 - Traducerea rusă a fost completată și regenerată pentru textele noi.
 - Versiunea 4.2.9 nu introduce o migrare nouă a schemei bazei de date și nu convertește automat bazele SQLite existente în SQLCipher.
 

@@ -430,9 +430,12 @@ void MainWindow::checkUpdateApp()
 
 void MainWindow::openDescriptionRealease()
 {
-    QFile file(":/releases.md");
-    if (! file.open(QIODevice::ReadOnly))
+    QFile file(":/RELEASES.md");
+    if (! file.open(QIODevice::ReadOnly)) {
+        qWarning(logWarning()) << "Istoria versiunilor nu poate fi citită:"
+                               << file.fileName() << file.errorString();
         return;
+    }
 
     info_window = new InfoWindow(this);
     info_window->setAttribute(Qt::WA_DeleteOnClose);
@@ -1021,6 +1024,7 @@ void MainWindow::onReadyVersion()
         return;
 
     const QString version_online = QString::fromUtf8(file.readAll()).trimmed();
+    file.close(); // pe Windows un fișier deschis nu poate fi eliminat
     qsizetype suffixIndex = 0;
     const QVersionNumber onlineVersion =
         QVersionNumber::fromString(version_online, &suffixIndex);

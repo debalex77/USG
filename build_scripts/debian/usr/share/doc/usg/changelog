@@ -4,6 +4,8 @@
   * Main and worker connections, migrations and backups recognize SQLCipher.
   * Separate Linux demo installer builder with integrity and schema verification.
   * Legacy SQLite profiles with an empty unused MariaDB port are accepted.
+  * About window shows SQLCipher and OpenSSL versions and lists third-party licenses.
+  * Version history window opens the release notes again.
   * Russian translation completed and regenerated.
 
 4.2.8 (October 4th, 2026)

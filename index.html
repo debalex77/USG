@@ -205,13 +205,15 @@
           <div class="hr"></div>
           <h2>Versiunea 4.2.9</h2>
           <p>Actualizare pentru bazele locale și distribuția demo, compatibilă cu SQLite și MariaDB. Nu introduce o migrare nouă a schemei bazei de date.</p>
-          <p>SQLite standard rămâne implicit; SQLCipher este disponibil opțional dacă pachetul conține pluginul Qt compatibil.</p>
+          <p>SQLite standard rămâne implicit; SQLCipher este disponibil opțional, iar pachetele Linux și Windows includ pluginul Qt compatibil.</p>
           <ul>
             <li>suport opțional SQLCipher pentru baza principală și baza imaginilor;</li>
             <li>cheia de criptare este introdusă la rulare și nu este salvată în profil;</li>
             <li>conexiunile workerilor, migrările și arhivarea recunosc bazele SQLCipher;</li>
             <li>selectarea fișierelor acceptă extensii SQLite și SQLCipher uzuale;</li>
             <li>script separat pentru pachetul demo Linux, cu profil configurat automat și verificări de integritate;</li>
+            <li>fereastra „Despre aplicație” afișează versiunile SQLCipher și OpenSSL și licențele componentelor terțe;</li>
+            <li>corectată deschiderea ferestrei „Istoria versiunilor”;</li>
             <li>traducerea rusă completată și regenerată pentru textele noi;</li>
             <li>include toate corectările din versiunile 4.2.8 și 4.2.7;</li>
             <li>LimeReport 1.7.23 compilat pentru Qt 6.9.3.</li>

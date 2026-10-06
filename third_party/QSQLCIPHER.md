@@ -54,11 +54,12 @@ distributes the OpenSSL runtime.
 
 The Windows plugin `qsqlcipher.dll` is built with MSVC 2022 x64 and links
 OpenSSL statically (`/MD` runtime), so no separate OpenSSL DLL is required.
-The Windows release currently uses OpenSSL 3.5.2 from the `openssl` port of
-vcpkg at the pinned commit `4334d8b4c8916018600212ab4dd4bbdc343065d1`
-(triplet `x64-windows-static-md`), the same static library linked into
-`USG.exe`. Aligning Windows with the Linux OpenSSL 3.5.9 source build is a
-planned follow-up.
+The Windows release uses OpenSSL 3.5.9, the same release and commit as the
+Linux build. It is built by the `openssl` port of vcpkg at the pinned commit
+`4334d8b4c8916018600212ab4dd4bbdc343065d1` (triplet `x64-windows-static-md`);
+`build_scripts/ci_windows.ps1` overlays that port with the 3.5.9 version and
+source checksum and verifies the installed version. The same static library is
+linked into `USG.exe`.
 
 ## Corresponding driver source
 

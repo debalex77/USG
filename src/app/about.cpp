@@ -27,6 +27,37 @@
 #include <QAction>
 #include <app/mainwindow.h>
 #include <common/applicationpathscontext.h>
+#include <QSqlQuery>
+
+namespace {
+// Versiunile SQLCipher și ale bibliotecii criptografice folosite de driver.
+QString sqlCipherPragmaValue(const QString &pragma)
+{
+    QSqlQuery query(QSqlDatabase::database());
+    if (!query.exec(QStringLiteral("PRAGMA %1").arg(pragma)) || !query.next())
+        return {};
+    return query.value(0).toString().trimmed();
+}
+
+QString sqlCipherVersionInfo()
+{
+    // Câte o versiune pe rând, fără sufixe ("community", data), ca să nu se lărgească fereastra.
+    QString info;
+    const QString cipherVersion = sqlCipherPragmaValue(QStringLiteral("cipher_version"))
+                                      .section(QLatin1Char(' '), 0, 0);
+    if (!cipherVersion.isEmpty())
+        info += QStringLiteral("\nversion SQLCipher: ") + cipherVersion;
+
+    // ex. "OpenSSL 3.5.9 30 Sep 2026" -> "version OpenSSL: 3.5.9"
+    const QStringList provider = sqlCipherPragmaValue(QStringLiteral("cipher_provider_version"))
+                                     .split(QLatin1Char(' '), Qt::SkipEmptyParts);
+    if (provider.size() >= 2)
+        info += QStringLiteral("\nversion %1: %2").arg(provider.at(0), provider.at(1));
+    else if (provider.size() == 1)
+        info += QStringLiteral("\nversion crypto: ") + provider.at(0);
+    return info;
+}
+}
 
 About::About(QWidget *parent) :
     QDialog(parent),
@@ -83,6 +114,15 @@ About::About(QWidget *parent) :
             </p>
         </div>
         )").arg(str_style));
+    str_licenses.append(tr(R"(
+        <div %1>
+            <p align=center>
+            Componente terțe: Qt (LGPLv3), LimeReport (LGPLv3), <br>
+            SQLCipher (BSD-3-Clause), OpenSSL (Apache-2.0). <br>
+            Textele licențelor se află în folderul <b>licenses</b> al aplicației.
+            </p>
+        </div>
+        )").arg(str_style));
     ui->textBrowser_licenses->setText(str_licenses);
 
 #if defined(Q_OS_WIN)
@@ -113,6 +153,9 @@ About::About(QWidget *parent) :
     ui->text_versionQt->setText("version Qt: " QT_VERSION_STR);
     if (connection.backend == MainDatabaseBackend::MariaDb)
         ui->text_version_SQLite->setText("version MySQL: " + db->getVersionMySQL());
+    else if (connection.sqliteEncrypted)
+        ui->text_version_SQLite->setText("version SQLite: " + db->getVersionSQLite()
+                                         + sqlCipherVersionInfo());
     else
         ui->text_version_SQLite->setText("version SQLite: " + db->getVersionSQLite());
 

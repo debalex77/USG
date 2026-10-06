@@ -19,12 +19,17 @@
   configures the local demo profile automatically and creates
   `USG_v4.2.9_Linux_amd64_demo.run` without changing the production packaging
   workflow.
-- Linux packages require and include the compatible SQLCipher plugin. Windows
-  packages include it when `qsqlcipher.dll` is present in the Qt kit used for
-  the build.
+- Linux and Windows packages build and include the compatible SQLCipher plugin
+  (`libqsqlcipher.so` and `qsqlcipher.dll`).
 - Linux packages build and bundle the pinned OpenSSL 3.5.9 LTS runtime used by
   SQLCipher; they do not replace or update the operating system's OpenSSL
-  installation.
+  installation. On Windows the plugin and USG are statically linked with the
+  same OpenSSL 3.5.9 release.
+- The About window shows the SQLite, SQLCipher and OpenSSL versions for
+  encrypted databases, and the license tab lists the third-party components and
+  the bundled `licenses` folder.
+- Fixed the "Version history" window, which could not find the release notes.
+- Fixed removal of the temporary online-version file on Windows.
 - Completed and regenerated the Russian translation for all current texts.
 
 ## Database compatibility and upgrade
@@ -74,8 +79,8 @@ generated.
 - `LimeReport_v1.7.23_USG_source.zip` — bundled dependency source.
 - SHA-256 checksum files are published with the artifacts.
 
-SQLCipher is available in a Windows package only when `qsqlcipher.dll` is
-present in the Qt installation used by the workflow.
+The Windows installer includes `qsqlcipher.dll`, built by the workflow and
+statically linked with OpenSSL 3.5.9.
 
 ## Linux packages
 

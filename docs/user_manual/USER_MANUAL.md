@@ -982,8 +982,9 @@ standard rămâne implicit. Cheia SQLCipher se introduce la lansare și
 nu se salvează în profil; fără cheie baza criptată nu poate fi
 recuperată. Activarea opțiunii nu convertește automat o bază SQLite
 existentă: selectați numai copii criptate și verificate ale ambelor
-baze. Funcția este disponibilă doar dacă instalatorul include pluginul
-Qt `QSQLCIPHER` compatibil.
+baze. Instalatoarele Linux și Windows includ pluginul Qt `QSQLCIPHER`
+compatibil. Pentru o bază criptată, fereastra „Despre aplicație” afișează
+versiunile SQLite, SQLCipher și OpenSSL.
 
 Pentru demonstrații poate fi construit separat un pachet Linux care
 configurează automat profilul demo. Acesta folosește utilizatorul
