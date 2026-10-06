@@ -65,11 +65,16 @@ if (-not (Test-Path (Join-Path $sqlcipherDir 'sqlite3.c'))) {
         Invoke-Native nmake @('/NOLOGO', '/f', 'Makefile.msc', 'sqlite3.c')
     } finally { Pop-Location }
 }
+# Numai amalgamarea intră în include path: pe un sistem de fișiere fără
+# diferență între majuscule, fișierul VERSION din sursă ar înlocui <version>.
+$amalgamationDir = Join-Path $work 'amalgamation'
+New-Item -ItemType Directory -Force $amalgamationDir | Out-Null
+Copy-Item (Join-Path $sqlcipherDir 'sqlite3.c'), (Join-Path $sqlcipherDir 'sqlite3.h') $amalgamationDir -Force
 
 # 2. Pluginul (OpenSSL static, CRT /MD ca Qt)
 Invoke-Native $qtCmake @('-S', $root, '-B', $build, '-G', 'Ninja',
     '-DCMAKE_BUILD_TYPE=Release',
-    "-DSQLCIPHER_AMALGAMATION_DIR=$sqlcipherDir",
+    "-DSQLCIPHER_AMALGAMATION_DIR=$amalgamationDir",
     "-DOPENSSL_ROOT_DIR=$opensslRoot",
     '-DOPENSSL_USE_STATIC_LIBS=TRUE',
     '-DOPENSSL_MSVC_STATIC_RT=FALSE')
