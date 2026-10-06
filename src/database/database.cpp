@@ -1,4 +1,4 @@
-﻿/*****************************************************************************
+/*****************************************************************************
  *
  * SPDX-License-Identifier: GPL-3.0-or-later
  *
@@ -35,6 +35,7 @@
  ********************************************************************/
 
 #include "database.h"
+#include "infrastructure/database/sqliteconnection.h"
 #include "common/cloudconnectioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
 #include "settings/legacysettingscodec.h"
@@ -133,28 +134,27 @@ bool DataBase::createConnectBaseSqlite(QString &txtMessage)
 bool DataBase::createConnectBaseSqlite(const QString &databaseName,
                                        const QString &databasePath,
                                        bool initializeSchema,
-                                       QString &txtMessage)
+                                       QString &txtMessage,
+                                       const MainDatabaseConnectionData *configuration)
 {
-    if (QFileInfo::exists(databasePath)) {
-        txtMessage = tr("Baza de date <b>\"%1\"</b> deja este creata !!! <br>%2")
-                         .arg(databaseName, databasePath);
-        return true;
-    }
+    const auto config = configuration ? *configuration
+        : MainDatabaseConnectionContext::instance().data();
+    const bool existing = QFileInfo::exists(databasePath);
 
     const QString connectionName = QStringLiteral("create_sqlite_%1")
                                        .arg(reinterpret_cast<quintptr>(this));
     bool created = false;
     QString errorText;
     {
-        QSqlDatabase newDatabase = QSqlDatabase::addDatabase(QStringLiteral("QSQLITE"),
+        QSqlDatabase newDatabase = QSqlDatabase::addDatabase(SqliteConnection::driver(config),
                                                               connectionName);
         newDatabase.setHostName(databaseName);
         newDatabase.setDatabaseName(databasePath);
-        created = newDatabase.open();
-        if (created && initializeSchema)
+        created = SqliteConnection::open(newDatabase, &errorText, config);
+        if (created && initializeSchema && !existing)
             created = DataBaseCommon::createAllTablesSqlite(newDatabase);
         if (!created)
-            errorText = newDatabase.lastError().text();
+            if (errorText.isEmpty()) errorText = newDatabase.lastError().text();
         newDatabase.close();
     }
     QSqlDatabase::removeDatabase(connectionName);
@@ -197,12 +197,12 @@ QSqlDatabase DataBase::getDatabaseThread(const QString threadConnectionName, con
             }
             return db_thread;
         } else {
-            QSqlDatabase db_thread = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
+            QSqlDatabase db_thread = QSqlDatabase::addDatabase(SqliteConnection::driver(), threadConnectionName);
             const MainDatabaseConnectionData connection =
                 MainDatabaseConnectionContext::instance().data();
             db_thread.setHostName(connection.sqliteDatabaseName);
             db_thread.setDatabaseName(connection.sqliteDatabasePath);
-            if (! db_thread.open()) {
+            if (! SqliteConnection::open(db_thread)) {
                 qWarning(logWarning()) << "Eroare <thread> la deschiderea bazei de date(sqlite):"
                                        << db_thread.lastError().text();
             }
@@ -240,11 +240,11 @@ QSqlDatabase DataBase::getDatabaseImageThread(const QString threadConnectionName
                      << threadConnectionName;
     if (! QSqlDatabase::contains(threadConnectionName)) {
 
-        QSqlDatabase db_threadImage = QSqlDatabase::addDatabase("QSQLITE", threadConnectionName);
+        QSqlDatabase db_threadImage = QSqlDatabase::addDatabase(SqliteConnection::driver(), threadConnectionName);
         db_threadImage.setHostName("db_image");
         db_threadImage.setDatabaseName(
             MainDatabaseConnectionContext::instance().data().imageDatabasePath);
-        if (! db_threadImage.open()) {
+        if (! SqliteConnection::open(db_threadImage)) {
             qWarning(logWarning()) << "Eroare la deschiderea bazei de date în thread:"
                                    << db_threadImage.lastError().text();
         }
@@ -773,8 +773,7 @@ QString DataBase::databaseSchemaVersion(QString *error)
         return {};
     }
 
-    const bool sqlite = database.driverName().compare(QStringLiteral("QSQLITE"),
-                                                       Qt::CaseInsensitive) == 0;
+    const bool sqlite = SqliteConnection::isSqlite(database);
     const QString createSql = sqlite
         ? QStringLiteral(R"(
               CREATE TABLE IF NOT EXISTS databaseMetadata (
@@ -3289,10 +3288,10 @@ bool DataBase::openDataBase()
             qCritical(logCritical()) << tr("Nu este indicata variabila globala 'sqliteDatabasePath'.");
             return false;
         }
-        db = QSqlDatabase::addDatabase("QSQLITE");
+        db = QSqlDatabase::addDatabase(SqliteConnection::driver());
         db.setHostName(connection.sqliteDatabaseName);
         db.setDatabaseName(connection.sqliteDatabasePath);
-        if(db.open()){
+        if(SqliteConnection::open(db, &m_lastConnectError)){
             qInfo(logInfo()) << "";
             qInfo(logInfo()) << "=~=~=~=~=~=~=~=~=~~=~=~=~=~= LANSARE NOUA =~=~=~=~=~=~=~=~~=~=~=~=~=~=~=~=~=";
             qInfo(logInfo()) << tr("Conectarea la baza de date '%1' este instalata cu succes.").arg(connection.sqliteDatabaseName);
@@ -3313,10 +3312,10 @@ bool DataBase::openDataBase()
             // if (db_image.isOpen())
             //     return true;
 
-            db_image = QSqlDatabase::addDatabase("QSQLITE", "db_image");
+            db_image = QSqlDatabase::addDatabase(SqliteConnection::driver(), "db_image");
             db_image.setHostName("db_image");
             db_image.setDatabaseName(connection.imageDatabasePath);
-            if (db_image.open()){
+            if (SqliteConnection::open(db_image, &m_lastConnectError)){
                 qInfo(logInfo()) << tr("Conectarea la baza de date 'db_image' este instalata cu succes.");
 
                 // db_image is a separate SQLite file and has no independent

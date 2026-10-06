@@ -148,7 +148,7 @@
 <body>
   <header>
     <nav class="nav" aria-label="Navigare principală">
-      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.8</span></div>
+      <div class="brand"><span class="logo" aria-hidden="true"></span><span>USG 4.2.9</span></div>
       <div class="navlinks">
         <span class="pill">Linux și Windows</span>
         <span class="pill">Qt 6.9.3 · qmake</span>
@@ -203,17 +203,17 @@
           </div>
 
           <div class="hr"></div>
-          <h2>Versiunea 4.2.8</h2>
-          <p>Actualizare de interfață și mentenanță pentru Linux și Windows, compatibilă cu bazele SQLite și MariaDB. Nu introduce o migrare nouă a schemei bazei de date.</p>
-          <p>Manualul de utilizare poate fi deschis direct din fereastra principală.</p>
+          <h2>Versiunea 4.2.9</h2>
+          <p>Actualizare pentru bazele locale și distribuția demo, compatibilă cu SQLite și MariaDB. Nu introduce o migrare nouă a schemei bazei de date.</p>
+          <p>SQLite standard rămâne implicit; SQLCipher este disponibil opțional dacă pachetul conține pluginul Qt compatibil.</p>
           <ul>
-            <li>deschiderea pentru editare a profilului <code>.conf</code> selectat, pe Linux și Windows;</li>
-            <li>alinierea uniformă a iconurilor și textelor din selectorul bazei de date;</li>
-            <li>corectarea iconurilor în ferestrele de configurare și e-mail;</li>
-            <li>exemple în câmpurile MariaDB, server cloud și cont e-mail;</li>
-            <li>imagini de pornire actualizate și auditul iconurilor completat;</li>
-            <li>traducerea rusă actualizată integral pentru textele curente;</li>
-            <li>include actualizările de securitate și funcționalitate din 4.2.7;</li>
+            <li>suport opțional SQLCipher pentru baza principală și baza imaginilor;</li>
+            <li>cheia de criptare este introdusă la rulare și nu este salvată în profil;</li>
+            <li>conexiunile workerilor, migrările și arhivarea recunosc bazele SQLCipher;</li>
+            <li>selectarea fișierelor acceptă extensii SQLite și SQLCipher uzuale;</li>
+            <li>script separat pentru pachetul demo Linux, cu profil configurat automat și verificări de integritate;</li>
+            <li>traducerea rusă completată și regenerată pentru textele noi;</li>
+            <li>include toate corectările din versiunile 4.2.8 și 4.2.7;</li>
             <li>LimeReport 1.7.23 compilat pentru Qt 6.9.3.</li>
           </ul>
         </article>

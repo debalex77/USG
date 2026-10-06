@@ -68,6 +68,7 @@ namespace Key {
     const QString sqliteDatabase     = QStringLiteral("sqliteDatabaseName");
     const QString sqlitePath         = QStringLiteral("sqliteDatabasePath");
     const QString imageDatabasePath  = QStringLiteral("imageDatabasePath");
+    const QString sqliteEncrypted    = QStringLiteral("sqliteEncrypted");
     const QString logPath            = QStringLiteral("logPath");
 
     const QString rememberedUserId   = QStringLiteral("idUserApp");
@@ -278,13 +279,21 @@ ReadResult readProfile(const QString &settingsPath, const QString &defaultLogPat
     settings.beginGroup(Key::groupConnection);
     data.mysqlHost          = LegacySettingsCodec::decode(settings.value(Key::mysqlHost).toString());
     data.mysqlDatabase      = LegacySettingsCodec::decode(settings.value(Key::mysqlDatabase).toString());
-    data.mysqlPort          = readBoundedInt(settings, Key::mysqlPort, Default::mysqlPort, 1, 65535);
+    // Older local profiles stored an empty/zero unused MariaDB port.
+    const QVariant storedPort = settings.value(Key::mysqlPort, Default::mysqlPort);
+    bool portConverted = false;
+    const int legacyPort = storedPort.toInt(&portConverted);
+    const bool unusedLegacyPort = data.databaseIndex != 1
+        && (storedPort.toString().trimmed().isEmpty() || (portConverted && legacyPort == 0));
+    data.mysqlPort = unusedLegacyPort ? Default::mysqlPort
+        : readBoundedInt(settings, Key::mysqlPort, Default::mysqlPort, 1, 65535);
     data.mysqlOptions       = settings.value(Key::mysqlOptions).toString();
     data.mysqlUser          = LegacySettingsCodec::decode(settings.value(Key::mysqlUser).toString());
     // Valoarea a fost deja validată mai sus, inclusiv autentificarea AES-GCM.
     decodeProfilePassword(settings.value(Key::mysqlPassword).toString(),
                           settingsPath, &data.mysqlPassword);
     data.imageDatabasePath  = settings.value(Key::imageDatabasePath).toString();
+    data.sqliteEncrypted = settings.value(Key::sqliteEncrypted, false).toBool();
     data.logPath            = settings.value(Key::logPath, defaultLogPath).toString();
     data.sqliteDatabase     = settings.value(Key::sqliteDatabase).toString();
     data.sqlitePath         = settings.value(Key::sqlitePath).toString();
@@ -351,13 +360,17 @@ WriteError writeProfile(const QString &settingsPath, const ProfileData &data)
     settings.beginGroup(Key::groupConnection);
     settings.setValue(Key::mysqlHost,          LegacySettingsCodec::encode(data.mysqlHost));
     settings.setValue(Key::mysqlDatabase,      LegacySettingsCodec::encode(data.mysqlDatabase));
-    settings.setValue(Key::mysqlPort,          data.mysqlPort);
+    const int portToSave = data.databaseIndex != 1
+        && (data.mysqlPort < 1 || data.mysqlPort > 65535)
+        ? Default::mysqlPort : data.mysqlPort;
+    settings.setValue(Key::mysqlPort, portToSave);
     settings.setValue(Key::mysqlUser,          LegacySettingsCodec::encode(data.mysqlUser));
     settings.setValue(Key::mysqlPassword,      encryptedPassword);
     settings.setValue(Key::mysqlOptions,       data.mysqlOptions);
     settings.setValue(Key::sqliteDatabase,     data.sqliteDatabase);
     settings.setValue(Key::sqlitePath,         data.sqlitePath);
     settings.setValue(Key::imageDatabasePath,  data.imageDatabasePath);
+    settings.setValue(Key::sqliteEncrypted, data.sqliteEncrypted);
     settings.setValue(Key::logPath,            data.logPath);
     settings.endGroup();
 

@@ -1,3 +1,18 @@
+## USG v4.2.9 (06.10.2026)
+
+- Adăugat suport opțional pentru baze locale criptate SQLCipher: baza principală și baza imaginilor folosesc același driver și aceeași cheie furnizată la rulare; SQLite standard rămâne implicit.
+- Cheia SQLCipher nu este salvată în profil. Poate fi introdusă în fereastra dedicată sau furnizată prin `USG_SQLCIPHER_KEY`; aplicația verifică prezența pluginului înainte de conectare.
+- Conexiunile principale, conexiunile workerilor, migrările și arhivarea recunosc atât `QSQLITE`, cât și `QSQLCIPHER`.
+- Dialogurile de alegere a bazelor acceptă extensiile `.sqlite3`, `.sqlite`, `.db` și `.sqlcipher`; numele bazei este determinat fără presupunerea unei extensii fixe.
+- Corectată citirea profilurilor SQLite vechi care au portul MariaDB neutilizat gol sau egal cu zero.
+- Adăugat un flux separat pentru construirea pachetului demo Linux `USG_v4.2.9_Linux_amd64_demo.run`, fără amestecarea fișierelor cu instalatoarele de producție.
+- Pachetul demo verifică integritatea, schema și legăturile dintre bazele incluse, configurează automat profilul local și folosește utilizatorul `admin` fără parolă; anonimizarea rămâne o verificare manuală obligatorie.
+- Baza demo de imagini poate fi inclusă numai după verificare; în lipsa ei, scriptul generează o bază goală și sincronizează marcajele imaginilor în copia livrată.
+- Pachetele Linux cer și includ pluginul SQLCipher compatibil; pachetele Windows îl includ dacă `qsqlcipher.dll` există în kitul Qt folosit pentru build.
+- Pachetele Linux construiesc și includ runtime-ul privat OpenSSL 3.5.9 LTS folosit de SQLCipher, fără a modifica instalarea OpenSSL a sistemului.
+- Traducerea rusă a fost completată și regenerată pentru textele noi.
+- Versiunea 4.2.9 nu introduce o migrare nouă a schemei bazei de date și nu convertește automat bazele SQLite existente în SQLCipher.
+
 ## USG v4.2.8 (04.10.2026)
 
 - În fereastra de selectare a bazei de date, profilul `.conf` selectat poate fi deschis pentru editare: cu aplicația implicită pe Linux și cu Notepad pe Windows; lipsa fișierului sau imposibilitatea deschiderii sunt raportate utilizatorului.

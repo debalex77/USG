@@ -120,8 +120,12 @@ void DatabaseSelection::readFileSettings(const QString pathToFile)
         if (settings.status() == QSettings::NoError) {
             if (databaseIndex == 1)
                 connectionType = QStringLiteral("MySQL");
-            else if (databaseIndex == 2)
-                connectionType = QStringLiteral("SQLite");
+            else if (databaseIndex == 2) {
+                settings.endGroup();
+                settings.beginGroup(AppSettingsStore::Key::groupConnection);
+                connectionType = settings.value(AppSettingsStore::Key::sqliteEncrypted, false).toBool()
+                    ? QStringLiteral("SQLCipher") : QStringLiteral("SQLite");
+            }
         }
     }
     ui->txtTypeConnection->setText(tr("Tipul conectării:<br><b><u>%1</u></b>")

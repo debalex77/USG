@@ -2,6 +2,8 @@
 /3rdparty/LimeReport/
 /3rdparty/LimeReport_*/
 /3rdparty/openssl/
+/third_party/qsqlcipher/source/_deps/
+/third_party/qsqlcipher/source/build/
 
 # qmake/Qt Creator build outputs
 /build/

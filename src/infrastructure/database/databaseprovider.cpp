@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "databaseprovider.h"
+#include "infrastructure/database/sqliteconnection.h"
 #include "common/cloudconnectioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
 
@@ -37,7 +38,7 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
         return QSqlDatabase::database(connectionName);
 
     const QString driver = mysql ? QStringLiteral("QMYSQL")
-                                 : QStringLiteral("QSQLITE");
+                                 : SqliteConnection::driver();
 
     const MainDatabaseConnectionData connection =
         MainDatabaseConnectionContext::instance().data();
@@ -61,11 +62,12 @@ QSqlDatabase DatabaseProvider::getDatabaseThread(const QString &connectionName, 
     } else {
         db.setHostName(connection.sqliteDatabaseName);
         db.setDatabaseName(connection.sqliteDatabasePath);
-        if (! db.open()) {
+        QString openError;
+        if (! SqliteConnection::open(db, &openError, connection)) {
             qCritical(logCritical()).noquote()
                 << prefixConn << this->metaObject()->className()
                 << "[getDatabaseThread()] Eroare la deschiderea bazei de date(sqlite):"
-                << db.lastError().text();
+                << openError;
         } else {
             QSqlQuery pragma(db);
             if (!pragma.exec(QStringLiteral("PRAGMA foreign_keys = ON"))) {
@@ -88,15 +90,16 @@ QSqlDatabase DatabaseProvider::getDatabaseImagesThread(const QString &connection
     if (QSqlDatabase::contains(connectionName))
         return QSqlDatabase::database(connectionName);
 
-    QSqlDatabase db = QSqlDatabase::addDatabase("QSQLITE", connectionName);
+    QSqlDatabase db = QSqlDatabase::addDatabase(SqliteConnection::driver(), connectionName);
     db.setHostName("db_image");
     db.setDatabaseName(
         MainDatabaseConnectionContext::instance().data().imageDatabasePath);
-    if (! db.open()) {
+    QString openError;
+    if (! SqliteConnection::open(db, &openError)) {
         qWarning(logWarning()).noquote()
             << "[THREAD]" << this->metaObject()->className()
             << "[getDatabaseImagesThread()] Eroare la deschiderea bazei de date(db_image 'sqlite'):"
-            << db.lastError().text();
+            << openError;
     } else {
         QSqlQuery pragma(db);
         if (!pragma.exec(QStringLiteral("PRAGMA foreign_keys = ON"))) {

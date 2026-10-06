@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "appcontroller.h"
+#include "infrastructure/database/sqlcipherkeyprompt.h"
 #include "common/applicationpathscontext.h"
 #include "common/cloudconnectioncontext.h"
 #include "common/maindatabaseconnectioncontext.h"
@@ -187,6 +188,10 @@ void AppController::applyStyleSheet()
 
 bool AppController::ensureMainDatabaseConnected()
 {
+    const auto keyConfig = MainDatabaseConnectionContext::instance().data();
+    if (!SqlCipherKeyPrompt::ensure(keyConfig.backend == MainDatabaseBackend::SQLite
+                                   && keyConfig.sqliteEncrypted))
+        return false;
     /** verificam daca bd e valabila si e deschisa */
     const QSqlDatabase currentDatabase = m_db.getDatabase();
     if (currentDatabase.isValid() && currentDatabase.isOpen())
@@ -268,6 +273,10 @@ bool AppController::ensureMainDatabaseConnected()
 
 bool AppController::initializeNewDatabase()
 {
+    const auto keyConfig = MainDatabaseConnectionContext::instance().data();
+    if (!SqlCipherKeyPrompt::ensure(keyConfig.backend == MainDatabaseBackend::SQLite
+                                   && keyConfig.sqliteEncrypted))
+        return false;
     DatabaseInit initializer(this);
     const bool initialized = initializer.run(nullptr, [] {
         const bool mariaDb = MainDatabaseConnectionContext::instance().isMariaDb();

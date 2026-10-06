@@ -43,13 +43,14 @@ Site oficial: <https://debalex77.github.io/USG/>
 - sincronizare opțională în fundal cu MariaDB, pe bază de UUID;
 - interfață în limbile română, engleză și rusă.
 
-## Versiunea 4.2.8
+## Versiunea 4.2.9
 
-Versiunea 4.2.8 permite deschiderea pentru editare a profilului bazei de date
-selectat, corectează căile resurselor și alinierea butoanelor în mai multe
-ferestre, adaugă exemple în câmpurile de conexiune, actualizează imaginile de
-pornire și completează traducerea rusă. Nu introduce o migrare nouă a schemei
-bazei de date.
+Versiunea 4.2.9 adaugă suport opțional SQLCipher pentru bazele locale principală
+și de imagini, SQLite standard rămânând opțiunea implicită. A fost adăugat și un
+script separat pentru pachetul demo Linux, cu configurarea automată a profilului
+demo și verificări de integritate ale bazelor incluse. Cheia SQLCipher se
+introduce la rulare și nu este păstrată în profil. Versiunea nu introduce o
+migrare nouă a schemei bazei de date.
 
 ## Versiunea 4.2.0
 
@@ -94,8 +95,10 @@ Descărcați executabilele publicate numai din pagina
 [GitHub Releases](https://github.com/debalex77/USG/releases) și verificați suma
 SHA-256 furnizată înainte de instalare.
 
-Copiile bazelor de date, bazele de test și fișierele de configurare ale
-utilizatorului nu sunt incluse în pachetele release.
+Pachetele de producție nu includ copii ale bazelor de date, baze de test sau
+fișiere de configurare ale utilizatorului. Singura excepție este instalatorul
+demo construit separat: acesta conține baze demonstrative pregătite și
+anonimizate explicit și creează propriul profil demo.
 
 ### Lansarea pachetului AppImage
 
@@ -104,15 +107,15 @@ biblioteca compatibilă astfel:
 
 ```bash
 sudo apt install libfuse2t64
-chmod +x USG_v4.2.8-x86_64.AppImage
-./USG_v4.2.8-x86_64.AppImage
+chmod +x USG_v4.2.9-x86_64.AppImage
+./USG_v4.2.9-x86_64.AppImage
 ```
 
 Dacă FUSE nu poate fi instalat, folosiți modul de extragere oferit de runtime-ul
 AppImage:
 
 ```bash
-./USG_v4.2.8-x86_64.AppImage --appimage-extract-and-run
+./USG_v4.2.9-x86_64.AppImage --appimage-extract-and-run
 ```
 
 Această variantă extrage temporar pachetul și pornește mai lent, dar nu necesită
@@ -120,7 +123,7 @@ FUSE.
 
 ## Compilarea din sursă
 
-Configurația de referință pentru versiunea 4.2.8 este:
+Configurația de referință pentru versiunea 4.2.9 este:
 
 | Componentă | Versiune / cerință |
 |---|---|
@@ -128,7 +131,7 @@ Configurația de referință pentru versiunea 4.2.8 este:
 | C++ | C++20 |
 | Sistem de build | qmake |
 | LimeReport | 1.7.23, revizie fixată și patch USG |
-| OpenSSL | 3.x |
+| OpenSSL | 3.5.9 LTS (runtime privat inclus în pachet) |
 | Bază de date | SQLite sau MariaDB |
 
 USG folosește intenționat qmake; proiectul nu furnizează fișiere CMake.

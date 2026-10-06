@@ -410,48 +410,48 @@
 <context>
     <name>AppController</name>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="63"/>
+        <location filename="../src/app/appcontroller.cpp" line="64"/>
         <source>Directorul pentru starea interfeței nu a putut fi creat:</source>
         <translation>Не удалось создать каталог для сохранения состояния интерфейса:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="240"/>
+        <location filename="../src/app/appcontroller.cpp" line="245"/>
         <source>host: %1, baza: %2</source>
         <translation>хост: %1, база: %2</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="254"/>
+        <location filename="../src/app/appcontroller.cpp" line="259"/>
         <source>Conexiunea principală la baza de date nu a putut fi deschisă:</source>
         <translation>Не удалось открыть основное соединение с базой данных:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="218"/>
-        <location filename="../src/app/appcontroller.cpp" line="260"/>
+        <location filename="../src/app/appcontroller.cpp" line="223"/>
+        <location filename="../src/app/appcontroller.cpp" line="265"/>
         <source>Conectarea la baza de date</source>
         <translation>Подключение к базе данных</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="203"/>
+        <location filename="../src/app/appcontroller.cpp" line="208"/>
         <source>(calea nu este indicată în profil)</source>
         <translation>(путь не указан в профиле)</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="210"/>
+        <location filename="../src/app/appcontroller.cpp" line="215"/>
         <source>Fișierele bazei de date SQLite din profil nu există:</source>
         <translation>Файлы базы данных SQLite, указанные в профиле, не существуют:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="219"/>
+        <location filename="../src/app/appcontroller.cpp" line="224"/>
         <source>Fișierele bazei de date indicate în profil nu au fost găsite:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Verificați dacă fișierele nu au fost mutate, redenumite sau șterse, sau dacă discul/directorul de rețea este accesibil.</source>
         <translation>Файлы базы данных, указанные в профиле, не найдены:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Проверьте, не были ли файлы перемещены, переименованы или удалены, а также доступен ли диск/сетевой каталог.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="249"/>
+        <location filename="../src/app/appcontroller.cpp" line="254"/>
         <source>Alegeți prima lansare pentru a crea schema sau restaurați baza de date dintr-o copie de rezervă.</source>
         <translation>Выберите первый запуск, чтобы создать схему, или восстановите базу данных из резервной копии.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="261"/>
+        <location filename="../src/app/appcontroller.cpp" line="266"/>
         <source>Baza de date nu a putut fi deschisă:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;%2</source>
         <translation>Не удалось открыть базу данных:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;%2</translation>
     </message>
@@ -460,107 +460,107 @@
         <translation type="vanished">Не удалось проверить существующую схему:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="296"/>
+        <location filename="../src/app/appcontroller.cpp" line="305"/>
         <source>Inițializarea bazei de imagini a eșuat.</source>
         <translation>Не удалось инициализировать базу данных изображений.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="311"/>
+        <location filename="../src/app/appcontroller.cpp" line="320"/>
         <source>Pregătirea bazelor pentru inițializare a eșuat:</source>
         <translation>Не удалось подготовить базы данных к инициализации:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="317"/>
+        <location filename="../src/app/appcontroller.cpp" line="326"/>
         <source>Baza de date are deja schema versiunii %1; crearea schemei este omisă.</source>
         <translation>База данных уже содержит схему версии %1; создание схемы пропущено.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="346"/>
+        <location filename="../src/app/appcontroller.cpp" line="355"/>
         <source>Inițializarea versiunii schemei a eșuat:</source>
         <translation>Не удалось инициализировать версию схемы:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="365"/>
+        <location filename="../src/app/appcontroller.cpp" line="374"/>
         <source>Inițializarea bazei de date noi a eșuat.</source>
         <translation>Не удалось инициализировать новую базу данных.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="367"/>
+        <location filename="../src/app/appcontroller.cpp" line="376"/>
         <source>Crearea bazei de date</source>
         <translation>Создание базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="368"/>
+        <location filename="../src/app/appcontroller.cpp" line="377"/>
         <source>Baza de date nu a putut fi inițializată complet. Inițializarea va putea fi reluată la următoarea lansare. Verificați jurnalul aplicației.</source>
         <translation>Не удалось полностью инициализировать базу данных. Инициализацию можно будет продолжить при следующем запуске. Проверьте журнал приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="386"/>
+        <location filename="../src/app/appcontroller.cpp" line="395"/>
         <source>Verificarea administratorului inițial a eșuat:</source>
         <translation>Не удалось проверить наличие первоначального администратора:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="390"/>
+        <location filename="../src/app/appcontroller.cpp" line="399"/>
         <source>Crearea administratorului</source>
         <translation>Создание администратора</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="391"/>
+        <location filename="../src/app/appcontroller.cpp" line="400"/>
         <source>Nu s-a putut verifica dacă baza de date conține un administrator.</source>
         <translation>Не удалось проверить, содержит ли база данных учетную запись администратора.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="406"/>
+        <location filename="../src/app/appcontroller.cpp" line="415"/>
         <source>Baza de date nu conține utilizatori activi (utilizatori marcați ca șterși: %1); crearea administratorului fără autentificare este refuzată.</source>
         <translation>В базе данных нет активных пользователей (пользователей, помеченных как удалённые: %1); создание администратора без авторизации отклонено.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="411"/>
+        <location filename="../src/app/appcontroller.cpp" line="420"/>
         <source>Autorizarea utilizatorului</source>
         <translation>Авторизация пользователя</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="412"/>
+        <location filename="../src/app/appcontroller.cpp" line="421"/>
         <source>Toți utilizatorii din baza de date sunt marcați ca șterși, iar autentificarea nu este posibilă.&lt;br&gt;&lt;br&gt;Restabiliți baza de date dintr-o copie de rezervă sau contactați administratorul aplicației.</source>
         <translation>Все пользователи в базе данных помечены как удалённые, авторизация невозможна.&lt;br&gt;&lt;br&gt;Восстановите базу данных из резервной копии или обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="424"/>
+        <location filename="../src/app/appcontroller.cpp" line="433"/>
         <source>Starea configurării inițiale incomplete nu a putut fi salvată.</source>
         <translation>Не удалось сохранить состояние незавершенной первоначальной настройки.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="431"/>
+        <location filename="../src/app/appcontroller.cpp" line="440"/>
         <source>Crearea administratorului aplicației [*]</source>
         <translation>Создание администратора приложения [*]</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="435"/>
+        <location filename="../src/app/appcontroller.cpp" line="444"/>
         <source>Crearea administratorului a fost amânată; configurarea inițială va fi reluată.</source>
         <translation>Создание администратора было отложено; первоначальная настройка будет продолжена.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="452"/>
+        <location filename="../src/app/appcontroller.cpp" line="461"/>
         <source>Citirea setărilor utilizatorului a eșuat:</source>
         <translation>Не удалось прочитать настройки пользователя:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="478"/>
+        <location filename="../src/app/appcontroller.cpp" line="487"/>
         <source>Nu există setări persistate pentru utilizatorul cu id=%1; se folosesc valorile încărcate la autentificare.</source>
         <translation>Для пользователя с id=%1 сохраненные настройки отсутствуют; используются значения, загруженные при аутентификации.</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="147"/>
+        <location filename="../src/app/appcontroller.cpp" line="148"/>
         <source>Relansarea aplicației după schimbarea limbii a eșuat:</source>
         <translation>Не удалось перезапустить приложение после смены языка:</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="150"/>
+        <location filename="../src/app/appcontroller.cpp" line="151"/>
         <source>Relansarea aplicației</source>
         <translation>Перезапуск приложения</translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="151"/>
+        <location filename="../src/app/appcontroller.cpp" line="152"/>
         <source>Aplicația nu a putut fi pornită din nou. Lansați-o manual.</source>
         <translation>Не удалось повторно запустить приложение. Запустите его вручную.</translation>
     </message>
@@ -588,13 +588,13 @@
         <translation>Язык интерфейса</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1579"/>
-        <location filename="../src/settings/appsettings.cpp" line="1585"/>
+        <location filename="../src/settings/appsettings.cpp" line="1594"/>
+        <location filename="../src/settings/appsettings.cpp" line="1600"/>
         <source>Testarea conectării</source>
         <translation>Тест соединения</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="592"/>
+        <location filename="../src/settings/appsettings.ui" line="598"/>
         <source>Setarile conectarii (MySQL/MariaDB)</source>
         <translation>Настройки соединения (MySQL/MariaDB)</translation>
     </message>
@@ -614,59 +614,86 @@
         <translation>Путь к печатным формам отчётов</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="564"/>
         <source>Denumirea bazei de date (.sqlite3)</source>
-        <translation>Наименование базы данных (.sqlite3)</translation>
+        <translation type="vanished">Наименование базы данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1542"/>
-        <location filename="../src/settings/appsettings.cpp" line="1547"/>
         <source>Crearea bazei de date (.sqlite)</source>
         <oldsource>Crearea bazei de date</oldsource>
-        <translation>Создать базу данных (.sqlite3)</translation>
+        <translation type="vanished">Создать базу данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="604"/>
+        <location filename="../src/settings/appsettings.ui" line="487"/>
+        <source>Setările conexiunii SQLite/SQLCipher</source>
+        <translation>Настройки подключения SQLite/SQLCipher</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="492"/>
+        <source>Folosește SQLCipher pentru baza principală și imagini</source>
+        <translation>Использовать SQLCipher для основной базы и базы изображений</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="493"/>
+        <source>Cheia este solicitată la salvare sau pornire. Bazele SQLite existente nu sunt convertite automat.</source>
+        <translation>Ключ запрашивается при сохранении или запуске. Существующие базы SQLite не преобразуются автоматически.</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="544"/>
+        <source>Localizarea bazei de date (SQLite/SQLCipher)</source>
+        <translation>Расположение базы данных (SQLite/SQLCipher)</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="570"/>
+        <source>Denumirea bazei de date (SQLite/SQLCipher)</source>
+        <translation>Название базы данных (SQLite/SQLCipher)</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="577"/>
+        <source>Testarea conectării (SQLite/SQLCipher)</source>
+        <translation>Проверка подключения (SQLite/SQLCipher)</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.ui" line="610"/>
         <source>Nume hostului</source>
         <translation>Имя хоста</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="633"/>
+        <location filename="../src/settings/appsettings.ui" line="639"/>
         <source>Denumirea bazei de date</source>
         <translation>Наименование базы данных</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="659"/>
+        <location filename="../src/settings/appsettings.ui" line="665"/>
         <source>Port pentru conectare la baza de date</source>
         <translation>Порт соединения с базой данных</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="685"/>
+        <location filename="../src/settings/appsettings.ui" line="691"/>
         <source>Opțiunile suplimentare de conectare</source>
         <translation>Дополнительные настройки соединения</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="760"/>
+        <location filename="../src/settings/appsettings.ui" line="766"/>
         <source>Testarea conectării (MySQL/MariaDB)</source>
         <translation>Тестирование соединения (MySQL/MariaDB)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="785"/>
+        <location filename="../src/settings/appsettings.ui" line="791"/>
         <source>Fișiere de logare</source>
         <translation>Файлы журналирования</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="819"/>
+        <location filename="../src/settings/appsettings.ui" line="825"/>
         <source>fișiere de logare</source>
         <translation>файлов журналирования</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="839"/>
+        <location filename="../src/settings/appsettings.ui" line="845"/>
         <source>Filtrează după nivel de logare</source>
         <translation>Фильтровать по уровню журналирования</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="800"/>
+        <location filename="../src/settings/appsettings.ui" line="806"/>
         <source>... de păstrat ultimele</source>
         <translation>...сохранять последние</translation>
     </message>
@@ -686,9 +713,8 @@
         <translation>Путь к файлам программы</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="425"/>
         <source>Localizarea bazei de date a imaginelor (.sqlite3)</source>
-        <translation>Путь к базе данных с изображениями (.sqlite3)</translation>
+        <translation type="vanished">Путь к базе данных с изображениями (.sqlite3)</translation>
     </message>
     <message>
         <location filename="../src/settings/appsettings.ui" line="290"/>
@@ -707,32 +733,34 @@
         <translation>...</translation>
     </message>
     <message>
+        <location filename="../src/settings/appsettings.ui" line="425"/>
+        <source>Localizarea bazei de date cu imagini (SQLite/SQLCipher)</source>
+        <translation>Расположение базы данных изображений (SQLite/SQLCipher)</translation>
+    </message>
+    <message>
         <location filename="../src/settings/appsettings.ui" line="461"/>
         <source>Localizarea fișierelor video</source>
         <translation>Расположение видеофайлов</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="487"/>
         <source>Setarile conectarii (.sqlite3)</source>
-        <translation>Настройки соединения (.sqlite3)</translation>
+        <translation type="vanished">Настройки соединения (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="538"/>
         <source>Localizarea bazei de date (.sqlite3)</source>
-        <translation>Путь к базе данных (.sqlite3)</translation>
+        <translation type="vanished">Путь к базе данных (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="571"/>
         <source>Testarea conectării (.sqlite3)</source>
-        <translation>Тестирование соединения (.sqlite3)</translation>
+        <translation type="vanished">Тестирование соединения (.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="737"/>
+        <location filename="../src/settings/appsettings.ui" line="743"/>
         <source>Parola</source>
         <translation>Пароль</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.ui" line="711"/>
+        <location filename="../src/settings/appsettings.ui" line="717"/>
         <source>Utilizatorul (root)</source>
         <translation>Пользователь (root)</translation>
     </message>
@@ -747,77 +775,77 @@
         <translation>Записать</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="704"/>
+        <location filename="../src/settings/appsettings.cpp" line="715"/>
         <source>Crearea directoriei</source>
         <translation>Создание директории</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="55"/>
-        <location filename="../src/settings/appsettings.cpp" line="1655"/>
+        <location filename="../src/settings/appsettings.cpp" line="57"/>
+        <location filename="../src/settings/appsettings.cpp" line="1670"/>
         <source>Setările aplicației %1</source>
         <oldsource>Setările aplicației [*]</oldsource>
         <translation>Настройки приложения %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="74"/>
-        <location filename="../src/settings/appsettings.cpp" line="1660"/>
+        <location filename="../src/settings/appsettings.cpp" line="76"/>
+        <location filename="../src/settings/appsettings.cpp" line="1675"/>
         <source>milimetru</source>
         <translation>милиметры</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="74"/>
-        <location filename="../src/settings/appsettings.cpp" line="1660"/>
+        <location filename="../src/settings/appsettings.cpp" line="76"/>
+        <location filename="../src/settings/appsettings.cpp" line="1675"/>
         <source>centimetru</source>
         <translation>сантиметры</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="705"/>
+        <location filename="../src/settings/appsettings.cpp" line="716"/>
         <source>Directoria &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;pentru baza de date SQlite nu a fost creată !!! Lansarea aplicației nu este posibilă.&lt;br&gt;Adresați-vă administratorului aplicației.</source>
         <translation>Каталог &lt;b&gt;&apos;%1&apos;&lt;/b&gt;&lt;br&gt;для базы данных SQLite не был создан !!! Запуск программы невозможен.&lt;br&gt;Обратитесь к администратору приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="709"/>
+        <location filename="../src/settings/appsettings.cpp" line="720"/>
         <source>Directoria &apos;%1&apos; pentru baza de date SQlite nu a fost creată.</source>
         <translation>Каталог &apos;%1&apos; для базы данных SQLite не был создан.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="774"/>
+        <location filename="../src/settings/appsettings.cpp" line="786"/>
         <source>&lt;br&gt;&lt;br&gt;Valoare: %1</source>
         <translation>&lt;br&gt;&lt;br&gt;Значение: %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="777"/>
+        <location filename="../src/settings/appsettings.cpp" line="789"/>
         <source>Configurația nu este validă: %1%2</source>
         <translation>Конфигурация недействительна: %1%2</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="846"/>
+        <location filename="../src/settings/appsettings.cpp" line="858"/>
         <source>Fișierul nu poate fi scris. Verificați calea și drepturile de acces.</source>
         <translation>Не удалось записать файл. Проверьте путь и права доступа.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="847"/>
+        <location filename="../src/settings/appsettings.cpp" line="859"/>
         <source>Formatul fișierului de configurare nu este valid.</source>
         <translation>Формат файла конфигурации недействителен.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="849"/>
+        <location filename="../src/settings/appsettings.cpp" line="861"/>
         <source>Salvarea setărilor în &apos;%1&apos; a eșuat: %2</source>
         <translation>Не удалось сохранить настройки в &apos;%1&apos;: %2</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="831"/>
-        <location filename="../src/settings/appsettings.cpp" line="852"/>
+        <location filename="../src/settings/appsettings.cpp" line="843"/>
+        <location filename="../src/settings/appsettings.cpp" line="864"/>
         <source>Salvarea setărilor</source>
         <translation>Сохранение настроек</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="832"/>
+        <location filename="../src/settings/appsettings.cpp" line="844"/>
         <source>Fișierul de configurare există deja:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Suprascrierea lui înlocuiește conexiunea salvată anterior. Continuați?</source>
         <translation>Файл конфигурации уже существует:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;Его перезапись заменит ранее сохранённое подключение. Продолжить?</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="853"/>
+        <location filename="../src/settings/appsettings.cpp" line="865"/>
         <source>Setările nu au putut fi salvate în:
 %1
 
@@ -828,45 +856,45 @@
 %2</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="866"/>
+        <location filename="../src/settings/appsettings.cpp" line="878"/>
         <source>Setarile aplicatiei sunt salvate/modificate in fisierul - %1.</source>
         <translation>Настройки приложения сохранены/изменены в файле — %1.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="954"/>
+        <location filename="../src/settings/appsettings.cpp" line="966"/>
         <source>Fișierul de configurare lipsește sau nu poate fi citit:
 %1</source>
         <translation>Файл конфигурации отсутствует или не может быть прочитан:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="957"/>
-        <location filename="../src/settings/appsettings.cpp" line="971"/>
-        <location filename="../src/settings/appsettings.cpp" line="980"/>
+        <location filename="../src/settings/appsettings.cpp" line="969"/>
+        <location filename="../src/settings/appsettings.cpp" line="983"/>
+        <location filename="../src/settings/appsettings.cpp" line="992"/>
         <source>Citirea setărilor</source>
         <translation>Чтение настроек</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="966"/>
+        <location filename="../src/settings/appsettings.cpp" line="978"/>
         <source>Fișierul de configurare are un format invalid:
 %1</source>
         <translation>Файл конфигурации имеет недопустимый формат:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="968"/>
+        <location filename="../src/settings/appsettings.cpp" line="980"/>
         <source>Fișierul de configurare nu poate fi accesat:
 %1</source>
         <translation>Нет доступа к файлу конфигурации:
 %1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="977"/>
+        <location filename="../src/settings/appsettings.cpp" line="989"/>
         <source>Valori codificate invalide în fișierul de configurare:</source>
         <translation>Недопустимые закодированные значения в файле конфигурации:</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="981"/>
+        <location filename="../src/settings/appsettings.cpp" line="993"/>
         <source>Fișierul de configurare conține valori codificate deteriorate:
 %1
 
@@ -877,195 +905,205 @@ Selectați alt profil sau corectați setările.</source>
 Выберите другой профиль или исправьте настройки.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="997"/>
+        <location filename="../src/settings/appsettings.cpp" line="1009"/>
         <source>Datele utilizatorului memorat sunt incomplete; memorarea a fost dezactivată.</source>
         <translation>Данные сохраненного пользователя неполны; сохранение данных отключено.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1015"/>
+        <location filename="../src/settings/appsettings.cpp" line="1027"/>
         <source>Datele utilizatorului memorat nu sunt valide; setările nu au fost scrise.</source>
         <translation>Данные сохраненного пользователя недействительны; настройки не были записаны.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1112"/>
+        <location filename="../src/settings/appsettings.cpp" line="1124"/>
         <source>Vizualizarea fisierului de logare &apos;%1&apos;.</source>
         <translation>Просмотр файла журналирования &apos;%1&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1206"/>
+        <location filename="../src/settings/appsettings.cpp" line="1177"/>
+        <location filename="../src/settings/appsettings.cpp" line="1198"/>
+        <location filename="../src/settings/appsettings.cpp" line="1250"/>
+        <location filename="../src/settings/appsettings.cpp" line="1264"/>
+        <source>Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)</source>
+        <translation>Файлы SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Все файлы (*)</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1217"/>
         <source>La continuare va fi creat un fișier nou, fără imagini.</source>
         <translation>При продолжении будет создан новый файл без изображений.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1207"/>
+        <location filename="../src/settings/appsettings.cpp" line="1218"/>
         <source>Lansarea nu va fi posibilă fără acest fișier.</source>
         <translation>Запуск без этого файла будет невозможен.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1209"/>
+        <location filename="../src/settings/appsettings.cpp" line="1220"/>
         <source>Baza de date cu imagini</source>
         <translation>База данных изображений</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1210"/>
+        <location filename="../src/settings/appsettings.cpp" line="1221"/>
         <source>Lângă baza aleasă nu a fost găsit fișierul cu imagini:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;%2&lt;br&gt;Dacă imaginile sunt păstrate în alt fișier, indicați-l în câmpul bazei de date cu imagini.</source>
         <translation>Рядом с выбранной базой не найден файл изображений:&lt;br&gt;&lt;b&gt;%1&lt;/b&gt;&lt;br&gt;&lt;br&gt;%2&lt;br&gt;Если изображения хранятся в другом файле, укажите его в поле базы данных изображений.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1275"/>
+        <location filename="../src/settings/appsettings.cpp" line="1285"/>
         <source>Verificarea fișierului</source>
         <translation>Проверка файла</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1276"/>
+        <location filename="../src/settings/appsettings.cpp" line="1286"/>
         <source>Fișierul cu setările aplicației nu a fost găsit !!!.</source>
         <translation>Файл настроек приложения не был найден !!!.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1309"/>
+        <location filename="../src/settings/appsettings.cpp" line="1319"/>
         <source>Verificarea fișierului de logare</source>
         <translation>Проверка файла журналирования</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1310"/>
+        <location filename="../src/settings/appsettings.cpp" line="1320"/>
         <source>Fișierul de logare nu a fost găsit !!!&lt;br&gt;Creați fișierul nou sau restartați aplicația.</source>
         <translation>Файл журналирования не был найден !!!&lt;br&gt;Создайте новый файл или перезапустите приложение.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1449"/>
+        <location filename="../src/settings/appsettings.cpp" line="1459"/>
         <source>Limba a fost salvată în profil, dar nu și pentru fereastra de selecție a bazei de date. Verificați drepturile de scriere ale setărilor aplicației.</source>
         <translation>Язык сохранён в профиле, но не для окна выбора базы данных. Проверьте права на запись настроек приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1472"/>
+        <location filename="../src/settings/appsettings.cpp" line="1482"/>
         <source>Exemplu: 127.0.0.1</source>
         <translation>Пример: 127.0.0.1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1473"/>
+        <location filename="../src/settings/appsettings.cpp" line="1483"/>
         <source>Exemplu: usg</source>
         <translation>Пример: usg</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1474"/>
+        <location filename="../src/settings/appsettings.cpp" line="1484"/>
         <source>Exemplu: MYSQL_OPT_RECONNECT=1</source>
         <translation>Пример: MYSQL_OPT_RECONNECT=1</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1475"/>
+        <location filename="../src/settings/appsettings.cpp" line="1485"/>
         <source>Exemplu: 3306</source>
         <translation>Пример: 3306</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1476"/>
+        <location filename="../src/settings/appsettings.cpp" line="1486"/>
         <source>Exemplu: usg_user</source>
         <translation>Пример: usg_user</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1477"/>
+        <location filename="../src/settings/appsettings.cpp" line="1487"/>
         <source>Introduceți parola</source>
         <translation>Введите пароль</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1586"/>
+        <location filename="../src/settings/appsettings.cpp" line="1557"/>
+        <location filename="../src/settings/appsettings.cpp" line="1562"/>
+        <source>Crearea bazei de date (SQLite/SQLCipher)</source>
+        <translation>Создание базы данных (SQLite/SQLCipher)</translation>
+    </message>
+    <message>
+        <location filename="../src/settings/appsettings.cpp" line="1601"/>
         <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; lipsește.&lt;br&gt;&lt;br&gt;%2</source>
         <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos; (MySQL)&lt;/b&gt; отсутствует.&lt;br&gt;&lt;br&gt;%2</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="776"/>
+        <location filename="../src/settings/appsettings.cpp" line="788"/>
         <source>Verificarea datelor</source>
         <translation>Проверка данных</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="73"/>
+        <location filename="../src/settings/appsettings.cpp" line="75"/>
         <source>&lt;- Alege -&gt;</source>
         <translation>&lt;- Выбери -&gt;</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1093"/>
+        <location filename="../src/settings/appsettings.cpp" line="1105"/>
         <source>Localizarea fisierelor de logare</source>
         <translation>Путь к файлам журналирования</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1094"/>
+        <location filename="../src/settings/appsettings.cpp" line="1106"/>
         <source>Deschisa forma &apos;Vizualizarea fisierului de logare&apos;.</source>
         <translation>Открыта форма &apos;Просмотр файлов журналирования&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1163"/>
-        <location filename="../src/settings/appsettings.cpp" line="1238"/>
+        <location filename="../src/settings/appsettings.cpp" line="1175"/>
+        <location filename="../src/settings/appsettings.cpp" line="1248"/>
         <source>Crearea fișierului</source>
         <translation>Создать файл</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1165"/>
-        <location filename="../src/settings/appsettings.cpp" line="1187"/>
-        <location filename="../src/settings/appsettings.cpp" line="1240"/>
-        <location filename="../src/settings/appsettings.cpp" line="1254"/>
         <source>SQLite3 file (*.sqlite3)</source>
-        <translation>SQLite3 file (*.sqlite3)</translation>
+        <translation type="vanished">SQLite3 file (*.sqlite3)</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1185"/>
-        <location filename="../src/settings/appsettings.cpp" line="1252"/>
+        <location filename="../src/settings/appsettings.cpp" line="1196"/>
+        <location filename="../src/settings/appsettings.cpp" line="1262"/>
         <source>Deschide fișierul</source>
         <translation>Открыть файл</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1321"/>
+        <location filename="../src/settings/appsettings.cpp" line="1331"/>
         <source>Eroare</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1322"/>
+        <location filename="../src/settings/appsettings.cpp" line="1332"/>
         <source>Nu s-a putut deschide fișierul de logare a aplicației.</source>
         <translation>Не удалось открыть файл журнала приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1344"/>
-        <location filename="../src/settings/appsettings.cpp" line="1362"/>
-        <location filename="../src/settings/appsettings.cpp" line="1380"/>
+        <location filename="../src/settings/appsettings.cpp" line="1354"/>
+        <location filename="../src/settings/appsettings.cpp" line="1372"/>
+        <location filename="../src/settings/appsettings.cpp" line="1390"/>
         <source>Alegeți directoriu</source>
         <translation>Выберите каталог</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1439"/>
+        <location filename="../src/settings/appsettings.cpp" line="1449"/>
         <source>Traducerea aplicației.</source>
         <translation>Перевод приложения.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1440"/>
+        <location filename="../src/settings/appsettings.cpp" line="1450"/>
         <source>Pentru traducerea completă este necesar de relansat aplicația.&lt;br&gt;&lt;br&gt;Doriți relansarea ?</source>
         <oldsource>Pentru traducerea completă este necesar de relansat aplicația.&lt;br&gt;Doriți relansarea ?</oldsource>
         <translation>Для полного перевода необходимо перезапустить приложение.&lt;br&gt;&lt;br&gt;Перезапустить ?</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1448"/>
+        <location filename="../src/settings/appsettings.cpp" line="1458"/>
         <source>Relansarea aplicației</source>
         <translation>Перезапуск приложения</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1464"/>
+        <location filename="../src/settings/appsettings.cpp" line="1474"/>
         <source>Controlul driverelor</source>
         <translation>Проверка драйверов</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1465"/>
+        <location filename="../src/settings/appsettings.cpp" line="1475"/>
         <source>Pentru sistemul de operare MacOS nu este inclus driverul MySQL !!! V-a fi inclus in actualizarile ulterioare.</source>
         <translation>Для операционной системы macOS драйвер MySQL не включен! Он будет добавлен в последующих обновления.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1580"/>
+        <location filename="../src/settings/appsettings.cpp" line="1595"/>
         <source>Conectarea cu baza de date &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; este realizată cu succes.</source>
         <translation>Соединение с базой данных &lt;b&gt;&apos;%1&apos;(MySQL)&lt;/b&gt; выполнено успешно.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1629"/>
+        <location filename="../src/settings/appsettings.cpp" line="1644"/>
         <source>Modificarea datelor</source>
         <translation>Изменения данных</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1630"/>
+        <location filename="../src/settings/appsettings.cpp" line="1645"/>
         <source>Setările au fost modificate.
 Doriți să salvați aceste modificări ?</source>
         <translation>Настройки приложения были измененны.
@@ -1428,9 +1466,8 @@ Debian/Ubuntu: `sudo apt install 7zip` или `sudo apt install p7zip-full`
 Windows: установите 7-Zip и добавьте его в PATH.</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="121"/>
         <source>Procesarea destinată doar pentru baza de date .sqlite !!!</source>
-        <translation>Обработка предназначена только для баз данных .sqlite !!!</translation>
+        <translation type="vanished">Обработка предназначена только для баз данных .sqlite !!!</translation>
     </message>
     <message>
         <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="128"/>
@@ -1503,9 +1540,8 @@ Windows: установите 7-Zip и добавьте его в PATH.</transla
         <translation>Выберите базы SQLite</translation>
     </message>
     <message>
-        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="346"/>
         <source>SQLite DB (*.sqlite *.db *.sqlite3);;Toate fișierele (*)</source>
-        <translation>SQLite DB (*.sqlite *.db *.sqlite3);;Все файлы (*)</translation>
+        <translation type="vanished">SQLite DB (*.sqlite *.db *.sqlite3);;Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="400"/>
@@ -1600,6 +1636,16 @@ Windows: установите 7-Zip и добавьте его в PATH.</transla
         <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="583"/>
         <source>Arhiva incompletă a fost ștearsă.</source>
         <translation>Незавершённый архив удалён.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="121"/>
+        <source>Arhivarea este disponibilă pentru bazele locale SQLite/SQLCipher.</source>
+        <translation>Архивирование доступно для локальных баз SQLite/SQLCipher.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="346"/>
+        <source>Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)</source>
+        <translation>Файлы SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Все файлы (*)</translation>
     </message>
     <message>
         <location filename="../src/infrastructure/backup/archivecreationhandler.cpp" line="484"/>
@@ -3573,9 +3619,8 @@ Doriți să salvați aceste modificări ?</source>
         <translation>База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; успешно создана.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="139"/>
         <source>Baza de date &lt;b&gt;&quot;%1&quot;&lt;/b&gt; deja este creata !!! &lt;br&gt;%2</source>
-        <translation>База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; уже создана !!! &lt;br&gt;%2</translation>
+        <translation type="vanished">База данных &quot;&lt;b&gt;%1&lt;/b&gt;&quot; уже создана !!! &lt;br&gt;%2</translation>
     </message>
     <message>
         <location filename="../src/database/database.cpp" line="168"/>
@@ -3627,511 +3672,511 @@ Doriți să salvați aceste modificări ?</source>
     </message>
     <message>
         <location filename="../src/database/database.cpp" line="772"/>
-        <location filename="../src/database/database.cpp" line="847"/>
+        <location filename="../src/database/database.cpp" line="846"/>
         <source>Baza de date nu este deschisă.</source>
         <translation>База данных не открыта.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="824"/>
+        <location filename="../src/database/database.cpp" line="823"/>
         <source>Versiunea schemei bazei de date nu a putut fi determinată.</source>
         <translation>Не удалось определить версию схемы базы данных.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="831"/>
+        <location filename="../src/database/database.cpp" line="830"/>
         <source>Versiunea schemei a fost importată în databaseMetadata:</source>
         <translation>Версия схемы импортирована в databaseMetadata:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="885"/>
+        <location filename="../src/database/database.cpp" line="884"/>
         <source>Baza de date conține utilizatori, dar versiunea schemei nu poate fi determinată.</source>
         <translation>База данных содержит пользователей, но версию схемы определить невозможно.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="911"/>
+        <location filename="../src/database/database.cpp" line="910"/>
         <source>Versiunea schemei este goală.</source>
         <translation>Версия схемы пуста.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1146"/>
+        <location filename="../src/database/database.cpp" line="1145"/>
         <source>Eroare la crearea tabelei &apos;imagesReports&apos; in baza de date &apos;DB_IMAGE&apos;.</source>
         <translation>Ошибка создании таблицы &apos;imagesReports&apos; в базе данных &apos;DB_IMAGE&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1163"/>
+        <location filename="../src/database/database.cpp" line="1162"/>
         <source>Verificarea schemei a eșuat: baza principală nu este deschisă.</source>
         <translation>Проверка схемы завершилась ошибкой: основная база данных не открыта.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1225"/>
+        <location filename="../src/database/database.cpp" line="1224"/>
         <source>tabela %1</source>
         <translation>таблица %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1229"/>
+        <location filename="../src/database/database.cpp" line="1228"/>
         <source>view-ul %1</source>
         <translation>представление %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1234"/>
+        <location filename="../src/database/database.cpp" line="1233"/>
         <source>tabela imagesReports</source>
         <translation>таблица imagesReports</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1239"/>
+        <location filename="../src/database/database.cpp" line="1238"/>
         <source>Schema bazei noi este incompletă. Lipsesc: %1</source>
         <translation>Схема новой базы данных неполная. Отсутствуют: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1289"/>
+        <location filename="../src/database/database.cpp" line="1288"/>
         <source>Schema bazei noi este incompletă: lipsește %1.%2.</source>
         <translation>Схема новой базы данных неполная: отсутствует %1.%2.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1355"/>
+        <location filename="../src/database/database.cpp" line="1354"/>
         <source>Schema bazei noi este incompletă: lipsește relația %1.%2 -&gt; %3.%4.</source>
         <translation>Схема новой базы данных неполная: отсутствует связь %1.%2 -&gt; %3.%4.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1370"/>
+        <location filename="../src/database/database.cpp" line="1369"/>
         <source>Cheile externe SQLite nu au putut fi verificate:</source>
         <translation>Не удалось проверить внешние ключи SQLite:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1376"/>
+        <location filename="../src/database/database.cpp" line="1375"/>
         <source>Schema bazei noi conține relații externe invalide în tabela %1, rândul %2.</source>
         <translation>Схема новой базы данных содержит недопустимые внешние связи в таблице %1, строка %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1387"/>
+        <location filename="../src/database/database.cpp" line="1386"/>
         <source>View-ul %1 există, dar nu poate fi executat: %2</source>
         <translation>Представление %1 существует, но не может быть выполнено: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1410"/>
+        <location filename="../src/database/database.cpp" line="1409"/>
         <source>Trigger-ele SQLite nu pot fi verificate:</source>
         <translation>Не удалось проверить триггеры SQLite:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1418"/>
+        <location filename="../src/database/database.cpp" line="1417"/>
         <source>Trigger-ele MariaDB nu pot fi verificate:</source>
         <translation>Не удалось проверить триггеры MariaDB:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1428"/>
+        <location filename="../src/database/database.cpp" line="1427"/>
         <source>Schema bazei noi este incompletă: lipsește trigger-ul %1.</source>
         <translation>Схема новой базы данных неполная: отсутствует триггер %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1439"/>
+        <location filename="../src/database/database.cpp" line="1438"/>
         <source>Schema bazei noi este incompletă: lipsește db_image.imagesReports.</source>
         <translation>Схема новой базы данных неполная: отсутствует db_image.imagesReports.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1447"/>
+        <location filename="../src/database/database.cpp" line="1446"/>
         <source>Schema db_image este incompletă: lipsește imagesReports.%1.</source>
         <translation>Схема db_image неполная: отсутствует imagesReports.%1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1458"/>
+        <location filename="../src/database/database.cpp" line="1457"/>
         <source>Schema MariaDB este incompletă: lipsește imagesReports.%1.</source>
         <translation>Схема MariaDB неполная: отсутствует imagesReports.%1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1476"/>
+        <location filename="../src/database/database.cpp" line="1475"/>
         <source>Fisierul &apos;:/xmls/investig.xml&apos; nu a fost citit !!!</source>
         <translation>Файл &apos;:/xmls/investig.xml&apos; не прочтён !!!</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1502"/>
+        <location filename="../src/database/database.cpp" line="1501"/>
         <source>Investigatia &apos;%1&apos; este introdusa in baza de date cu codul &apos;%2&apos;.</source>
         <translation>Исследование &apos;%1&apos; записано в базу данных с кодом &apos;%2&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1505"/>
+        <location filename="../src/database/database.cpp" line="1504"/>
         <source>Eroare la inserare a datelor in tabela &apos;investigations&apos;: %1</source>
         <translation>Ошибка записи данных в таблицу &apos;investigations&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1517"/>
+        <location filename="../src/database/database.cpp" line="1516"/>
         <source>Au fost încărcate %1 investigatii.</source>
         <translation>Загружено исследований: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1725"/>
+        <location filename="../src/database/database.cpp" line="1724"/>
         <source>Actualizat clasificatorul &quot;Investigatii&quot; pe anul 2024.</source>
         <translation>Классификатор «Исследования» обновлён на 2024 год.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1750"/>
+        <location filename="../src/database/database.cpp" line="1749"/>
         <source>Fisierul &apos;:/xmls/normograms.xml&apos; nu a fost citit !!!</source>
         <translation>Файл «:/xmls/normograms.xml» не был прочитан !!!</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1756"/>
+        <location filename="../src/database/database.cpp" line="1755"/>
         <source>Fișierul normogramelor este invalid la linia %1, coloana %2: %3</source>
         <translation>Файл нормограмм недопустим в строке %1, столбце %2: %3</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1767"/>
+        <location filename="../src/database/database.cpp" line="1766"/>
         <source>Fișierul normogramelor nu conține înregistrări.</source>
         <translation>Файл нормограмм не содержит записей.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1772"/>
+        <location filename="../src/database/database.cpp" line="1771"/>
         <source>Baza de date nu este deschisă pentru încărcarea normogramelor.</source>
         <translation>База данных не открыта для загрузки нормограмм.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1779"/>
+        <location filename="../src/database/database.cpp" line="1778"/>
         <source>Nu s-a putut verifica tabela normograms: %1</source>
         <translation>Не удалось проверить таблицу normograms: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1789"/>
+        <location filename="../src/database/database.cpp" line="1788"/>
         <source>Tabela normograms este inițializată parțial: %1 din %2 înregistrări.</source>
         <translation>Таблица normograms инициализирована частично: %1 из %2 записей.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1796"/>
+        <location filename="../src/database/database.cpp" line="1795"/>
         <source>Nu s-a putut porni tranzacția pentru normograme: %1</source>
         <translation>Не удалось начать транзакцию для нормограмм: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1807"/>
+        <location filename="../src/database/database.cpp" line="1806"/>
         <source>Nu s-a putut pregăti inserarea normogramelor: %1</source>
         <translation>Не удалось подготовить вставку нормограмм: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1821"/>
+        <location filename="../src/database/database.cpp" line="1820"/>
         <source>Eroare la inserarea normogramei %1: %2</source>
         <translation>Ошибка при добавлении нормограммы %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1832"/>
+        <location filename="../src/database/database.cpp" line="1831"/>
         <source>Salvarea normogramelor a eșuat: %1</source>
         <translation>Не удалось сохранить нормограммы: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1739"/>
+        <location filename="../src/database/database.cpp" line="1738"/>
         <source>Au fost încărcate %1 elemente ale normogramelor.</source>
         <translation>Загружено элементов нормограмм: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1851"/>
+        <location filename="../src/database/database.cpp" line="1850"/>
         <source>Eroare la verificarea tabelei &apos;typesPrices&apos;: %1</source>
         <translation>Ошибка проверки таблицы &apos;typesPrices&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1856"/>
+        <location filename="../src/database/database.cpp" line="1855"/>
         <source>Tabela &apos;typesPrices&apos; conține deja date; completarea implicită este omisă.</source>
         <translation>Таблица &apos;typesPrices&apos; уже содержит данные; заполнение по умолчанию пропущено.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1873"/>
+        <location filename="../src/database/database.cpp" line="1872"/>
         <source>Prețuri comerciale</source>
         <translation>Цена коммерческая</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1880"/>
+        <location filename="../src/database/database.cpp" line="1879"/>
         <source>In baza de date este introdus tipul pretului &apos;Preturi comerciale&apos;.</source>
         <translation>В базу данных записан тип цены &apos;Цена коммерческая&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1882"/>
-        <location filename="../src/database/database.cpp" line="1905"/>
+        <location filename="../src/database/database.cpp" line="1881"/>
+        <location filename="../src/database/database.cpp" line="1904"/>
         <source>Eroare la inserare a datelor in tabela &apos;typesPrices&apos;: %1</source>
         <translation>Ошибка записи данных в таблицу &apos;typesPrices&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1896"/>
+        <location filename="../src/database/database.cpp" line="1895"/>
         <source>Prețuri CNAM</source>
         <translation>Цена CNAM</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1903"/>
+        <location filename="../src/database/database.cpp" line="1902"/>
         <source>In baza de date este introdus tipul pretului &apos;Preturi CNAM&apos;.</source>
         <translation>В базу данных записан тип цены &apos;Цена CNAM&apos;.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2477"/>
+        <location filename="../src/database/database.cpp" line="2476"/>
         <source>Eroare determinarii existentii &apos;count(id)&apos; a documentului cu &apos;id=%1&apos; din baza de date &apos;DB_IMAGE&apos;:
 </source>
         <translation>Ошибка определения наличия «count(id)» документа с «id=%1» в базе данных «DB_IMAGE»: 
 </translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2910"/>
+        <location filename="../src/database/database.cpp" line="2909"/>
         <source>UUID: se verifică tabela %1...</source>
         <translation>UUID: проверяется таблица %1...</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2971"/>
+        <location filename="../src/database/database.cpp" line="2970"/>
         <source>Eroare la adăugarea coloanei UUID în %1.</source>
         <translation>Ошибка при добавлении столбца UUID в %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2979"/>
+        <location filename="../src/database/database.cpp" line="2978"/>
         <source>A fost adăugată coloana UUID în tabela %1.</source>
         <translation>Столбец UUID добавлен в таблицу %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2990"/>
+        <location filename="../src/database/database.cpp" line="2989"/>
         <source>Eroare la citirea înregistrărilor fără UUID din %1.</source>
         <translation>Ошибка при чтении записей без UUID из %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3003"/>
+        <location filename="../src/database/database.cpp" line="3002"/>
         <source>UUID în %1: nu sunt înregistrări de completat.</source>
         <translation>UUID в %1: нет записей для заполнения.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3036"/>
+        <location filename="../src/database/database.cpp" line="3035"/>
         <source>UUID: %2 din %3 înregistrări procesate în %4...</source>
         <translation>UUID: обработано %2 из %3 записей в %4...</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3043"/>
+        <location filename="../src/database/database.cpp" line="3042"/>
         <source>contracte</source>
         <translation>договоры</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3044"/>
+        <location filename="../src/database/database.cpp" line="3043"/>
         <source>doctori</source>
         <translation>врачи</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3045"/>
+        <location filename="../src/database/database.cpp" line="3044"/>
         <source>pacienți</source>
         <translation>пациенты</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3046"/>
+        <location filename="../src/database/database.cpp" line="3045"/>
         <source>asistenți medicali</source>
         <translation>медицинские ассистенты</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3047"/>
+        <location filename="../src/database/database.cpp" line="3046"/>
         <source>comenzi ecografice</source>
         <translation>заказы на УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3048"/>
+        <location filename="../src/database/database.cpp" line="3047"/>
         <source>rapoarte ecografice</source>
         <translation>протоколы УЗИ</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3049"/>
+        <location filename="../src/database/database.cpp" line="3048"/>
         <source>organizații</source>
         <translation>организации</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3050"/>
+        <location filename="../src/database/database.cpp" line="3049"/>
         <source>investigații</source>
         <translation>исследования</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3051"/>
+        <location filename="../src/database/database.cpp" line="3050"/>
         <source>grupe de investigații</source>
         <translation>группы исследований</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3052"/>
+        <location filename="../src/database/database.cpp" line="3051"/>
         <source>liste de prețuri</source>
         <translation>прайс-листы</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3053"/>
+        <location filename="../src/database/database.cpp" line="3052"/>
         <source>tipuri de prețuri</source>
         <translation>типы цен</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3054"/>
+        <location filename="../src/database/database.cpp" line="3053"/>
         <source>utilizatori</source>
         <translation>пользователи</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3055"/>
+        <location filename="../src/database/database.cpp" line="3054"/>
         <source>imagini</source>
         <translation>изображения</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3058"/>
+        <location filename="../src/database/database.cpp" line="3057"/>
         <source>Au fost completate UUID la %1: %2. Erori: %3.</source>
         <translation>UUID заполнены для %1: %2. Ошибок: %3.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3065"/>
+        <location filename="../src/database/database.cpp" line="3064"/>
         <source>Salvarea tranzacției UUID a eșuat; rezultatele etapelor nu sunt confirmate.</source>
         <translation>Не удалось сохранить транзакцию UUID; результаты этапов не подтверждены.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3110"/>
+        <location filename="../src/database/database.cpp" line="3109"/>
         <source>UUID: se verifică indexul unic pentru %1...</source>
         <translation>UUID: проверяется уникальный индекс для %1...</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3243"/>
+        <location filename="../src/database/database.cpp" line="3242"/>
         <source>A fost creat indexul unic UUID pentru %1.</source>
         <translation>Уникальный индекс UUID создан для %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3248"/>
+        <location filename="../src/database/database.cpp" line="3247"/>
         <source>UUID: indexurile verificate pentru %1 din %2 tabele.</source>
         <translation>UUID: индексы проверены для %1 из %2 таблиц.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3289"/>
+        <location filename="../src/database/database.cpp" line="3288"/>
         <source>Nu este indicata variabila globala &apos;sqliteDatabasePath&apos;.</source>
         <translation>Не указана глобальная переменная «sqliteDatabasePath».</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3310"/>
+        <location filename="../src/database/database.cpp" line="3309"/>
         <source>Nu este indicata variabila globala &apos;imageDatabasePath&apos;.</source>
         <translation>Не указана глобальная переменная «imageDatabasePath».</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3455"/>
+        <location filename="../src/database/database.cpp" line="3454"/>
         <source>Tipul bazei de date principale nu a fost configurat.</source>
         <translation>Тип основной базы данных не настроен.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3472"/>
+        <location filename="../src/database/database.cpp" line="3471"/>
         <source>Baza de date este goală și nu conține schema aplicației.</source>
         <translation>База данных пуста и не содержит схему приложения.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3473"/>
+        <location filename="../src/database/database.cpp" line="3472"/>
         <source>Baza de date nu conține schema completă a aplicației (lipsesc tabelele orderEcho/reportEcho).</source>
         <translation>База данных не содержит полную схему приложения (отсутствуют таблицы orderEcho/reportEcho).</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3486"/>
+        <location filename="../src/database/database.cpp" line="3485"/>
         <source>Tabela reportVideo lipsește și nu a putut fi creată.</source>
         <translation>Таблица reportVideo отсутствует и не может быть создана.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3489"/>
+        <location filename="../src/database/database.cpp" line="3488"/>
         <source>Tabela lipsă reportVideo a fost creată.</source>
         <translation>Отсутствующая таблица reportVideo создана.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2501"/>
+        <location filename="../src/database/database.cpp" line="2500"/>
         <source>Solicitarea nereusita: %1</source>
         <translation>Запрос не выполнен - %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1919"/>
+        <location filename="../src/database/database.cpp" line="1918"/>
         <source>%1: Executarea solicitarii nereusita !!!</source>
         <translation>%1: Выполнение запроса не удалось !!!</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1934"/>
+        <location filename="../src/database/database.cpp" line="1933"/>
         <source>%1: Executarea eliminarii obiectului nereusita !!!</source>
         <translation>%1: Выполнение удаления объекта не удалось !!!</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="1964"/>
+        <location filename="../src/database/database.cpp" line="1963"/>
         <source>Eroare de executare a solicitarii &apos;getLastIdForTableByDatabase()&apos;: %1</source>
         <translation>Ошибка выполнения запроса &apos;getLastIdForTableByDatabase()&apos;: %1</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2058"/>
-        <location filename="../src/database/database.cpp" line="2071"/>
+        <location filename="../src/database/database.cpp" line="2057"/>
+        <location filename="../src/database/database.cpp" line="2070"/>
         <source>%1 - deletionMarkObject(nameTable = %2, id = %3)</source>
         <translation>%1 - deletionMarkObject(nameTable = %2, id = %3)</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2060"/>
+        <location filename="../src/database/database.cpp" line="2059"/>
         <source>Status &apos;deletionMark&apos; = -1 : nu poate fi negativ !!!</source>
         <translation>Статус &apos;deletionMark&apos; = -1 : не должен быть негативным !!!</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2073"/>
+        <location filename="../src/database/database.cpp" line="2072"/>
         <source>Modificarea statusului &apos;deletionMark&apos; a obiectului cu &apos;ID&apos;=%1 nu este reusita. Erroarea:%2</source>
         <translation>Изменение статуса &apos;deletionMark&apos; объекта с &apos;ID&apos;=%1 не выполнено. Ошибка:%2</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2131"/>
+        <location filename="../src/database/database.cpp" line="2130"/>
         <source>%1: postDocument(nameTable = %2): &lt;br&gt;Validarea documentului a esuat.</source>
         <translation>%1: postDocument(nameTable = %2): &lt;br&gt;Проведение документа не удалось.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="2500"/>
+        <location filename="../src/database/database.cpp" line="2499"/>
         <source>%1 - existSubalternDocument()</source>
         <translation>%1 - existSubalternDocument()</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3302"/>
+        <location filename="../src/database/database.cpp" line="3301"/>
         <source>Conectarea la baza de date &apos;%1&apos; nu a fost instalata.</source>
         <translation>Соединение с базой данных &apos;%1&apos; не установлено.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3320"/>
+        <location filename="../src/database/database.cpp" line="3319"/>
         <source>Conectarea la baza de date &apos;db_image&apos; este instalata cu succes.</source>
         <translation>Соединение с базой данных &apos;db_image&apos; установлено успешно.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3353"/>
+        <location filename="../src/database/database.cpp" line="3352"/>
         <source>Nu s-a putut elimina view-ul invalid %1 din db_image:</source>
         <translation>Не удалось удалить недопустимое представление %1 из db_image:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3359"/>
+        <location filename="../src/database/database.cpp" line="3358"/>
         <source>View invalid eliminat din db_image: %1.</source>
         <translation>Недопустимое представление удалено из db_image: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3373"/>
+        <location filename="../src/database/database.cpp" line="3372"/>
         <source>Nu s-a putut actualiza coloana pacientului în db_image.imagesReports:</source>
         <translation>Не удалось обновить столбец пациента в db_image.imagesReports:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3378"/>
+        <location filename="../src/database/database.cpp" line="3377"/>
         <source>Coloana %1 a fost redenumită în patient_id în db_image.imagesReports.</source>
         <translation>Столбец %1 переименован в patient_id в db_image.imagesReports.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3387"/>
+        <location filename="../src/database/database.cpp" line="3386"/>
         <source>Nu s-a putut adăuga UUID în db_image.imagesReports:</source>
         <translation>Не удалось добавить UUID в db_image.imagesReports:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3391"/>
+        <location filename="../src/database/database.cpp" line="3390"/>
         <source>Coloana UUID a fost adăugată în db_image.imagesReports.</source>
         <translation>Столбец UUID добавлен в db_image.imagesReports.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3398"/>
+        <location filename="../src/database/database.cpp" line="3397"/>
         <source>Nu s-au putut verifica UUID-urile imaginilor:</source>
         <translation>Не удалось проверить UUID изображений:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3408"/>
+        <location filename="../src/database/database.cpp" line="3407"/>
         <source>Nu s-a putut porni tranzacția UUID pentru db_image:</source>
         <translation>Не удалось начать транзакцию UUID для db_image:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3422"/>
+        <location filename="../src/database/database.cpp" line="3421"/>
         <source>Nu s-a putut genera UUID pentru imaginea id=%1:</source>
         <translation>Не удалось сгенерировать UUID для изображения id=%1:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3434"/>
+        <location filename="../src/database/database.cpp" line="3433"/>
         <source>Nu s-a putut crea indexul UUID pentru imagini:</source>
         <translation>Не удалось создать индекс UUID для изображений:</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3443"/>
+        <location filename="../src/database/database.cpp" line="3442"/>
         <source>UUID generate pentru imaginile existente: %1.</source>
         <translation>UUID сгенерированы для существующих изображений: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3447"/>
+        <location filename="../src/database/database.cpp" line="3446"/>
         <source>Conectarea la baza de date &apos;db_image&apos; nu a fost instalata.</source>
         <translation>Соединение с базой данных &apos;db_image&apos; не установлено.</translation>
     </message>
     <message>
-        <location filename="../src/database/database.cpp" line="3298"/>
+        <location filename="../src/database/database.cpp" line="3297"/>
         <source>Conectarea la baza de date &apos;%1&apos; este instalata cu succes.</source>
         <translation>Соединение с базой данных &apos;%1&apos; установлено успешно.</translation>
     </message>
@@ -4199,7 +4244,7 @@ Doriți să salvați aceste modificări ?</source>
         <translation type="vanished">Закрыть      </translation>
     </message>
     <message>
-        <location filename="../src/app/appcontroller.cpp" line="82"/>
+        <location filename="../src/app/appcontroller.cpp" line="83"/>
         <location filename="../src/app/databaseselection.cpp" line="45"/>
         <source>Alege/creează baza de date</source>
         <translation>Выбор/создание базы данных</translation>
@@ -4220,65 +4265,65 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Неизвестно</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="127"/>
+        <location filename="../src/app/databaseselection.cpp" line="131"/>
         <source>Tipul conectării:&lt;br&gt;&lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt;</source>
         <translation>Тип подключения:&lt;br&gt;&lt;b&gt;&lt;u&gt;%1&lt;/u&gt;&lt;/b&gt;</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="181"/>
+        <location filename="../src/app/databaseselection.cpp" line="185"/>
         <source>Verificarea fișierului</source>
         <translation>Проверка файла</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="182"/>
+        <location filename="../src/app/databaseselection.cpp" line="186"/>
         <source>Fișierul cu setările conexiunii nu a fost găsit:&lt;br&gt;%1</source>
         <translation>Файл с настройками подключения не найден:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="200"/>
+        <location filename="../src/app/databaseselection.cpp" line="204"/>
         <source>Deschiderea fișierului</source>
         <translation>Открытие файла</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="201"/>
+        <location filename="../src/app/databaseselection.cpp" line="205"/>
         <source>Fișierul cu setările conexiunii nu a putut fi deschis:&lt;br&gt;%1</source>
         <translation>Не удалось открыть файл с настройками подключения:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="213"/>
-        <location filename="../src/app/databaseselection.cpp" line="228"/>
+        <location filename="../src/app/databaseselection.cpp" line="217"/>
+        <location filename="../src/app/databaseselection.cpp" line="232"/>
         <source>Eliminarea setărilor</source>
         <translation>Удаление настроек</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="214"/>
+        <location filename="../src/app/databaseselection.cpp" line="218"/>
         <source>Doriți să eliminați fișierul:&lt;br&gt;%1 ?</source>
         <translation>Удалить файл настроек:&lt;br&gt;%1 ?</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="217"/>
-        <location filename="../src/app/databaseselection.cpp" line="253"/>
+        <location filename="../src/app/databaseselection.cpp" line="221"/>
+        <location filename="../src/app/databaseselection.cpp" line="257"/>
         <source>Da</source>
         <translation>Да</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="218"/>
-        <location filename="../src/app/databaseselection.cpp" line="254"/>
+        <location filename="../src/app/databaseselection.cpp" line="222"/>
+        <location filename="../src/app/databaseselection.cpp" line="258"/>
         <source>Nu</source>
         <translation>Нет</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="229"/>
+        <location filename="../src/app/databaseselection.cpp" line="233"/>
         <source>Fișierul nu a putut fi eliminat:&lt;br&gt;%1</source>
         <translation>Не удалось удалить файл:&lt;br&gt;%1</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="250"/>
+        <location filename="../src/app/databaseselection.cpp" line="254"/>
         <source>Crearea bazei de date</source>
         <translation>Создание базы данных</translation>
     </message>
     <message>
-        <location filename="../src/app/databaseselection.cpp" line="251"/>
+        <location filename="../src/app/databaseselection.cpp" line="255"/>
         <source>Adaugarea/crearea bazei de date ?</source>
         <translation>Добавление/создание базы данных?</translation>
     </message>
@@ -5468,6 +5513,11 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Не удалось сохранить версию схемы базы данных:</translation>
     </message>
     <message>
+        <location filename="../src/app/mainwindow.cpp" line="1512"/>
+        <source> (%1): base - &apos;%2&apos;, utilizator (%3)</source>
+        <translation> (%1): база — «%2», пользователь (%3)</translation>
+    </message>
+    <message>
         <source>Arhivarea automată nu poate fi efectuată: 7-Zip nu este instalat.</source>
         <translation type="vanished">Автоматическое архивирование невозможно: 7-Zip не установлен.</translation>
     </message>
@@ -5615,17 +5665,21 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Хотите загрузить новую версию?</translation>
     </message>
     <message>
+        <location filename="../src/app/mainwindow.cpp" line="1327"/>
+        <source>Arhiva SQLite/SQLCipher nu a putut fi creată. Detaliile sunt disponibile în jurnal.</source>
+        <translation>Не удалось создать архив SQLite/SQLCipher. Подробности доступны в журнале.</translation>
+    </message>
+    <message>
         <location filename="../src/app/mainwindow.cpp" line="1509"/>
         <source> (MySQL: %1@%2): utilizator (%3)</source>
         <translation> (MySQL: %1@%2): пользователь (%3)</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1512"/>
         <source> (.sqlite3): base - &apos;%1&apos;, utilizator (%2)</source>
-        <translation> (.sqlite3): база — &apos;%1&apos;, пользователь (%2)</translation>
+        <translation type="vanished"> (.sqlite3): база — &apos;%1&apos;, пользователь (%2)</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1515"/>
+        <location filename="../src/app/mainwindow.cpp" line="1517"/>
         <source>: utilizator (%1)</source>
         <translation>: пользователь (%1)</translation>
     </message>
@@ -5852,9 +5906,8 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Автоматическое архивирование</translation>
     </message>
     <message>
-        <location filename="../src/app/mainwindow.cpp" line="1327"/>
         <source>Arhiva SQLite nu a putut fi creată. Detaliile sunt disponibile în jurnal.</source>
-        <translation>Не удалось создать архив SQLite. Подробности доступны в журнале.</translation>
+        <translation type="vanished">Не удалось создать архив SQLite. Подробности доступны в журнале.</translation>
     </message>
     <message>
         <location filename="../src/app/mainwindow.cpp" line="1343"/>
@@ -8587,12 +8640,12 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Не удалось открыть файл журнала: %1 (%2)</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="60"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="61"/>
         <source>nu a putut adăuga coloana %1.%2:</source>
         <translation>не удалось добавить столбец %1.%2:</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="67"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="68"/>
         <source>coloană adăugată: %1.%2</source>
         <translation>добавлен столбец: %1.%2</translation>
     </message>
@@ -8807,12 +8860,12 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Необходимо выбрать значение.</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1289"/>
+        <location filename="../src/settings/appsettings.cpp" line="1299"/>
         <source>Eroare</source>
         <translation>Ошибка</translation>
     </message>
     <message>
-        <location filename="../src/settings/appsettings.cpp" line="1290"/>
+        <location filename="../src/settings/appsettings.cpp" line="1300"/>
         <source>Nu s-a putut deschide fișierul cu TextEdit.</source>
         <translation>Не удалось открыть файл в TextEdit.</translation>
     </message>
@@ -8937,6 +8990,65 @@ Doriți să salvați aceste modificări ?</source>
         <location filename="../src/ui/delegates/combodelegate.h" line="75"/>
         <source>&lt;&lt;- selectează -&gt;&gt;</source>
         <translation>&lt;- выбери -&gt;</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="42"/>
+        <source>SQLCipher indisponibil</source>
+        <translation>SQLCipher недоступен</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="43"/>
+        <source>Pluginul bazei de date QSQLCIPHER nu este instalat pentru această versiune a aplicației. Instalați pluginul compatibil sau dezactivați SQLCipher în profilul bazei de date.</source>
+        <translation>Плагин базы данных QSQLCIPHER не установлен для этой версии приложения. Установите совместимый плагин или отключите SQLCipher в профиле базы данных.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="54"/>
+        <source>SQLCipher — cheia de criptare</source>
+        <translation>SQLCipher — ключ шифрования</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="64"/>
+        <source>Introduceți cheia existentă pentru baza principală și baza de imagini.
+
+Pentru o bază nouă, puteți genera o cheie. Păstrați cheia într-un loc sigur: veți avea nevoie de ea la fiecare lansare.</source>
+        <translation>Введите существующий ключ для основной базы и базы изображений.
+
+Для новой базы можно сгенерировать ключ. Храните его в безопасном месте: он потребуется при каждом запуске.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="78"/>
+        <source>Generează cheie pentru o bază nouă</source>
+        <translation>Сгенерировать ключ для новой базы</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="87"/>
+        <source>OK</source>
+        <translation>ОК</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqlcipherkeyprompt.h" line="88"/>
+        <source>Anulează</source>
+        <translation>Отмена</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqliteconnection.h" line="32"/>
+        <source>SQLCipher: cheia lipsește. Setați USG_SQLCIPHER_KEY înainte de lansare.</source>
+        <translation>SQLCipher: ключ отсутствует. Перед запуском задайте USG_SQLCIPHER_KEY.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqliteconnection.h" line="40"/>
+        <source>SQLCipher: cheia nu a putut fi aplicată.</source>
+        <translation>SQLCipher: не удалось применить ключ.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqliteconnection.h" line="43"/>
+        <source>Driverul nu oferă criptare SQLCipher.</source>
+        <translation>Драйвер не поддерживает шифрование SQLCipher.</translation>
+    </message>
+    <message>
+        <location filename="../src/infrastructure/database/sqliteconnection.h" line="46"/>
+        <source>SQLCipher: cheie incorectă, format incompatibil sau bază deteriorată.</source>
+        <translation>SQLCipher: неверный ключ, несовместимый формат или повреждённая база данных.</translation>
     </message>
 </context>
 <context>
@@ -11688,80 +11800,80 @@ Doriți să salvați aceste modificări ?</source>
         <translation>Рекомендации:</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="301"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="302"/>
         <source>reg.cervicală, axilară, inghinală ... max.50 caractere</source>
         <translation>шейная, подмышечная, паховая область ... макс. 50 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="304"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="305"/>
         <source>tumefacție, durere, susp. de adenopatie, control postoper. ... max.100 caractere</source>
         <translation>припухлость, боль, подозрение на лимфаденопатию, послеоперационный контроль ... макс. 100 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="306"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="307"/>
         <source>... max. 100 caractere</source>
         <translation>... макс. 100 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="308"/>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="312"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="309"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="313"/>
         <source>... max.50 caractere</source>
         <translation>... макс. 50 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="309"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="310"/>
         <source>colecții, hematom, abces, lipom etc. ... maximum 250 caractere</source>
         <translation>скопления жидкости, гематома, абсцесс, липома и т. д. ... максимум 250 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="313"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="314"/>
         <source>necroză, calcificări, adenopatie suspectă ... max.250 carcatere</source>
         <translation>некроз, кальцинаты, подозрительная лимфаденопатия ... макс. 250 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="316"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="317"/>
         <source>... maximum 500 caractere</source>
         <translation>...максимум 500 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="320"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="321"/>
         <source>... maximum 250 caractere</source>
         <translation>... максимум 250 символов</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="457"/>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="506"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="458"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="507"/>
         <source>Verificarea dublajului</source>
         <translation>Проверка дубляжа</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="458"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="459"/>
         <source>Concluzia &lt;b&gt;%1&lt;/b&gt; există ca șablon.&lt;br&gt;Doriți să prelungiți validarea ?</source>
         <translation>Заключение &lt;b&gt;%1&lt;/b&gt; существует как шаблок.&lt;br&gt;Продолжить запись ?</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="478"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="479"/>
         <source>Inserarea șablonului în baza de date nu s-a efectuat.</source>
         <translation>Добавление шаблона в базу данных не выполнено.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="484"/>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="532"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="485"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="533"/>
         <source>Șablonul adăugat cu succes&lt;br&gt;în baza de date.</source>
         <translation>Шаблон успешно добавлен&lt;br&gt;в базу данных.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="493"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="494"/>
         <source>Schema șabloanelor de recomandări nu a putut fi actualizată.</source>
         <translation>Не удалось обновить схему шаблонов рекомендаций.</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="507"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="508"/>
         <source>Recomandarea &lt;b&gt;&lt;u&gt;&apos;%1&apos;&lt;/u&gt;&lt;/b&gt; există ca șablon.&lt;br&gt;Doriți să prelungiți validarea ?</source>
         <translation>Рекомендация &lt;b&gt;&lt;u&gt;«%1»&lt;/u&gt;&lt;/b&gt; уже существует как шаблон.&lt;br&gt;Хотите продлить срок её действия?</translation>
     </message>
     <message>
-        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="526"/>
+        <location filename="../src/features/reports/reportpagelymphnodes.cpp" line="527"/>
         <source>Inserarea recomandării în baza de date nu s-a efectuat.</source>
         <translation>Добавление рекомендации в базу данных не выполнено.</translation>
     </message>
@@ -13536,8 +13648,12 @@ Continuați?</source>
     </message>
     <message>
         <location filename="../src/settings/settingsdialog.ui" line="436"/>
+        <source>Arhivează automat baza SQLite/SQLCipher la închiderea aplicației</source>
+        <translation>Автоматически архивировать базу SQLite/SQLCipher при закрытии приложения</translation>
+    </message>
+    <message>
         <source>Arhivează automat baza SQLite la închiderea aplicației</source>
-        <translation>Автоматически архивировать базу SQLite при закрытии приложения</translation>
+        <translation type="vanished">Автоматически архивировать базу SQLite при закрытии приложения</translation>
     </message>
     <message>
         <location filename="../src/settings/settingsdialog.ui" line="458"/>
@@ -13915,114 +14031,113 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
         <translation>Перенос UUID остановлен: конфликт UUID или ошибка схемы. Проверьте журнал.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="253"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="254"/>
         <source>Actualizarea a fost anulată: driver SQL nesuportat: %1.</source>
         <translation>Обновление отменено: неподдерживаемый SQL-драйвер: %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="266"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="267"/>
         <source>Actualizarea a fost anulată: motorul selectat nu corespunde driverului conexiunii (%1).</source>
         <translation>Обновление отменено: выбранный движок не соответствует драйверу соединения (%1).</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="274"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="275"/>
         <source>Actualizarea a fost anulată: baza de date are versiunea %1, mai nouă decât aplicația %2. Folosiți o versiune compatibilă a aplicației.</source>
         <translation>Обновление отменено: версия базы данных %1 новее версии приложения %2. Используйте совместимую версию приложения.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="332"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="333"/>
         <source>Migrarea la %1 a fost anulată înainte de modificarea schemei. Lipsesc tabelele obligatorii: %2.</source>
         <translation>Миграция на %1 отменена до изменения схемы. Отсутствуют обязательные таблицы: %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="426"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="427"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește tabela %2.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует таблица %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="443"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="444"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește view-ul %2.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует представление %2.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="452"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="453"/>
         <source>Verificarea după migrarea la %1 a eșuat: lipsește coloana docYear.</source>
         <translation>Проверка после миграции на %1 завершилась ошибкой: отсутствует столбец docYear.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="495"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="496"/>
         <source>Verificarea UUID a eșuat: tabela sau coloana uuid lipsește în %1.</source>
         <translation>Проверка UUID завершилась ошибкой: в %1 отсутствует таблица или столбец uuid.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="508"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="509"/>
         <source>Verificarea UUID nu a putut fi executată pentru %1: %2</source>
         <translation>Не удалось выполнить проверку UUID для %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="517"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="518"/>
         <source>Verificarea UUID a eșuat pentru %1: %2 valori invalide, %3 valori duplicate.</source>
         <translation>Проверка UUID для %1 завершилась ошибкой: недействительных значений — %2, дублирующихся — %3.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="541"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="542"/>
         <source>Verificarea relațiilor după migrarea la %1 a eșuat: %2</source>
         <translation>Проверка связей после миграции на %1 завершилась ошибкой: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="548"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="549"/>
         <source>Verificările după migrarea la %1 s-au finalizat cu succes.</source>
         <translation>Проверки после миграции на %1 успешно завершены.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1330"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1331"/>
         <source>Începe migrarea bazei de date la versiunea %1.</source>
         <translation>Начинается миграция базы данных на версию %1.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1332"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1333"/>
         <source>Se execută migrarea bazei de date la versiunea %1...</source>
         <translation>Выполняется миграция базы данных на версию %1...</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1337"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1338"/>
         <source>Migrarea bazei de date la versiunea %1 a eșuat.</source>
         <translation>Миграция базы данных на версию %1 завершилась ошибкой.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1347"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1348"/>
         <source>Versiunea intermediară %1 nu a putut fi salvată: %2</source>
         <translation>Не удалось сохранить промежуточную версию %1: %2</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1353"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1354"/>
         <source>Migrarea bazei de date la versiunea %1 s-a finalizat.</source>
         <translation>Миграция базы данных на версию %1 завершена.</translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1411"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1412"/>
         <source>Nu este eliminata tabela &apos;settingsUsers&apos; %1 </source>
         <translation>Не удалось удалить таблицу &apos;settingsUsers&apos; %1 </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1488"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1489"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (crearea tabelei &apos;sqlitestudio_temp_table0&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (создание таблицы &apos;sqlitestudio_temp_table0&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1498"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1499"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (eliminarea tabelei &apos;userPreferences&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (удаление таблицы &apos;userPreferences&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1546"/>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1547"/>
         <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (inserarea datelor din tabela &apos;sqlitestudio_temp_table0&apos; in tabela &apos;userPreferences&apos;): </source>
         <translation>Ошибка обновления релиза &apos;2.0.9&apos; (перенос данных из таблицы &apos;sqlitestudio_temp_table0&apos; в таблицу &apos;userPreferences&apos;): </translation>
     </message>
     <message>
-        <location filename="../src/database/updatereleasesapp.cpp" line="1556"/>
         <source>Eroare de actualizare a relizului &apos;</source>
-        <translation>Ошибка обновления релиза &apos;</translation>
+        <translation type="vanished">Ошибка обновления релиза &apos;</translation>
     </message>
     <message>
         <location filename="../src/database/updatereleasesapp.cpp" line="2319"/>
@@ -14068,6 +14183,11 @@ Conexiunea, parola și baza cloud se configurează în fereastra dedicată „Se
     <message>
         <source>UUID-urile SQLite au fost transferate în MariaDB: %1 înregistrări.</source>
         <translation type="vanished">UUID из SQLite перенесены в MariaDB: %1 записей.</translation>
+    </message>
+    <message>
+        <location filename="../src/database/updatereleasesapp.cpp" line="1557"/>
+        <source>Eroare de actualizare a relizului &apos;2.0.9&apos; (eliminarea tabelei &apos;sqlitestudio_temp_table0&apos;): </source>
+        <translation>Ошибка обновления релиза &apos;2.0.9&apos; (удаление таблицы &apos;sqlitestudio_temp_table0&apos;): </translation>
     </message>
     <message>
         <location filename="../src/database/updatereleasesapp.cpp" line="2507"/>

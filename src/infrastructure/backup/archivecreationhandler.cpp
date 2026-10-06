@@ -118,7 +118,7 @@ ArchiveCreationHandler::ArchiveCreationHandler(DataBase &db, QWidget *parent)
         ui->list_files->setEnabled(false);
         ui->groupConfig->setEnabled(false);
         ui->groupEncryption->setEnabled(false);
-        appendLog(tr("Procesarea destinată doar pentru baza de date .sqlite !!!"));
+        appendLog(tr("Arhivarea este disponibilă pentru bazele locale SQLite/SQLCipher."));
         ui->btnAdd->setEnabled(false);
         ui->btnRemove->setEnabled(false);
         ui->btnClear->setEnabled(false);
@@ -343,7 +343,7 @@ void ArchiveCreationHandler::onAddFiles()
         QFileDialog::getOpenFileNames(this,
                                       tr("Alege baze SQLite"),
                                       QString(),
-                                      tr("SQLite DB (*.sqlite *.db *.sqlite3);;Toate fișierele (*)"));
+                                      tr("Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)"));
     if (sel.isEmpty())
         return;
 

@@ -1,3 +1,11 @@
+4.2.9 (October 6th, 2026)
+  * Optional SQLCipher support for the local main and image databases.
+  * Runtime SQLCipher key entry; keys are not stored in database profiles.
+  * Main and worker connections, migrations and backups recognize SQLCipher.
+  * Separate Linux demo installer builder with integrity and schema verification.
+  * Legacy SQLite profiles with an empty unused MariaDB port are accepted.
+  * Russian translation completed and regenerated.
+
 4.2.8 (October 4th, 2026)
   * Open the selected .conf database profile from the Database Selection window on Linux and Windows.
   * Corrected button alignment and Qt resource references in startup, cloud and e-mail dialogs.

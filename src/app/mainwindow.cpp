@@ -1324,7 +1324,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         closeDatabases();
         if (!createAutomaticSqliteArchive()) {
             QMessageBox::warning(this, tr("Arhivarea automată"),
-                                 tr("Arhiva SQLite nu a putut fi creată. "
+                                 tr("Arhiva SQLite/SQLCipher nu a putut fi creată. "
                                     "Detaliile sunt disponibile în jurnal."));
         }
         qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
@@ -1509,8 +1509,10 @@ void MainWindow::updateWindowTitle()
         title += tr(" (MySQL: %1@%2): utilizator (%3)")
                      .arg(connection.databaseName, connection.hostName, globals().nameUserApp);
     } else if (connection.backend == MainDatabaseBackend::SQLite)
-        title += tr(" (.sqlite3): base - '%1', utilizator (%2)")
-                     .arg(connection.sqliteDatabaseName, globals().nameUserApp);
+        title += tr(" (%1): base - '%2', utilizator (%3)")
+                     .arg(connection.sqliteEncrypted ? QStringLiteral("SQLCipher")
+                                                     : QStringLiteral("SQLite"),
+                          connection.sqliteDatabaseName, globals().nameUserApp);
     else
         title += tr(": utilizator (%1)").arg(globals().nameUserApp);
     setWindowTitle(title);

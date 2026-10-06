@@ -1,7 +1,7 @@
 # Manual de utilizare USG
 
 **USG -- Evidența investigațiilor ecografice**\
-**Versiune documentată:** 4.2.8\
+**Versiune documentată:** 4.2.9\
 **Platforme:** Linux / Windows\
 **Interfață:** Română / Русский
 
@@ -974,6 +974,22 @@ este activată.
 7. porniți aplicația și permiteți finalizarea migrării;
 8. verificați funcțiile principale înainte de reluarea activității.
 
+### Notă pentru 4.2.9
+
+Versiunea 4.2.9 nu modifică schema bazei de date. Adaugă opțional
+SQLCipher pentru baza locală principală și baza imaginilor. SQLite
+standard rămâne implicit. Cheia SQLCipher se introduce la lansare și
+nu se salvează în profil; fără cheie baza criptată nu poate fi
+recuperată. Activarea opțiunii nu convertește automat o bază SQLite
+existentă: selectați numai copii criptate și verificate ale ambelor
+baze. Funcția este disponibilă doar dacă instalatorul include pluginul
+Qt `QSQLCIPHER` compatibil.
+
+Pentru demonstrații poate fi construit separat un pachet Linux care
+configurează automat profilul demo. Acesta folosește utilizatorul
+`admin` fără parolă și trebuie distribuit numai după verificarea manuală
+a anonimizării tuturor datelor și imaginilor.
+
 ### Notă pentru 4.2.8
 
 Versiunea 4.2.8 nu modifică schema bazei de date. În fereastra de
@@ -1227,7 +1243,7 @@ Pentru capturile destinate documentației publice:
 
 ## Despre document
 
-Manual pregătit pentru **USG 4.2.8**, pe baza interfeței și
+Manual pregătit pentru **USG 4.2.9**, pe baza interfeței și
 funcționalităților proiectului.
 
 Repository: `debalex77/USG`

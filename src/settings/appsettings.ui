@@ -422,7 +422,7 @@ QToolButton:pressed
              </font>
             </property>
             <property name="text">
-             <string>Localizarea bazei de date a imaginelor (.sqlite3)</string>
+             <string>Localizarea bazei de date cu imagini (SQLite/SQLCipher)</string>
             </property>
            </widget>
           </item>
@@ -484,9 +484,15 @@ QToolButton:pressed
          </property>
          <widget class="QWidget" name="tabSqlite">
           <attribute name="title">
-           <string>Setarile conectarii (.sqlite3)</string>
+           <string>Setările conexiunii SQLite/SQLCipher</string>
           </attribute>
           <layout class="QGridLayout" name="gridLayout_3">
+           <item row="3" column="0" colspan="3">
+            <widget class="QCheckBox" name="sqliteEncrypted">
+             <property name="text"><string>Folosește SQLCipher pentru baza principală și imagini</string></property>
+             <property name="toolTip"><string>Cheia este solicitată la salvare sau pornire. Bazele SQLite existente nu sunt convertite automat.</string></property>
+            </widget>
+           </item>
            <item row="0" column="1">
             <widget class="QLineEdit" name="nameBaseSqlite">
              <property name="font">
@@ -535,7 +541,7 @@ QToolButton:pressed
               </font>
              </property>
              <property name="text">
-              <string>Localizarea bazei de date (.sqlite3)</string>
+              <string>Localizarea bazei de date (SQLite/SQLCipher)</string>
              </property>
             </widget>
            </item>
@@ -561,14 +567,14 @@ QToolButton:pressed
               </font>
              </property>
              <property name="text">
-              <string>Denumirea bazei de date (.sqlite3)</string>
+              <string>Denumirea bazei de date (SQLite/SQLCipher)</string>
              </property>
             </widget>
            </item>
            <item row="2" column="1">
             <widget class="QPushButton" name="btnCreateNewBaseSqlite">
              <property name="text">
-              <string>Testarea conectării (.sqlite3)</string>
+              <string>Testarea conectării (SQLite/SQLCipher)</string>
              </property>
             </widget>
            </item>

@@ -8,6 +8,13 @@ links, and applicable terms are documented in
 third_party/THIRD_PARTY_ICONS.md. Distribution packages place a copy in their
 licenses directory.
 
+The optional QSQLCIPHER database plugin contains driver code derived from Qt
+6.9.3 and SQLCipher Community Edition. Its exact source references,
+modifications, license selection and redistribution requirements are documented
+in third_party/QSQLCIPHER.md. The complete SQLCipher BSD 3-Clause license is in
+third_party/licenses/SQLCipher-BSD-3-Clause.txt. Distribution packages that
+contain the QSQLCIPHER plugin must preserve these files.
+
 The complete GNU General Public License version 3 follows.
 
                     GNU GENERAL PUBLIC LICENSE

@@ -27,6 +27,9 @@ struct MainDatabaseConnectionData
     QString sqliteDatabaseName;
     QString sqliteDatabasePath;
     QString imageDatabasePath;
+    bool sqliteEncrypted = false;
+    // Runtime only: never persisted in the profile.
+    QString sqliteKey;
 
     friend bool operator==(const MainDatabaseConnectionData &,
                            const MainDatabaseConnectionData &) = default;

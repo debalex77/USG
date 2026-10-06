@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "updatereleasesapp.h"
+#include "infrastructure/database/sqliteconnection.h"
 #include "uuidmigrationplan.h"
 #include "common/cloudconnectioncontext.h"
 #include "infrastructure/security/cryptomanager.h"
@@ -98,7 +99,7 @@ namespace {
 
     bool migrateInvestigationsOwnerColumn(QSqlDatabase currentDb)
     {
-        const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+        const bool sqlite = SqliteConnection::isSqlite(currentDb);
         QSqlQuery q(currentDb);
         QString ownerType;
         QString groupIdType = QStringLiteral("INTEGER");
@@ -245,7 +246,7 @@ bool UpdateReleasesApp::validateMigrationContext(const QVersionNumber &current,
     }
 
     const QString driverName = currentDb.driverName().toUpper();
-    const bool sqliteDriver = driverName == QStringLiteral("QSQLITE");
+    const bool sqliteDriver = SqliteConnection::isSqlite(currentDb);
     const bool mysqlDriver = driverName == QStringLiteral("QMYSQL");
 
     if (!sqliteDriver && !mysqlDriver) {
@@ -1042,7 +1043,7 @@ bool UpdateReleasesApp::ensureCryptoSplitKeySchema()
                                                 Qt::CaseInsensitive))
         return true;
 
-    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool sqlite = SqliteConnection::isSqlite(currentDb);
     bool created = false;
     if (sqlite) {
         created = db_common.execFileBatch(currentDb,
@@ -1553,7 +1554,7 @@ bool UpdateReleasesApp::update_2_0_9()
     qry.prepare("DROP TABLE sqlitestudio_temp_table0;");
     if (! qry.exec()){
         qCritical(logCritical())
-            << tr("Eroare de actualizare a relizului '" USG_VERSION_FULL "' (eliminarea tabelei 'sqlitestudio_temp_table0'): ")
+            << tr("Eroare de actualizare a relizului '2.0.9' (eliminarea tabelei 'sqlitestudio_temp_table0'): ")
                    + qry.lastError().text();
         db->getDatabase().rollback();
         return false;
@@ -2291,8 +2292,7 @@ bool UpdateReleasesApp::transferSqliteUuidsToCloud(bool auditOnly)
     QSqlDatabase localDb = db->getDatabase();
     QSqlDatabase imageDb = db->getDatabaseImage();
     if (!localDb.isOpen() ||
-        localDb.driverName().compare(QStringLiteral("QSQLITE"),
-        Qt::CaseInsensitive) != 0) {
+        !SqliteConnection::isSqlite(localDb)) {
         qCritical(logCritical())
             << "Transferul UUID necesită baza locală SQLite deschisă.";
         return false;
@@ -3454,7 +3454,7 @@ bool UpdateReleasesApp::update_4_1_2()
         return false;
     }
 
-    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool sqlite = SqliteConnection::isSqlite(currentDb);
 
     const QStringList settingsTables = {
         QStringLiteral("userPreferences"),
@@ -3670,7 +3670,7 @@ bool UpdateReleasesApp::update_4_2_0()
         return false;
     }
 
-    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool sqlite = SqliteConnection::isSqlite(currentDb);
     const QString sqlRoot = sqlite ? QStringLiteral(":/sql/sqlite/tables/")
                                    : QStringLiteral(":/sql/mariadb/tables/");
 
@@ -4139,7 +4139,7 @@ bool UpdateReleasesApp::update_4_2_3()
         return false;
     }
 
-    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool sqlite = SqliteConnection::isSqlite(currentDb);
     if (!addColumnIfMissing(
             currentDb,
             QStringLiteral("applicationSettings"),
@@ -4187,7 +4187,7 @@ bool UpdateReleasesApp::update_4_2_7()
         return false;
     }
 
-    const bool sqlite = currentDb.driverName() == QStringLiteral("QSQLITE");
+    const bool sqlite = SqliteConnection::isSqlite(currentDb);
     const bool hasCloudServer = tables.contains(QStringLiteral("cloudServer"), Qt::CaseInsensitive);
     const QString nameEquals = sqlite ? QStringLiteral("name = ? COLLATE NOCASE")
                                       : QStringLiteral("name = ?");

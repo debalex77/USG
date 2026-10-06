@@ -30,6 +30,17 @@ New-Item -ItemType Directory -Force "$projectDir/3rdparty/openssl/include", "$pr
 Copy-Item "$staticDir/include/openssl" "$projectDir/3rdparty/openssl/include" -Recurse -Force
 Copy-Item "$staticDir/lib/libssl.lib", "$staticDir/lib/libcrypto.lib" "$projectDir/3rdparty/openssl/lib"
 
+# QSQLCIPHER embeds SQLCipher and links the same static OpenSSL as USG.
+$env:OPENSSL_ROOT_DIR = [IO.Path]::GetFullPath("$projectDir/3rdparty/openssl")
+$env:INSTALL = '1'
+$env:QSQLCIPHER_BUILD_JOBS = '2'
+try {
+    Invoke-Native pwsh @('-NoProfile', '-File', "$projectDir/third_party/qsqlcipher/source/build.ps1", $qtDir)
+} finally {
+    Remove-Item Env:INSTALL, Env:QSQLCIPHER_BUILD_JOBS -ErrorAction SilentlyContinue
+}
+if (-not (Test-Path "$qtDir/plugins/sqldrivers/qsqlcipher.dll")) { throw 'QSQLCIPHER plugin was not installed' }
+
 # The Qt SQL plugin must be compiled against the same Qt version as USG.
 $qtSource = "$buildDir/qtbase"
 Invoke-Native git @('clone', '--depth=1', '--branch', "v$env:QT_VERSION", 'https://github.com/qt/qtbase.git', $qtSource)

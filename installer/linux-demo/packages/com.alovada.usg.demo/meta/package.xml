@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Package>
+    <DisplayName>USG Demo v@@VERSION@@</DisplayName>
+    <Description>Versiune demonstrativă USG cu bază de date SQLite inclusă</Description>
+    <Version>@@VERSION@@</Version>
+    <ReleaseDate>@@RELEASE_DATE@@</ReleaseDate>
+    <Default>true</Default>
+    <Script>installscript.qs</Script>
+    <Licenses>
+        <License name="GNU General Public License v3" file="license.txt"/>
+    </Licenses>
+</Package>

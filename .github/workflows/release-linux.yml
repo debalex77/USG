@@ -17,6 +17,8 @@ env:
   QT_VERSION: 6.9.3
   LIMEREPORT_VERSION: 1.7.23
   LIMEREPORT_COMMIT: e6210b58a46ab14c0ff8a409b5fa5d339937ea7c
+  OPENSSL_VERSION: 3.5.9
+  OPENSSL_COMMIT: 45e844fa2a14ec92d146bd8f5778ac130b6625fb
 
 jobs:
   packages:
@@ -56,13 +58,16 @@ jobs:
             curl \
             desktop-file-utils \
             file \
+            cmake \
             libgl1-mesa-dev \
             libpulse-dev \
-            libssl-dev \
             libxkbcommon-x11-0 \
             libxcb-cursor0 \
             libxcb-xinerama0 \
             lld \
+            ninja-build \
+            perl \
+            pkg-config \
             rsync
 
       - name: Install Qt and Qt Installer Framework
@@ -74,6 +79,21 @@ jobs:
           # The public tools_ifw repository provides IFW 4.7 as qt.tools.ifw.47.
           tools: tools_ifw,qt.tools.ifw.47
           cache: true
+
+      - name: Build the pinned OpenSSL runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPENSSL_BUILD_JOBS=2 ./build_scripts/build_openssl
+
+      - name: Build and test the QSQLCIPHER plugin
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPENSSL_ROOT_DIR="${GITHUB_WORKSPACE}/3rdparty/openssl" \
+          INSTALL=1 \
+            ./third_party/qsqlcipher/source/build.sh "${QT_ROOT_DIR}"
+          test -f "${QT_ROOT_DIR}/plugins/sqldrivers/libqsqlcipher.so"
 
       - name: Install CQtDeployer
         uses: QuasarApp/cqtdeployer-install-action@v1.0.0
@@ -131,11 +151,8 @@ jobs:
           cp -a "${lime_lib}/liblimereport.so"* "${usg_lime}/release/"
           cp -a "${lime_lib}/libQtZint.so"* "${usg_lime}/release/"
 
-          mkdir -p "${GITHUB_WORKSPACE}/3rdparty/openssl"
-          cp /usr/lib/x86_64-linux-gnu/libcrypto.so.3 \
-            "${GITHUB_WORKSPACE}/3rdparty/openssl/"
-          cp /usr/lib/x86_64-linux-gnu/libssl.so.3 \
-            "${GITHUB_WORKSPACE}/3rdparty/openssl/"
+          test -f "${GITHUB_WORKSPACE}/3rdparty/openssl/libcrypto.so.3"
+          test -f "${GITHUB_WORKSPACE}/3rdparty/openssl/libssl.so.3"
 
       - name: Build USG Release with qmake
         shell: bash
@@ -198,6 +215,8 @@ jobs:
           done
 
           dpkg-deb --info "USG_v${RELEASE_VERSION}_Linux_amd64.deb" >/dev/null
+          dpkg-deb --contents "USG_v${RELEASE_VERSION}_Linux_amd64.deb" \
+            | grep -F "plugins/sqldrivers/libqsqlcipher.so" >/dev/null
           offset="$("./USG_v${RELEASE_VERSION}-x86_64.AppImage" --appimage-offset)"
           test "${offset}" -gt 0
 

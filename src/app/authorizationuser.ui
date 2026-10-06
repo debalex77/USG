@@ -19,17 +19,17 @@
    <string>Dialog</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="../resources/resource.qrc">
+   <iconset resource="../../resources/resource.qrc">
     <normaloff>:/img/catalogs/autorization.png</normaloff>:/img/catalogs/autorization.png</iconset>
   </property>
   <layout class="QGridLayout" name="gridLayout">
    <item row="3" column="0" colspan="2">
     <spacer name="horizontalSpacer_3">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeType">
-      <enum>QSizePolicy::Minimum</enum>
+      <enum>QSizePolicy::Policy::Minimum</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -56,7 +56,7 @@
    <item row="3" column="3" colspan="2">
     <spacer name="horizontalSpacer_2">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -83,7 +83,7 @@
    <item row="1" column="1" colspan="4">
     <widget class="QLineEdit" name="editPasswd">
      <property name="echoMode">
-      <enum>QLineEdit::Normal</enum>
+      <enum>QLineEdit::EchoMode::Normal</enum>
      </property>
     </widget>
    </item>
@@ -99,7 +99,7 @@
       <string>OK</string>
      </property>
      <property name="icon">
-      <iconset resource="../resources/resource.qrc">
+      <iconset resource="../../resources/resource.qrc">
        <normaloff>:/img/btns/valide.png</normaloff>:/img/btns/valide.png</iconset>
      </property>
     </widget>
@@ -116,7 +116,7 @@
       <string>Închide</string>
      </property>
      <property name="icon">
-      <iconset resource="../resources/resource.qrc">
+      <iconset resource="../../resources/resource.qrc">
        <normaloff>:/img/btns/close.png</normaloff>:/img/btns/close.png</iconset>
      </property>
     </widget>
@@ -124,7 +124,7 @@
    <item row="4" column="0" colspan="3">
     <spacer name="horizontalSpacer">
      <property name="orientation">
-      <enum>Qt::Horizontal</enum>
+      <enum>Qt::Orientation::Horizontal</enum>
      </property>
      <property name="sizeHint" stdset="0">
       <size>
@@ -152,14 +152,14 @@
       <string>Ultima accesare:  indisponibil determinarea</string>
      </property>
      <property name="alignment">
-      <set>Qt::AlignRight|Qt::AlignTrailing|Qt::AlignVCenter</set>
+      <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
      </property>
     </widget>
    </item>
   </layout>
  </widget>
  <resources>
-  <include location="../resources/resource.qrc"/>
+  <include location="../../resources/resource.qrc"/>
  </resources>
  <connections/>
 </ui>

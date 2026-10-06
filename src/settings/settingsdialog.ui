@@ -433,7 +433,7 @@
        <item row="4" column="0" colspan="3">
         <widget class="QCheckBox" name="checkArchiveSqlite">
          <property name="text">
-          <string>Arhivează automat baza SQLite la închiderea aplicației</string>
+          <string>Arhivează automat baza SQLite/SQLCipher la închiderea aplicației</string>
          </property>
         </widget>
        </item>
