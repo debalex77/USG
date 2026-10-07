@@ -22,6 +22,7 @@
 #endif
 
 #include <common/globals.h>
+#include <common/maindatabaseconnectioncontext.h>
 #include <core/loggingcategories.h>
 #include <database/database_common.h>
 #include <infrastructure/security/cryptomanager.h>
@@ -42,7 +43,8 @@ public:
     bool createConnectBaseSqlite(const QString &databaseName,
                                  const QString &databasePath,
                                  bool initializeSchema,
-                                 QString &txtMessage);
+                                 QString &txtMessage,
+                                 const MainDatabaseConnectionData *configuration = nullptr);
 
     QSqlDatabase getDatabase();
     QSqlDatabase getDatabaseThread(const QString threadConnectionName, const bool thisMySQL);

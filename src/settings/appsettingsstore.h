@@ -34,6 +34,7 @@ struct ProfileData {
     QString sqliteDatabase;
     QString sqlitePath;
     QString imageDatabasePath;
+    bool sqliteEncrypted = false;
     QString logPath;
 
     // remmembder data user
@@ -97,6 +98,7 @@ namespace Key {
     extern const QString sqliteDatabase;
     extern const QString sqlitePath;
     extern const QString imageDatabasePath;
+    extern const QString sqliteEncrypted;
     extern const QString logPath;
 
     // remember

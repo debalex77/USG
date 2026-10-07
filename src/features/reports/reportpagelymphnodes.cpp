@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "reportpagelymphnodes.h"
+#include "infrastructure/database/sqliteconnection.h"
 #include "ui_reportpagelymphnodes.h"
 
 #include <QPushButton>
@@ -535,8 +536,7 @@ void ReportPageLymphNodes::insertRecommendationTemplate(const QString &recommend
 bool ReportPageLymphNodes::ensureRecommendationTemplateType()
 {
     const QString type = QStringLiteral("Recomandari (gangl.limfatici)");
-    const bool sqlite = m_currentDB.driverName().compare(QStringLiteral("QSQLITE"),
-                                                          Qt::CaseInsensitive) == 0;
+    const bool sqlite = SqliteConnection::isSqlite(m_currentDB);
 
     if (sqlite) {
         QSqlQuery schema(m_currentDB);

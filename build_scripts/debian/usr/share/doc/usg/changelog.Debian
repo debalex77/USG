@@ -1,3 +1,16 @@
+usg (4.2.9) UNRELEASED; urgency=medium
+
+  * Added optional SQLCipher support for local main and image databases.
+  * Added runtime key entry and explicit SQLCipher driver validation.
+  * Updated worker connections, migrations and backups for SQLCipher.
+  * Added a separate integrity-checked Linux demo-package build workflow.
+  * Fixed legacy SQLite profiles with an empty unused MariaDB port.
+  * Added SQLCipher/OpenSSL versions and third-party licenses to About.
+  * Fixed opening the version history window.
+  * Completed and regenerated the Russian translation.
+
+ -- Codreanu Alexandru <alovada.med@gmail.com>  Tue, 06 Oct 2026 12:00:00 +0300
+
 usg (4.2.8) UNRELEASED; urgency=medium
 
   * Open the selected database profile configuration from Database Selection.

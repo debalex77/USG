@@ -95,3 +95,7 @@ HEADERS += \
     $$USG_ROOT/src/infrastructure/sync/syncreportworker.h
 
 FORMS += $$USG_ROOT/src/infrastructure/backup/archivecreationhandler.ui
+
+HEADERS += $$USG_ROOT/src/infrastructure/database/sqliteconnection.h
+
+HEADERS += $$USG_ROOT/src/infrastructure/database/sqlcipherkeyprompt.h

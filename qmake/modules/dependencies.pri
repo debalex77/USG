@@ -71,6 +71,7 @@ macx {
 # OpenSSL
 OPENSSL_DIR = $$USG_ROOT/3rdparty/openssl
 INCLUDEPATH += $$OPENSSL_DIR
+INCLUDEPATH += $$OPENSSL_DIR/include
 
 win32 {
     INCLUDEPATH += $$OPENSSL_DIR/include
@@ -86,6 +87,7 @@ win32 {
 
 unix:!macx {
     LIBS += -L$$OPENSSL_DIR -lssl -lcrypto
+    QMAKE_RPATHDIR += $$OPENSSL_DIR
 }
 
 macx {

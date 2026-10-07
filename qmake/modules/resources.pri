@@ -12,9 +12,24 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 DISTFILES += \
     $$PWD/../../.github/workflows/build-windows.yml \
     $$PWD/../../.github/workflows/release-windows.yml \
+    $$PWD/../../build_scripts/build_demo \
+    $$PWD/../../build_scripts/build_openssl \
+    $$PWD/../../installer/linux-demo/README.md \
+    $$PWD/../../installer/linux-demo/config/config.xml \
+    $$PWD/../../installer/linux-demo/packages/com.alovada.usg.demo/meta/installscript.qs \
+    $$PWD/../../installer/linux-demo/packages/com.alovada.usg.demo/meta/package.xml \
+    $$PWD/../../installer/linux-demo/runtime/README-DEMO.md \
+    $$PWD/../../installer/linux-demo/runtime/USG-Demo.sh \
+    $$PWD/../../installer/linux-demo/runtime/configure-demo-profile.sh \
+    $$PWD/../../installer/linux-demo/tools/verify_demo_database.py \
     $$USG_ROOT/LICENSE.txt \
     $$USG_ROOT/README.md \
     $$USG_ROOT/README-RO.md \
+    $$USG_ROOT/docs/sqlcipher.md \
+    $$USG_ROOT/tests/sqlcipher/sqlcipher.pro \
+    $$USG_ROOT/tests/sqlcipher/tst_sqlcipher.cpp \
+    $$USG_ROOT/tests/sqlcipherkeyprompt/sqlcipherkeyprompt.pro \
+    $$USG_ROOT/tests/sqlcipherkeyprompt/tst_sqlcipherkeyprompt.cpp \
     $$USG_ROOT/release.md \
     $$USG_ROOT/index.html \
     $$USG_ROOT/privacy.html \
@@ -22,6 +37,20 @@ DISTFILES += \
     $$USG_ROOT/sitemap.xml \
     $$USG_ROOT/third_party/THIRD_PARTY_ICONS.md \
     $$USG_ROOT/third_party/LIMEREPORT.md \
+    $$USG_ROOT/third_party/QSQLCIPHER.md \
+    $$USG_ROOT/third_party/licenses/OpenSSL-Apache-2.0.txt \
+    $$USG_ROOT/third_party/licenses/SQLCipher-BSD-3-Clause.txt \
+    $$USG_ROOT/third_party/qsqlcipher/source/CMakeLists.txt \
+    $$USG_ROOT/third_party/qsqlcipher/source/README.md \
+    $$USG_ROOT/third_party/qsqlcipher/source/build.sh \
+    $$USG_ROOT/third_party/qsqlcipher/source/build.ps1 \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/qsql_sqlcipher.cpp \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/qsql_sqlcipher_p.h \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/qsql_sqlcipher_vfs.cpp \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/qsql_sqlcipher_vfs_p.h \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/smain.cpp \
+    $$USG_ROOT/third_party/qsqlcipher/source/src/sqlcipher.json \
+    $$USG_ROOT/third_party/qsqlcipher/source/test/main.cpp \
     $$USG_ROOT/patches/limereport/1.7.23/0001-make-singleton-destruction-idempotent.patch \
     $$USG_ROOT/.github/workflows/build-linux.yml \
     $$USG_ROOT/.github/workflows/release-linux.yml \

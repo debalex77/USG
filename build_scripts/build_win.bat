@@ -36,6 +36,7 @@ call :require_file "%LIMEREPORT_RELEASE%\limereport.dll" "Lipsește LimeReport R
 call :require_file "%LIMEREPORT_RELEASE%\QtZint.dll" "Lipsește QtZint Release pentru Windows." || exit /b 1
 call :require_file "%QT_SQLDRIVERS%\qsqlite.dll" "Lipsește pluginul Qt SQLite." || exit /b 1
 call :require_file "%QT_SQLDRIVERS%\qsqlmysql.dll" "Lipsește pluginul Qt MySQL/MariaDB." || exit /b 1
+call :require_file "%QT_SQLDRIVERS%\qsqlcipher.dll" "Lipsește pluginul QSQLCIPHER (third_party\qsqlcipher\source\build.ps1)." || exit /b 1
 call :require_file "%PROJECT_PATH%\installer\linux\config\config.xml" "Lipsește șablonul Qt IFW." || exit /b 1
 call :require_file "%PROJECT_PATH%\installer\linux\packages\com.alovada.usg\meta\package.xml" "Lipsește package.xml." || exit /b 1
 call :require_file "%LIMEREPORT_SOURCE_DIR%\LICENSE" "Lipsește licența din sursa LimeReport 1.7.23." || exit /b 1
@@ -91,6 +92,7 @@ call :copy_required "%QT_PATH%\plugins\tls\qschannelbackend.dll" "%PREBUILD_PATH
 if not exist "%PREBUILD_PATH%\sqldrivers" mkdir "%PREBUILD_PATH%\sqldrivers"
 call :copy_required "%QT_SQLDRIVERS%\qsqlite.dll" "%PREBUILD_PATH%\sqldrivers\qsqlite.dll" || exit /b 1
 call :copy_required "%QT_SQLDRIVERS%\qsqlmysql.dll" "%PREBUILD_PATH%\sqldrivers\qsqlmysql.dll" || exit /b 1
+call :copy_required "%QT_SQLDRIVERS%\qsqlcipher.dll" "%PREBUILD_PATH%\sqldrivers\qsqlcipher.dll" || exit /b 1
 
 xcopy "%PROJECT_PATH%\resources\icons" "%PREBUILD_PATH%\icons\" /E /I /Y >nul
 if errorlevel 1 call :die "Copierea iconurilor a eșuat." || exit /b 1
@@ -103,11 +105,18 @@ if defined CI_DEPENDENCY_LICENSES (
     if errorlevel 1 exit /b 1
 )
 mkdir "%PREBUILD_PATH%\licenses\LimeReport" >nul 2>&1
+mkdir "%PREBUILD_PATH%\licenses\QSQLCipher" >nul 2>&1
 call :copy_required "%PROJECT_PATH%\LICENSE.txt" "%PREBUILD_PATH%\licenses\LICENSE.txt" || exit /b 1
 call :copy_required "%PROJECT_PATH%\README.md" "%PREBUILD_PATH%\README.md" || exit /b 1
 call :copy_required "%PROJECT_PATH%\README-RO.md" "%PREBUILD_PATH%\README-RO.md" || exit /b 1
 call :copy_required "%PROJECT_PATH%\third_party\THIRD_PARTY_ICONS.md" "%PREBUILD_PATH%\licenses\THIRD_PARTY_ICONS.md" || exit /b 1
 call :copy_required "%PROJECT_PATH%\third_party\LIMEREPORT.md" "%PREBUILD_PATH%\licenses\LimeReport\README.md" || exit /b 1
+call :copy_required "%PROJECT_PATH%\third_party\QSQLCIPHER.md" "%PREBUILD_PATH%\licenses\QSQLCipher\README.md" || exit /b 1
+call :copy_required "%PROJECT_PATH%\third_party\licenses\OpenSSL-Apache-2.0.txt" "%PREBUILD_PATH%\licenses\QSQLCipher\OpenSSL-Apache-2.0.txt" || exit /b 1
+call :copy_required "%PROJECT_PATH%\third_party\licenses\SQLCipher-BSD-3-Clause.txt" "%PREBUILD_PATH%\licenses\QSQLCipher\SQLCipher-BSD-3-Clause.txt" || exit /b 1
+rem Fără _deps (SQLCipher descărcat) și build; robocopy: codurile 0-7 înseamnă succes.
+robocopy "%PROJECT_PATH%\third_party\qsqlcipher\source" "%PREBUILD_PATH%\licenses\QSQLCipher\source" /E /XD _deps build /NJH /NJS /NFL /NDL /NP >nul
+if errorlevel 8 call :die "Copierea sursei QSQLCIPHER a eșuat." || exit /b 1
 call :copy_required "%LIMEREPORT_SOURCE_DIR%\LICENSE" "%PREBUILD_PATH%\licenses\LimeReport\LICENSE" || exit /b 1
 call :copy_required "%LIMEREPORT_SOURCE_DIR%\COPYING" "%PREBUILD_PATH%\licenses\LimeReport\COPYING" || exit /b 1
 call :copy_required "%PROJECT_PATH%\patches\limereport\1.7.23\0001-make-singleton-destruction-idempotent.patch" "%PREBUILD_PATH%\licenses\LimeReport\0001-make-singleton-destruction-idempotent.patch" || exit /b 1

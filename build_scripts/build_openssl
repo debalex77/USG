@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+OPENSSL_VERSION="${OPENSSL_VERSION:-3.5.9}"
+OPENSSL_COMMIT="${OPENSSL_COMMIT:-45e844fa2a14ec92d146bd8f5778ac130b6625fb}"
+PROJECT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
+OUTPUT_DIR="${OPENSSL_OUTPUT_DIR:-$PROJECT_DIR/3rdparty/openssl}"
+SOURCE_DIR="${OPENSSL_SOURCE_DIR:-}"
+BUILD_ROOT="${OPENSSL_BUILD_ROOT:-$(mktemp -d -t usg-openssl-XXXXXX)}"
+JOBS="${OPENSSL_BUILD_JOBS:-$(( ($(nproc) * 3 + 3) / 4 ))}"
+REMOVE_BUILD_ROOT=0
+
+if [[ -z "$SOURCE_DIR" ]]; then
+    SOURCE_DIR="$BUILD_ROOT/source"
+    REMOVE_BUILD_ROOT=1
+fi
+
+cleanup()
+{
+    if [[ "$REMOVE_BUILD_ROOT" == "1" ]]; then
+        rm -rf -- "$BUILD_ROOT"
+    fi
+}
+trap cleanup EXIT
+
+for tool in git make perl cc; do
+    command -v "$tool" >/dev/null 2>&1 || {
+        echo "Required build tool is missing: $tool" >&2
+        exit 1
+    }
+done
+
+if [[ ! -d "$SOURCE_DIR/.git" ]]; then
+    git init "$SOURCE_DIR"
+    git -C "$SOURCE_DIR" remote add origin https://github.com/openssl/openssl.git
+    git -C "$SOURCE_DIR" fetch --depth=1 origin "$OPENSSL_COMMIT"
+    git -C "$SOURCE_DIR" checkout --detach FETCH_HEAD
+fi
+
+ACTUAL_COMMIT="$(git -C "$SOURCE_DIR" rev-parse HEAD)"
+if [[ "$ACTUAL_COMMIT" != "$OPENSSL_COMMIT" ]]; then
+    echo "Unexpected OpenSSL commit: $ACTUAL_COMMIT (expected: $OPENSSL_COMMIT)" >&2
+    exit 1
+fi
+
+INSTALL_DIR="$BUILD_ROOT/install"
+mkdir -p "$INSTALL_DIR"
+
+(
+    cd "$SOURCE_DIR"
+    ./Configure linux-x86_64 \
+        shared \
+        no-docs \
+        no-tests \
+        --prefix="$INSTALL_DIR" \
+        --openssldir="$INSTALL_DIR/ssl" \
+        --libdir=lib
+    make -s -j"$JOBS"
+    make -s install_sw
+)
+
+test -f "$INSTALL_DIR/lib/libcrypto.so.3"
+test -f "$INSTALL_DIR/lib/libssl.so.3"
+test -d "$INSTALL_DIR/include/openssl"
+
+LD_LIBRARY_PATH="$INSTALL_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+    "$INSTALL_DIR/bin/openssl" version | grep -F "OpenSSL $OPENSSL_VERSION"
+printf 'USG OpenSSL runtime test' \
+    | LD_LIBRARY_PATH="$INSTALL_DIR/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}" \
+        "$INSTALL_DIR/bin/openssl" dgst -sha256 >/dev/null
+
+mkdir -p "$OUTPUT_DIR/include"
+[[ -n "$OUTPUT_DIR" && "$OUTPUT_DIR" != "/" ]]
+rm -rf -- "$OUTPUT_DIR/include/openssl"
+cp -a "$INSTALL_DIR/include/openssl" "$OUTPUT_DIR/include/"
+install -m 0644 "$INSTALL_DIR/lib/libcrypto.so.3" "$OUTPUT_DIR/libcrypto.so.3"
+install -m 0644 "$INSTALL_DIR/lib/libssl.so.3" "$OUTPUT_DIR/libssl.so.3"
+ln -sfn libcrypto.so.3 "$OUTPUT_DIR/libcrypto.so"
+ln -sfn libssl.so.3 "$OUTPUT_DIR/libssl.so"
+
+ACTUAL_VERSION="$(strings "$OUTPUT_DIR/libcrypto.so.3" | grep '^OpenSSL [0-9]' | sed -n '1p')"
+if [[ "$ACTUAL_VERSION" != "OpenSSL $OPENSSL_VERSION "* ]]; then
+    echo "Unexpected OpenSSL runtime version: $ACTUAL_VERSION" >&2
+    exit 1
+fi
+
+echo "OpenSSL $OPENSSL_VERSION prepared in $OUTPUT_DIR"
+sha256sum "$OUTPUT_DIR/libcrypto.so.3" "$OUTPUT_DIR/libssl.so.3"

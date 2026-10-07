@@ -90,7 +90,7 @@ trap 'cleanup' EXIT
 
 cd "$ROOT"
 
-require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "$QMAKE" "sha256sum" "md5sum" "gzip" "tar" "dpkg-deb" "find" "xargs" "awk" "rsync" "readelf" "ldd"
+require_cmd "$CQTDEPLOYER" "$BINARYCREATOR" "$QMAKE" "sha256sum" "md5sum" "gzip" "tar" "dpkg-deb" "find" "xargs" "awk" "rsync" "readelf" "ldd" "strings"
 command -v "$APPIMAGETOOL" >/dev/null 2>&1 || warn "appimagetool nu este în PATH. Etapa AppImage va fi omisă."
 
 [[ -d "$QT_LIB_DIR" ]]     || die "QT_LIB_DIR inexistent: $QT_LIB_DIR"
@@ -173,9 +173,33 @@ copy_checked() {
   install -m 0644 "$src" "$dst"
 }
 
+# SQLCipher este o funcție distribuită în pachetul 4.2.9.
+mkdir -p "$ROOT/$BUILD_DIR/plugins/sqldrivers"
+copy_checked "$QT_PLUGINS_DIR/sqldrivers/libqsqlcipher.so" \
+             "$ROOT/$BUILD_DIR/plugins/sqldrivers/libqsqlcipher.so"
+
 # OpenSSL (din 3rdparty)
 copy_checked "$ROOT/3rdparty/openssl/libcrypto.so.3" "$ROOT/$BUILD_DIR/lib/libcrypto.so.3"
 copy_checked "$ROOT/3rdparty/openssl/libssl.so.3"    "$ROOT/$BUILD_DIR/lib/libssl.so.3"
+
+openssl_runtime_version="$(
+  strings "$ROOT/$BUILD_DIR/lib/libcrypto.so.3" \
+    | grep '^OpenSSL [0-9]' \
+    | sed -n '1p'
+)"
+[[ "$openssl_runtime_version" == "OpenSSL 3.5.9 "* ]] \
+  || die "Versiune OpenSSL neașteptată în pachet: $openssl_runtime_version"
+
+qsqlcipher_ldd="$(
+  LD_LIBRARY_PATH="$ROOT/$BUILD_DIR/lib" \
+    ldd "$ROOT/$BUILD_DIR/plugins/sqldrivers/libqsqlcipher.so"
+)"
+if grep -Fq 'not found' <<< "$qsqlcipher_ldd"; then
+  printf '%s\n' "$qsqlcipher_ldd" >&2
+  die "Pluginul QSQLCIPHER conține dependențe runtime nerezolvate."
+fi
+grep -F "$ROOT/$BUILD_DIR/lib/libcrypto.so.3" <<< "$qsqlcipher_ldd" >/dev/null \
+  || die "Pluginul QSQLCIPHER nu folosește copia OpenSSL privată din pachet."
 
 # LimeReport (din 3rdparty)
 for f in \
@@ -227,13 +251,25 @@ log 'RPATH-ul portabil și dependențele executabilului distribuit au fost verif
 
 # Licențe, proveniență și sursa corespunzătoare LimeReport
 LICENSES_DIR="$ROOT/$BUILD_DIR/licenses"
-mkdir -p "$LICENSES_DIR/LimeReport"
+mkdir -p "$LICENSES_DIR/LimeReport" "$LICENSES_DIR/QSQLCipher"
 copy_checked "$ROOT/LICENSE.txt" "$LICENSES_DIR/LICENSE.txt"
 copy_checked "$ROOT/README.md" "$ROOT/$BUILD_DIR/README.md"
 copy_checked "$ROOT/README-RO.md" "$ROOT/$BUILD_DIR/README-RO.md"
 copy_checked "$ROOT/resources/RELEASES.md" "$ROOT/$BUILD_DIR/RELEASES.md"
 copy_checked "$ROOT/third_party/THIRD_PARTY_ICONS.md" "$LICENSES_DIR/THIRD_PARTY_ICONS.md"
 copy_checked "$ROOT/third_party/LIMEREPORT.md" "$LICENSES_DIR/LimeReport/README.md"
+copy_checked "$ROOT/third_party/QSQLCIPHER.md" "$LICENSES_DIR/QSQLCipher/README.md"
+copy_checked "$ROOT/third_party/licenses/OpenSSL-Apache-2.0.txt" \
+             "$LICENSES_DIR/QSQLCipher/OpenSSL-Apache-2.0.txt"
+copy_checked "$ROOT/third_party/licenses/SQLCipher-BSD-3-Clause.txt" \
+             "$LICENSES_DIR/QSQLCipher/SQLCipher-BSD-3-Clause.txt"
+rsync -a \
+  --exclude='_deps/' \
+  --exclude='build/' \
+  "$ROOT/third_party/qsqlcipher/source/" \
+  "$LICENSES_DIR/QSQLCipher/source/"
+install -m 0755 "$ROOT/build_scripts/build_openssl" \
+                "$LICENSES_DIR/QSQLCipher/build_openssl"
 copy_checked "$ROOT/patches/limereport/${LIMEREPORT_VERSION}/0001-make-singleton-destruction-idempotent.patch" \
              "$LICENSES_DIR/LimeReport/0001-make-singleton-destruction-idempotent.patch"
 copy_checked "$LIMEREPORT_SOURCE_DIR/LICENSE" "$LICENSES_DIR/LimeReport/LICENSE"

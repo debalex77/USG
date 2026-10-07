@@ -8,8 +8,8 @@
 
 #define VERSION_MAJOR   4
 #define VERSION_MINOR   2
-#define VERSION_RELEASE 8
-#define VERSION_FULL "4.2.8"
+#define VERSION_RELEASE 9
+#define VERSION_FULL "4.2.9"
 #define COMPANY_EMAIL "alovada.med@gmail.com"
 
 #endif // VERSION_H

@@ -22,6 +22,7 @@
  ******************************************************************************/
 
 #include "appsettings.h"
+#include "infrastructure/database/sqlcipherkeyprompt.h"
 #include "appsettingsstore.h"
 #include "appsettingsvalidator.h"
 #include "common/applicationpathscontext.h"
@@ -43,6 +44,7 @@ AppSettings::AppSettings(QWidget *parent) :
     ui(new Ui::AppSettings)
 {
     ui->setupUi(this);
+    connect(ui->sqliteEncrypted, &QCheckBox::toggled, this, [this] { dataWasModified(); });
     dirConfigPath = ApplicationPathsContext::instance().configDirectory();
 #if defined(Q_OS_WIN)
     // Validarea profilului are loc înainte de inițializarea LogManager.
@@ -159,6 +161,7 @@ AppSettingsStore::ProfileData AppSettings::profileFromGlobals() const
     data.sqliteDatabase    = connection.sqliteDatabaseName;
     data.sqlitePath        = connection.sqliteDatabasePath;
     data.imageDatabasePath = connection.imageDatabasePath;
+    data.sqliteEncrypted = connection.sqliteEncrypted;
     data.logPath           = paths.logFilePath;
 
     // remember
@@ -187,6 +190,8 @@ AppSettingsStore::ProfileData AppSettings::profileFromForm() const
     data.mysqlHost     = ui->mySQLhost->text();
     data.mysqlDatabase = ui->mySQLnameBase->text();
     data.mysqlPort     = ui->mySQLport->text().toInt();
+    if (data.databaseIndex != idx_MySQL && (data.mysqlPort < 1 || data.mysqlPort > 65535))
+        data.mysqlPort = AppSettingsStore::Default::mysqlPort;
     data.mysqlUser     = ui->mySQLuser->text();
     data.mysqlPassword = ui->mySQLpasswdUser->text();
     data.mysqlOptions  = ui->mySQLoptionConnect->text();
@@ -194,6 +199,7 @@ AppSettingsStore::ProfileData AppSettings::profileFromForm() const
     data.sqliteDatabase    = ui->nameBaseSqlite->text();
     data.sqlitePath        = lineEditPathDBSqlite->text();
     data.imageDatabasePath = lineEditPathDBImage->text();
+    data.sqliteEncrypted = ui->sqliteEncrypted->isChecked();
     data.logPath           = ui->txtPathLog->text();
 
     data.rememberUser       = globals().memoryUser;
@@ -224,6 +230,7 @@ void AppSettings::applyProfileToForm(const AppSettingsStore::ProfileData &data)
     ui->mySQLuser->setText(data.mysqlUser);
     ui->mySQLpasswdUser->setText(data.mysqlPassword);
     ui->nameBaseSqlite->setText(data.sqliteDatabase);
+    ui->sqliteEncrypted->setChecked(data.sqliteEncrypted);
     lineEditPathDBSqlite->setText(data.sqlitePath);
     lineEditPathDBImage->setText(data.imageDatabasePath);
 
@@ -283,6 +290,10 @@ void AppSettings::applyProfileToRuntime(const AppSettingsStore::ProfileData &dat
     connection.sqliteDatabaseName = data.sqliteDatabase;
     connection.sqliteDatabasePath = data.sqlitePath;
     connection.imageDatabasePath  = data.imageDatabasePath;
+    connection.sqliteEncrypted = data.sqliteEncrypted;
+    connection.sqliteKey = MainDatabaseConnectionContext::instance().data().sqliteKey;
+    if (connection.sqliteKey.isEmpty())
+        connection.sqliteKey = qEnvironmentVariable("USG_SQLCIPHER_KEY");
     MainDatabaseConnectionContext::instance().setData(connection);
 
     globals().firstLaunch = !data.initialSetupComplete;
@@ -740,7 +751,8 @@ bool AppSettings::checkDataSettings()
     const AppSettingsValidator::ValidationResult validation =
         AppSettingsValidator::validateProfile(data, ui->txtPathAppSettings->text());
     if (validation.isValid())
-        return true;
+        return SqlCipherKeyPrompt::ensure(data.databaseIndex == idx_Sqlite
+                                          && data.sqliteEncrypted, this);
 
     QWidget *invalidField = nullptr;
     using Field = AppSettingsValidator::Field;
@@ -1162,7 +1174,7 @@ void AppSettings::onAddPathSqlite()
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Crearea fișierului"),
                                                     dir.toNativeSeparators(QDir::rootPath() + "/base"),
-                                                    tr("SQLite3 file (*.sqlite3)"));
+                                                    tr("Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)"));
 
     if (!fileName.isEmpty()){
         QDir file_database;
@@ -1170,8 +1182,7 @@ void AppSettings::onAddPathSqlite()
 
         if (ui->nameBaseSqlite->text().isEmpty()){
             QFileInfo fileInfo(dir.toNativeSeparators(fileName));
-            QString m_nameBase = fileInfo.fileName();
-            m_nameBase.remove(m_nameBase.size() - 8, 8); // 8 simboluri = (.sqlite3)
+            const QString m_nameBase = fileInfo.completeBaseName();
             ui->nameBaseSqlite->setText(m_nameBase);
         }
         dataWasModified();
@@ -1184,7 +1195,7 @@ void AppSettings::onEditPathSqlite()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Deschide fișierul"),
                                                     dir.toNativeSeparators(QDir::currentPath()),
-                                                    tr("SQLite3 file (*.sqlite3)"));
+                                                    tr("Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)"));
     if (!fileName.isEmpty()){
         QDir file_database;
         lineEditPathDBSqlite->setText(file_database.toNativeSeparators(fileName));
@@ -1215,8 +1226,7 @@ void AppSettings::onEditPathSqlite()
             }
         } else if (ui->nameBaseSqlite->text().isEmpty()){
             QFileInfo fileInfo(dir.toNativeSeparators(fileName));
-            QString m_nameBase = fileInfo.fileName();
-            m_nameBase.remove(m_nameBase.size() - 8, 8); // 8 simboluri = (.sqlite3)
+            const QString m_nameBase = fileInfo.completeBaseName();
             ui->nameBaseSqlite->setText(m_nameBase);
         }
         dataWasModified();
@@ -1237,7 +1247,7 @@ void AppSettings::onAddPathDBImage()
     QString fileName = QFileDialog::getSaveFileName(this,
                                                     tr("Crearea fișierului"),
                                                     QDir::currentPath() + "/database/imagesUSG.sqlite3",
-                                                    tr("SQLite3 file (*.sqlite3)"));
+                                                    tr("Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)"));
 
     if (!fileName.isEmpty()){
         QDir file_img;
@@ -1251,7 +1261,7 @@ void AppSettings::onEditPathDBImage()
     QString fileName = QFileDialog::getOpenFileName(this,
                                                     tr("Deschide fișierul"),
                                                     QDir::currentPath() + "/database/imagesUSG.sqlite3",
-                                                    tr("SQLite3 file (*.sqlite3)"));
+                                                    tr("Fișiere SQLite/SQLCipher (*.sqlite3 *.sqlite *.db *.sqlcipher);;Toate fișierele (*)"));
     if (!fileName.isEmpty()){
         QDir file_img;
         lineEditPathDBImage->setText(file_img.toNativeSeparators(fileName));
@@ -1527,6 +1537,10 @@ void AppSettings::createNewBaseSqlite()
     if (!checkDataSettings())
         return;
 
+    const auto previousConnection = MainDatabaseConnectionContext::instance().data();
+    auto testConnection = previousConnection;
+    testConnection.sqliteEncrypted = ui->sqliteEncrypted->isChecked();
+    testConnection.sqliteKey = MainDatabaseConnectionContext::instance().data().sqliteKey;
     QString txtMSG; // pentru mesaj/debug
     DataBase database;
     // Aici se creează numai fișierul și se verifică dacă poate fi deschis.
@@ -1535,16 +1549,17 @@ void AppSettings::createNewBaseSqlite()
     const bool created = database.createConnectBaseSqlite(ui->nameBaseSqlite->text(),
                                                            lineEditPathDBSqlite->text(),
                                                            false,
-                                                           txtMSG);
+                                                           txtMSG,
+                                                           &testConnection);
 
     if (created) {
         QMessageBox::information(this,
-                                 tr("Crearea bazei de date (.sqlite)"),
+                                 tr("Crearea bazei de date (SQLite/SQLCipher)"),
                                  txtMSG,
                                  QMessageBox::Ok);
     } else {
         QMessageBox::critical(this,
-                              tr("Crearea bazei de date (.sqlite)"),
+                              tr("Crearea bazei de date (SQLite/SQLCipher)"),
                               txtMSG,
                               QMessageBox::Ok);
     }

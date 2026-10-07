@@ -23,12 +23,42 @@ $portText = [IO.File]::ReadAllText($portPath)
 $portText = $portText.Replace('string(TOUPPER "${VCPKG_LIBRARY_LINKAGE}" plugin_type)', 'set(plugin_type STATIC)')
 $portText = $portText.Replace('-DCLIENT_PLUGIN_CLIENT_ED25519=DYNAMIC', '-DCLIENT_PLUGIN_CLIENT_ED25519=OFF')
 [IO.File]::WriteAllText($portPath, $portText)
+# OpenSSL is pinned to the same 3.5.x LTS release as Linux (build_scripts/build_openssl).
+# The pinned vcpkg tree ships 3.5.2; only the version and source checksum change.
+$opensslVersion = '3.5.9'
+$opensslSha512 = 'ab29a6ed40dd8c74420b9bd19c5ac119b0f191aee72d555ba5a0601456155d39c809c77300d98c7e0bce607f32c1f7a83fc7f69f86b9909fe557bba3aa2e468f'
+Copy-Item "$vcpkgDir/ports/openssl" $overlayDir -Recurse -Force
+$opensslManifest = "$overlayDir/openssl/vcpkg.json"
+$manifestText = [IO.File]::ReadAllText($opensslManifest)
+$pinnedManifest = [regex]::Replace($manifestText, '"version":\s*"[^"]+"', "`"version`": `"$opensslVersion`"")
+if ($pinnedManifest -eq $manifestText) { throw 'Cannot pin the OpenSSL port version' }
+[IO.File]::WriteAllText($opensslManifest, $pinnedManifest)
+$opensslPortfile = "$overlayDir/openssl/portfile.cmake"
+$portfileText = [IO.File]::ReadAllText($opensslPortfile)
+$pinnedPortfile = [regex]::Replace($portfileText, 'SHA512\s+[0-9a-fA-F]{128}', "SHA512 $opensslSha512")
+if ($pinnedPortfile -eq $portfileText) { throw 'Cannot pin the OpenSSL source checksum' }
+[IO.File]::WriteAllText($opensslPortfile, $pinnedPortfile)
 Invoke-Native "$vcpkgDir/vcpkg.exe" @('install', 'openssl:x64-windows-static-md', 'libmariadb[core,schannel]:x64-windows', '--classic', "--overlay-ports=$overlayDir")
 $staticDir = "$vcpkgDir/installed/x64-windows-static-md"
 $clientDir = "$vcpkgDir/installed/x64-windows"
+$opensslHeader = [IO.File]::ReadAllText("$staticDir/include/openssl/opensslv.h")
+if ($opensslHeader -notmatch "OPENSSL_VERSION_TEXT\s+`"OpenSSL $([regex]::Escape($opensslVersion)) ") {
+    throw "vcpkg did not install OpenSSL $opensslVersion"
+}
 New-Item -ItemType Directory -Force "$projectDir/3rdparty/openssl/include", "$projectDir/3rdparty/openssl/lib" | Out-Null
 Copy-Item "$staticDir/include/openssl" "$projectDir/3rdparty/openssl/include" -Recurse -Force
 Copy-Item "$staticDir/lib/libssl.lib", "$staticDir/lib/libcrypto.lib" "$projectDir/3rdparty/openssl/lib"
+
+# QSQLCIPHER embeds SQLCipher and links the same static OpenSSL as USG.
+$env:OPENSSL_ROOT_DIR = [IO.Path]::GetFullPath("$projectDir/3rdparty/openssl")
+$env:INSTALL = '1'
+$env:QSQLCIPHER_BUILD_JOBS = '2'
+try {
+    Invoke-Native pwsh @('-NoProfile', '-File', "$projectDir/third_party/qsqlcipher/source/build.ps1", $qtDir)
+} finally {
+    Remove-Item Env:INSTALL, Env:QSQLCIPHER_BUILD_JOBS -ErrorAction SilentlyContinue
+}
+if (-not (Test-Path "$qtDir/plugins/sqldrivers/qsqlcipher.dll")) { throw 'QSQLCIPHER plugin was not installed' }
 
 # The Qt SQL plugin must be compiled against the same Qt version as USG.
 $qtSource = "$buildDir/qtbase"

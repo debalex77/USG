@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>USG Demo</Name>
+    <Version>@@VERSION@@</Version>
+    <Title>USG Demo — evidența examinărilor ecografice</Title>
+    <Publisher>Alovada-Med SRL</Publisher>
+    <StartMenuDir>USG Demo v@@VERSION@@</StartMenuDir>
+    <InstallerWindowIcon>eco_256x256.png</InstallerWindowIcon>
+    <Logo>logo.png</Logo>
+    <Watermark>eco.png</Watermark>
+    <TargetDir>@HomeDir@/USG-Demo</TargetDir>
+    <RemoveTargetDir>false</RemoveTargetDir>
+    <StyleSheet>style.qss</StyleSheet>
+    <WizardStyle>Classic</WizardStyle>
+    <WizardDefaultWidth>800</WizardDefaultWidth>
+    <WizardDefaultHeight>500</WizardDefaultHeight>
+</Installer>

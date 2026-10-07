@@ -430,9 +430,12 @@ void MainWindow::checkUpdateApp()
 
 void MainWindow::openDescriptionRealease()
 {
-    QFile file(":/releases.md");
-    if (! file.open(QIODevice::ReadOnly))
+    QFile file(":/RELEASES.md");
+    if (! file.open(QIODevice::ReadOnly)) {
+        qWarning(logWarning()) << "Istoria versiunilor nu poate fi citită:"
+                               << file.fileName() << file.errorString();
         return;
+    }
 
     info_window = new InfoWindow(this);
     info_window->setAttribute(Qt::WA_DeleteOnClose);
@@ -1021,6 +1024,7 @@ void MainWindow::onReadyVersion()
         return;
 
     const QString version_online = QString::fromUtf8(file.readAll()).trimmed();
+    file.close(); // pe Windows un fișier deschis nu poate fi eliminat
     qsizetype suffixIndex = 0;
     const QVersionNumber onlineVersion =
         QVersionNumber::fromString(version_online, &suffixIndex);
@@ -1324,7 +1328,7 @@ void MainWindow::closeEvent(QCloseEvent *event)
         closeDatabases();
         if (!createAutomaticSqliteArchive()) {
             QMessageBox::warning(this, tr("Arhivarea automată"),
-                                 tr("Arhiva SQLite nu a putut fi creată. "
+                                 tr("Arhiva SQLite/SQLCipher nu a putut fi creată. "
                                     "Detaliile sunt disponibile în jurnal."));
         }
         qInfo(logInfo()) << tr("Utilizatorul '%1' a finisat lucru cu aplicația.").arg(globals().nameUserApp);
@@ -1509,8 +1513,10 @@ void MainWindow::updateWindowTitle()
         title += tr(" (MySQL: %1@%2): utilizator (%3)")
                      .arg(connection.databaseName, connection.hostName, globals().nameUserApp);
     } else if (connection.backend == MainDatabaseBackend::SQLite)
-        title += tr(" (.sqlite3): base - '%1', utilizator (%2)")
-                     .arg(connection.sqliteDatabaseName, globals().nameUserApp);
+        title += tr(" (%1): base - '%2', utilizator (%3)")
+                     .arg(connection.sqliteEncrypted ? QStringLiteral("SQLCipher")
+                                                     : QStringLiteral("SQLite"),
+                          connection.sqliteDatabaseName, globals().nameUserApp);
     else
         title += tr(": utilizator (%1)").arg(globals().nameUserApp);
     setWindowTitle(title);

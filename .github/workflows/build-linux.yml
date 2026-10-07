@@ -16,6 +16,8 @@ permissions:
 env:
   QT_VERSION: 6.9.3
   LIMEREPORT_COMMIT: e6210b58a46ab14c0ff8a409b5fa5d339937ea7c
+  OPENSSL_VERSION: 3.5.9
+  OPENSSL_COMMIT: 45e844fa2a14ec92d146bd8f5778ac130b6625fb
 
 jobs:
   build:
@@ -34,7 +36,10 @@ jobs:
             build-essential \
             libgl1-mesa-dev \
             libpulse-dev \
-            libssl-dev \
+            cmake \
+            ninja-build \
+            perl \
+            pkg-config \
             lld \
             libxkbcommon-x11-0 \
             libxcb-cursor0 \
@@ -47,6 +52,21 @@ jobs:
           # qtsvg and qttools are included in the desktop package, not add-ons.
           modules: qtmultimedia qtpositioning qtwebchannel qtwebengine
           cache: true
+
+      - name: Build the pinned OpenSSL runtime
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPENSSL_BUILD_JOBS=2 ./build_scripts/build_openssl
+
+      - name: Build and test the QSQLCIPHER plugin
+        shell: bash
+        run: |
+          set -euo pipefail
+          OPENSSL_ROOT_DIR="${GITHUB_WORKSPACE}/3rdparty/openssl" \
+          INSTALL=1 \
+            ./third_party/qsqlcipher/source/build.sh "${QT_ROOT_DIR}"
+          test -f "${QT_ROOT_DIR}/plugins/sqldrivers/libqsqlcipher.so"
 
       - name: Fetch the pinned LimeReport source
         shell: bash
@@ -109,10 +129,18 @@ jobs:
         run: |
           set -euo pipefail
           artifact="${RUNNER_TEMP}/USG-linux-build"
-          mkdir -p "${artifact}/lib" "${artifact}/licenses/LimeReport"
+          mkdir -p \
+            "${artifact}/lib" \
+            "${artifact}/plugins/sqldrivers" \
+            "${artifact}/licenses/LimeReport" \
+            "${artifact}/licenses/QSQLCipher"
           cp "${GITHUB_WORKSPACE}/build-ci/USG" "${artifact}/"
           cp -a "${GITHUB_WORKSPACE}/3rdparty/LimeReport/release/liblimereport.so"* "${artifact}/lib/"
           cp -a "${GITHUB_WORKSPACE}/3rdparty/LimeReport/release/libQtZint.so"* "${artifact}/lib/"
+          cp "${GITHUB_WORKSPACE}/3rdparty/openssl/libcrypto.so.3" "${artifact}/lib/"
+          cp "${GITHUB_WORKSPACE}/3rdparty/openssl/libssl.so.3" "${artifact}/lib/"
+          cp "${QT_ROOT_DIR}/plugins/sqldrivers/libqsqlcipher.so" \
+            "${artifact}/plugins/sqldrivers/"
           cp "${RUNNER_TEMP}/LimeReport/LICENSE" "${artifact}/licenses/LimeReport/"
           cp "${RUNNER_TEMP}/LimeReport/COPYING" "${artifact}/licenses/LimeReport/"
           git -C "${RUNNER_TEMP}/LimeReport" archive \
@@ -124,6 +152,19 @@ jobs:
             "${GITHUB_WORKSPACE}/patches/limereport/1.7.23/0001-make-singleton-destruction-idempotent.patch" \
             "${artifact}/licenses/LimeReport/"
           cp "${GITHUB_WORKSPACE}/LICENSE.txt" "${artifact}/"
+          cp "${GITHUB_WORKSPACE}/third_party/QSQLCIPHER.md" \
+            "${artifact}/licenses/QSQLCipher/README.md"
+          cp "${GITHUB_WORKSPACE}/third_party/licenses/OpenSSL-Apache-2.0.txt" \
+            "${artifact}/licenses/QSQLCipher/"
+          cp "${GITHUB_WORKSPACE}/third_party/licenses/SQLCipher-BSD-3-Clause.txt" \
+            "${artifact}/licenses/QSQLCipher/"
+          rsync -a \
+            --exclude='_deps/' \
+            --exclude='build/' \
+            "${GITHUB_WORKSPACE}/third_party/qsqlcipher/source/" \
+            "${artifact}/licenses/QSQLCipher/source/"
+          cp "${GITHUB_WORKSPACE}/build_scripts/build_openssl" \
+            "${artifact}/licenses/QSQLCipher/"
           mkdir -p "${artifact}/third_party"
           cp "${GITHUB_WORKSPACE}/third_party/THIRD_PARTY_ICONS.md" "${artifact}/third_party/"
           cp "${GITHUB_WORKSPACE}/third_party/LIMEREPORT.md" "${artifact}/third_party/"
